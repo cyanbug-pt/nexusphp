@@ -2450,10 +2450,17 @@ function get_style_highlight()
 	return $hltr;
 }
 
+function getOpenHtmlTag_A($link){
+	if($link == ""){
+		return "<a>";
+	}
+	return "<a href='$link'>";
+}
+
 function stdhead($title = "", $msgalert = true, $script = "", $place = "")
 {
 	global $lang_functions;
-	global $CURUSER, $CURLANGDIR, $USERUPDATESET, $iplog1, $oldip, $SITE_ONLINE, $FUNDS, $SITENAME, $SLOGAN, $logo_main, $BASEURL, $offlinemsg,$enabledonation, $staffmem_class, $titlekeywords_tweak, $metakeywords_tweak, $metadescription_tweak, $cssdate_tweak, $deletenotransfertwo_account, $neverdelete_account, $iniupload_main;
+	global $CURUSER, $CURLANGDIR, $USERUPDATESET, $iplog1, $oldip, $SITE_ONLINE, $FUNDS, $SITENAME, $SLOGAN, $logo_main, $banner_img, $banner_link, $BASEURL, $offlinemsg,$enabledonation, $staffmem_class, $titlekeywords_tweak, $metakeywords_tweak, $metadescription_tweak, $cssdate_tweak, $deletenotransfertwo_account, $neverdelete_account, $iniupload_main;
 	global $tstart;
 	global $Cache;
 	global $Advertisement;
@@ -2562,7 +2569,7 @@ foreach (\Nexus\Nexus::getAppendHeaders() as $value) {
 	<tr>
 		<td class="clear">
 <?php
-if ($logo_main == "")
+if ($banner_img == "")
 {
 ?>
 			<div class="logo"><?php echo htmlspecialchars($SITENAME)?></div>
@@ -2572,7 +2579,7 @@ if ($logo_main == "")
 else
 {
 ?>
-			<div class="logo_img"><img src="<?php echo $logo_main?>" alt="<?php echo htmlspecialchars($SITENAME)?>" title="<?php echo htmlspecialchars($SITENAME)?> - <?php echo htmlspecialchars($SLOGAN)?>" /></div>
+			<div class="logo_img"><?php echo getOpenHtmlTag_A($banner_link)?><img src="<?php echo $banner_img?>" alt="<?php echo htmlspecialchars($SITENAME)?>" title="<?php echo htmlspecialchars($SITENAME)?> - <?php echo htmlspecialchars($SLOGAN)?>" /></a></div>
 <?php
 }
 ?>
