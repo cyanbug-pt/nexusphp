@@ -69,7 +69,10 @@ function stdmsg($heading, $text, $htmlstrip = false)
 	if ($htmlstrip) {
 		$heading = htmlspecialchars(trim($heading));
 		$text = htmlspecialchars(trim($text));
-	}
+	} else {
+        $heading = strip_tags($heading, '<a>');
+        $text = strip_tags($text, '<a>');
+    }
 	print("<table align=\"center\" class=\"main\" width=\"500\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"embedded\">\n");
 	if ($heading)
 	print("<h2>".$heading."</h2>\n");
@@ -457,7 +460,7 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
 		}
 		$j++;
 	}
-	return $s;
+    return str_replace('', '', $s);
 }
 
 function highlight($search,$subject,$hlstart='<b><font class="striking">',$hlend="</font></b>")
@@ -1610,7 +1613,7 @@ function failedloginscheck ($type = 'Login') {
 	list($total) = mysql_fetch_array($Query);
 	if ($total >= $maxloginattempts) {
 		sql_query("UPDATE loginattempts SET banned = 'yes' WHERE ip=$ip") or sqlerr(__FILE__, __LINE__);
-		stderr($type.$lang_functions['std_locked'].$type.$lang_functions['std_attempts_reached'], $lang_functions['std_your_ip_banned']);
+		stderr($type.$lang_functions['std_locked'].$type.$lang_functions['std_attempts_reached'], $lang_functions['std_your_ip_banned'], true, true);
 	}
 }
 function failedlogins ($type = 'login', $recover = false, $head = true)
@@ -1678,13 +1681,13 @@ function registration_check($type = "invitesystem", $maxuserscheck = true, $ipch
 	global $invitesystem, $registration, $maxusers, $SITENAME, $maxip;
 	if ($type == "invitesystem") {
 		if ($invitesystem == "no") {
-			stderr($lang_functions['std_oops'], $lang_functions['std_invite_system_disabled'], 0, false);
+			stderr($lang_functions['std_oops'], $lang_functions['std_invite_system_disabled'], 0, true);
 		}
 	}
 
 	if ($type == "normal") {
 		if ($registration == "no") {
-			stderr($lang_functions['std_sorry'], $lang_functions['std_open_registration_disabled'], 0, false);
+			stderr($lang_functions['std_sorry'], $lang_functions['std_open_registration_disabled'], 0, true);
 		}
 	}
 
@@ -1692,14 +1695,14 @@ function registration_check($type = "invitesystem", $maxuserscheck = true, $ipch
 		$res = sql_query("SELECT COUNT(*) FROM users") or sqlerr(__FILE__, __LINE__);
 		$arr = mysql_fetch_row($res);
 		if ($arr[0] >= $maxusers)
-		stderr($lang_functions['std_sorry'], $lang_functions['std_account_limit_reached'], 0, false);
+		stderr($lang_functions['std_sorry'], $lang_functions['std_account_limit_reached'], 0, true);
 	}
 
 	if ($ipcheck) {
 		$ip = getip () ;
 		$a = (@mysql_fetch_row(@sql_query("select count(*) from users where ip='" . mysql_real_escape_string($ip) . "'"))) or sqlerr(__FILE__, __LINE__);
 		if ($a[0] > $maxip)
-		stderr($lang_functions['std_sorry'], $lang_functions['std_the_ip']."<b>" . htmlspecialchars($ip) ."</b>". $lang_functions['std_used_many_times'],false, false);
+		stderr($lang_functions['std_sorry'], $lang_functions['std_the_ip']."<b>" . htmlspecialchars($ip) ."</b>". $lang_functions['std_used_many_times'],false, true);
 	}
 	return true;
 }
@@ -2953,7 +2956,7 @@ function stdfoot() {
 	global $hook;
 	print("</td></tr></table>");
 	print("<div id=\"footer\">");
-	if ($Advertisement->enable_ad()){
+	if ($Advertisement && $Advertisement->enable_ad()){
 			$footerad=$Advertisement->get_ad('footer');
 			if ($footerad)
 			echo "<div align=\"center\" style=\"margin-top: 10px\" id=\"\">".$footerad[0]."</div>";
@@ -3043,22 +3046,22 @@ function logincookie($id, $passhash, $updatedb = 1, $expires = 0x7fffffff, $secu
 	if ($expires != 0x7fffffff)
 	$expires = time()+$expires;
 
-	setcookie("c_secure_uid", base64($id), $expires, "/");
-	setcookie("c_secure_pass", $passhash, $expires, "/");
+	setcookie("c_secure_uid", base64($id), $expires, "/", "", false, true);
+	setcookie("c_secure_pass", $passhash, $expires, "/", "", false, true);
 	if($ssl)
-	setcookie("c_secure_ssl", base64("yeah"), $expires, "/");
+	setcookie("c_secure_ssl", base64("yeah"), $expires, "/", "", false, true);
 	else
-	setcookie("c_secure_ssl", base64("nope"), $expires, "/");
+	setcookie("c_secure_ssl", base64("nope"), $expires, "/", "", false, true);
 
 	if($trackerssl)
-	setcookie("c_secure_tracker_ssl", base64("yeah"), $expires, "/");
+	setcookie("c_secure_tracker_ssl", base64("yeah"), $expires, "/", "", false, true);
 	else
-	setcookie("c_secure_tracker_ssl", base64("nope"), $expires, "/");
+	setcookie("c_secure_tracker_ssl", base64("nope"), $expires, "/", "", false, true);
 
 	if ($securelogin)
-	setcookie("c_secure_login", base64("yeah"), $expires, "/");
+	setcookie("c_secure_login", base64("yeah"), $expires, "/", "", false, true);
 	else
-	setcookie("c_secure_login", base64("nope"), $expires, "/");
+	setcookie("c_secure_login", base64("nope"), $expires, "/", "", false, true);
 
 
 	if ($updatedb)
@@ -3070,7 +3073,7 @@ function set_langfolder_cookie($folder, $expires = 0x7fffffff)
 	if ($expires != 0x7fffffff)
 	$expires = time()+$expires;
 
-	setcookie("c_lang_folder", $folder, $expires, "/");
+	setcookie("c_lang_folder", $folder, $expires, "/", "", false, true);
 }
 
 function get_protocol_prefix()
@@ -3114,12 +3117,12 @@ function make_folder($pre, $folder_name)
 }
 
 function logoutcookie() {
-	setcookie("c_secure_uid", "", 0x7fffffff, "/");
-	setcookie("c_secure_pass", "", 0x7fffffff, "/");
-// setcookie("c_secure_ssl", "", 0x7fffffff, "/");
-	setcookie("c_secure_tracker_ssl", "", 0x7fffffff, "/");
-	setcookie("c_secure_login", "", 0x7fffffff, "/");
-//	setcookie("c_lang_folder", "", 0x7fffffff, "/");
+	setcookie("c_secure_uid", "", 0x7fffffff, "/", "", false, true);
+	setcookie("c_secure_pass", "", 0x7fffffff, "/", "", false, true);
+// setcookie("c_secure_ssl", "", 0x7fffffff, "/", "", false, true);
+	setcookie("c_secure_tracker_ssl", "", 0x7fffffff, "/", "", false, true);
+	setcookie("c_secure_login", "", 0x7fffffff, "/", "", false, true);
+//	setcookie("c_lang_folder", "", 0x7fffffff, "/", "", false, true);
 }
 
 function base64 ($string, $encode=true) {

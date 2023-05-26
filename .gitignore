@@ -31,3 +31,5 @@ auth.json
 /public/bitbucket
 install.lock
 /torrents
+/.vscode
+/.history
