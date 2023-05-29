@@ -1136,6 +1136,7 @@ function clear_user_cache($uid, $passkey = '')
     \Nexus\Database\NexusDB::cache_del("direct_permissions:$uid");
     if ($passkey) {
         \Nexus\Database\NexusDB::cache_del('user_passkey_'.$passkey.'_content');//announce.php
+        \Nexus\Database\NexusDB::cache_del('user_passkey_'.$passkey.'_rss');//torrentrss.php
     }
     $userInfo = \App\Models\User::query()->find($uid, \App\Models\User::$commonFields);
     if ($userInfo) {
