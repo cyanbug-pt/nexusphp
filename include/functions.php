@@ -69,10 +69,7 @@ function stdmsg($heading, $text, $htmlstrip = false)
 	if ($htmlstrip) {
 		$heading = htmlspecialchars(trim($heading));
 		$text = htmlspecialchars(trim($text));
-	} else {
-        $heading = strip_tags($heading, '<a>');
-        $text = strip_tags($text, '<a>');
-    }
+	}
 	print("<table align=\"center\" class=\"main\" width=\"500\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"embedded\">\n");
 	if ($heading)
 	print("<h2>".$heading."</h2>\n");
@@ -280,7 +277,7 @@ function formatSpoiler($content, $title = '', $defaultCollapsed = true): string
     if (!$title) {
         $title = $lang_functions['spoiler_default_title'];
     }
-    $content = str_replace(['<br>', '<br />'], '', $content);
+//    $content = str_replace(['<br>', '<br />'], '', $content);
     $contentClass = "spoiler-content";
     if ($defaultCollapsed) {
         $contentClass .= " collapse";
@@ -1490,7 +1487,7 @@ function check_email ($email) {
         return false;
     }
     $bannedEmails = \Nexus\Database\NexusDB::select('select * from bannedemails');
-    $bannedEmailsArr = preg_split('/[\s]+/', $bannedEmails[0]['value'] ?? '');
+    $bannedEmailsArr = array_filter(preg_split('/[\s]+/', $bannedEmails[0]['value'] ?? ''));
     if (empty($bannedEmailsArr)) {
         return true;
     }
@@ -1613,7 +1610,7 @@ function failedloginscheck ($type = 'Login') {
 	list($total) = mysql_fetch_array($Query);
 	if ($total >= $maxloginattempts) {
 		sql_query("UPDATE loginattempts SET banned = 'yes' WHERE ip=$ip") or sqlerr(__FILE__, __LINE__);
-		stderr($type.$lang_functions['std_locked'].$type.$lang_functions['std_attempts_reached'], $lang_functions['std_your_ip_banned'], true, true);
+		stderr($type.$lang_functions['std_locked'].$maxloginattempts.$lang_functions['std_attempts_reached'], $lang_functions['std_your_ip_banned'], true, true);
 	}
 }
 function failedlogins ($type = 'login', $recover = false, $head = true)
@@ -2962,7 +2959,7 @@ function stdfoot() {
 			echo "<div align=\"center\" style=\"margin-top: 10px\" id=\"\">".$footerad[0]."</div>";
 	}
 	print("<div style=\"margin-top: 10px; margin-bottom: 30px;\" align=\"center\">");
-	if ($CURUSER){
+	if ($CURUSER && count($USERUPDATESET)){
 		sql_query("UPDATE users SET " . join(",", $USERUPDATESET) . " WHERE id = ".$CURUSER['id']);
 	}
 	// Variables for End Time

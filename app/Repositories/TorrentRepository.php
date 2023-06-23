@@ -21,6 +21,7 @@ use App\Models\StaffMessage;
 use App\Models\Standard;
 use App\Models\Team;
 use App\Models\Torrent;
+use App\Models\TorrentBuyLog;
 use App\Models\TorrentOperationLog;
 use App\Models\TorrentSecret;
 use App\Models\TorrentTag;
@@ -36,6 +37,8 @@ use Nexus\Database\NexusDB;
 
 class TorrentRepository extends BaseRepository
 {
+    const BOUGHT_USER_CACHE_KEY_PREFIX = "torrent_purchasers:";
+
     /**
      *  fetch torrent list
      *
@@ -93,9 +96,8 @@ class TorrentRepository extends BaseRepository
 
         $with = ['user', 'tags'];
         $torrents = $query->with($with)->paginate();
-        $userArr = $user->toArray();
         foreach ($torrents as &$item) {
-            $item->download_url = $this->getDownloadUrl($item->id, $userArr);
+            $item->download_url = $this->getDownloadUrl($item->id, $user);
         }
         return $torrents;
     }
@@ -112,15 +114,15 @@ class TorrentRepository extends BaseRepository
             },
         ];
         $result = Torrent::query()->with($with)->withCount(['peers', 'thank_users', 'reward_logs'])->visible()->findOrFail($id);
-        $result->download_url = $this->getDownloadUrl($id, $user->toArray());
+        $result->download_url = $this->getDownloadUrl($id, $user);
         return $result;
     }
 
-    private function getDownloadUrl($id, array $user): string
+    private function getDownloadUrl($id, array|User $user): string
     {
         return sprintf(
             '%s/download.php?downhash=%s|%s',
-            getSchemeAndHttpHost(), $user['id'], $this->encryptDownHash($id, $user)
+            getSchemeAndHttpHost(), is_array($user) ? $user['id'] : $user->id, $this->encryptDownHash($id, $user)
         );
     }
 
@@ -339,14 +341,18 @@ class TorrentRepository extends BaseRepository
 
     private function getEncryptDownHashKey($user)
     {
-        if ($user instanceof User) {
-            $user = $user->toArray();
-        }
-        if (!is_array($user) || empty($user['passkey']) || empty($user['id'])) {
-            $user = User::query()->findOrFail(intval($user), ['id', 'passkey'])->toArray();
+        if ($user instanceof User && $user->passkey) {
+            $passkey = $user->passkey;
+        } elseif (is_array($user) && !empty($user['passkey'])) {
+            $passkey = $user['passkey'];
+        } elseif (is_scalar($user)) {
+            $user = User::query()->findOrFail(intval($user), ['id', 'passkey']);
+            $passkey = $user->passkey;
+        } else {
+            throw new \InvalidArgumentException("Invalid user: " . json_encode($user));
         }
         //down hash is relative to user passkey
-        return md5($user['passkey'] . date('Ymd') . $user['id']);
+        return md5($passkey . date('Ymd') . $user['id']);
     }
 
     public function getTrackerReportAuthKey($id, $uid, $initializeIfNotExists = false): string
@@ -381,12 +387,14 @@ class TorrentRepository extends BaseRepository
 
     private function getTrackerReportAuthKeySecret($id, $uid, $initializeIfNotExists = false)
     {
-        $secret = TorrentSecret::query()
-            ->where('uid', $uid)
-            ->whereIn('torrent_id', [0, $id])
-            ->orderBy('torrent_id', 'desc')
-            ->orderBy('id', 'desc')
-            ->first();
+        $secret = NexusDB::remember("torrent_secret_{$uid}_{$id}", 3600, function () use ($id, $uid) {
+            return TorrentSecret::query()
+                ->where('uid', $uid)
+                ->whereIn('torrent_id', [0, $id])
+                ->orderBy('torrent_id', 'desc')
+                ->orderBy('id', 'desc')
+                ->first();
+        });
 
         if ($secret) {
             return $secret->secret;
@@ -711,6 +719,43 @@ HTML;
             return '';
         }
         return sprintf('<span title="%s" style="vertical-align: %s"><svg t="1676058062789" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3406" width="%s" height="%s"><path d="M554.666667 810.666667v42.666666h-85.333334v-42.666666c-93.866667 0-170.666667-76.8-170.666666-170.666667h85.333333c0 46.933333 38.4 85.333333 85.333333 85.333333v-170.666666c-93.866667 0-170.666667-76.8-170.666666-170.666667s76.8-170.666667 170.666666-170.666667V170.666667h85.333334v42.666666c93.866667 0 170.666667 76.8 170.666666 170.666667h-85.333333c0-46.933333-38.4-85.333333-85.333333-85.333333v170.666666h17.066666c29.866667 0 68.266667 17.066667 98.133334 42.666667 34.133333 29.866667 59.733333 76.8 59.733333 128-4.266667 93.866667-81.066667 170.666667-174.933333 170.666667z m0-85.333334c46.933333 0 85.333333-38.4 85.333333-85.333333s-38.4-85.333333-85.333333-85.333333v170.666666zM469.333333 298.666667c-46.933333 0-85.333333 38.4-85.333333 85.333333s38.4 85.333333 85.333333 85.333333V298.666667z" fill="#CD7F32" p-id="3407"></path></svg></span>', nexus_trans('torrent.paid_torrent'), $verticalAlign, $size, $size);
+    }
+
+    public function loadBoughtUser($torrentId): int
+    {
+        $size = 500;
+        $page = 1;
+        $key = $this->getBoughtUserCacheKey($torrentId);
+        $redis = NexusDB::redis();
+        $total = 0;
+        while (true) {
+            $list = TorrentBuyLog::query()->where("torrent_id", $torrentId)->forPage($page, $size)->get(['torrent_id', 'uid']);
+            if ($list->isEmpty()) {
+                break;
+            }
+            foreach ($list as $item) {
+                $redis->hSet($key, $item->uid, 1);
+                $total += 1;
+                do_log(sprintf("hset %s %s 1", $key, $item->uid));
+            }
+            $page++;
+        }
+        do_log("torrent_purchasers:$torrentId LOAD DONE, total: $total");
+        if ($total > 0) {
+            $redis->expire($key, 86400*30);
+        }
+        return $total;
+    }
+
+    public function addBoughtUserToCache($torrentId, $uid)
+    {
+        NexusDB::redis()->hSet($this->getBoughtUserCacheKey($torrentId), $uid, 1);
+    }
+
+
+    private function getBoughtUserCacheKey($torrentId): string
+    {
+        return  self::BOUGHT_USER_CACHE_KEY_PREFIX . $torrentId;
     }
 
 }
