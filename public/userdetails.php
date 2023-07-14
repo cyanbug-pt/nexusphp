@@ -235,7 +235,8 @@ if (user_can('userprofile') ||  $user["id"] == $CURUSER["id"])
 		$locationinfo = "<span title=\"" . $loc_mod . "\">[" . $loc_pub . "]</span>";
 	}
 	else $locationinfo = "";
-	tr_small($lang_userdetails['row_ip_address'], $user['ip'].$locationinfo.$seedBoxIcon, 1);
+    $ip = $user["id"] == $CURUSER["id"] ? hide_text($user['ip']) : $user['ip'];
+	tr_small($lang_userdetails['row_ip_address'], $ip.$locationinfo.$seedBoxIcon, 1);
 }
 $clientselect = '';
 $res = sql_query("SELECT peer_id, agent, ipv4, ipv6, port FROM peers WHERE userid = {$user['id']} GROUP BY agent, ipv4, ipv6, port") or sqlerr();
@@ -247,7 +248,9 @@ if (mysql_num_rows($res) > 0)
 	    $clientselect .= "<tr>";
 		$clientselect .= sprintf('<td>%s</td>', get_agent($arr['peer_id'], $arr['agent']));
 		if (user_can('userprofile') ||  $user["id"] == $CURUSER["id"]) {
-            $clientselect .= sprintf('<td>%s</td><td>%s</td><td>%s</td>', $arr['ipv4'].$seedBoxRep->renderIcon($arr['ipv4'], $user['id']), $arr['ipv6'].$seedBoxRep->renderIcon($arr['ipv6'], $user['id']), $arr['port']);
+            $v4 = $user["id"] == $CURUSER["id"] ? hide_text($arr['ipv4']) : $arr['ipv4'];
+            $v6 = $user["id"] == $CURUSER["id"] ? hide_text($arr['ipv6']) : $arr['ipv6'];
+            $clientselect .= sprintf('<td>%s</td><td>%s</td><td>%s</td>', $v4.$seedBoxRep->renderIcon($arr['ipv4'], $user['id']), $v6.$seedBoxRep->renderIcon($arr['ipv6'], $user['id']), $arr['port']);
         } else {
             $clientselect .= sprintf('<td>%s</td><td>%s</td><td>%s</td>', '---', '---', '---');
         }

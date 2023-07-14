@@ -6516,4 +6516,8 @@ function can_view_post($uid, $post)
     return true;
 }
 
+function hide_text($text) {
+    return '<span class="hidden-text">' . $text . '</span>';
+}
+
 ?>
