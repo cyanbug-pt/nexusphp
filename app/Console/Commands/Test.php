@@ -26,6 +26,7 @@ use App\Models\User;
 use App\Models\UserBanLog;
 use App\Repositories\AgentAllowRepository;
 use App\Repositories\AttendanceRepository;
+use App\Repositories\CleanupRepository;
 use App\Repositories\ExamRepository;
 use App\Repositories\HitAndRunRepository;
 use App\Repositories\MeiliSearchRepository;
@@ -97,10 +98,8 @@ class Test extends Command
      */
     public function handle()
     {
-        $results = NexusDB::select("select torrent, peer_id, userid, group_concat(id) as ids from peers group by torrent, peer_id, userid having(count(*)) > 1 limit 20");
-        dump($results);
-        $rep = new ToolRepository();
-        $rep->removeDuplicatePeer();
+        CleanupRepository::recordBatch(NexusDB::redis(), "1", "5");
+        CleanupRepository::runBatchJobCalculateUserSeedBonus("bbbbb");
     }
 
 }

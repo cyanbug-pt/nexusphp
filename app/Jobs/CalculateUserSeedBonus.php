@@ -20,6 +20,8 @@ class CalculateUserSeedBonus implements ShouldQueue
 
     private int $endUid;
 
+    private string $uidArrStr;
+
     private string $requestId;
 
     /**
@@ -27,10 +29,11 @@ class CalculateUserSeedBonus implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(int $beginUid, int $endUid, string $requestId = '')
+    public function __construct(int $beginUid, int $endUid, string $uidArrStr, string $requestId = '')
     {
         $this->beginUid = $beginUid;
         $this->endUid = $endUid;
+        $this->uidArrStr = $uidArrStr;
         $this->requestId = $requestId;
     }
 
@@ -57,19 +60,19 @@ class CalculateUserSeedBonus implements ShouldQueue
     {
         $beginTimestamp = time();
         $logPrefix = sprintf("[CLEANUP_CLI_CALCULATE_SEED_BONUS_HANDLE_JOB], commonRequestId: %s, beginUid: %s, endUid: %s", $this->requestId, $this->beginUid, $this->endUid);
-        $sql = sprintf("select userid from peers where userid > %s and userid <= %s and seeder = 'yes' group by userid", $this->beginUid, $this->endUid);
-        $results = NexusDB::select($sql);
-        $count = count($results);
-        do_log("$logPrefix, [GET_UID], sql: $sql, count: " . count($results));
-        if ($count == 0) {
-            do_log("$logPrefix, no user...");
-            return;
-        }
+//        $sql = sprintf("select userid from peers where userid > %s and userid <= %s and seeder = 'yes' group by userid", $this->beginUid, $this->endUid);
+//        $results = NexusDB::select($sql);
+//        $count = count($results);
+//        do_log("$logPrefix, [GET_UID], sql: $sql, count: " . count($results));
+//        if ($count == 0) {
+//            do_log("$logPrefix, no user...");
+//            return;
+//        }
         $haremAdditionFactor = Setting::get('bonus.harem_addition');
         $officialAdditionFactor = Setting::get('bonus.official_addition');
         $donortimes_bonus = Setting::get('bonus.donortimes');
         $autoclean_interval_one = Setting::get('main.autoclean_interval_one');
-        $sql = sprintf("select %s from users where id in (%s)", implode(',', User::$commonFields), implode(',', array_column($results, 'userid')));
+        $sql = sprintf("select %s from users where id in (%s)", implode(',', User::$commonFields), $this->uidArrStr);
         $results = NexusDB::select($sql);
         $logFile = getLogFile("seed-bonus-points");
         do_log("$logPrefix, [GET_UID_REAL], count: " . count($results) . ", logFile: $logFile");
@@ -106,7 +109,7 @@ class CalculateUserSeedBonus implements ShouldQueue
             $all_bonus = $all_bonus / $dividend;
             $seed_points = $seedBonusResult['seed_points'] / $dividend;
             $updatedAt = now()->toDateTimeString();
-            $sql = "update users set seed_points = ifnull(seed_points, 0) + $seed_points, seedbonus = seedbonus + $all_bonus, seed_points_updated_at = '$updatedAt' where id = $uid limit 1";
+            $sql = "update users set seed_points = ifnull(seed_points, 0) + $seed_points, seed_points_per_hour = {$seedBonusResult['seed_points']}, seedbonus = seedbonus + $all_bonus, seed_points_updated_at = '$updatedAt' where id = $uid limit 1";
             do_log("$bonusLog, query: $sql");
             NexusDB::statement($sql);
             if ($fd) {

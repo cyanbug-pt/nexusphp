@@ -3693,7 +3693,6 @@ foreach ($rows as $row)
 	$titleSuffix = $banned_torrent.$paidIcon.$picked_torrent.$sp_torrent.$sp_torrent_sub. $hrImg . $seedBoxIcon . $approvalStatusIcon;
 	$titleSuffix = apply_filter('torrent_title_suffix', $titleSuffix, $row);
 	print($titleSuffix);
-	//$tags = torrentTags($row['tags'], 'span');
     /**
      * render tags
      */
@@ -5412,7 +5411,7 @@ function checkGuestVisit()
 
 }
 
-function render($view, $data, $return = false)
+function render($view, $data = [], $return = false)
 {
     extract($data);
     if (!file_exists($view)) {
@@ -6117,18 +6116,26 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
 
 function calculate_harem_addition($uid)
 {
-    $harems = \App\Models\User::query()
-        ->where('invited_by', $uid)
+//    $harems = \App\Models\User::query()
+//        ->where('invited_by', $uid)
+//        ->where('status', \App\Models\User::STATUS_CONFIRMED)
+//        ->where('enabled', \App\Models\User::ENABLED_YES)
+//        ->get(['id']);
+//    $addition = 0;
+//    $haremsCount = $harems->count();
+//    foreach ($harems as $harem) {
+//        $result = calculate_seed_bonus($harem->id);
+//        $addition += $result['seed_points'];
+//    }
+//    do_log("[HAREM_ADDITION], user: $uid, haremsCount: $haremsCount ,addition: $addition");
+
+    $addition = \Nexus\Database\NexusDB::table("users")
+        ->where("invited_by", $uid)
         ->where('status', \App\Models\User::STATUS_CONFIRMED)
         ->where('enabled', \App\Models\User::ENABLED_YES)
-        ->get(['id']);
-    $addition = 0;
-    $haremsCount = $harems->count();
-    foreach ($harems as $harem) {
-        $result = calculate_seed_bonus($harem->id);
-        $addition += $result['seed_points'];
-    }
-    do_log("[HAREM_ADDITION], user: $uid, haremsCount: $haremsCount ,addition: $addition");
+        ->sum("seed_points_per_hour")
+    ;
+    do_log("[HAREM_ADDITION], user: $uid, addition: $addition");
     return $addition;
 }
 

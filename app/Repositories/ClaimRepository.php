@@ -126,16 +126,18 @@ class ClaimRepository extends BaseRepository
         $startOfThisMonth = Carbon::now()->startOfMonth();
         $query = Claim::query()
             ->select(['uid'])
+            ->where("created_at", "<", $startOfThisMonth)
             ->where(function (Builder $query) use ($startOfThisMonth) {
                 $query->where('last_settle_at', '<', $startOfThisMonth)->orWhereNull('last_settle_at');
             })
             ->groupBy('uid')
         ;
-        $size = 10000;
+        $size = 1000;
+        $page = 1;
         $successCount = $failCount = 0;
         while (true) {
-            $logPrefix = "size: $size";
-            $result = (clone $query)->take($size)->get();
+            $logPrefix = "size: $size, page: $page";
+            $result = (clone $query)->forPage($page, $size)->get();
             if ($result->isEmpty()) {
                 do_log("$logPrefix, no more data...");
                 break;
@@ -157,6 +159,7 @@ class ClaimRepository extends BaseRepository
                     $failCount++;
                 }
             }
+            $page++;
         }
         return ['success_count' => $successCount, 'fail_count' => $failCount];
     }
@@ -168,10 +171,15 @@ class ClaimRepository extends BaseRepository
             do_log("uid: $uid, filter: user_has_role_work_seeding => true, skip");
             return false;
         }
-        $user = User::query()->with('language')->findOrFail($uid);
-        $list = Claim::query()->where('uid', $uid)->with(['snatch', 'torrent' => fn ($query) => $query->select(Torrent::$commentFields)])->get();
         $now = Carbon::now();
         $startOfThisMonth = $now->clone()->startOfMonth();
+        $user = User::query()->with('language')->findOrFail($uid);
+        $list = Claim::query()
+            ->where('uid', $uid)
+            ->where("created_at", "<", $startOfThisMonth)
+            ->with(['snatch', 'torrent' => fn ($query) => $query->select(Torrent::$commentFields)])
+            ->get()
+        ;
         $seedTimeRequiredHours = Claim::getConfigStandardSeedTimeHours();
         $uploadedRequiredTimes = Claim::getConfigStandardUploadedTimes();
         $bonusMultiplier = Claim::getConfigBonusMultiplier();
@@ -179,6 +187,7 @@ class ClaimRepository extends BaseRepository
         $reachedTorrentIdArr = $unReachedTorrentIdArr = $remainTorrentIdArr = $unReachedIdArr = $toUpdateIdArr = [];
         $totalSeedTime = 0;
         $seedTimeCaseWhen = $uploadedCaseWhen = [];
+        $toDelClaimId = [];
         do_log(
             "uid: $uid, claim torrent count: " . $list->count()
             . ", seedTimeRequiredHours: $seedTimeRequiredHours"
@@ -193,6 +202,16 @@ class ClaimRepository extends BaseRepository
                     do_log("No force, return", 'alert');
                     return false;
                 }
+            }
+            if (!$row->snatch) {
+                $toDelClaimId[$row->id] = $row->id;
+                do_log("No snatch, continue", 'alert');
+                continue;
+            }
+            if (!$row->torrent) {
+                $toDelClaimId[$row->id] = $row->id;
+                do_log("No torrent, continue", 'alert');
+                continue;
             }
             if (
                 bcsub($row->snatch->seedtime, $row->seed_time_begin) >= $seedTimeRequiredHours * 3600
@@ -271,6 +290,10 @@ class ClaimRepository extends BaseRepository
             //Send message
             Message::add($message);
         });
+        if (!empty($toDelClaimId)) {
+            do_log("del claim: %s", json_encode($toDelClaimId));
+            Claim::query()->whereIn("id", array_keys($toDelClaimId))->delete();
+        }
         do_log("[DONE], cost time: " . (time() - $now->timestamp) . " seconds");
         return true;
     }
