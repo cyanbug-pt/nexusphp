@@ -92,3 +92,8 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
 });
 
 Route::post('login', [\App\Http\Controllers\AuthenticateController::class, 'login']);
+
+
+Route::group(['middleware' => ['auth.nexus:passkey', 'locale']], function () {
+    Route::post("pieces-hash", [\App\Http\Controllers\TorrentController::class, "queryByPiecesHash"])->name("torrent.pieces_hash.query");
+});

@@ -2,9 +2,9 @@
 
 function get_global_sp_state()
 {
-	static $global_promotion_state;
-	$cacheKey = \App\Models\Setting::TORRENT_GLOBAL_STATE_CACHE_KEY;
-	if (!$global_promotion_state) {
+    static $global_promotion_state;
+    $cacheKey = \App\Models\Setting::TORRENT_GLOBAL_STATE_CACHE_KEY;
+    if (!$global_promotion_state) {
         $row = \Nexus\Database\NexusDB::remember($cacheKey, 600, function () use ($cacheKey) {
             return \Nexus\Database\NexusDB::getOne('torrents_state', 1);
         });
@@ -19,87 +19,88 @@ function get_global_sp_state()
         } else {
             $global_promotion_state = $row;
         }
-	}
-	return $global_promotion_state;
+    }
+    return $global_promotion_state;
 }
 
 // IP Validation
 function validip($ip)
 {
-	if (!ip2long($ip)) //IPv6
-		return true;
-	if (!empty($ip) && $ip == long2ip(ip2long($ip)))
-	{
-		// reserved IANA IPv4 addresses
-		// http://www.iana.org/assignments/ipv4-address-space
-		$reserved_ips = array (
-		array('192.0.2.0','192.0.2.255'),
-		array('192.168.0.0','192.168.255.255'),
-		array('255.255.255.0','255.255.255.255')
-		);
+    if (!ip2long($ip)) //IPv6
+        return true;
+    if (!empty($ip) && $ip == long2ip(ip2long($ip))) {
+        // reserved IANA IPv4 addresses
+        // http://www.iana.org/assignments/ipv4-address-space
+        $reserved_ips = array(
+            array('192.0.2.0', '192.0.2.255'),
+            array('192.168.0.0', '192.168.255.255'),
+            array('255.255.255.0', '255.255.255.255')
+        );
 
-		foreach ($reserved_ips as $r)
-		{
-			$min = ip2long($r[0]);
-			$max = ip2long($r[1]);
-			if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
-		}
-		return true;
-	}
-	else return false;
+        foreach ($reserved_ips as $r) {
+            $min = ip2long($r[0]);
+            $max = ip2long($r[1]);
+            if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
+        }
+        return true;
+    } else return false;
 }
 
-function getip() {
-	if (isset($_SERVER)) {
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && validip($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		} elseif (isset($_SERVER['HTTP_CLIENT_IP']) && validip($_SERVER['HTTP_CLIENT_IP'])) {
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
-		} else {
-			$ip = $_SERVER['REMOTE_ADDR'] ?? '';
-		}
-	} else {
-		if (getenv('HTTP_X_FORWARDED_FOR') && validip(getenv('HTTP_X_FORWARDED_FOR'))) {
-			$ip = getenv('HTTP_X_FORWARDED_FOR');
-		} elseif (getenv('HTTP_CLIENT_IP') && validip(getenv('HTTP_CLIENT_IP'))) {
-			$ip = getenv('HTTP_CLIENT_IP');
-		} else {
-			$ip = getenv('REMOTE_ADDR') ?? '';
-		}
-	}
+function getip()
+{
+    if (isset($_SERVER)) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && validip($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_CLIENT_IP']) && validip($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        }
+    } else {
+        if (getenv('HTTP_X_FORWARDED_FOR') && validip(getenv('HTTP_X_FORWARDED_FOR'))) {
+            $ip = getenv('HTTP_X_FORWARDED_FOR');
+        } elseif (getenv('HTTP_CLIENT_IP') && validip(getenv('HTTP_CLIENT_IP'))) {
+            $ip = getenv('HTTP_CLIENT_IP');
+        } else {
+            $ip = getenv('REMOTE_ADDR') ?? '';
+        }
+    }
 
-	return $ip;
+    return $ip;
 }
 
 function sql_query($query)
 {
-	$begin = microtime(true);
-	global $query_name;
-	$result = mysql_query($query);
-	$end = microtime(true);
-	$query_name[] = [
-		'query' => $query,
-		'time' => sprintf('%.3f ms', ($end - $begin) * 1000),
-	];
-	return $result;
+    $begin = microtime(true);
+    global $query_name;
+    $result = mysql_query($query);
+    $end = microtime(true);
+    $query_name[] = [
+        'query' => $query,
+        'time' => sprintf('%.3f ms', ($end - $begin) * 1000),
+    ];
+    return $result;
 }
 
-function sqlesc($value) {
-	if (is_null($value)) {
-		return 'null';
-	}
-	$value = "'" . mysql_real_escape_string($value) . "'";
-	return $value;
+function sqlesc($value)
+{
+    if (is_null($value)) {
+        return 'null';
+    }
+    $value = "'" . mysql_real_escape_string($value) . "'";
+    return $value;
 }
 
-function hash_pad($hash) {
+function hash_pad($hash)
+{
     return str_pad($hash, 20);
 }
 
-function hash_where($name, $hash) {
-//	$shhash = preg_replace('/ *$/s', "", $hash);
-//	return "($name = " . sqlesc($hash) . " OR $name = " . sqlesc($shhash) . ")";
-//	return sprintf("$name in (%s, %s)", sqlesc($hash), sqlesc($shhash));
+function hash_where($name, $hash)
+{
+    //	$shhash = preg_replace('/ *$/s', "", $hash);
+    //	return "($name = " . sqlesc($hash) . " OR $name = " . sqlesc($shhash) . ")";
+    //	return sprintf("$name in (%s, %s)", sqlesc($hash), sqlesc($shhash));
     return "$name = " . sqlesc($hash);
 }
 
@@ -135,16 +136,16 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
 
 function get_langfolder_list()
 {
-	//do not access db for speed up, or for flexibility
-	return array("en", "chs", "cht", "ko", "ja");
+    //do not access db for speed up, or for flexibility
+    return array("en", "chs", "cht", "ko", "ja");
 }
 
 function printLine($line, $exist = false)
 {
-	echo "[" . date('Y-m-d H:i:s') . "] $line<br />";
-	if ($exist) {
-		exit(0);
-	}
+    echo "[" . date('Y-m-d H:i:s') . "] $line<br />";
+    if ($exist) {
+        exit(0);
+    }
 }
 
 function nexus_dd($vars)
@@ -185,11 +186,11 @@ function do_log($log, $level = 'info', $echo = false)
     }
 
     $logFile = getLogFile();
-	if (($fd = fopen($logFile, 'a')) === false) {
-	    $log .= "--------Can not open $logFile";
+    if (($fd = fopen($logFile, 'a')) === false) {
+        $log .= "--------Can not open $logFile";
         $fd = fopen(sys_get_temp_dir() . '/nexus.log', 'a');
-	}
-	$uid = 0;
+    }
+    $uid = 0;
     if (IN_NEXUS) {
         global $CURUSER;
         $user = $CURUSER;
@@ -213,7 +214,8 @@ function do_log($log, $level = 'info', $echo = false)
         sprintf('%.3f', microtime(true) - (nexus() ? nexus()->getStartTimestamp() : 0)),
         $uid,
         $passkey,
-        $env, $level,
+        $env,
+        strtoupper($level),
         $backtrace[0]['file'] ?? '',
         $backtrace[0]['line'] ?? '',
         $backtrace[1]['class'] ?? '',
@@ -263,7 +265,6 @@ function getLogFile($append = '')
     }
     $logFile = sprintf('%s-%s%s', $name, date('Y-m-d'), $suffix);
     return $logFiles[$append] = $logFile;
-
 }
 
 function nexus_config($key, $default = null)
@@ -274,7 +275,7 @@ function nexus_config($key, $default = null)
     static $configs;
     if (is_null($configs)) {
         //get all configuration from config file
-//		$files = glob(ROOT_PATH . 'config/*.php');
+        //		$files = glob(ROOT_PATH . 'config/*.php');
         $files = [
             ROOT_PATH . 'config/nexus.php',
             ROOT_PATH . 'config/emoji.php',
@@ -304,15 +305,15 @@ function nexus_config($key, $default = null)
  */
 function get_setting($name = null, $default = null): mixed
 {
-	static $settings;
-	if (is_null($settings)) {
+    static $settings;
+    if (is_null($settings)) {
         $settings = \Nexus\Database\NexusDB::remember("nexus_settings_in_nexus", 600, function () {
             //get all settings from database
             return \App\Models\Setting::getFromDb();
         });
-	}
-	if (is_null($name)) {
-	    return $settings;
+    }
+    if (is_null($name)) {
+        return $settings;
     }
     return arr_get($settings, $name, $default);
 }
@@ -377,24 +378,24 @@ function readEnvFile($envFile)
 
 function normalize_env($value)
 {
-	$value = trim($value);
-	$toStrip = ['\'', '"'];
-	if (in_array(mb_substr($value, 0, 1, 'utf-8'), $toStrip)) {
-		$value = mb_substr($value, 1, null, 'utf-8');
-	}
-	if (in_array(mb_substr($value, -1, null,'utf-8'), $toStrip)) {
-		$value = mb_substr($value, 0, -1, 'utf-8');
-	}
-	switch (strtolower($value)) {
-		case 'true':
-			return true;
-		case 'false':
-			return false;
-		case 'null':
-			return null;
-		default:
-			return $value;
-	}
+    $value = trim($value);
+    $toStrip = ['\'', '"'];
+    if (in_array(mb_substr($value, 0, 1, 'utf-8'), $toStrip)) {
+        $value = mb_substr($value, 1, null, 'utf-8');
+    }
+    if (in_array(mb_substr($value, -1, null, 'utf-8'), $toStrip)) {
+        $value = mb_substr($value, 0, -1, 'utf-8');
+    }
+    switch (strtolower($value)) {
+        case 'true':
+            return true;
+        case 'false':
+            return false;
+        case 'null':
+            return null;
+        default:
+            return $value;
+    }
 }
 
 /**
@@ -410,17 +411,17 @@ function normalize_env($value)
  */
 function arr_get($array, $key, $default = null)
 {
-	if (strpos($key, '.') === false) {
-		return $array[$key] ?? $default;
-	}
-	foreach (explode('.', $key) as $segment) {
-		if (isset($array[$segment])) {
-			$array = $array[$segment];
-		} else {
-			return $default;
-		}
-	}
-	return $array;
+    if (strpos($key, '.') === false) {
+        return $array[$key] ?? $default;
+    }
+    foreach (explode('.', $key) as $segment) {
+        if (isset($array[$segment])) {
+            $array = $array[$segment];
+        } else {
+            return $default;
+        }
+    }
+    return $array;
 }
 
 /**
@@ -453,7 +454,7 @@ function arr_set(&$array, $key, $value)
         // If the key doesn't exist at this depth, we will just create an empty array
         // to hold the next value, allowing us to create the arrays to hold final
         // values at the correct depth. Then we'll keep digging into the array.
-        if (! isset($array[$key]) || ! is_array($array[$key])) {
+        if (!isset($array[$key]) || !is_array($array[$key])) {
             $array[$key] = [];
         }
 
@@ -500,7 +501,7 @@ function getBaseUrl()
 
 function nexus_json_encode($data)
 {
-    return json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+    return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
 function api(...$args)
@@ -660,12 +661,12 @@ function get_tracker_schema_and_host($combine = false): array|string
     ) {
         $log .= ", c_secure_tracker_ssl = base64('yeah'): " . base64("yeah") . ", or not empty https_announce_urls, or isHttps()";
         $tracker_ssl = true;
-    }  else {
+    } else {
         $tracker_ssl = false;
     }
     $log .= ", tracker_ssl: $tracker_ssl";
 
-    if ($tracker_ssl == true){
+    if ($tracker_ssl == true) {
         $ssl_torrent = "https://";
         if ($https_announce_urls[0] != "") {
             $log .= ", https_announce_urls not empty, use it";
@@ -722,7 +723,7 @@ function get_user_row($id)
         'donoruntil', 'leechwarn', 'warned', 'title', 'downloadpos', 'parked', 'clientselect', 'showclienterror',
     );
     if (isset($userRows[$id])) return $userRows[$id];
-    $cacheKey = 'user_'.$id.'_content';
+    $cacheKey = 'user_' . $id . '_content';
     $row = \Nexus\Database\NexusDB::remember($cacheKey, 3600, function () use ($id, $neededColumns) {
         $user = \App\Models\User::query()->with(['wearing_medals'])->find($id, $neededColumns);
         if (!$user) {
@@ -741,20 +742,20 @@ function get_user_row($id)
         return apply_filter("user_row", $arr);
     });
 
-//	if ($CURUSER && $id == $CURUSER['id']) {
-//		$row = array();
-//		foreach($neededColumns as $column) {
-//			$row[$column] = $CURUSER[$column];
-//		}
-//		if (!$curuserRowUpdated) {
-//			$Cache->cache_value('user_'.$CURUSER['id'].'_content', $row, 900);
-//			$curuserRowUpdated = true;
-//		}
-//	} elseif (!$row = $Cache->get_value('user_'.$id.'_content')){
-//		$res = sql_query("SELECT ".implode(',', $neededColumns)." FROM users WHERE id = ".sqlesc($id)) or sqlerr(__FILE__,__LINE__);
-//		$row = mysql_fetch_array($res);
-//		$Cache->cache_value('user_'.$id.'_content', $row, 900);
-//	}
+    //	if ($CURUSER && $id == $CURUSER['id']) {
+    //		$row = array();
+    //		foreach($neededColumns as $column) {
+    //			$row[$column] = $CURUSER[$column];
+    //		}
+    //		if (!$curuserRowUpdated) {
+    //			$Cache->cache_value('user_'.$CURUSER['id'].'_content', $row, 900);
+    //			$curuserRowUpdated = true;
+    //		}
+    //	} elseif (!$row = $Cache->get_value('user_'.$id.'_content')){
+    //		$res = sql_query("SELECT ".implode(',', $neededColumns)." FROM users WHERE id = ".sqlesc($id)) or sqlerr(__FILE__,__LINE__);
+    //		$row = mysql_fetch_array($res);
+    //		$Cache->cache_value('user_'.$id.'_content', $row, 900);
+    //	}
 
     if (!$row)
         return false;
@@ -794,14 +795,14 @@ function site_info()
     return $siteInfo;
 }
 
-function isIPV4 ($ip)
+function isIPV4($ip)
 {
-    return filter_var($ip,FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+    return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 }
 
-function isIPV6 ($ip)
+function isIPV6($ip)
 {
-    return filter_var($ip,FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+    return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
 }
 
 function add_filter($name, $function, $priority = 10, $argc = 1)
@@ -813,7 +814,7 @@ function add_filter($name, $function, $priority = 10, $argc = 1)
 function apply_filter($name, ...$args)
 {
     global $hook;
-//    do_log("[APPLY_FILTER]: $name");
+    //    do_log("[APPLY_FILTER]: $name");
     return $hook->applyFilter(...func_get_args());
 }
 
@@ -826,7 +827,7 @@ function add_action($name, $function, $priority = 10, $argc = 1)
 function do_action($name, ...$args)
 {
     global $hook;
-//    do_log("[DO_ACTION]: $name");
+    //    do_log("[DO_ACTION]: $name");
     return $hook->doAction(...func_get_args());
 }
 
@@ -844,7 +845,10 @@ function isIPSeedBox($ip, $uid, $withoutCache = false): bool
     //check allow list first, not consider specific user
     $checkSeedBoxAllowedSql = sprintf(
         'select id from seed_box_records where `ip_begin_numeric` <= "%s" and `ip_end_numeric` >= "%s" and `version` = %s and `status` = %s and `is_allowed` = 1 limit 1',
-        $ipNumeric, $ipNumeric, $ipVersion, \App\Models\SeedBoxRecord::STATUS_ALLOWED
+        $ipNumeric,
+        $ipNumeric,
+        $ipVersion,
+        \App\Models\SeedBoxRecord::STATUS_ALLOWED
     );
     $res = \Nexus\Database\NexusDB::select($checkSeedBoxAllowedSql);
     if (!empty($res)) {
@@ -854,7 +858,11 @@ function isIPSeedBox($ip, $uid, $withoutCache = false): bool
     }
     $checkSeedBoxAdminSql = sprintf(
         'select id from seed_box_records where `ip_begin_numeric` <= "%s" and `ip_end_numeric` >= "%s" and `type` = %s and `version` = %s and `status` = %s and `is_allowed` = 0 limit 1',
-        $ipNumeric, $ipNumeric, \App\Models\SeedBoxRecord::TYPE_ADMIN, $ipVersion, \App\Models\SeedBoxRecord::STATUS_ALLOWED
+        $ipNumeric,
+        $ipNumeric,
+        \App\Models\SeedBoxRecord::TYPE_ADMIN,
+        $ipVersion,
+        \App\Models\SeedBoxRecord::STATUS_ALLOWED
     );
     $res = \Nexus\Database\NexusDB::select($checkSeedBoxAdminSql);
     if (!empty($res)) {
@@ -865,7 +873,12 @@ function isIPSeedBox($ip, $uid, $withoutCache = false): bool
     if ($uid !== null) {
         $checkSeedBoxUserSql = sprintf(
             'select id from seed_box_records where `ip_begin_numeric` <= "%s" and `ip_end_numeric` >= "%s" and `uid` = %s and `type` = %s and `version` = %s and `status` = %s and `is_allowed` = 0  limit 1',
-            $ipNumeric, $ipNumeric, $uid, \App\Models\SeedBoxRecord::TYPE_USER, $ipVersion, \App\Models\SeedBoxRecord::STATUS_ALLOWED
+            $ipNumeric,
+            $ipNumeric,
+            $uid,
+            \App\Models\SeedBoxRecord::TYPE_USER,
+            $ipVersion,
+            \App\Models\SeedBoxRecord::STATUS_ALLOWED
         );
         $res = \Nexus\Database\NexusDB::select($checkSeedBoxUserSql);
         if (!empty($res)) {
@@ -886,7 +899,13 @@ function getDataTraffic(array $torrent, array $queries, array $user, $peer, $sna
     }
     $log = sprintf(
         "torrent: %s, owner: %s, user: %s, peerUploaded: %s, peerDownloaded: %s, queriesUploaded: %s, queriesDownloaded: %s",
-        $torrent['id'], $torrent['owner'], $user['id'], $peer['uploaded'] ?? '', $peer['downloaded'] ?? '', $queries['uploaded'], $queries['downloaded']
+        $torrent['id'],
+        $torrent['owner'],
+        $user['id'],
+        $peer['uploaded'] ?? '',
+        $peer['downloaded'] ?? '',
+        $queries['uploaded'],
+        $queries['downloaded']
     );
     if (!empty($peer)) {
         $realUploaded = max(bcsub($queries['uploaded'], $peer['uploaded']), 0);
@@ -993,12 +1012,12 @@ function clear_user_cache($uid, $passkey = '')
     do_log("clear_user_cache, uid: $uid, passkey: $passkey");
     \Nexus\Database\NexusDB::cache_del("user_{$uid}_content");
     \Nexus\Database\NexusDB::cache_del("user_{$uid}_roles");
-    \Nexus\Database\NexusDB::cache_del("announce_user_passkey_$uid");//announce.php
+    \Nexus\Database\NexusDB::cache_del("announce_user_passkey_$uid"); //announce.php
     \Nexus\Database\NexusDB::cache_del(\App\Models\Setting::DIRECT_PERMISSION_CACHE_KEY_PREFIX . $uid);
     \Nexus\Database\NexusDB::cache_del("user_role_ids:$uid");
     \Nexus\Database\NexusDB::cache_del("direct_permissions:$uid");
     if ($passkey) {
-        \Nexus\Database\NexusDB::cache_del('user_passkey_'.$passkey.'_content');//announce.php
+        \Nexus\Database\NexusDB::cache_del('user_passkey_' . $passkey . '_content'); //announce.php
     }
 }
 
@@ -1020,7 +1039,6 @@ function clear_category_cache()
     foreach ($searchBoxList as $item) {
         \Nexus\Database\NexusDB::cache_del("category_list_mode_{$item->id}");
     }
-
 }
 
 /**
@@ -1064,8 +1082,8 @@ function clear_inbox_count_cache($uid)
 {
     do_log("clear_inbox_count_cache");
     foreach (\Illuminate\Support\Arr::wrap($uid) as $id) {
-        \Nexus\Database\NexusDB::cache_del('user_'.$id.'_inbox_count');
-        \Nexus\Database\NexusDB::cache_del('user_'.$id.'_unread_message_count');
+        \Nexus\Database\NexusDB::cache_del('user_' . $id . '_inbox_count');
+        \Nexus\Database\NexusDB::cache_del('user_' . $id . '_unread_message_count');
     }
 }
 
@@ -1126,7 +1144,7 @@ function user_can($permission, $fail = false, $uid = 0): bool
         global $lang_functions;
         $requireClass = get_setting("authority.$permission");
         if (isset(\App\Models\User::$classes[$requireClass])) {
-            stderr($lang_functions['std_sorry'],$lang_functions['std_permission_denied_only'].get_user_class_name($requireClass,false,true,true).$lang_functions['std_or_above_can_view'],false);
+            stderr($lang_functions['std_sorry'], $lang_functions['std_permission_denied_only'] . get_user_class_name($requireClass, false, true, true) . $lang_functions['std_or_above_can_view'], false);
         } else {
             stderr($lang_functions['std_error'], $lang_functions['std_permission_denied']);
         }
@@ -1149,7 +1167,7 @@ function is_donor(array $userInfo): bool
  */
 function get_passkey_by_authkey($authkey)
 {
-    return \Nexus\Database\NexusDB::remember("authkey2passkey:$authkey", 3600*24, function () use ($authkey) {
+    return \Nexus\Database\NexusDB::remember("authkey2passkey:$authkey", 3600 * 24, function () use ($authkey) {
         $arr = explode('|', $authkey);
         if (count($arr) != 3) {
             throw new \InvalidArgumentException("Invalid authkey: $authkey, format error");
@@ -1195,9 +1213,30 @@ function has_role_work_seeding($uid)
     return $result;
 }
 
-function format_chat_answer($userid, $message){
+function is_danger_url($url): bool
+{
+    $dangerScriptsPattern = "/(logout|login|ajax|announce|scrape|adduser|modtask|take.*)\.php/i";
+    $match = preg_match($dangerScriptsPattern, $url);
+    if ($match > 0) {
+        return true;
+    }
+    return false;
+}
+
+function is_danger_url($url): bool
+{
+    $dangerScriptsPattern = "/(logout|login|ajax|announce|scrape|adduser|modtask|take.*)\.php/i";
+    $match = preg_match($dangerScriptsPattern, $url);
+    if ($match > 0) {
+        return true;
+    }
+    return false;
+}
+
+function format_chat_answer($userid, $message)
+{
     $user = get_user_row($userid);
-    if(str_contains($message,'[mybonus]')){
+    if (str_contains($message, '[mybonus]')) {
         $totalBonus = get_hourly_bonus();
         $totalBonusStr = number_format($totalBonus, 3);
         $format_message = '';
@@ -1221,14 +1260,15 @@ function format_chat_answer($userid, $message){
         }
         $message = str_replace("[mybonus]",  $format_message, $message);
     }
-    if(mb_substr($message, 0, 6) === '[eval]'){
+    if (mb_substr($message, 0, 6) === '[eval]') {
         $message = trim(mb_substr($message, 6));
         $message = eval($message);
     }
     return $message;
 };
 
-function get_hourly_bonus($userid){
+function get_hourly_bonus($userid)
+{
     $user = get_user_row($userid);
     $bonusResult = calculate_seed_bonus($userid);
     $officialAdditionalFactor = get_setting('bonus.official_addition', 0);
@@ -1244,12 +1284,42 @@ function get_hourly_bonus($userid){
     return $baseBonus + $haremAddition * $haremFactor + $bonusResult['official_bonus'] * $officialAdditionalFactor;
 }
 
-function get_user_avatar(){
+function get_user_avatar()
+{
     global $CURUSER;
     $userid = $CURUSER["id"];
     $userRow = get_user_row($userid);
     $avatar = ($CURUSER["avatars"] == "yes" ? htmlspecialchars(trim($CURUSER["avatar"])) : "");
-    if (!$avatar){
+    if (!$avatar) {
+        $avatar = "pic/default_avatar.gif";
+    }
+    return $avatar;
+}
+
+function get_hourly_bonus($userid)
+{
+    $user = get_user_row($userid);
+    $bonusResult = calculate_seed_bonus($userid);
+    $officialAdditionalFactor = get_setting('bonus.official_addition', 0);
+    $haremFactor = get_setting('bonus.harem_addition');
+    $haremAddition = calculate_harem_addition($userid);
+    $isDonor = is_donor($user);
+    $donortimes_bonus = get_setting('bonus.donortimes');
+    $baseBonusFactor = 1;
+    if ($isDonor) {
+        $baseBonusFactor = $donortimes_bonus;
+    }
+    $baseBonus = $bonusResult['seed_bonus'] * $baseBonusFactor;
+    return $baseBonus + $haremAddition * $haremFactor + $bonusResult['official_bonus'] * $officialAdditionalFactor;
+}
+
+function get_user_avatar()
+{
+    global $CURUSER;
+    $userid = $CURUSER["id"];
+    $userRow = get_user_row($userid);
+    $avatar = ($CURUSER["avatars"] == "yes" ? htmlspecialchars(trim($CURUSER["avatar"])) : "");
+    if (!$avatar) {
         $avatar = "pic/default_avatar.gif";
     }
     return $avatar;

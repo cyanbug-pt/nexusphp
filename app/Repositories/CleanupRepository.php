@@ -12,6 +12,21 @@ class CleanupRepository extends BaseRepository
     const USER_SEEDING_LEECHING_TIME_BATCH_KEY = "batch_key:user_seeding_leeching_time";
     const TORRENT_SEEDERS_ETC_BATCH_KEY = "batch_key:torrent_seeders_etc";
 
+    private static array $batchKeyActionsMap = [
+        self::USER_SEED_BONUS_BATCH_KEY => [
+            'action' => 'seed_bonus',
+            'task_index' => 0,
+        ],
+        self::TORRENT_SEEDERS_ETC_BATCH_KEY => [
+            'action' => 'seeders_etc',
+            'task_index' => 1,
+        ],
+        self::USER_SEEDING_LEECHING_TIME_BATCH_KEY => [
+            'action' => 'seeding_leeching_time',
+            'task_index' => 2,
+        ],
+    ];
+
     private static int $totalTask = 3;
 
     private static int $oneTaskSeconds = 0;
@@ -22,7 +37,7 @@ class CleanupRepository extends BaseRepository
     {
         $args = [
             self::USER_SEED_BONUS_BATCH_KEY, self::USER_SEEDING_LEECHING_TIME_BATCH_KEY, self::TORRENT_SEEDERS_ETC_BATCH_KEY,
-            $uid, $uid, $torrentId, self::getHashKeySuffix()
+            $uid, $uid, $torrentId, self::getHashKeySuffix(), self::getCacheKeyLifeTime()
         ];
         $result  = $redis->eval(self::getAddRecordLuaScript(), $args, 3);
         $err = $redis->getLastError();
@@ -37,11 +52,26 @@ class CleanupRepository extends BaseRepository
         self::runBatchJob(self::USER_SEED_BONUS_BATCH_KEY, $requestId);
     }
 
-    public static function runBatchJob($batchKey, $requestId)
+    public static function runBatchJobUpdateUserSeedingLeechingTime(string $requestId)
+    {
+        self::runBatchJob(self::USER_SEEDING_LEECHING_TIME_BATCH_KEY, $requestId);
+    }
+
+    public static function runBatchJobUpdateTorrentSeedersEtc(string $requestId)
+    {
+        self::runBatchJob(self::TORRENT_SEEDERS_ETC_BATCH_KEY, $requestId);
+    }
+
+    private static function runBatchJob($batchKey, $requestId)
     {
         $redis = NexusDB::redis();
         $logPrefix = sprintf("[$batchKey], commonRequestId: %s", $requestId);
         $beginTimestamp = time();
+        if (!isset(self::$batchKeyActionsMap[$batchKey])) {
+            do_log("$logPrefix, batchKey: $batchKey invalid", 'error');
+            return;
+        }
+        $batchKeyInfo = self::$batchKeyActionsMap[$batchKey];
 
         $batch = self::getBatch($redis, $batchKey);
         if (!$batch) {
@@ -49,13 +79,32 @@ class CleanupRepository extends BaseRepository
             return;
         }
         //update the batch key
-        $redis->set($batchKey, $batchKey . ":" . self::getHashKeySuffix());
-        $count = match ($batchKey) {
-            self::USER_SEEDING_LEECHING_TIME_BATCH_KEY => self::updateUserLeechingSeedingTime($redis, $batch, $requestId),
-            self::TORRENT_SEEDERS_ETC_BATCH_KEY => self::updateTorrentSeedersEtc($redis, $batch, $requestId),
-            self::USER_SEED_BONUS_BATCH_KEY => self::calculateUserSeedBonus($redis, $batch, $requestId),
-            default => throw new \InvalidArgumentException("Invalid batchKey: $batchKey")
-        };
+        $newBatch = $batchKey . ":" . self::getHashKeySuffix();
+        $lifeTime = self::getCacheKeyLifeTime();
+        $redis->set($batchKey, $newBatch, ['ex' => $lifeTime]);
+        $redis->hSetNx($newBatch, -1, 1);
+        $redis->expire($newBatch, $lifeTime);
+
+
+        $count = 0;
+        $it = NULL;
+        $length = $redis->hLen($batch);
+        $page = 0;
+        /* Don't ever return an empty array until we're done iterating */
+        $redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
+        while($arr_keys = $redis->hScan($batch, $it, "*", self::$scanSize)) {
+            $delay = self::getDelay($batchKeyInfo['task_index'], $length, $page);
+            $idStr = implode(",", array_keys($arr_keys));
+            $command = sprintf(
+                'cleanup --action=%s --begin_id=%s --end_id=%s --id_str=%s --request_id=%s --delay=%s',
+                $batchKeyInfo['action'], 0, 0,  $idStr, $requestId, $delay
+            );
+            $output = executeCommand($command, 'string', true);
+            do_log(sprintf('output: %s', $output));
+            $count += count($arr_keys);
+            $page++;
+        }
+
         //remove this batch
         $redis->del($batch);
         $endTimestamp = time();
@@ -63,79 +112,6 @@ class CleanupRepository extends BaseRepository
     }
 
 
-    private static function updateUserLeechingSeedingTime(\Redis $redis, $batch, $logPrefix): int
-    {
-        $count = 0;
-        $size = 1000;
-        $it = NULL;
-        /* Don't ever return an empty array until we're done iterating */
-        $redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
-        while($arr_keys = $redis->hScan($batch, $it, "*", $size)) {
-            foreach($arr_keys as $uid => $timestamp) {
-                do_log("$logPrefix $uid => $timestamp"); /* Print the hash member and value */
-                $sumInfo = NexusDB::table('snatched')
-                    ->selectRaw('sum(seedtime) as seedtime_sum, sum(leechtime) as leechtime_sum')
-                    ->where('userid', $uid)
-                    ->first();
-                if ($sumInfo && $sumInfo->seedtime_sum !== null) {
-                    $update = [
-                        'seedtime' => $sumInfo->seedtime_sum ?? 0,
-                        'leechtime' => $sumInfo->leechtime_sum ?? 0,
-                        'seed_time_updated_at' => Carbon::now()->toDateTimeString(),
-                    ];
-                    NexusDB::table('users')
-                        ->where('id', $uid)
-                        ->update($update);
-                    do_log("$logPrefix, [SUCCESS]: $uid => " . json_encode($update));
-                    $count++;
-                }
-            }
-            sleep(rand(1, 10));
-        }
-        return $count;
-    }
-
-    private static function updateTorrentSeedersEtc(\Redis $redis, $batch, $logPrefix)
-    {
-        $count = 0;
-        $size = 1000;
-        $it = NULL;
-        /* Don't ever return an empty array until we're done iterating */
-        $redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
-        while($arr_keys = $redis->hScan($batch, $it, "*", $size)) {
-            foreach($arr_keys as $torrentId => $timestamp) {
-                do_log("$logPrefix $torrentId => $timestamp"); /* Print the hash member and value */
-                $peerResult = NexusDB::table('peers')
-                    ->where('torrent', $torrentId)
-                    ->selectRaw("count(*) as count, seeder")
-                    ->groupBy('seeder')
-                    ->get()
-                ;
-                $commentResult = NexusDB::table('comments')
-                    ->where('torrent', $torrentId)
-                    ->selectRaw("count(*) as count")
-                    ->first()
-                ;
-                $update = [
-                    'comments' => $commentResult && $commentResult->count !== null ? $commentResult->count : 0,
-                    'seeders' => 0,
-                    'leechers' => 0,
-                ];
-                foreach ($peerResult as $item) {
-                    if ($item->seeder == 'yes') {
-                        $update['seeders'] = $item->count;
-                    } elseif ($item->seeder == 'no') {
-                        $update['leechers'] = $item->count;
-                    }
-                }
-                NexusDB::table('torrents')->where('id', $torrentId)->update($update);
-                do_log("$logPrefix, [SUCCESS]: $torrentId => " . json_encode($update));
-                $count++;
-            }
-            sleep(rand(1, 10));
-        }
-        return $count;
-    }
 
     private static function getBatch(\Redis $redis, $batchKey)
     {
@@ -152,7 +128,7 @@ class CleanupRepository extends BaseRepository
     }
 
     /**
-     * USER_SEED_BONUS, USER_SEEDING_LEECHING_TIME, TORRENT_SEEDERS_ETC, uid, uid, torrentId, timeStr
+     * USER_SEED_BONUS, USER_SEEDING_LEECHING_TIME, TORRENT_SEEDERS_ETC, uid, uid, torrentId, timeStr, cacheLifeTime
      *
      * @return string
      */
@@ -165,7 +141,7 @@ for k, v in pairs(batchList) do
     local isBatchKeyNew = false
     if batchKey == false then
         batchKey = v .. ":" .. ARGV[4]
-        redis.call("SET", v, batchKey, "EX", 2592000)
+        redis.call("SET", v, batchKey, "EX", ARGV[5])
         isBatchKeyNew = true
     end
     local hashKey
@@ -178,9 +154,9 @@ for k, v in pairs(batchList) do
     else
         hashKey = ARGV[3]
     end
-    redis.call("HSETNX", batchKey, hashKey, ARGV[4])
+    redis.call("HSETNX", batchKey, hashKey, 1)
     if isBatchKeyNew then
-        redis.call("EXPIRE", batchKey, 2592000)
+        redis.call("EXPIRE", batchKey, ARGV[5])
     end
 end
 LUA;
@@ -189,29 +165,6 @@ LUA;
     private static function getHashKeySuffix(): string
     {
         return date('Ymd_His');
-    }
-
-    private static function calculateUserSeedBonus(\Redis $redis, $batch, $requestId): int
-    {
-        $count = 0;
-        $it = NULL;
-        $length = $redis->hLen($batch);
-        $page = 0;
-        /* Don't ever return an empty array until we're done iterating */
-        $redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
-        while($arr_keys = $redis->hScan($batch, $it, "*", self::$scanSize)) {
-            $delay = self::getDelay(0, $length, $page);
-            $idStr = implode(",", array_keys($arr_keys));
-            $command = sprintf(
-                'cleanup --action=seed_bonus --begin_id=%s --end_id=%s --id_str=%s --request_id=%s --delay=%s',
-                0, 0,  $idStr, $requestId, $delay
-            );
-            $output = executeCommand($command, 'string', true);
-            do_log(sprintf('command: %s, output: %s', $command, $output));
-            $page++;
-            $count += count($arr_keys);
-        }
-        return $count;
     }
 
     private static function getOneTaskSeconds(): float|int
@@ -244,6 +197,14 @@ LUA;
         $offset = $page * $perPage;
 
         return floor($base + $offset);
+    }
+
+    private static function getCacheKeyLifeTime(): int
+    {
+        $four = get_setting("main.autoclean_interval_four");
+        $three = get_setting("main.autoclean_interval_three");
+        $one = get_setting("main.autoclean_interval_one");
+        return intval($four) + intval($three) + intval($one);
     }
 
 }

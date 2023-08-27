@@ -225,10 +225,16 @@ function formatUrl($url, $newWindow = false, $text = '', $linkClass = '') {
 }
 function formatCode($text) {
 	global $lang_functions;
-	return addTempCode("<br /><div class=\"codetop\">".$lang_functions['text_code']."</div><div class=\"codemain\">$text</div><br />");
+	return addTempCode("<br /><div class=\"codetop\">".$lang_functions['text_code']."</div><div class=\"codemain\"><pre><code>$text</code></pre></div><br />");
 }
 
 function formatImg($src, $enableImageResizer, $image_max_width, $image_max_height, $imgId = "") {
+    if (is_danger_url($src)) {
+        $msg = "[DANGER_URL]: $src";
+        do_log($msg, "alert");
+        write_log($msg, "mod");
+        return "";
+    }
 	return addTempCode("<img style=\"max-width: 100%\" id=\"$imgId\" alt=\"image\" src=\"$src\"" .($enableImageResizer ?  " onload=\"Scale(this,$image_max_width,$image_max_height);\" onclick=\"Preview(this);\"" : "") .  " />");
 }
 
@@ -3135,12 +3141,12 @@ function loggedinorreturn($mainpage = false) {
 	    if (nexus()->getScript() == 'ajax') {
 	        exit(fail('Not login!', $_POST));
         }
-		if ($mainpage)
-		header("Location: " . get_protocol_prefix() . "$BASEURL/login.php");
-		else {
+		if ($mainpage) {
+            nexus_redirect("login.php");
+        } else {
 			$to = $_SERVER["REQUEST_URI"];
 			$to = basename($to);
-			header("Location: " . get_protocol_prefix() . "$BASEURL/login.php?returnto=" . rawurlencode($to));
+            nexus_redirect("login.php?returnto=" . rawurlencode($to));
 		}
 		exit();
 	}
@@ -3148,7 +3154,13 @@ function loggedinorreturn($mainpage = false) {
 }
 
 function deletetorrent($id, $notify = false) {
-    $idArr = \Illuminate\Support\Arr::wrap($id);
+    $idArr = is_array($id) ? $id : [$id];
+    $torrentInfo = \Nexus\Database\NexusDB::table("torrents")
+        ->whereIn("id", $idArr)
+        ->get(['id', 'pieces_hash'])
+        ->KeyBy("id")
+    ;
+    $torrentRep = new \App\Repositories\TorrentRepository();
 	$idStr = implode(', ', $idArr ?: [0]);
 	$torrent_dir = get_setting('main.torrent_dir');
     \Nexus\Database\NexusDB::statement("DELETE FROM torrents WHERE id in ($idStr)");
@@ -3158,7 +3170,10 @@ function deletetorrent($id, $notify = false) {
 	}
     \Nexus\Database\NexusDB::statement("DELETE FROM hit_and_runs WHERE torrent_id in ($idStr)");
     \Nexus\Database\NexusDB::statement("DELETE FROM claims WHERE torrent_id in ($idStr)");
-    foreach ($idArr as $_id) {
+    foreach ($torrentInfo as $_id => $info) {
+        if ($torrentInfo->has($_id)) {
+            $torrentRep->delPiecesHashCache($torrentInfo->get($_id)->pieces_hash);
+        }
         do_action("torrent_delete", $_id);
         do_log("delete torrent: $_id", "error");
         unlink(getFullDirectory("$torrent_dir/$_id.torrent"));
@@ -5359,6 +5374,9 @@ function saveSetting($prefix, $nameAndValue, $autoload = 'yes')
 
 function getFullDirectory($dir)
 {
+    if (is_file($dir) && file_exists($dir)) {
+        return $dir;
+    }
     if (!is_dir($dir)) {
         $dir = ROOT_PATH . $dir;
     }
