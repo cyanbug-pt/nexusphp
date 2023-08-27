@@ -1285,32 +1285,3 @@ function get_user_avatar()
     }
     return $avatar;
 }
-
-function get_hourly_bonus($userid)
-{
-    $user = get_user_row($userid);
-    $bonusResult = calculate_seed_bonus($userid);
-    $officialAdditionalFactor = get_setting('bonus.official_addition', 0);
-    $haremFactor = get_setting('bonus.harem_addition');
-    $haremAddition = calculate_harem_addition($userid);
-    $isDonor = is_donor($user);
-    $donortimes_bonus = get_setting('bonus.donortimes');
-    $baseBonusFactor = 1;
-    if ($isDonor) {
-        $baseBonusFactor = $donortimes_bonus;
-    }
-    $baseBonus = $bonusResult['seed_bonus'] * $baseBonusFactor;
-    return $baseBonus + $haremAddition * $haremFactor + $bonusResult['official_bonus'] * $officialAdditionalFactor;
-}
-
-function get_user_avatar()
-{
-    global $CURUSER;
-    $userid = $CURUSER["id"];
-    $userRow = get_user_row($userid);
-    $avatar = ($CURUSER["avatars"] == "yes" ? htmlspecialchars(trim($CURUSER["avatar"])) : "");
-    if (!$avatar) {
-        $avatar = "pic/default_avatar.gif";
-    }
-    return $avatar;
-}
