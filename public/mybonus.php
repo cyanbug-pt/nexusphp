@@ -77,6 +77,28 @@ function bonusarray($option = 0){
         $results[] = $bonus;
     }
 
+		//Invite for 10
+    if ($oneinvite_bonus > 0){
+        $bonus = array();
+        $bonus['points'] = $oneinvite_bonus*10;
+        $bonus['art'] = 'invite';
+        $bonus['menge'] = 10;
+        $bonus['name'] = $lang_mybonus['text_buy_invite_10'];
+        $bonus['description'] = $lang_mybonus['text_buy_invite_note'];
+        $results[] = $bonus;
+    }
+
+		//Invite for 100
+    if ($oneinvite_bonus > 0){
+        $bonus = array();
+        $bonus['points'] = $oneinvite_bonus*100;
+        $bonus['art'] = 'invite';
+        $bonus['menge'] = 100;
+        $bonus['name'] = $lang_mybonus['text_buy_invite_100'];
+        $bonus['description'] = $lang_mybonus['text_buy_invite_note'];
+        $results[] = $bonus;
+    }
+
     //Tmp Invite
     $tmpInviteBonus = \App\Models\BonusLogs::getBonusForBuyTemporaryInvite();
     if ($tmpInviteBonus > 0) {
@@ -308,10 +330,11 @@ if (isset($do)) {
 	$msg = $lang_mybonus['text_success_upload'];
     elseif ($do == "download")
     $msg = $lang_mybonus['text_success_download'];
-	elseif ($do == "invite")
-	$msg = $lang_mybonus['text_success_invites'];
-    elseif ($do == "tmp_invite")
-        $msg = $lang_mybonus['text_success_tmp_invites'];
+	elseif ($do == "invite"){
+    $menge = htmlspecialchars($_GET['menge'] ?? '1');
+    $msg = str_replace('1', $menge, $lang_mybonus['text_success_invites']);
+	} elseif ($do == "tmp_invite")
+  $msg = $lang_mybonus['text_success_tmp_invites'];
 	elseif ($do == "vip")
 	$msg =  $lang_mybonus['text_success_vip']."<b>".get_user_class_name(UC_VIP,false,false,true)."</b>".$lang_mybonus['text_success_vip_two'];
 	elseif ($do == "vipfalse")
@@ -645,7 +668,7 @@ if ($action == "exchange") {
 //			$bonuscomment = date("Y-m-d") . " - " .$points. " Points for invites.\n " .htmlspecialchars($bonuscomment);
 //			sql_query("UPDATE users SET invites = ".sqlesc($inv).", seedbonus = seedbonus - $points, bonuscomment=".sqlesc($bonuscomment)." WHERE id = ".sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
             $bonusRep->consumeUserBonus($CURUSER['id'], $points, \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE, $points. " Points for invites.", ['invites' => $inv, ]);
-            nexus_redirect("" . get_protocol_prefix() . "$BASEURL/mybonus.php?do=invite");
+            nexus_redirect("" . get_protocol_prefix() . "$BASEURL/mybonus.php?do=invite&menge=".$bonusarray['menge']);
 		}
         //=== temporary invite
         elseif($art == "tmp_invite") {

@@ -82,6 +82,8 @@ $lang_mybonus = array
     'text_downloaded_ten_gb' => "10.0 GB <font color='#ff4500'>下载量</font>",
     'text_downloaded_hundred_gb' => "100.0 GB <font color='#ff4500'>下载量</font>",
 	'text_buy_invite' => "1个邀请名额",
+	'text_buy_invite_10' => "10个邀请名额",
+	'text_buy_invite_100' => "100个邀请名额",
 	'text_buy_invite_note' => "如果有足够的魔力值，你可以用它来换取邀请名额。交易完成后，你的魔力值会减少，邀请名额数则会增加。",
 	'text_custom_title' => "自定义头衔",
 	'text_custom_title_note' => "如果有足够的魔力值，你就可以给自己定一个头衔了。注意：禁止使用脏话、攻击性的词汇或用户等级作为头衔。交易完成后，你的魔力值会减少，你的头衔将变成自定义的。",
