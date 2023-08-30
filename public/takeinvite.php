@@ -39,6 +39,9 @@ if ($isPreRegisterEmailAndUsername) {
     if (empty($preRegisterUsername)) {
         bark(nexus_trans("invite.require_pre_register_username"));
     }
+    if (!validusername($preRegisterUsername)) {
+        bark(nexus_trans("user.username_invalid", ["username" => $preRegisterUsername]));
+    }
     $exists = \App\Models\User::query()->where('username', $preRegisterUsername)->exists();
     if ($exists) {
         bark(nexus_trans("user.username_already_exists", ["username" => $preRegisterUsername]));
@@ -92,11 +95,16 @@ $sendResult = sent_mail($email,$SITENAME,$SITEEMAIL,$title,$message,"invitesignu
 //this email is sent only when someone give out an invitation
 if ($sendResult === true) {
     if (isset($hashRecord)) {
-        $hashRecord->update([
+        $update = [
             'invitee' => $email,
             'time_invited' => now(),
             'valid' => 1,
-        ]);
+        ];
+        if ($isPreRegisterEmailAndUsername) {
+            $update["pre_register_email"] = $email;
+            $update["pre_register_username"] = $preRegisterUsername;
+        }
+        $hashRecord->update($update);
     } else {
         $insert = [
             "inviter" => $id,
