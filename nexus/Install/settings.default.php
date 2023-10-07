@@ -431,6 +431,7 @@ return array (
          'seed_time_minimum' => '',
          'ignore_when_ratio_reach' => '',
          'ban_user_when_counts_reach' => '',
+         'include_rate' => 1,
      ],
     'seed_box' => [
         'enabled' => 'no',
@@ -451,5 +452,6 @@ return array (
         'cookie_valid_days' => 365,
         'maximum_upload_speed' => 8000,
         'is_invite_pre_email_and_username' => 'No',
+        'access_admin_class_min' => User::CLASS_ADMINISTRATOR,
     ],
 );

@@ -72,6 +72,8 @@ return [
             'ignore_when_ratio_reach_help' => '達標的最小分享率',
             'ban_user_when_counts_reach' => 'H&R 數量上限',
             'ban_user_when_counts_reach_help' => 'H&R 數量達到此值，賬號會被禁用',
+            'include_rate' => '計入完成率',
+            'include_rate_help' => '當下載完成率（0 ~ 1 之間的小數）達到此值時才計入 H&R。默認：1'
         ],
         'seed_box' => [
             'tab_header' => 'SeedBox',
@@ -101,9 +103,11 @@ return [
             'maximum_number_of_medals_can_be_worn' => '勛章最大可佩戴數',
             'cookie_valid_days' => 'Cookie 有效天數',
             'maximum_upload_speed' => '最大上傳速度',
-            'maximum_upload_speed_help' => '單種上傳速度超過此值賬號即刻禁用，單位 Mbps。如：100 Mbps = 12.5 MB/s',
+            'maximum_upload_speed_help' => '此值影響作弊者檢測，是檢測級別保守的最大上傳速度。實際限速 = 最大上傳速度/檢測級別，從保守~多疑為1~4。假如最大限速為 1000，檢測級別為保守，實際限速為 1000/1 = 1000，檢測級別為多疑，實際限速為 1000/4=250。單種上傳速度超過實際限速即刻禁用賬號。這裏的單位是 Mbps，如：100 Mbps = 12.5 MB/s。',
             'is_invite_pre_email_and_username' => '邀請是否預定郵箱和用戶名',
             'is_invite_pre_email_and_username_help' => "默認: 'No'。若預定，用戶註冊時不可修改郵箱和用戶名",
+            'access_admin_class_min' => '登錄管理後臺最小等級',
+            'access_admin_class_min_help' => '默認：管理員，用戶等級大於等於設定值的用戶可以登錄管理後臺',
         ],
     ],
     'user' => [

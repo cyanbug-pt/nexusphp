@@ -84,7 +84,7 @@ if (!empty($_GET['authkey'])) {
 if ($redis->get("$torrentNotExistsKey:$info_hash")) {
     $msg = "Torrent not exists";
     do_log("[ANNOUNCE] $msg");
-    warn($msg);
+    err($msg);
 }
 $torrentReAnnounceKey = sprintf('reAnnounceCheckByInfoHash:%s:%s', $userAuthenticateKey, $info_hash);
 if (!$isReAnnounce && !$redis->set($torrentReAnnounceKey, TIMENOW, ['nx', 'ex' => 60])) {
@@ -215,7 +215,7 @@ if (!$torrent) {
     $infoHashUrlEncode = substr($queryString, $start, $end - $start);
     do_log("[TORRENT NOT EXISTS] $checkTorrentSql, params: $queryString, infoHashUrlEncode: $infoHashUrlEncode");
     $redis->set("$torrentNotExistsKey:$info_hash", TIMENOW, ['ex' => 24*3600]);
-    warn("torrent not registered with this tracker");
+    err("torrent not registered with this tracker");
 }
 $GLOBALS['torrent'] = $torrent;
 $torrentid = $torrent["id"];
@@ -393,8 +393,8 @@ if (!isset($self))
         warn("You cannot seed the same torrent in the same location from more than 1 client.", 300);
     }
 	$valid = @mysql_fetch_row(@sql_query("SELECT COUNT(*) FROM peers WHERE torrent=$torrentid AND userid=" . sqlesc($userid)));
-	if ($valid[0] >= 1 && $seeder == 'no') warn("You already are downloading the same torrent. You may only leech from one location at a time.", 300);
-	if ($valid[0] >= 3 && $seeder == 'yes') warn("You cannot seed the same torrent from more than 3 locations.", 300);
+	if ($valid[0] >= 1 && $seeder == 'no') err("You already are downloading the same torrent. You may only leech from one location at a time.", 300);
+	if ($valid[0] >= 3 && $seeder == 'yes') err("You cannot seed the same torrent from more than 3 locations.", 300);
 
 	if ($az["enabled"] == "no")
         warn("Your account is disabled!", 300);
@@ -487,7 +487,6 @@ if (!isset($self))
 }
 else // continue an existing session
 {
-    $snatchInfo = mysql_fetch_assoc(sql_query(sprintf('select * from snatched where torrentid = %s and userid = %s order by id desc limit 1', $torrentid, $userid)));
 	$upthis = $trueupthis = max(0, $uploaded - $self["uploaded"]);
 	$downthis = $truedownthis = max(0, $downloaded - $self["downloaded"]);
 	$announcetime = ($self["seeder"] == "yes" ? "seedtime = seedtime + {$self['announcetime']}" : "leechtime = leechtime + {$self['announcetime']}");
@@ -511,99 +510,12 @@ else // continue an existing session
 	}
 
 	do_log("upthis: $upthis, downthis: $downthis, announcetime: $announcetime, is_cheater: $is_cheater");
-
+    $snatchInfo = get_snatch_info($torrentid, $userid);
 	if (!$is_cheater && ($trueupthis > 0 || $truedownthis > 0))
 	{
         $dataTraffic = getDataTraffic($torrent, $_GET, $az, $self, $snatchInfo, apply_filter('torrent_promotion', $torrent));
         $USERUPDATESET[] = "uploaded = uploaded + " . $dataTraffic['uploaded_increment_for_user'];
         $USERUPDATESET[] = "downloaded = downloaded + " . $dataTraffic['downloaded_increment_for_user'];
-
-//        $global_promotion_state = get_global_sp_state();
-//        if (isset($torrent['__ignore_global_sp_state']) && $torrent['__ignore_global_sp_state']) {
-//            do_log("[IGNORE_GLOBAL_SP_STATE], sp_state: {$torrent['sp_state']}");
-//            $global_promotion_state = 1;
-//        }
-//        if($global_promotion_state == 1)// Normal, see individual torrent
-//        {
-//            if($torrent['sp_state']==3) //2X
-//            {
-//                $USERUPDATESET[] = "uploaded = uploaded + 2*$trueupthis";
-//                $USERUPDATESET[] = "downloaded = downloaded + $truedownthis";
-//            }
-//            elseif($torrent['sp_state']==4) //2X Free
-//            {
-//                $USERUPDATESET[] = "uploaded = uploaded + 2*$trueupthis";
-//            }
-//            elseif($torrent['sp_state']==6) //2X 50%
-//            {
-//                $USERUPDATESET[] = "uploaded = uploaded + 2*$trueupthis";
-//                $USERUPDATESET[] = "downloaded = downloaded + $truedownthis/2";
-//            }
-//            else{
-//                if ($torrent['owner'] == $userid && $uploaderdouble_torrent > 0)
-//                    $upthis = $trueupthis * $uploaderdouble_torrent;
-//
-//                if($torrent['sp_state']==2) //Free
-//                {
-//                    $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//                }
-//                elseif($torrent['sp_state']==5) //50%
-//                {
-//                    $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//                    $USERUPDATESET[] = "downloaded = downloaded + $truedownthis/2";
-//                }
-//                elseif($torrent['sp_state']==7) //30%
-//                {
-//                    $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//                    $USERUPDATESET[] = "downloaded = downloaded + $truedownthis*3/10";
-//                }
-//                elseif($torrent['sp_state']==1) //Normal
-//                {
-//                    $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//                    $USERUPDATESET[] = "downloaded = downloaded + $truedownthis";
-//                }
-//            }
-//        }
-//        elseif($global_promotion_state == 2) //Free
-//        {
-//            if ($torrent['owner'] == $userid && $uploaderdouble_torrent > 0)
-//                $upthis = $trueupthis * $uploaderdouble_torrent;
-//            $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//        }
-//        elseif($global_promotion_state == 3) //2X
-//        {
-//            if ($uploaderdouble_torrent > 2 && $torrent['owner'] == $userid && $uploaderdouble_torrent > 0)
-//                $upthis = $trueupthis * $uploaderdouble_torrent;
-//            else $upthis = 2*$trueupthis;
-//            $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//            $USERUPDATESET[] = "downloaded = downloaded + $truedownthis";
-//        }
-//        elseif($global_promotion_state == 4) //2X Free
-//        {
-//            if ($uploaderdouble_torrent > 2 && $torrent['owner'] == $userid && $uploaderdouble_torrent > 0)
-//                $upthis = $trueupthis * $uploaderdouble_torrent;
-//            else $upthis = 2*$trueupthis;
-//            $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//        }
-//        elseif($global_promotion_state == 5){ // 50%
-//            if ($torrent['owner'] == $userid && $uploaderdouble_torrent > 0)
-//                $upthis = $trueupthis * $uploaderdouble_torrent;
-//            $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//            $USERUPDATESET[] = "downloaded = downloaded + $truedownthis/2";
-//        }
-//        elseif($global_promotion_state == 6){ //2X 50%
-//            if ($uploaderdouble_torrent > 2 && $torrent['owner'] == $userid && $uploaderdouble_torrent > 0)
-//                $upthis = $trueupthis * $uploaderdouble_torrent;
-//            else $upthis = 2*$trueupthis;
-//            $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//            $USERUPDATESET[] = "downloaded = downloaded + $truedownthis/2";
-//        }
-//        elseif($global_promotion_state == 7){ //30%
-//            if ($torrent['owner'] == $userid && $uploaderdouble_torrent > 0)
-//                $upthis = $trueupthis * $uploaderdouble_torrent;
-//            $USERUPDATESET[] = "uploaded = uploaded + $upthis";
-//            $USERUPDATESET[] = "downloaded = downloaded + $truedownthis*3/10";
-//        }
 	}
 }
 
@@ -626,7 +538,7 @@ if (isset($self) && $event == "stopped")
 elseif(isset($self))
 {
 	$finished = $finished_snatched = '';
-	if ($event == "completed" || (!empty($snatchInfo) && $left == 0 && $snatchInfo['finished'] != 'yes'))
+	if ($event == "completed")
 	{
 		//sql_query("UPDATE snatched SET  finished  = 'yes', completedat = $dt WHERE torrentid = $torrentid AND userid = $userid");
 		$finished .= ", finishedat = ".TIMENOW;
@@ -645,16 +557,6 @@ elseif(isset($self))
 		if (!empty($snatchInfo)) {
             sql_query("UPDATE snatched SET uploaded = uploaded + $trueupthis, downloaded = downloaded + $truedownthis, to_go = $left, $announcetime, last_action = ".$dt." $finished_snatched WHERE id = {$snatchInfo['id']}") or err("SL Err 2");
             do_action('snatched_saved', $torrent, $snatchInfo);
-            if ($event == 'completed' && $az['class'] < \App\Models\HitAndRun::MINIMUM_IGNORE_USER_CLASS && !$isDonor && isset($torrent['mode'])) {
-                //think about H&R
-//                $hrMode = get_setting('hr.mode');
-                $hrMode = \App\Models\HitAndRun::getConfig('mode', $torrent['mode']);
-                if ($hrMode == \App\Models\HitAndRun::MODE_GLOBAL || ($hrMode == \App\Models\HitAndRun::MODE_MANUAL && $torrent['hr'] == \App\Models\Torrent::HR_YES)) {
-                    $sql = "insert into hit_and_runs (uid, torrent_id, snatched_id) values ($userid, $torrentid, {$snatchInfo['id']}) on duplicate key update updated_at = " . sqlesc(date('Y-m-d H:i:s'));
-                    $affectedRows = sql_query($sql);
-                    do_log("[INSERT_H&R], $sql, affectedRows: $affectedRows");
-                }
-            }
         }
 	}
 }
@@ -702,6 +604,46 @@ else
         do_log("[INSERT PEER] event = 'stopped', ignore.");
     }
 
+}
+
+//handle hr
+if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun::MINIMUM_IGNORE_USER_CLASS && !$isDonor && isset($torrent['mode'])) {
+    $hrMode = \App\Models\HitAndRun::getConfig('mode', $torrent['mode']);
+    $hrLog = sprintf("[HR_LOG] user: %d, torrent: %d, hrMode: %s", $userid, $torrentid, $hrMode);
+    if ($hrMode == \App\Models\HitAndRun::MODE_GLOBAL || ($hrMode == \App\Models\HitAndRun::MODE_MANUAL && $torrent['hr'] == \App\Models\Torrent::HR_YES)) {
+        $hrCacheKey = sprintf("hit_and_run:%d:%d", $userid, $torrentid);
+        $hrExists = \Nexus\Database\NexusDB::remember($hrCacheKey, 24*3600, function () use ($torrentid, $userid) {
+            return \App\Models\HitAndRun::query()->where("uid", $userid)->where("torrent_id", $torrentid)->exists();
+        });
+        $hrLog .= ", hrExists: $hrExists";
+        if (!$hrExists) {
+            //last check include rate
+            $includeRate = \App\Models\HitAndRun::getConfig('include_rate', $torrent['mode']);
+            if ($includeRate === "" || $includeRate === null) {
+                //not set yet
+                $includeRate = 1;
+            }
+            $hrLog .= ", includeRate: $includeRate";
+            //get newest snatch info
+            $snatchInfo = get_snatch_info($torrentid, $userid);
+            $requiredDownloaded = $torrent['size'] * $includeRate;
+            if ($snatchInfo['downloaded'] >= $requiredDownloaded) {
+                $nowStr = date('Y-m-d H:i:s');
+                $sql = sprintf(
+                    "insert into hit_and_runs (uid, torrent_id, snatched_id, created_at, updated_at) values (%d, %d, %d, '%s', '%s') on duplicate key update created_at = '%s', updated_at = '%s'",
+                    $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, $nowStr, $nowStr
+                );
+                $affectedRows = sql_query($sql);
+                do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} >= required: $requiredDownloaded, [INSERT_H&R], sql: $sql, affectedRows: $affectedRows");
+            } else {
+                do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} < required: $requiredDownloaded", "debug");
+            }
+        } else {
+            do_log("$hrLog, already exists", "debug");
+        }
+    } else {
+        do_log("$hrLog, not match", "debug");
+    }
 }
 
 if (isset($event) && !empty($event)) {

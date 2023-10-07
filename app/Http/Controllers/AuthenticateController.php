@@ -102,5 +102,19 @@ class AuthenticateController extends Controller
         return $this->success($resource);
     }
 
-
+    public function iyuuApprove(Request $request)
+    {
+        try {
+            $request->validate([
+                'token' => 'required|string',
+                'id' => 'required|integer',
+                'verity' => 'required|string',
+                'provider' => ["required", "string", Rule::in("iyuu")],
+            ]);
+            $this->repository->iyuuApprove($request->token, $request->id, $request->verity);
+            return response()->json(["success" => true]);
+        } catch (\Exception $exception) {
+            return response()->json(["success" => false, "msg" => $exception->getMessage()]);
+        }
+    }
 }

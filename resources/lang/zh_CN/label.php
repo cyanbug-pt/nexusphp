@@ -72,6 +72,8 @@ return [
             'ignore_when_ratio_reach_help' => '达标的最小分享率',
             'ban_user_when_counts_reach' => 'H&R 数量上限',
             'ban_user_when_counts_reach_help' => 'H&R 数量达到此值，账号会被禁用',
+            'include_rate' => '计入完成率',
+            'include_rate_help' => '当下载完成率（0 ~ 1 之间的小数）达到此值时才计入 H&R。默认：1'
         ],
         'seed_box' => [
             'tab_header' => 'SeedBox',
@@ -101,9 +103,11 @@ return [
             'maximum_number_of_medals_can_be_worn' => '勋章最大可佩戴数',
             'cookie_valid_days' => 'Cookie 有效天数',
             'maximum_upload_speed' => '最大上传速度',
-            'maximum_upload_speed_help' => '单种上传速度超过此值账号即刻禁用，单位 Mbps。如：100 Mbps = 12.5 MB/s',
+            'maximum_upload_speed_help' => '此值影响作弊者检测，是检测级别保守的最大上传速度。实际限速 = 最大上传速度/检测级别，从保守~多疑为1~4。假如最大限速为 1000，检测级别为保守，实际限速为 1000/1 = 1000，检测级别为多疑，实际限速为 1000/4=250。单种上传速度超过实际限速即刻禁用账号。这里的单位是 Mbps，如：100 Mbps = 12.5 MB/s。',
             'is_invite_pre_email_and_username' => '邀请是否预定邮箱和用户名',
             'is_invite_pre_email_and_username_help' => "默认: 'No'。若预定，用户注册时不可修改邮箱和用户名",
+            'access_admin_class_min' => '登录管理后台最小等级',
+            'access_admin_class_min_help' => '默认：管理员，用户等级大于等于设定值的用户可以登录管理后台',
         ],
     ],
     'user' => [

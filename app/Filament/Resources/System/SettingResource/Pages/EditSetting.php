@@ -8,6 +8,7 @@ use App\Models\HitAndRun;
 use App\Models\SearchBox;
 use App\Models\Setting;
 use App\Models\Tag;
+use App\Models\User;
 use App\Repositories\MeiliSearchRepository;
 use Filament\Facades\Filament;
 use Filament\Forms\ComponentContainer;
@@ -155,6 +156,11 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
                     ->label(__('label.setting.system.is_invite_pre_email_and_username'))
                     ->helperText(__('label.setting.system.is_invite_pre_email_and_username_help'))
                 ,
+                Forms\Components\Select::make('system.access_admin_class_min')
+                    ->options(User::listClass(User::CLASS_VIP))
+                    ->label(__('label.setting.system.access_admin_class_min'))
+                    ->helperText(__('label.setting.system.access_admin_class_min_help'))
+                ,
             ])->columns(2);
 
         $tabs = apply_filter('nexus_setting_tabs', $tabs);
@@ -169,6 +175,7 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
             Forms\Components\TextInput::make('hr.seed_time_minimum')->helperText(__('label.setting.hr.seed_time_minimum_help'))->label(__('label.setting.hr.seed_time_minimum'))->integer(),
             Forms\Components\TextInput::make('hr.ignore_when_ratio_reach')->helperText(__('label.setting.hr.ignore_when_ratio_reach_help'))->label(__('label.setting.hr.ignore_when_ratio_reach'))->integer(),
             Forms\Components\TextInput::make('hr.ban_user_when_counts_reach')->helperText(__('label.setting.hr.ban_user_when_counts_reach_help'))->label(__('label.setting.hr.ban_user_when_counts_reach'))->integer(),
+            Forms\Components\TextInput::make('hr.include_rate')->helperText(__('label.setting.hr.include_rate_help'))->label(__('label.setting.hr.include_rate'))->numeric(),
         ];
         return apply_filter("hit_and_run_setting_schema", $default);
     }

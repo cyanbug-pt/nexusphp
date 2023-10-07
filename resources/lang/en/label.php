@@ -72,6 +72,8 @@ return [
             'ignore_when_ratio_reach_help' => 'The minimum sharing rate to meet the standard',
             'ban_user_when_counts_reach' => 'H&R counts limit',
             'ban_user_when_counts_reach_help' => 'The number of H&R reaches this value and the account will be disabled',
+            'include_rate' => 'Require completion rate',
+            'include_rate_help' => 'Count H&R only when the download completion rate (decimal between 0 ~ 1) reaches this value. Default: 1'
         ],
         'seed_box' => [
             'tab_header' => 'SeedBox',
@@ -101,9 +103,11 @@ return [
             'maximum_number_of_medals_can_be_worn' => 'Maximum number of medals that can be worn',
             'cookie_valid_days' => 'Cookie Valid days',
             'maximum_upload_speed' => 'Maximum upload speed',
-            'maximum_upload_speed_help' => 'A single torrent upload speed exceeding this value is instantly disabled for the account, in Mbps. For example: 100 Mbps = 12.5 MB/s',
+            'maximum_upload_speed_help' => 'This value affects cheater detection and is the maximum upload speed for a conservative detection level. Actual Speed Limit = Maximum Upload Speed / Detection Level, from Conservative to Suspicious is 1 to 4. If the Maximum Speed Limit is 1000, and the Detection Level is Conservative, the Actual Speed Limit is 1000/1 = 1000, and the Detection Level is Suspicious, the Actual Speed Limit is 1000/4 = 250. A single upload speed that exceeds the Actual Speed Limit will instantly disable the account. The unit here is Mbps, e.g.: 100 Mbps = 12.5 MB/s.',
             'is_invite_pre_email_and_username' => 'Invite whether to pre-book an email and username',
             'is_invite_pre_email_and_username_help' => "Default: 'No'. If pre-booked, email and username may not be changed when the user registers.",
+            'access_admin_class_min' => 'Minimum class for logging into admin backend',
+            'access_admin_class_min_help' => 'Default: administrator, users with a user class greater than or equal to the set value can log into the admin backend',
         ],
     ],
     'user' => [
