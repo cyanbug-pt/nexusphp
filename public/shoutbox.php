@@ -98,7 +98,7 @@ else
 		// 截取用户输入的指令
 		$instruction = trim(mb_substr($text,4));
 		// 默认回答
-		$message = '你说的什么我听不懂啊';
+		$message = null;
 		// 根据指令查询答复
 		$chat_res = sql_query("SELECT * FROM cyanbug_chat WHERE `trigger` LIKE ".sqlesc("%".$instruction."%")." ORDER BY weight") or sqlerr(__FILE__, __LINE__);
 		$chat_row = mysql_fetch_assoc($chat_res);
@@ -191,6 +191,20 @@ else
 				}
 			}
 			$message = format_chat_answer($userid, $message);
+		}
+		if($message==null){
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curl, CURLOPT_URL, "http://127.0.0.1:23000/chat");
+			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array('q' => $instruction)));
+			$response = curl_exec($curl);
+			if(curl_errno($curl)){
+						$message = '你说的什么我听不懂啊';
+			}else{
+				$responseData = json_decode($response, true);
+				$message = $responseData['a'];
+			}
 		}
 		// 为回复的内容加上绿色字体
 		$message = '[color=green]@'.$userInfo->username.' '.$message.'[/color]';
