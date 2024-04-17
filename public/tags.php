@@ -60,6 +60,22 @@ insert_tag(
 );
 
 insert_tag(
+    $lang_tags['text_strikethrough'],
+    $lang_tags['text_strikethrough_description'],
+    $lang_tags['text_strikethrough_syntax'],
+    $lang_tags['text_strikethrough_example'],
+    ""
+);
+
+insert_tag(
+    $lang_tags['text_hide'],
+    $lang_tags['text_hide_description'],
+    $lang_tags['text_hide_syntax'],
+    $lang_tags['text_hide_example'],
+    ""
+);
+
+insert_tag(
 	$lang_tags['text_color_one'],
 	$lang_tags['text_color_one_description'],
 	$lang_tags['text_color_one_syntax'],
@@ -252,6 +268,24 @@ insert_tag(
 	$lang_tags['text_youtube_example'],
 	""
 );
+
+
+insert_tag(
+    $lang_tags['text_video'],
+    $lang_tags['text_video_description'],
+    $lang_tags['text_video_syntax'],
+    $lang_tags['text_video_example'],
+    ""
+);
+
+
+insert_tag(
+    $lang_tags['text_audio'],
+    $lang_tags['text_audio_description'],
+    $lang_tags['text_audio_syntax'],
+    $lang_tags['text_audio_example'],
+    ""
+);
 /*
 insert_tag(
 	$lang_tags['text_youku'],
@@ -283,6 +317,15 @@ insert_tag(
     $lang_tags['text_spoiler_description'],
     $lang_tags['text_spoiler_syntax'],
     $lang_tags['text_spoiler_example'],
+    ""
+);
+
+
+insert_tag(
+    $lang_tags['text_hr'],
+    $lang_tags['text_hr_description'],
+    $lang_tags['text_hr_syntax'],
+    $lang_tags['text_hr_example'],
     ""
 );
 

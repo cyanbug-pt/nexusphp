@@ -283,6 +283,20 @@ function formatYoutube($src, $width = '', $height = ''): string
     ));
 }
 
+function formatVideo($src, $width, $height) {
+    if (!$width) {
+        $width = 560;
+    }
+    if (!$height) {
+        $height = 315;
+    }
+    return addTempCode("<video controls width=\"$width\" height=\"$height\"><source src=\"$src\" /><a href=\"$src\">$src</a></video>");
+}
+
+function formatAudio($src) {
+    return addTempCode("<audio controls><source src=\"$src\" /><a href=\"$src\">$src</a></audio>");
+}
+
 function formatSpoiler($content, $title = '', $defaultCollapsed = true): string
 {
     global $lang_functions;
@@ -299,6 +313,11 @@ function formatSpoiler($content, $title = '', $defaultCollapsed = true): string
         $lang_functions['spoiler_expand_collapse'], $title, $contentClass, $content
     );
     return addTempCode($HTML);
+}
+
+function formatHidden($content): string
+{
+    return addTempCode(sprintf('<span class="hidden-text">%s</span>', $content));
 }
 
 function formatTextAlign($text, $align): string
@@ -346,8 +365,8 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
     // Linebreaks
     $s = nl2br($s);
 
-	$originalBbTagArray = array('[siteurl]', '[site]','[*]', '[b]', '[/b]', '[i]', '[/i]', '[u]', '[/u]', '[pre]', '[/pre]', '[/color]', '[/font]', '[/size]', "  ");
-	$replaceXhtmlTagArray = array(get_protocol_prefix().get_setting('basic.BASEURL'), get_setting('basic.SITENAME'), '<img class="listicon listitem" src="pic/trans.gif" alt="list" />', '<b>', '</b>', '<i>', '</i>', '<u>', '</u>', '<pre>', '</pre>', '</span>', '</font>', '</font>', ' &nbsp;');
+	$originalBbTagArray = array('[siteurl]', '[site]','[*]', '[b]', '[/b]', '[i]', '[/i]', '[u]', '[/u]', '[s]', '[/s]', '[pre]', '[/pre]', '[/color]', '[/font]', '[/size]', '[hr]', "  ");
+	$replaceXhtmlTagArray = array(get_protocol_prefix().get_setting('basic.BASEURL'), get_setting('basic.SITENAME'), '&#x2022; ', '<b>', '</b>', '<i>', '</i>', '<u>', '</u>', '<s>', '</s>', '<pre>', '</pre>', '</span>', '</font>', '</font>', '<hr>', ' &nbsp;');
 	$s = str_replace($originalBbTagArray, $replaceXhtmlTagArray, $s);
 
 	$originalBbTagArray = array("/\[font=([^\[\(&\\;]+?)\]/is", "/\[color=([#0-9a-z]{1,15})\]/is", "/\[color=([a-z]+)\]/is", "/\[size=([1-7])\]/is");
@@ -398,6 +417,17 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
             return formatYoutube($matches[4], $matches[2], $matches[3]);
         }, $s);
     }
+    if (str_contains($s, "[video")) {
+        $s = preg_replace_callback("/\[video(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|https):\/\/[^\s'\"<>]+)\[\/video\]/i", function ($matches) {
+            return formatVideo($matches[4], $matches[2], $matches[3]);
+        }, $s);
+    }
+    if (str_contains($s, "[audio")) {
+        $s = preg_replace_callback("/\[audio\]((http|https):\/\/[^\s'\"<>]+)\[\/audio\]/i", function ($matches) {
+            return formatAudio($matches[1]);
+        }, $s);
+
+    }
 
 	// [url=http://www.example.com]Text[/url]
 	if ($adid) {
@@ -431,6 +461,11 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
     // [right]Right text[/right]
     $s = preg_replace_callback("/\[right\](.*)\[\/right\]/isU", function ($matches) {
         return formatTextAlign($matches[1], 'right');
+    }, $s);
+
+    // [hide]Hidden text[/hide]
+    $s = preg_replace_callback("/\[hide\](.*)\[\/hide\]/isU", function ($matches) {
+        return formatHidden($matches[1]);
     }, $s);
 
 
@@ -5557,7 +5592,7 @@ function strip_all_tags($text)
 {
     //替换掉无参数标签
     $bbTags = [
-        '[*]', '[b]', '[/b]', '[i]', '[/i]', '[u]', '[/u]', '[pre]', '[/pre]', '[quote]', '[/quote]',
+        '[*]', '[b]', '[/b]', '[i]', '[/i]', '[u]', '[/u]', '[s]', '[/s]', '[pre]', '[/pre]', '[quote]', '[/quote]',
         '[/color]', '[/font]', '[/size]', '[/url]', '[/youtube]', '[/spoiler]',
     ];
     $text = str_replace($bbTags, '', $text);
