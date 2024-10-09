@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('uploaded_points')) {
+        if (Schema::hasColumn('users','uploaded_points')) {
             return;
         }
         Schema::table('users', function (Blueprint $table) {
