@@ -76,7 +76,6 @@ $lang_functions = array
 	'text_yes' => "是",
 	'text_no' => "否",
 	'text_unknown' => "未知",
-	'text_welcome_back' => "歡迎回來",
 	'text_current_hour_bonus' => "當前時魔:",
 	'text_staff_panel' => "管理組面板",
 	'text_cyanbug_chat_settings' => "青蟲娘設定",

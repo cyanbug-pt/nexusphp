@@ -76,7 +76,6 @@ $lang_functions = array
 	'text_yes' => "Yes",
 	'text_no' => "No",
 	'text_unknown' => "Unknown",
-	'text_welcome_back' => "Welcome",
 	'text_current_hour_bonus' => "Current Hourly Bonus:",
 	'text_staff_panel' => "Staff Panel",
 	'text_cyanbug_chat_settings' => "CyanBug Settings",
