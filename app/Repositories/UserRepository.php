@@ -17,8 +17,10 @@ use App\Models\UsernameChangeLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
 
 class UserRepository extends BaseRepository
@@ -198,6 +200,7 @@ class UserRepository extends BaseRepository
         });
         do_log("user: $uid, $modCommentText");
         $this->clearCache($targetUser);
+        fire_event("user_disabled", $targetUser);
         return true;
     }
 
@@ -224,6 +227,7 @@ class UserRepository extends BaseRepository
         $targetUser->updateWithModComment($update, $modCommentText);
         do_log("user: $uid, $modCommentText, update: " . nexus_json_encode($update));
         $this->clearCache($targetUser);
+        fire_event("user_enabled", $targetUser);
         return true;
     }
 
@@ -621,13 +625,20 @@ class UserRepository extends BaseRepository
         return true;
     }
 
-    public function destroy($id, $reasonKey = 'user.destroy_by_admin')
+    public function destroy(Collection|int $id, $reasonKey = 'user.destroy_by_admin')
     {
         if (!isRunningInConsole()) {
             user_can('user-delete', true);
         }
-        $uidArr = Arr::wrap($id);
-        $users = User::query()->with('language')->whereIn('id', $uidArr)->get(['id', 'username', 'lang']);
+        if (is_int($id)) {
+            $uidArr = Arr::wrap($id);
+        } else {
+            $uidArr = $id->pluck('id')->toArray();
+        }
+        $users = User::query()->with('language')->whereIn('id', $uidArr)->get();
+        if (empty($uidArr)) {
+            return;
+        }
         $tables = [
             'users' => 'id',
             'hit_and_runs' => 'uid',
@@ -639,6 +650,8 @@ class UserRepository extends BaseRepository
             'attendance' => 'uid',
             'attendance_logs' => 'uid',
             'login_logs' => 'uid',
+            'oauth_access_tokens' => 'user_id',
+            'oauth_auth_codes' => 'user_id',
         ];
         foreach ($tables as $table => $key) {
             \Nexus\Database\NexusDB::table($table)->whereIn($key, $uidArr)->delete();
@@ -653,7 +666,10 @@ class UserRepository extends BaseRepository
             ];
         }
         UserBanLog::query()->insert($userBanLogs);
-        do_action("user_delete", $id);
+        if (is_int($id)) {
+            do_action("user_delete", $id);
+            fire_event("user_destroyed", $users->first());
+        }
         return true;
     }
 

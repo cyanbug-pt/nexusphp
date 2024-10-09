@@ -8,7 +8,7 @@ return [
         'tags_list' => '標簽',
         'agent_allows' => '允許客戶端',
         'agent_denies' => '拒絕客戶端',
-        'exams_list' => '考核',
+        'exams_list' => '考核 & 任務',
         'medals_list' => '勛章',
         'settings' => '設置',
         'users_medals' => '用戶勛章',
@@ -38,6 +38,10 @@ return [
         'bonus_log' => '魔力記錄',
         'torrent_buy_log' => '種子購買',
         'attendance_log' => '簽到記錄',
+        'oauth_client' => '客戶端',
+        'oauth_access_token' => '訪問令牌',
+        'oauth_auth_code' => '授權碼',
+        'oauth_refresh_token' => '刷新令牌',
     ],
     'resources' => [
         'agent_allow' => [
@@ -89,7 +93,9 @@ return [
         ],
         'exam_user' => [
             'bulk_action_avoid_label' => '批量免除',
+            'bulk_action_update_end_label' => '批量修改結束時間',
             'action_avoid' => '免除',
+            'action_update_end' => '修改結束時間',
             'result_passed' => '通過！',
             'result_not_passed' => '未通過！',
         ],

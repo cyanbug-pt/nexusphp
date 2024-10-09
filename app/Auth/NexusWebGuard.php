@@ -4,12 +4,12 @@ namespace App\Auth;
 use Carbon\Carbon;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
-class NexusWebGuard implements Guard
+class NexusWebGuard implements StatefulGuard
 {
     use GuardHelpers;
 
@@ -74,11 +74,17 @@ class NexusWebGuard implements Guard
             return false;
         }
         $user = $this->provider->retrieveById($id);
-        if ($user) {
+        if (!$user) {
+            return false;
+        }
+        try {
+            $user->checkIsNormal();
             $this->user = $user;
             return true;
+        } catch (\Throwable $e) {
+            do_log($e->getMessage());
+            return false;
         }
-        return false;
     }
 
     public function logout()
@@ -88,4 +94,33 @@ class NexusWebGuard implements Guard
     }
 
 
+    public function attempt(array $credentials = [], $remember = false)
+    {
+        // TODO: Implement attempt() method.
+    }
+
+    public function once(array $credentials = [])
+    {
+        // TODO: Implement once() method.
+    }
+
+    public function login(Authenticatable $user, $remember = false)
+    {
+        // TODO: Implement login() method.
+    }
+
+    public function loginUsingId($id, $remember = false)
+    {
+        // TODO: Implement loginUsingId() method.
+    }
+
+    public function onceUsingId($id)
+    {
+        // TODO: Implement onceUsingId() method.
+    }
+
+    public function viaRemember()
+    {
+        // TODO: Implement viaRemember() method.
+    }
 }

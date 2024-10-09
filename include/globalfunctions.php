@@ -46,27 +46,29 @@ function validip($ip)
     } else return false;
 }
 
-function getip()
-{
-    if (isset($_SERVER)) {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && validip($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['HTTP_CLIENT_IP']) && validip($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
-        }
-    } else {
-        if (getenv('HTTP_X_FORWARDED_FOR') && validip(getenv('HTTP_X_FORWARDED_FOR'))) {
-            $ip = getenv('HTTP_X_FORWARDED_FOR');
-        } elseif (getenv('HTTP_CLIENT_IP') && validip(getenv('HTTP_CLIENT_IP'))) {
-            $ip = getenv('HTTP_CLIENT_IP');
-        } else {
-            $ip = getenv('REMOTE_ADDR') ?? '';
-        }
+function getip($real = true) {
+	if (isset($_SERVER)) {
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && validip($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} elseif (isset($_SERVER['HTTP_CLIENT_IP']) && validip($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} else {
+			$ip = $_SERVER['REMOTE_ADDR'] ?? '';
+		}
+	} else {
+		if (getenv('HTTP_X_FORWARDED_FOR') && validip(getenv('HTTP_X_FORWARDED_FOR'))) {
+			$ip = getenv('HTTP_X_FORWARDED_FOR');
+		} elseif (getenv('HTTP_CLIENT_IP') && validip(getenv('HTTP_CLIENT_IP'))) {
+			$ip = getenv('HTTP_CLIENT_IP');
+		} else {
+			$ip = getenv('REMOTE_ADDR') ?? '';
+		}
+	}
+    $ip = trim(trim($ip), ",");
+    if ($real && str_contains($ip, ",")) {
+        return strstr($ip, ",", true);
     }
-
-    return $ip;
+	return $ip;
 }
 
 function sql_query($query)
@@ -468,20 +470,26 @@ function arr_set(&$array, $key, $value)
 
 function isHttps(): bool
 {
-    $schema = nexus()->getRequestSchema();
-    return $schema == 'https';
+    if (isRunningInConsole()) {
+        $securityLogin = get_setting("security.securelogin");
+        if ($securityLogin != "no") {
+            return true;
+        }
+        return false;
+    }
+    return nexus()->getRequestSchema() == 'https';
 }
 
 
-function getSchemeAndHttpHost()
+function getSchemeAndHttpHost(bool $fromConfig = false)
 {
-    global $BASEURL;
-    if (isRunningInConsole()) {
-        return $BASEURL;
+    if (isRunningInConsole() || $fromConfig) {
+        $host = get_setting("basic.BASEURL");
+    } else {
+        $host = nexus()->getRequestHost();
     }
     $isHttps = isHttps();
     $protocol = $isHttps ? 'https' : 'http';
-    $host = nexus()->getRequestHost();
     return "$protocol://" . $host;
 }
 
@@ -780,6 +788,15 @@ function get_user_id()
     return auth()->user()->id ?? 0;
 }
 
+function get_pure_username()
+{
+    if (IN_NEXUS) {
+        global $CURUSER;
+        return $CURUSER["username"] ?? "";
+    }
+    return auth()->user()->username ?? "";
+}
+
 function nexus()
 {
     return \Nexus\Nexus::instance();
@@ -1026,6 +1043,11 @@ function clear_setting_cache()
     do_log("clear_setting_cache");
     \Nexus\Database\NexusDB::cache_del('nexus_settings_in_laravel');
     \Nexus\Database\NexusDB::cache_del('nexus_settings_in_nexus');
+    \Nexus\Database\NexusDB::cache_del('setting_protected_forum');
+    $channel = nexus_env("CHANNEL_NAME_SETTING");
+    if (!empty($channel)) {
+        \Nexus\Database\NexusDB::redis()->publish($channel, "update");
+    }
 }
 
 /**
@@ -1199,9 +1221,14 @@ function executeCommand($command, $format = 'string', $artisan = false, $excepti
     do_log("command: $command");
     $result = exec($command, $output, $result_code);
     $outputString = implode("\n", $output);
-    do_log(sprintf('result_code: %s, result: %s, output: %s', $result_code, $result, $outputString));
-    if ($exception && $result_code != 0) {
-        throw new \RuntimeException($outputString);
+    $log = sprintf('result_code: %s, result: %s, output: %s', $result_code, $result, $outputString);
+    if ($result_code != 0) {
+        do_log($log, "error");
+        if ($exception) {
+            throw new \RuntimeException($outputString);
+        }
+    } else {
+        do_log($log);
     }
     return $format == 'string' ? $outputString : $output;
 }
@@ -1221,11 +1248,6 @@ function is_danger_url($url): bool
         return true;
     }
     return false;
-}
-
-function get_snatch_info($torrentId, $userId)
-{
-    return mysql_fetch_assoc(sql_query(sprintf('select * from snatched where torrentid = %s and userid = %s order by id desc limit 1', $torrentId, $userId)));
 }
 
 function format_chat_answer($userid, $message)
@@ -1289,4 +1311,22 @@ function get_user_avatar()
         $avatar = "pic/default_avatar.gif";
     }
     return $avatar;
+}
+
+function get_snatch_info($torrentId, $userId)
+{
+    return mysql_fetch_assoc(sql_query(sprintf('select * from snatched where torrentid = %s and userid = %s order by id desc limit 1', $torrentId, $userId)));
+}
+
+function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, \Illuminate\Database\Eloquent\Model $oldModel = null): void
+{
+    $prefix = "fire_event:";
+    $idKey = $prefix . \Illuminate\Support\Str::random();
+    $idKeyOld = "";
+    \Nexus\Database\NexusDB::cache_put($idKey, serialize($model), 3600*24*30);
+    if ($oldModel) {
+        $idKeyOld = $prefix . \Illuminate\Support\Str::random();
+        \Nexus\Database\NexusDB::cache_put($idKeyOld, serialize($oldModel), 3600*24*30);
+    }
+    executeCommand("event:fire --name=$name --idKey=$idKey --idKeyOld=$idKeyOld", "string", true, false);
 }

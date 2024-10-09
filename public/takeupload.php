@@ -179,9 +179,10 @@ unset ($dict['announce-list']); // remove multi-tracker capability
 unset ($dict['nodes']); // remove cached peers (Bitcomet & Azareus)
 
 $infohash = pack("H*", sha1(\Rhilip\Bencode\Bencode::encode($dict['info']))); // double up on the becoding solves the occassional misgenerated infohash
-
-if (\App\Models\Torrent::query()->where('info_hash', $infohash)->exists()) {
-    bark($lang_takeupload['std_torrent_existed']);
+$exists = \App\Models\Torrent::query()->where('info_hash', $infohash)->first(['id']);
+if ($exists) {
+//    bark($lang_takeupload['std_torrent_existed']);
+    nexus_redirect(sprintf("details.php?id=%d&existed=1", $exists['id']));
 }
 
 // ------------- start: check upload authority ------------------//
@@ -349,6 +350,7 @@ $insert = [
     'technical_info' => $_POST['technical_info'] ?? '',
     'cover' => $cover,
     'pieces_hash' => sha1($info['pieces']),
+    'cache_stamp' => time(),
 ];
 if (isset($_POST['hr'][$catmod]) && isset(\App\Models\Torrent::$hrStatus[$_POST['hr'][$catmod]]) && user_can('torrent_hr')) {
     $insert['hr'] = $_POST['hr'][$catmod];
@@ -445,6 +447,9 @@ $searchRep->addTorrent($id);
 
 $meiliSearch = new \App\Repositories\MeiliSearchRepository();
 $meiliSearch->doImportFromDatabase($id);
+
+//trigger event
+fire_event("torrent_created", \App\Models\Torrent::query()->find($id));
 
 //===notify people who voted on offer thanks CoLdFuSiOn :)
 if ($is_offer)

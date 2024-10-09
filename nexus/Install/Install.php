@@ -172,7 +172,8 @@ class Install
                 $output = [];
                 $command = "php -r 'var_export(function_exists(\"$fn\"));'";
                 $result = exec($command, $output, $result_code);
-                $exists = $output[0] == 'true';
+                $lastFourChars = substr(trim($output[0]), -4);
+                $exists = $lastFourChars == 'true';
                 if (!$exists) {
                     $disabledFunctions[] = $fn;
                 }

@@ -8,7 +8,7 @@ return [
         'tags_list' => '标签',
         'agent_allows' => '允许客户端',
         'agent_denies' => '拒绝客户端',
-        'exams_list' => '考核',
+        'exams_list' => '考核 & 任务',
         'medals_list' => '勋章',
         'settings' => '设置',
         'users_medals' => '用户勋章',
@@ -36,6 +36,10 @@ return [
         'bonus_log' => '魔力记录',
         'torrent_buy_log' => '种子购买',
         'attendance_log' => '签到记录',
+        'oauth_client' => '客户端',
+        'oauth_access_token' => '访问令牌',
+        'oauth_auth_code' => '授权码',
+        'oauth_refresh_token' => '刷新令牌',
     ],
     'resources' => [
         'agent_allow' => [
@@ -87,7 +91,9 @@ return [
         ],
         'exam_user' => [
             'bulk_action_avoid_label' => '批量免除',
+            'bulk_action_update_end_label' => '批量修改结束时间',
             'action_avoid' => '免除',
+            'action_update_end' => '修改结束时间',
             'result_passed' => '通过！',
             'result_not_passed' => '未通过！',
         ],

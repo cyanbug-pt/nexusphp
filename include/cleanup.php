@@ -670,18 +670,19 @@ function docleanup($forceAll = 0, $printProgress = false) {
 	}
 
 	//destroy disabled accounts
+    $userRep = new \App\Repositories\UserRepository();
     $destroyDisabledDays = get_setting('account.destroy_disabled');
     if ($destroyDisabledDays > 0) {
         $secs = $destroyDisabledDays*24*60*60;
         $dt = date("Y-m-d H:i:s",(TIMENOW - $secs));
-        $users = \App\Models\User::query()
+        \App\Models\User::query()
             ->where('enabled', 'no')
             ->where("last_access","<", $dt)
-            ->get(['id']);
-        if ($users->isNotEmpty()) {
-            $userRep = new \App\Repositories\UserRepository();
-            $userRep->destroy($users->pluck('id')->toArray(), 'cleanup.destroy_disabled_account');
-        }
+            ->select(['id', 'username', 'lang'])
+            ->orderBy("id", "asc")
+            ->chunk(2000, function (\Illuminate\Support\Collection $users) use ($userRep) {
+                $userRep->destroy($users, 'cleanup.destroy_disabled_account');
+            });
     }
     $log = "destroy disabled accounts";
     do_log($log);
@@ -888,14 +889,16 @@ function docleanup($forceAll = 0, $printProgress = false) {
 		$length = $deldeadtorrent_torrent*86400;
 		$until = date("Y-m-d H:i:s",(TIMENOW - $length));
 		$dt = sqlesc(date("Y-m-d H:i:s"));
-		$res = sql_query("SELECT id, name, owner FROM torrents WHERE visible = 'no' AND last_action < ".sqlesc($until)." AND seeders = 0 AND leechers = 0") or sqlerr(__FILE__, __LINE__);
+		$res = sql_query("SELECT torrents.id, torrents.name, torrents.owner, users.id as uid FROM torrents left join users on torrents.owner = users.id WHERE torrents.visible = 'no' AND torrents.last_action < ".sqlesc($until)." AND torrents.seeders = 0 AND torrents.leechers = 0") or sqlerr(__FILE__, __LINE__);
 		while($arr = mysql_fetch_assoc($res))
 		{
 			deletetorrent($arr['id']);
-			$subject = $lang_cleanup_target[get_user_lang($arr['owner'])]['msg_your_torrent_deleted'];
-			$msg = $lang_cleanup_target[get_user_lang($arr['owner'])]['msg_your_torrent']."[i]".$arr['name']."[/i]".$lang_cleanup_target[get_user_lang($arr['owner'])]['msg_was_deleted_because_dead'];
-			sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['owner']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
-			write_log("Torrent {$arr['id']} ({$arr['name']}) is deleted by system because of being dead for a long time.",'normal');
+            if (!empty($arr['uid'])) {
+                $subject = $lang_cleanup_target[get_user_lang($arr['owner'])]['msg_your_torrent_deleted'];
+                $msg = $lang_cleanup_target[get_user_lang($arr['owner'])]['msg_your_torrent']."[i]".$arr['name']."[/i]".$lang_cleanup_target[get_user_lang($arr['owner'])]['msg_was_deleted_because_dead'];
+                sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['owner']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
+                write_log("Torrent {$arr['id']} ({$arr['name']}) is deleted by system because of being dead for a long time.",'normal');
+            }
 		}
 	}
 	$log = "delete torrents that have been dead for a long time";
@@ -1105,6 +1108,27 @@ function docleanup($forceAll = 0, $printProgress = false) {
 //    if ($printProgress) {
 //        printProgress($log);
 //    }
+
+    sql_query("delete from oauth_auth_codes where expires_at <= '$nowStr'");
+    $log = "delete oauth auth code expired";
+    do_log($log);
+    if ($printProgress) {
+        printProgress($log);
+    }
+
+    sql_query("delete from oauth_access_tokens where expires_at <= '$nowStr'");
+    $log = "delete oauth access token expired";
+    do_log($log);
+    if ($printProgress) {
+        printProgress($log);
+    }
+
+    sql_query("delete from oauth_refresh_tokens where expires_at <= '$nowStr'");
+    $log = "delete oauth refresh token expired";
+    do_log($log);
+    if ($printProgress) {
+        printProgress($log);
+    }
 
 	$log = 'Full cleanup is done';
 	do_log($log);

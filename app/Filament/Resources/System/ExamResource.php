@@ -48,6 +48,34 @@ class ExamResource extends Resource
             ->schema([
                 Forms\Components\Section::make(__('label.exam.section_base_info'))->schema([
                     Forms\Components\TextInput::make('name')->required()->columnSpan(['sm' => 2])->label(__('label.name')),
+                    Forms\Components\Select::make('type')
+                        ->required()
+                        ->columnSpanFull()
+                        ->label(__('exam.type'))
+                        ->options(Exam::listTypeOptions())
+                        ->helperText(__('exam.type_help'))
+                        ->reactive()
+                    ,
+                    Forms\Components\TextInput::make('success_reward_bonus')
+                        ->columnSpanFull()
+                        ->required()
+                        ->label(__('exam.success_reward_bonus'))
+                        ->hidden(fn (\Closure $get) => $get('type') != Exam::TYPE_TASK)
+                    ,
+                    Forms\Components\TextInput::make('fail_deduct_bonus')
+                        ->columnSpanFull()
+                        ->required()
+                        ->label(__('exam.fail_deduct_bonus'))
+                        ->hidden(fn (\Closure $get) => $get('type') != Exam::TYPE_TASK)
+                    ,
+                    Forms\Components\TextInput::make('max_user_count')
+                        ->columnSpanFull()
+                        ->required()
+                        ->numeric()
+                        ->label(__('exam.max_user_count'))
+                        ->hidden(fn (\Closure $get) => $get('type') != Exam::TYPE_TASK)
+                    ,
+
                     Forms\Components\Repeater::make('indexes')->schema([
                         Forms\Components\Select::make('index')
                             ->options(Exam::listIndex(true))
@@ -76,6 +104,10 @@ class ExamResource extends Resource
                         ->inline()
                         ->required()
                         ->columnSpan(['sm' => 2]),
+                    Forms\Components\TextInput::make('background_color')
+                        ->required()
+                        ->label(__('exam.background_color'))
+                        ->columnSpan(['sm' => 2]),
                     Forms\Components\TextInput::make('priority')
                         ->columnSpan(['sm' => 2])
                         ->integer()
@@ -91,6 +123,12 @@ class ExamResource extends Resource
                         ->columnSpan(['sm' => 2])
                         ->label(__('label.duration'))
                         ->helperText(__('label.exam.duration_help')),
+                    Forms\Components\Select::make('recurring')
+                        ->options(Exam::listRecurringOptions())
+                        ->label(__('exam.recurring'))
+                        ->helperText(__('exam.recurring_help'))
+                        ->columnSpan(['sm' => 2])
+                    ,
                 ])->columns(2),
 
                 Forms\Components\Section::make(__('label.exam.section_target_user'))->schema([
@@ -100,6 +138,8 @@ class ExamResource extends Resource
                         ->label(__('label.user.class')),
                     Forms\Components\DateTimePicker::make('filters.register_time_range.0')->label(__("label.exam.register_time_range.begin")),
                     Forms\Components\DateTimePicker::make('filters.register_time_range.1')->label(__("label.exam.register_time_range.end")),
+                    Forms\Components\TextInput::make('filters.register_days_range.0')->numeric()->label(__("label.exam.register_days_range.begin")),
+                    Forms\Components\TextInput::make('filters.register_days_range.1')->numeric()->label(__("label.exam.register_days_range.end")),
                     Forms\Components\CheckboxList::make('filters.donate_status')
                         ->options(self::$yesOrNo)
                         ->label(__('label.exam.donated')),
@@ -116,17 +156,20 @@ class ExamResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('name')->searchable()->label(__('label.name')),
+                Tables\Columns\TextColumn::make('typeText')->label(__('exam.type')),
                 Tables\Columns\TextColumn::make('indexFormatted')->label(__('label.exam.index_formatted'))->html(),
                 Tables\Columns\TextColumn::make('begin')->label(__('label.begin')),
                 Tables\Columns\TextColumn::make('end')->label(__('label.end')),
                 Tables\Columns\TextColumn::make('durationText')->label(__('label.duration')),
-                Tables\Columns\TextColumn::make('filterFormatted')->label(__('label.exam.filter_formatted'))->html(),
+                Tables\Columns\TextColumn::make('recurringText')->label(__('exam.recurring')),
+                Tables\Columns\TextColumn::make('filterFormatted')->label(__('label.exam.filter_formatted'))->html()->extraAttributes([]),
                 Tables\Columns\BooleanColumn::make('is_discovered')->label(__('label.exam.is_discovered')),
                 Tables\Columns\TextColumn::make('priority')->label(__('label.priority')),
                 Tables\Columns\TextColumn::make('statusText')->label(__('label.status')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
+                Tables\Filters\SelectFilter::make('type')->options(Exam::listTypeOptions())->label(__("exam.type")),
                 Tables\Filters\SelectFilter::make('is_discovered')->options(self::IS_DISCOVERED_OPTIONS)->label(__("label.exam.is_discovered")),
                 Tables\Filters\SelectFilter::make('status')->options(self::getEnableDisableOptions())->label(__("label.status")),
             ])

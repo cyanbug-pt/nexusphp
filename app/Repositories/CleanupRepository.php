@@ -1,9 +1,13 @@
 <?php
 namespace App\Repositories;
 
+use App\Http\Middleware\Locale;
+use App\Models\Avp;
+use App\Models\NexusModel;
 use App\Models\Setting;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
 
 class CleanupRepository extends BaseRepository
@@ -11,6 +15,8 @@ class CleanupRepository extends BaseRepository
     const USER_SEED_BONUS_BATCH_KEY = "batch_key:user_seed_bonus";
     const USER_SEEDING_LEECHING_TIME_BATCH_KEY = "batch_key:user_seeding_leeching_time";
     const TORRENT_SEEDERS_ETC_BATCH_KEY = "batch_key:torrent_seeders_etc";
+
+    const IDS_KEY_PREFIX = "cleanup_batch_job_ids:";
 
     private static array $batchKeyActionsMap = [
         self::USER_SEED_BONUS_BATCH_KEY => [
@@ -37,7 +43,7 @@ class CleanupRepository extends BaseRepository
     {
         $args = [
             self::USER_SEED_BONUS_BATCH_KEY, self::USER_SEEDING_LEECHING_TIME_BATCH_KEY, self::TORRENT_SEEDERS_ETC_BATCH_KEY,
-            $uid, $uid, $torrentId, self::getHashKeySuffix(), self::getCacheKeyLifeTime()
+            $uid, $uid, $torrentId, self::getHashKeySuffix(), self::getCacheKeyLifeTime(), time(),
         ];
         $result  = $redis->eval(self::getAddRecordLuaScript(), $args, 3);
         $err = $redis->getLastError();
@@ -79,13 +85,16 @@ class CleanupRepository extends BaseRepository
             return;
         }
         //update the batch key
-        $newBatch = $batchKey . ":" . self::getHashKeySuffix();
-        $lifeTime = self::getCacheKeyLifeTime();
-        $redis->set($batchKey, $newBatch, ['ex' => $lifeTime]);
-        $redis->hSetNx($newBatch, -1, 1);
-        $redis->expire($newBatch, $lifeTime);
+        //用户魔力部分不更新，避免用户保旧种汇报时间过长影响魔力增加
+        if ($batchKey != self::USER_SEED_BONUS_BATCH_KEY) {
+            $newBatch = $batchKey . ":" . self::getHashKeySuffix();
+            $lifeTime = self::getCacheKeyLifeTime();
+            $redis->set($batchKey, $newBatch, ['ex' => $lifeTime]);
+            $redis->hSetNx($newBatch, -1, 1);
+            $redis->expire($newBatch, $lifeTime);
+        }
 
-
+        $userSeedBonusDeadline = deadtime();
         $count = 0;
         $it = NULL;
         $length = $redis->hLen($batch);
@@ -94,19 +103,37 @@ class CleanupRepository extends BaseRepository
         $redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
         while($arr_keys = $redis->hScan($batch, $it, "*", self::$scanSize)) {
             $delay = self::getDelay($batchKeyInfo['task_index'], $length, $page);
-            $idStr = implode(",", array_keys($arr_keys));
-            $command = sprintf(
-                'cleanup --action=%s --begin_id=%s --end_id=%s --id_str=%s --request_id=%s --delay=%s',
-                $batchKeyInfo['action'], 0, 0,  $idStr, $requestId, $delay
-            );
-            $output = executeCommand($command, 'string', true);
-            do_log(sprintf('output: %s', $output));
-            $count += count($arr_keys);
+            $toRemoveFields = $validFields = [];
+            foreach ($arr_keys as $field => $value) {
+                if ($batchKey == self::USER_SEED_BONUS_BATCH_KEY && $value < $userSeedBonusDeadline) {
+                    //dead, should remove
+                    $toRemoveFields[] = $field;
+                } else {
+                    $validFields[] = $field;
+                }
+            }
+            if (!empty($validFields)) {
+                $idStr = implode(",", $validFields);
+                $idRedisKey = self::IDS_KEY_PREFIX . Str::random();
+                NexusDB::cache_put($idRedisKey, $idStr);
+                $command = sprintf(
+                    'cleanup --action=%s --begin_id=%s --end_id=%s --id_redis_key=%s --request_id=%s --delay=%s',
+                    $batchKeyInfo['action'], 0, 0,  $idRedisKey, $requestId, $delay
+                );
+                $output = executeCommand($command, 'string', true);
+                do_log(sprintf('output: %s', $output));
+                $count += count($validFields);
+            }
+            if (!empty($toRemoveFields)) {
+                $redis->hDel($batch, ...$toRemoveFields);
+            }
             $page++;
         }
 
         //remove this batch
-        $redis->del($batch);
+        if ($batchKey != self::USER_SEED_BONUS_BATCH_KEY) {
+            $redis->del($batch);
+        }
         $endTimestamp = time();
         do_log(sprintf("$logPrefix, [DONE], batch: $batch, count: $count, cost time: %d seconds", $endTimestamp - $beginTimestamp));
     }
@@ -128,7 +155,8 @@ class CleanupRepository extends BaseRepository
     }
 
     /**
-     * USER_SEED_BONUS, USER_SEEDING_LEECHING_TIME, TORRENT_SEEDERS_ETC, uid, uid, torrentId, timeStr, cacheLifeTime
+     * USER_SEED_BONUS, USER_SEEDING_LEECHING_TIME, TORRENT_SEEDERS_ETC,
+     * uid, uid, torrentId, timeStr, cacheLifeTime, nowTimestamp
      *
      * @return string
      */
@@ -141,7 +169,10 @@ for k, v in pairs(batchList) do
     local isBatchKeyNew = false
     if batchKey == false then
         batchKey = v .. ":" .. ARGV[4]
-        redis.call("SET", v, batchKey, "EX", ARGV[5])
+        redis.call("SET", v, batchKey)
+        if (k > 1) then
+            redis.call("EXPIRE", v, ARGV[5])
+        end
         isBatchKeyNew = true
     end
     local hashKey
@@ -154,8 +185,8 @@ for k, v in pairs(batchList) do
     else
         hashKey = ARGV[3]
     end
-    redis.call("HSETNX", batchKey, hashKey, 1)
-    if isBatchKeyNew then
+    redis.call("HSET", batchKey, hashKey, ARGV[6])
+    if (isBatchKeyNew and k > 1) then
         redis.call("EXPIRE", batchKey, ARGV[5])
     end
 end
@@ -201,10 +232,128 @@ LUA;
 
     private static function getCacheKeyLifeTime(): int
     {
-        $four = get_setting("main.autoclean_interval_four");
-        $three = get_setting("main.autoclean_interval_three");
-        $one = get_setting("main.autoclean_interval_one");
+        $four = self::getInterval("four");
+        $three = self::getInterval("three");
+        $one = self::getInterval("one");
         return intval($four) + intval($three) + intval($one);
     }
 
+    private static function getInterval($level): int
+    {
+        $name = sprintf("main.autoclean_interval_%s", $level);
+        return intval(get_setting($name));
+    }
+
+    public static function checkCleanup(): void
+    {
+        $now = Carbon::now();
+        $timestamp = $now->getTimestamp();
+        $toolRep = new ToolRepository();
+        $arvToLevel = [
+            "lastcleantime" => "one",
+            "lastcleantime2" => "two",
+            "lastcleantime3" => "three",
+            "lastcleantime4" => "four",
+            "lastcleantime5" => "five",
+        ];
+        $avps = Avp::query()->get()->keyBy("arg");
+        foreach ($arvToLevel as $arg => $level) {
+            /** @var NexusModel $value */
+            $value = $avps->get($arg);
+            $interval = self::getInterval($level);
+            if ($interval <= 0) {
+                do_log(sprintf("level: %s not set cleanup interval", $level), "error");
+                continue;
+            }
+            $lastTime = 0;
+            if ($value && $value->value_u) {
+                $lastTime = $value->value_u;
+            }
+            if ($timestamp < $lastTime + $interval * 2) {
+                continue;
+            }
+            $receiverUid = get_setting("system.alarm_email_receiver");
+            do_log("receiverUid: $receiverUid");
+            if (empty($receiverUid)) {
+                $locale = Locale::getDefault();
+                $subject = self::getAlarmEmailSubjectForCleanup($locale);
+                $msg = self::getAlarmEmailBodyForCleanup($now, $level, $lastTime, $interval, $locale);
+                do_log(sprintf("%s - %s", $subject, $msg), "error");
+            } else {
+                $receiverUidArr = preg_split("/\s+/", $receiverUid);
+                $users = User::query()->whereIn("id", $receiverUidArr)->get(User::$commonFields);
+                foreach ($users as $user) {
+                    $locale = $user->locale;
+                    $subject = self::getAlarmEmailSubjectForCleanup($locale);
+                    $msg = self::getAlarmEmailBodyForCleanup($now, $level, $lastTime, $interval, $locale);
+                    $result = $toolRep->sendMail($user->email, $subject, $msg);
+                    do_log(sprintf("send msg: %s result: %s", $msg, var_export($result, true)), $result ? "info" : "error");
+                }
+            }
+            return;
+        }
+    }
+
+    private static function getAlarmEmailSubjectForCleanup(string|null $locale = null)
+    {
+        return nexus_trans("cleanup.alarm_email_subject", ["site_name" => get_setting("basic.SITENAME")], $locale);
+    }
+
+    private static function getAlarmEmailBodyForCleanup(Carbon $now, string $level, int $lastTime, int $interval, string|null $locale = null)
+    {
+        return  nexus_trans("cleanup.alarm_email_body", [
+            "now_time" => $now->toDateTimeString(),
+            "level" => $level,
+            "last_time" => $lastTime > 0 ? Carbon::createFromTimestamp($lastTime)->toDateTimeString() : "",
+            "elapsed_seconds" => $lastTime > 0 ? $now->getTimestamp() - $lastTime : "",
+            "elapsed_seconds_human" => $lastTime > 0 ? mkprettytime($now->getTimestamp() - $lastTime) : "",
+            "interval" => $interval,
+            "interval_human" => mkprettytime($interval),
+        ], $locale);
+    }
+
+    public static function checkQueueFailedJobs(): void
+    {
+        $now = Carbon::now();
+        $since = $now->subHours(6)->toDateTimeString();
+        $failedJobsTable = nexus_config("queue.failed.table");
+        $failedJobsCount = NexusDB::table($failedJobsTable)->where("failed_at", ">=", $since)->count();
+        if ($failedJobsCount == 0) {
+            do_log(sprintf("no failed jobs since: %s", $since));
+            return;
+        }
+        $receiverUid = get_setting("system.alarm_email_receiver");
+        do_log("receiverUid: $receiverUid");
+        $toolRep = new ToolRepository();
+        if (empty($receiverUid)) {
+            $locale = Locale::getDefault();
+            $subject = self::getAlarmEmailSubjectForQueueFailedJobs($locale);
+            $msg = self::getAlarmEmailBodyForQueueFailedJobs($since, $failedJobsCount, $failedJobsTable, $locale);
+            do_log(sprintf("%s - %s", $subject, $msg), "error");
+        } else {
+            $receiverUidArr = preg_split("/\s+/", $receiverUid);
+            $users = User::query()->whereIn("id", $receiverUidArr)->get(User::$commonFields);
+            foreach ($users as $user) {
+                $locale = $user->locale;
+                $subject = self::getAlarmEmailSubjectForQueueFailedJobs($locale);
+                $msg = self::getAlarmEmailBodyForQueueFailedJobs($since, $failedJobsCount, $failedJobsTable, $locale);
+                $result = $toolRep->sendMail($user->email, $subject, $msg);
+                do_log(sprintf("send msg: %s result: %s", $msg, var_export($result, true)), $result ? "info" : "error");
+            }
+        }
+    }
+
+    private static function getAlarmEmailSubjectForQueueFailedJobs(string|null $locale = null)
+    {
+        return nexus_trans("cleanup.alarm_email_subject_for_queue_failed_jobs", ["site_name" => get_setting("basic.SITENAME")], $locale);
+    }
+
+    private static function getAlarmEmailBodyForQueueFailedJobs(string $since, int $count, string $failedJobTable, string|null $locale = null)
+    {
+        return  nexus_trans("cleanup.alarm_email_body_for_queue_failed_jobs", [
+            "since" => $since,
+            "count" => $count,
+            "failed_job_table" => $failedJobTable,
+        ], $locale);
+    }
 }

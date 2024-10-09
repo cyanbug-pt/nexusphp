@@ -217,18 +217,16 @@ else
 }
 
 $limit = ($CURUSER['sbnum'] ? $CURUSER['sbnum'] : 70);
-if ($where == "helpbox")
-{
-$sql = "SELECT * FROM shoutbox WHERE type='hb' ORDER BY date DESC, id DESC LIMIT ".$limit;
-}
-elseif ($CURUSER['hidehb'] == 'yes' || $showhelpbox_main != 'yes'){
-$sql = "SELECT * FROM shoutbox WHERE type='sb' ORDER BY date DESC, id DESC LIMIT ".$limit;
-}
-elseif ($CURUSER){
-$sql = "SELECT * FROM shoutbox ORDER BY date DESC, id DESC LIMIT ".$limit;
-}
-else {
-die("<h1>".$lang_shoutbox['std_access_denied']."</h1>"."<p>".$lang_shoutbox['std_access_denied_note']."</p></body></html>");
+if ($where == "helpbox" && $showhelpbox_main == 'yes') {
+    //request helpbox, not require login
+    $sql = "SELECT * FROM shoutbox WHERE type='hb' ORDER BY date DESC, id DESC LIMIT ".$limit;
+} elseif ($where == "shoutbox" && $CURUSER && ($CURUSER['hidehb'] == 'yes' || $showhelpbox_main != 'yes')) {
+    //request shoutbox, exclude helpbox content, require login
+    $sql = "SELECT * FROM shoutbox WHERE type='sb' ORDER BY date DESC, id DESC LIMIT ".$limit;
+} elseif ($CURUSER) {
+    $sql = "SELECT * FROM shoutbox ORDER BY date DESC, id DESC LIMIT ".$limit;
+} else {
+    die("<h1>".$lang_shoutbox['std_access_denied']."</h1>"."<p>".$lang_shoutbox['std_access_denied_note']."</p></body></html>");
 }
 $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
 if (mysql_num_rows($res) == 0)
@@ -250,7 +248,7 @@ else
 			}
 		else $username = $lang_shoutbox['text_guest'];
 		if (isset($CURUSER) && $CURUSER['timetype'] != 'timealive')
-			$time = strftime("%m.%d %H:%M",$arr["date"]);
+			$time = (new DateTime())->setTimestamp($arr["date"])->format('m.d H:i');
 		else $time = get_elapsed_time($arr["date"]).$lang_shoutbox['text_ago'];
 		print("<tr><td class=\"shoutrow\"><span class='date'>[".$time."]</span> ".
 $del ." ". $username." " . format_comment($arr["text"],true,false,true,true,600,false,false)."

@@ -20,7 +20,7 @@ class AjaxInterface{
     {
         global $CURUSER;
         $rep = new \App\Repositories\AttendanceRepository();
-        return $rep->retroactive($CURUSER['id'], $params['timestamp']);
+        return $rep->retroactive($CURUSER['id'], $params['date']);
     }
 
     public static function getPtGen($params)
@@ -149,6 +149,13 @@ class AjaxInterface{
     //    dd($params, $data);
         $rep = new \App\Repositories\MedalRepository();
         return $rep->saveUserMedal($CURUSER['id'], $data);
+    }
+
+    public static function claimTask($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\ExamRepository();
+        return $rep->assignToUser($CURUSER['id'], $params['exam_id']);
     }
 }
 

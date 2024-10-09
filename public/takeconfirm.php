@@ -2,8 +2,11 @@
 require_once("../include/bittorrent.php");
 dbconn();
 require_once(get_langfile_path());
+loggedinorreturn();
 $id =  isset($_POST['id']) ? intval($_POST['id']) : (isset($_GET['id']) ? intval($_GET['id']) : die());
 int_check($id,true);
+if (($CURUSER['id'] != $id && !user_can('viewinvite')) || !is_valid_id($id))
+    stderr($lang_functions['std_sorry'],$lang_functions['std_permission_denied'], true, false);
 $email = unesc(htmlspecialchars(trim($_POST["email"])));
 if(!empty($_POST['conusr'])) {
 //    sql_query("UPDATE users SET status = 'confirmed', editsecret = '' WHERE id IN (" . implode(", ", $_POST['conusr']) . ") AND status='pending'");

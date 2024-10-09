@@ -218,12 +218,12 @@ class User extends Authenticatable implements FilamentUser, HasName
         'leechwarnuntil' => 'datetime',
     ];
 
-    public static $commonFields = [
+    public static array $commonFields = [
         'id', 'username', 'email', 'class', 'status', 'added', 'avatar', 'passkey',
         'uploaded', 'downloaded', 'seedbonus', 'seedtime', 'leechtime',
         'invited_by', 'enabled', 'seed_points', 'last_access', 'invites',
         'lang', 'attendance_card', 'privacy', 'noad', 'downloadpos', 'donoruntil', 'donor',
-        'seedbonus', 'bonuscomment', 'downloadpos', 'vip_added', 'vip_until', 'title', 'invites', 'attendance_card',
+        'bonuscomment', 'downloadpos', 'vip_added', 'vip_until', 'title', 'invites', 'attendance_card',
         'seed_points_per_hour'
     ];
 
@@ -512,6 +512,16 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function directPermissions()
     {
         return $this->hasMany(UserPermission::class, 'uid');
+    }
+
+    public function examAndTasks(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Exam::class, "exam_users", "uid", "exam_id");
+    }
+
+    public function onGoingExamAndTasks(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->examAndTasks()->wherePivot("status", ExamUser::STATUS_NORMAL);
     }
 
     public function getAvatarAttribute($value)
