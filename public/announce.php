@@ -29,6 +29,9 @@ $torrentNotExistsKey = "torrent_not_exists";
 $authKeyInvalidKey = "authkey_invalid";
 $passkeyInvalidKey = "passkey_invalid";
 $isReAnnounce = false;
+$reAnnounceInterval = 5;
+$frequencyInterval = 30;
+$isStoppedOrCompleted = !empty($GLOBALS['event']) && in_array($GLOBALS['event'], array('completed', 'stopped'));
 $userAuthenticateKey = "";
 if (!empty($_GET['authkey'])) {
     $authkey = $_GET['authkey'];
@@ -47,11 +50,11 @@ if (!empty($_GET['authkey'])) {
 
     $lockString = http_build_query($lockParams);
     $lockKey = "isReAnnounce:" . md5($lockString);
-    if (!$redis->set($lockKey, TIMENOW, ['nx', 'ex' => 20])) {
+    if (!$redis->set($lockKey, TIMENOW, ['nx', 'ex' => $reAnnounceInterval])) {
         $isReAnnounce = true;
     }
     $reAnnounceCheckByAuthKey = "reAnnounceCheckByAuthKey:$subAuthkey";
-    if (!$isReAnnounce && !$redis->set($reAnnounceCheckByAuthKey, TIMENOW, ['nx', 'ex' => 60])) {
+    if (!$isStoppedOrCompleted && !$isReAnnounce && !$redis->set($reAnnounceCheckByAuthKey, TIMENOW, ['nx', 'ex' => $frequencyInterval])) {
         $msg = "Request too frequent(a)";
         do_log(sprintf("[ANNOUNCE] %s key: %s already exists, value: %s", $msg, $reAnnounceCheckByAuthKey, TIMENOW));
         warn($msg, 300);
@@ -74,7 +77,7 @@ if (!empty($_GET['authkey'])) {
     }
     $lockString = http_build_query($lockParams);
     $lockKey = "isReAnnounce:" . md5($lockString);
-    if (!$redis->set($lockKey, TIMENOW, ['nx', 'ex' => 20])) {
+    if (!$redis->set($lockKey, TIMENOW, ['nx', 'ex' => $reAnnounceInterval])) {
         $isReAnnounce = true;
     }
 } else {
@@ -87,7 +90,7 @@ if ($redis->get("$torrentNotExistsKey:$info_hash")) {
     err($msg);
 }
 $torrentReAnnounceKey = sprintf('reAnnounceCheckByInfoHash:%s:%s', $userAuthenticateKey, $info_hash);
-if (!$isReAnnounce && !$redis->set($torrentReAnnounceKey, TIMENOW, ['nx', 'ex' => 60])) {
+if (!$isStoppedOrCompleted && !$isReAnnounce && !$redis->set($torrentReAnnounceKey, TIMENOW, ['nx', 'ex' => $frequencyInterval])) {
     $msg = "Request too frequent(h)";
     do_log(sprintf("[ANNOUNCE] %s key: %s already exists, value: %s", $msg, $torrentReAnnounceKey, TIMENOW));
     warn($msg, 300);
