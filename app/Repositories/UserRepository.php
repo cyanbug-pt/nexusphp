@@ -10,6 +10,7 @@ use App\Models\Invite;
 use App\Models\LoginLog;
 use App\Models\Message;
 use App\Models\Setting;
+use App\Models\Snatch;
 use App\Models\User;
 use App\Models\UserBanLog;
 use App\Models\UserMeta;
@@ -636,9 +637,10 @@ class UserRepository extends BaseRepository
         } else {
             $uidArr = $id->pluck('id')->toArray();
         }
+        $uidStr = implode(',', $uidArr);
         $users = User::query()->with('language')->whereIn('id', $uidArr)->get();
-        if (empty($uidArr)) {
-            return;
+        if ($users->isEmpty()) {
+            return true;
         }
         $tables = [
             'users' => 'id',
@@ -655,7 +657,7 @@ class UserRepository extends BaseRepository
             'oauth_auth_codes' => 'user_id',
         ];
         foreach ($tables as $table => $key) {
-            \Nexus\Database\NexusDB::table($table)->whereIn($key, $uidArr)->delete();
+            NexusDB::statement(sprintf("delete from `%s` where `%s` in (%s)", $table, $key, $uidStr));
         }
         do_log("[DESTROY_USER]: " . json_encode($uidArr), 'error');
         $userBanLogs = [];
@@ -667,6 +669,8 @@ class UserRepository extends BaseRepository
             ];
         }
         UserBanLog::query()->insert($userBanLogs);
+        //delete by user, make sure torrent is deleted
+        NexusDB::statement(sprintf('DELETE FROM snatched WHERE userid IN (%s) and not exists (select 1 from torrents where id = snatched.torrentid)', $uidStr));
         if (is_int($id)) {
             do_action("user_delete", $id);
             fire_event("user_destroyed", $users->first());

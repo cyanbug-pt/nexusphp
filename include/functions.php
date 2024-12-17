@@ -3126,7 +3126,8 @@ function deletetorrent($id, $notify = false) {
 	$idStr = implode(', ', $idArr ?: [0]);
 	$torrent_dir = get_setting('main.torrent_dir');
     \Nexus\Database\NexusDB::statement("DELETE FROM torrents WHERE id in ($idStr)");
-    \Nexus\Database\NexusDB::statement("DELETE FROM snatched WHERE torrentid in ($idStr)");
+    //delete by torrent, make sure user is deleted
+    \Nexus\Database\NexusDB::statement("DELETE FROM snatched WHERE torrentid in ($idStr) and not exists (select 1 from users where id = snatched.userid)");
 	foreach(array("peers", "files", "comments") as $x) {
         \Nexus\Database\NexusDB::statement("DELETE FROM $x WHERE torrent in ($idStr)");
 	}

@@ -616,8 +616,8 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
             if ($snatchInfo['downloaded'] >= $requiredDownloaded) {
                 $nowStr = date('Y-m-d H:i:s');
                 $sql = sprintf(
-                    "insert into hit_and_runs (uid, torrent_id, snatched_id, created_at, updated_at) values (%d, %d, %d, '%s', '%s') on duplicate key update created_at = '%s', updated_at = '%s'",
-                    $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, $nowStr, $nowStr
+                    "insert into hit_and_runs (uid, torrent_id, snatched_id, created_at, updated_at) values (%d, %d, %d, '%s', '%s') on duplicate key update updated_at = '%s'",
+                    $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, $nowStr
                 );
                 $affectedRows = sql_query($sql);
                 do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} >= required: $requiredDownloaded, [INSERT_H&R], sql: $sql, affectedRows: $affectedRows");

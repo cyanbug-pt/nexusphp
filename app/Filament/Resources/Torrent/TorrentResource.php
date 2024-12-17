@@ -16,6 +16,7 @@ use App\Repositories\TagRepository;
 use App\Repositories\TorrentRepository;
 use Filament\Facades\Filament;
 use Filament\Forms;
+use Filament\Pages\Actions\Action;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -113,7 +114,8 @@ class TorrentResource extends Resource
             ->defaultSort('id', 'desc')
             ->filters(self::getFilters())
             ->actions(self::getActions())
-            ->bulkActions(self::getBulkActions());
+            ->bulkActions(self::getBulkActions())
+        ;
 
     }
 
@@ -339,6 +341,13 @@ class TorrentResource extends Resource
             $actions[] = Tables\Actions\DeleteAction::make('delete')->using(function ($record) {
                 deletetorrent($record->id);
             });
+//            $actions[] = Tables\Actions\Action::make('view')
+//                ->action(function (Torrent $record) {
+//                    return [
+//                        'modelContent' => new HtmlString("ssss")
+//                    ];
+//                })
+//            ;
         }
         return $actions;
     }
