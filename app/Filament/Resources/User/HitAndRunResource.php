@@ -56,6 +56,7 @@ class HitAndRunResource extends Resource
                 Tables\Columns\TextColumn::make('seedTimeRequired')->label(__('label.seed_time_required')),
                 Tables\Columns\TextColumn::make('inspectTimeLeft')->label(__('label.inspect_time_left')),
                 Tables\Columns\TextColumn::make('statusText')->label(__('label.status')),
+                Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([

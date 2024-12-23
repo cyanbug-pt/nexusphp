@@ -247,7 +247,7 @@ JS;
         }
         // ------------- end claim block ------------------//
 
-        tr($lang_details['torrent_dl_url'],sprintf('<a title="%s" href="%s/download.php?downhash=%s|%s">%s</a>',$lang_details['torrent_dl_url_notice'], getSchemeAndHttpHost(), $CURUSER['id'], $torrentRep->encryptDownHash($row['id'], $CURUSER), $lang_details['torrent_dl_url_text']),1);
+        tr($lang_details['torrent_dl_url'],sprintf('<a title="%s" href="%s">%s</a>',$lang_details['torrent_dl_url_notice'], $torrentRep->getDownloadUrl($id, $CURUSER), $lang_details['torrent_dl_url_text']),1);
 
 		// ---------------- start subtitle block -------------------//
         $subTorrentIdArr = [$row['id']];

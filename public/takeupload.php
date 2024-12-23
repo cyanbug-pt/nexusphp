@@ -514,7 +514,7 @@ $body_arr[$langfolder_array[$i]] = <<<EOD
 $description
 -------------------------------------------------------------------------------------------------------------------------
 
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent']}<b><a href="javascript:void(null)" onclick="window.open('http://$BASEURL/details.php?id=$id&hit=1')">{$lang_takeupload_target[$langfolder_array[$i]]['mail_here']}</a></b><br />
+{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent']}<b><a href="javascript:void(null)" onclick="window.open('$baseUrl/details.php?id=$id&hit=1')">{$lang_takeupload_target[$langfolder_array[$i]]['mail_here']}</a></b><br />
 $baseUrl/details.php?id=$id&hit=1
 
 ------{$lang_takeupload_target[$langfolder_array[$i]]['mail_yours']}

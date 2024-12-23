@@ -132,10 +132,10 @@ class TorrentRepository extends BaseRepository
         return $result;
     }
 
-    private function getDownloadUrl($id, array|User $user): string
+    public function getDownloadUrl($id, array|User $user): string
     {
         return sprintf(
-            '%s/download.php?downhash=%s|%s',
+            '%s/download.php?downhash=%s.%s',
             getSchemeAndHttpHost(), is_array($user) ? $user['id'] : $user->id, $this->encryptDownHash($id, $user)
         );
     }
@@ -365,6 +365,7 @@ class TorrentRepository extends BaseRepository
 
     private function getEncryptDownHashKey($user)
     {
+        $passkey = "";
         if ($user instanceof User && $user->passkey) {
             $passkey = $user->passkey;
         } elseif (is_array($user) && !empty($user['passkey'])) {
@@ -372,7 +373,8 @@ class TorrentRepository extends BaseRepository
         } elseif (is_scalar($user)) {
             $user = User::query()->findOrFail(intval($user), ['id', 'passkey']);
             $passkey = $user->passkey;
-        } else {
+        }
+        if (empty($passkey)) {
             throw new \InvalidArgumentException("Invalid user: " . json_encode($user));
         }
         //down hash is relative to user passkey

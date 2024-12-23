@@ -9,7 +9,7 @@ function denyDownload()
 }
 $torrentRep = new \App\Repositories\TorrentRepository();
 if (!empty($_REQUEST['downhash'])) {
-    $params = explode('|', $_REQUEST['downhash']);
+    $params = explode('.', $_REQUEST['downhash'], 2);
     if (empty($params[0]) || empty($params[1])) {
         die("invalid downhash, format error");
     }

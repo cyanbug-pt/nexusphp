@@ -240,7 +240,7 @@ foreach ($list as $row)
     }
 	$itemurl = $url."/details.php?id=".$row['id'];
 	if ($dllink)
-		$itemdlurl = $url."/download.php?id=".$row['id']."&amp;downhash=" . rawurlencode( $user['id'] . '|'. $torrentRep->encryptDownHash($row['id'], $user));
+		$itemdlurl = $torrentRep->getDownloadUrl($row['id'], $user);
 	else $itemdlurl = $url."/download.php?id=".$row['id'];
 	if (!empty($_GET['icat'])) $title .= "[".$row['category_name']."]";
 	$title .= $row['name'];
