@@ -101,12 +101,9 @@ class Test extends Command
      */
     public function handle()
     {
-        $file = resource_path("geoip/GeoLite2-ASN.mmdb");
-        $file = resource_path("geoip/GeoLite2-City.mmdb");
-        $reader = new Reader($file);
-        $asn = $reader->asn("94.16.120.0");
-//        $result = \Nexus\Plugin\Plugin::listEnabled();
-        dd($asn);
+        $torrent = Torrent::query()->find(12, ['info_hash']);
+        $infoHash = $torrent->info_hash;
+        dd($infoHash === rawurldecode("%15%24%f3%e6%91e%f6%fbT%be%3f%b8%f3%f7_%f5%f6%aa%3fv"));
     }
 
 }

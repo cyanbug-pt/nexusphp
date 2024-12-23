@@ -493,7 +493,7 @@ $size = mksize($totallen);
 $description = format_comment($descr);
 
 //dirty code, change later
-
+$baseUrl = getSchemeAndHttpHost();
 $langfolder_array = array("en", "chs", "cht", "ko", "ja");
 $body_arr = array("en" => "", "chs" => "", "cht" => "", "ko" => "", "ja" => "");
 $i = 0;
@@ -515,7 +515,7 @@ $description
 -------------------------------------------------------------------------------------------------------------------------
 
 {$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent']}<b><a href="javascript:void(null)" onclick="window.open('http://$BASEURL/details.php?id=$id&hit=1')">{$lang_takeupload_target[$langfolder_array[$i]]['mail_here']}</a></b><br />
-http://$BASEURL/details.php?id=$id&hit=1
+$baseUrl/details.php?id=$id&hit=1
 
 ------{$lang_takeupload_target[$langfolder_array[$i]]['mail_yours']}
 {$lang_takeupload_target[$langfolder_array[$i]]['mail_team']}
@@ -530,7 +530,14 @@ while($arr = mysql_fetch_array($res))
 		$current_lang = $arr["lang"];
 		$to = $arr["email"];
 
-		sent_mail($to,$SITENAME,$SITEEMAIL,change_email_encode(validlang($current_lang),$lang_takeupload_target[validlang($current_lang)]['mail_title'].$torrent),change_email_encode(validlang($current_lang),$body_arr[validlang($current_lang)]),"torrent upload",false,false,'',get_email_encode(validlang($current_lang)), "eYou");
+		sent_mail(
+            $to,$SITENAME,$SITEEMAIL,
+            $lang_takeupload_target[validlang($current_lang)]['mail_title'],
+            $torrent,
+            validlang($current_lang),
+            $body_arr[validlang($current_lang)],
+            "torrent upload",false,false,'',
+        );
 }
 }
 

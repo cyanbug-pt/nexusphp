@@ -18,6 +18,11 @@
                 <td></td>
             </tr>
             <tr>
+                <th>Passkey</th>
+                <td>{{$record->passkey}}</td>
+                <td></td>
+            </tr>
+            <tr>
                 <th>{{__('label.status')}}</th>
                 <td>{{$record->status}}</td>
                 <td></td>
