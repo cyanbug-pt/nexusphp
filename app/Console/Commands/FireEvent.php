@@ -10,6 +10,7 @@ use App\Events\UserCreated;
 use App\Events\UserDestroyed;
 use App\Events\UserDisabled;
 use App\Events\UserEnabled;
+use App\Events\UserUpdated;
 use App\Models\News;
 use App\Models\Torrent;
 use App\Models\User;
@@ -43,6 +44,7 @@ class FireEvent extends Command
         "user_destroyed" => ['event' => UserDestroyed::class, 'model' => User::class],
         "user_disabled" => ['event' => UserDisabled::class, 'model' => User::class],
         "user_enabled" => ['event' => UserEnabled::class, 'model' => User::class],
+        "user_updated" => ['event' => UserUpdated::class, 'model' => User::class],
 
         "news_created" => ['event' => NewsCreated::class, 'model' => News::class],
     ];

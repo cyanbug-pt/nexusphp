@@ -1070,6 +1070,10 @@ function clear_user_cache($uid, $passkey = '')
     if ($passkey) {
         \Nexus\Database\NexusDB::cache_del('user_passkey_'.$passkey.'_content');//announce.php
     }
+    $userInfo = \App\Models\User::query()->find($uid, \App\Models\User::$commonFields);
+    if ($userInfo) {
+        fire_event("user_updated", $userInfo);
+    }
 }
 
 function clear_setting_cache()
