@@ -11,7 +11,7 @@ class ManagePlugins extends PageListSingle
 {
     protected static string $resource = PluginResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

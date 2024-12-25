@@ -78,7 +78,7 @@ class ViewHitAndRun extends ViewRecord
         ];
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         $actions = [];
         if (in_array($this->record->status, HitAndRun::CAN_PARDON_STATUS)) {

@@ -13,7 +13,7 @@ class EditCodec extends EditRecord
 
     protected static string $resource = CodecResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

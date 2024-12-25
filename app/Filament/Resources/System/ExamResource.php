@@ -9,9 +9,9 @@ use App\Models\Exam;
 use App\Repositories\ExamRepository;
 use App\Repositories\UserRepository;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,7 +23,7 @@ class ExamResource extends Resource
 
     protected static ?string $model = Exam::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-exclamation';
+    protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
 
     protected static ?string $navigationGroup = 'System';
 
@@ -31,7 +31,7 @@ class ExamResource extends Resource
 
     const IS_DISCOVERED_OPTIONS = ['0' => 'No', '1' => 'Yes'];
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.exams_list');
     }
@@ -60,20 +60,20 @@ class ExamResource extends Resource
                         ->columnSpanFull()
                         ->required()
                         ->label(__('exam.success_reward_bonus'))
-                        ->hidden(fn (\Closure $get) => $get('type') != Exam::TYPE_TASK)
+                        ->hidden(fn (\Filament\Forms\Get $get) => $get('type') != Exam::TYPE_TASK)
                     ,
                     Forms\Components\TextInput::make('fail_deduct_bonus')
                         ->columnSpanFull()
                         ->required()
                         ->label(__('exam.fail_deduct_bonus'))
-                        ->hidden(fn (\Closure $get) => $get('type') != Exam::TYPE_TASK)
+                        ->hidden(fn (\Filament\Forms\Get $get) => $get('type') != Exam::TYPE_TASK)
                     ,
                     Forms\Components\TextInput::make('max_user_count')
                         ->columnSpanFull()
                         ->required()
                         ->numeric()
                         ->label(__('exam.max_user_count'))
-                        ->hidden(fn (\Closure $get) => $get('type') != Exam::TYPE_TASK)
+                        ->hidden(fn (\Filament\Forms\Get $get) => $get('type') != Exam::TYPE_TASK)
                     ,
 
                     Forms\Components\Repeater::make('indexes')->schema([

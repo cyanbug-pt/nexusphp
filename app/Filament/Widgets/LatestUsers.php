@@ -6,13 +6,14 @@ use App\Models\User;
 use Closure;
 use Filament\Tables;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 
 class LatestUsers extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    protected function getTableHeading(): string | Closure | null
+    protected function getTableHeading(): string | Htmlable | null
     {
         return __('dashboard.latest_user.page_title');
     }

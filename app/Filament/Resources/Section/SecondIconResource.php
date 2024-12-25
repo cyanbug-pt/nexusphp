@@ -9,9 +9,9 @@ use App\Models\SecondIcon;
 use App\Models\Setting;
 use App\Repositories\SearchBoxRepository;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -27,7 +27,7 @@ class SecondIconResource extends Resource
 
     protected static ?int $navigationSort = 11;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.second_icon');
     }
@@ -71,13 +71,13 @@ class SecondIconResource extends Resource
                     ->id("taxonomy_$torrentMode")
                     ->schema($torrentTaxonomySchema)
                     ->columns(4)
-                    ->hidden(fn (\Closure $get) => $get('mode') != $torrentMode)
+                    ->hidden(fn (\Filament\Forms\Get $get) => $get('mode') != $torrentMode)
                 ,
                 Forms\Components\Section::make(__('label.second_icon.select_section'))
                     ->id("taxonomy_$specialMode")
                     ->schema($specialTaxonomySchema)
                     ->columns(4)
-                    ->hidden(fn (\Closure $get) => $get('mode') != $specialMode)
+                    ->hidden(fn (\Filament\Forms\Get $get) => $get('mode') != $specialMode)
                 ,
 
             ]);

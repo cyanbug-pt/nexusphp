@@ -14,7 +14,7 @@ class ListMedia extends PageList
 {
     protected static string $resource = MediaResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

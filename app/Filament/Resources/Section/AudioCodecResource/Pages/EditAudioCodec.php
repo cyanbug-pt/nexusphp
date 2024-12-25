@@ -11,7 +11,7 @@ class EditAudioCodec extends EditCodec
 {
     protected static string $resource = AudioCodecResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

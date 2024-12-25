@@ -13,7 +13,7 @@ class ListTags extends PageList
 {
     protected static string $resource = TagResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

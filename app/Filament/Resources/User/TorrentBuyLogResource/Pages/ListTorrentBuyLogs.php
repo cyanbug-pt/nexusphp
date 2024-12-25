@@ -13,7 +13,7 @@ class ListTorrentBuyLogs extends PageList
 {
     protected static string $resource = TorrentBuyLogResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

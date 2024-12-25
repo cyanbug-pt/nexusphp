@@ -13,7 +13,7 @@ class ListAudioCodecs extends PageList
 {
     protected static string $resource = AudioCodecResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

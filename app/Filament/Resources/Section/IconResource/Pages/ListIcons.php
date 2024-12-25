@@ -11,7 +11,7 @@ class ListIcons extends PageList
 {
     protected static string $resource = IconResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

@@ -7,9 +7,9 @@ use App\Filament\Resources\Torrent\TagResource\RelationManagers;
 use App\Models\SearchBox;
 use App\Models\Tag;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -24,7 +24,7 @@ class TagResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.tags_list');
     }

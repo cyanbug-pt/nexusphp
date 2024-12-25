@@ -11,7 +11,7 @@ class EditSource extends EditCodec
 {
     protected static string $resource = SourceResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

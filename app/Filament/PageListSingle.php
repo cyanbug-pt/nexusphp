@@ -13,7 +13,7 @@ class PageListSingle extends ManageRecords
 
     protected function getTableFiltersLayout(): ?string
     {
-        return Layout::AboveContent;
+        return \Filament\Tables\Enums\FiltersLayout::AboveContent;
     }
 
     protected function getTableRecordActionUsing(): ?Closure

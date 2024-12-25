@@ -6,9 +6,9 @@ use App\Filament\Resources\System\UsernameChangeLogResource\Pages;
 use App\Filament\Resources\System\UsernameChangeLogResource\RelationManagers;
 use App\Models\UsernameChangeLog;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -18,13 +18,13 @@ class UsernameChangeLogResource extends Resource
 {
     protected static ?string $model = UsernameChangeLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-pencil-alt';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 100;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.username_change_log');
     }

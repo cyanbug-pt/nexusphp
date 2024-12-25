@@ -10,7 +10,7 @@ class EditUserMeta extends EditRecord
 {
     protected static string $resource = UserMetaResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

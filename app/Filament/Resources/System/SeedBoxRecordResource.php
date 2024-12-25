@@ -10,9 +10,9 @@ use App\Models\SeedBoxRecord;
 use App\Repositories\SeedBoxRepository;
 use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,13 +25,13 @@ class SeedBoxRecordResource extends Resource
 
     protected static ?string $model = SeedBoxRecord::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-archive';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     protected static ?string $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 98;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.seed_box_records');
     }

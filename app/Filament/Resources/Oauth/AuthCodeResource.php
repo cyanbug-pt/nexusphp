@@ -6,9 +6,9 @@ use App\Filament\Resources\Oauth\AuthCodeResource\Pages;
 use App\Filament\Resources\Oauth\AuthCodeResource\RelationManagers;
 use Laravel\Passport\AuthCode;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +17,13 @@ class AuthCodeResource extends Resource
 {
     protected static ?string $model = AuthCode::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Oauth';
 
     protected static ?int $navigationSort = 2;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.oauth_auth_code');
     }

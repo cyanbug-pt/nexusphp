@@ -12,7 +12,7 @@ class ListTorrents extends PageList
 {
     protected static string $resource = TorrentResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

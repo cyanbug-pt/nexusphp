@@ -7,9 +7,9 @@ use App\Filament\Resources\User\HitAndRunResource\RelationManagers;
 use App\Models\HitAndRun;
 use App\Repositories\HitAndRunRepository;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -27,7 +27,7 @@ class HitAndRunResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.hit_and_runs');
     }
@@ -83,7 +83,7 @@ class HitAndRunResource extends Resource
                 })
                 ->deselectRecordsAfterCompletion()
                 ->label(__('admin.resources.hit_and_run.bulk_action_pardon'))
-                    ->icon('heroicon-o-x')
+                    ->icon('heroicon-o-x-mark')
             ]);
     }
 

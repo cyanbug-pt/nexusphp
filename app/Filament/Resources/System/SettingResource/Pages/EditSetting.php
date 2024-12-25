@@ -28,7 +28,7 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
 
     protected static string $view = 'filament.resources.system.setting-resource.pages.edit-hit-and-run';
 
-    protected function getTitle(): string
+    public function getTitle(): string
     {
         return __('label.setting.nav_text');
     }

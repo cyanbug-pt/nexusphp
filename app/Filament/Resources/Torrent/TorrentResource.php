@@ -17,9 +17,9 @@ use App\Repositories\TorrentRepository;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Pages\Actions\Action;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +37,7 @@ class TorrentResource extends Resource
 
     protected static ?string $model = Torrent::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Torrent';
 
@@ -45,7 +45,7 @@ class TorrentResource extends Resource
 
     private static ?TorrentRepository $rep;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.torrent_list');
     }
@@ -157,7 +157,7 @@ class TorrentResource extends Resource
                         ->label(__('label.deadline'))
                     ,
                 ])
-                ->icon('heroicon-o-arrow-circle-up')
+                ->icon('heroicon-o-arrow-up-circle')
                 ->action(function (Collection $records, array $data) {
                     $idArr = $records->pluck('id')->toArray();
                     try {
@@ -189,7 +189,7 @@ class TorrentResource extends Resource
                         ->label(__('label.deadline'))
                     ,
                 ])
-                ->icon('heroicon-o-speakerphone')
+                ->icon('heroicon-o-megaphone')
                 ->action(function (Collection $records, array $data) {
                     $idArr = $records->pluck('id')->toArray();
                     try {

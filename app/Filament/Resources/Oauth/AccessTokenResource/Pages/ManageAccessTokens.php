@@ -11,7 +11,7 @@ class ManageAccessTokens extends PageListSingle
 {
     protected static string $resource = AccessTokenResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

@@ -72,7 +72,7 @@ class ViewExamUser extends ViewRecord
         ];
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\Action::make('Avoid')

@@ -12,7 +12,7 @@ class ListSeedBoxRecords extends PageList
 {
     protected static string $resource = SeedBoxRecordResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

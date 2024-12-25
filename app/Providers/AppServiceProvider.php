@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Http\Middleware\Locale;
 use Carbon\Carbon;
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -53,9 +55,9 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        Filament::registerStyles([
-            asset('styles/sprites.css'),
-            asset('styles/admin.css'),
+        FilamentAsset::register([
+            Css::make("sprites", asset('styles/sprites.css')),
+            Css::make("admin", asset('styles/admin.css')),
         ]);
 
         do_action('nexus_boot');

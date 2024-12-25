@@ -6,9 +6,9 @@ use App\Filament\Resources\Oauth\AccessTokenResource\Pages;
 use App\Filament\Resources\Oauth\AccessTokenResource\RelationManagers;
 use Laravel\Passport\Token;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +17,13 @@ class AccessTokenResource extends Resource
 {
     protected static ?string $model = Token::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Oauth';
 
     protected static ?int $navigationSort = 3;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.oauth_access_token');
     }

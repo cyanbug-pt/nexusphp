@@ -6,13 +6,14 @@ use App\Models\Torrent;
 use Closure;
 use Filament\Tables;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 
 class LatestTorrents extends BaseWidget
 {
     protected static ?int $sort = 2;
 
-    protected function getTableHeading(): string | Closure | null
+    protected function getTableHeading(): string | Htmlable | null
     {
         return __('dashboard.latest_torrent.page_title');
     }

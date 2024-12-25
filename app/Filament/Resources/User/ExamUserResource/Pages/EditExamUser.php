@@ -10,7 +10,7 @@ class EditExamUser extends EditRecord
 {
     protected static string $resource = ExamUserResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

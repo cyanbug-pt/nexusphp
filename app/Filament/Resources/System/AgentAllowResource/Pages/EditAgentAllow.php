@@ -11,7 +11,7 @@ class EditAgentAllow extends EditRecord
 {
     protected static string $resource = AgentAllowResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make()->using(function ($record) {

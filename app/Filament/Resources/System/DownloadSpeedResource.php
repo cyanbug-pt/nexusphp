@@ -6,9 +6,9 @@ use App\Filament\Resources\System\DownloadSpeedResource\Pages;
 use App\Filament\Resources\System\DownloadSpeedResource\RelationManagers;
 use App\Models\DownloadSpeed;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +17,13 @@ class DownloadSpeedResource extends Resource
 {
     protected static ?string $model = DownloadSpeed::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-download';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
 
     protected static ?string $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 6;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.download_speed');
     }

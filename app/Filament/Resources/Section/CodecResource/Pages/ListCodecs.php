@@ -13,7 +13,7 @@ class ListCodecs extends PageList
 {
     protected static string $resource = CodecResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

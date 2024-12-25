@@ -11,7 +11,7 @@ class ManageAttendanceLogs extends PageListSingle
 {
     protected static string $resource = AttendanceLogResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

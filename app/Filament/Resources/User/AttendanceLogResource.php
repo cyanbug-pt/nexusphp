@@ -8,9 +8,9 @@ use App\Filament\Resources\User\AttendanceLogResource\RelationManagers;
 use App\Models\AttendanceLog;
 use Carbon\Carbon;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,13 +21,13 @@ class AttendanceLogResource extends Resource
 
     protected static ?string $model = AttendanceLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-pencil-alt';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 11;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.attendance_log');
     }

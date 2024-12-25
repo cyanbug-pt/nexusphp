@@ -8,9 +8,9 @@ use App\Models\Setting;
 use App\Models\Torrent;
 use App\Models\TorrentState;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -20,13 +20,13 @@ class TorrentStateResource extends Resource
 {
     protected static ?string $model = TorrentState::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-speakerphone';
+    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
 
     protected static ?string $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 99;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.torrent_state');
     }

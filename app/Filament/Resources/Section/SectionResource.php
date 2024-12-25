@@ -9,9 +9,9 @@ use App\Models\Forum;
 use App\Models\SearchBox;
 use App\Models\TorrentCustomField;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -26,13 +26,13 @@ class SectionResource extends Resource
 
     protected static ?string $label = 'Section';
 
-    protected static ?string $navigationIcon = 'heroicon-o-view-boards';
+    protected static ?string $navigationIcon = 'heroicon-o-view-columns';
 
     protected static ?string $navigationGroup = 'Section';
 
     protected static ?int $navigationSort = 1;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.section');
     }

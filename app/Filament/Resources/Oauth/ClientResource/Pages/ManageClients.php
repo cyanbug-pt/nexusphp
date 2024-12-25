@@ -11,7 +11,7 @@ class ManageClients extends PageListSingle
 {
     protected static string $resource = ClientResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

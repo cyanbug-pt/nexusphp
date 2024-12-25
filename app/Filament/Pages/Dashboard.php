@@ -15,7 +15,7 @@ class Dashboard extends \Filament\Pages\Dashboard
 {
     protected ?string $maxContentWidth = 'full';
 
-    protected function getWidgets(): array
+    public function getWidgets(): array
     {
         return [
             AccountInfo::class,

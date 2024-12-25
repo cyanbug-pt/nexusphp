@@ -11,7 +11,7 @@ class ListUserMedals extends PageList
 {
     protected static string $resource = UserMedalResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

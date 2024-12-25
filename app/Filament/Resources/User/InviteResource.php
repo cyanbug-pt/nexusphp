@@ -7,9 +7,9 @@ use App\Filament\Resources\User\InviteResource\Pages;
 use App\Filament\Resources\User\InviteResource\RelationManagers;
 use App\Models\Invite;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -20,13 +20,13 @@ class InviteResource extends Resource
 
     protected static ?string $model = Invite::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-add';
+    protected static ?string $navigationIcon = 'heroicon-o-user-plus';
 
     protected static ?string $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 7;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.invite');
     }

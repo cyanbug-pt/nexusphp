@@ -13,7 +13,7 @@ class ListInvites extends PageList
 {
     protected static string $resource = InviteResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

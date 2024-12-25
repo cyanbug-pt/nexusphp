@@ -10,9 +10,9 @@ use App\Repositories\ExamRepository;
 use App\Repositories\HitAndRunRepository;
 use Carbon\Carbon;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -30,7 +30,7 @@ class ExamUserResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.exam_users');
     }
@@ -109,7 +109,7 @@ class ExamUserResource extends Resource
                 ->deselectRecordsAfterCompletion()
                 ->requiresConfirmation()
                 ->label(__('admin.resources.exam_user.bulk_action_avoid_label'))
-                ->icon('heroicon-o-x'),
+                ->icon('heroicon-o-x-mark'),
 
                 Tables\Actions\BulkAction::make('UpdateEnd')
                     ->form([

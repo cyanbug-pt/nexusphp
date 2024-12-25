@@ -14,7 +14,7 @@ class TorrentTrend extends LineChartWidget
 
     protected static ?string $pollingInterval = null;
 
-    protected function getHeading(): ?string
+    public function getHeading(): ?string
     {
         return __('dashboard.torrent_trend.page_title');
     }

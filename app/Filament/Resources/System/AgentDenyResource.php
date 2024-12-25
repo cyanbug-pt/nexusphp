@@ -6,9 +6,9 @@ use App\Filament\Resources\System\AgentDenyResource\Pages;
 use App\Filament\Resources\System\AgentDenyResource\RelationManagers;
 use App\Models\AgentDeny;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +17,13 @@ class AgentDenyResource extends Resource
 {
     protected static ?string $model = AgentDeny::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-ban';
+    protected static ?string $navigationIcon = 'heroicon-o-no-symbol';
 
     protected static ?string $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 5;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.agent_denies');
     }

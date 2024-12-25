@@ -11,7 +11,7 @@ class EditMedia extends EditCodec
 {
     protected static string $resource = MediaResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

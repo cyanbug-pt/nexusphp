@@ -11,14 +11,14 @@ class EditExam extends EditRecord
 {
     protected static string $resource = ExamResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 
-    public function save(bool $shouldRedirect = true): void
+    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
     {
         $data = $this->form->getState();
         $examRep = new ExamRepository();

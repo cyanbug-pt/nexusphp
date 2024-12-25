@@ -9,9 +9,9 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -32,7 +32,7 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.users_list');
     }

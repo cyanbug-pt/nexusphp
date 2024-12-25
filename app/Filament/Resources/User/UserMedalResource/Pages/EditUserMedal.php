@@ -10,7 +10,7 @@ class EditUserMedal extends EditRecord
 {
     protected static string $resource = UserMedalResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

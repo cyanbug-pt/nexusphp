@@ -14,7 +14,7 @@ class ListSources extends PageList
 {
     protected static string $resource = SourceResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

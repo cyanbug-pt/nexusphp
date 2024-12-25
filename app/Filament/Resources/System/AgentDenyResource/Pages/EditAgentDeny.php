@@ -10,7 +10,7 @@ class EditAgentDeny extends EditRecord
 {
     protected static string $resource = AgentDenyResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make()->using(function ($record) {

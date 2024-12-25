@@ -6,9 +6,9 @@ use App\Filament\Resources\Torrent\TorrentDenyReasonResource\Pages;
 use App\Filament\Resources\Torrent\TorrentDenyReasonResource\RelationManagers;
 use App\Models\TorrentDenyReason;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +17,13 @@ class TorrentDenyReasonResource extends Resource
 {
     protected static ?string $model = TorrentDenyReason::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-ban';
+    protected static ?string $navigationIcon = 'heroicon-o-no-symbol';
 
     protected static ?string $navigationGroup = 'Torrent';
 
     protected static ?int $navigationSort = 3;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.torrent_deny_reason');
     }

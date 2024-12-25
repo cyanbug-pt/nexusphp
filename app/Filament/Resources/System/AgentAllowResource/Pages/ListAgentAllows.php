@@ -13,7 +13,7 @@ class ListAgentAllows extends PageList
 {
     protected static string $resource = AgentAllowResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

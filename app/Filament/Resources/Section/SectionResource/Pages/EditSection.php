@@ -11,7 +11,7 @@ class EditSection extends EditRecord
 {
     protected static string $resource = SectionResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

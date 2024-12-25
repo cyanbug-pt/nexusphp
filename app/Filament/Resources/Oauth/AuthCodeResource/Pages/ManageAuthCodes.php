@@ -11,7 +11,7 @@ class ManageAuthCodes extends PageListSingle
 {
     protected static string $resource = AuthCodeResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

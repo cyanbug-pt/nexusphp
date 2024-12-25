@@ -10,7 +10,7 @@ class ManageDownloadSpeeds extends ManageRecords
 {
     protected static string $resource = DownloadSpeedResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

@@ -11,7 +11,7 @@ class ListExams extends PageList
 {
     protected static string $resource = ExamResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

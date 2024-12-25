@@ -6,9 +6,9 @@ use App\Filament\Resources\Oauth\RefreshTokenResource\Pages;
 use App\Filament\Resources\Oauth\RefreshTokenResource\RelationManagers;
 use Laravel\Passport\RefreshToken;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +17,13 @@ class RefreshTokenResource extends Resource
 {
     protected static ?string $model = RefreshToken::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Oauth';
 
     protected static ?int $navigationSort = 4;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.oauth_refresh_token');
     }

@@ -15,7 +15,7 @@ class EditIcon extends EditRecord
 
     protected static string $view = 'filament.resources.system.category-icon-resource.pages.edit-record';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

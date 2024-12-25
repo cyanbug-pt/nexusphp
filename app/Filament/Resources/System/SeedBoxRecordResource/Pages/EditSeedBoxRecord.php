@@ -11,14 +11,14 @@ class EditSeedBoxRecord extends EditRecord
 {
     protected static string $resource = SeedBoxRecordResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
     }
 
-    public function save(bool $shouldRedirect = true): void
+    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
     {
         $data = $this->form->getState();
         $rep = new SeedBoxRepository();

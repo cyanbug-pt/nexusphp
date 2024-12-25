@@ -14,7 +14,7 @@ class ListTeams extends PageList
 {
     protected static string $resource = TeamResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

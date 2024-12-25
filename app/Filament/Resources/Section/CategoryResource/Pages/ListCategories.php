@@ -13,7 +13,7 @@ class ListCategories extends PageList
 {
     protected static string $resource = CategoryResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

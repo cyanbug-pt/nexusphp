@@ -11,7 +11,7 @@ class EditProcessing extends EditCodec
 {
     protected static string $resource = ProcessingResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

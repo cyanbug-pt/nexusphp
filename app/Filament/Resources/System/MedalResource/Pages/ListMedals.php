@@ -13,7 +13,7 @@ class ListMedals extends PageList
 {
     protected static string $resource = MedalResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

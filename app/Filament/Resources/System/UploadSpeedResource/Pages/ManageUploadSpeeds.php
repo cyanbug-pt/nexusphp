@@ -10,7 +10,7 @@ class ManageUploadSpeeds extends ManageRecords
 {
     protected static string $resource = UploadSpeedResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

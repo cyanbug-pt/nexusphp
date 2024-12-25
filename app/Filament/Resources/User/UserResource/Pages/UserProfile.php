@@ -53,7 +53,7 @@ class UserProfile extends ViewRecord
         $this->record = $this->resolveRecord($id);
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         $actions = [];
         if (Auth::user()->class > $this->record->class) {
@@ -160,7 +160,7 @@ class UserProfile extends ViewRecord
                 Forms\Components\TextInput::make('duration')->integer()
                     ->label(__('admin.resources.user.actions.change_bonus_etc_duration_label'))
                     ->helperText(__('admin.resources.user.actions.change_bonus_etc_duration_help'))
-                    ->hidden(fn (\Closure $get) => $get('field') != 'tmp_invites')
+                    ->hidden(fn (\Filament\Forms\Get $get) => $get('field') != 'tmp_invites')
                 ,
 
                 Forms\Components\TextInput::make('reason')
@@ -380,13 +380,13 @@ class UserProfile extends ViewRecord
                     ->default($this->record->vip_added)
                     ->label(__('user.labels.vip_added'))
                     ->helperText(__('user.labels.vip_added_help'))
-                    ->hidden(fn (\Closure $get) => $get('class') != User::CLASS_VIP)
+                    ->hidden(fn (\Filament\Forms\Get $get) => $get('class') != User::CLASS_VIP)
                 ,
                 Forms\Components\DateTimePicker::make('vip_until')
                     ->default($this->record->vip_until)
                     ->label(__('user.labels.vip_until'))
                     ->helperText(__('user.labels.vip_until_help'))
-                    ->hidden(fn (\Closure $get) => $get('class') != User::CLASS_VIP)
+                    ->hidden(fn (\Filament\Forms\Get $get) => $get('class') != User::CLASS_VIP)
                 ,
                 Forms\Components\TextInput::make('reason')
                     ->label(__('admin.resources.user.actions.enable_disable_reason'))

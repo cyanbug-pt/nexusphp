@@ -14,7 +14,7 @@ class ListStandards extends PageList
 {
     protected static string $resource = StandardResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
