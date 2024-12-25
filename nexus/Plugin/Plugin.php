@@ -51,7 +51,10 @@ class Plugin
 
     private function bootPlugins()
     {
-        foreach (self::$providers as $name => $providers) {
+        foreach (self::$providers as $providers) {
+            if (!isset($providers['providers'])) {
+                continue;
+            }
             $provider = $providers['providers'][0];
             $parts = explode('\\', $provider);
             if ($parts[0] == 'NexusPlugin') {

@@ -23,9 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (class_exists(Passport::class)) {
-            Passport::ignoreMigrations();
-        }
         do_action('nexus_register');
     }
 

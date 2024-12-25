@@ -50,7 +50,7 @@ class DashboardRepository extends BaseRepository
         $result[$name] = [
             'name' => $name,
             'text' => nexus_trans("dashboard.system_info.$name"),
-            'value' => DB::select(DB::raw('select version() as info'))[0]->info,
+            'value' => NexusDB::select('select version() as info')[0]['info'],
         ];
 //        $name = 'os';
 //        $result[$name] = [

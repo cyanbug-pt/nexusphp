@@ -486,7 +486,7 @@ class HitAndRunRepository extends BaseRepository
 
     private function getCommentUpdateRaw($comment): \Illuminate\Database\Query\Expression
     {
-        return DB::raw(sprintf("if (comment = '', '%s', concat('\n', '%s', comment))", $comment, $comment));
+        return NexusDB::raw(sprintf("if (comment = '', '%s', concat('\n', '%s', comment))", $comment, $comment));
     }
 
     private function getCanPardonStatus(): array

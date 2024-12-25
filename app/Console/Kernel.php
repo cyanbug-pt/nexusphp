@@ -31,6 +31,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('cache:prune-stale-tags')->hourly();
         $schedule->command('exam:assign_cronjob')->everyMinute()->withoutOverlapping();
         $schedule->command('exam:checkout_cronjob')->everyFiveMinutes()->withoutOverlapping();
         $schedule->command('exam:update_progress --bulk=1')->hourly()->withoutOverlapping();

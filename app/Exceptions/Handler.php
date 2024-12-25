@@ -55,9 +55,9 @@ class Handler extends ExceptionHandler
         });
 
         //Other Only handle in json request
-        if (!request()->expectsJson()) {
-            return;
-        }
+//        if (!request()->expectsJson()) {
+//            return;
+//        }
 
         $this->renderable(function (AuthenticationException $e) {
             return response()->json(fail($e->getMessage(), ['guards' => $e->guards()]), 401);

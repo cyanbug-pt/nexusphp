@@ -55,7 +55,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
+//        $this->registerPolicies();
         if (class_exists(Passport::class)) {
             Passport::useClientModel(OauthClient::class);
         }
