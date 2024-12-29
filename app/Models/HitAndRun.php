@@ -73,7 +73,7 @@ class HitAndRun extends NexusModel
             return '---';
         }
         $inspectTime = HitAndRun::getConfig('inspect_time', $searchBoxId);
-        $diffInSeconds = Carbon::now()->diffInSeconds($this->created_at->addHours($inspectTime));
+        $diffInSeconds = Carbon::now()->diffInSeconds($this->created_at->addHours(intval($inspectTime)));
         return mkprettytime($diffInSeconds);
     }
 

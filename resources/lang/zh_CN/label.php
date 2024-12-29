@@ -40,6 +40,7 @@ return [
     'city' => '城市',
     'client' => '客户端',
     'reason' => '原因',
+    'change' => '修改',
     'setting' => [
         'nav_text' => '设置',
         'backup' => [
@@ -111,6 +112,14 @@ return [
             'alarm_email_receiver' => '告警邮件接收者',
             'alarm_email_receiver_help' => '填写用户 UID，多个空格隔开，系统异常告警邮件将会发到对应用户的邮箱。如果不填会写到运行日志中，日志级别为 error',
         ],
+        'image_hosting' => [
+            'driver' => '存储位置',
+            'driver_help' => '若选择 local, 对应默认的保存在网站所在服务器本地, 否则上传到对应的图片服务器',
+            'tab_header' => '图床',
+            'upload_api_endpoint' => '上传接口地址',
+            'base_url' => '图片 URL 前缀',
+            'upload_token' => '上传令牌',
+        ]
     ],
     'user' => [
         'label' => '用户',

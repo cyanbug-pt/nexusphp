@@ -148,16 +148,19 @@ function print_attachment($dlkey, $enableimage = true, $imageresizer = true)
 	if ($row['isimage'] == 1)
 	{
 		if ($enableimage){
-			if ($row['thumb'] == 1){
-				$url = $httpdirectory_attachment."/".$row['location'].".thumb.jpg";
-			}
-			else{
-				$url = $httpdirectory_attachment."/".$row['location'];
-			}
+//			if ($row['thumb'] == 1){
+//				$url = $httpdirectory_attachment."/".$row['location'].".thumb.jpg";
+//                $url = $httpdirectory_attachment."/".$row['location'];
+//			}
+//			else{
+//				$url = $httpdirectory_attachment."/".$row['location'];
+//			}
+            $url = \Nexus\Attachment\Storage::getDriver($row['driver'])->getImageUrl($row['location']);
+            do_log(sprintf("driver: %s, location: %s, url: %s", $row['driver'], $row['location'], $url));
 			if($imageresizer == true)
-				$onclick = " onclick=\"Previewurl('".$httpdirectory_attachment."/".$row['location']."')\"";
+				$onclick = " onclick=\"Previewurl('".$url."')\"";
 			else $onclick = "";
-			$return = "<img id=\"attach".$id."\" alt=\"".htmlspecialchars($row['filename'])."\" src=\"".$url."\"". $onclick .  " onmouseover=\"domTT_activate(this, event, 'content', '".htmlspecialchars("<strong>".$lang_functions['text_size']."</strong>: ".mksize($row['filesize'])."<br />".gettime($row['added']))."', 'styleClass', 'attach', 'x', findPosition(this)[0], 'y', findPosition(this)[1]-58);\" />";
+			$return = "<img id=\"attach".$id."\" style=\"max-width: 700px\" alt=\"".htmlspecialchars($row['filename'])."\" src=\"".$url."\"". $onclick .  " onmouseover=\"domTT_activate(this, event, 'content', '".htmlspecialchars("<strong>".$lang_functions['text_size']."</strong>: ".mksize($row['filesize'])."<br />".gettime($row['added']))."', 'styleClass', 'attach', 'x', findPosition(this)[0], 'y', findPosition(this)[1]-58);\" />";
 		}
 		else $return = "";
 	}
@@ -345,13 +348,6 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
 	$replaceXhtmlTagArray = array("<font face=\"\\1\">", "<span style=\"color: \\1;\">", "<span style=\"color: \\1;\">", "<font size=\"\\1\">");
 	$s = preg_replace($originalBbTagArray, $replaceXhtmlTagArray, $s);
 
-	if ($enableattach_attachment == 'yes' && $imagenum != 1){
-		$limit = 20;
-//		$s = preg_replace("/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/ies", "print_attachment('\\1', ".($enableimage ? 1 : 0).", ".($imageresizer ? 1 : 0).")", $s, $limit);
-		$s = preg_replace_callback("/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/is", function ($matches) use ($enableimage, $imageresizer) {
-		        return print_attachment($matches[1], ".($enableimage ? 1 : 0).", ".($imageresizer ? 1 : 0).");
-		    }, $s, $limit);
-	}
 
 	if ($enableimage) {
 //		$s = preg_replace("/\[img\]([^\<\r\n\"']+?)\[\/img\]/ei", "formatImg('\\1',".$imageresizer.",".$image_max_width.",".$image_max_height.")", $s, $imagenum, $imgReplaceCount);
@@ -449,6 +445,14 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
         $s = preg_replace_callback("/\[spoiler(=(.*))?\](.*)\[\/spoiler\]/isU", function ($matches) {
             return formatSpoiler($matches[3], $matches[2], nexus()->getScript() != 'preview');
         }, $s);
+    }
+
+    if ($enableattach_attachment == 'yes' && $imagenum != 1){
+        $limit = 20;
+//		$s = preg_replace("/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/ies", "print_attachment('\\1', ".($enableimage ? 1 : 0).", ".($imageresizer ? 1 : 0).")", $s, $limit);
+        $s = preg_replace_callback("/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/is", function ($matches) use ($enableimage, $imageresizer) {
+            return print_attachment($matches[1], ".($enableimage ? 1 : 0).", ".($imageresizer ? 1 : 0).");
+        }, $s, $limit);
     }
 
 	reset($tempCode);
@@ -5626,7 +5630,8 @@ function format_description($description)
         if ($attachments->isNotEmpty()) {
             $description = preg_replace_callback($pattern, function ($matches) use ($attachments) {
                 $item = $attachments->get($matches[2]);
-                $url = attachmentUrl($item->location);
+                $url = \Nexus\Attachment\Storage::getDriver($item->driver)->getImageUrl($item->location);
+                do_log(sprintf("location: %s, driver: %s, url: %s", $item->location, $item->driver, $url));
                 return str_replace($matches[2], $url, $matches[1]);
             }, $description);
         }

@@ -100,7 +100,7 @@ class ExamUserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
-            ->prependBulkActions([
+            ->groupedBulkActions([
                 Tables\Actions\BulkAction::make('Avoid')->action(function (Collection $records) {
                     $idArr = $records->pluck('id')->toArray();
                     $rep = new ExamRepository();

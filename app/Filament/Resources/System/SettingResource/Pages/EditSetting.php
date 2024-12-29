@@ -7,26 +7,20 @@ use App\Filament\Resources\System\SettingResource;
 use App\Models\HitAndRun;
 use App\Models\SearchBox;
 use App\Models\Setting;
-use App\Models\Tag;
 use App\Models\User;
-use App\Repositories\MeiliSearchRepository;
 use Filament\Facades\Filament;
-use Filament\Forms\ComponentContainer;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Resources\Pages\Concerns\InteractsWithRecord;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Pages\Page;
 use Filament\Forms;
-use Illuminate\Support\Facades\DB;
-use Nexus\Database\NexusDB;
 
 class EditSetting extends Page implements Forms\Contracts\HasForms
 {
-    use InteractsWithForms, OptionsTrait;
+    use Forms\Concerns\InteractsWithForms, OptionsTrait;
 
     protected static string $resource = SettingResource::class;
 
     protected static string $view = 'filament.resources.system.setting-resource.pages.edit-hit-and-run';
+
+    public ?array $data = [];
 
     public function getTitle(): string
     {
@@ -39,11 +33,20 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
         $this->fillForm();
     }
 
+    public function form(Forms\Form $form): Forms\Form
+    {
+        return $form
+            ->schema($this->getFormSchema())
+            ->statePath('data');
+    }
+
     private function fillForm()
     {
-        $settings = Setting::get();
+        $settings = Setting::getFromDb();
         $this->form->fill($settings);
     }
+
+
 
     protected function getFormSchema(): array
     {
@@ -81,7 +84,7 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
         Setting::query()->upsert($data, ['name'], ['value']);
         do_action("nexus_setting_update");
         clear_setting_cache();
-        Filament::notify('success', __('filament::resources/pages/edit-record.messages.saved'), true);
+        send_admin_success_notification();
     }
 
     private function getTabs(): array
@@ -122,6 +125,13 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
         $tabs[] = Forms\Components\Tabs\Tab::make(__("label.setting.$id.tab_header"))
             ->id($id)
             ->schema($this->getTabMeilisearchSchema($id))
+            ->columns(2)
+        ;
+
+        $id = "image_hosting";
+        $tabs[] = Forms\Components\Tabs\Tab::make(__("label.setting.$id.tab_header"))
+            ->id($id)
+            ->schema($this->getTabImageHostingSchema($id))
             ->columns(2)
         ;
 
@@ -184,7 +194,7 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
         return apply_filter("hit_and_run_setting_schema", $default);
     }
 
-    private function getTabMeilisearchSchema($id)
+    private function getTabMeilisearchSchema($id): array
     {
         $schema = [];
 
@@ -211,6 +221,61 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
             ->label(__("label.setting.$name"))
             ->helperText(__("label.setting.{$name}_help"))
         ;
+
+        return $schema;
+    }
+
+    private function getTabImageHostingSchema($id): array
+    {
+        $schema = [];
+        $name = "$id.driver";
+        $schema[] = Forms\Components\Radio::make($name)
+            ->options(['local' => 'local', 'chevereto' => 'chevereto', 'lsky' => 'lsky'])
+            ->inline(true)
+            ->label(__("label.setting.$name"))
+            ->helperText(__("label.setting.{$name}_help"))
+            ->columnSpanFull()
+        ;
+
+        //chevereto
+        $driverName = "chevereto";
+        $driverId = sprintf("%s_%s", $id, $driverName);
+        $driverSchemas = [];
+        $field = "upload_api_endpoint";
+        $driverSchemas[] = Forms\Components\TextInput::make("$driverId.$field")
+            ->label(__("label.setting.$id.$field"))
+        ;
+        $field = "upload_token";
+        $driverSchemas[] = Forms\Components\TextInput::make("$driverId.$field")
+            ->label(__("label.setting.$id.$field"))
+        ;
+        $field = "base_url";
+        $driverSchemas[] = Forms\Components\TextInput::make("$driverId.$field")
+            ->label(__("label.setting.$id.$field"))
+        ;
+
+        $driverSection = Forms\Components\Section::make($driverName)->schema($driverSchemas);
+        $schema[] = $driverSection;
+
+        //lsky
+        $driverName = "lsky";
+        $driverId = sprintf("%s_%s", $id, $driverName);
+        $driverSchemas = [];
+        $field = "upload_api_endpoint";
+        $driverSchemas[] = Forms\Components\TextInput::make("$driverId.$field")
+            ->label(__("label.setting.$id.$field"))
+        ;
+        $field = "upload_token";
+        $driverSchemas[] = Forms\Components\TextInput::make("$driverId.$field")
+            ->label(__("label.setting.$id.$field"))
+        ;
+        $field = "base_url";
+        $driverSchemas[] = Forms\Components\TextInput::make("$driverId.$field")
+            ->label(__("label.setting.$id.$field"))
+        ;
+        $driverSection = Forms\Components\Section::make($driverName)->schema($driverSchemas);
+        $schema[] = $driverSection;
+
 
         return $schema;
     }

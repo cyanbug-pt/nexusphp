@@ -40,6 +40,7 @@ return [
     'city' => 'City',
     'client' => 'Client',
     'reason' => 'Reason',
+    'change' => 'Change',
     'setting' => [
         'nav_text' => 'Setting',
         'backup' => [
@@ -111,6 +112,14 @@ return [
             'alarm_email_receiver' => 'Alarm email receiver',
             'alarm_email_receiver_help' => "Fill in the UID of the user, separated by space, and the alarm email will be sent to the corresponding user's email address. If you don't fill it in, it will be written to the runtime log, and the log level will be error",
         ],
+        'image_hosting' => [
+            'driver' => 'Storage location',
+            'driver_help' => 'If you choose local, the default is to save it locally on the server where the website is located, otherwise upload it to the corresponding image server',
+            'tab_header' => 'Image hosting',
+            'upload_api_endpoint' => 'Upload interface address',
+            'base_url' => 'Image URL prefix',
+            'upload_token' => 'Upload token',
+        ]
     ],
     'user' => [
         'label' => 'User',

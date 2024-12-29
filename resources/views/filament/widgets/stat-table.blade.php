@@ -1,36 +1,36 @@
-<x-filament::widget class="filament-widgets-table-widget">
-    <div class="p-2 space-y-2 bg-white rounded-xl shadow">
-        <div class="space-y-2">
-            <div class="px-4 py-2 space-y-4">
-                <div class="flex items-center justify-between gap-8">
-                    <h2 class="text-xl font-semibold tracking-tight filament-card-heading">
-                        {{$header}}
-                    </h2>
-                </div>
-                <div aria-hidden="true" class="border-t filament-hr"></div>
-                <div class="overflow-y-auto relative">
-                    <table class="w-full text-left rtl:text-right divide-y table-auto filament-tables-table">
-                        <tbody class="divide-y whitespace-nowrap">
-                            @foreach(array_chunk($data, 2) as $chunk)
-                            <tr class="filament-tables-row">
-                                @foreach($chunk as $item)
-                                <th class="filament-tables-cell"><div class="px-4 py-3 filament-tables-text-column">{{$item['text']}}</div></th>
-                                <td class="filament-tables-cell"
+<x-filament-widgets::widget class="fi-wi-table">
+    <div class="filament-widgets-card rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-6">
+        <!-- Header Section -->
+        <div class="fi-ta-header flex flex-col gap-3 p-4 sm:px-6 sm:flex-row sm:items-center">
+            <div class="grid gap-y-1">
+                <h3 class="fi-ta-header-heading text-base font-semibold leading-6 text-gray-950 dark:text-white">
+                    {{ $header }}
+                </h3>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="fi-ta-content border-t relative divide-y divide-gray-200 overflow-x-auto dark:divide-white/10 dark:border-t-white/10">
+            <table class="fi-ta-table w-full table-auto divide-y divide-gray-200 text-start dark:divide-white/5">
+                <tbody class="divide-y divide-gray-200 whitespace-nowrap dark:divide-white/5">
+                @foreach(array_chunk($data, 2) as $chunk)
+                    <tr class="bg-white dark:bg-gray-800">
+                        @foreach($chunk as $item)
+                            <th class="fi-ta-header-cell px-3 py-3.5 sm:first-of-type:ps-6 sm:last-of-type:pe-6 fi-table-header-cell-id">
+                                {{$item['text']}}
+                            </th>
+                            <td class="fi-ta-cell p-0 first-of-type:ps-1 last-of-type:pe-1 sm:first-of-type:ps-3 sm:last-of-type:pe-3 fi-table-cell-id"
                                 @if($loop->count == 1)
                                     colspan="3"
                                 @endif
-                                >
-                                    <div class="px-4 py-3 filament-tables-text-column {{$item['class'] ?? ''}}"><span class="">{{$item['value']}}</span></div>
-                                </td>
-                                @endforeach
-                            </tr>
-                            @endforeach
-
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
+                            >
+                                <div class="{{$item['class'] ?? ''}}">{{$item['value']}}</div>
+                            </td>
+                        @endforeach
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
-</x-filament::widget>
+</x-filament-widgets::widget>

@@ -13,10 +13,11 @@ use App\Repositories\ExamRepository;
 use App\Repositories\MedalRepository;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Concerns\HasRelationManagers;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Facades\Auth;
@@ -32,13 +33,7 @@ class UserProfile extends ViewRecord
 
     protected static string $resource = UserResource::class;
 
-    protected static string $view = 'filament.resources.user.user-resource.pages.user-profile';
-
-    const EVENT_RECORD_UPDATED = 'recordUpdated';
-
-    protected $listeners = [
-        self::EVENT_RECORD_UPDATED => 'updateRecord'
-    ];
+//    protected static string $view = 'filament.resources.user.user-resource.pages.user-profile';
 
     private function getRep(): UserRepository
     {
@@ -46,11 +41,6 @@ class UserProfile extends ViewRecord
             self::$rep = new UserRepository();
         }
         return self::$rep;
-    }
-
-    public function updateRecord($id)
-    {
-        $this->record = $this->resolveRecord($id);
     }
 
     protected function getHeaderActions(): array
@@ -61,18 +51,18 @@ class UserProfile extends ViewRecord
             $actions[] = $this->buildGrantMedalAction();
             $actions[] = $this->buildAssignExamAction();
             $actions[] = $this->buildChangeBonusEtcAction();
-            if ($this->record->two_step_secret) {
-                $actions[] = $this->buildDisableTwoStepAuthenticationAction();
-            }
-            if ($this->record->status == User::STATUS_PENDING) {
-                $actions[] = $this->buildConfirmAction();
-            }
+//            if ($this->record->two_step_secret) {
+//                $actions[] = $this->buildDisableTwoStepAuthenticationAction();
+//            }
+//            if ($this->record->status == User::STATUS_PENDING) {
+//                $actions[] = $this->buildConfirmAction();
+//            }
             $actions[] = $this->buildResetPasswordAction();
-            $actions[] = $this->buildEnableDisableAction();
-            $actions[] = $this->buildEnableDisableDownloadPrivilegesAction();
-            if (user_can('user-change-class')) {
-                $actions[] = $this->buildChangeClassAction();
-            }
+//            $actions[] = $this->buildEnableDisableAction();
+//            $actions[] = $this->buildEnableDisableDownloadPrivilegesAction();
+//            if (user_can('user-change-class')) {
+//                $actions[] = $this->buildChangeClassAction();
+//            }
             if (user_can('user-delete')) {
                 $actions[] = $this->buildDeleteAction();
             }
@@ -101,10 +91,9 @@ class UserProfile extends ViewRecord
                     } elseif ($data['action'] == 'disable') {
                         $userRep->disableUser(Auth::user(), $data['uid'], $data['reason']);
                     }
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $data['uid']);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
@@ -118,10 +107,9 @@ class UserProfile extends ViewRecord
                 $userRep = $this->getRep();
                 try {
                     $userRep->removeTwoStepAuthentication(Auth::user(), $this->record->id);
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
@@ -175,10 +163,9 @@ class UserProfile extends ViewRecord
                     } else {
                         $userRep->incrementDecrement(Auth::user(), $this->record->id, $data['action'], $data['field'], $data['value'], $data['reason']);
                     }
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
@@ -198,10 +185,9 @@ class UserProfile extends ViewRecord
                 $userRep = $this->getRep();
                 try {
                     $userRep->resetPassword($this->record->id, $data['password'], $data['password_confirmation']);
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
@@ -223,10 +209,9 @@ class UserProfile extends ViewRecord
                 $examRep = new ExamRepository();
                 try {
                     $examRep->assignToUser($this->record->id, $data['exam_id'], $data['begin'], $data['end']);
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
@@ -251,10 +236,9 @@ class UserProfile extends ViewRecord
                 $medalRep = new MedalRepository();
                 try {
                     $medalRep->grantToUser($this->record->id, $data['medal_id'], $data['duration']);
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
@@ -272,8 +256,7 @@ class UserProfile extends ViewRecord
                 $this->record->status = User::STATUS_CONFIRMED;
                 $this->record->info= null;
                 $this->record->save();
-                $this->notify('success', 'Success!');
-                $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                $this->sendSuccessNotification();
             });
     }
 
@@ -287,10 +270,9 @@ class UserProfile extends ViewRecord
                 $userRep = $this->getRep();
                 try {
                     $userRep->updateDownloadPrivileges(Auth::user(), $this->record->id, $this->record->downloadpos == 'yes' ? 'no' : 'yes');
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
@@ -311,15 +293,14 @@ class UserProfile extends ViewRecord
                 $rep = $this->getRep();
                 try {
                     $rep->addMeta($this->record, $data, $data);
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
     }
 
-    private function buildDeleteAction(): Actions\Action
+    private function buildDeleteAction(): Actions\DeleteAction
     {
         return Actions\DeleteAction::make()->using(function () {
             $this->getRep()->destroy($this->record->id);
@@ -345,7 +326,7 @@ class UserProfile extends ViewRecord
         $props = [];
         foreach ($metaList as $metaKey => $metas) {
             $meta = $metas->first();
-            $text = sprintf('[%s]', $meta->metaKeyText, );
+            $text = sprintf('[%s]', $meta->metaKeyText);
             if ($meta->meta_key == UserMeta::META_KEY_PERSONALIZED_USERNAME) {
                 $text .= sprintf('(%s)', $meta->getDeadlineText());
             }
@@ -397,11 +378,28 @@ class UserProfile extends ViewRecord
                 $userRep = $this->getRep();
                 try {
                     $userRep->changeClass(Auth::user(), $this->record, $data['class'], $data['reason'], $data);
-                    $this->notify('success', 'Success!');
-                    $this->emitSelf(self::EVENT_RECORD_UPDATED, $this->record->id);
+                    $this->sendSuccessNotification();
                 } catch (\Exception $exception) {
-                    $this->notify('danger', $exception->getMessage());
+                    $this->sendFailNotification($exception->getMessage());
                 }
             });
+    }
+
+    private function sendSuccessNotification(string $msg = ""): void
+    {
+        Notification::make()
+            ->success()
+            ->title($msg ?: "Success!")
+            ->send()
+        ;
+    }
+
+    private function sendFailNotification(string $msg = ""): void
+    {
+        Notification::make()
+            ->danger()
+            ->title($msg ?: "Fail!")
+            ->send()
+        ;
     }
 }

@@ -40,6 +40,7 @@ return [
     'city' => '城市',
     'client' => '客戶端',
     'reason' => '原因',
+    'change' => '修改',
     'setting' => [
         'nav_text' => '設置',
         'backup' => [
@@ -111,6 +112,14 @@ return [
             'alarm_email_receiver' => '告警郵件接收者',
             'alarm_email_receiver_help' => '填寫用戶 UID，多個空格隔開，系統異常告警郵件將會發到對應用戶的郵箱。如果不填會寫到運行日誌中，日誌級別為 error',
         ],
+        'image_hosting' => [
+            'driver' => '存儲位置',
+            'driver_help' => '若選擇 local, 對應默認的保存在網站所在服務器本地, 否則上傳到對應的圖片服務器',
+            'tab_header' => '圖床',
+            'upload_api_endpoint' => '上傳接口地址',
+            'base_url' => '圖片 URL 前綴',
+            'upload_token' => '上傳令牌',
+        ]
     ],
     'user' => [
         'label' => '用戶',

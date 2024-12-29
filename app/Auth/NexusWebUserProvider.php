@@ -92,4 +92,8 @@ class NexusWebUserProvider implements UserProvider
         return true;
     }
 
+    public function rehashPasswordIfRequired(Authenticatable $user, #[\SensitiveParameter] array $credentials, bool $force = false)
+    {
+        // TODO: Implement rehashPasswordIfRequired() method.
+    }
 }

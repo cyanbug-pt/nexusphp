@@ -75,7 +75,7 @@ class HitAndRunResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
-            ->prependBulkActions([
+            ->groupedBulkActions([
                 Tables\Actions\BulkAction::make('Pardon')->action(function (Collection $records) {
                     $idArr = $records->pluck('id')->toArray();
                     $rep = new HitAndRunRepository();

@@ -11,6 +11,13 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+
+/**
+ * @OA\Info(
+ *     title="NexusPHP API",
+ *     version="1.0"
+ * )
+ */
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;

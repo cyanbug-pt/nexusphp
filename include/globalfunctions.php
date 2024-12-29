@@ -1337,3 +1337,11 @@ function get_user_locale(int $uid): string
     }
     return \App\Http\Middleware\Locale::$languageMaps[$result[0]['site_lang_folder']] ?? 'en';
 }
+
+function send_admin_success_notification(string $msg = ""): void {
+    \Filament\Notifications\Notification::make()->success()->title($msg ?: "Success!")->send();
+}
+
+function send_admin_fail_notification(string $msg = ""): void {
+    \Filament\Notifications\Notification::make()->danger()->title($msg ?: "Fail!")->send();
+}

@@ -120,7 +120,7 @@ if ($CURUSER['id'] == $user['id'] || user_can('cruprfmanage'))
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
 <?php
 $userIdDisplay = $user['id'];
-$userManageSystemUrl = sprintf('%s/%s/users/%s',getSchemeAndHttpHost(), nexus_env('FILAMENT_PATH', 'nexusphp'), $user['id']);
+$userManageSystemUrl = sprintf('%s/%s/user/users/%s',getSchemeAndHttpHost(), nexus_env('FILAMENT_PATH', 'nexusphp'), $user['id']);
 $userManageSystemText = sprintf('<a href="%s" target="_blank" class="altlink">%s</a>', $userManageSystemUrl, $lang_functions['text_management_system']);
 $migratedHelp = sprintf($lang_userdetails['change_field_value_migrated'], $userManageSystemText);
 if (user_can('prfmanage') && $user["class"] < get_user_class()) {

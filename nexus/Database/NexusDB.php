@@ -260,7 +260,6 @@ class NexusDB
         $capsule->bootEloquent();
         $connection = self::$eloquentConnection = $capsule->getConnection($connectionName);
         $connection->enableQueryLog();
-        $connection->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
     }
 
     private static function schema(): \Illuminate\Database\Schema\Builder

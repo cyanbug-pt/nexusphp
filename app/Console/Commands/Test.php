@@ -102,7 +102,9 @@ class Test extends Command
     public function handle()
     {
         $str = "1.abc.de";
-        $res = explode(".", $str, 2);
+        $ext = "png";
+        $str = "202404/20240403215909f58f38ddd968a0e8a4bdd30690a9e92e.png";
+        $res = substr($str, 0,-1*strlen($ext)-1);
         dd($res);
     }
 

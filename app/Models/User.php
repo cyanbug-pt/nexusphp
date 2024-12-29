@@ -333,6 +333,11 @@ class User extends Authenticatable implements FilamentUser, HasName
         );
     }
 
+    protected function getTwoFactorAuthenticationStatusAttribute(): string
+    {
+        return $this->two_step_secret != "" ? "yes" : "no";
+    }
+
     public static function getMinSeedPoints($class)
     {
         $setting = Setting::get("account.{$class}_min_seed_points");
