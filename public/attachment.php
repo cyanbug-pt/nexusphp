@@ -238,7 +238,7 @@ if ($Attach->enable_attachment())
             } else {
                 try {
                     $driver = \Nexus\Attachment\Storage::getDriver();
-                    $location = $driver->uploadGetLocation($file["tmp_name"]);
+                    $location = $driver->uploadGetLocation($file["tmp_name"], $file['name']);
                     $db_file_location = substr($location, 0, -1*strlen($ext)-1);
                     $url = $driver->getImageUrl($location);
                 } catch (\Exception $exception) {

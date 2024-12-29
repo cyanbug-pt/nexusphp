@@ -23,9 +23,23 @@ abstract class Storage {
     abstract function getBaseUrl(): string;
     abstract function getDriverName(): string;
 
-    public function uploadGetLocation(string $filepath): string
+    public function uploadGetLocation(string $filepath, string $originalName): string
     {
-        $url = $this->upload($filepath);
+        $extension = pathinfo($filepath, PATHINFO_EXTENSION);
+        if (empty($extension)) {
+            $newFilepath = sprintf("%s/%s", dirname($filepath), trim($originalName));
+            $moveResult = move_uploaded_file($filepath, $newFilepath);
+            do_log(sprintf("filepath: %s, newFilepath: %s, moveResult: %s", $filepath, $newFilepath, $moveResult));
+            if (!$moveResult) {
+                throw new \Exception("Failed to move uploaded file.");
+            }
+            $url = $this->upload($newFilepath);
+            @unlink($filepath);
+            @unlink($newFilepath);
+        } else {
+            $url = $this->upload($filepath);
+            @unlink($filepath);
+        }
         return $this->trimBaseUrl($url);
     }
 
