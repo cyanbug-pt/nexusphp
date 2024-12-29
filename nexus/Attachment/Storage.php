@@ -34,7 +34,6 @@ abstract class Storage {
                 throw new \Exception("Failed to move uploaded file.");
             }
             $url = $this->upload($newFilepath);
-            @unlink($filepath);
             @unlink($newFilepath);
         } else {
             $url = $this->upload($filepath);

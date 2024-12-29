@@ -13,7 +13,7 @@ class Install
 {
     protected $currentStep;
 
-    protected $minimumPhpVersion = '8.0.3';
+    protected $minimumPhpVersion = '8.2.0';
 
     protected $progressKeyPrefix = '__step';
 
@@ -32,7 +32,10 @@ class Install
         'UID_STARTS',
     ];
 
-    protected array $requiredExtensions = ['ctype', 'curl', 'fileinfo', 'json', 'mbstring', 'openssl', 'pdo_mysql', 'tokenizer', 'xml', 'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets'];
+    protected array $requiredExtensions = [
+        'ctype', 'curl', 'fileinfo', 'json', 'mbstring', 'openssl', 'pdo_mysql', 'tokenizer', 'xml',
+        'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets', 'zip', 'intl'
+    ];
     protected array $optionalExtensions = [
 //        ['name' => 'swoole', 'desc' => "If use swoole for Octane, make sure 'current' shows 1"],
     ];

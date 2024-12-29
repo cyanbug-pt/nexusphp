@@ -536,6 +536,29 @@ class Update extends Install
         return false;
     }
 
+    public function updateEnvFile()
+    {
+        $envFile = ROOT_PATH . '.env';
+        $envExample = ROOT_PATH . '.env.example';
+        $envData = readEnvFile($envFile);
+        $envExampleData = readEnvFile($envExample);
+        foreach ($envExampleData as $key => $value) {
+            if (!isset($envData[$key])) {
+                $envData[$key] = $value;
+            }
+        }
+        $fp = @fopen($envFile, 'w');
+        if ($fp === false) {
+            throw new \RuntimeException("can't create env file, make sure php has permission to create file at: " . ROOT_PATH);
+        }
+        $content = "";
+        foreach ($envData as $key => $value) {
+            $content .= "{$key}={$value}\n";
+        }
+        fwrite($fp, $content);
+        fclose($fp);
+    }
+
 
 
 

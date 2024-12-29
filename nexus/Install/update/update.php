@@ -157,7 +157,7 @@ if ($currentStep == 4) {
     $tableRows = $settingTableRows['table_rows'];
     $pass = $settingTableRows['pass'];
     $mysqlInfo = $update->getMysqlVersionInfo();
-    $redisInfo = $update->getREdisVersionInfo();
+    $redisInfo = $update->getRedisVersionInfo();
     while ($isPost) {
         set_time_limit(300);
         try {
