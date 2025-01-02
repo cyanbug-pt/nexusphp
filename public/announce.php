@@ -115,8 +115,6 @@ $ip = getip();	// avoid to get the spoof ip from some agent
 $_GET['ip'] = $ip;
 if (!$port || $port > 0xffff)
 	warn("invalid port");
-if (!ip2long($ip)) //Disable compact announce with IPv6
-	$compact = 0;
 
 $ipv4 = $ipv6 = '';
 if (isIPV4($ip)) {
