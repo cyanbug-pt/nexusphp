@@ -209,24 +209,24 @@ JS;
                 else
                     $status = "<a href=checkuser.php?id={$arr['id']}><font color=#ca0226>".$lang_invite['text_pending']."</font></a>";
                 print("<tr class=rowfollow>
-<td class=rowfollow>".get_username($arr['id'])."</td>
-<td>{$arr['email']}</td>
-<td class=rowfollow>".$arr['enabled']."</td>
-<td class=rowfollow>" . mksize($arr['uploaded']) . "</td>
-<td class=rowfollow>" . mksize($arr['downloaded']) . "</td>
-<td class=rowfollow>$ratio</td>
-<td class=rowfollow>".number_format($arr['seeding_torrent_count'])."</td>
-<td class=rowfollow>".mksize($arr['seeding_torrent_size'])."</td>
-<td class=rowfollow>".number_format($arr['seed_points_per_hour'], 3)."</td>
-");
+                    <td class=rowfollow>".get_username($arr['id'])."</td>
+                    <td class=rowfollow>".$arr['email']."</td>
+                    <td class=rowfollow>".$arr['enabled']."</td>
+                    <td class=rowfollow>" . mksize($arr['uploaded']) . "</td>
+                    <td class=rowfollow>" . mksize($arr['downloaded']) . "</td>
+                    <td class=rowfollow>".$ratio."</td>
+                    <td class=rowfollow>".number_format($arr['seeding_torrent_count'])."</td>
+                    <td class=rowfollow>".mksize($arr['seeding_torrent_size'])."</td>
+                    <td class=rowfollow>".number_format($arr['seed_points_per_hour'], 3)."</td>
+                ");
 
                 if ($haremAdditionFactor > 0) {
                     print ("<td class=rowfollow>".number_format(floatval($arr['seed_points_per_hour']) * $haremAdditionFactor, 3)."</td>");
                 }
                 print("<td class=rowfollow>{$arr['last_announce_at']}</td>");
-                print("<td class=rowfollow>$status</td>");
+                print("<td class=rowfollow>{$status}</td>");
                 if ($CURUSER['id'] == $id || get_user_class() >= UC_SYSOP){
-                    print("<td>");
+                    print("<td class=rowfollow>");
                     if ($arr['status'] == 'pending')
                         print("<input type=\"checkbox\" name=\"conusr[]\" value=\"" . $arr['id'] . "\" />");
                     print("</td>");
