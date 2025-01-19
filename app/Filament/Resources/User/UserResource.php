@@ -130,8 +130,10 @@ class UserResource extends Resource
                         ,
                         Infolists\Components\TextEntry::make('email')
                             ->label(__("label.email"))
+                            ->copyable()
+                            ->placeholder("点击复制")
                         ,
-                        Infolists\Components\TextEntry::make('passkey'),
+                        Infolists\Components\TextEntry::make('passkey')->limit(10)->copyable(),
                         Infolists\Components\TextEntry::make('added')->label(__("label.added")),
                         Infolists\Components\TextEntry::make('last_access')->label(__("label.last_access")),
                         Infolists\Components\TextEntry::make('inviter.username')->label(__("label.user.invite_by")),
@@ -141,7 +143,12 @@ class UserResource extends Resource
                         Infolists\Components\TextEntry::make('uploadedText')->label(__("label.uploaded")),
                         Infolists\Components\TextEntry::make('downloadedText')->label(__("label.downloaded")),
                         Infolists\Components\TextEntry::make('seedbonus')->label(__("label.user.seedbonus")),
-                    ])->columns(2),
+                        Infolists\Components\TextEntry::make('seed_points')->label(__("label.user.seed_points")),
+                    ])
+                        ->columns(6)
+                        ->columnSpan(4)
+                    ,
+
                     Components\Group::make([
                         Infolists\Components\TextEntry::make('status')
                             ->label(__('label.user.status'))
@@ -174,7 +181,8 @@ class UserResource extends Resource
                             ->hintAction(self::buildActionCancelTwoStepAuthentication())
                         ,
                     ])
-                ]),
+                        ->columnSpan(1)
+                ])->columns(5),
             ]);
     }
 

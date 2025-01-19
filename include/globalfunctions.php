@@ -264,6 +264,9 @@ function getLogFile($append = '')
     if ($append) {
         $name .= "-$append";
     }
+    if (isRunningInConsole()) {
+        $name .= sprintf("-cli-%s-%s", get_current_user(), getmyuid());
+    }
     $logFile = sprintf('%s-%s%s', $name, date('Y-m-d'), $suffix);
     return $logFiles[$append] = $logFile;
 
@@ -1221,6 +1224,7 @@ function is_donor(array $userInfo): bool
 }
 
 /**
+ * @deprecated
  * @param $authkey
  * @return false|int|mixed|string|null
  * @throws \App\Exceptions\NexusException

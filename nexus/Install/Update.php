@@ -26,6 +26,8 @@ use App\Repositories\TorrentRepository;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
 
@@ -331,6 +333,18 @@ class Update extends Install
                 ["name" => "system.alarm_email_receiver"],
                 ["value" => User::query()->where("class", User::CLASS_STAFF_LEADER)->first(["id"])->id]
             );
+        }
+
+        /**
+         * @since 1.9.0
+         */
+        if (!Schema::hasTable("torrent_extras")) {
+            $this->runMigrate("database/migrations/2025_01_08_133552_create_torrent_extra_table.php");
+            $this->runMigrate("database/migrations/2025_01_08_133847_create_user_modify_logs_table.php");
+            $this->runMigrate("database/migrations/2025_01_18_235747_drop_users_table_text_column.php");
+            $this->runMigrate("database/migrations/2025_01_18_235757_drop_torrents_table_text_column.php");
+            Artisan::call("upgrade:upgrade:migrate_torrents_table_text_column");
+            Artisan::call("upgrade:migrate_users_table_comment_related_column");
         }
     }
 

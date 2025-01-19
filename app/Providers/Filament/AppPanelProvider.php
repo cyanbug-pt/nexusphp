@@ -22,6 +22,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Livewire\Livewire;
+use NexusPlugin\TelegramBot\Filament\TelegramBotBindsResource;
+use NexusPlugin\TelegramBot\Filament\TelegramBotResource;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -29,7 +31,7 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('app')
+            ->id('admin')
             ->homeUrl("/")
             ->sidebarWidth("15rem")
             ->topbar(true)
@@ -39,6 +41,10 @@ class AppPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->resources([
+//                TelegramBotResource::class,
+//                TelegramBotBindsResource::class
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -51,6 +57,7 @@ class AppPanelProvider extends PanelProvider
 //                Widgets\AccountWidget::class,
 //                Widgets\FilamentInfoWidget::class,
             ])
+            ->discoverClusters(app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->middleware([
 //                EncryptCookies::class,
                 \App\Http\Middleware\EncryptCookies::class,

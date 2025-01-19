@@ -496,9 +496,22 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
 
 	if (user_can('cruprfmanage'))
 	{
-		$modcomment = htmlspecialchars($user["modcomment"]);
+        $modcomment = \App\Models\UserModifyLog::query()
+            ->where("user_id", $user["id"])
+            ->orderBy("id", "desc")
+            ->limit(20)
+            ->get()
+            ->implode("content", "\n")
+        ;
 		tr($lang_userdetails['row_comment'], "<textarea cols=\"60\" rows=\"6\" name=\"modcomment\">".$modcomment."</textarea>", 1);
-		$bonuscomment = htmlspecialchars($user["bonuscomment"]);
+        $bonuscomment = \App\Models\BonusLogs::query()
+            ->where("uid", $user["id"])
+            ->orderBy("id", "desc")
+            ->limit(20)
+            ->get()
+            ->map(fn ($item) => sprintf("%s - %s", $item->created_at->format("Y-m-d"), $item->comment))
+            ->implode("\n")
+        ;
 		tr($lang_userdetails['row_seeding_karma'], "<textarea cols=\"60\" rows=\"6\" name=\"bonuscomment\" readonly=\"readonly\">".$bonuscomment."</textarea>", 1);
 	}
 	$warned = $user["warned"] == "yes";

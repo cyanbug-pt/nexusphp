@@ -157,6 +157,28 @@ class AjaxInterface{
         $rep = new \App\Repositories\ExamRepository();
         return $rep->assignToUser($CURUSER['id'], $params['exam_id']);
     }
+
+    public static function addToken($params)
+    {
+        global $CURUSER;
+        if (empty($params['name'])) {
+            throw new \InvalidArgumentException("Name is required");
+        }
+        $user = \App\Models\User::query()->findOrFail($CURUSER['id'], \App\Models\User::$commonFields);
+        $user->createToken($params['name']);
+        return true;
+    }
+
+    public static function removeToken($params)
+    {
+        global $CURUSER;
+        if (empty($params['id'])) {
+            throw new \InvalidArgumentException("id is required");
+        }
+        $user = \App\Models\User::query()->findOrFail($CURUSER['id'], \App\Models\User::$commonFields);
+        $user->tokens()->where('id', $params['id'])->delete();
+        return true;
+    }
 }
 
 $class = 'AjaxInterface';
@@ -171,5 +193,6 @@ try {
         throw new \RuntimeException("Invalid action: $action");
     }
 }catch(\Throwable $exception){
+    do_log($exception->getMessage() . $exception->getTraceAsString(), "error");
     exit(json_encode(fail($exception->getMessage(), $_POST)));
 }

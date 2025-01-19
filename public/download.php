@@ -139,7 +139,6 @@ if (strlen($CURUSER['passkey']) != 32) {
 	$CURUSER['passkey'] = md5($CURUSER['username'].date("Y-m-d H:i:s").$CURUSER['passhash']);
 	sql_query("UPDATE users SET passkey=".sqlesc($CURUSER['passkey'])." WHERE id=".sqlesc($CURUSER['id']));
 }
-$trackerReportAuthKey = $torrentRep->getTrackerReportAuthKey($id, $CURUSER['id'], true);
 $dict = \Rhilip\Bencode\Bencode::load($fn);
 $dict['announce'] = $ssl_torrent . $base_announce_url . "?passkey=" . $CURUSER['passkey'];
 do_log(sprintf("[ANNOUNCE_URL], user: %s, torrent: %s, url: %s", $CURUSER['id'] ?? '', $id, $dict['announce']));
@@ -221,6 +220,5 @@ else
 //header ("Content-Disposition: attachment; filename=".$row["filename"]."");
 //ob_implicit_flush(true);
 //print(benc($dict));
-\Nexus\Database\NexusDB::cache_put("authkey2passkey:$trackerReportAuthKey", $CURUSER['passkey'], 3600*24);
 echo \Rhilip\Bencode\Bencode::encode($dict);
 ?>

@@ -35,7 +35,7 @@ class PluginResource extends Resource
         return self::getNavigationLabel();
     }
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static bool $shouldRegisterNavigation = true;
 
     public static function form(Form $form): Form
     {

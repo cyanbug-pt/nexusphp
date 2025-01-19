@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Filament;
 use App\Http\Middleware\Locale;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -49,7 +50,8 @@ class Kernel extends HttpKernel
         ],
         'filament' => [
             \Illuminate\Session\Middleware\StartSession::class,
-            \Filament\Http\Middleware\Authenticate::class,
+//            \Filament\Http\Middleware\Authenticate::class,
+            Filament::class,
         ],
     ];
 

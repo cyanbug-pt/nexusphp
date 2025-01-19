@@ -26,45 +26,13 @@ if (isset($passkey) && strlen($passkey) != 32) warn("Invalid passkey (" . strlen
 
 $redis = $Cache->getRedis();
 $torrentNotExistsKey = "torrent_not_exists";
-$authKeyInvalidKey = "authkey_invalid";
 $passkeyInvalidKey = "passkey_invalid";
 $isReAnnounce = false;
 $reAnnounceInterval = 5;
 $frequencyInterval = 30;
 $isStoppedOrCompleted = !empty($GLOBALS['event']) && in_array($GLOBALS['event'], array('completed', 'stopped'));
 $userAuthenticateKey = "";
-if (!empty($_GET['authkey'])) {
-    $authkey = $_GET['authkey'];
-    $parts = explode("|", $authkey);
-    if (count($parts) != 3) {
-        warn("authkey format error");
-    }
-    $authKeyTid = $parts[0];
-    $authKeyUid = $userAuthenticateKey = $parts[1];
-    $subAuthkey = sprintf("%s|%s", $authKeyTid, $authKeyUid);
-    //check ReAnnounce
-    $lockParams = [
-        'user' => $authKeyUid,
-        'info_hash' => $info_hash
-    ];
-
-    $lockString = http_build_query($lockParams);
-    $lockKey = "isReAnnounce:" . md5($lockString);
-    if (!$redis->set($lockKey, TIMENOW, ['nx', 'ex' => $reAnnounceInterval])) {
-        $isReAnnounce = true;
-    }
-    $reAnnounceCheckByAuthKey = "reAnnounceCheckByAuthKey:$subAuthkey";
-    if (!$isStoppedOrCompleted && !$isReAnnounce && !$redis->set($reAnnounceCheckByAuthKey, TIMENOW, ['nx', 'ex' => $frequencyInterval])) {
-        $msg = "Request too frequent(a)";
-        do_log(sprintf("[ANNOUNCE] %s key: %s already exists, value: %s", $msg, $reAnnounceCheckByAuthKey, TIMENOW));
-        warn($msg, 300);
-    }
-    if ($redis->get("$authKeyInvalidKey:$authkey")) {
-        $msg = "Invalid authkey";
-        do_log("[ANNOUNCE] $msg");
-        warn($msg);
-    }
-} elseif (!empty($_GET['passkey'])) {
+if (!empty($_GET['passkey'])) {
     $passkey = $userAuthenticateKey = $_GET['passkey'];
     if ($redis->get("$passkeyInvalidKey:$passkey")) {
         $msg = "Passkey invalid";
@@ -81,7 +49,7 @@ if (!empty($_GET['authkey'])) {
         $isReAnnounce = true;
     }
 } else {
-    warn("Require passkey or authkey");
+    warn("Require passkey");
 }
 
 if ($redis->get("$torrentNotExistsKey:$info_hash")) {
@@ -95,20 +63,7 @@ if (!$isStoppedOrCompleted && !$isReAnnounce && !$redis->set($torrentReAnnounceK
     do_log(sprintf("[ANNOUNCE] %s key: %s already exists, value: %s", $msg, $torrentReAnnounceKey, TIMENOW));
     warn($msg, 300);
 }
-
-
 dbconn_announce();
-//check authkey
-if (!empty($_REQUEST['authkey'])) {
-    try {
-        $GLOBALS['passkey'] = $_GET['passkey'] = get_passkey_by_authkey($_REQUEST['authkey']);
-    } catch (\Exception $exception) {
-        $redis->set("$authKeyInvalidKey:".$_REQUEST['authkey'], TIMENOW, ['ex' => 3600*24]);
-        warn($exception->getMessage());
-    }
-}
-
-
 
 //4. GET IP AND CHECK PORT
 $ip = getip();	// avoid to get the spoof ip from some agent
@@ -229,12 +184,6 @@ if (!$torrent) {
 }
 $GLOBALS['torrent'] = $torrent;
 $torrentid = $torrent["id"];
-if (isset($authKeyTid) && $authKeyTid != $torrentid) {
-    $redis->set("$authKeyInvalidKey:$authkey", TIMENOW, ['ex' => 3600*24]);
-    $msg = "Invalid authkey: $authkey 2";
-    do_log("[ANNOUNCE] $msg");
-    warn($msg);
-}
 if ($torrent['banned'] == 'yes') {
     if (!user_can('seebanned', false, $az['id'])) {
         err("torrent banned");

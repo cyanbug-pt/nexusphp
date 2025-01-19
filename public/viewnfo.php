@@ -8,7 +8,7 @@ $id = intval($_GET["id"] ?? 0);
 if (!user_can('viewnfo') || !is_valid_id($id) || $enablenfo_main != 'yes')
 permissiondenied();
 
-$r = sql_query("SELECT name,nfo FROM torrents WHERE id=$id") or sqlerr();
+$r = sql_query("SELECT torrents.name, torrent_extras.nfo FROM torrents left join torrent_extras on torrents.id=torrent_extras.torrent_id WHERE torrents.id=$id") or sqlerr();
 $a = mysql_fetch_assoc($r) or die($lang_viewnfo['std_puke']);
 
 //error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use Carbon\Carbon;
+
 class BonusLogs extends NexusModel
 {
     protected $table = 'bonus_logs';
@@ -41,6 +43,7 @@ class BonusLogs extends NexusModel
 
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
     const BUSINESS_TYPE_TORRENT_BE_DOWNLOADED = 1001;
+    const BUSINESS_TYPE_RECEIVE_REWARD = 1002;
 
     public static array $businessTypes = [
         self::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => ['text' => 'Cancel H&R'],
@@ -65,6 +68,7 @@ class BonusLogs extends NexusModel
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
+        self::BUSINESS_TYPE_RECEIVE_REWARD => ['text' => 'Receive reward'],
     ];
 
     public function getBusinessTypeTextAttribute()
@@ -100,6 +104,24 @@ class BonusLogs extends NexusModel
     {
         $result = Setting::get('bonus.change_username_card');
         return $result ?? self::DEFAULT_BONUS_BUY_CHANGE_USERNAME_CARD;
+    }
+
+    public static function add(int $userId, float $old, float $delta, float $new, string $comment, int $businessType)
+    {
+        if (!isset(self::$businessTypes[$businessType])) {
+            throw new \InvalidArgumentException("Invalid business type: $businessType");
+        }
+        $nowStr = Carbon::now()->toDateTimeString();
+        return self::query()->create([
+            'business_type' => $businessType,
+            'uid' => $userId,
+            'old_total_value' => $old,
+            'value' => $delta,
+            'new_total_value' => $new,
+            'comment' => sprintf("[%s] %s", self::$businessTypes[$businessType]['text'], $comment),
+            'created_at' => $nowStr,
+            'updated_at' => $nowStr,
+        ]);
     }
 
 

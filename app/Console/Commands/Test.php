@@ -16,6 +16,7 @@ use App\Models\Invite;
 use App\Models\LoginLog;
 use App\Models\Medal;
 use App\Models\Peer;
+use App\Models\Post;
 use App\Models\SearchBox;
 use App\Models\Setting;
 use App\Models\Snatch;
@@ -101,11 +102,7 @@ class Test extends Command
      */
     public function handle()
     {
-        $str = "1.abc.de";
-        $ext = "png";
-        $str = "202404/20240403215909f58f38ddd968a0e8a4bdd30690a9e92e.png";
-        $ext = pathinfo($str, PATHINFO_EXTENSION);
-        dd(basename($str), $ext);
+        $this->info("haha");
     }
 
 }

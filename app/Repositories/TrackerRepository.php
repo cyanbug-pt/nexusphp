@@ -227,6 +227,13 @@ class TrackerRepository extends BaseRepository
 
     }
 
+    /**
+     * @deprecated
+     *
+     * @param $authkey
+     * @return array
+     * @throws TrackerException
+     */
     protected function checkAuthkey($authkey)
     {
         $arr = explode('|', $authkey);

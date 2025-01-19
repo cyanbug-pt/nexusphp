@@ -41,6 +41,7 @@ return [
     'client' => '客户端',
     'reason' => '原因',
     'change' => '修改',
+    'create' => '创建',
     'setting' => [
         'nav_text' => '设置',
         'backup' => [

@@ -330,8 +330,8 @@ $insert = [
     'type' => $type,
     'url' => $url,
     'small_descr' => $small_descr,
-    'descr' => $descr,
-    'ori_descr' => $descr,
+//    'descr' => $descr,
+//    'ori_descr' => $descr,
     'category' => $catid,
     'source' => $sourceid,
     'medium' => $mediumid,
@@ -346,11 +346,20 @@ $insert = [
     'last_action' => $dateTimeStringNow,
     'nfo' => $nfo,
     'info_hash' => $infohash,
-    'pt_gen' => $_POST['pt_gen'] ?? '',
-    'technical_info' => $_POST['technical_info'] ?? '',
+//    'pt_gen' => $_POST['pt_gen'] ?? '',
+//    'technical_info' => $_POST['technical_info'] ?? '',
     'cover' => $cover,
     'pieces_hash' => sha1($info['pieces']),
     'cache_stamp' => time(),
+];
+/**
+ * migrate to extra table and remove pt_gen field
+ * @since 1.9
+ */
+$extra = [
+    'descr' => $descr,
+    'media_info' => $_POST['technical_info'] ?? '',
+    'nfo' => $nfo,
 ];
 if (isset($_POST['hr'][$catmod]) && isset(\App\Models\Torrent::$hrStatus[$_POST['hr'][$catmod]]) && user_can('torrent_hr')) {
     $insert['hr'] = $_POST['hr'][$catmod];
@@ -432,6 +441,7 @@ if (!empty($tagIdArr)) {
 foreach ($filelist as $file) {
 	@sql_query("INSERT INTO files (torrent, filename, size) VALUES ($id, ".sqlesc($file[0]).",".$file[1].")");
 }
+\App\Models\TorrentExtra::query()->create($extra);
 
 //===add karma
 KPS("+",$uploadtorrent_bonus,$CURUSER["id"]);

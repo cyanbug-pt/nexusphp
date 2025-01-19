@@ -42,6 +42,9 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        if (app()->runningInConsole()) {
+            return;
+        }
         $this->reportable(function (InsufficientPermissionException $e) {
             if (request()->expectsJson()) {
                 return response()->json(fail($e->getMessage(), request()->all()), 403);
@@ -55,9 +58,9 @@ class Handler extends ExceptionHandler
         });
 
         //Other Only handle in json request
-//        if (!request()->expectsJson()) {
-//            return;
-//        }
+        if (!request()->expectsJson()) {
+            return;
+        }
 
         $this->renderable(function (AuthenticationException $e) {
             return response()->json(fail($e->getMessage(), ['guards' => $e->guards()]), 401);

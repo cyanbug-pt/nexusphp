@@ -844,17 +844,16 @@ EOD;
 				if ($CURUSER['privacy'] != $privacy) $privacyupdated = 1;
 
 				$user = $CURUSER["id"];
-				$query = sprintf("UPDATE users SET " . implode(",", $updateset) . " WHERE id ='%s'",
-				mysql_real_escape_string($user));
-				$result = sql_query($query);
-				if (!$result)
-				sqlerr(__FILE__,__LINE__);
-
-				if (!empty($_REQUEST['resetauthkey']) && $_REQUEST['resetauthkey'] == 1) {
-				    //reset authkey
-				    $torrentRep = new \App\Repositories\TorrentRepository();
-				    $torrentRep->resetTrackerReportAuthKeySecret($user);
-                }
+                \Nexus\Database\NexusDB::transaction(function () use ($user, $updateset) {
+                    $query = sprintf("UPDATE users SET " . implode(",", $updateset) . " WHERE id ='%s'", mysql_real_escape_string($user));
+                    sql_query($query);
+                    if (!empty($_REQUEST['resetauthkey']) && $_REQUEST['resetauthkey'] == 1) {
+                        //reset authkey
+                        $torrentRep = new \App\Repositories\TorrentRepository();
+                        $torrentRep->resetTrackerReportAuthKeySecret($user);
+                    }
+                    do_action("usercp_security_update", $_POST);
+                });
 				$to = "usercp.php?action=security&type=saved";
 				if ($changedemail == 1)
 				$to .= "&mail=1";
@@ -891,7 +890,8 @@ EOD;
 				print("<input type=\"hidden\" name=\"two_step_secret\" value=\"$two_step_secret\">");
 				print("<input type=\"hidden\" name=\"two_step_code\" value=\"$two_step_code\">");
 				Print("<tr><td class=\"rowhead nowrap\" valign=\"top\" align=\"right\" width=1%>".$lang_usercp['row_security_check']."</td><td valign=\"top\" align=\"left\" width=\"99%\"><input type=password name=oldpassword style=\"width: 200px\"><br /><font class=small>".$lang_usercp['text_security_check_note']."</font></td></tr>\n");
-				submit();
+				do_action("usercp_security_update_confirm", $_POST);
+                submit();
 				print("</table>");
 				stdfoot();
 				die;
@@ -900,7 +900,7 @@ EOD;
 				print("<tr><td colspan=2 class=\"heading\" valign=\"top\" align=\"center\"><font color=red>".$lang_usercp['text_saved'].($_GET["mail"] == "1" ? $lang_usercp['std_confirmation_email_sent'] : "")." ".($_GET["passkey"] == "1" ? $lang_usercp['std_passkey_reset'] : "")." ".($_GET["password"] == "1" ? $lang_usercp['std_password_changed'] : "")." ".($_GET["privacy"] == "1" ? $lang_usercp['std_privacy_level_updated'] : "")."</font></td></tr>\n");
 			form ("security");
 			tr_small($lang_usercp['row_reset_passkey'],"<input type=checkbox name=resetpasskey value=1 />".$lang_usercp['checkbox_reset_my_passkey']."<br /><font class=small>".$lang_usercp['text_reset_passkey_note']."</font>", 1);
-			tr_small($lang_usercp['row_reset_authkey'],"<input type=checkbox name=resetauthkey value=1 />".$lang_usercp['checkbox_reset_my_authkey']."<br /><font class=small>".$lang_usercp['text_reset_authkey_note']."</font>", 1);
+//			tr_small($lang_usercp['row_reset_authkey'],"<input type=checkbox name=resetauthkey value=1 />".$lang_usercp['checkbox_reset_my_authkey']."<br /><font class=small>".$lang_usercp['text_reset_authkey_note']."</font>", 1);
 
 			//two step authentication
             if (!empty($CURUSER['two_step_secret'])) {
@@ -926,7 +926,8 @@ EOD;
 
 			if ($disableemailchange != 'no' && $smtptype != 'none') //system-wide setting
 				tr_small($lang_usercp['row_email_address'], "<input type=\"text\" name=\"email\" style=\"width: 200px\" value=\"" . htmlspecialchars($CURUSER["email"]) . "\" /> <br /><font class=small>".$lang_usercp['text_email_address_note']."</font>", 1);
-			tr_small($lang_usercp['row_change_password'], "<input type=\"password\" name=\"chpassword\" style=\"width: 200px\" />", 1);
+            do_action("usercp_security_setting_form");
+            tr_small($lang_usercp['row_change_password'], "<input type=\"password\" name=\"chpassword\" style=\"width: 200px\" />", 1);
 			tr_small($lang_usercp['row_type_password_again'], "<input type=\"password\" name=\"passagain\" style=\"width: 200px\" />", 1);
 			tr_small($lang_usercp['row_privacy_level'],  priv("normal", $lang_usercp['radio_normal']) . " " . priv("low", $lang_usercp['radio_low']) . " " . priv("strong", $lang_usercp['radio_strong']), 1);
 			submit();
@@ -1118,6 +1119,81 @@ JS;
     \Nexus\Nexus::css($seedBoxCss, 'footer', false);
 }
 //end seed box
+
+//token start
+$token = '';
+$tokenLabel = nexus_trans("token.label");
+$columnName = nexus_trans('label.name');
+$columnCreatedAt = nexus_trans('label.created_at');
+$actionCreate = nexus_trans('label.create');
+//$res = \App\Models\SeedBoxRecord::query()->where('uid', $CURUSER['id'])->where('type', \App\Models\SeedBoxRecord::TYPE_USER)->get();
+//if ($res->count() > 0)
+//{
+//    $seedBox .= "<table border='1' cellspacing='0' cellpadding='5' id='seed-box-table'><tr><td class='colhead'>ID</td><td class='colhead'>{$columnOperator}</td><td class='colhead'>{$columnBandwidth}</td><td class='colhead'>{$columnIP}</td><td class='colhead'>{$columnComment}</td><td class='colhead'>{$columnStatus}</td><td class='colhead'></td></tr>";
+//    foreach ($res as $seedBoxRecord)
+//    {
+//        $seedBox .= "<tr>";
+//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->id);
+//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->operator);
+//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->bandwidth ?: '');
+//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->ip ?: sprintf('%s ~ %s', $seedBoxRecord->ip_begin, $seedBoxRecord->ip_end));
+//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->comment);
+//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->statusText);
+//        $seedBox .= sprintf('<td><img style="cursor: pointer" class="staff_delete remove-seed-box-btn" src="pic/trans.gif" alt="D" title="%s" data-id="%s"></td>', $lang_functions['text_delete'], $seedBoxRecord->id);
+//        $seedBox .= "</tr>";
+//    }
+//    $seedBox .= '</table>';
+//}
+$token .= sprintf('<div><input type="button" id="add-token-box-btn" value="%s"/></div>', $actionCreate);
+tr_small($tokenLabel, $token, 1);
+$tokenFoxForm = <<<FORM
+<div class="form-box">
+<form id="token-box-form">
+    <div class="form-control-row">
+        <div class="label">{$columnName}</div>
+        <div class="field"><input type="text" name="params[name]"></div>
+    </div>
+</form>
+</div>
+FORM;
+    $tokenBoxJs = <<<JS
+jQuery('#add-token-box-btn').on('click', function () {
+    layer.open({
+        type: 1,
+        title: "{$tokenLabel} {$actionCreate}",
+        content: `$tokenFoxForm`,
+        btn: ['OK'],
+        btnAlign: 'c',
+        yes: function () {
+            let params = jQuery('#token-box-form').serialize()
+            jQuery.post('ajax.php', params + "&action=addToken", function (response) {
+                console.log(response)
+                if (response.ret != 0) {
+                    layer.alert(response.msg)
+                    return
+                }
+                window.location.reload()
+            }, 'json')
+        }
+    })
+});
+jQuery('#token-box-table').on('click', '.remove-token-box-btn', function () {
+    let params = {action: "removeToken", params: {id: jQuery(this).attr("data-id")}}
+    layer.confirm("{$lang_functions['std_confirm_remove']}", {btnAlign: 'c'}, function (index) {
+        jQuery.post('ajax.php', params, function (response) {
+            console.log(response)
+            if (response.ret != 0) {
+                layer.alert(response.msg)
+                return
+            }
+            window.location.reload()
+        }, 'json')
+    })
+});
+JS;
+    \Nexus\Nexus::js($tokenBoxJs, 'footer', false);
+
+//token end
 
 if ($forumposts)
 	tr($lang_usercp['row_forum_posts'], $forumposts." [<a href=\"userhistory.php?action=viewposts&id=".$CURUSER['id']."\" title=\"".$lang_usercp['link_view_posts']."\">".$lang_usercp['text_view']."</a>] (".$dayposts.$lang_usercp['text_posts_per_day']."; ".$percentages.$lang_usercp['text_of_total_posts'].")", 1);

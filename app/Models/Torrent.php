@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class Torrent extends NexusModel
 {
     protected $fillable = [
-        'name', 'filename', 'save_as', 'descr', 'small_descr', 'ori_descr',
+        'name', 'filename', 'save_as', 'small_descr',
         'category', 'source', 'medium', 'codec', 'standard', 'processing', 'team', 'audiocodec',
         'size', 'added', 'type', 'numfiles', 'owner', 'nfo', 'sp_state', 'promotion_time_type',
         'promotion_until', 'anonymous', 'url', 'pos_state', 'cache_stamp', 'picktype', 'picktime',
-        'last_reseed', 'pt_gen', 'technical_info', 'leechers', 'seeders', 'cover', 'last_action',
+        'last_reseed', 'leechers', 'seeders', 'cover', 'last_action',
         'times_completed', 'approval_status', 'banned', 'visible', 'pos_state_until', 'price',
     ];
 
@@ -25,7 +25,6 @@ class Torrent extends NexusModel
 
     protected $casts = [
         'added' => 'datetime',
-        'pt_gen' => 'array',
         'promotion_until' => 'datetime',
         'pos_state_until' => 'datetime',
     ];
@@ -241,7 +240,7 @@ class Torrent extends NexusModel
 
     public static function getFieldsForList($appendTableName = false): array|bool
     {
-        $fields = 'id, sp_state, promotion_time_type, promotion_until, banned, picktype, pos_state, category, source, medium, codec, standard, processing, team, audiocodec, leechers, seeders, name, small_descr, times_completed, size, added, comments,anonymous,owner,url,cache_stamp, pt_gen, hr, approval_status, cover, price';
+        $fields = 'id, sp_state, promotion_time_type, promotion_until, banned, picktype, pos_state, category, source, medium, codec, standard, processing, team, audiocodec, leechers, seeders, name, small_descr, times_completed, size, added, comments,anonymous,owner,url,cache_stamp, hr, approval_status, cover, price';
         $fields = preg_split('/[,\s]+/', $fields);
         if ($appendTableName) {
             foreach ($fields as &$value) {
@@ -512,5 +511,10 @@ class Torrent extends NexusModel
     public function operationLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(TorrentOperationLog::class, 'torrent_id');
+    }
+
+    public function extra(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(TorrentExtra::class, 'torrent_id');
     }
 }

@@ -3363,16 +3363,17 @@ function linkcolor($num) {
 }
 
 function writecomment($userid, $comment, $oldModcomment = null) {
-    if (is_null($oldModcomment)) {
-        $res = sql_query("SELECT modcomment FROM users WHERE id = '$userid'") or sqlerr(__FILE__, __LINE__);
-        $arr = mysql_fetch_assoc($res);
-        $modcomment = date("Y-m-d") . " - " . $comment . "" . ($arr['modcomment'] != "" ? "\n" : "") . $arr['modcomment'];
-    } else {
-        $modcomment = date("Y-m-d") . " - " . $comment . "" . ($oldModcomment != "" ? "\n" : "") .$oldModcomment;
-    }
-	$modcom = sqlesc($modcomment);
-    do_log("update user: $userid prepend modcomment: $comment, with oldModcomment: $oldModcomment");
-	return sql_query("UPDATE users SET modcomment = $modcom WHERE id = '$userid'") or sqlerr(__FILE__, __LINE__);
+    \App\Models\UserModifyLog::query()->create(['user_id' => $userid, 'content' => date("Y-m-d") . " - " . $comment]);
+//    if (is_null($oldModcomment)) {
+//        $res = sql_query("SELECT modcomment FROM users WHERE id = '$userid'") or sqlerr(__FILE__, __LINE__);
+//        $arr = mysql_fetch_assoc($res);
+//        $modcomment = date("Y-m-d") . " - " . $comment . "" . ($arr['modcomment'] != "" ? "\n" : "") . $arr['modcomment'];
+//    } else {
+//        $modcomment = date("Y-m-d") . " - " . $comment . "" . ($oldModcomment != "" ? "\n" : "") .$oldModcomment;
+//    }
+//	$modcom = sqlesc($modcomment);
+//    do_log("update user: $userid prepend modcomment: $comment, with oldModcomment: $oldModcomment");
+//	return sql_query("UPDATE users SET modcomment = $modcom WHERE id = '$userid'") or sqlerr(__FILE__, __LINE__);
 }
 
 function return_torrent_bookmark_array($userid)

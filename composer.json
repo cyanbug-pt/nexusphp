@@ -33,6 +33,7 @@
         "ext-xml": "*",
         "ext-zend-opcache": "*",
         "ext-zip": "*",
+        "calebporzio/sushi": "^2.5",
         "elasticsearch/elasticsearch": "^7.16",
         "filament/filament": "^3.2",
         "flowframe/laravel-trend": "^0.3",
@@ -45,7 +46,6 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.5",
         "league/flysystem-sftp-v3": "^3.0",
-        "masbug/flysystem-google-drive-ext": "^2.0",
         "meilisearch/meilisearch-php": "^1.0",
         "orangehill/iseed": "^3.0",
         "phpgangsta/googleauthenticator": "dev-master",
@@ -74,7 +74,8 @@
             "@php artisan filament:upgrade"
         ],
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan passport:keys"
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
@@ -95,7 +96,8 @@
         "secure-http": false,
         "allow-plugins": {
             "php-http/discovery": true
-        }
+        },
+        "process-timeout": 900
     },
     "minimum-stability": "dev",
     "prefer-stable": true

@@ -381,6 +381,14 @@ class TorrentRepository extends BaseRepository
         return md5($passkey . date('Ymd') . $user['id']);
     }
 
+    /**
+     * @deprecated
+     * @param $id
+     * @param $uid
+     * @param $initializeIfNotExists
+     * @return string
+     * @throws NexusException
+     */
     public function getTrackerReportAuthKey($id, $uid, $initializeIfNotExists = false): string
     {
         $key = $this->getTrackerReportAuthKeySecret($id, $uid, $initializeIfNotExists);
@@ -389,6 +397,8 @@ class TorrentRepository extends BaseRepository
     }
 
     /**
+     * @deprecated
+     *
      * check tracker report authkey
      * if valid, the result will be the date the key generate, else if will be empty string
      *
