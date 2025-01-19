@@ -81,13 +81,15 @@ else {
                     print("<tr><td class=colhead align=left>{$lang_viewrequests['thead_name']}</td><td class=colhead align=center>{$lang_viewrequests['thead_price_newest']}</td><td class=colhead align=center>{$lang_viewrequests['thead_price_original']}</td><td class=colhead  align=center>{$lang_viewrequests['thead_comment_count']}</td><td class=colhead  align=center>{$lang_viewrequests['thead_on_request_count']}</td><td class=colhead align=center>{$lang_viewrequests['thead_request_user']}</td><td class=colhead align=center>{$lang_viewrequests['thead_created_at']}</td><td class=colhead align=center>{$lang_viewrequests['thead_status']}</td></tr>\n");
                     while ($row = mysql_fetch_array($rows)) {
                         print("<tr>
-	<td align=left class='rowfollow'><a href='viewrequests.php?action=view&id=" . $row["id"] . "'><b>" . $row["request"] . "</b></a></td>
-	<td align=center class='rowfollow nowrap'><font color=#ff0000><b>" . $row['amount'] . "</b></font></td>
-	<td align=center class='rowfollow nowrap'>" . $row['ori_amount'] . "</td>
-	<td align=center class='rowfollow nowrap'>" . ($row['comments']) . "</td><td align=center>" . ($row['Totalreq']) . "</td>
-	<td align=center class='rowfollow nowrap'>" . get_username($row['userid']) . "</td>
-	<td align=center class='rowfollow nowrap'>" . gettime($row['added'], true, false) . "</td>
-	<td align=center class='rowfollow nowrap'>" . ($row['finish'] == "yes" ? $lang_viewrequests['request_status_resolved'] : ($row['userid'] == $CURUSER['id'] ? $lang_viewrequests['request_status_resolving'] : "<a href='viewrequests.php?action=res&id=" . $row["id"] . "'>{$lang_viewrequests['request_status_resolving']}</a>")) . "</td></tr>\n");
+                                <td align=left class='rowfollow'><a href='viewrequests.php?action=view&id=" . $row["id"] . "'><b>" . $row["request"] . "</b></a></td>
+                                <td align=center class='rowfollow nowrap'><font color=#ff0000><b>" . $row['amount'] . "</b></font></td>
+                                <td align=center class='rowfollow nowrap'>" . $row['ori_amount'] . "</td>
+                                <td align=center class='rowfollow nowrap'>" . ($row['comments']) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . ($row['Totalreq']) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . get_username($row['userid']) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . gettime($row['added'], true, false) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . ($row['finish'] == "yes" ? $lang_viewrequests['request_status_resolved'] : ($row['userid'] == $CURUSER['id'] ? $lang_viewrequests['request_status_resolving'] : "<a href='viewrequests.php?action=res&id=" . $row["id"] . "'>{$lang_viewrequests['request_status_resolving']}</a>")) . "</td>
+                            </tr>\n");
                     }
                 }
                 print("</table>\n");
