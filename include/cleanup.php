@@ -333,7 +333,8 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
 	//2.5.update torrents' visibility
 	$deadtime = deadtime() - $max_dead_torrent_time;
-	sql_query("UPDATE torrents SET visible='no' WHERE visible='yes' AND last_action < FROM_UNIXTIME($deadtime) AND seeders=0") or sqlerr(__FILE__, __LINE__);
+    $lastActionDeadTime = date("Y-m-d H:i:s",$deadtime);
+	sql_query("UPDATE torrents SET visible='no' WHERE visible='yes' AND last_action < '$lastActionDeadTime' AND seeders=0") or sqlerr(__FILE__, __LINE__);
 	$log = "update torrents' visibility";
 	do_log($log);
 	if ($printProgress) {

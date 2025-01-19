@@ -340,11 +340,7 @@ class Update extends Install
          */
         if (!Schema::hasTable("torrent_extras")) {
             $this->runMigrate("database/migrations/2025_01_08_133552_create_torrent_extra_table.php");
-            $this->runMigrate("database/migrations/2025_01_08_133847_create_user_modify_logs_table.php");
-            $this->runMigrate("database/migrations/2025_01_18_235747_drop_users_table_text_column.php");
-            $this->runMigrate("database/migrations/2025_01_18_235757_drop_torrents_table_text_column.php");
             Artisan::call("upgrade:migrate_torrents_table_text_column");
-            Artisan::call("upgrade:migrate_users_table_comment_related_column");
         }
     }
 

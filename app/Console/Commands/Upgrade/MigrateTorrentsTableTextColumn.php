@@ -28,6 +28,9 @@ class MigrateTorrentsTableTextColumn extends Command
      */
     public function handle()
     {
+        if (Schema::hasTable("torrent_extras") && Schema::hasColumn("torrents", "descr")) {
+            NexusDB::statement("insert into torrent_extras (torrent_id, descr, media_info, nfo, created_at) select id, descr, technical_info, nfo, now() from torrents on duplicate key update torrent_id = values(torrent_id)");
+        }
         $columns = ["ori_descr", "descr", "nfo", "technical_info", "pt_gen"];
         $sql = "alter table torrents ";
         $drops = [];
@@ -39,9 +42,6 @@ class MigrateTorrentsTableTextColumn extends Command
         if (!empty($drops)) {
             $sql .= implode(",", $drops);
             NexusDB::statement($sql);
-        }
-        if (Schema::hasTable("torrent_extras")) {
-            NexusDB::statement("insert torrent_extras (torrent_id, descr, media_info, nfo, created_at) select id, descr, technical_info, nfo, now() from torrents on duplicate key update torrent_id = values(torrent_id)");
         }
     }
 }
