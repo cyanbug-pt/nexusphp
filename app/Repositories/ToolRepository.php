@@ -329,7 +329,8 @@ class ToolRepository extends BaseRepository
         }
         // Create the Transport
         $transport = $factory->create(new Dsn(
-            $encryption === 'tls' ? (($smtp['smtpport'] == 465) ? 'smtps' : 'smtp') : '',
+//            $encryption === 'tls' ? (($smtp['smtpport'] == 465) ? 'smtps' : 'smtp') : '',
+            $smtp['smtpport'] == 465 && in_array($encryption, ['ssl', 'tls']) ? 'smtps' : 'smtp',
             $smtp['smtpaddress'],
             $smtp['accountname'] ?? null,
             $smtp['accountpassword'] ?? null,

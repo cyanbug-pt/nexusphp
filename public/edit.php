@@ -8,7 +8,7 @@ $id = intval($_GET['id'] ?? 0);
 if (!$id)
 	die();
 
-$res = sql_query("SELECT torrents.*, categories.mode as cat_mode FROM torrents LEFT JOIN categories ON category = categories.id WHERE torrents.id = $id");
+$res = sql_query("SELECT torrents.*, categories.mode as cat_mode, torrent_extras.media_info as technical_info, torrent_extras.descr FROM torrents LEFT JOIN categories ON category = categories.id left join torrent_extras on torrents.id = torrent_extras.torrent_id WHERE torrents.id = $id");
 $row = mysql_fetch_assoc($res);
 if (!$row) die();
 

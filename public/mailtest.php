@@ -26,6 +26,7 @@ EOD;
         $toolRep->sendMail($email, $title, $body, true);
         stderr($lang_mailtest['std_success'], $lang_mailtest['std_success_note']);
     } catch (\Throwable $e) {
+        do_log($e->getMessage().$e->getTraceAsString(), "error");
         stderr($lang_functions['std_error'], $lang_functions['text_unable_to_send_mail'] . sprintf("<br/><br/><code>%s</code>", $e->getMessage()), false);
     }
 }
