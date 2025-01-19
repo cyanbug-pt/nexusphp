@@ -104,7 +104,7 @@ class PluginStoreResource extends Resource
         $result = [];
         $result[] = "配置扩展地址";
         $result[] = sprintf("<code>composer config repositories.%s git %s</code>", $record->plugin_id, $record->remote_url);
-        $result[] = "<br/>下载扩展. 这里展示的最新版本号, 如果要要安装其他版本自行替换(dev-master 代表开发中的版本)";
+        $result[] = "<br/>下载扩展. 这里展示的最新版本号, 如果需要安装其他版本(可在查看页面底部获得)自行替换";
         $result[] = sprintf("<code>composer require %s:%s</code>", $record->package_name, $record->version);
         $result[] = "<br/>执行安装";
         $result[] = sprintf("<code>php artisan plugin install %s</code>", $record->package_name);

@@ -163,11 +163,6 @@ class NexusUpdate extends Command
         $this->update->runExtraMigrate();
         $this->doLog("runExtraMigrate done!");
 
-        $logFile = getLogFile();
-        $command = "chmod 777 $logFile";
-        $this->doLog("$command...");
-        executeCommand($command);
-
         $this->doLog("All done!");
 
         return 0;
