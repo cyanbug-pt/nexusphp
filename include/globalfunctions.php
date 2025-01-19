@@ -265,7 +265,8 @@ function getLogFile($append = '')
         $name .= "-$append";
     }
     if (isRunningInConsole()) {
-        $name .= sprintf("-cli-%s-%s", get_current_user(), getmyuid());
+        $scriptUserInfo = posix_getpwuid(posix_getuid());
+        $name .= sprintf("-cli-%s", $scriptUserInfo['name']);
     }
     $logFile = sprintf('%s-%s%s', $name, date('Y-m-d'), $suffix);
     return $logFiles[$append] = $logFile;

@@ -85,13 +85,7 @@ class PluginStoreResource extends Resource
                                 ->label(fn () => sprintf("进入目录: %s, 以 root 用户的身份依次执行以下命令进行安装: ", base_path()))
                                 ->html(true)
                                 ->formatStateUsing(function (PluginStore $record) {
-                                    $user = executeCommand("whoami");
-                                    $commands = [
-                                        sprintf("sudo -u %s composer config repositories.%s %s", $user, $record->plugin_id, $record->remote_url),
-                                        sprintf("sudo -u %s composer require %s:%s", $user, $record->package_name, $record->version),
-                                        sprintf("sudo -u %s php artisan plugin install %s", $user, $record->package_name),
-                                    ];
-                                    return implode("<br/>", $commands);
+                                    return self::getPluginInstruction($record);
                                 })
                             ,
                         ]);
@@ -103,6 +97,18 @@ class PluginStoreResource extends Resource
             ->recordAction(null)
             ->paginated(false)
         ;
+    }
+
+    private static function getPluginInstruction(PluginStore $record): string
+    {
+        $result = [];
+        $result[] = "配置扩展地址";
+        $result[] = sprintf("<code>composer config repositories.%s git %s</code>", $record->plugin_id, $record->remote_url);
+        $result[] = "<br/>下载扩展. 这里展示的最新版本号, 如果要要安装其他版本自行替换(dev-master 代表开发中的版本)";
+        $result[] = sprintf("<code>composer require %s:%s</code>", $record->package_name, $record->version);
+        $result[] = "<br/>执行安装";
+        $result[] = sprintf("<code>php artisan plugin install %s</code>", $record->package_name);
+        return implode("<br/>", $result);
     }
 
     public static function getRelations(): array

@@ -102,7 +102,12 @@ class Test extends Command
      */
     public function handle()
     {
-        $this->info("haha");
+        $whoami = executeCommand('whoami');
+        $user = get_current_user();
+        $uid = getmyuid();
+        $uid2 = posix_getuid();
+        $info = posix_getpwuid($uid2);
+        dd($whoami, $user, $uid, $uid2, $info);
     }
 
 }

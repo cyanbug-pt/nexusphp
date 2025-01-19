@@ -33,6 +33,7 @@
         "ext-xml": "*",
         "ext-zend-opcache": "*",
         "ext-zip": "*",
+        "ext-posix": "*",
         "calebporzio/sushi": "^2.5",
         "elasticsearch/elasticsearch": "^7.16",
         "filament/filament": "^3.2",
