@@ -56,7 +56,7 @@ class ClaimResource extends Resource
                 ,
                 Tables\Columns\TextColumn::make('torrent.name')->limit(40)->label(__('label.torrent.label'))->searchable(),
                 Tables\Columns\TextColumn::make('torrent.size')->label(__('label.torrent.size'))->formatStateUsing(fn (Model $record) => mksize($record->torrent->size)),
-                Tables\Columns\TextColumn::make('torrent.added')->label(__('label.torrent.ttl'))->formatStateUsing(fn (Model $record) => mkprettytime($record->torrent->added->diffInSeconds())),
+                Tables\Columns\TextColumn::make('torrent.added')->label(__('label.torrent.ttl'))->formatStateUsing(fn (Model $record) => mkprettytime(abs($record->torrent->added->diffInSeconds()))),
                 Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at'))->dateTime(),
                 Tables\Columns\TextColumn::make('last_settle_at')->label(__('label.claim.last_settle_at'))->dateTime(),
                 Tables\Columns\TextColumn::make('seedTimeThisMonth')->label(__('label.claim.seed_time_this_month')),

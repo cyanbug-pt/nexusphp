@@ -432,7 +432,7 @@ class UserRepository extends BaseRepository
             $changeLog = $user->usernameChangeLogs()->orderBy('id', 'desc')->first();
             if ($changeLog) {
                 $miniDays = Setting::get('system.change_username_min_interval_in_days', 365);
-                if ($changeLog->created_at->diffInDays() <= $miniDays) {
+                if (abs($changeLog->created_at->diffInDays()) <= $miniDays) {
                     $msg = nexus_trans('user.change_username_lte_min_interval', ['last_change_time' => $changeLog->created_at, 'interval' => $miniDays]);
                     throw new \RuntimeException($msg);
                 }

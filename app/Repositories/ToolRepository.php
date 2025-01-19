@@ -300,7 +300,7 @@ class ToolRepository extends BaseRepository
         $start = Carbon::now();
         try {
             $remoteFilesystem->writeStream(basename($filename), $localFilesystem->readStream($filename));
-            $speed = !(float)$start->diffInSeconds() ? 0 :filesize($filename) / (float)$start->diffInSeconds();
+            $speed = !(float)abs($start->diffInSeconds()) ? 0 :filesize($filename) / (float)abs($start->diffInSeconds());
             $log =  'Elapsed time: '.$start->diffForHumans(null, true);
             $log .= ', Speed: '. number_format($speed/1024,2) . ' KB/s';
             do_log($log);

@@ -102,12 +102,11 @@ class Test extends Command
      */
     public function handle()
     {
-        $whoami = executeCommand('whoami');
-        $user = get_current_user();
-        $uid = getmyuid();
-        $uid2 = posix_getuid();
-        $info = posix_getpwuid($uid2);
-        dd($whoami, $user, $uid, $uid2, $info);
+        $today = Carbon::today();
+        $yesterday = Carbon::yesterday();
+        $tomorrow = Carbon::tomorrow();
+        $diff = $tomorrow->diffInDays();
+        dd($today, $tomorrow, $diff);
     }
 
 }

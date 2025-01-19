@@ -37,7 +37,7 @@ class AttendanceRepository extends BaseRepository
                 //already attended today, do nothing
                 $isUpdated = 0;
             } else {
-                $diffDays = $today->diffInDays($added);
+                $diffDays = $today->diffInDays($added, true);
                 if ($diffDays == 1) {
                     //yesterday do it, it's continuous
                     $continuousDays = $this->getContinuousDays($attendance, Carbon::yesterday());
@@ -292,7 +292,7 @@ class AttendanceRepository extends BaseRepository
         }
         $date = Carbon::parse($dateStr);
         $now = Carbon::now();
-        if ($date->gte($now) || $now->diffInDays($date) > Attendance::MAX_RETROACTIVE_DAYS) {
+        if ($date->gte($now) || $now->diffInDays($date, true) > Attendance::MAX_RETROACTIVE_DAYS) {
             throw new \LogicException(nexus_trans('attendance.target_date_can_no_be_retroactive', ['date' => $date->format('Y-m-d')]));
         }
         return NexusDB::transaction(function () use ($user, $attendance, $date) {

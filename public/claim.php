@@ -73,7 +73,7 @@ foreach ($list as $row) {
         <td class='rowfollow' align='left'><a href='userdetails.php?id=" . $row->uid . "'>" . $row->user->username . "</a></td>
         <td class='rowfollow' align='left'><a href='details.php?id=" . $row->torrent_id . "'>" . $row->torrent->name . "</a></td>
         <td class='rowfollow nowrap' align='center'>" . mksize($row->torrent->size) . "</td>
-        <td class='rowfollow nowrap' align='center'>" . mkprettytime($row->torrent->added->diffInSeconds($now)) . "</td>
+        <td class='rowfollow nowrap' align='center'>" . mkprettytime($row->torrent->added->diffInSeconds($now, true)) . "</td>
         <td class='rowfollow nowrap' align='center'>" . format_datetime($row->created_at) . "</td>
         <td class='rowfollow nowrap' align='center'>" . format_datetime($row->last_settle_at) . "</td>
         <td class='rowfollow nowrap' align='center'>" . mkprettytime($row->snatch->seedtime - $row->seed_time_begin) . "</td>

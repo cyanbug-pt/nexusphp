@@ -328,7 +328,7 @@ class ExamRepository extends BaseRepository
 
         $filter = Exam::FILTER_USER_REGISTER_DAYS_RANGE;
         $filterValues = $filters[$filter] ?? [];
-        $value = $user->added->diffInDays(now());
+        $value = $user->added->diffInDays(now(), true);
         $begin = $filterValues[0] ?? null;
         $end = $filterValues[1] ?? null;
         if ($begin !== null && $value < $begin) {

@@ -225,7 +225,7 @@ class ClaimRepository extends BaseRepository
                 $uploadedCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->uploaded);
             } else {
                 $targetStartOfMonth = $row->created_at->startOfMonth();
-                if ($startOfThisMonth->diffInMonths($targetStartOfMonth) > 1) {
+                if ($startOfThisMonth->diffInMonths($targetStartOfMonth, true) > 1) {
                     do_log("[UNREACHED_REMOVE], uid: $uid, torrent: " . $row->torrent_id);
                     $unReachedIdArr[] = $row->id;
                     $unReachedTorrentIdArr[] = $row->torrent_id;

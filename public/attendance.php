@@ -68,7 +68,7 @@ foreach ($period as $value) {
         if ($logValue->is_retroactive) {
             $events[] = array_merge($eventBase, ['title' => $lang_attendance['retroactive_event_text'], 'display' => 'list-item']);
         }
-    } elseif ($value->lte($today) && $value->diffInDays($today) <= \App\Models\Attendance::MAX_RETROACTIVE_DAYS) {
+    } elseif ($value->lte($today) && $value->diffInDays($today, true) <= \App\Models\Attendance::MAX_RETROACTIVE_DAYS) {
         $events[] = array_merge($eventBase, ['groupId' => 'to_do', 'display' => 'list-item']);
     }
 }

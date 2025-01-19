@@ -262,7 +262,7 @@ class TorrentRepository extends BaseRepository
     public function getPeerUploadSpeed($peer): string
     {
         $diff = $peer->uploaded - $peer->uploadoffset;
-        $seconds = max(1, $peer->started->diffInSeconds($peer->last_action));
+        $seconds = max(1, $peer->started->diffInSeconds($peer->last_action, true));
         return mksize($diff / $seconds) . '/s';
     }
 
@@ -270,9 +270,9 @@ class TorrentRepository extends BaseRepository
     {
         $diff = $peer->downloaded - $peer->downloadoffset;
         if ($peer->isSeeder()) {
-            $seconds = max(1, $peer->started->diffInSeconds($peer->finishedat));
+            $seconds = max(1, $peer->started->diffInSeconds($peer->finishedat, true));
         } else {
-            $seconds = max(1, $peer->started->diffInSeconds($peer->last_action));
+            $seconds = max(1, $peer->started->diffInSeconds($peer->last_action, true));
         }
         return mksize($diff / $seconds) . '/s';
     }
@@ -550,7 +550,7 @@ class TorrentRepository extends BaseRepository
                     $hasBeenDownloaded = Snatch::query()->where('torrentid', $torrent->id)->exists();
                     $log = "Torrent: {$torrent->id} is in promotion, hasBeenDownloaded: $hasBeenDownloaded";
                     if (!$hasBeenDownloaded) {
-                        $diffInSeconds = $torrent->promotion_until->diffInSeconds($torrent->added);
+                        $diffInSeconds = $torrent->promotion_until->diffInSeconds($torrent->added, true);
                         $log .= ", addSeconds: $diffInSeconds";
                         $torrentUpdate['promotion_until'] = $torrent->promotion_until->addSeconds($diffInSeconds);
                     }
