@@ -36,7 +36,7 @@ class Cleanup extends Command
         $idStr = $this->option('id_str') ?: "";
         $idRedisKey = $this->option('id_redis_key') ?: "";
         $commentRequestId = $this->option('request_id');
-        $delay = $this->option('delay') ?: 0;
+        $delay = intval($this->option('delay') ?: 0);
         $this->info("beginId: $beginId, endId: $endId, idStr: $idStr, idRedisKey: $idRedisKey, commentRequestId: $commentRequestId, delay: $delay, action: $action");
         if ($action == 'seed_bonus') {
             CalculateUserSeedBonus::dispatch($beginId, $endId, $idStr, $idRedisKey, $commentRequestId)->delay($delay);
