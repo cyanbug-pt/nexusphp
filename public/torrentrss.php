@@ -171,15 +171,14 @@ if ($where) {
     }
 }
 $sort = "id desc";
-$fieldStr = "torrents.id, torrents.category, torrents.name, torrents.small_descr, torrents.descr, torrents.info_hash, torrents.size, torrents.added, torrents.anonymous, torrents.owner, categories.name AS category_name";
-//$query = "SELECT torrents.id, torrents.category, torrents.name, torrents.small_descr, torrents.descr, torrents.info_hash, torrents.size, torrents.added, torrents.anonymous, users.username AS username, categories.id AS cat_id, categories.name AS cat_name FROM torrents LEFT JOIN categories ON category = categories.id LEFT JOIN users ON torrents.owner = users.id $where ORDER BY $sort LIMIT $limit";
+$fieldStr = "torrents.id, torrents.category, torrents.name, torrents.small_descr, torrent_extras.descr, torrents.info_hash, torrents.size, torrents.added, torrents.anonymous, torrents.owner, categories.name AS category_name";
 if (!$noNormalResults) {
-    $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id $normalWhere ORDER BY $sort LIMIT $limit";
+    $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id $normalWhere ORDER BY $sort LIMIT $limit";
     $normalRows = \Nexus\Database\NexusDB::select($query);
 }
 if (!empty($prependIdArr) && $startindex == 0) {
     $prependIdStr = implode(',', $prependIdArr);
-    $prependRows = \Nexus\Database\NexusDB::select("SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id where torrents.id in ($prependIdStr) and $where ORDER BY field(torrents.id, $prependIdStr)");
+    $prependRows = \Nexus\Database\NexusDB::select("SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id where torrents.id in ($prependIdStr) and $where ORDER BY field(torrents.id, $prependIdStr)");
 }
 $list = [];
 foreach ($prependRows as $row) {
