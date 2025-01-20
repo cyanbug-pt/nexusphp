@@ -1138,7 +1138,7 @@ class ExamRepository extends BaseRepository
             $result += $examUsers->count();
             $now = Carbon::now()->toDateTimeString();
             $examUserIdArr = $uidToDisable = $messageToSend = $userBanLog = $userModcommentUpdate = [];
-            $bonusLog = $userBonusCommentUpdate = $userBonusUpdate = $uidToUpdateBonus = [];
+            $bonusLog = $userBonusUpdate = $uidToUpdateBonus = [];
             $examUserToInsert = [];
             foreach ($examUsers as $examUser) {
                 $minId = $examUser->id;
@@ -1183,13 +1183,6 @@ class ExamRepository extends BaseRepository
                                 "new_total_value" => $examUser->user->seedbonus + $exam->success_reward_bonus,
                                 "business_type" => BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD,
                             ];
-                            $userBonusComment = nexus_trans("exam.reward_bonus_comment", [
-                                'exam_name' => $exam->name,
-                                'begin' => $examUser->begin,
-                                'end' => $examUser->end,
-                                'success_reward_bonus' => $exam->success_reward_bonus,
-                            ], $locale);
-                            $userBonusCommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', bonuscomment)", $uid, addslashes($userBonusComment));
                             $userBonusUpdate[] = sprintf("when `id` = %s then seedbonus + %d", $uid, $exam->success_reward_bonus);
                         }
                     }
@@ -1230,13 +1223,6 @@ class ExamRepository extends BaseRepository
                                 "new_total_value" => $examUser->user->seedbonus - $exam->fail_deduct_bonus,
                                 "business_type" => BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT,
                             ];
-                            $userBonusComment = nexus_trans("exam.deduct_bonus_comment", [
-                                'exam_name' => $exam->name,
-                                'begin' => $examUser->begin,
-                                'end' => $examUser->end,
-                                'fail_deduct_bonus' => $exam->fail_deduct_bonus,
-                            ], $locale);
-                            $userBonusCommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', bonuscomment)", $uid, addslashes($userBonusComment));
                             $userBonusUpdate[] = sprintf("when `id` = %s then seedbonus - %d", $uid, $exam->fail_deduct_bonus);
                         }
                     }
@@ -1256,7 +1242,7 @@ class ExamRepository extends BaseRepository
                     'msg' => $msg
                 ];
             }
-            DB::transaction(function () use ($uidToDisable, $messageToSend, $examUserIdArr, $examUserToInsert, $userBanLog, $userModcommentUpdate, $userBonusUpdate, $userBonusCommentUpdate, $bonusLog, $uidToUpdateBonus, $userTable, $logPrefix) {
+            DB::transaction(function () use ($uidToDisable, $messageToSend, $examUserIdArr, $examUserToInsert, $userBanLog, $userModcommentUpdate, $userBonusUpdate, $bonusLog, $uidToUpdateBonus, $userTable, $logPrefix) {
                 ExamUser::query()->whereIn('id', $examUserIdArr)->update(['status' => ExamUser::STATUS_FINISHED]);
                 do {
                     $deleted = ExamProgress::query()->whereIn('exam_user_id', $examUserIdArr)->limit(10000)->delete();
@@ -1281,8 +1267,8 @@ class ExamRepository extends BaseRepository
                 if (!empty($userBonusUpdate)) {
                     $uidStr = implode(', ', $uidToUpdateBonus);
                     $sql = sprintf(
-                        "update %s set seedbonus = case %s end, bonuscomment = case %s end where id in (%s)",
-                        $userTable, implode(' ', $userBonusUpdate), implode(' ', $userBonusCommentUpdate), $uidStr
+                        "update %s set seedbonus = case %s end where id in (%s)",
+                        $userTable, implode(' ', $userBonusUpdate), $uidStr
                     );
                     $updateResult = DB::update($sql);
                     do_log(sprintf("$logPrefix, update %s users: %s seedbonus, sql: %s, updateResult: %s", count($uidToUpdateBonus), $uidStr, $sql, $updateResult));
