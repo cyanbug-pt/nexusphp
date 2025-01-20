@@ -320,7 +320,7 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
 	$imageresizer = $imageresizer ? 1 : 0;
 	$s = $text;
 
-	if ($strip_html) {
+	if ($strip_html && !is_null($s)) {
 		$s = htmlspecialchars($s);
 	}
 
@@ -2537,7 +2537,7 @@ if ($CURUSER){
         foreach ($icons as $icon) {
 
 ?>
-<link rel="stylesheet" href="<?php echo htmlspecialchars(trim($icon['cssfile'], '/')).$cssupdatedate?>" type="text/css" />
+<link rel="stylesheet" href="<?php echo htmlspecialchars(trim($icon['cssfile'] ?? '', '/')).$cssupdatedate?>" type="text/css" />
 <?php
 	}}
 }
