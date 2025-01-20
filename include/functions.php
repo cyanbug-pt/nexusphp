@@ -314,13 +314,16 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
 	global $lang_functions;
 	global $CURUSER, $SITENAME, $BASEURL;
 	global $tempCode, $tempCodeCount;
+    if ($text == '') {
+        return "";
+    }
     $enableattach_attachment = get_setting('attachment.enableattach');
 	$tempCode = array();
 	$tempCodeCount = 0;
 	$imageresizer = $imageresizer ? 1 : 0;
 	$s = $text;
 
-	if ($strip_html && !is_null($s)) {
+	if ($strip_html) {
 		$s = htmlspecialchars($s);
 	}
 
