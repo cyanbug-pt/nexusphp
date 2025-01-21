@@ -863,6 +863,9 @@ function do_action($name, ...$args)
 
 function isIPSeedBoxFromASN($ip, $exceptionWhenYes = false): bool
 {
+    $redis = \Nexus\Database\NexusDB::redis();
+    $key = "nexus_asn";
+    $notFoundCacheValue = "__NOT_FOUND__";
    try {
        static $reader;
        $database = nexus_env('GEOIP2_ASN_DATABASE');
@@ -878,10 +881,23 @@ function isIPSeedBoxFromASN($ip, $exceptionWhenYes = false): bool
        if ($asn <= 0) {
            return false;
        }
+       $cacheResult = $redis->hGet($key, $asn);
+       if ($cacheResult !== false) {
+           if ($cacheResult === $notFoundCacheValue) {
+               return false;
+           } else {
+               return true;
+           }
+       }
        $row = \Nexus\Database\NexusDB::getOne("seed_box_records", "asn = $asn", "id");
+       if (!empty($row)) {
+           $redis->hSet($key, $asn, $row['id']);
+       } else {
+           $redis->hSet($key, $asn, $notFoundCacheValue);
+       }
    } catch (\Throwable $throwable) {
-       do_log("ip: $ip, error: " . $throwable->getMessage(), "error");
-       return false;
+       do_log("ip: $ip, " . $throwable->getMessage());
+       $redis->hSet($key, $asn, $notFoundCacheValue);
    }
    $result = !empty($row);
    if ($result && $exceptionWhenYes) {
