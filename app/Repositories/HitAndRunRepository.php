@@ -215,7 +215,7 @@ class HitAndRunRepository extends BaseRepository
                 }
 
                 //unreached
-                if ($row->created_at->addHours($setting['inspect_time'])->lte(Carbon::now())) {
+                if ($row->created_at->addHours((int)$setting['inspect_time'])->lte(Carbon::now())) {
                     $result = $this->unreached($row, $setting, !isset($disabledUsers[$row->uid]));
                     if ($result) {
                         $successCounts++;
