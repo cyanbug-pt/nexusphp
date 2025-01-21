@@ -242,7 +242,7 @@ $sql = "UPDATE torrents SET " . join(",", $updateset) . " WHERE id = $id";
 do_log("[UPDATE_TORRENT]: $sql");
 $affectedRows = sql_query($sql) or sqlerr(__FILE__, __LINE__);
 $torrentInfo = \App\Models\Torrent::query()->find($id);
-$torrentInfo->extra()->update($extraUpdate);
+$torrentInfo->extra()->updateOrCreate(['torrent_id' => $id], $extraUpdate);
 fire_event("torrent_updated", $torrentInfo, $torrentOld);
 $dateTimeStringNow = date("Y-m-d H:i:s");
 
