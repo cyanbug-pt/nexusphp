@@ -441,6 +441,7 @@ if (!empty($tagIdArr)) {
 foreach ($filelist as $file) {
 	@sql_query("INSERT INTO files (torrent, filename, size) VALUES ($id, ".sqlesc($file[0]).",".$file[1].")");
 }
+$extra['torrent_id'] = $id;
 \App\Models\TorrentExtra::query()->create($extra);
 
 //===add karma
