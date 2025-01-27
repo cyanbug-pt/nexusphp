@@ -14,7 +14,7 @@ class ViewHitAndRun extends ViewRecord
 {
     protected static string $resource = HitAndRunResource::class;
 
-    protected static string $view = 'filament.detail-card';
+//    protected static string $view = 'filament.detail-card';
 
     private function getDetailCardData(): array
     {

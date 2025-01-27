@@ -11,6 +11,7 @@ use App\Models\Snatch;
 use App\Models\Torrent;
 use App\Models\User;
 use App\Models\UserBanLog;
+use App\Models\UserModifyLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
@@ -1137,9 +1138,10 @@ class ExamRepository extends BaseRepository
             }
             $result += $examUsers->count();
             $now = Carbon::now()->toDateTimeString();
-            $examUserIdArr = $uidToDisable = $messageToSend = $userBanLog = $userModcommentUpdate = [];
+            $examUserIdArr = $uidToDisable = $messageToSend = $userBanLog = [];
             $bonusLog = $userBonusUpdate = $uidToUpdateBonus = [];
             $examUserToInsert = [];
+            $userModifyLogs = [];
             foreach ($examUsers as $examUser) {
                 $minId = $examUser->id;
                 $examUserIdArr[] = $examUser->id;
@@ -1200,8 +1202,14 @@ class ExamRepository extends BaseRepository
                             'begin' => $examUser->begin,
                             'end' => $examUser->end
                         ], $locale);
-                        $userModcomment = sprintf('%s - %s', date('Y-m-d'), $userModcomment);
-                        $userModcommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', modcomment)", $uid, $userModcomment);
+//                        $userModcomment = sprintf('%s - %s', date('Y-m-d'), $userModcomment);
+//                        $userModcommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', modcomment)", $uid, $userModcomment);
+                        $userModifyLogs[] = [
+                            'user_id' => $uid,
+                            'content' => $userModcomment,
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
                         $banLogReason = nexus_trans('exam.ban_log_reason', [
                             'exam_name' => $exam->name,
                             'begin' => $examUser->begin,
@@ -1242,7 +1250,7 @@ class ExamRepository extends BaseRepository
                     'msg' => $msg
                 ];
             }
-            DB::transaction(function () use ($uidToDisable, $messageToSend, $examUserIdArr, $examUserToInsert, $userBanLog, $userModcommentUpdate, $userBonusUpdate, $bonusLog, $uidToUpdateBonus, $userTable, $logPrefix) {
+            DB::transaction(function () use ($uidToDisable, $messageToSend, $examUserIdArr, $examUserToInsert, $userBanLog, $userModifyLogs, $userBonusUpdate, $bonusLog, $uidToUpdateBonus, $userTable, $logPrefix) {
                 ExamUser::query()->whereIn('id', $examUserIdArr)->update(['status' => ExamUser::STATUS_FINISHED]);
                 do {
                     $deleted = ExamProgress::query()->whereIn('exam_user_id', $examUserIdArr)->limit(10000)->delete();
@@ -1252,8 +1260,8 @@ class ExamRepository extends BaseRepository
                 if (!empty($uidToDisable)) {
                     $uidStr = implode(', ', $uidToDisable);
                     $sql = sprintf(
-                        "update %s set enabled = '%s', modcomment = case %s end where id in (%s)",
-                        $userTable, User::ENABLED_NO, implode(' ', $userModcommentUpdate), $uidStr
+                        "update %s set enabled = '%s' where id in (%s)",
+                        $userTable, User::ENABLED_NO, $uidStr
                     );
                     $updateResult = DB::update($sql);
                     do_log(sprintf("$logPrefix, disable %s users: %s, sql: %s, updateResult: %s", count($uidToDisable), $uidStr, $sql, $updateResult));
@@ -1275,6 +1283,9 @@ class ExamRepository extends BaseRepository
                 }
                 if (!empty($bonusLog)) {
                     BonusLogs::query()->insert($bonusLog);
+                }
+                if (!empty($userModifyLogs)) {
+                    UserModifyLog::query()->insert($userModifyLogs);
                 }
             });
         }
