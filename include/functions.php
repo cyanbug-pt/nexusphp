@@ -3366,7 +3366,7 @@ function linkcolor($num) {
 }
 
 function writecomment($userid, $comment, $oldModcomment = null) {
-    \App\Models\UserModifyLog::query()->create(['user_id' => $userid, 'content' => date("Y-m-d") . " - " . $comment]);
+    \App\Models\UserModifyLog::query()->create(['user_id' => $userid, 'content' => $comment]);
 //    if (is_null($oldModcomment)) {
 //        $res = sql_query("SELECT modcomment FROM users WHERE id = '$userid'") or sqlerr(__FILE__, __LINE__);
 //        $arr = mysql_fetch_assoc($res);

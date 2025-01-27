@@ -175,7 +175,7 @@ function ban_user_with_leech_warning_expired()
         ->where('enabled', \App\Models\User::ENABLED_YES)
         ->where('leechwarn', 'yes')
         ->where('leechwarnuntil', '<', $dt)
-        ->get(['id', 'username', 'modcomment', 'lang']);
+        ->get(['id', 'username', 'lang']);
     if ($results->isEmpty()) {
         return [];
     }
@@ -206,28 +206,37 @@ function ban_user_with_leech_warning_expired()
 
 function disable_user(\Illuminate\Database\Eloquent\Builder $query, $reasonKey)
 {
-    $results = $query->where('enabled', \App\Models\User::ENABLED_YES)->get(['id', 'username', 'modcomment', 'lang']);
+    $results = $query->where('enabled', \App\Models\User::ENABLED_YES)->get(['id', 'username', 'lang']);
     if ($results->isEmpty()) {
         return [];
     }
     $results->load('language');
     $uidArr = [];
     $userBanLogData = [];
+    $userModifyLogs = [];
     foreach ($results as $user) {
         $uid = $user->id;
         $uidArr[] = $uid;
+        $reason = nexus_trans($reasonKey, [], $user->locale);
         $userBanLogData[] = [
             'uid' => $uid,
             'username' => $user->username,
-            'reason' => nexus_trans($reasonKey, [], $user->locale),
+            'reason' => $reason,
+        ];
+        $userModifyLogs[] = [
+            'user_id' => $uid,
+            'content' => sprintf("[CLEANUP] %s", $reason),
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
         ];
     }
     $sql = sprintf(
-        "update users set enabled = '%s', modcomment = concat_ws('\n', '%s [CLEANUP] %s', modcomment) where id in (%s)",
-        \App\Models\User::ENABLED_NO, date('Y-m-d'), addslashes($reasonKey), implode(', ', $uidArr)
+        "update users set enabled = '%s' where id in (%s)",
+        \App\Models\User::ENABLED_NO, implode(', ', $uidArr)
     );
     sql_query($sql);
     \App\Models\UserBanLog::query()->insert($userBanLogData);
+    \App\Models\UserModifyLog::query()->insert($userModifyLogs);
     do_log("[DISABLE_USER]($reasonKey): " . implode(', ', $uidArr));
     return $uidArr;
 }
@@ -697,31 +706,36 @@ function docleanup($forceAll = 0, $printProgress = false) {
     }
 
 	//remove VIP status if time's up
-	$res = sql_query("SELECT id, modcomment, class FROM users WHERE vip_added='yes' AND vip_until < NOW()") or sqlerr(__FILE__, __LINE__);
-	if (mysql_num_rows($res) > 0)
+	$res = sql_query("SELECT id, class FROM users WHERE vip_added='yes' AND vip_until < NOW()") or sqlerr(__FILE__, __LINE__);
+	$userModifyLogs = [];
+    if (mysql_num_rows($res) > 0)
 	{
 		while ($arr = mysql_fetch_assoc($res))
 		{
 			$dt = sqlesc(date("Y-m-d H:i:s"));
 			$subject = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_vip_status_removed']);
 			$msg = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_vip_status_removed_body']);
-			///---AUTOSYSTEM MODCOMMENT---//
-			$modcomment = htmlspecialchars($arr["modcomment"]);
-			$modcomment =  date("Y-m-d") . " - VIP status removed by - AutoSystem.\n". $modcomment;
-			$modcom =  sqlesc($modcomment);
-			///---end
+            $userModifyLogs[] = [
+                'user_id' => $arr['id'],
+                'content' => "VIP status removed by - AutoSystem",
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ];
 			if ($arr['class'] > \App\Models\User::CLASS_VIP) {
                 /**
                  * @since 1.8
                  * never demotion VIP above
                  */
-                sql_query("UPDATE users SET vip_added = 'no', vip_until = null, modcomment = $modcom WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                sql_query("UPDATE users SET vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
             } else {
-                sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = null, modcomment = $modcom WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+                sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
                 sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
             }
 		}
 	}
+    if (!empty($userModifyLogs)) {
+        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
+    }
 	$log = "remove VIP status if time's up";
 	do_log($log);
 	if ($printProgress) {
@@ -729,7 +743,8 @@ function docleanup($forceAll = 0, $printProgress = false) {
 	}
 
     //remove donor status if time's up
-    $res = sql_query("SELECT id, modcomment FROM users WHERE donor='yes' AND donoruntil is not null and donoruntil != '0000-00-00 00:00:00' and donoruntil < NOW()") or sqlerr(__FILE__, __LINE__);
+    $userModifyLogs = [];
+    $res = sql_query("SELECT id FROM users WHERE donor='yes' AND donoruntil is not null and donoruntil != '0000-00-00 00:00:00' and donoruntil < NOW()") or sqlerr(__FILE__, __LINE__);
     if (mysql_num_rows($res) > 0)
     {
         while ($arr = mysql_fetch_assoc($res))
@@ -737,14 +752,18 @@ function docleanup($forceAll = 0, $printProgress = false) {
             $dt = sqlesc(date("Y-m-d H:i:s"));
             $subject = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_donor_status_removed']);
             $msg = sqlesc($lang_cleanup_target[get_user_lang($arr['id'])]['msg_donor_status_removed_body']);
-            ///---AUTOSYSTEM MODCOMMENT---//
-            $modcomment = htmlspecialchars($arr["modcomment"]);
-            $modcomment =  date("Y-m-d") . " - donor status removed by - AutoSystem.\n". $modcomment;
-            $modcom =  sqlesc($modcomment);
-            ///---end
-            sql_query("UPDATE users SET donor = 'no', modcomment = $modcom WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+            $userModifyLogs[] = [
+                'user_id' => $arr['id'],
+                'content' => "donor status removed by - AutoSystem",
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ];
+            sql_query("UPDATE users SET donor = 'no' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
             sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
         }
+    }
+    if (!empty($userModifyLogs)) {
+        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
     }
     $log = "remove donor status if time's up";
     do_log($log);
