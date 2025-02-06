@@ -89,7 +89,12 @@ else
 	}
 	$date=sqlesc(time());
 	$text=trim($_GET["shbox_text"]);
-
+    if ($userid > 0) {
+        $lockRes = \Nexus\Database\NexusDB::redis()->set($userid, 1, ['nx', 'ex'=>60]);
+        if ($lockRes !== true){
+            die($lang_shoutbox['speaking_too_often']);
+        }
+    }
 	sql_query("INSERT INTO shoutbox (userid, date, text, type) VALUES (" . sqlesc($userid) . ", $date, " . sqlesc($text) . ", ".sqlesc($type).")") or sqlerr(__FILE__, __LINE__);
 	print "<script type=\"text/javascript\">parent.document.forms['shbox'].shbox_text.value='';</script>";
 }

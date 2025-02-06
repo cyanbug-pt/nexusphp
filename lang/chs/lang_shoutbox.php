@@ -10,6 +10,7 @@ $lang_shoutbox = array
 	'text_ago' => "前",
 	'text_helpbox_disabled' => "求助区当前关闭中。你在搞什么鬼？",
 	'text_no_permission_to_shoutbox' => "你没有在群聊区发言的权力。你在搞什么鬼？",
+    "speaking_too_often" => "不要刷屏!",
 );
 
 ?>

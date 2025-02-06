@@ -14,6 +14,7 @@ use App\Models\Snatch;
 use App\Models\User;
 use App\Models\UserBanLog;
 use App\Models\UserMeta;
+use App\Models\UserModifyLog;
 use App\Models\UsernameChangeLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -286,13 +287,11 @@ class UserRepository extends BaseRepository
             'new' => $formatSize ?  mksize($new) : $new,
             'reason' => $reason,
         ], 'en');
-        $modCommentText = date('Y-m-d') . " - $modCommentText";
         do_log("user: $uid, $modCommentText", 'alert');
         $update = [
             $sourceField => $new,
-            'modcomment' => NexusDB::raw("if(modcomment = '', '$modCommentText', concat_ws('\n', '$modCommentText', modcomment))"),
+//            'modcomment' => NexusDB::raw("if(modcomment = '', '$modCommentText', concat_ws('\n', '$modCommentText', modcomment))"),
         ];
-
         $locale = $targetUser->locale;
         $fieldLabel = nexus_trans("user.labels.$sourceField", [], $locale);
         $msg = nexus_trans('message.field_value_change_message_body', [
@@ -309,7 +308,7 @@ class UserRepository extends BaseRepository
             'msg' => $msg,
             'added' => Carbon::now(),
         ];
-        NexusDB::transaction(function () use ($uid, $sourceField, $old, $new, $update, $message) {
+        NexusDB::transaction(function () use ($uid, $sourceField, $old, $new, $update, $message, $modCommentText) {
             $affectedRows = User::query()
                 ->where('id', $uid)
                 ->where($sourceField, $old)
@@ -319,6 +318,12 @@ class UserRepository extends BaseRepository
                 throw new \RuntimeException("Change fail, affected rows != 1($affectedRows)");
             }
             Message::query()->insert($message);
+            UserModifyLog::query()->insert([
+                'user_id' => $uid,
+                'content' => $modCommentText,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
         });
         $this->clearCache($targetUser);
         return true;

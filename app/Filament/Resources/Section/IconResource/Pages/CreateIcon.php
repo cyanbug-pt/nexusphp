@@ -8,7 +8,7 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateIcon extends CreateRecord
 {
-    protected static string $view = 'filament.resources.system.category-icon-resource.pages.create-record';
+//    protected static string $view = 'filament.resources.system.category-icon-resource.pages.create-record';
 
     protected static string $resource = IconResource::class;
 

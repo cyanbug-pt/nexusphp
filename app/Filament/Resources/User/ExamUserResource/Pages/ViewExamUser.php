@@ -15,7 +15,7 @@ class ViewExamUser extends ViewRecord
 {
     protected static string $resource = ExamUserResource::class;
 
-    protected static string $view = 'filament.resources.user.exam-user-resource.pages.detail';
+//    protected static string $view = 'filament.resources.user.exam-user-resource.pages.detail';
 
     private function getDetailCardData(): array
     {

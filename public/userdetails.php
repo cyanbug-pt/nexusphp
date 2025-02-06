@@ -501,6 +501,7 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
             ->orderBy("id", "desc")
             ->limit(20)
             ->get()
+            ->map(fn ($item) => sprintf("%s - %s", $item->created_at->format("Y-m-d"), $item->content))
             ->implode("content", "\n")
         ;
 		tr($lang_userdetails['row_comment'], "<textarea cols=\"60\" rows=\"6\" name=\"modcomment\">".$modcomment."</textarea>", 1);

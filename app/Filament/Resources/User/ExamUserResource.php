@@ -11,6 +11,7 @@ use App\Repositories\HitAndRunRepository;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Filament\Infolists;
+use Filament\Infolists\Components;
 
 class ExamUserResource extends Resource
 {
@@ -137,6 +140,96 @@ class ExamUserResource extends Resource
                     ->icon('heroicon-o-pencil'),
             ]);
     }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Components\Grid::make(2)->schema([
+                    Components\Group::make([
+                        Infolists\Components\TextEntry::make('id'),
+                        Infolists\Components\TextEntry::make('statusText')
+                            ->label(__("label.status"))
+                        ,
+                        Infolists\Components\TextEntry::make('uid')
+                            ->formatStateUsing(fn ($record) => username_for_admin($record->uid))
+                            ->label(__("label.username"))
+                        ,
+                        Infolists\Components\TextEntry::make('exam.name')
+//                    ->formatStateUsing(fn ($record) => $record->torrent->name)
+                            ->label(__("label.exam.label"))
+                        ,
+                        Infolists\Components\TextEntry::make('begin')
+                            ->label(__("label.begin"))
+                        ,
+                        Infolists\Components\TextEntry::make('end')
+                            ->label(__("label.end"))
+                        ,
+                        Infolists\Components\TextEntry::make('isDoneText')
+                            ->label(__("label.exam_user.is_done"))
+                        ,
+                        Infolists\Components\TextEntry::make('created_at')
+                            ->label(__("label.created_at"))
+                        ,
+                        Infolists\Components\TextEntry::make('updated_at')
+                            ->label(__("label.updated_at"))
+                        ,
+                    ])
+                        ->columnSpan(1)
+                        ->columns(2)
+                    ,
+                    Components\Group::make([
+                        Components\Grid::make(3) // 3 列的网格
+                        ->schema([
+                            Infolists\Components\TextEntry::make('header1')->label('Header 1'),
+                            Infolists\Components\TextEntry::make('header2')->label('Header 2'),
+                            Infolists\Components\TextEntry::make('header3')->label('Header 3'),
+                        ]),
+                        Components\Grid::make(3) // 数据行
+                        ->schema([
+                            Infolists\Components\TextEntry::make('data1')->getStateUsing(fn ($record) => $record->data1),
+                            Infolists\Components\TextEntry::make('data2')->getStateUsing(fn ($record) => $record->data2),
+                            Infolists\Components\TextEntry::make('data3')->getStateUsing(fn ($record) => $record->data3),
+                        ]),
+                        // 更多数据行...
+                        Components\Grid::make(3) // 数据行
+                        ->schema([
+                            Infolists\Components\TextEntry::make('data1')->getStateUsing(fn ($record) => $record->data4),
+                            Infolists\Components\TextEntry::make('data2')->getStateUsing(fn ($record) => $record->data5),
+                            Infolists\Components\TextEntry::make('data3')->getStateUsing(fn ($record) => $record->data6),
+                        ]),
+                        ])->columnSpan(1),
+                ]),
+            ]);
+
+    }
+
+//    private static function buildProgressTable(): array
+//    {
+//        $exam = $record->exam;
+//        $passTransKey = $exam->getPassResultTransKey('pass');
+//        $notPassTransKey = $exam->getPassResultTransKey('not_pass');
+//        $result = [];
+//        $result[] = Components\Grid::make(4) // 4 列的网格
+//        ->schema([
+//            Infolists\Components\TextEntry::make('index')->label(__('label.exam.index_required_label')),
+//            Infolists\Components\TextEntry::make('require')->label(__('label.exam.index_required_value')),
+//            Infolists\Components\TextEntry::make('current')->label(__('label.exam.index_current_value')),
+//            Infolists\Components\TextEntry::make('result')->label(__('label.exam.index_result')),
+//        ]);
+//        foreach($record->progressFormatted as $key => $index) {
+//            $result[] =  Components\Grid::make(4) // 4 列的网格
+//            ->schema([
+//                Infolists\Components\TextEntry::make('index'.$key)->label($index['index_formatted']),
+//                Infolists\Components\TextEntry::make('require'.$key)->label($index['require_value_formatted']),
+//                Infolists\Components\TextEntry::make('current'.$key)->label($index['current_value_formatted']),
+//                Infolists\Components\TextEntry::make('result'.$key)->label($index['passed'] ? __($passTransKey) : __($notPassTransKey)),
+//            ]);
+//        }
+//
+//
+//        return $result;
+//    }
 
     public static function getEloquentQuery(): Builder
     {

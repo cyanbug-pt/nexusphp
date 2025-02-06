@@ -2870,7 +2870,7 @@ if ($msgalert)
             $Cache->cache_value($cacheKey, $toApprovalCounts, 60);
         }
         if ($toApprovalCounts) {
-            msgalert('/nexusphp/seed-box-records?tableFilters[status][value]=0', sprintf($lang_functions['text_seed_box_record_to_approval'], is_or_are($toApprovalCounts), $toApprovalCounts, add_s($toApprovalCounts)), 'darkred');
+            msgalert('/nexusphp/system/seed-box-records?tableFilters[status][value]=0', sprintf($lang_functions['text_seed_box_record_to_approval'], is_or_are($toApprovalCounts), $toApprovalCounts, add_s($toApprovalCounts)), 'darkred');
         }
     }
 

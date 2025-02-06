@@ -41,6 +41,12 @@ class IconResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Textarea::make('tip')
+                    ->default(nexus_trans('label.icon.desc'))
+                    ->disabled()
+                    ->columnSpanFull()
+                    ->rows(18)
+                ,
                 Forms\Components\TextInput::make('name')
                     ->label(__('label.name'))
                     ->required()
