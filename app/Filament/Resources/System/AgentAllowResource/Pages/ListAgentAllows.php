@@ -28,9 +28,9 @@ class ListAgentAllows extends PageList
                     $agentAllowRep = new AgentAllowRepository();
                     try {
                         $result = $agentAllowRep->checkClient($data['peer_id'], $data['agent']);
-                        $this->notify('success', __('admin.resources.agent_allow.check_pass_msg', ['id' => $result->id]));
+                        send_admin_success_notification(__('admin.resources.agent_allow.check_pass_msg', ['id' => $result->id]));
                     } catch (\Exception $exception) {
-                        $this->notify('danger', $exception->getMessage());
+                        send_admin_fail_notification($exception->getMessage());
                     }
                 })
 

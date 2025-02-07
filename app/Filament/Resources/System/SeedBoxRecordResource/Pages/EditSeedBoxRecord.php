@@ -24,10 +24,10 @@ class EditSeedBoxRecord extends EditRecord
         $rep = new SeedBoxRepository();
         try {
             $this->record = $rep->update($data, $this->record->id);
-            $this->notify('success', $this->getSavedNotificationTitle());
+            send_admin_success_notification();
             $this->redirect($this->getResource()::getUrl('index'));
         } catch (\Exception $exception) {
-            $this->notify('danger', $exception->getMessage());
+            send_admin_fail_notification($exception->getMessage());
         }
     }
 }

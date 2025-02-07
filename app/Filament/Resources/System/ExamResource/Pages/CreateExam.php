@@ -17,7 +17,7 @@ class CreateExam extends CreateRecord
         $examRep = new ExamRepository();
         try {
             $this->record = $examRep->store($data);
-            $this->notify('success', $this->getCreatedNotificationTitle());
+            send_admin_success_notification();
             if ($another) {
                 // Ensure that the form record is anonymized so that relationships aren't loaded.
                 $this->form->model($this->record::class);
@@ -30,7 +30,7 @@ class CreateExam extends CreateRecord
             $this->redirect($this->getResource()::getUrl('index'));
         } catch (\Exception $exception) {
             do_log($exception->getMessage() . "\n" . $exception->getTraceAsString(), "error");
-            $this->notify('danger', $exception->getMessage());
+            send_admin_fail_notification($exception->getMessage());
         }
     }
 

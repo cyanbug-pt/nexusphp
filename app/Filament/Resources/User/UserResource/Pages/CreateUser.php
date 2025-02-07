@@ -18,16 +18,10 @@ class CreateUser extends CreateRecord
         $data = $this->form->getState();
         try {
             $this->record = $userRep->store($data);
-            $this->notify(
-                'success ',
-                $this->getCreatedNotificationTitle(),
-            );
+            send_admin_success_notification();
             $this->redirect($this->getRedirectUrl());
         } catch (\Exception $exception) {
-            $this->notify(
-                'danger',
-                $exception->getMessage(),
-            );
+            send_admin_fail_notification($exception->getMessage());
         }
     }
 }

@@ -88,10 +88,10 @@ class ViewHitAndRun extends ViewRecord
                     $hitAndRunRep = new HitAndRunRepository();
                     try {
                         $hitAndRunRep->pardon($this->record->id, Auth::user());
-                        $this->notify('success', 'Success !');
+                        send_admin_success_notification();
                         $this->record = $this->resolveRecord($this->record->id);
                     } catch (\Exception $exception) {
-                        $this->notify('danger', $exception->getMessage());
+                        send_admin_fail_notification($exception->getMessage());
                     }
                 })
                 ->label(__('admin.resources.hit_and_run.action_pardon'))

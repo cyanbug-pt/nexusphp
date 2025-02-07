@@ -26,12 +26,12 @@ class ListSeedBoxRecords extends PageList
                 ->action(function ($data) {
                     try {
                         isIPSeedBox($data['ip'], $data['uid'], true, true);
-                        $this->notify('success', nexus_trans("seed-box.is_seed_box_no"));
+                        send_admin_success_notification(nexus_trans("seed-box.is_seed_box_no"));
                     } catch (SeedBoxYesException $exception) {
-                        $this->notify('danger', nexus_trans("seed-box.is_seed_box_yes", ['id' => $exception->getId()]));
+                        send_admin_fail_notification(nexus_trans("seed-box.is_seed_box_yes", ['id' => $exception->getId()]));
                     } catch (\Throwable $throwable) {
                         do_log($throwable->getMessage() . $throwable->getTraceAsString(), "error");
-                        $this->notify('danger', $throwable->getMessage());
+                        send_admin_fail_notification($throwable->getMessage());
                     }
                 })
         ];

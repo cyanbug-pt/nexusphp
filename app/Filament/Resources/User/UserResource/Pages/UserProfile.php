@@ -250,7 +250,7 @@ class UserProfile extends ViewRecord
             ->requiresConfirmation()
             ->action(function () {
                 if (Auth::user()->class <= $this->record->class) {
-                    $this->notify('danger', 'No permission!');
+                    send_admin_fail_notification("No permission!");
                     return;
                 }
                 $this->record->status = User::STATUS_CONFIRMED;

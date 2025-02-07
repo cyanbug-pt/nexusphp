@@ -81,10 +81,10 @@ class ViewExamUser extends ViewRecord
                     $examRep = new ExamRepository();
                     try {
                         $examRep->avoidExamUser($this->record->id);
-                        $this->notify('success', 'Success !');
+                        send_admin_success_notification();
                         $this->record = $this->resolveRecord($this->record->id);
                     } catch (\Exception $exception) {
-                        $this->notify('danger', $exception->getMessage());
+                        send_admin_fail_notification($exception->getMessage());
                     }
                 })
                 ->label(__('admin.resources.exam_user.action_avoid')),
@@ -106,10 +106,10 @@ class ViewExamUser extends ViewRecord
                     $examRep = new ExamRepository();
                     try {
                         $examRep->updateExamUserEnd($this->record, Carbon::parse($data['end']), $data['reason'] ?? "");
-                        $this->notify('success', 'Success !');
+                        send_admin_success_notification();
                         $this->record = $this->resolveRecord($this->record->id);
                     } catch (\Exception $exception) {
-                        $this->notify('danger', $exception->getMessage());
+                        send_admin_fail_notification($exception->getMessage());
                     }
                 })
                 ->label(__('admin.resources.exam_user.action_update_end')),
