@@ -37,6 +37,13 @@ class SeedBoxRecord extends NexusModel
         );
     }
 
+    protected function ipRange(): Attribute
+    {
+        return new Attribute(
+            get: fn($value, $attributes) => $attributes['ip'] ?: sprintf('%s ~ %s', $attributes['ip_begin'] ?? '', $attributes['ip_end'] ?? ''),
+        );
+    }
+
     protected function statusText(): Attribute
     {
         return new Attribute(

@@ -74,7 +74,7 @@ class SeedBoxRecordResource extends Resource
                 Tables\Columns\TextColumn::make('operator')->label(__('label.seed_box_record.operator'))->searchable(),
                 Tables\Columns\TextColumn::make('bandwidth')->label(__('label.seed_box_record.bandwidth')),
                 Tables\Columns\TextColumn::make('asn')->label(__('label.seed_box_record.asn')),
-                Tables\Columns\TextColumn::make('ip')
+                Tables\Columns\TextColumn::make('ipRange')
                     ->label(__('label.seed_box_record.ip'))
                     ->searchable(true, function (Builder $query, $search) {
                         try {
@@ -87,7 +87,7 @@ class SeedBoxRecordResource extends Resource
                             do_log("Invalid IP: $search, error: " . $exception->getMessage());
                         }
                     })
-                    ->formatStateUsing(fn ($record) => $record->ip ?: sprintf('%s ~ %s', $record->ip_begin, $record->ip_end)),
+                ,
                 Tables\Columns\TextColumn::make('comment')->label(__('label.comment'))->searchable(),
                 Tables\Columns\IconColumn::make('is_allowed')->boolean()->label(__('label.seed_box_record.is_allowed')),
                 Tables\Columns\BadgeColumn::make('status')
@@ -99,6 +99,7 @@ class SeedBoxRecordResource extends Resource
                     ->formatStateUsing(fn ($record) => $record->statusText)
                     ->label(__('label.seed_box_record.status')),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
                 Tables\Filters\Filter::make('id')
                     ->form([
@@ -148,7 +149,7 @@ class SeedBoxRecordResource extends Resource
                         try {
                             $rep->updateStatus($record, $data['status'], $data['reason']);
                         } catch (\Exception $exception) {
-                            Filament::notify('danger', class_basename($exception));
+                            send_admin_fail_notification(class_basename($exception));
                         }
                     })
                 ,
