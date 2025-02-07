@@ -728,7 +728,7 @@ if ($action == "exchange") {
 			$message = $_POST["message"];
 			//==gift for peeps with no more options
 			$usernamegift = sqlesc(trim($_POST["username"]));
-			$res = sql_query("SELECT id, bonuscomment FROM users WHERE username=" . $usernamegift);
+			$res = sql_query("SELECT id, seedbonus FROM users WHERE username=" . $usernamegift);
 			$arr = mysql_fetch_assoc($res);
             if (empty($arr)) {
                 stdmsg($lang_mybonus['text_error'], $lang_mybonus['text_receiver_not_exists'], 0);
@@ -737,7 +737,7 @@ if ($action == "exchange") {
             }
 			$useridgift = $arr['id'];
 			$userseedbonus = $arr['seedbonus'];
-			$receiverbonuscomment = $arr['bonuscomment'];
+//			$receiverbonuscomment = $arr['bonuscomment'];
 			if (!is_numeric($points) || $points < $bonusarray['points']) {
 				//write_log("User " . $CURUSER["username"] . "," . $CURUSER["ip"] . " is hacking bonus system",'mod');
 				stdmsg($lang_mybonus['text_error'], $lang_mybonus['bonus_amount_not_allowed']);
@@ -755,7 +755,7 @@ if ($action == "exchange") {
 					$aftertaxpoint -= $basictax_bonus;
 
 				$points2receiver = number_format($aftertaxpoint,1);
-				$newreceiverbonuscomment = date("Y-m-d") . " + " .$points2receiver. " Points (after tax) as a gift from ".($CURUSER["username"]).".\n " .htmlspecialchars($receiverbonuscomment);
+//				$newreceiverbonuscomment = date("Y-m-d") . " + " .$points2receiver. " Points (after tax) as a gift from ".($CURUSER["username"]).".\n " .htmlspecialchars($receiverbonuscomment);
 				if ($userid==$useridgift){
 					stdmsg($lang_mybonus['text_huh'], $lang_mybonus['text_karma_self_giving_warning'], 0);
 					stdfoot();
@@ -764,7 +764,8 @@ if ($action == "exchange") {
 
 //				sql_query("UPDATE users SET seedbonus = seedbonus - $points, bonuscomment = ".sqlesc($bonuscomment)." WHERE id = ".sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
                 $bonusRep->consumeUserBonus($CURUSER['id'], $points, \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE, $points2 . " Points as gift to ".htmlspecialchars(trim($_POST["username"])));
-				sql_query("UPDATE users SET seedbonus = seedbonus + $aftertaxpoint, bonuscomment = ".sqlesc($newreceiverbonuscomment)." WHERE id = ".sqlesc($useridgift));
+				sql_query("UPDATE users SET seedbonus = seedbonus + $aftertaxpoint WHERE id = ".sqlesc($useridgift));
+                \App\Models\BonusLogs::add($useridgift, $userseedbonus, $aftertaxpoint, $userseedbonus + $aftertaxpoint, " + " .$points2receiver. " Points (after tax) as a gift from ".($CURUSER["username"]), \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT);
 
 				//===send message
 				$subject = sqlesc($lang_mybonus_target[get_user_lang($useridgift)]['msg_someone_loves_you']);

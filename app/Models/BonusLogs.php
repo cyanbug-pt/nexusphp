@@ -44,6 +44,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
     const BUSINESS_TYPE_TORRENT_BE_DOWNLOADED = 1001;
     const BUSINESS_TYPE_RECEIVE_REWARD = 1002;
+    const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
 
     public static array $businessTypes = [
         self::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => ['text' => 'Cancel H&R'],
@@ -69,6 +70,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
         self::BUSINESS_TYPE_RECEIVE_REWARD => ['text' => 'Receive reward'],
+        self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
     ];
 
     public function getBusinessTypeTextAttribute()

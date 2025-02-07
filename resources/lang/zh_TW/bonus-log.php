@@ -25,6 +25,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => '工作組工資',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => '種子被下載',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => '收到獎勵',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => '收到禮物',
     ],
     'fields' => [
         'business_type' => '業務類型',
