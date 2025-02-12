@@ -3,7 +3,7 @@ require "../include/bittorrent.php";
 dbconn();
 require_once(get_langfile_path());
 loggedinorreturn();
-
+$userInfo = \App\Models\User::query()->findOrFail($CURUSER["id"], \App\Models\User::$commonFields);
 function bark($msg) {
 	stdhead();
 	global $lang_usercp;
@@ -940,6 +940,7 @@ EOD;
 }
 
 stdhead($lang_usercp['head_control_panel'].$lang_usercp['head_home']);
+\Nexus\Nexus::js('vendor/jquery-loading/jquery.loading.min.js', 'footer', true);
 usercpmenu ();
 //Comment Results
 $commentcount = get_row_count("comments", "WHERE user=" . sqlesc($CURUSER["id"]));
@@ -1126,24 +1127,22 @@ $tokenLabel = nexus_trans("token.label");
 $columnName = nexus_trans('label.name');
 $columnCreatedAt = nexus_trans('label.created_at');
 $actionCreate = nexus_trans('label.create');
-//$res = \App\Models\SeedBoxRecord::query()->where('uid', $CURUSER['id'])->where('type', \App\Models\SeedBoxRecord::TYPE_USER)->get();
-//if ($res->count() > 0)
-//{
-//    $seedBox .= "<table border='1' cellspacing='0' cellpadding='5' id='seed-box-table'><tr><td class='colhead'>ID</td><td class='colhead'>{$columnOperator}</td><td class='colhead'>{$columnBandwidth}</td><td class='colhead'>{$columnIP}</td><td class='colhead'>{$columnComment}</td><td class='colhead'>{$columnStatus}</td><td class='colhead'></td></tr>";
-//    foreach ($res as $seedBoxRecord)
-//    {
-//        $seedBox .= "<tr>";
-//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->id);
-//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->operator);
-//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->bandwidth ?: '');
-//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->ip ?: sprintf('%s ~ %s', $seedBoxRecord->ip_begin, $seedBoxRecord->ip_end));
-//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->comment);
-//        $seedBox .= sprintf('<td>%s</td>', $seedBoxRecord->statusText);
-//        $seedBox .= sprintf('<td><img style="cursor: pointer" class="staff_delete remove-seed-box-btn" src="pic/trans.gif" alt="D" title="%s" data-id="%s"></td>', $lang_functions['text_delete'], $seedBoxRecord->id);
-//        $seedBox .= "</tr>";
-//    }
-//    $seedBox .= '</table>';
-//}
+$actionLabel = nexus_trans('label.action');
+$res = $userInfo->tokens()->orderBy("id", "desc")->get();
+if ($res->count() > 0)
+{
+    $token .= "<table border='1' cellspacing='0' cellpadding='5' id='token-table'><tr><td class='colhead'>ID</td><td class='colhead'>{$columnName}</td><td class='colhead'>{$columnCreatedAt}</td><td class='colhead'>{$actionLabel}</td></tr>";
+    foreach ($res as $tokenRecord)
+    {
+        $token .= "<tr>";
+        $token .= sprintf('<td>%s</td>', $tokenRecord->id);
+        $token .= sprintf('<td>%s</td>', $tokenRecord->name);
+        $token .= sprintf('<td>%s</td>', $tokenRecord->created_at);
+        $token .= sprintf('<td><span style="cursor: pointer;margin-right: 10px" class="token-get">获取</span><span style="cursor: pointer" title="%s" data-id="%s" class="token-del">删除</span></td>', $lang_functions['text_delete'], $tokenRecord->id);
+        $token .= "</tr>";
+    }
+    $token .= '</table>';
+}
 $token .= sprintf('<div><input type="button" id="add-token-box-btn" value="%s"/></div>', $actionCreate);
 tr_small($tokenLabel, $token, 1);
 $tokenFoxForm = <<<FORM
@@ -1151,7 +1150,7 @@ $tokenFoxForm = <<<FORM
 <form id="token-box-form">
     <div class="form-control-row">
         <div class="label">{$columnName}</div>
-        <div class="field"><input type="text" name="params[name]"></div>
+        <div class="field"><input type="text" name="name"></div>
     </div>
 </form>
 </div>
@@ -1164,11 +1163,14 @@ jQuery('#add-token-box-btn').on('click', function () {
         content: `$tokenFoxForm`,
         btn: ['OK'],
         btnAlign: 'c',
-        yes: function () {
+        yes: function (index) {
+            layer.close(index);
+            jQuery('body').loading({stoppable: false});
             let params = jQuery('#token-box-form').serialize()
-            jQuery.post('ajax.php', params + "&action=addToken", function (response) {
+            jQuery.post('/web/token/add', params, function (response) {
                 console.log(response)
                 if (response.ret != 0) {
+                    jQuery('body').loading('stop');
                     layer.alert(response.msg)
                     return
                 }
@@ -1177,12 +1179,15 @@ jQuery('#add-token-box-btn').on('click', function () {
         }
     })
 });
-jQuery('#token-box-table').on('click', '.remove-token-box-btn', function () {
-    let params = {action: "removeToken", params: {id: jQuery(this).attr("data-id")}}
+jQuery('#token-table').on('click', '.token-del', function () {
+    let params = {id: jQuery(this).attr("data-id")}
     layer.confirm("{$lang_functions['std_confirm_remove']}", {btnAlign: 'c'}, function (index) {
-        jQuery.post('ajax.php', params, function (response) {
+        layer.close(index)
+        jQuery('body').loading({stoppable: false});
+        jQuery.post('/web/token/del', params, function (response) {
             console.log(response)
             if (response.ret != 0) {
+                jQuery('body').loading('stop');
                 layer.alert(response.msg)
                 return
             }

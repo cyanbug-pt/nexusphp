@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        self::TG_WEBHOOK_PREFIX . "/*"
+        self::TG_WEBHOOK_PREFIX . "/*",
+        "web/token/*",
     ];
 }
