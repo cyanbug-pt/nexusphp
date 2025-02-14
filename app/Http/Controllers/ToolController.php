@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PluginStore;
 use App\Repositories\ToolRepository;
+use App\Repositories\UploadRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Process\Process;
@@ -30,7 +31,9 @@ class ToolController extends Controller
 
     public function test(Request $request)
     {
-
+        $rep = new UploadRepository();
+        $result = $rep->listSections();
+        return $result;
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Auth\Permission;
 use App\Exceptions\InsufficientPermissionException;
 use App\Http\Middleware\Locale;
 use App\Models\Category;
@@ -240,6 +241,21 @@ class SearchBoxRepository extends BaseRepository
             throw new \RuntimeException("There are torrents that belong to this category and cannot be deleted!");
         }
         return Category::query()->whereIn('id', $idArr)->delete();
+    }
+
+    public function listSections()
+    {
+        $modeIds = [SearchBox::getBrowseMode()];
+        if (SearchBox::isSpecialEnabled() && Permission::canUploadToSpecialSection()) {
+            $modeIds[] = SearchBox::getSpecialMode();
+        }
+        $searchBoxList = SearchBox::query()->with("categories")->find($modeIds);
+        foreach ($searchBoxList as $searchBox) {
+            if ($searchBox->showsubcat) {
+                $searchBox->loadSubCategories();
+            }
+        }
+        return $searchBoxList;
     }
 
 

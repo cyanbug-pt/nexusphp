@@ -46,6 +46,8 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
         Route::resource('over-forums', \App\Http\Controllers\OverForumController::class);
         Route::resource('forums', \App\Http\Controllers\ForumController::class);
         Route::resource('topics', \App\Http\Controllers\TopicController::class);
+
+        Route::get('sections', [\App\Http\Controllers\UploadController::class, 'sections']);
     });
 
     Route::group(['middleware' => ['admin']], function () {

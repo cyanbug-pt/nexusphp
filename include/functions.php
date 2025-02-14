@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 function get_langfolder_cookie($transToLocale = false)
 {
-	global $deflang;
+    $deflang = \App\Models\Setting::getDefaultLang();
 	$lang = "";
 	if (!isset($_COOKIE["c_lang_folder"])) {
 		$lang = $deflang;

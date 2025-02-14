@@ -141,6 +141,7 @@ if (strlen($CURUSER['passkey']) != 32) {
 }
 $dict = \Rhilip\Bencode\Bencode::load($fn);
 $dict['announce'] = $ssl_torrent . $base_announce_url . "?passkey=" . $CURUSER['passkey'];
+$dict['comment'] = getSchemeAndHttpHost(true) . "/details.php?id=" . $id;
 do_log(sprintf("[ANNOUNCE_URL], user: %s, torrent: %s, url: %s", $CURUSER['id'] ?? '', $id, $dict['announce']));
 /**
  * does not support multi-tracker

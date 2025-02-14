@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Middleware\Locale;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
@@ -182,6 +183,25 @@ class SearchBox extends NexusModel
         }
     }
 
+    public function getDisplaySectionNameAttribute()
+    {
+        $locale = Locale::getDefault();
+        if (!empty($this->section_name[$locale])) {
+            return $this->section_name[$locale];
+        }
+        $defaultLang = get_setting("main.defaultlang");
+        if (!empty($this->section_name[$defaultLang])) {
+            return $this->section_name[$defaultLang];
+        }
+        if ($this->isSectionBrowse()) {
+            return nexus_trans("searchbox.sections.browse");
+        }
+        if ($this->isSectionSpecial()) {
+            return nexus_trans("searchbox.sections.special");
+        }
+        return $this->name;
+    }
+
     public static function listSearchModes(): array
     {
         $result = [];
@@ -204,6 +224,16 @@ class SearchBox extends NexusModel
     public static function getSpecialMode()
     {
         return Setting::get('main.specialcat');
+    }
+
+    public function isSectionBrowse(): bool
+    {
+        return $this->id == self::getBrowseMode();
+    }
+
+    public function isSectionSpecial(): bool
+    {
+        return $this->id == self::getSpecialMode();
     }
 
 
@@ -245,6 +275,17 @@ class SearchBox extends NexusModel
     public function taxonomy_processing(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Processing::class, 'mode');
+    }
+
+    public function loadSubCategories(): void
+    {
+        foreach (self::$taxonomies as $name => $info) {
+            $relationName = "taxonomy_" . $name;
+            $show = "show" . $name;
+            if ($this->{$show}) {
+                $this->setRelation($relationName, $this->{$relationName}()->orWhere('mode', 0)->get());
+            }
+        }
     }
 
     public static function getDefaultSearchMode()

@@ -1,6 +1,7 @@
 <?php
 namespace Nexus;
 
+use App\Http\Middleware\Locale;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Nexus\Plugin\Hook;
@@ -290,7 +291,7 @@ final class Nexus
     public static function trans($key, $replace = [], $locale = null)
     {
         if (!IN_NEXUS) {
-            return trans($key, $replace, $locale);
+            return trans($key, $replace, $locale ?? Locale::getDefault());
         }
         if (empty(self::$translations)) {
             //load from default lang dir
@@ -301,7 +302,7 @@ final class Nexus
                 self::loadTranslations($path, $namespace);
             }
         }
-        return self::getTranslation($key, $replace, $locale);
+        return self::getTranslation($key, $replace, $locale ?? Locale::getDefault());
     }
 
     private static function loadTranslations($path, $namespace = null)

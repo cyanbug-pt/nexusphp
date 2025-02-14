@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\PermissionEnum;
 use App\Events\TorrentUpdated;
 use App\Filament\Resources\System\AgentAllowResource;
 use App\Http\Resources\TagResource;
@@ -102,11 +103,10 @@ class Test extends Command
      */
     public function handle()
     {
-        $today = Carbon::today();
-        $yesterday = Carbon::yesterday();
-        $tomorrow = Carbon::tomorrow();
-        $diff = $tomorrow->diffInDays();
-        dd($today, $tomorrow, $diff);
+        $with = ["ss" => function($query) {$query->orWhere("mode", 0);}];
+        $r = SearchBox::query()->with($with)->find(4);
+//        $r = SearchBox::query()->find(4)->ss()->orWhere("mode", 0)->get();
+        dd($r);
     }
 
 }

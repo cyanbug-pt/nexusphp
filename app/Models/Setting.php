@@ -100,4 +100,9 @@ class Setting extends NexusModel
         return $value;
     }
 
+    public static function getDefaultLang()
+    {
+        return self::get("main.defaultlang");
+    }
+
 }
