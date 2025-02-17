@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Middleware\Locale;
+use App\Repositories\TagRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
@@ -286,6 +287,16 @@ class SearchBox extends NexusModel
                 $this->setRelation($relationName, $this->{$relationName}()->orWhere('mode', 0)->get());
             }
         }
+    }
+
+    public function tags(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Tag::class, 'mode');
+    }
+
+    public function loadTags(): void
+    {
+        $this->setRelation("tags", TagRepository::listAll($this->id));
     }
 
     public static function getDefaultSearchMode()

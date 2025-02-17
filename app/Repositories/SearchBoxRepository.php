@@ -254,6 +254,7 @@ class SearchBoxRepository extends BaseRepository
             if ($searchBox->showsubcat) {
                 $searchBox->loadSubCategories();
             }
+            $searchBox->loadTags();
         }
         return $searchBoxList;
     }
