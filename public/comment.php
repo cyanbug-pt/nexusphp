@@ -97,11 +97,11 @@ if ($action == "add")
 		sql_query("UPDATE users SET last_comment = NOW() WHERE id = ".sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);
 
 		if($type == "torrent")
-			header("Refresh: 0; url=details.php?id=$parent_id#$newid");
+			header("Location: details.php?id=$parent_id#$newid");
 		else if($type == "offer")
-			header("Refresh: 0; url=offers.php?id=$parent_id&off_details=1#$newid");
+			header("Location: offers.php?id=$parent_id&off_details=1#$newid");
 		else if($type == "request")
-			header("Refresh: 0; url=viewrequests.php?id=$parent_id&req_details=1#$newid");
+			header("Location: viewrequests.php?id=$parent_id&req_details=1#$newid");
 		die;
 	}
 

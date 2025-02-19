@@ -23,4 +23,4 @@ while ($arr = mysql_fetch_assoc($res))
 	$Cache->delete_value('staff_report_count');
 }
 
-header("Refresh: 0; url=reports.php");
+header("Location: reports.php");

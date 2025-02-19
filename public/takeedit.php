@@ -309,4 +309,4 @@ if ($affectedRows == 1) {
 $returl = "details.php?id=$id&edited=1";
 if (isset($_POST["returnto"]))
 	$returl = $_POST["returnto"];
-header("Refresh: 0; url=$returl");
+header("Location: $returl");

@@ -16,7 +16,7 @@ if (!$row)
 	httperr();
 
 if ($row["status"] != "pending") {
-	header("Refresh: 0; url=ok.php?type=confirmed");
+	header("Location: ok.php?type=confirmed");
 	exit();
 }
 
@@ -43,5 +43,5 @@ else	// when it's op, default is not use secure login
 logincookie($id, $passh,1,get_setting('system.cookie_valid_days', 365) * 86400,$securelogin_indentity_cookie);
 //sessioncookie($row["id"], $passh,false);
 
-header("Refresh: 0; url=ok.php?type=confirm");
+header("Location: ok.php?type=confirm");
 ?>

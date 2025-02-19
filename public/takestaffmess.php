@@ -53,5 +53,5 @@ while (true) {
     $page++;
 }
 
-header("Refresh: 0; url=staffmess.php?sent=1");
+header("Location: staffmess.php?sent=1");
 ?>

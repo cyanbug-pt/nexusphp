@@ -49,5 +49,5 @@ if (!empty($_POST["desact"])){
 }
 }
 }
-header("Refresh: 0; url=warned.php");
+header("Location: warned.php");
 ?>

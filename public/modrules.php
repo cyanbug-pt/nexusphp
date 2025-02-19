@@ -40,7 +40,7 @@ elseif (isset($_GET["act"]) && $_GET["act"]=="addsect"){
 	$language = $_POST["language"];
 	sql_query("insert into rules (title, text, lang_id) values(".sqlesc($title).", ".sqlesc($text).", ".sqlesc($language).")") or sqlerr(__FILE__,__LINE__);
     clear_rules_cache();
-	header("Refresh: 0; url=modrules.php");
+	header("Location: modrules.php");
 }
 elseif (isset($_GET["act"]) && $_GET["act"] == "edit"){
 	$id = intval($_GET["id"]);
@@ -74,7 +74,7 @@ elseif (isset($_GET["act"]) && $_GET["act"]=="edited"){
 	$language = $_POST["language"];
 	sql_query("update rules set title=".sqlesc($title).", text=".sqlesc($text).", lang_id = ".sqlesc($language)." where id=".sqlesc($id)) or sqlerr(__FILE__,__LINE__);
     clear_rules_cache();
-	header("Refresh: 0; url=modrules.php");
+	header("Location: modrules.php");
 }
 elseif (isset($_GET["act"]) && $_GET["act"]=="del"){
 	$id = (int)$_GET["id"];
@@ -85,7 +85,7 @@ elseif (isset($_GET["act"]) && $_GET["act"]=="del"){
 	}
 	sql_query("DELETE FROM rules WHERE id=".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
     clear_rules_cache();
-	header("Refresh: 0; url=modrules.php");
+	header("Location: modrules.php");
 }
 else{
 	$res = sql_query("select rules.*, lang_name from rules left join language on rules.lang_id = language.id order by lang_name, id");
