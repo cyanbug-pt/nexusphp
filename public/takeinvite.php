@@ -130,7 +130,7 @@ if ($sendResult === true) {
     }
 }
 $lock->release();
-header("Refresh: 0; url=invite.php?id=".htmlspecialchars($id)."&sent=1");
+header("Location: invite.php?id=".htmlspecialchars($id)."&sent=1");
 ?>
 
 

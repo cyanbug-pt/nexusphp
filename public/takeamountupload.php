@@ -3,7 +3,7 @@ require "../include/bittorrent.php";
 if ($_SERVER["REQUEST_METHOD"] != "POST")
 	stderr("Error", "Permission denied!");
 dbconn();
-loggedinorreturn();                                                    
+loggedinorreturn();
 
 if (get_user_class() < UC_SYSOP)
 	stderr("Sorry", "Permission denied.");
@@ -37,5 +37,5 @@ while($dat=mysql_fetch_assoc($query))
 	sql_query("INSERT INTO messages (sender, receiver, added,  subject, msg) VALUES ($sender_id, {$dat['id']}, $dt, " . sqlesc($subject) .", " . sqlesc($msg) .")") or sqlerr(__FILE__,__LINE__);
 }
 
-header("Refresh: 0; url=amountupload.php?sent=1");
+header("Location: amountupload.php?sent=1");
 ?>

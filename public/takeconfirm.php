@@ -30,5 +30,5 @@ EOD;
 //this mail is sent when the site is using admin(open/closed)/inviter(closed) confirmation and the admin/inviter confirmed the pending user
 sent_mail($email,$SITENAME,$SITEEMAIL,$title,$body,"invite confirm",false,false,'');
 
-header("Refresh: 0; url=invite.php?id=".htmlspecialchars($CURUSER['id']));
+header("Location: invite.php?id=".htmlspecialchars($CURUSER['id']));
 ?>

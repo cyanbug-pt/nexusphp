@@ -53,5 +53,5 @@ if (\App\Models\User::query()->where("id", $row['owner'])->exists()) {
         sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, $row[owner], $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
     }
 }
-header("Refresh: 0; url=torrents.php");
+header("Location: torrents.php");
 ?>

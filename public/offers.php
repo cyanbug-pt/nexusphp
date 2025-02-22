@@ -110,7 +110,7 @@ if (isset($_GET['new_offer']) && $_GET["new_offer"]){
 
 		write_log("offer $name was added by ".$CURUSER['username'],'normal');
 
-		header("Refresh: 0; url=offers.php?id=$id&off_details=1");
+		header("Location: offers.php?id=$id&off_details=1");
 
 		stdhead($lang_offers['head_success']);
 	}
@@ -261,7 +261,7 @@ if (isset($_GET["allow_offer"]) && $_GET["allow_offer"]) {
 	sql_query ("UPDATE offers SET allowed = 'allowed', allowedtime = '".$allowedtime."' WHERE id = $offid") or sqlerr(__FILE__,__LINE__);
 
 	write_log("{$CURUSER['username']} allowed offer {$arr['name']}",'normal');
-	header("Refresh: 0; url=" . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
+	header("Location: " . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
 }
 //=== end allow the offer
 
@@ -312,7 +312,7 @@ if (isset($_GET["finish_offer"]) && $_GET["finish_offer"]) {
 	//sql_query("INSERT INTO messages (sender, receiver, added, msg) VALUES(0, $arr['userid'], '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
 	write_log("{$CURUSER['username']} closed poll {$arr['name']}",'normal');
 
-	header("Refresh: 0; url=" . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
+	header("Location: " . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
 	die;
 }
 //===end allow offer by vote
@@ -403,7 +403,7 @@ if (isset($_GET["take_off_edit"]) && $_GET["take_off_edit"]){
 
 	sql_query("UPDATE offers SET category=$cat, name=$name, descr=$descr where id=".sqlesc($id));
 
-	//header("Refresh: 0; url=offers.php?id=$id&off_details=1");
+	//header("Location: offers.php?id=$id&off_details=1");
 }
 //======end take offer edit
 
@@ -579,7 +579,7 @@ if (isset($_GET["del_offer"]) && $_GET["del_offer"]){
 			sql_query("INSERT INTO messages (sender, receiver, msg, added, subject) VALUES(0, {$num['userid']}, $msg, $added, $subject)") or sqlerr(__FILE__, __LINE__);
 		}
 		write_log("Offer: $offer ({$num['name']}) was deleted by {$CURUSER['username']}".($reason != "" ? " (".$reason.")" : ""),'normal');
-		header("Refresh: 0; url=offers.php");
+		header("Location: offers.php");
 		die;
 	}
 	else

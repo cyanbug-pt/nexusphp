@@ -3,6 +3,6 @@ require_once("../include/bittorrent.php");
 dbconn();
 logoutcookie();
 //logoutsession();
-//header("Refresh: 0; url=./");
+//header("Location: ./");
 nexus_redirect("/");
 ?>
