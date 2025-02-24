@@ -11,6 +11,7 @@ use App\Repositories\HitAndRunRepository;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
@@ -179,25 +180,9 @@ class ExamUserResource extends Resource
                         ->columns(2)
                     ,
                     Components\Group::make([
-                        Components\Grid::make(3) // 3 列的网格
-                        ->schema([
-                            Infolists\Components\TextEntry::make('header1')->label('Header 1'),
-                            Infolists\Components\TextEntry::make('header2')->label('Header 2'),
-                            Infolists\Components\TextEntry::make('header3')->label('Header 3'),
-                        ]),
-                        Components\Grid::make(3) // 数据行
-                        ->schema([
-                            Infolists\Components\TextEntry::make('data1')->getStateUsing(fn ($record) => $record->data1),
-                            Infolists\Components\TextEntry::make('data2')->getStateUsing(fn ($record) => $record->data2),
-                            Infolists\Components\TextEntry::make('data3')->getStateUsing(fn ($record) => $record->data3),
-                        ]),
-                        // 更多数据行...
-                        Components\Grid::make(3) // 数据行
-                        ->schema([
-                            Infolists\Components\TextEntry::make('data1')->getStateUsing(fn ($record) => $record->data4),
-                            Infolists\Components\TextEntry::make('data2')->getStateUsing(fn ($record) => $record->data5),
-                            Infolists\Components\TextEntry::make('data3')->getStateUsing(fn ($record) => $record->data6),
-                        ]),
+                        ViewEntry::make('progressFormatted')
+                            ->label('进度')
+                            ->view('filament.resources.user.exam-user-resource.pages.detail-v3')
                         ])->columnSpan(1),
                 ]),
             ]);

@@ -867,6 +867,7 @@ class ExamRepository extends BaseRepository
             $index['current_value'] = $currentValue;
             $index['current_value_formatted'] = $currentValueFormatted;
             $index['passed'] = $currentValue >= $requireValueAtomic;
+            $index['index_result'] = $index['passed'] ? nexus_trans($exam->getPassResultTransKey('pass')) : nexus_trans($exam->getPassResultTransKey('not_pass'));
             $result[] = $index;
         }
         return $result;

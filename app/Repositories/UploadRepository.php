@@ -21,11 +21,15 @@ class UploadRepository extends BaseRepository
             'name' => 'required',
         ];
         $request->validate($rules);
-        $category = Category::query()->firstOrFail($request->type);
+        $category = Category::query()->findOrFail($request->type);
         $mode = $category->mode;
+        $searchBox = SearchBox::query()->findOrFail($mode);
+        $searchBox->loadSubCategories();
+        $searchBox->loadTags();
+
         $anonymous = "no";
         $uploaderUsername = $user->username;
-        if ($request->uplver == 'yes' && user_can('beanonymous')) {
+        if ($request->uplver == 'yes' && Permission::canBeAnonymous()) {
             $anonymous = "yes";
             $uploaderUsername = "Anonymous";
         }

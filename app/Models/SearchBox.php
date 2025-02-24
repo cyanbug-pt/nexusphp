@@ -283,8 +283,15 @@ class SearchBox extends NexusModel
         foreach (self::$taxonomies as $name => $info) {
             $relationName = "taxonomy_" . $name;
             $show = "show" . $name;
-            if ($this->{$show}) {
-                $this->setRelation($relationName, $this->{$relationName}()->orWhere('mode', 0)->get());
+            if ($this->{$show} && isset(self::$taxonomies[$name])) {
+                $modelName = self::$taxonomies[$name]['model'];
+                $this->setRelation(
+                    $relationName,
+                    $modelName::query()->whereIn('mode', [$this->getKey(), 0])
+                        ->orderBy('sort_index')
+                        ->orderBy('id')
+                        ->get()
+                );
             }
         }
     }
@@ -296,7 +303,7 @@ class SearchBox extends NexusModel
 
     public function loadTags(): void
     {
-        $this->setRelation("tags", TagRepository::listAll($this->id));
+        $this->setRelation("tags", TagRepository::listAll($this->getKey()));
     }
 
     public static function getDefaultSearchMode()
