@@ -76,5 +76,5 @@ while (true) {
     $page++;
 }
 
-header("Refresh: 0; url=increment-bulk.php?sent=1&type=$type");
+header("Location: increment-bulk.php?sent=1&type=$type");
 ?>

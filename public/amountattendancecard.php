@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         \App\Models\Message::query()->insert($messages);
         $page++;
     }
-    header(sprintf("Refresh: 0; url=%s?sent=1", $_SERVER['PHP_SELF']));
+    header(sprintf("Location: %s?sent=1", $_SERVER['PHP_SELF']));
 }
 
 stdhead("Add Attendance card", false);

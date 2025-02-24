@@ -1973,7 +1973,7 @@ function userlogin() {
 		$res = sql_query("SELECT * FROM bans WHERE $nip >= first AND $nip <= last") or sqlerr(__FILE__, __LINE__);
 		if (mysql_num_rows($res) > 0)
 		{
-			header("HTTP/1.0 403 Forbidden");
+			header("HTTP/1.1 403 Forbidden");
 			print("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head><body>".$lang_functions['text_unauthorized_ip']."</body></html>\n");
 			die;
 		}
@@ -3008,7 +3008,7 @@ function mksecret($len = 20) {
 }
 
 function httperr($code = 404) {
-	header("HTTP/1.0 404 Not found");
+	header("HTTP/1.1 404 Not found");
 	print("<h1>Not Found</h1>\n");
 	exit();
 }

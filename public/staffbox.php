@@ -231,7 +231,7 @@ $id = intval($_GET["id"] ?? 0);
 sql_query ("UPDATE staffmessages SET answered=1, answeredby = {$CURUSER['id']} WHERE id = $id") or sqlerr();
 $Cache->delete_value('staff_new_message_count');
     clear_staff_message_cache();
-header("Refresh: 0; url=staffbox.php" . (!empty($_GET['return']) ? "?" . $_GET['return'] : ''));
+header("Location: staffbox.php" . (!empty($_GET['return']) ? "?" . $_GET['return'] : ''));
 }
 
          //////////////////////////
@@ -259,7 +259,7 @@ elseif ($_POST['delete']){
 }
 $Cache->delete_value('staff_new_message_count');
     clear_staff_message_cache();
-header("Refresh: 0; url=staffbox.php");
+header("Location: staffbox.php");
 }
 
 ?>
