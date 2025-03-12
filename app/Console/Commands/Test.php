@@ -103,8 +103,7 @@ class Test extends Command
      */
     public function handle()
     {
-        $with = ["ss" => function($query) {$query->orWhere("mode", 0);}];
-        $r = SearchBox::query()->with($with)->find(4);
+        $r = microtime();
 //        $r = SearchBox::query()->find(4)->ss()->orWhere("mode", 0)->get();
         dd($r);
     }

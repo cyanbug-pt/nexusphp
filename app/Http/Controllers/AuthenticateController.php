@@ -106,6 +106,26 @@ class AuthenticateController extends Controller
         }
     }
 
+    public function ammdsApprove(Request $request)
+    {
+        try {
+            $request->validate([
+                'uid' => 'required|integer',
+                'timestamp' => 'required|integer',
+                'nonce' => 'required|string',
+                'signature' => 'required|string',
+            ]);
+            $user = $this->repository->ammdsApprove($request);
+            $resource = new UserResource($user);
+            return $this->success($resource);
+        } catch (\Exception $exception) {
+            $msg = $exception->getMessage();
+            $params = $request->all();
+            do_log(sprintf("ammdsApprove fail: %s, params: %s", $msg, nexus_json_encode($params)));
+            return $this->fail($params, $msg);
+        }
+    }
+
     public function addToken(Request $request)
     {
         try {

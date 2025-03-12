@@ -5,6 +5,8 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Encryption\Encrypter;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -71,5 +73,32 @@ class AuthenticateRepository extends BaseRepository
             throw new \InvalidArgumentException("Invalid uid or passkey");
         }
         return true;
+    }
+
+    public function ammdsApprove(Request $request)
+    {
+        $now = Carbon::now();
+        if (abs($now->getTimestampMs() - $request->timestamp) > 300 * 1000) {
+            throw new \InvalidArgumentException("expired.");
+        }
+        $cacheKey = sprintf("ammdsApprove:%s", $request->nonce);
+        if (Cache::has($cacheKey)) {
+            throw new \InvalidArgumentException("duplicate.");
+        }
+        Cache::put($cacheKey, 1, 600);
+        $user = User::query()->findOrFail($request->uid, User::$commonFields);
+        $user->checkIsNormal();
+        $passkeyHash = hash('sha256', $user->passkey);
+        $dataToSign = sprintf("%s%s%s%s", $user->id, $passkeyHash, $request->timestamp, $request->nonce);
+        $signatureKey = env('AMMDS_SECRET');
+        $serverSignature = hash_hmac('sha256', $dataToSign, $signatureKey);
+        if (!hash_equals($serverSignature, $request->signature)) {
+            do_log(sprintf(
+                "uid: %s, passkey_hash: %s, timestamp: %s, nonce: %s, dataToSign: %s, signatureKey: %s, serverSignature: %s, requestSignature: %s, !hash_equals",
+                $user->id, $passkeyHash, $request->timestamp, $request->nonce, $dataToSign, $signatureKey, $serverSignature, $request->signature
+            ));
+            throw new \InvalidArgumentException("Invalid signature.");
+        }
+        return $user;
     }
 }
