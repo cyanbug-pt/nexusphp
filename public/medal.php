@@ -40,6 +40,7 @@ $table = <<<TABLE
 <table border="1" cellspacing="0" cellpadding="5" width="100%">
 <thead>
 <tr>
+<td class="colhead">ID</td>
 <td class="colhead">$columnImageLargeLabel</td>
 <td class="colhead">$columnDescriptionLabel</td>
 <td class="colhead" style="width: 115px">$columnSaleBeginEndTimeLabel</td>
@@ -89,8 +90,8 @@ foreach ($rows as $row) {
          $giftDisabled, $giftClass, $row->id, $giftBtnText, $giftDisabled, $columnGiftFeeLabel, (($row->gift_fee_factor ?? 0) * 100).'%'
     );
     $table .= sprintf(
-        '<tr><td><img src="%s" style="max-width: 60px;max-height: 60px;" class="preview" /></td><td><h1>%s</h1>%s</td><td>%s ~<br>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>',
-        $row->image_large, $row->name, $row->description, $row->sale_begin_time ?? nexus_trans('nexus.no_limit'), $row->sale_end_time ?? nexus_trans('nexus.no_limit'), $row->durationText, (($row->bonus_addition_factor ?? 0) * 100).'%', number_format($row->price),  $row->inventory ?? nexus_trans('label.infinite'), $buyAction, $giftAction
+        '<tr><td>%s</td><td><img src="%s" style="max-width: 60px;max-height: 60px;" class="preview" /></td><td><h1>%s</h1>%s</td><td>%s ~<br>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>',
+        $row->id,$row->image_large, $row->name, $row->description, $row->sale_begin_time ?? nexus_trans('nexus.no_limit'), $row->sale_end_time ?? nexus_trans('nexus.no_limit'), $row->durationText, (($row->bonus_addition_factor ?? 0) * 100).'%', number_format($row->price),  $row->inventory ?? nexus_trans('label.infinite'), $buyAction, $giftAction
     );
 }
 $table .= '</tbody></table>';
