@@ -66,6 +66,8 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => ['text' => 'Buy change username card'],
         self::BUSINESS_TYPE_GIFT_MEDAL => ['text' => 'Gift medal to someone'],
         self::BUSINESS_TYPE_BUY_TORRENT => ['text' => 'Buy torrent'],
+        self::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => ['text' => 'Task failure penalty'],
+        self::BUSINESS_TYPE_TASK_PASS_REWARD => ['text' => 'Task success reward'],
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
