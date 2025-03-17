@@ -2910,7 +2910,7 @@ if ($msgalert)
     $exam = new \Nexus\Exam\Exam();
     $currentExam = $exam->getCurrent($CURUSER['id']);
     if (!empty($currentExam['html'])) {
-        msgalert("messages.php", $currentExam['html'], $currentExam['exam']->background_color ?? 'blue');
+        msgalert($currentExam['exam']->type==\App\Models\Exam::TYPE_TASK ? "task.php" : "messages.php", $currentExam['html'], $currentExam['exam']->background_color ?? 'blue');
     }
 }
 		if ($offlinemsg)
