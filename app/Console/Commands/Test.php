@@ -49,9 +49,9 @@ class Test extends Command
      */
     public function handle()
     {
-        $r = PersonalAccessToken::query()->find(11);
+        $r = config('nexus.ammds_secret');
 //        $r = SearchBox::query()->find(4)->ss()->orWhere("mode", 0)->get();
-        dd($r->abilitiesText);
+        dd($r);
     }
 
 }

@@ -44,7 +44,7 @@ class AuthenticateRepository extends BaseRepository
 
     public function nasToolsApprove(string $json)
     {
-        $key = env('NAS_TOOLS_KEY');
+        $key = config('nexus.nas_tools_key');
         $encrypter = new Encrypter($key);
         $decrypted = $encrypter->decryptString($json);
         $data = json_decode($decrypted, true);
@@ -65,7 +65,7 @@ class AuthenticateRepository extends BaseRepository
 
     public function iyuuApprove($token, $id, $verity)
     {
-        $secret = env('IYUU_SECRET');
+        $secret = config('nexus.iyuu_secret');
         $user = User::query()->findOrFail($id, User::$commonFields);
         $user->checkIsNormal();
         $encryptedResult = md5($token . $id . sha1($user->passkey) . $secret);
@@ -90,7 +90,7 @@ class AuthenticateRepository extends BaseRepository
         $user->checkIsNormal();
         $passkeyHash = hash('sha256', $user->passkey);
         $dataToSign = sprintf("%s%s%s%s", $user->id, $passkeyHash, $request->timestamp, $request->nonce);
-        $signatureKey = env('AMMDS_SECRET');
+        $signatureKey = config('nexus.ammds_secret');
         $serverSignature = hash_hmac('sha256', $dataToSign, $signatureKey);
         if (!hash_equals($serverSignature, $request->signature)) {
             do_log(sprintf(
