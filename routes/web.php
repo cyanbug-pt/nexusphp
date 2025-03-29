@@ -21,8 +21,9 @@ Route::group(['prefix' => 'web', 'middleware' => ['auth.nexus:nexus-web', 'local
     Route::get('torrent-approval-page', [\App\Http\Controllers\TorrentController::class, 'approvalPage']);
     Route::get('torrent-approval-logs', [\App\Http\Controllers\TorrentController::class, 'approvalLogs']);
     Route::post('torrent-approval', [\App\Http\Controllers\TorrentController::class, 'approval']);
-    Route::post('token/add', [\App\Http\Controllers\AuthenticateController::class, 'addToken']);
-    Route::post('token/del', [\App\Http\Controllers\AuthenticateController::class, 'delToken']);
+    Route::post('token/add', [\App\Http\Controllers\TokenController::class, 'addToken']);
+    Route::post('token/del', [\App\Http\Controllers\TokenController::class, 'delToken']);
+    Route::post('token/get-plain', [\App\Http\Controllers\TokenController::class, 'getPlainText']);
 });
 
 if (!isRunningInConsole()) {

@@ -1045,9 +1045,12 @@ width: 80px
 .form-control-row .field {
 
 }
-.form-control-row input,textarea {
+.form-control-row input[type=text],textarea {
 width: 300px;
 padding: 4px;
+}
+.form-control-row input[type=checkbox] {
+vertical-align: sub;
 }
 CSS;
 
@@ -1122,23 +1125,32 @@ JS;
 //end seed box
 
 //token start
+$tokenRep = new \App\Repositories\TokenRepository();
+$permissions = $tokenRep->listUserTokenPermissions();
+$permissionOptions = [];
+foreach ($permissions as $name => $label) {
+    $permissionOptions[] = sprintf('<label><input type="checkbox" name="permissions[]" value="%s">%s</label>', $name, $label);
+}
+$permissionCheckbox = implode("", $permissionOptions);
 $token = '';
 $tokenLabel = nexus_trans("token.label");
 $columnName = nexus_trans('label.name');
+$columnPermission = nexus_trans('token.permission');
 $columnCreatedAt = nexus_trans('label.created_at');
 $actionCreate = nexus_trans('label.create');
 $actionLabel = nexus_trans('label.action');
 $res = $userInfo->tokens()->orderBy("id", "desc")->get();
 if ($res->count() > 0)
 {
-    $token .= "<table border='1' cellspacing='0' cellpadding='5' id='token-table'><tr><td class='colhead'>ID</td><td class='colhead'>{$columnName}</td><td class='colhead'>{$columnCreatedAt}</td><td class='colhead'>{$actionLabel}</td></tr>";
+    $token .= "<table border='1' cellspacing='0' cellpadding='5' id='token-table'><tr><td class='colhead'>ID</td><td class='colhead'>{$columnName}</td><td class='colhead'>{$columnPermission}</td><td class='colhead'>{$columnCreatedAt}</td><td class='colhead'>{$actionLabel}</td></tr>";
     foreach ($res as $tokenRecord)
     {
         $token .= "<tr>";
         $token .= sprintf('<td>%s</td>', $tokenRecord->id);
         $token .= sprintf('<td>%s</td>', $tokenRecord->name);
+        $token .= sprintf('<td>%s</td>', $tokenRecord->abilitiesText);
         $token .= sprintf('<td>%s</td>', $tokenRecord->created_at);
-        $token .= sprintf('<td><span style="cursor: pointer;margin-right: 10px" class="token-get">获取</span><span style="cursor: pointer" title="%s" data-id="%s" class="token-del">删除</span></td>', $lang_functions['text_delete'], $tokenRecord->id);
+        $token .= sprintf('<td><span style="cursor: pointer;margin-right: 10px" class="token-get" data-id="%s">获取</span><span style="cursor: pointer" title="%s" data-id="%s" class="token-del">删除</span></td>', $tokenRecord->id, $lang_functions['text_delete'], $tokenRecord->id);
         $token .= "</tr>";
     }
     $token .= '</table>';
@@ -1151,6 +1163,10 @@ $tokenFoxForm = <<<FORM
     <div class="form-control-row">
         <div class="label">{$columnName}</div>
         <div class="field"><input type="text" name="name"></div>
+    </div>
+    <div class="form-control-row">
+        <div class="label">{$columnPermission}</div>
+        <div class="field">$permissionCheckbox</div>
     </div>
 </form>
 </div>
@@ -1194,6 +1210,19 @@ jQuery('#token-table').on('click', '.token-del', function () {
             window.location.reload()
         }, 'json')
     })
+});
+jQuery('#token-table').on('click', '.token-get', function () {
+    let params = {id: jQuery(this).attr("data-id")}
+    jQuery('body').loading({stoppable: false});
+    jQuery.post('/web/token/get-plain', params, function (response) {
+        console.log(response)
+        jQuery('body').loading('stop');
+        if (response.ret != 0) {
+            layer.alert(response.msg)
+        } else {
+            layer.alert(response.data)
+        }
+    }, 'json')
 });
 JS;
     \Nexus\Nexus::js($tokenBoxJs, 'footer', false);

@@ -126,45 +126,7 @@ class AuthenticateController extends Controller
         }
     }
 
-    public function addToken(Request $request)
-    {
-        try {
-            $request->validate([
-                'name' => 'required|string',
-            ]);
-            $user = Auth::user();
-            $count = $user->tokens()->count();
-            if ($count >= 5) {
-                throw new NexusException("Token limit exceeded");
-            }
-            $newAccessToken = $user->createToken($request->name);
-            PersonalAccessTokenPlain::query()->create([
-                'access_token_id' => $newAccessToken->accessToken->getKey(),
-                'plain_text_token' => $newAccessToken->plainTextToken,
-            ]);
-            return $this->success(true);
-        } catch (\Exception $exception) {
-            return $this->fail(false, $exception->getMessage());
-        }
-    }
 
-    public function delToken(Request $request)
-    {
-        try {
-            $request->validate([
-                'id' => 'required|integer',
-            ]);
-            $user = Auth::user();
-            $token = $user->tokens()->where("id", $request->id)->first();
-            if ($token) {
-                PersonalAccessTokenPlain::query()->where("access_token_id", $token->id)->delete();
-                $token->delete();
-            }
-            return $this->success(true);
-        } catch (\Exception $exception) {
-            return $this->fail(false, $exception->getMessage());
-        }
-    }
 
 
 }

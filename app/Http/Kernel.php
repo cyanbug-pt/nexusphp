@@ -78,4 +78,9 @@ class Kernel extends HttpKernel
         'locale' => \App\Http\Middleware\Locale::class,
         'user' => \App\Http\Middleware\User::class,
     ];
+
+    protected $middlewareAliases = [
+        'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+        'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+    ];
 }

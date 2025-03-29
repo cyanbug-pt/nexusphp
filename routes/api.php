@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Enums\Permission\PermissionEnum;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
         Route::resource('topics', \App\Http\Controllers\TopicController::class);
 
         Route::get('sections', [\App\Http\Controllers\UploadController::class, 'sections']);
+        Route::post('upload', [\App\Http\Controllers\UploadController::class, 'upload'])->middleware(ability(PermissionEnum::UPLOAD));
     });
 
     Route::group(['middleware' => ['admin']], function () {
@@ -99,6 +101,3 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
 Route::post('login', [\App\Http\Controllers\AuthenticateController::class, 'login']);
 
 
-Route::group(['middleware' => ['auth.nexus:passkey', 'locale']], function () {
-    Route::post("pieces-hash", [\App\Http\Controllers\TorrentController::class, "queryByPiecesHash"])->name("torrent.pieces_hash.query");
-});

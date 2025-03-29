@@ -26,4 +26,10 @@ class UploadController extends Controller
         return $this->success($resource);
     }
 
+    public function upload(Request $request)
+    {
+        $user = $request->user();
+        return $this->success("OK");
+    }
+
 }

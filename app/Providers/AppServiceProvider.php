@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Laravel\Passport\Passport;
+use Nexus\Database\NexusDB;
 use Nexus\Nexus;
 use Filament\Facades\Filament;
 
@@ -37,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
     {
         global $plugin;
         $plugin->start();
+        NexusDB::customModel();
         DB::connection(config('database.default'))->enableQueryLog();
         $forceScheme = strtolower(env('FORCE_SCHEME'));
         if (env('APP_ENV') == "production" && in_array($forceScheme, ['https', 'http'])) {

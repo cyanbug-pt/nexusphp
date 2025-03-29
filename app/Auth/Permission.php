@@ -2,7 +2,7 @@
 
 namespace App\Auth;
 
-use App\Enums\PermissionEnum;
+use App\Enums\Permission\PermissionEnum;
 
 class Permission
 {
