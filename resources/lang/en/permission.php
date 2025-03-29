@@ -217,4 +217,8 @@ return [
         'text' => 'Allow Userbar',
         'desc' => ' Get his userba',
     ],
+    'torrent:list' => [
+        'text' => 'Get torrent list',
+        'desc' => 'Get torrent list',
+    ],
 ];
