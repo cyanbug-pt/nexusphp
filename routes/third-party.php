@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth.nexus:passkey', 'locale']], function () {
+Route::group(['middleware' => ['auth.nexus:passkey']], function () {
     Route::post("pieces-hash", [\App\Http\Controllers\TorrentController::class, "queryByPiecesHash"])->name("torrent.pieces_hash.query");
 });
 

@@ -856,7 +856,7 @@ EOD;
 				if ($privacyupdated == 1)
 				$to .= "&privacy=1";
 				clear_user_cache($CURUSER["id"]);
-                \Nexus\Database\NexusDB::cache_get(get_challenge_key($userInfo->username));
+                \Nexus\Database\NexusDB::cache_del(get_challenge_key($userInfo->username));
 				header("Location: $to");
 			}
 			stdhead($lang_usercp['head_control_panel'].$lang_usercp['head_security_settings']);

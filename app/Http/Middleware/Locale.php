@@ -32,7 +32,7 @@ class Locale
             $locale = $user->locale;
             do_log("locale from user: {$user->id}, set locale: $locale");
         } else {
-            $locale = self::getLocaleFromCookie() ?? 'en';
+            $locale = self::getLocaleFromCookie() ?? self::getDefault();
             do_log("locale from cookie, set locale: $locale");
         }
         App::setLocale($locale);

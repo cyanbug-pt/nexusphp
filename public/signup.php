@@ -17,7 +17,6 @@ if ($langid)
 	}
 }
 require_once(get_langfile_path("", false, $CURLANGDIR));
-require_once(get_langfile_path("takesignup.php", false, $CURLANGDIR));
 cur_user_check ();
 $type = $_GET['type'] ?? '';
 $isPreRegisterEmailAndUsername = get_setting("system.is_invite_pre_email_and_username") == "yes";
@@ -94,9 +93,9 @@ if ($isPreRegisterEmailAndUsername && !empty($inv["pre_register_email"])) {
 ?>
 <tr><td class=rowhead><?php echo $lang_signup['row_desired_username'] ?></td><td class=rowfollow align=left><?php echo $usernameInput?><br />
 <font class=small><?php echo $lang_signup['text_allowed_characters'] ?></font></td></tr>
-<tr><td class=rowhead><?php echo $lang_signup['row_pick_a_password'] ?></td><td class=rowfollow align=left><input type="password" style="width: 200px" class="wantpassword" data-too-short="<?php echo $lang_takesignup['std_password_too_short']?>" data-too-long="<?php echo $lang_takesignup['std_password_too_long']?>" data-equals-username="<?php echo $lang_takesignup['std_password_equals_username']?>"/><br />
+<tr><td class=rowhead><?php echo $lang_signup['row_pick_a_password'] ?></td><td class=rowfollow align=left><input type="password" style="width: 200px" class="wantpassword"/><br />
 	<font class=small><?php echo $lang_signup['text_minimum_six_characters'] ?></font></td></tr>
-<tr><td class=rowhead><?php echo $lang_signup['row_enter_password_again'] ?></td><td class=rowfollow align=left><input type="password" style="width: 200px" class="passagain" data-tip="<?php echo $lang_takesignup['std_passwords_unmatched']?>"/></td></tr>
+<tr><td class=rowhead><?php echo $lang_signup['row_enter_password_again'] ?></td><td class=rowfollow align=left><input type="password" style="width: 200px" class="passagain" /></td></tr>
 <?php
 show_image_code ();
 ?>
