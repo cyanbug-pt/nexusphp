@@ -70,11 +70,32 @@ class HitAndRunResource extends Resource
                             ->label('UID')
                             ->placeholder('UID')
                         ,
-                    ])->query(function (Builder $query, array $data) {
+                    ])
+                    ->query(function (Builder $query, array $data) {
                         return $query->when($data['uid'], fn (Builder $query, $uid) => $query->where("uid", $uid));
                     })
                 ,
                 Tables\Filters\SelectFilter::make('status')->options(HitAndRun::listStatus(true))->label(__('label.status')),
+                Tables\Filters\Filter::make('created_at_begin')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_at_begin')
+                            ->maxDate(now())
+                            ->label(__('hr.created_at_begin'))
+                        ,
+                    ])->query(function (Builder $query, array $data) {
+                        return $query->when($data['created_at_begin'], fn (Builder $query, $value) => $query->where("created_at", '>=', $value));
+                    })
+                ,
+                Tables\Filters\Filter::make('created_at_end')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_at_end')
+                            ->maxDate(now())
+                            ->label(__('hr.created_at_end'))
+                        ,
+                    ])->query(function (Builder $query, array $data) {
+                        return $query->when($data['created_at_end'], fn (Builder $query, $value) => $query->where("created_at", '<=', $value));
+                    })
+                ,
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -88,6 +109,8 @@ class HitAndRunResource extends Resource
                 ->deselectRecordsAfterCompletion()
                 ->label(__('admin.resources.hit_and_run.bulk_action_pardon'))
                     ->icon('heroicon-o-x-mark')
+                ,
+                Tables\Actions\DeleteBulkAction::make('bulkDelete')
             ]);
     }
 

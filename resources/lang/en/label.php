@@ -41,6 +41,8 @@ return [
     'client' => 'Client',
     'reason' => 'Reason',
     'change' => 'Change',
+    'created_at_begin' => 'Created at begin',
+    'created_at_end' => 'Created at end',
     'setting' => [
         'nav_text' => 'Setting',
         'backup' => [

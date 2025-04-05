@@ -42,6 +42,8 @@ return [
     'reason' => '原因',
     'change' => '修改',
     'create' => '创建',
+    'created_at_begin' => '创建时间开始',
+    'created_at_end' => '创建时间结束',
     'setting' => [
         'nav_text' => '设置',
         'backup' => [

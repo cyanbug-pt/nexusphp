@@ -41,6 +41,8 @@ return [
     'client' => '客戶端',
     'reason' => '原因',
     'change' => '修改',
+    'created_at_begin' => '創建時間開始',
+    'created_at_end' => '創建時間結束',
     'setting' => [
         'nav_text' => '設置',
         'backup' => [
