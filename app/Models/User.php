@@ -185,7 +185,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'username', 'email', 'passhash', 'secret', 'stylesheet', 'editsecret', 'added', 'enabled', 'status',
         'leechwarn', 'leechwarnuntil', 'page', 'class', 'uploaded', 'downloaded', 'clientselect', 'showclienterror', 'last_home',
         'seedbonus', 'downloadpos', 'vip_added', 'vip_until', 'title', 'invites', 'attendance_card',
-        'seed_points_per_hour', 'passkey',
+        'seed_points_per_hour', 'passkey', 'auth_key'
     ];
 
     /**

@@ -129,6 +129,7 @@ class UserRepository extends BaseRepository
             'username' => $username,
             'email' => $email,
             'secret' => $secret,
+            'auth_key' => mksecret(),
             'editsecret' => '',
             'passhash' => $passhash,
             'stylesheet' => $setting['defstylesheet'],
@@ -165,6 +166,7 @@ class UserRepository extends BaseRepository
         $update = [
             'secret' => $secret,
             'passhash' => $passhash,
+            'auth_key' => mksecret(),
         ];
         $user->update($update);
         return true;
