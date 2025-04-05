@@ -1954,7 +1954,6 @@ function dbconn($autoclean = false, $doLogin = true)
 }
 
 function userlogin() {
-//    do_log("COOKIE:" . json_encode($_COOKIE) . ", uid: " . (isset($_COOKIE['c_secure_uid']) ? base64($_COOKIE["c_secure_uid"],false) : ''));
     static $loginResult;
     if (!is_null($loginResult)) {
         return $loginResult;
@@ -1964,7 +1963,6 @@ function userlogin() {
 	global $SITE_ONLINE, $oldip;
 	global $enablesqldebug_tweak, $sqldebug_tweak;
 	unset($GLOBALS["CURUSER"]);
-	$log = "cookie: " . json_encode($_COOKIE);
 
 	$ip = getip();
 	$nip = ip2long($ip);
@@ -1979,68 +1977,11 @@ function userlogin() {
 		}
 	}
 
-	if (empty($_COOKIE["c_secure_pass"]) || empty($_COOKIE["c_secure_uid"]) || empty($_COOKIE["c_secure_login"])) {
-	    do_log("$log, param not enough");
-	    return $loginResult = false;
-    }
-	if ($_COOKIE["c_secure_login"] == base64("yeah"))
-	{
-		//if (empty($_SESSION["s_secure_uid"]) || empty($_SESSION["s_secure_pass"]))
-		//return;
-	}
-	$b_id = base64($_COOKIE["c_secure_uid"],false);
-	$id = intval($b_id ?? 0);
-	if (!$id || !is_valid_id($id) || strlen($_COOKIE["c_secure_pass"]) != 32) {
-        do_log("$log, invalid c_secure_uid");
+	$row = get_user_from_cookie($_COOKIE);
+    if (empty($row)) {
         return $loginResult = false;
     }
 
-	if ($_COOKIE["c_secure_login"] == base64("yeah"))
-	{
-		//if (strlen($_SESSION["s_secure_pass"]) != 32)
-		//return;
-	}
-
-	$res = sql_query("SELECT * FROM users WHERE users.id = ".sqlesc($id)." AND users.enabled='yes' AND users.status = 'confirmed' LIMIT 1");
-	$row = mysql_fetch_array($res);
-	if (!$row) {
-        do_log("$log, c_secure_uid not exists");
-        return $loginResult = false;
-    }
-
-	$sec = hash_pad($row["secret"]);
-
-	//die(base64_decode($_COOKIE["c_secure_login"]));
-
-	if ($_COOKIE["c_secure_login"] == base64("yeah"))
-	{
-        /**
-         * Not IP related
-         * @since 1.8.0
-         */
-//        $md5 = md5($row["passhash"].$ip);
-        $md5 = md5($row["passhash"]);
-        $log .= ", secure login == yeah, passhash: {$row['passhash']}, ip: $ip, md5: $md5";
-		if ($_COOKIE["c_secure_pass"] != $md5) {
-		    do_log("$log, c_secure_pass != md5");
-            return $loginResult = false;
-        }
-	}
-	else
-	{
-	    $md5 = md5($row["passhash"]);
-        $log .= "$log, passhash: {$row['passhash']}, md5: $md5";
-		if ($_COOKIE["c_secure_pass"] !== $md5) {
-            do_log("$log, c_secure_pass != md5");
-            return $loginResult = false;
-        }
-	}
-
-	if ($_COOKIE["c_secure_login"] == base64("yeah"))
-	{
-		//if ($_SESSION["s_secure_pass"] !== md5($row["passhash"].$_SERVER["REMOTE_ADDR"]))
-		//return;
-	}
 	if (!$row["passkey"]){
 		$passkey = md5($row['username'].date("Y-m-d H:i:s").$row['passhash']);
 		sql_query("UPDATE users SET passkey = ".sqlesc($passkey)." WHERE id=" . sqlesc($row["id"]));
@@ -3001,10 +2942,11 @@ function genbark($x,$y) {
 }
 
 function mksecret($len = 20) {
-	$ret = "";
-	for ($i = 0; $i < $len; $i++)
-	$ret .= chr(mt_rand(100, 120));
-	return $ret;
+//	$ret = "";
+//	for ($i = 0; $i < $len; $i++)
+//	$ret .= chr(mt_rand(100, 120));
+//	return $ret;
+    return bin2hex(random_bytes($len));
 }
 
 function httperr($code = 404) {
@@ -3013,30 +2955,23 @@ function httperr($code = 404) {
 	exit();
 }
 
-function logincookie($id, $passhash, $updatedb = 1, $expires = 0x7fffffff, $securelogin=false, $ssl=false, $trackerssl=false)
+function logincookie($id, $authKey, $duration = 0)
 {
-	if ($expires != 0x7fffffff)
-	$expires = time()+$expires;
-
-	setcookie("c_secure_uid", base64($id), $expires, "/", "", false, true);
-	setcookie("c_secure_pass", $passhash, $expires, "/", "", false, true);
-	if($ssl)
-	setcookie("c_secure_ssl", base64("yeah"), $expires, "/", "", false, true);
-	else
-	setcookie("c_secure_ssl", base64("nope"), $expires, "/", "", false, true);
-
-	if($trackerssl)
-	setcookie("c_secure_tracker_ssl", base64("yeah"), $expires, "/", "", false, true);
-	else
-	setcookie("c_secure_tracker_ssl", base64("nope"), $expires, "/", "", false, true);
-
-	if ($securelogin)
-	setcookie("c_secure_login", base64("yeah"), $expires, "/", "", false, true);
-	else
-	setcookie("c_secure_login", base64("nope"), $expires, "/", "", false, true);
-
-
-	if ($updatedb)
+    if (empty($authKey)) {
+        throw new \RuntimeException("user secret or auth_key is empty");
+    }
+    if ($duration <= 0) {
+        $duration = get_setting('system.cookie_valid_days', 365) * 86400;
+    }
+	$expires = time() + $duration;
+    $tokenData = [
+        'user_id' => $id,
+        'expires' => $expires,
+    ];
+    $tokenJson = json_encode($tokenData);
+    $signature = hash_hmac('sha256', $tokenJson, $authKey);
+    $authToken = base64_encode($tokenJson . '.' . $signature);
+	setcookie("c_secure_pass", $authToken, $expires, "/", "", true, true);
 	sql_query("UPDATE users SET last_login = NOW(), lang=" . sqlesc(get_langid_from_langcookie()) . " WHERE id = ".sqlesc($id));
 }
 
@@ -3089,11 +3024,11 @@ function make_folder($pre, $folder_name)
 }
 
 function logoutcookie() {
-	setcookie("c_secure_uid", "", 0x7fffffff, "/", "", false, true);
-	setcookie("c_secure_pass", "", 0x7fffffff, "/", "", false, true);
+//	setcookie("c_secure_uid", "", 0x7fffffff, "/", "", false, true);
+	setcookie("c_secure_pass", "", 0x7fffffff, "/", "", true, true);
 // setcookie("c_secure_ssl", "", 0x7fffffff, "/", "", false, true);
-	setcookie("c_secure_tracker_ssl", "", 0x7fffffff, "/", "", false, true);
-	setcookie("c_secure_login", "", 0x7fffffff, "/", "", false, true);
+//	setcookie("c_secure_tracker_ssl", "", 0x7fffffff, "/", "", false, true);
+//	setcookie("c_secure_login", "", 0x7fffffff, "/", "", false, true);
 //	setcookie("c_lang_folder", "", 0x7fffffff, "/", "", false, true);
 }
 

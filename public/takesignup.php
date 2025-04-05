@@ -73,7 +73,7 @@ $res = sql_query("SELECT username FROM users WHERE id = $inviter") or sqlerr(__F
 $arr = mysql_fetch_assoc($res);
 $invusername = $arr['username'];
 }
-if (!mkglobal("wantusername:wantpassword:passagain:email")) {
+if (!mkglobal("wantusername:wantpassword:email")) {
     die();
 }
 if ($isPreRegisterEmailAndUsername && $type == 'invite' && !empty($inv["pre_register_username"]) && !empty($inv["pre_register_email"])) {
@@ -111,17 +111,17 @@ if (empty($wantusername) || empty($wantpassword) || empty($email) || empty($coun
 if (strlen($wantusername) > 12)
 	bark($lang_takesignup['std_username_too_long']);
 
-if ($wantpassword != $passagain)
-	bark($lang_takesignup['std_passwords_unmatched']);
+//if ($wantpassword != $passagain)
+//	bark($lang_takesignup['std_passwords_unmatched']);
 
-if (strlen($wantpassword) < 6)
-	bark($lang_takesignup['std_password_too_short']);
-
-if (strlen($wantpassword) > 40)
-	bark($lang_takesignup['std_password_too_long']);
-
-if ($wantpassword == $wantusername)
-	bark($lang_takesignup['std_password_equals_username']);
+//if (strlen($wantpassword) < 6)
+//	bark($lang_takesignup['std_password_too_short']);
+//
+//if (strlen($wantpassword) > 40)
+//	bark($lang_takesignup['std_password_too_long']);
+//
+//if ($wantpassword == $wantusername)
+//	bark($lang_takesignup['std_password_equals_username']);
 
 if (!validemail($email))
 	bark($lang_takesignup['std_wrong_email_address_format']);
@@ -148,7 +148,8 @@ $arr = mysql_fetch_row($res);
 */
 
 $secret = mksecret();
-$wantpasshash = md5($secret . $wantpassword . $secret);
+//$wantpasshash = md5($secret . $wantpassword . $secret);
+$wantpasshash = hash('sha256', $secret . $wantpassword);
 $editsecret = ($verification == 'admin' ? '' : $secret);
 $invite_count = (int) $invite_count;
 $passkey = md5($wantusername.date("Y-m-d H:i:s").$wantpasshash);
@@ -162,13 +163,13 @@ $email = sqlesc($email);
 $country = sqlesc($country);
 $gender = sqlesc($gender);
 $sitelangid = sqlesc(get_langid_from_langcookie());
-
+$authKey = sqlesc(mksecret());
 $res_check_user = sql_query("SELECT * FROM users WHERE username = " . $wantusername);
 
 if(mysql_num_rows($res_check_user) == 1)
   bark($lang_takesignup['std_username_exists']);
 
-$ret = sql_query("INSERT INTO users (username, passhash, passkey, secret, editsecret, email, country, gender, status, class, invites, ".($type == 'invite' ? "invited_by," : "")." added, last_access, lang, stylesheet".($showschool == 'yes' ? ", school" : "").", uploaded) VALUES (" . $wantusername . "," . $wantpasshash . "," . sqlesc($passkey) . "," . $secret . "," . $editsecret . "," . $email . "," . $country . "," . $gender . ", 'pending', ".$defaultclass_class.",". $invite_count .", ".($type == 'invite' ? "'$inviter'," : "") ." '". date("Y-m-d H:i:s") ."' , " . " '". date("Y-m-d H:i:s") ."' , ".$sitelangid . ",".$defcss.($showschool == 'yes' ? ",".$school : "").",".($iniupload_main > 0 ? $iniupload_main : 0).")") or sqlerr(__FILE__, __LINE__);
+$ret = sql_query("INSERT INTO users (username, passhash, passkey, secret, auth_key, editsecret, email, country, gender, status, class, invites, ".($type == 'invite' ? "invited_by," : "")." added, last_access, lang, stylesheet".($showschool == 'yes' ? ", school" : "").", uploaded) VALUES (" . $wantusername . "," . $wantpasshash . "," . sqlesc($passkey) . "," . $secret . "," . $authKey. "," . $editsecret . "," . $email . "," . $country . "," . $gender . ", 'pending', ".$defaultclass_class.",". $invite_count .", ".($type == 'invite' ? "'$inviter'," : "") ." '". date("Y-m-d H:i:s") ."' , " . " '". date("Y-m-d H:i:s") ."' , ".$sitelangid . ",".$defcss.($showschool == 'yes' ? ",".$school : "").",".($iniupload_main > 0 ? $iniupload_main : 0).")") or sqlerr(__FILE__, __LINE__);
 $id = mysql_insert_id();
 fire_event("user_created", \App\Models\User::query()->find($id, \App\Models\User::$commonFields));
 $tmpInviteCount = get_setting('main.tmp_invite_count');

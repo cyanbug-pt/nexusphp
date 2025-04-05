@@ -194,7 +194,7 @@ class User extends Authenticatable implements FilamentUser, HasName
      * @var array
      */
     protected $hidden = [
-        'secret', 'passhash', 'passkey'
+        'secret', 'passhash', 'passkey', 'auth_key'
     ];
 
     /**

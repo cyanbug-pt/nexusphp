@@ -199,7 +199,7 @@ elseif ($action == 'savesettings_security') 	// save security
 	$validConfig = array(
 		'securelogin', 'securetracker', 'https_announce_url','iv','maxip','maxloginattempts','changeemail','cheaterdet','nodetect',
 		'guest_visit_type', 'guest_visit_value_static_page', 'guest_visit_value_custom_content', 'guest_visit_value_redirect',
-		'login_type', 'login_secret_lifetime',
+		'login_type', 'login_secret_lifetime', 'use_challenge_response_authentication'
 	);
 	GetVar($validConfig);
 	$SECURITY = [];
@@ -376,6 +376,7 @@ elseif ($action == 'securitysettings')	//security settings
 	tr($lang_settings['row_max_ips'],"<input type='text' style=\"width: 300px\" name=maxip value='" . ($SECURITY["maxip"] ? $SECURITY["maxip"] : "1")."'> ".$lang_settings['text_max_ips_note'], 1);
 	tr($lang_settings['row_max_login_attemps'],"<input type='text' style=\"width: 300px\" name=maxloginattempts value='" . ($SECURITY["maxloginattempts"] ? $SECURITY["maxloginattempts"] : "7")."'> ".$lang_settings['text_max_login_attemps_note'], 1);
 
+    yesorno($lang_settings['row_use_challenge_response_authentication'], 'use_challenge_response_authentication', $SECURITY["use_challenge_response_authentication"], $lang_settings['text_use_challenge_response_authentication_note']);
 	$guestVisitTypeRadio = '<label><input type="radio" name="guest_visit_type" value="normal"' . (empty($SECURITY['guest_visit_type']) || $SECURITY['guest_visit_type'] == 'normal' ? ' checked' : '') . ' onclick="document.getElementById(\'tbody_static_page\').style.display=\'none\';document.getElementById(\'tbody_custom_content\').style.display=\'none\';document.getElementById(\'tbody_redirect\').style.display=\'none\';">' . $lang_settings['text_guest_visit_type_normal'] . '</label>';
 	$guestVisitTypeRadio .= '<br/><label><input type="radio" name="guest_visit_type" value="static_page"' . ($SECURITY['guest_visit_type'] == 'static_page' ? ' checked' : '') . ' onclick="document.getElementById(\'tbody_static_page\').style.display=\'table-row-group\';document.getElementById(\'tbody_custom_content\').style.display=\'none\';document.getElementById(\'tbody_redirect\').style.display=\'none\';">' . $lang_settings['text_guest_visit_type_static_page'] . '</label>';
 	$guestVisitTypeRadio .= '<br/><label><input type="radio" name="guest_visit_type" value="custom_content"' . ($SECURITY['guest_visit_type'] == 'custom_content' ? ' checked' : '') . ' onclick="document.getElementById(\'tbody_static_page\').style.display=\'none\';document.getElementById(\'tbody_custom_content\').style.display=\'table-row-group\';document.getElementById(\'tbody_redirect\').style.display=\'none\';">' . $lang_settings['text_guest_visit_type_custom_content'] . '</label>';

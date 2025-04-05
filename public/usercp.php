@@ -3,7 +3,7 @@ require "../include/bittorrent.php";
 dbconn();
 require_once(get_langfile_path());
 loggedinorreturn();
-$userInfo = \App\Models\User::query()->findOrFail($CURUSER["id"], \App\Models\User::$commonFields);
+$userInfo = \App\Models\User::query()->findOrFail($CURUSER["id"]);
 function bark($msg) {
 	stdhead();
 	global $lang_usercp;
@@ -41,12 +41,15 @@ function getimageheight ($imagewidth, $imageheight)
 	}
 	return $imageheight;
 }
-function form($name) {
-	return print("<form method=post action=usercp.php><input type=hidden name=action value=".htmlspecialchars($name)."><input type=hidden name=type value=save>");
+function form($name, $type = "save", $id = "") {
+    if ($id == "") {
+        $id = "form" . random_str();
+    }
+	return print("<form method=post action=usercp.php id=\"".$id."\"><input type=hidden name=action value=".htmlspecialchars($name)."><input type=hidden name=type value={$type}>");
 }
-function submit() {
+function submit($type = "submit") {
 	global $lang_usercp;
-	print("<tr><td class=\"rowhead\" valign=\"top\" align=\"right\">".$lang_usercp['row_save_settings']."</td><td class=\"rowfollow\" valign=\"top\" align=left><input type=submit value=\"".$lang_usercp['submit_save_settings']."\"></td></tr>"."</form>");
+	print("<tr><td class=\"rowhead\" valign=\"top\" align=\"right\">".$lang_usercp['row_save_settings']."</td><td class=\"rowfollow\" valign=\"top\" align=left><input type=".$type." value=\"".$lang_usercp['submit_save_settings']."\"></td></tr>");
 }
 function format_tz($a)
 {
@@ -174,11 +177,11 @@ if ($action){
 			}
 
 			usercpmenu ("personal");
+            form ("personal");
 			print ("<table border=0 cellspacing=0 cellpadding=5 width=".CONTENT_WIDTH.">");
 			if ($type == 'saved')
 				print("<tr><td colspan=2 class=\"heading\" valign=\"top\" align=\"center\"><font color=red>".$lang_usercp['text_saved']."</font></td></tr>\n");
 
-			form ("personal");
 			tr_small($lang_usercp['row_account_parked'],
 			"<input type=checkbox name=parked" . ($CURUSER["parked"] == "yes" ? " checked" : "") . " value=yes>".$lang_usercp['checkbox_pack_my_account']."<br /><font class=small size=1>".$lang_usercp['text_account_pack_note']."</font>"
 			,1);
@@ -214,7 +217,7 @@ tr($lang_usercp['row_school'], "<select name=school>$schools</select>", 1);
   "\"><br />\n".$lang_usercp['text_avatar_note'].($enablebitbucket_main == 'yes' ? $lang_usercp['text_bitbucket_note'] : ""),1);
   tr($lang_usercp['row_info'], "<textarea name=\"info\" style=\"width:700px\" rows=\"10\" >" . htmlspecialchars($CURUSER["info"]) . "</textarea><br />".$lang_usercp['text_info_note'], 1);
   submit();
-  print("</table>");
+  print("</table></form>");
   stdfoot();
   die;
   break;
@@ -398,6 +401,7 @@ tr($lang_usercp['row_school'], "<select name=school>$schools</select>", 1);
 			}
 			stdhead($lang_usercp['head_control_panel'].$lang_usercp['head_tracker_settings']);
 			usercpmenu ("tracker");
+            form ("tracker");
 $brsectiontype = $browsecatmode;
 $spsectiontype = $specialcatmode;
 if ($enablespecial == 'yes' && get_user_class() >= get_setting('authority.view_special_torrent'))
@@ -451,7 +455,6 @@ if ($showaudiocodec) $audiocodecs = searchbox_item_list("audiocodecs");
 }
 */
 			print ("<table border=0 cellspacing=0 cellpadding=5 width=".CONTENT_WIDTH.">");
-			form ("tracker");
 			if ($type == 'saved')
 				print("<tr><td colspan=2 class=\"heading\" valign=\"top\" align=\"center\"><font color=red>".$lang_usercp['text_saved']."</font></td></tr>\n");
 			if ($emailnotify_smtp=='yes' && $smtptype != 'none')
@@ -654,7 +657,7 @@ tr_small($lang_usercp['row_funbox'],"<input type=checkbox name=showfb".($CURUSER
 		<b>".$lang_usercp['text_comments_reviews'].": </b><br /><input type=checkbox name=showcomnum ".($CURUSER['showcomnum'] == 'yes' ? " checked" : "")." value=yes>".$lang_usercp['text_show_comment_number'].($showtooltipsetting ? "<select name=\"showlastcom\" style=\"width: 70px;\"><option value=\"yes\" ".($CURUSER['showlastcom'] != 'no' ? " selected" : "").">".$lang_usercp['select_with']."</option><option value=\"no\" ".($CURUSER['showlastcom'] == 'no' ? " selected" : "").">".$lang_usercp['select_without']."</option></select>".$lang_usercp['text_last_comment_on_tooltip'] : ""), 1);
 
 			submit();
-			print("</table>");
+			print("</table></form>");
 			stdfoot();
 			die;
 			break;
@@ -689,8 +692,8 @@ tr_small($lang_usercp['row_funbox'],"<input type=checkbox name=showfb".($CURUSER
 			}
 			stdhead($lang_usercp['head_control_panel'].$lang_usercp['head_forum_settings'],true);
 			usercpmenu ("forum");
+            form ("forum");
 			print ("<table border=0 cellspacing=0 cellpadding=5 width=".CONTENT_WIDTH.">");
-			form ("forum");
 			if ($type == 'saved')
 			print("<tr><td colspan=2 class=\"heading\" valign=\"top\" align=\"center\"><font color=red>".$lang_usercp['text_saved']."</font></td></tr>\n");
 
@@ -703,20 +706,26 @@ tr_small($lang_usercp['row_funbox'],"<input type=checkbox name=showfb".($CURUSER
 			tr_small($lang_usercp['row_click_on_topic'], "<input type=radio name=clicktopic" . ($CURUSER["clicktopic"] == "firstpage" ? " checked" : "") . " value=\"firstpage\">".$lang_usercp['text_go_to_first_page']."<input type=radio name=clicktopic" . ($CURUSER["clicktopic"] == "lastpage" ? " checked" : "") . " value=\"lastpage\">".$lang_usercp['text_go_to_last_page'],1);
 			tr_small($lang_usercp['row_forum_signature'], "<textarea name=signature style=\"width:700px\" rows=10>" . $CURUSER['signature'] . "</textarea><br />".$lang_usercp['text_signature_note'],1);
 			submit();
-			print("</table>");
+			print("</table></form>");
 			stdfoot();
 			die;
 			break;
 		case "security":
 			if ($type == 'confirm') {
-				$oldpassword = $_POST['oldpassword'];
-				if (!$oldpassword){
+				$response = $_POST['response'];
+				if (!$response){
 					stderr($lang_usercp['std_error'], $lang_usercp['std_enter_old_password'].goback(), 0);
-					die;
-				}elseif ($CURUSER["passhash"] != md5($CURUSER["secret"] . $oldpassword . $CURUSER["secret"])){
-					stderr($lang_usercp['std_error'], $lang_usercp['std_wrong_password_note'].goback(), 0);
-					die;
-				}else
+				}
+                //验证旧密码
+                $challenge = \Nexus\Database\NexusDB::cache_get(get_challenge_key($userInfo->username));
+                if (empty($challenge)) {
+                    stderr($lang_usercp['std_error'], "expired!".goback(), 0);
+                }
+                $expectedResponse = hash_hmac('sha256', $userInfo->passhash, $challenge);
+                if (!hash_equals($expectedResponse, $response)) {
+                    stderr($lang_usercp['std_error'], $lang_usercp['std_wrong_password_note'].goback(), 0);
+                }
+
 				$updateset = array();
 				$changedemail = 0;
 				$passupdated = 0;
@@ -724,7 +733,7 @@ tr_small($lang_usercp['row_funbox'],"<input type=checkbox name=showfb".($CURUSER
 				$resetpasskey = $_POST["resetpasskey"];
 				$email = mysql_real_escape_string( htmlspecialchars( trim($_POST["email"]) ));
 				$chpassword = $_POST["chpassword"];
-				$passagain = $_POST["passagain"];
+//				$passagain = $_POST["passagain"];
 				$privacy = $_POST["privacy"];
 				$twoStepSecret = $_POST['two_step_secret'] ?? '';
 				$twoStepSecretHash = $_POST['two_step_code'];
@@ -747,47 +756,30 @@ tr_small($lang_usercp['row_funbox'],"<input type=checkbox name=showfb".($CURUSER
                 }
 
 				if ($chpassword != "") {
-					if ($chpassword == $CURUSER["username"]) {
-						stderr($lang_usercp['std_error'], $lang_usercp['std_password_equals_username'].goback("-2"), 0);
-						die;
-					}
-					if (strlen($chpassword) > 40) {
-						stderr($lang_usercp['std_error'], $lang_usercp['std_password_too_long'].goback("-2"), 0);
-						die;
-					}
-					if (strlen($chpassword) < 6) {
-						stderr($lang_usercp['std_error'], $lang_usercp['std_password_too_short'].goback("-2"), 0);
-						die;
-					}
-					if ($chpassword != $passagain) {
-						stderr($lang_usercp['std_error'], $lang_usercp['std_passwords_unmatched'].goback("-2"), 0);
-						die;
-					}
+//					if ($chpassword == $CURUSER["username"]) {
+//						stderr($lang_usercp['std_error'], $lang_usercp['std_password_equals_username'].goback("-2"), 0);
+//						die;
+//					}
+//					if (strlen($chpassword) > 40) {
+//						stderr($lang_usercp['std_error'], $lang_usercp['std_password_too_long'].goback("-2"), 0);
+//						die;
+//					}
+//					if (strlen($chpassword) < 6) {
+//						stderr($lang_usercp['std_error'], $lang_usercp['std_password_too_short'].goback("-2"), 0);
+//						die;
+//					}
+//					if ($chpassword != $passagain) {
+//						stderr($lang_usercp['std_error'], $lang_usercp['std_passwords_unmatched'].goback("-2"), 0);
+//						die;
+//					}
 
 					$sec = mksecret();
-					$passhash = md5($sec . $chpassword . $sec);
+//					$passhash = md5($sec . $chpassword . $sec);
+					$passhash = hash('sha256', $sec . $chpassword);
 					$updateset[] = "secret = " . sqlesc($sec);
 					$updateset[] = "passhash = " . sqlesc($passhash);
 
-					//die($securelogin . base64_decode($_COOKIE["c_secure_login"]));
-					if ($_COOKIE["c_secure_login"] == base64("yeah"))
-					{
-						$passh = md5($passhash . $_SERVER["REMOTE_ADDR"]);
-						$securelogin_indentity_cookie = true;
-					}
-					else
-					{
-						$passh = md5($passhash);
-						$securelogin_indentity_cookie = false;
-					}
-
-					if($_COOKIE["c_secure_ssl"] == base64("yeah"))
-						$ssl = true;
-					else
-						$ssl = false;
-
-					logincookie($CURUSER["id"], $passh ,1,get_setting('system.cookie_valid_days', 365) * 86400,$securelogin_indentity_cookie,$ssl);
-					//sessioncookie($CURUSER["id"], $passh);
+					logincookie($CURUSER["id"],  $userInfo->auth_key);
 					$passupdated = 1;
 				}
 
@@ -864,13 +856,15 @@ EOD;
 				if ($privacyupdated == 1)
 				$to .= "&privacy=1";
 				clear_user_cache($CURUSER["id"]);
+                \Nexus\Database\NexusDB::cache_get(get_challenge_key($userInfo->username));
 				header("Location: $to");
 			}
 			stdhead($lang_usercp['head_control_panel'].$lang_usercp['head_security_settings']);
 			usercpmenu ("security");
+            form ("security", $type == "save" ? "confirm" : "save","security");
 			print ("<table border=0 cellspacing=0 cellpadding=5 width=".CONTENT_WIDTH.">");
 			if ($type == 'save') {
-				print("<form method=post action=usercp.php><input type=hidden name=action value=security><input type=hidden name=type value=confirm>");
+//				print("<form method=post action=usercp.php><input type=hidden name=action value=security><input type=hidden name=type value=confirm>");
 				$resetpasskey = $_POST["resetpasskey"];
 				$resetauthkey = $_POST["resetauthkey"];
 				$email = mysql_real_escape_string( htmlspecialchars( trim($_POST["email"]) ));
@@ -885,20 +879,23 @@ EOD;
 				print("<input type=\"hidden\" name=\"resetauthkey\" value=\"1\">");
 				print("<input type=\"hidden\" name=\"email\" value=\"$email\">");
 				print("<input type=\"hidden\" name=\"chpassword\" value=\"$chpassword\">");
-				print("<input type=\"hidden\" name=\"passagain\" value=\"$passagain\">");
+//				print("<input type=\"hidden\" name=\"passagain\" value=\"$passagain\">");
 				print("<input type=\"hidden\" name=\"privacy\" value=\"$privacy\">");
 				print("<input type=\"hidden\" name=\"two_step_secret\" value=\"$two_step_secret\">");
 				print("<input type=\"hidden\" name=\"two_step_code\" value=\"$two_step_code\">");
-				Print("<tr><td class=\"rowhead nowrap\" valign=\"top\" align=\"right\" width=1%>".$lang_usercp['row_security_check']."</td><td valign=\"top\" align=\"left\" width=\"99%\"><input type=password name=oldpassword style=\"width: 200px\"><br /><font class=small>".$lang_usercp['text_security_check_note']."</font></td></tr>\n");
-				do_action("usercp_security_update_confirm", $_POST);
-                submit();
-				print("</table>");
+				Print("<tr><td class=\"rowhead nowrap\" valign=\"top\" align=\"right\" width=1%>".$lang_usercp['row_security_check']."</td><td valign=\"top\" align=\"left\" width=\"99%\"><input type=password class=oldpassword style=\"width: 200px\"><br /><font class=small>".$lang_usercp['text_security_check_note']."</font></td></tr>\n");
+				print('<input type=hidden name=username value="'.$CURUSER["username"].'">');
+                print('<input type=hidden name=response>');
+                do_action("usercp_security_update_confirm", $_POST);
+                submit("button");
+				print("</table></form>");
+                render_password_challenge_js("security", "username", "oldpassword");
 				stdfoot();
 				die;
 			}
 			if ($type == 'saved')
 				print("<tr><td colspan=2 class=\"heading\" valign=\"top\" align=\"center\"><font color=red>".$lang_usercp['text_saved'].($_GET["mail"] == "1" ? $lang_usercp['std_confirmation_email_sent'] : "")." ".($_GET["passkey"] == "1" ? $lang_usercp['std_passkey_reset'] : "")." ".($_GET["password"] == "1" ? $lang_usercp['std_password_changed'] : "")." ".($_GET["privacy"] == "1" ? $lang_usercp['std_privacy_level_updated'] : "")."</font></td></tr>\n");
-			form ("security");
+
 			tr_small($lang_usercp['row_reset_passkey'],"<input type=checkbox name=resetpasskey value=1 />".$lang_usercp['checkbox_reset_my_passkey']."<br /><font class=small>".$lang_usercp['text_reset_passkey_note']."</font>", 1);
 //			tr_small($lang_usercp['row_reset_authkey'],"<input type=checkbox name=resetauthkey value=1 />".$lang_usercp['checkbox_reset_my_authkey']."<br /><font class=small>".$lang_usercp['text_reset_authkey_note']."</font>", 1);
 
@@ -927,11 +924,14 @@ EOD;
 			if ($disableemailchange != 'no' && $smtptype != 'none') //system-wide setting
 				tr_small($lang_usercp['row_email_address'], "<input type=\"text\" name=\"email\" style=\"width: 200px\" value=\"" . htmlspecialchars($CURUSER["email"]) . "\" /> <br /><font class=small>".$lang_usercp['text_email_address_note']."</font>", 1);
             do_action("usercp_security_setting_form");
-            tr_small($lang_usercp['row_change_password'], "<input type=\"password\" name=\"chpassword\" style=\"width: 200px\" />", 1);
-			tr_small($lang_usercp['row_type_password_again'], "<input type=\"password\" name=\"passagain\" style=\"width: 200px\" />", 1);
+            tr_small($lang_usercp['row_change_password'], "<input type=\"password\" class=\"password\" style=\"width: 200px\" />", 1);
+            print('<input type="hidden" name="chpassword" />');
+			tr_small($lang_usercp['row_type_password_again'], "<input type=\"password\" class=\"passagain\" style=\"width: 200px\" />", 1);
 			tr_small($lang_usercp['row_privacy_level'],  priv("normal", $lang_usercp['radio_normal']) . " " . priv("low", $lang_usercp['radio_low']) . " " . priv("strong", $lang_usercp['radio_strong']), 1);
-			submit();
-			print("</table>");
+            submit("button");
+			print("</table></form>");
+
+            render_password_hash_js("security", "password", "chpassword", false,"passagain");
 			stdfoot();
 			die;
 			break;

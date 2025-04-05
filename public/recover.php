@@ -85,7 +85,9 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET" && $take_recover && isset($_GET["id"]
 
 	$sec = mksecret();
 
-	$newpasshash = md5($sec . $newpassword . $sec);
+//	$newpasshash = md5($sec . $newpassword . $sec);
+	$newpasshash = hash('sha256', $newpassword);
+	$newpasshash = hash('sha256', $sec.$newpasshash);
 
 	sql_query("UPDATE users SET secret=" . sqlesc($sec) . ", editsecret='', passhash=" . sqlesc($newpasshash) . " WHERE id=" . sqlesc($id)." AND editsecret=" . sqlesc($arr["editsecret"])) or sqlerr(__FILE__, __LINE__);
 

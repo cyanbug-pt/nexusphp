@@ -813,6 +813,8 @@ $lang_settings = array
     'text_max_price_note' => '默認：1,000,000，設置為 0 無限製',
     'row_paid_torrent_enabled' => '是否啟用收費種子',
     'text_paid_torrent_enabled_note' => '啟用後，有權限的用戶可以在發種時設置向下載種子的用戶收取一定的魔力，默認：否',
+    'row_use_challenge_response_authentication' => '挑戰-響應認證',
+    'text_use_challenge_response_authentication_note' => '如果啟用，登錄時將不傳輸明文密碼，建議啟用。未來版本會刪除此配置且啟用此功能。',
 );
 
 ?>

@@ -16,6 +16,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\Rule;
+use Nexus\Database\NexusDB;
 
 class AuthenticateController extends Controller
 {
@@ -53,7 +54,7 @@ class AuthenticateController extends Controller
     {
         $deadline = Setting::get('security.login_secret_deadline');
         if ($deadline && $deadline > now()->toDateTimeString()) {
-            $user = User::query()->where('passkey', $passkey)->first(['id', 'passhash']);
+            $user = User::query()->where('passkey', $passkey)->first(['id', 'passhash', 'secret', 'auth_key']);
             if ($user) {
                 $ip = getip();
                 /**
@@ -61,9 +62,10 @@ class AuthenticateController extends Controller
                  * @since 1.8.0
                  */
 //                $passhash = md5($user->passhash . $ip);
-                $passhash = md5($user->passhash);
-                do_log(sprintf('passhash: %s, ip: %s, md5: %s', $user->passhash, $ip, $passhash));
-                logincookie($user->id, $passhash,false, get_setting('system.cookie_valid_days', 365) * 86400, true, true, true);
+//                $passhash = md5($user->passhash);
+//                do_log(sprintf('passhash: %s, ip: %s, md5: %s', $user->passhash, $ip, $passhash));
+//                logincookie($user->id, $passhash,false, get_setting('system.cookie_valid_days', 365) * 86400, true, true, true);
+                logincookie($user->id, $user->auth_key);
                 $user->last_login = now();
                 $user->save();
                 $userRep = new UserRepository();
@@ -125,6 +127,29 @@ class AuthenticateController extends Controller
             return $this->fail($params, $msg);
         }
     }
+
+    public function challenge(Request $request)
+    {
+        try {
+            $request->validate([
+                'username' => 'required|string',
+            ]);
+            $username = $request->username;
+            $challenge = mksecret();
+            NexusDB::cache_put(get_challenge_key($username), $challenge,300);
+            $user = User::query()->where("username", $username)->first(['secret']);
+            return $this->success([
+                "challenge" => $challenge,
+                'secret' => $user->secret ?? mksecret(),
+            ]);
+        } catch (\Exception $exception) {
+            $msg = $exception->getMessage();
+            $params = $request->all();
+            do_log(sprintf("challenge fail: %s, params: %s", $msg, nexus_json_encode($params)));
+            return $this->fail($params, $msg);
+        }
+    }
+
 
 
 

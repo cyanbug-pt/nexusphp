@@ -1370,3 +1370,159 @@ function send_admin_fail_notification(string $msg = ""): void {
 function ability(\App\Enums\Permission\PermissionEnum $permission): string {
     return sprintf("ability:%s", $permission->value);
 }
+
+function get_challenge_key(string $challenge): string {
+    return "challenge:".$challenge;
+}
+
+function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models\User|null {
+    $log = "cookie: " . json_encode($cookie);
+    if (empty($_COOKIE["c_secure_pass"])) {
+        do_log("$log, param not enough");
+        return null;
+    }
+    list($tokenJson, $signature) = explode('.', base64_decode($_COOKIE["c_secure_pass"]));
+    if (empty($tokenJson) || empty($signature)) {
+        do_log("$log, no tokenJson or signature");
+        return null;
+    }
+    $tokenData = json_decode($tokenJson, true);
+    if (!isset($tokenData['user_id'])) {
+        do_log("$log, no user_id");
+        return null;
+    }
+    if (!isset($tokenData['expires']) || $tokenData['expires'] < time()) {
+        do_log("$log, signature expired");
+        return null;
+    }
+    $id = $tokenData['user_id'];
+    $log .= ", uid = $id";
+
+    if ($isArray) {
+        $res = sql_query("SELECT * FROM users WHERE users.id = ".sqlesc($id)." AND users.enabled='yes' AND users.status = 'confirmed' LIMIT 1");
+        $row = mysql_fetch_array($res);
+        if (!$row) {
+            do_log("$log, user not exists");
+            return null;
+        }
+        $authKey = $row["auth_key"];
+        unset($row['auth_key'], $row['passhash']);
+    } else {
+        $row = \App\Models\User::query()->find($id);
+        if (!$row) {
+            do_log("$log, user not exists");
+            return null;
+        }
+        try {
+            $row->checkIsNormal();
+        } catch (\Exception $e) {
+            do_log("$log, " . $e->getMessage());
+            return null;
+        }
+        $authKey = $row->auth_key;
+    }
+    $expectedSignature = hash_hmac('sha256', $tokenJson, $authKey);
+    if (!hash_equals($expectedSignature, $signature)) {
+        do_log("$log, !hash_equals, expectedSignature: $expectedSignature, actualSignature: $signature");
+        return null;
+    }
+    return $row;
+}
+
+function render_password_hash_js(string $formId, string $passwordOriginalClass, string $passwordHashedName, bool $passwordRequired, string $passwordConfirmClass = "password_confirmation", string $usernameName = "username"): void {
+    $tipTooShort = nexus_trans('signup.password_too_short');
+    $tipTooLong = nexus_trans('signup.password_too_long');
+    $tipEqualUsername = nexus_trans('signup.password_equals_username');
+    $tipNotMatch = nexus_trans('signup.passwords_unmatched');
+    $passwordValidateJS = "";
+    if ($passwordRequired) {
+        $passwordValidateJS = <<<JS
+if (password.length < 6) {
+    layer.alert("$tipTooShort")
+    return
+}
+if (password.length > 40) {
+    layer.alert("$tipTooLong")
+    return
+}
+JS;
+    }
+    $formVar = "jqForm" . md5($formId);
+    $js = <<<JS
+var $formVar = jQuery("#{$formId}");
+$formVar.on("click", "input[type=button]", function() {
+    let jqUsername = $formVar.find("[name={$usernameName}]")
+    let jqPassword = $formVar.find(".{$passwordOriginalClass}")
+    let jqPasswordConfirm = $formVar.find(".{$passwordConfirmClass}")
+    let password = jqPassword.val()
+    $passwordValidateJS
+    if (jqUsername.length > 0 && jqUsername.val() === password) {
+        layer.alert("$tipEqualUsername")
+        return
+    }
+    if (jqPasswordConfirm.length > 0 && password !== jqPasswordConfirm.val()) {
+        layer.alert("$tipNotMatch")
+        return
+    }
+    if (password !== "") {
+        sha256(password).then((passwordHashed) => {
+            $formVar.find("input[name={$passwordHashedName}]").val(passwordHashed)
+            $formVar.submit()
+        })
+    } else {
+        $formVar.submit()
+    }
+})
+JS;
+    \Nexus\Nexus::js($js, 'footer', false);
+}
+
+function render_password_challenge_js(string $formId, string $usernameName, string $passwordOriginalClass): void {
+    $formVar = "jqForm" . md5($formId);
+    $js = <<<JS
+var $formVar = jQuery("#{$formId}");
+$formVar.on("click", "input[type=button]", function() {
+    let useChallengeResponseAuthentication = $formVar.find("input[name=response]").length > 0
+    if (!useChallengeResponseAuthentication) {
+        return $formVar.submit()
+    }
+    let jqUsername = $formVar.find("[name={$usernameName}]")
+    let jqPassword = $formVar.find(".{$passwordOriginalClass}")
+    let username = jqUsername.val()
+    let password = jqPassword.val()
+    login(username, password, $formVar)
+})
+async function login(username, password, jqForm) {
+    try {
+        jQuery('body').loading({stoppable: false});
+        const challengeResponse = await fetch('/api/challenge', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username })
+        });
+        jQuery('body').loading('stop');
+
+        const challengeData = await challengeResponse.json();
+        if (challengeData.ret !== 0) {
+            layer.alert(challengeData.msg)
+            return
+        }
+
+        const clientHashedPassword = await sha256(password);
+
+        const serverSideHash = await sha256(challengeData.data.secret + clientHashedPassword);
+
+        const clientResponse = await hmacSha256(challengeData.data.challenge, serverSideHash);
+        jqForm.find("input[name=response]").val(clientResponse)
+        jqForm.submit()
+    } catch (error) {
+        console.error(error);
+        layer.alert(error.toString())
+    }
+}
+JS;
+    \Nexus\Nexus::js("vendor/jquery-loading/jquery.loading.min.js", 'footer', true);
+    \Nexus\Nexus::js($js, 'footer', false);
+}

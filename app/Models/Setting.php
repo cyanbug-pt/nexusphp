@@ -105,4 +105,9 @@ class Setting extends NexusModel
         return self::get("main.defaultlang");
     }
 
+    public static function getIsUseChallengeResponseAuthentication(): bool
+    {
+        return self::get("security.use_challenge_response_authentication") == "yes";
+    }
+
 }

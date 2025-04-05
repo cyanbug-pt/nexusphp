@@ -291,7 +291,7 @@ final class Nexus
     public static function trans($key, $replace = [], $locale = null)
     {
         if (!IN_NEXUS) {
-            return trans($key, $replace, $locale ?? Locale::getDefault());
+            return trans($key, $replace, $locale ?? get_langfolder_cookie(true));
         }
         if (empty(self::$translations)) {
             //load from default lang dir
@@ -302,7 +302,7 @@ final class Nexus
                 self::loadTranslations($path, $namespace);
             }
         }
-        return self::getTranslation($key, $replace, $locale ?? Locale::getDefault());
+        return self::getTranslation($key, $replace, $locale ?? get_langfolder_cookie(true));
     }
 
     private static function loadTranslations($path, $namespace = null)

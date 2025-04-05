@@ -813,6 +813,8 @@ $lang_settings = array
     'text_max_price_note' => '默认：1,000,000，设置为 0 无限制',
     'row_paid_torrent_enabled' => '是否启用收费种子',
     'text_paid_torrent_enabled_note' => '启用后，有权限的用户可以在发种时设置向下载种子的用户收取一定的魔力，默认：否',
+    'row_use_challenge_response_authentication' => '挑战-响应认证',
+    'text_use_challenge_response_authentication_note' => '如果启用，登录时将不传输明文密码，建议启用。未来版本会删除此配置且启用此功能。',
 );
 
 ?>
