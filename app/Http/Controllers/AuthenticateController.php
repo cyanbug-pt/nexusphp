@@ -57,14 +57,6 @@ class AuthenticateController extends Controller
             $user = User::query()->where('passkey', $passkey)->first(['id', 'passhash', 'secret', 'auth_key']);
             if ($user) {
                 $ip = getip();
-                /**
-                 * Not IP related
-                 * @since 1.8.0
-                 */
-//                $passhash = md5($user->passhash . $ip);
-//                $passhash = md5($user->passhash);
-//                do_log(sprintf('passhash: %s, ip: %s, md5: %s', $user->passhash, $ip, $passhash));
-//                logincookie($user->id, $passhash,false, get_setting('system.cookie_valid_days', 365) * 86400, true, true, true);
                 logincookie($user->id, $user->auth_key);
                 $user->last_login = now();
                 $user->save();

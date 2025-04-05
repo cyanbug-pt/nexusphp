@@ -2958,7 +2958,7 @@ function httperr($code = 404) {
 function logincookie($id, $authKey, $duration = 0)
 {
     if (empty($authKey)) {
-        throw new \RuntimeException("user secret or auth_key is empty");
+        throw new \RuntimeException("auth_key is empty");
     }
     if ($duration <= 0) {
         $duration = get_setting('system.cookie_valid_days', 365) * 86400;
@@ -2972,7 +2972,14 @@ function logincookie($id, $authKey, $duration = 0)
     $signature = hash_hmac('sha256', $tokenJson, $authKey);
     $authToken = base64_encode($tokenJson . '.' . $signature);
 	setcookie("c_secure_pass", $authToken, $expires, "/", "", true, true);
-	sql_query("UPDATE users SET last_login = NOW(), lang=" . sqlesc(get_langid_from_langcookie()) . " WHERE id = ".sqlesc($id));
+    $update = [
+        'last_login' => now(),
+    ];
+    $langId = get_langid_from_langcookie();
+    if ($langId > 0) {
+        $update['lang'] = $langId;
+    }
+	\App\Models\User::query()->where("id", $id)->update($update);
 }
 
 function set_langfolder_cookie($folder, $expires = 0x7fffffff)
@@ -3005,12 +3012,12 @@ function get_protocol_prefix()
 function get_langid_from_langcookie($lang = '')
 {
     if (empty($lang)) {
-        global $CURLANGDIR;
-        $lang = $CURLANGDIR;
+        $lang = get_langfolder_cookie();
     }
-
-	$row = mysql_fetch_array(sql_query("SELECT id FROM language WHERE site_lang = 1 AND site_lang_folder = " . sqlesc($lang) . "ORDER BY id ASC")) or sqlerr(__FILE__, __LINE__);
-	return $row['id'];
+    $row = \App\Models\Language::query()->where('site_lang', 1)->where("site_lang_folder", $lang)->orderBy("id")->first();
+    return $row->id ?? 0;
+//	$row = mysql_fetch_array(sql_query("SELECT id FROM language WHERE site_lang = 1 AND site_lang_folder = " . sqlesc($lang) . "ORDER BY id ASC")) or sqlerr(__FILE__, __LINE__);
+//	return $row['id'];
 }
 
 function make_folder($pre, $folder_name)
