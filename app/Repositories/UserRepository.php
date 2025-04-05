@@ -124,7 +124,7 @@ class UserRepository extends BaseRepository
         }
         $setting = Setting::get('main');
         $secret = mksecret();
-        $passhash = md5($secret . $password . $secret);
+        $passhash = hash('sha256', $secret . hash('sha256', $password));
         $data = [
             'username' => $username,
             'email' => $email,
@@ -161,7 +161,7 @@ class UserRepository extends BaseRepository
             $this->checkPermission($operator, $user);
         }
         $secret = mksecret();
-        $passhash = md5($secret . $password . $secret);
+        $passhash = hash('sha256', $secret . hash('sha256', $password));
         $update = [
             'secret' => $secret,
             'passhash' => $passhash,
