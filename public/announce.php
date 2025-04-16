@@ -19,7 +19,7 @@ foreach (array("port","downloaded","uploaded","left","compact","no_peer_id") as 
 }
 //check info_hash, peer_id and passkey
 foreach (array("info_hash","peer_id","port","downloaded","uploaded","left") as $x)
-    if (!isset($x)) warn("Missing key: $x");
+    if (!isset($GLOBALS[$x])) warn("Missing key: $x");
 foreach (array("info_hash","peer_id") as $x)
     if (strlen($GLOBALS[$x]) != 20) warn("Invalid $x (" . strlen($GLOBALS[$x]) . " - " . rawurlencode($GLOBALS[$x]) . ")");
 if (isset($passkey) && strlen($passkey) != 32) warn("Invalid passkey (" . strlen($passkey) . " - $passkey)");
