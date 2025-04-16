@@ -83,7 +83,7 @@ if ($nfoaction == "update")
 	$Cache->delete_value('nfo_block_torrent_id_'.$id);
 }
 elseif ($nfoaction == "remove"){
-	$updateset[] = "nfo = ''";
+    $extraUpdate["nfo"] = "";
 	$Cache->delete_value('nfo_block_torrent_id_'.$id);
 }
 }

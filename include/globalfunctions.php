@@ -242,6 +242,9 @@ function getLogFile($append = '')
         return $logFiles[$append];
     }
     $config = nexus_config('nexus');
+    if (!empty($config['log_file']) && in_array($config['log_files'], ["/dev/stdout", "/dev/stderr"])) {
+        return $logFiles[$append] = $config['log_files'];
+    }
     $path = getenv('NEXUS_LOG_DIR', true);
     $fromEnv = true;
     if ($path === false) {
@@ -500,12 +503,14 @@ function getSchemeAndHttpHost(bool $fromConfig = false)
 function getBaseUrl()
 {
     $url = getSchemeAndHttpHost();
-    $requestUri = $_SERVER['REQUEST_URI'];
-    $pos = strpos($requestUri, '?');
-    if ($pos !== false) {
-        $url .= substr($requestUri, 0, $pos);
-    } else {
-        $url .= $requestUri;
+    if (!isRunningInConsole()) {
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $pos = strpos($requestUri, '?');
+        if ($pos !== false) {
+            $url .= substr($requestUri, 0, $pos);
+        } else {
+            $url .= $requestUri;
+        }
     }
     return trim($url, '/');
 }
@@ -528,13 +533,10 @@ function api(...$args)
         $msg = $args[1];
         $data = $args[2];
     }
-    if ($data instanceof \Illuminate\Http\Resources\Json\ResourceCollection || $data instanceof \Illuminate\Http\Resources\Json\JsonResource) {
+    if ($data instanceof \Illuminate\Http\Resources\Json\JsonResource) {
         $data = $data->response()->getData(true);
-        if (isset($data['data']) && count($data) == 1) {
-            //单纯的集合，无分页等其数据
-            $data = $data['data'];
-        }
     }
+//    dd($data);
     $time = (float)number_format(microtime(true) - nexus()->getStartTimestamp(), 3);
     $count = null;
     $resultKey = 'ret';
@@ -630,7 +632,7 @@ function last_query($all = false)
 function format_datetime($datetime, $format = 'Y-m-d H:i')
 {
     if (empty($datetime)) {
-        return '';
+        return null;
     }
     try {
         $carbonTime = \Carbon\Carbon::parse($datetime);
@@ -1320,15 +1322,28 @@ function get_snatch_info($torrentId, $userId)
  */
 function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, \Illuminate\Database\Eloquent\Model $oldModel = null): void
 {
-    $prefix = "fire_event:";
-    $idKey = $prefix . \Illuminate\Support\Str::random();
-    $idKeyOld = "";
-    \Nexus\Database\NexusDB::cache_put($idKey, serialize($model), 3600*24*30);
-    if ($oldModel) {
-        $idKeyOld = $prefix . \Illuminate\Support\Str::random();
-        \Nexus\Database\NexusDB::cache_put($idKeyOld, serialize($oldModel), 3600*24*30);
+    if (!isset(\App\Enums\ModelEventEnum::$eventMaps[$name])) {
+        throw new \InvalidArgumentException("Event $name is not a valid event enumeration");
     }
-    executeCommand("event:fire --name=$name --idKey=$idKey --idKeyOld=$idKeyOld", "string", true, false);
+    if (IN_NEXUS) {
+        $prefix = "fire_event:";
+        $idKey = $prefix . \Illuminate\Support\Str::random();
+        $idKeyOld = "";
+        \Nexus\Database\NexusDB::cache_put($idKey, serialize($model), 3600*24*30);
+        if ($oldModel) {
+            $idKeyOld = $prefix . \Illuminate\Support\Str::random();
+            \Nexus\Database\NexusDB::cache_put($idKeyOld, serialize($oldModel), 3600*24*30);
+        }
+        executeCommand("event:fire --name=$name --idKey=$idKey --idKeyOld=$idKeyOld", "string", true, false);
+    } else {
+        $eventClass = \App\Enums\ModelEventEnum::$eventMaps[$name]['event'];
+        $params = [$model];
+        if ($oldModel) {
+            $params[] = $oldModel;
+        }
+        call_user_func_array([$eventClass, "dispatch"], $params);
+        publish_model_event($name, $model->id);
+    }
 }
 
 /**

@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Auth\Permission;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
+use App\Http\Resources\TorrentResource;
 use App\Models\AudioCodec;
 use App\Models\Category;
 use App\Models\Claim;
@@ -26,9 +28,12 @@ use App\Models\TorrentOperationLog;
 use App\Models\TorrentSecret;
 use App\Models\TorrentTag;
 use App\Models\User;
+use App\Utils\ApiQueryBuilder;
 use Carbon\Carbon;
-use Hashids\Hashids;
+use Elasticsearch\Endpoints\Search;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -55,81 +60,134 @@ class TorrentRepository extends BaseRepository
 
     /**
      *  fetch torrent list
-     *
-     * @param array $params
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getList(array $params, User $user)
+    public function getList(Request $request, Authenticatable $user, string $sectionName = null)
     {
-        $query = Torrent::query();
-        if (!empty($params['category'])) {
-            $query->where('category', $params['category']);
+        if (empty($sectionName)) {
+            $sectionId = SearchBox::getBrowseMode();
+            $searchBox = SearchBox::query()->find($sectionId);
+        } else {
+            $searchBox = SearchBox::query()->where('name', $sectionName)->first();
         }
-        if (!empty($params['source'])) {
-            $query->where('source', $params['source']);
+        if (empty($searchBox)) {
+            throw new NexusException(nexus_trans("upload.invalid_section"));
         }
-        if (!empty($params['medium'])) {
-            $query->where('medium', $params['medium']);
+        if ($searchBox->isSectionSpecial() && !Permission::canViewSpecialSection()) {
+            throw new InsufficientPermissionException();
         }
-        if (!empty($params['codec'])) {
-            $query->where('codec', $params['codec']);
+        $categoryIdList = $searchBox->categories()->pluck('id')->toArray();
+        //query this info default
+        $query = Torrent::query()->with([
+            'basic_category', 'basic_category.search_box',
+            'basic_audiocodec', 'basic_codec', 'basic_medium',
+            'basic_source', 'basic_processing', 'basic_standard', 'basic_team',
+        ])
+            ->whereIn('category', $categoryIdList)
+            ->orderBy("pos_state", "DESC");
+        $allowIncludes = ['user', 'extra', 'tags'];
+        $allowIncludeCounts = ['thank_users', 'reward_logs', 'claims'];
+        $allowIncludeFields = [
+            'has_bookmarked', 'has_claimed', 'has_thanked', 'has_rewarded',
+            'description', 'download_url'
+        ];
+        $allowFilters = [
+            'title', 'category', 'source', 'medium', 'codec', 'audiocodec', 'standard', 'processing', 'team',
+            'owner', 'visible', 'added', 'size', 'sp_state', 'leechers', 'seeders', 'times_completed'
+        ];
+        $allowSorts = ['id', 'comments', 'size', 'seeders', 'leechers', 'times_completed'];
+        $apiQueryBuilder = ApiQueryBuilder::for(TorrentResource::NAME, $query, $request)
+            ->allowIncludes($allowIncludes)
+            ->allowIncludeCounts($allowIncludeCounts)
+            ->allowIncludeFields($allowIncludeFields)
+            ->allowFilters($allowFilters)
+            ->allowSorts($allowSorts)
+            ->registerCustomFilter('title', function (Builder $query, Request $request) {
+                $title = $request->input(ApiQueryBuilder::PARAM_NAME_FILTER.".title");
+                if ($title) {
+                    $query->where(function (Builder $query) use ($title) {
+                        $query->where('name', 'like', '%' . $title . '%')
+                            ->orWhere('small_descr', 'like', '%' . $title . '%');
+                    });
+                }
+            })
+        ;
+        $query = $apiQueryBuilder->build();
+        if (!$apiQueryBuilder->hasSort()) {
+            $query->orderBy("id", "DESC");
         }
-        if (!empty($params['audio_codec'])) {
-            $query->where('audiocodec', $params['audio_codec']);
-        }
-        if (!empty($params['standard'])) {
-            $query->where('standard', $params['standard']);
-        }
-        if (!empty($params['processing'])) {
-            $query->where('processing', $params['processing']);
-        }
-        if (!empty($params['team'])) {
-            $query->where('team', $params['team']);
-        }
-        if (!empty($params['owner'])) {
-            $query->where('owner', $params['owner']);
-        }
-        if (!empty($params['visible'])) {
-            $query->where('visible', $params['visible']);
-        }
-
-        if (!empty($params['query'])) {
-            $query->where(function (Builder $query) use ($params) {
-                $query->where('name', 'like', "%{$params['query']}%")
-                    ->orWhere('small_descr', 'like', "%{$params['query']}%");
-            });
-        }
-
-        if (!empty($params['category_mode'])) {
-            $query->whereHas('basic_category', function (Builder $query) use ($params) {
-                $query->where('mode', $params['category_mode']);
-            });
-        }
-
-        $query = $this->handleGetListSort($query, $params);
-
-        $with = ['user', 'tags'];
-        $torrents = $query->with($with)->paginate();
-        foreach ($torrents as &$item) {
-            $item->download_url = $this->getDownloadUrl($item->id, $user);
-        }
-        return $torrents;
+        $torrents = $query->paginate($this->getPerPageFromRequest($request));
+        return $this->appendIncludeFields($apiQueryBuilder, $user, $torrents);
     }
 
-    public function getDetail($id, User $user)
+    public function getDetail($id, Authenticatable $user)
     {
-        $with = [
-            'user', 'basic_audio_codec', 'basic_category', 'basic_codec', 'basic_media', 'basic_source', 'basic_standard', 'basic_team',
-            'thanks' => function ($query) use ($user) {
-                $query->where('userid', $user->id);
-            },
-            'reward_logs' => function ($query) use ($user) {
-                $query->where('userid', $user->id);
-            },
+        //query this info default
+        $query = Torrent::query()->with([
+            'basic_category', 'basic_category.search_box',
+            'basic_audiocodec', 'basic_codec', 'basic_medium',
+            'basic_source', 'basic_processing', 'basic_standard', 'basic_team',
+        ]);
+        $allowIncludes = ['user', 'extra', 'tags'];
+        $allowIncludeCounts = ['thank_users', 'reward_logs', 'claims'];
+        $allowIncludeFields = [
+            'has_bookmarked', 'has_claimed', 'has_thanked', 'has_rewarded',
+            'description', 'download_url'
         ];
-        $result = Torrent::query()->with($with)->withCount(['peers', 'thank_users', 'reward_logs'])->visible()->findOrFail($id);
-        $result->download_url = $this->getDownloadUrl($id, $user);
-        return $result;
+        $apiQueryBuilder = ApiQueryBuilder::for(TorrentResource::NAME, $query)
+            ->allowIncludes($allowIncludes)
+            ->allowIncludeCounts($allowIncludeCounts)
+            ->allowIncludeFields($allowIncludeFields)
+        ;
+        $torrent = $apiQueryBuilder->build()->findOrFail($id);
+        $torrentList = $this->appendIncludeFields($apiQueryBuilder, $user, [$torrent]);
+        return $torrentList[0];
+    }
+
+    private function appendIncludeFields(ApiQueryBuilder $apiQueryBuilder, Authenticatable $user, $torrentList)
+    {
+        $torrentIdArr = $bookmarkData = $claimData = $thankData = $rewardData =[];
+        foreach ($torrentList as $torrent) {
+            $torrentIdArr[] = $torrent->id;
+        }
+        unset($torrent);
+        if ($hasFieldHasBookmarked = $apiQueryBuilder->hasIncludeField('has_bookmarked')) {
+            $bookmarkData = $user->bookmarks()->whereIn('torrentid', $torrentIdArr)->get()->keyBy('torrentid');
+        }
+        if ($hasFieldHasClaimed = $apiQueryBuilder->hasIncludeField('has_claimed')) {
+            $claimData = $user->claims()->whereIn('torrent_id', $torrentIdArr)->get()->keyBy('torrent_id');
+        }
+        if ($hasFieldHasThanked = $apiQueryBuilder->hasIncludeField('has_thanked')) {
+            $thankData = $user->thank_torrent_logs()->whereIn('torrentid', $torrentIdArr)->get()->keyBy('torrentid');
+        }
+        if ($hasFieldHasRewarded = $apiQueryBuilder->hasIncludeField('has_rewarded')) {
+            $rewardData = $user->reward_torrent_logs()->whereIn('torrentid', $torrentIdArr)->get()->keyBy('torrentid');
+        }
+
+        foreach ($torrentList as $torrent) {
+            $id = $torrent->id;
+            if ($hasFieldHasBookmarked) {
+                $torrent->has_bookmarked = $bookmarkData->has($id);
+            }
+            if ($hasFieldHasClaimed) {
+                $torrent->has_claimed = $claimData->has($id);
+            }
+            if ($hasFieldHasThanked) {
+                $torrent->has_thanked = $thankData->has($id);
+            }
+            if ($hasFieldHasRewarded) {
+                $torrent->has_rewarded = $rewardData->has($id);
+            }
+
+            if ($apiQueryBuilder->hasIncludeField('description') && $apiQueryBuilder->hasInclude('extra')) {
+                $descriptionArr = format_description($torrent->extra->descr ?? '');
+                $torrent->description = $descriptionArr;
+                $torrent->images = get_image_from_description($descriptionArr);
+            }
+            if ($apiQueryBuilder->hasIncludeField("download_url")) {
+                $torrent->download_url = $this->getDownloadUrl($id, $user);
+            }
+        }
+        return $torrentList;
     }
 
     public function getDownloadUrl($id, array|User $user): string

@@ -29,7 +29,7 @@ if ($useChallengeResponse) {
     }
 }
 
-$res = sql_query("SELECT id, passhash, secret, auth_key, enabled, status, two_step_secret, lang FROM users WHERE username = " . sqlesc($username));
+$res = sql_query("SELECT id, passhash, secret, auth_key, enabled, status, two_step_secret, lang FROM users WHERE BINARY username = " . sqlesc($username));
 $row = mysql_fetch_array($res);
 
 if (!$row)

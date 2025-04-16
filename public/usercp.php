@@ -1150,7 +1150,7 @@ if ($res->count() > 0)
         $token .= sprintf('<td>%s</td>', $tokenRecord->name);
         $token .= sprintf('<td>%s</td>', $tokenRecord->abilitiesText);
         $token .= sprintf('<td>%s</td>', $tokenRecord->created_at);
-        $token .= sprintf('<td><span style="cursor: pointer;margin-right: 10px" class="token-get" data-id="%s">获取</span><span style="cursor: pointer" title="%s" data-id="%s" class="token-del">删除</span></td>', $tokenRecord->id, $lang_functions['text_delete'], $tokenRecord->id);
+        $token .= sprintf('<td><img style="cursor: pointer" class="staff_delete token-del" src="pic/trans.gif" alt="D" title="%s" data-id="%s"></td>', $lang_functions['text_delete'], $tokenRecord->id);
         $token .= "</tr>";
     }
     $token .= '</table>';
@@ -1184,13 +1184,16 @@ jQuery('#add-token-box-btn').on('click', function () {
             jQuery('body').loading({stoppable: false});
             let params = jQuery('#token-box-form').serialize()
             jQuery.post('/web/token/add', params, function (response) {
+                 jQuery('body').loading('stop');
                 console.log(response)
                 if (response.ret != 0) {
-                    jQuery('body').loading('stop');
                     layer.alert(response.msg)
-                    return
+                } else {
+                    layer.alert(response.msg, function(index) {
+                        layer.close(index);
+                        window.location.reload()
+                    })
                 }
-                window.location.reload()
             }, 'json')
         }
     })
@@ -1210,19 +1213,6 @@ jQuery('#token-table').on('click', '.token-del', function () {
             window.location.reload()
         }, 'json')
     })
-});
-jQuery('#token-table').on('click', '.token-get', function () {
-    let params = {id: jQuery(this).attr("data-id")}
-    jQuery('body').loading({stoppable: false});
-    jQuery.post('/web/token/get-plain', params, function (response) {
-        console.log(response)
-        jQuery('body').loading('stop');
-        if (response.ret != 0) {
-            layer.alert(response.msg)
-        } else {
-            layer.alert(response.data)
-        }
-    }, 'json')
 });
 JS;
     \Nexus\Nexus::js($tokenBoxJs, 'footer', false);

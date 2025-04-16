@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserDestroyed
+class UserDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

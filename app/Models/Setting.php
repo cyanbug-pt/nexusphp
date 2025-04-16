@@ -100,7 +100,7 @@ class Setting extends NexusModel
         return $value;
     }
 
-    public static function getDefaultLang()
+    public static function getDefaultLang(): string
     {
         return self::get("main.defaultlang");
     }
@@ -108,6 +108,114 @@ class Setting extends NexusModel
     public static function getIsUseChallengeResponseAuthentication(): bool
     {
         return self::get("security.use_challenge_response_authentication") == "yes";
+    }
+
+    public static function getUploadTorrentMaxSize(): int
+    {
+        return intval(self::get("main.max_torrent_size"));
+    }
+
+    public static function getUploadTorrentMaxPrice(): int
+    {
+        return intval(self::get("torrent.max_price"));
+    }
+
+    public static function getIsPaidTorrentEnabled(): bool
+    {
+        return self::get("torrent.paid_torrent_enabled") == "yes";
+    }
+
+    public static function getUploadDenyApprovalDenyCount(): int
+    {
+        return intval(self::get("main.upload_deny_approval_deny_count"));
+    }
+
+    public static function getOfferSkipApprovedCount(): int
+    {
+        return intval(self::get("main.offer_skip_approved_count"));
+    }
+
+    public static function getLargeTorrentSize(): int
+    {
+        return intval(self::get("torrent.largesize"));
+    }
+
+    public static function getLargeTorrentSpState(): int
+    {
+        return intval(self::get("torrent.largepro"));
+    }
+
+    public static function getUploadTorrentHalfDownProbability(): int
+    {
+        return intval(self::get("torrent.randomhalfleech"));
+    }
+
+    public static function getUploadTorrentFreeProbability(): int
+    {
+        return intval(self::get("torrent.randomfree"));
+    }
+
+    public static function getUploadTorrentTwoTimesUpProbability(): int
+    {
+        return intval(self::get("torrent.randomtwoup"));
+    }
+
+    public static function getUploadTorrentFreeTwoTimesUpProbability(): int
+    {
+        return intval(self::get("torrent.randomtwoupfree"));
+    }
+
+    public static function getUploadTorrentHalfDownTwoTimesUpProbability(): int
+    {
+        return intval(self::get("torrent.randomtwouphalfdown"));
+    }
+
+    public static function getUploadTorrentOneThirdDownProbability(): int
+    {
+        return intval(self::get("torrent.randomthirtypercentdown"));
+    }
+
+    public static function getUploadTorrentRewardBonus(): int
+    {
+        return intval(self::get("bonus.uploadtorrent"));
+    }
+
+
+
+    public static function getIsUploadOpenAtWeekend(): bool
+    {
+        return self::get("main.sptime") == "yes";
+    }
+
+    public static function getIsSpecialSectionEnabled(): bool
+    {
+        return self::get('main.spsct') == 'yes';
+    }
+
+    public static function getIsAllowUserReceiveEmailNotification(): bool
+    {
+        return self::get('smtp.emailnotify') == 'yes';
+    }
+
+    public static function getBaseUrl(): string
+    {
+        $result = self::get('basic.BASEURL', $_SERVER['HTTP_HOST'] ?? '');
+        return rtrim($result, '/');
+    }
+
+    public static function getSiteName(): string
+    {
+        return self::get("basic.SITENAME");
+    }
+
+    public static function getTorrentSaveDir(): string
+    {
+        return self::get("main.torrent_dir");
+    }
+
+    public static function getSmtpType(): string
+    {
+        return self::get("smtp.smtptype");
     }
 
 }

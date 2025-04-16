@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Validation\Rule;
 
 class SectionResource extends Resource
 {
@@ -59,8 +60,13 @@ class SectionResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label(__('label.search_box.name'))
-                    ->rules('alpha_dash')
-                    ->required()
+                    ->rules(function ($record) {
+                        return [
+                            'required',
+                            'alpha_dash:ascii',
+                            Rule::unique('searchbox', 'name')->ignore($record?->id)
+                        ];
+                    })
                 ,
                 Forms\Components\TextInput::make('catsperrow')
                     ->label(__('label.search_box.catsperrow'))

@@ -26,6 +26,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent be downloaded',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Receive reward',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Receive gift',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Upload torrent',
     ],
     'fields' => [
         'business_type' => 'Business type',

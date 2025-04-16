@@ -43,6 +43,7 @@ $lang_log = array
 	'text_news_empty' => "<b>News is empty</b><br />",
 	'col_title' => "Title",
 	'col_body' => "Body",
+    'col_user' => 'User',
 	'std_delete_poll' => "Delete poll",
 	'std_delete_poll_confirmation' => "Do you really want to delete a poll? Click ",
 	'std_here_if_sure' => "<b>here</b></a> if you are sure.",

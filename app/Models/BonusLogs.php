@@ -45,6 +45,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_TORRENT_BE_DOWNLOADED = 1001;
     const BUSINESS_TYPE_RECEIVE_REWARD = 1002;
     const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
+    const BUSINESS_TYPE_UPLOAD_TORRENT = 1004;
 
     public static array $businessTypes = [
         self::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => ['text' => 'Cancel H&R'],
@@ -73,6 +74,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
         self::BUSINESS_TYPE_RECEIVE_REWARD => ['text' => 'Receive reward'],
         self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
+        self::BUSINESS_TYPE_UPLOAD_TORRENT => ['text' => 'Upload torrent'],
     ];
 
     public function getBusinessTypeTextAttribute()

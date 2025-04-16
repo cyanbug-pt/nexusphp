@@ -12,6 +12,7 @@ $lang_log = array
 	'title_time_added' => "時間",
 	'col_date' => "日期",
 	'col_event' => "事件",
+    'col_user' => '用戶',
 	'time_zone_note' => "<p>時間為北京時間。</p>\n",
 	'text_daily_log' => "&nbsp;常&nbsp;規&nbsp;日&nbsp;志&nbsp;",
 	'text_chronicle' => "&nbsp;史&nbsp;&nbsp;冊&nbsp;",

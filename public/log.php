@@ -121,7 +121,7 @@ else {
 
 		list($pagertop, $pagerbottom, $limit) = pager($perpage, $count, "log.php?action=dailylog&".$addparam);
 
-		$res = sql_query("SELECT added, txt FROM sitelog $wherea ORDER BY added DESC $limit") or sqlerr(__FILE__, __LINE__);
+		$res = sql_query("SELECT * FROM sitelog $wherea ORDER BY added DESC $limit") or sqlerr(__FILE__, __LINE__);
 		if (mysql_num_rows($res) == 0)
 		print($lang_log['text_log_empty']);
 		else
@@ -130,7 +130,11 @@ else {
 		//echo $pagertop;
 
 			print("<table width=940 border=1 cellspacing=0 cellpadding=5>\n");
-			print("<tr><td class=colhead align=center><img class=\"time\" src=\"pic/trans.gif\" alt=\"time\" title=\"".$lang_log['title_time_added']."\" /></td><td class=colhead align=left>".$lang_log['col_event']."</td></tr>\n");
+			print("<tr><td class=colhead align=center><img class=\"time\" src=\"pic/trans.gif\" alt=\"time\" title=\"".$lang_log['title_time_added']."\" /></td><td class=colhead align=left>".$lang_log['col_event']);
+            if (user_can('confilog')){
+                print("<td class=colhead align=left>".$lang_log['col_user']."</td>");
+            }
+            print("</td></tr>\n");
 			while ($arr = mysql_fetch_assoc($res))
 			{
 				$color = "";
@@ -139,7 +143,11 @@ else {
 				if (strpos($arr['txt'],'was added to the Request section')) $color = "purple";
 				if (strpos($arr['txt'],'was edited by')) $color = "blue";
 				if (strpos($arr['txt'],'settings updated by')) $color = "darkred";
-				print("<tr><td class=\"rowfollow nowrap\" align=center>".gettime($arr['added'],true,false)."</td><td class=rowfollow align=left><font color='".$color."'>".htmlspecialchars($arr['txt'])."</font></td></tr>\n");
+				print("<tr><td class=\"rowfollow nowrap\" align=center>".gettime($arr['added'],true,false)."</td><td class=rowfollow align=left><font color='".$color."'>".htmlspecialchars($arr['txt'])."</font></td>");
+                if (user_can('confilog')){
+                    print("<td class=rowfollow align=left>".($arr['uid'] > 0 ? get_username($arr['uid']) : "System")."</td>");
+                }
+                print("</tr>\n");
 			}
 			print("</table>");
 

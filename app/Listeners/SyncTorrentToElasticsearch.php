@@ -8,7 +8,7 @@ use App\Repositories\ToolRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SyncTorrentToEs implements ShouldQueue
+class SyncTorrentToElasticsearch implements ShouldQueue
 {
 
     public $tries = 3;
@@ -32,6 +32,10 @@ class SyncTorrentToEs implements ShouldQueue
     public function handle($event)
     {
         $id = $event->model?->id ?? 0;
+        if ($id == 0) {
+            do_log("event: " . get_class($event) . " no model id", 'error');
+            return;
+        }
         $searchRep = new SearchRepository();
         $result = $searchRep->updateTorrent($id);
         do_log(sprintf("updateTorrent: %s result: %s", $id, var_export($result, true)));

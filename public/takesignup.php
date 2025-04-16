@@ -134,7 +134,7 @@ if ($_POST["rulesverify"] != "yes" || $_POST["faqverify"] != "yes" || $_POST["ag
 	stderr($lang_takesignup['std_signup_failed'], $lang_takesignup['std_unqualified']);
 
 // check if email addy is already in use
-$a = (@mysql_fetch_row(@sql_query("select count(*) from users where email='".mysql_real_escape_string($email)."'"))) or sqlerr(__FILE__, __LINE__);
+$a = (@mysql_fetch_row(@sql_query("select count(*) from users where BINARY email='".mysql_real_escape_string($email)."'"))) or sqlerr(__FILE__, __LINE__);
 if ($a[0] != 0)
   bark($lang_takesignup['std_email_address'].$email.$lang_takesignup['std_in_use']);
 

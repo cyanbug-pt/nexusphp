@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SearchBoxResource;
+use App\Http\Resources\TorrentResource;
 use App\Repositories\SearchBoxRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Http\Request;
@@ -24,12 +25,6 @@ class UploadController extends Controller
         $sections = $this->searchBoxRepository->listSections();
         $resource = SearchBoxResource::collection($sections);
         return $this->success($resource);
-    }
-
-    public function upload(Request $request)
-    {
-        $user = $request->user();
-        return $this->success("OK");
     }
 
 }

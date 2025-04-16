@@ -346,7 +346,8 @@ class ToolRepository extends BaseRepository
             ->from(new Address(Setting::get('main.SITEEMAIL'), Setting::get('basic.SITENAME')))
             ->to($to)
             ->subject($subject)
-            ->html($body)
+            ->text($body)
+            ->html(nl2br($body))
         ;
 
         // Send the message

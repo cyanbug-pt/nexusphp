@@ -4,25 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InsufficientPermissionException;
 use App\Models\Setting;
+use App\Utils\ApiQueryBuilder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 
-/**
- * @OA\Info(
- *     title="NexusPHP API",
- *     version="1.0"
- * )
- */
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function success($data, $msg = null)
+    protected ?array $extraFields = null;
+    protected ?array $extraSettingNames = null;
+
+    /**
+     * 返回成功信息，这里是旧方法，大部分情况下 $data 已经是 JsonResource
+     * 但很多地方有使用，历史原因保留不动，尽量使用 successJsonResource
+     *
+     * @param $data
+     * @param $msg
+     * @return array
+     */
+    public function success($data, $msg = null): array
     {
         if (is_null($msg)) {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
@@ -32,6 +41,34 @@ class Controller extends BaseController
         return success($msg, $data);
     }
 
+    /**
+     * 返回成功信息，对于不是 JsonResource 的数据，进行包装。返回的数据在 data.data 中
+     *
+     * @param $data
+     * @param $msg
+     * @return array
+     */
+    public function successJsonResource($data, $msg = null): array
+    {
+        if (is_null($msg)) {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = $backtrace[1];
+            $msg = $this->getReturnMsg($caller);
+        }
+        if ($data instanceof JsonResource) {
+            return $this->success($data, $msg);
+        }
+        $resource = new JsonResource($data);
+        return $this->success($resource, $msg);
+    }
+
+    /**
+     * 返回失败信息，目前对于失败信息不需要包装
+     *
+     * @param $data
+     * @param $msg
+     * @return array
+     */
     public function fail($data, $msg = null)
     {
         if (is_null($msg)) {
@@ -78,6 +115,31 @@ class Controller extends BaseController
         return [$perPage, ['*'], 'page', $page];
     }
 
+    protected function hasExtraField($field): bool
+    {
+        if ($this->extraFields === null) {
+            $extraFieldsStr = request()->input("extra_fields", '');
+            $this->extraFields = explode(',', $extraFieldsStr);
+        }
+        do_log(sprintf("field: %s, extraFields: %s", $field, json_encode($this->extraFields)));
+        return in_array($field, $this->extraFields);
+    }
 
+    protected function appendExtraSettings(array &$additional, array $names): void
+    {
+        if ($this->extraSettingNames === null) {
+            $extraSettingStr = request()->input("extra_settings", '');
+            $this->extraSettingNames = explode(',', $extraSettingStr);
+        }
+        $results = [];
+        foreach ($names as $name) {
+            if (in_array($name, $this->extraSettingNames)) {
+                $results[$name] = get_setting($name);
+            }
+        }
+        if (!empty($results)) {
+            $additional['extra_settings'] = $results;
+        }
+    }
 
 }

@@ -2,18 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Events\NewsCreated;
-use App\Events\TorrentCreated;
-use App\Events\TorrentDeleted;
-use App\Events\TorrentUpdated;
-use App\Events\UserCreated;
-use App\Events\UserDestroyed;
-use App\Events\UserDisabled;
-use App\Events\UserEnabled;
-use App\Events\UserUpdated;
-use App\Models\News;
-use App\Models\Torrent;
-use App\Models\User;
+use App\Enums\ModelEventEnum;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Nexus\Database\NexusDB;
@@ -35,20 +24,6 @@ class FireEvent extends Command
      */
     protected $description = 'Fire an event, options: --name, --idKey --idKeyOld';
 
-    protected array $eventMaps = [
-        "torrent_created" => ['event' => TorrentCreated::class, 'model' => Torrent::class],
-        "torrent_updated" => ['event' => TorrentUpdated::class, 'model' => Torrent::class],
-        "torrent_deleted" => ['event' => TorrentDeleted::class, 'model' => Torrent::class],
-
-        "user_created" => ['event' => UserCreated::class, 'model' => User::class],
-        "user_destroyed" => ['event' => UserDestroyed::class, 'model' => User::class],
-        "user_disabled" => ['event' => UserDisabled::class, 'model' => User::class],
-        "user_enabled" => ['event' => UserEnabled::class, 'model' => User::class],
-        "user_updated" => ['event' => UserUpdated::class, 'model' => User::class],
-
-        "news_created" => ['event' => NewsCreated::class, 'model' => News::class],
-    ];
-
     /**
      * Execute the console command.
      *
@@ -60,8 +35,8 @@ class FireEvent extends Command
         $idKey = $this->option('idKey');
         $idKeyOld = $this->option('idKeyOld');
         $log = "FireEvent, name: $name, idKey: $idKey, idKeyOld: $idKeyOld";
-        if (isset($this->eventMaps[$name])) {
-            $eventName = $this->eventMaps[$name]['event'];
+        if (isset(ModelEventEnum::$eventMaps[$name])) {
+            $eventName = ModelEventEnum::$eventMaps[$name]['event'];
             $model = unserialize(NexusDB::cache_get($idKey));
             if ($model instanceof Model) {
                 $params = [$model];

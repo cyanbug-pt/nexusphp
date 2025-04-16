@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+    const NAME = 'user';
     /**
      * Transform the resource into an array.
      *
@@ -21,7 +22,9 @@ class UserResource extends JsonResource
             'status' => $this->status,
             'enabled' => $this->enabled,
             'added' => format_datetime($this->added),
+            'added_human' => gettime($this->added),
             'last_access' => format_datetime($this->last_access),
+            'last_access_human' => gettime($this->last_access),
             'class' => $this->class,
             'class_text' => $this->class_text,
             'avatar' => $this->avatar,
@@ -31,8 +34,10 @@ class UserResource extends JsonResource
             'uploaded_text' => mksize($this->uploaded),
             'downloaded' => $this->downloaded,
             'downloaded_text' => mksize($this->downloaded),
-            'bonus' => number_format($this->seedbonus, 1),
-            'seed_points' => number_format($this->seed_points, 1),
+            'bonus' => floatval($this->seedbonus),
+            'bonus_human' => number_format($this->seedbonus, 1),
+            'seed_points' => floatval($this->seed_points),
+            'seed_points_human' => number_format($this->seed_points, 1),
             'seedtime' => $this->seedtime,
             'seedtime_text' => mkprettytime($this->seedtime),
             'leechtime' => $this->leechtime,
@@ -40,27 +45,27 @@ class UserResource extends JsonResource
             'inviter' => new UserResource($this->whenLoaded('inviter')),
             'valid_medals' => MedalResource::collection($this->whenLoaded('valid_medals')),
         ];
-        if ($request->routeIs('user.me')) {
-            $out['downloaded_human'] = mksize($this->downloaded);
-            $out['uploaded_human'] = mksize($this->uploaded);
-            $out['seed_time'] = mkprettytime($this->seedtime);
-            $out['leech_time'] = mkprettytime($this->leechtime);
-            $out['share_ratio'] = get_share_ratio($this->uploaded, $this->downloaded);
-            $out['comments_count'] = $this->comments_count;
-            $out['posts_count'] = $this->posts_count;
-            $out['torrents_count'] = $this->torrents_count;
-            $out['seeding_torrents_count'] = $this->seeding_torrents_count;
-            $out['leeching_torrents_count'] = $this->leeching_torrents_count;
-            $out['completed_torrents_count'] = $this->completed_torrents_count;
-            $out['incomplete_torrents_count'] = $this->incomplete_torrents_count;
-        }
-        if ($request->routeIs("oauth.user_info")) {
-            $out['name'] = $this->username;
-        }
-
-        if (nexus()->isPlatformAdmin() && $request->routeIs('users.show')) {
-            $out['two_step_secret'] = $this->two_step_secret;
-        }
+//        if ($request->routeIs('user.me')) {
+//            $out['downloaded_human'] = mksize($this->downloaded);
+//            $out['uploaded_human'] = mksize($this->uploaded);
+//            $out['seed_time'] = mkprettytime($this->seedtime);
+//            $out['leech_time'] = mkprettytime($this->leechtime);
+//            $out['share_ratio'] = get_share_ratio($this->uploaded, $this->downloaded);
+//            $out['comments_count'] = $this->comments_count;
+//            $out['posts_count'] = $this->posts_count;
+//            $out['torrents_count'] = $this->torrents_count;
+//            $out['seeding_torrents_count'] = $this->seeding_torrents_count;
+//            $out['leeching_torrents_count'] = $this->leeching_torrents_count;
+//            $out['completed_torrents_count'] = $this->completed_torrents_count;
+//            $out['incomplete_torrents_count'] = $this->incomplete_torrents_count;
+//        }
+//        if ($request->routeIs("oauth.user_info")) {
+//            $out['name'] = $this->username;
+//        }
+//
+//        if (nexus()->isPlatformAdmin() && $request->routeIs('users.show')) {
+//            $out['two_step_secret'] = $this->two_step_secret;
+//        }
 
         return $out;
     }

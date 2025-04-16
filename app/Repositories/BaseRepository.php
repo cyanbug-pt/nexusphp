@@ -6,6 +6,7 @@ use App\Models\Setting;
 use App\Models\Torrent;
 use App\Models\User;
 use Illuminate\Encryption\Encrypter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class BaseRepository
@@ -18,6 +19,11 @@ class BaseRepository
             $type = 'asc';
         }
         return [$field, $type];
+    }
+
+    protected function getPerPageFromRequest(Request $request)
+    {
+        return $request->get('per_page');
     }
 
     protected function handleAnonymous($username, $user, User $authenticator, Torrent $torrent = null)

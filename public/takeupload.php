@@ -275,34 +275,34 @@ else{ //ramdom torrent promotion
 	else
 		$sp_state = 1; //normal
 }
-
-if ($altname_main == 'yes'){
-$cnname_part = unesc(trim($_POST["cnname"]));
-$size_part = str_replace(" ", "", mksize($totallen));
-$date_part = date("m.d.y");
-$category_part = get_single_value("categories","name","WHERE id = ".sqlesc($catid));
-$torrent = "【".$date_part."】".($_POST["name"] ? "[".$_POST["name"]."]" : "").($cnname_part ? "[".$cnname_part."]" : "");
-}
+//
+//if ($altname_main == 'yes'){
+//$cnname_part = unesc(trim($_POST["cnname"]));
+//$size_part = str_replace(" ", "", mksize($totallen));
+//$date_part = date("m.d.y");
+//$category_part = get_single_value("categories","name","WHERE id = ".sqlesc($catid));
+//$torrent = "【".$date_part."】".($_POST["name"] ? "[".$_POST["name"]."]" : "").($cnname_part ? "[".$cnname_part."]" : "");
+//}
 
 // some ugly code of automatically promoting torrents based on some rules
-if ($prorules_torrent == 'yes'){
-foreach ($promotionrules_torrent as $rule)
-{
-	if (!array_key_exists('catid', $rule) || in_array($catid, $rule['catid']))
-		if (!array_key_exists('sourceid', $rule) || in_array($sourceid, $rule['sourceid']))
-			if (!array_key_exists('mediumid', $rule) || in_array($mediumid, $rule['mediumid']))
-				if (!array_key_exists('codecid', $rule) || in_array($codecid, $rule['codecid']))
-					if (!array_key_exists('standardid', $rule) || in_array($standardid, $rule['standardid']))
-						if (!array_key_exists('processingid', $rule) || in_array($processingid, $rule['processingid']))
-							if (!array_key_exists('teamid', $rule) || in_array($teamid, $rule['teamid']))
-								if (!array_key_exists('audiocodecid', $rule) || in_array($audiocodecid, $rule['audiocodecid']))
-									if (!array_key_exists('pattern', $rule) || preg_match($rule['pattern'], $torrent))
-										if (is_numeric($rule['promotion'])){
-											$sp_state = $rule['promotion'];
-											break;
-										}
-}
-}
+//if ($prorules_torrent == 'yes'){
+//foreach ($promotionrules_torrent as $rule)
+//{
+//	if (!array_key_exists('catid', $rule) || in_array($catid, $rule['catid']))
+//		if (!array_key_exists('sourceid', $rule) || in_array($sourceid, $rule['sourceid']))
+//			if (!array_key_exists('mediumid', $rule) || in_array($mediumid, $rule['mediumid']))
+//				if (!array_key_exists('codecid', $rule) || in_array($codecid, $rule['codecid']))
+//					if (!array_key_exists('standardid', $rule) || in_array($standardid, $rule['standardid']))
+//						if (!array_key_exists('processingid', $rule) || in_array($processingid, $rule['processingid']))
+//							if (!array_key_exists('teamid', $rule) || in_array($teamid, $rule['teamid']))
+//								if (!array_key_exists('audiocodecid', $rule) || in_array($audiocodecid, $rule['audiocodecid']))
+//									if (!array_key_exists('pattern', $rule) || preg_match($rule['pattern'], $torrent))
+//										if (is_numeric($rule['promotion'])){
+//											$sp_state = $rule['promotion'];
+//											break;
+//										}
+//}
+//}
 $dateTimeStringNow = \Carbon\Carbon::now()->toDateTimeString();
 
 $torrentSavePath = getFullDirectory($torrent_dir);
@@ -452,15 +452,15 @@ $torrentRep = new \App\Repositories\TorrentRepository();
 $torrentRep->addPiecesHashCache($id, $insert['pieces_hash']);
 
 write_log("Torrent $id ($torrent) was uploaded by $anon");
-
-$searchRep = new \App\Repositories\SearchRepository();
-$searchRep->addTorrent($id);
-
-$meiliSearch = new \App\Repositories\MeiliSearchRepository();
-$meiliSearch->doImportFromDatabase($id);
+//move to event listener
+//$searchRep = new \App\Repositories\SearchRepository();
+//$searchRep->addTorrent($id);
+//
+//$meiliSearch = new \App\Repositories\MeiliSearchRepository();
+//$meiliSearch->doImportFromDatabase($id);
 
 //trigger event
-fire_event("torrent_created", \App\Models\Torrent::query()->find($id));
+fire_event(\App\Enums\ModelEventEnum::TORRENT_CREATED, \App\Models\Torrent::query()->find($id));
 
 //===notify people who voted on offer thanks CoLdFuSiOn :)
 if ($is_offer)

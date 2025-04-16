@@ -22,10 +22,15 @@ class MedalResource extends JsonResource
             'image_large' => $this->image_large,
             'image_small' => $this->image_small,
             'price' => $this->price,
+            'price_human' => number_format($this->price),
             'duration' => $this->duration,
             'description' => $this->description,
             'expire_at' => $this->whenPivotLoaded('user_medals', function () {return $this->pivot->expire_at;}),
             'user_medal_id' => $this->whenPivotLoaded('user_medals', function () {return $this->pivot->id;}),
+            'wearing_status' => $this->whenPivotLoaded('user_medals', function () {return $this->pivot->status;}),
+            'wearing_status_text' => $this->whenPivotLoaded('user_medals', function () {
+                return nexus_trans("medal.wearing_status_text." . $this->pivot->status);
+            }),
         ];
     }
 }

@@ -13,8 +13,9 @@ class Torrent extends NexusModel
         'category', 'source', 'medium', 'codec', 'standard', 'processing', 'team', 'audiocodec',
         'size', 'added', 'type', 'numfiles', 'owner', 'nfo', 'sp_state', 'promotion_time_type',
         'promotion_until', 'anonymous', 'url', 'pos_state', 'cache_stamp', 'picktype', 'picktime',
-        'last_reseed', 'leechers', 'seeders', 'cover', 'last_action',
+        'last_reseed', 'leechers', 'seeders', 'cover', 'last_action', 'info_hash', 'pieces_hash',
         'times_completed', 'approval_status', 'banned', 'visible', 'pos_state_until', 'price',
+        'hr',
     ];
 
     const VISIBLE_YES = 'yes';
@@ -27,6 +28,7 @@ class Torrent extends NexusModel
         'added' => 'datetime',
         'promotion_until' => 'datetime',
         'pos_state_until' => 'datetime',
+        'last_action' => 'datetime',
     ];
 
     public static $commentFields = [
@@ -334,15 +336,6 @@ class Torrent extends NexusModel
         return implode('', $html);
     }
 
-    public static function getBasicInfo(): array
-    {
-        $result = [];
-        foreach (self::$basicRelations as $relation) {
-            $result[$relation] = nexus_trans("torrent.show.$relation");
-        }
-        return $result;
-    }
-
     public static function listPosStates($onlyKeyValue = false, $valueField = 'text'): array
     {
         $result = self::$posStates;
@@ -380,6 +373,11 @@ class Torrent extends NexusModel
         }
 
         return true;
+    }
+
+    public function getSubCategoryLabel($field): string
+    {
+        return $this->basic_category->search_box->getTaxonomyLabel($field);
     }
 
     public function bookmarks(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -452,7 +450,7 @@ class Torrent extends NexusModel
         return $this->belongsTo(Source::class, 'source');
     }
 
-    public function basic_media()
+    public function basic_medium()
     {
         return $this->belongsTo(Media::class, 'medium');
     }
@@ -477,9 +475,19 @@ class Torrent extends NexusModel
         return $this->belongsTo(Team::class, 'team');
     }
 
-    public function basic_audio_codec()
+    public function basic_audiocodec()
     {
         return $this->belongsTo(AudioCodec::class, 'audiocodec');
+    }
+
+    public function claim_users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'claims', 'torrent_id');
+    }
+
+    public function claims()
+    {
+        return $this->hasMany(Claim::class, 'torrent_id');
     }
 
     public function scopeVisible($query, $visible = self::VISIBLE_YES)

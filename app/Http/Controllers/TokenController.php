@@ -27,14 +27,12 @@ class TokenController extends Controller
             $user = Auth::user();
             $count = $user->tokens()->count();
             if ($count >= 5) {
-                throw new NexusException("Token limit exceeded");
+                throw new NexusException(nexus_trans("token.maximum_allow_number_reached"));
             }
             $newAccessToken = $user->createToken($request->name, $request->permissions);
-            PersonalAccessTokenPlain::query()->create([
-                'access_token_id' => $newAccessToken->accessToken->getKey(),
-                'plain_text_token' => $newAccessToken->plainTextToken,
-            ]);
-            return $this->success(true);
+            $tokenText = $newAccessToken->plainTextToken;
+            $msg = nexus_trans("token.create_success_tip", ['token' => $tokenText]);
+            return $this->successJsonResource(['token' => $tokenText], $msg);
         } catch (\Exception $exception) {
             return $this->fail(false, $exception->getMessage());
         }
@@ -47,11 +45,7 @@ class TokenController extends Controller
                 'id' => 'required|integer',
             ]);
             $user = Auth::user();
-            $token = $user->tokens()->where("id", $request->id)->first();
-            if ($token) {
-                PersonalAccessTokenPlain::query()->where("access_token_id", $token->id)->delete();
-                $token->delete();
-            }
+            $user->tokens()->where("id", $request->id)->delete();
             return $this->success(true);
         } catch (\Exception $exception) {
             return $this->fail(false, $exception->getMessage());

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personal_access_token_plains', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('access_token_id')->unsigned();
-            $table->string("plain_text_token");
-            $table->timestamps();
+        Schema::table('sitelog', function (Blueprint $table) {
+            $table->integer('uid')->default(0);
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personal_access_token_plains');
+        Schema::table('sitelog', function (Blueprint $table) {
+            $table->dropColumn('uid');
+        });
     }
 };

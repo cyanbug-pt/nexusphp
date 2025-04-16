@@ -5,7 +5,7 @@ namespace App\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DeductUserBonusWhenTorrentDeleted
+class DeductUserBonusWhenTorrentDeleted implements ShouldQueue
 {
     /**
      * Create the event listener.

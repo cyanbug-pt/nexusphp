@@ -28,6 +28,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => '种子被下载',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => '收到奖励',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => '收到礼物',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => '发布种子',
     ],
     'fields' => [
         'business_type' => '业务类型',

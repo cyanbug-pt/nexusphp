@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\PersonalAccessToken;
+use App\Models\Torrent;
+use App\Models\User;
+use App\Repositories\UploadRepository;
 use Illuminate\Console\Command;
 use NexusPlugin\Menu\Filament\MenuItemResource\Pages\ManageMenuItems;
 use NexusPlugin\Menu\MenuRepository;
@@ -15,6 +18,7 @@ use NexusPlugin\StickyPromotion\Models\StickyPromotionParticipator;
 use NexusPlugin\Tracker\TrackerRepository;
 use NexusPlugin\Work\Models\RoleWork;
 use NexusPlugin\Work\WorkRepository;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class Test extends Command
 {
@@ -49,8 +53,12 @@ class Test extends Command
      */
     public function handle()
     {
-        $result = getLogFile();
-        dd($result);
+        $a = ['acb' => 2];
+
+        if ($a = isset($a['ab'])) {
+            $this->info("isset ab = true");
+        }
+        dd($a);
     }
 
 }

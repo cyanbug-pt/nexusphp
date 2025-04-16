@@ -7,7 +7,9 @@ class TokenRepository extends BaseRepository
 {
     private static array $userTokenPermissions = [
         PermissionEnum::TORRENT_LIST,
+        PermissionEnum::TORRENT_VIEW,
         PermissionEnum::UPLOAD,
+        PermissionEnum::USER_VIEW,
     ];
 
     public function listUserTokenPermissions(): array

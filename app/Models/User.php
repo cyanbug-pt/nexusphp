@@ -540,6 +540,11 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(UserModifyLog::class, "user_id");
     }
 
+    public function claims(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Claim::class, 'uid');
+    }
+
     public function getAvatarAttribute($value)
     {
         if ($value) {

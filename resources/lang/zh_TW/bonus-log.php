@@ -26,6 +26,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => '種子被下載',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => '收到獎勵',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => '收到禮物',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => '發布種子',
     ],
     'fields' => [
         'business_type' => '業務類型',

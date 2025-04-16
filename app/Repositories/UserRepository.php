@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\ExamUserResource;
+use App\Http\Resources\TorrentResource;
 use App\Http\Resources\UserResource;
 use App\Models\ExamUser;
 use App\Models\Invite;
@@ -11,12 +12,15 @@ use App\Models\LoginLog;
 use App\Models\Message;
 use App\Models\Setting;
 use App\Models\Snatch;
+use App\Models\Torrent;
 use App\Models\User;
 use App\Models\UserBanLog;
 use App\Models\UserMeta;
 use App\Models\UserModifyLog;
 use App\Models\UsernameChangeLog;
+use App\Utils\ApiQueryBuilder;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -53,28 +57,30 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
-    public function getDetail($id)
+    public function getDetail($id, Authenticatable $currentUser)
     {
-        $with = [
-            'inviter' => function ($query) {return $query->select(User::$commonFields);},
-            'valid_medals'
-        ];
-        $user = User::query()->with($with)->findOrFail($id);
-        $userResource = new UserResource($user);
-        $baseInfo = $userResource->response()->getData(true)['data'];
+        //query this info default
+        $query = User::query()->with([]);
+        $allowIncludes = ['inviter', 'valid_medals'];
+        $allowIncludeCounts = [];
+        $allowIncludeFields = [];
+        $apiQueryBuilder = ApiQueryBuilder::for(UserResource::NAME, $query)
+            ->allowIncludes($allowIncludes)
+            ->allowIncludeCounts($allowIncludeCounts)
+            ->allowIncludeFields($allowIncludeFields)
+        ;
+        $user = $apiQueryBuilder->build()->findOrFail($id);
+        return $this->appendIncludeFields($apiQueryBuilder, $currentUser, $user);
+    }
 
-        $examRep = new ExamRepository();
-        $examProgress = $examRep->getUserExamProgress($id, ExamUser::STATUS_NORMAL);
-        if ($examProgress) {
-            $examResource = new ExamUserResource($examProgress);
-            $examInfo = $examResource->response()->getData(true)['data'];
-        } else {
-            $examInfo = null;
-        }
-        return [
-            'base_info' => $baseInfo,
-            'exam_info' => $examInfo,
-        ];
+    private function appendIncludeFields(ApiQueryBuilder $apiQueryBuilder, Authenticatable $currentUser, User $user): User
+    {
+//        $id = $torrent->id;
+//        if ($apiQueryBuilder->hasIncludeField('has_bookmarked')) {
+//            $torrent->has_bookmarked = (int)$user->bookmarks()->where('torrentid', $id)->exists();;
+//        }
+
+        return $user;
     }
 
     /**

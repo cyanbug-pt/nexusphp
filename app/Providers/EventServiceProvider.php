@@ -6,13 +6,15 @@ use App\Events\SeedBoxRecordUpdated;
 use App\Events\TorrentCreated;
 use App\Events\TorrentDeleted;
 use App\Events\TorrentUpdated;
-use App\Events\UserDestroyed;
+use App\Events\UserDeleted;
 use App\Events\UserDisabled;
 use App\Listeners\DeductUserBonusWhenTorrentDeleted;
 use App\Listeners\FetchTorrentImdb;
 use App\Listeners\RemoveOauthTokens;
 use App\Listeners\RemoveSeedBoxRecordCache;
-use App\Listeners\SyncTorrentToEs;
+use App\Listeners\SendEmailNotificationWhenTorrentCreated;
+use App\Listeners\SyncTorrentToElasticsearch;
+use App\Listeners\SyncTorrentToMeilisearch;
 use App\Listeners\TestTorrentUpdated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -34,11 +36,14 @@ class EventServiceProvider extends ServiceProvider
             RemoveSeedBoxRecordCache::class,
         ],
         TorrentUpdated::class => [
-            SyncTorrentToEs::class,
-            TestTorrentUpdated::class,
+            SyncTorrentToElasticsearch::class,
+            SyncTorrentToMeilisearch::class,
         ],
         TorrentCreated::class => [
             FetchTorrentImdb::class,
+            SyncTorrentToElasticsearch::class,
+            SyncTorrentToMeilisearch::class,
+            SendEmailNotificationWhenTorrentCreated::class,
         ],
         TorrentDeleted::class => [
             DeductUserBonusWhenTorrentDeleted::class,

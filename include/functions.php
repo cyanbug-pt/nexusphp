@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\SearchBox;
+use Carbon\CarbonInterface;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
@@ -722,10 +723,12 @@ function get_slr_color($ratio)
 
 function write_log($text, $security = "normal")
 {
-	$text = sqlesc($text);
-	$added = sqlesc(date("Y-m-d H:i:s"));
-	$security = sqlesc($security);
-	sql_query("INSERT INTO sitelog (added, txt, security_level) VALUES($added, $text, $security)") or sqlerr(__FILE__, __LINE__);
+    \App\Models\SiteLog::query()->insert([
+        'added' => now(),
+        'txt' => $text,
+        'security_level' => $security,
+        'uid' => get_user_id(),
+    ]);
 }
 
 
@@ -2219,9 +2222,8 @@ function validlang($langid) {
 
 function get_if_restricted_is_open()
 {
-	global $sptime;
 	// it's sunday
-	if($sptime == 'yes' && (date("w",time()) == '0' || (date("w",time()) == 6) && (date("G",time()) >=12 && date("G",time()) <=23)))
+	if(\App\Models\Setting::getIsUploadOpenAtWeekend() && (date("w",time()) == '0' || (date("w",time()) == 6) && (date("G",time()) >=12 && date("G",time()) <=23)))
 	{
 		return true;
 	}
@@ -2992,7 +2994,6 @@ function set_langfolder_cookie($folder, $expires = 0x7fffffff)
 
 function get_protocol_prefix()
 {
-	global $securelogin;
 	if (isHttps()) {
         return "https://";
     }
@@ -4277,7 +4278,18 @@ function permissiondenied($allowMinimumClass = null){
 }
 
 function gettime($time, $withago = true, $twoline = false, $forceago = false, $oneunit = false, $isfuturetime = false){
-	global $lang_functions, $CURUSER;
+	if (!IN_NEXUS) {
+        if (empty($time)) {
+            return null;
+        }
+        try {
+            return \Carbon\Carbon::parse($time)->diffForHumans();
+        } catch (\Exception $e) {
+            do_log($e->getMessage() . $e->getTraceAsString(), 'error');
+            return $time;
+        }
+    }
+    global $lang_functions, $CURUSER;
 	if (isset($CURUSER) && $CURUSER['timetype'] != 'timealive' && !$forceago){
 		$newtime = $time;
 		if ($twoline){
@@ -5910,7 +5922,8 @@ function insert_torrent_tags($torrentId, $tagIdArr, $sync = false)
     $canSetSpecialTag = user_can('torrent-set-special-tag');
     $dateTimeStringNow = date('Y-m-d H:i:s');
     if ($sync) {
-        sql_query("delete from torrent_tags where torrent_id = $torrentId");
+        \App\Models\TorrentTag::query()->where("torrent_id", $torrentId)->delete();
+//        sql_query("delete from torrent_tags where torrent_id = $torrentId");
     }
     if (empty($tagIdArr)) {
         return;
@@ -5926,7 +5939,8 @@ function insert_torrent_tags($torrentId, $tagIdArr, $sync = false)
     }
     $insertTagsSql .= implode(', ', $values);
     do_log("[INSERT_TAGS], torrent: $torrentId with tags: " . nexus_json_encode($tagIdArr));
-    sql_query($insertTagsSql);
+    \Nexus\Database\NexusDB::statement($insertTagsSql);
+//    sql_query($insertTagsSql);
 }
 
 function get_smile($num)

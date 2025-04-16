@@ -148,20 +148,25 @@ class TechnicalInformation
     public function renderOnDetailsPage()
     {
         global $lang_functions;
-        $videos = [
-            'Runtime' => $this->getRuntime(),
-            'Resolution' => $this->getResolution(),
-            'Bitrate' => $this->getBitrate(),
-            'HDR' => $this->getHDRFormat(),
-            'Bit depth' => $this->getBitDepth(),
-            'Frame rate' => $this->getFramerate(),
-            'Profile' => $this->getProfile(),
-            'Ref.Frames' => $this->getRefFrame(),
-        ];
-        $videos = array_filter($videos);
-        $audios = $this->getAudios();
-        $subtitles = $this->getSubtitles();
-//        dd($videos, $audios, $subtitles);
+//        $videos = [
+//            'Runtime' => $this->getRuntime(),
+//            'Resolution' => $this->getResolution(),
+//            'Bitrate' => $this->getBitrate(),
+//            'HDR' => $this->getHDRFormat(),
+//            'Bit depth' => $this->getBitDepth(),
+//            'Frame rate' => $this->getFramerate(),
+//            'Profile' => $this->getProfile(),
+//            'Ref.Frames' => $this->getRefFrame(),
+//        ];
+//        $videos = array_filter($videos);
+//        $audios = $this->getAudios();
+//        $subtitles = $this->getSubtitles();
+        $summaryInfo = $this->getSummaryInfo();
+        $videos = $summaryInfo['videos'] ?: [];
+        $audios = $summaryInfo['audios'] ?: [];
+        $subtitles = $summaryInfo['subtitles'] ?: [];
+
+//        dd($summaryInfo, $videos, $audios, $subtitles);
         if (empty($videos) && empty($audios) && empty($subtitles)) {
             return sprintf('<div class="nexus-media-info-raw"><pre>%s</pre></div>', $this->mediaInfo);
         }
@@ -185,6 +190,24 @@ class TechnicalInformation
         $result .= sprintf('<tr><td colspan="%s" class="nexus-media-info-raw">%s</td></tr>', $cols, format_comment($rawMediaInfo, false));
         $result .= '</tbody></table>';
         return $result;
+    }
+
+    public function getSummaryInfo(): array
+    {
+        $videos = [
+            'Runtime' => $this->getRuntime(),
+            'Resolution' => $this->getResolution(),
+            'Bitrate' => $this->getBitrate(),
+            'HDR' => $this->getHDRFormat(),
+            'Bit depth' => $this->getBitDepth(),
+            'Frame rate' => $this->getFramerate(),
+            'Profile' => $this->getProfile(),
+            'Ref.Frames' => $this->getRefFrame(),
+        ];
+        $videos = array_filter($videos) ?: null;
+        $audios = $this->getAudios() ?: null;
+        $subtitles = $this->getSubtitles() ?: null;
+        return compact('videos', 'audios', 'subtitles');
     }
 
     private function buildTdTable(array $parts)

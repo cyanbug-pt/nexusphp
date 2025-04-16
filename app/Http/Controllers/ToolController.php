@@ -6,6 +6,7 @@ use App\Models\PluginStore;
 use App\Repositories\ToolRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -31,9 +32,9 @@ class ToolController extends Controller
 
     public function test(Request $request)
     {
-        $rep = new UploadRepository();
-        $result = $rep->listSections();
-        return $result;
+        $result = ['id' => 1];
+        $resource = new JsonResource($result);
+        return $this->success($resource);
     }
 
 }

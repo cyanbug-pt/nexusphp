@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	failedlogins($lang_recover['std_missing_email_address'],true);
 	if (!check_email($email))
 	failedlogins($lang_recover['std_invalid_email_address'],true);
-	$res = sql_query("SELECT * FROM users WHERE email=" . sqlesc($email) . " LIMIT 1") or sqlerr(__FILE__, __LINE__);
+	$res = sql_query("SELECT * FROM users WHERE BINARY email=" . sqlesc($email) . " LIMIT 1") or sqlerr(__FILE__, __LINE__);
 	$arr = mysql_fetch_assoc($res);
 	if (!$arr) failedlogins($lang_recover['std_email_not_in_database'],true);
 	if ($arr['status'] == "pending") failedlogins($lang_recover['std_user_account_unconfirmed'],true);

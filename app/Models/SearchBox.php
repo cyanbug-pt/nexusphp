@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Auth\Permission;
 use App\Http\Middleware\Locale;
 use App\Repositories\TagRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -106,7 +107,9 @@ class SearchBox extends NexusModel
         $lang = get_langfolder_cookie();
         foreach ($this->extra[self::EXTRA_TAXONOMY_LABELS] ?? [] as $item) {
             if ($item['torrent_field'] == $torrentField) {
-                return $item['display_text'][$lang] ?? 'Unknown';
+                if (!empty($item['display_text'][$lang])) {
+                    return $item['display_text'][$lang];
+                }
             }
         }
         return nexus_trans("searchbox.sub_category_{$torrentField}_label") ?: ucfirst($torrentField);
@@ -214,7 +217,7 @@ class SearchBox extends NexusModel
 
     public static function isSpecialEnabled(): bool
     {
-        return Setting::get('main.spsct') == 'yes';
+        return Setting::getIsSpecialSectionEnabled();
     }
 
     public static function getBrowseMode()
@@ -303,7 +306,12 @@ class SearchBox extends NexusModel
 
     public function loadTags(): void
     {
-        $this->setRelation("tags", TagRepository::listAll($this->getKey()));
+        $allTags = TagRepository::listAll($this->getKey());
+        if (!Permission::canSetTorrentSpecialTag()) {
+            $specialTagIdList = Tag::listSpecial();
+            $allTags = $allTags->filter(fn ($item) => !in_array($item->id, $specialTagIdList));
+        }
+        $this->setRelation("tags", $allTags);
     }
 
     public static function getDefaultSearchMode()
@@ -348,6 +356,5 @@ class SearchBox extends NexusModel
         }
         return $results;
     }
-
 
 }

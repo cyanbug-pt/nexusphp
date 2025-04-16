@@ -29,11 +29,11 @@
         "ext-mbstring": "*",
         "ext-mysqli": "*",
         "ext-pcntl": "*",
+        "ext-posix": "*",
         "ext-redis": "*",
         "ext-xml": "*",
         "ext-zend-opcache": "*",
         "ext-zip": "*",
-        "ext-posix": "*",
         "calebporzio/sushi": "^2.5",
         "elasticsearch/elasticsearch": "^7.16",
         "filament/filament": "^3.2",
@@ -51,7 +51,8 @@
         "orangehill/iseed": "^3.0",
         "phpgangsta/googleauthenticator": "dev-master",
         "rhilip/bencode": "^2.0",
-        "rlanvin/php-ip": "^3.0"
+        "rlanvin/php-ip": "^3.0",
+        "stichoza/google-translate-php": "^5.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
