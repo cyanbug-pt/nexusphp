@@ -101,6 +101,7 @@ class Handler extends ExceptionHandler
         if (config('app.debug')) {
             $data['trace'] = $trace;
         }
+//        dd($e);
         if ($e instanceof \Error || $e instanceof \ErrorException) {
             do_log(sprintf(get_class($e) . ": %s, trace: %s", $msg, $e->getTraceAsString()), "error");
         }

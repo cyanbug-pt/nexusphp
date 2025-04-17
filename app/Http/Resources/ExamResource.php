@@ -41,8 +41,8 @@ class ExamResource extends JsonResource
     {
         $filters = $exam->filters;
         foreach (Exam::$filters as $key => $value) {
-            if (!isset($filters->$key)) {
-                $filters->$key = [];
+            if (!isset($filters[$key])) {
+                $filters[$key] = [];
             }
         }
         return $filters;

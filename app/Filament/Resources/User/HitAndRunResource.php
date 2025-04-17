@@ -80,7 +80,7 @@ class HitAndRunResource extends Resource
                     ->form([
                         Forms\Components\DatePicker::make('created_at_begin')
                             ->maxDate(now())
-                            ->label(__('hr.created_at_begin'))
+                            ->label(__('label.created_at_begin'))
                         ,
                     ])->query(function (Builder $query, array $data) {
                         return $query->when($data['created_at_begin'], fn (Builder $query, $value) => $query->where("created_at", '>=', $value));
@@ -90,7 +90,7 @@ class HitAndRunResource extends Resource
                     ->form([
                         Forms\Components\DatePicker::make('created_at_end')
                             ->maxDate(now())
-                            ->label(__('hr.created_at_end'))
+                            ->label(__('label.created_at_end'))
                         ,
                     ])->query(function (Builder $query, array $data) {
                         return $query->when($data['created_at_end'], fn (Builder $query, $value) => $query->where("created_at", '<=', $value));

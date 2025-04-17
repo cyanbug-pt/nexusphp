@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\ExamUser;
 use App\Models\PersonalAccessToken;
 use App\Models\Torrent;
 use App\Models\User;
+use App\Repositories\ExamRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Console\Command;
 use NexusPlugin\Menu\Filament\MenuItemResource\Pages\ManageMenuItems;
@@ -53,12 +55,9 @@ class Test extends Command
      */
     public function handle()
     {
-        $a = ['acb' => 2];
-
-        if ($a = isset($a['ab'])) {
-            $this->info("isset ab = true");
-        }
-        dd($a);
+       $rep = new ExamRepository();
+       $result = $rep->getUserExamProgress(10041, ExamUser::STATUS_NORMAL);
+       dd($result);
     }
 
 }

@@ -73,7 +73,8 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 \App\Http\Middleware\Filament::class,
-            ]);
+            ])
+            ;
     }
 
     public function boot()

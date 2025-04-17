@@ -42,6 +42,7 @@ return [
         'oauth_access_token' => '訪問令牌',
         'oauth_auth_code' => '授權碼',
         'oauth_refresh_token' => '刷新令牌',
+        'token' => '訪問令牌',
     ],
     'resources' => [
         'agent_allow' => [

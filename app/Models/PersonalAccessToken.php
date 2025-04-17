@@ -13,7 +13,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
         $result = [];
         foreach ($this->abilities as $ability) {
             if ($ability != '*') {
-                $result[] = nexus_trans("permission.{$ability}.text");
+                $result[] = nexus_trans("route-permission.{$ability}.text");
             }
         }
         return implode(', ', $result);

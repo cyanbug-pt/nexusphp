@@ -42,6 +42,7 @@ return [
         'oauth_access_token' => 'Access tokens',
         'oauth_auth_code' => 'Auth codes',
         'oauth_refresh_token' => 'Refresh tokens',
+        'token' => 'Access tokens',
     ],
     'resources' => [
         'agent_allow' => [

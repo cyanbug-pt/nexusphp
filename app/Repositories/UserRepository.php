@@ -26,6 +26,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
 
@@ -69,7 +70,9 @@ class UserRepository extends BaseRepository
             ->allowIncludeCounts($allowIncludeCounts)
             ->allowIncludeFields($allowIncludeFields)
         ;
-        $user = $apiQueryBuilder->build()->findOrFail($id);
+        $query = $apiQueryBuilder->build();
+        $user = $query->findOrFail($id);
+        Gate::authorize('view', $user);
         return $this->appendIncludeFields($apiQueryBuilder, $currentUser, $user);
     }
 

@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Enums\Permission\PermissionEnum;
+use App\Enums\Permission\RoutePermissionEnum;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,12 +48,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 //        Route::resource('forums', \App\Http\Controllers\ForumController::class);
 //        Route::resource('topics', \App\Http\Controllers\TopicController::class);
 
-        Route::get('sections', [\App\Http\Controllers\UploadController::class, 'sections'])->middleware(ability(PermissionEnum::UPLOAD));
-        Route::get('torrents/{section?}', [\App\Http\Controllers\TorrentController::class, 'index'])->middleware(ability(PermissionEnum::TORRENT_LIST));
-        Route::post('upload', [\App\Http\Controllers\TorrentController::class, 'store'])->middleware(ability(PermissionEnum::UPLOAD));
-        Route::get('detail/{id}', [\App\Http\Controllers\TorrentController::class, 'show'])->middleware(ability(PermissionEnum::TORRENT_VIEW));
+        Route::get('sections', [\App\Http\Controllers\UploadController::class, 'sections'])->middleware(ability(RoutePermissionEnum::TORRENT_UPLOAD));
+        Route::get('torrents/{section?}', [\App\Http\Controllers\TorrentController::class, 'index'])->middleware(ability(RoutePermissionEnum::TORRENT_LIST));
+        Route::post('upload', [\App\Http\Controllers\TorrentController::class, 'store'])->middleware(ability(RoutePermissionEnum::TORRENT_UPLOAD));
+        Route::get('detail/{id}', [\App\Http\Controllers\TorrentController::class, 'show'])->middleware(ability(RoutePermissionEnum::TORRENT_VIEW));
 
-        Route::get('/profile/{id?}', [\App\Http\Controllers\UserController::class, 'show'])->middleware(ability(PermissionEnum::USER_VIEW));
+        Route::get('/profile/{id?}', [\App\Http\Controllers\UserController::class, 'show'])->middleware(ability(RoutePermissionEnum::USER_VIEW));
 
 
     });

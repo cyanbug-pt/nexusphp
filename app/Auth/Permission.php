@@ -64,4 +64,19 @@ class Permission
     {
         return user_can(PermissionEnum::TORRENT_SET_SPECIAL_TAG->value);
     }
+
+    public static function canManageUserBasicInfo(): bool
+    {
+        return user_can(PermissionEnum::MANAGE_USER_BASIC_INFO->value);
+    }
+
+    public static function canManageUserConfidentialInfo(): bool
+    {
+        return user_can(PermissionEnum::MANAGE_USER_CONFIDENTIAL_INFO->value);
+    }
+
+    public static function canViewUserConfidentialInfo(): bool
+    {
+        return user_can(PermissionEnum::VIEW_USER_CONFIDENTIAL_INFO->value);
+    }
 }

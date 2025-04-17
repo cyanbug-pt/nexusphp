@@ -1382,7 +1382,7 @@ function send_admin_fail_notification(string $msg = ""): void {
     \Filament\Notifications\Notification::make()->danger()->title($msg ?: "Fail!")->send();
 }
 
-function ability(\App\Enums\Permission\PermissionEnum $permission): string {
+function ability(\App\Enums\Permission\RoutePermissionEnum $permission): string {
     return sprintf("ability:%s", $permission->value);
 }
 

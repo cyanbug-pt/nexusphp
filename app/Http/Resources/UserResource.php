@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Auth\Permission;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class UserResource extends JsonResource
 {
@@ -18,7 +20,7 @@ class UserResource extends JsonResource
         $out = [
             'id' => $this->id,
             'username' => $this->username,
-            'email' => $this->email,
+            'email' => $this->when(Gate::allows("viewEmail", $this->resource), $this->email),
             'status' => $this->status,
             'enabled' => $this->enabled,
             'added' => format_datetime($this->added),
