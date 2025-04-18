@@ -194,7 +194,7 @@ $CODE=array(
 	'mainversion' => 'NexusPHP',
 	'subversion' => 'Standard v1.5 Beta 4',
 	'releasedate' => '2010-09-19',
-	'website' => '<a href="http://www.nexusphp.com">http://www.nexusphp.com</a>',
+	'website' => '<a href="https://nexusphp.org">https://nexusphp.org</a>',
 );
 $MAIN=array(
 	'site_online' => 'yes',

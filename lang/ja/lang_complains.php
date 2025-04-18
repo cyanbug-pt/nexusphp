@@ -1,0 +1,33 @@
+<?php
+
+$lang_complains = array (
+  'text_complain' => '苦情エリア',
+  'text_new_complain' => '控訴を提出します',
+  'text_new_email' => 'アカウントメール：',
+  'text_new_body' => '苦情の内容：',
+  'text_new_body_placeholder' => 'アピールの質問：
+関連証拠：外部リンクの写真は、タグ[img = url]を使用して使用できます',
+  'text_new_submit' => '苦情を提出します',
+  'text_new_failure' => '電子メールが誤って埋められないか、アピールが空です',
+  'text_created_title' => 'アピールが作成されました',
+  'text_created_note' => 'このページをブックマークして、後続の更新を確認してください。アピールプロセスに影響を与えないように、他の人にURLを送信しないでください！',
+  'text_search_account' => 'このアカウントを検索します',
+  'text_reply' => '苦情に返信します',
+  'text_replies' => '苦情処理',
+  'text_complainer' => '苦情',
+  'text_added' => '苦情の時間',
+  'text_no_replies' => '現在、コンテンツを追跡する苦情はありません',
+  'text_closed' => '苦情は処理されており、返信することはできません',
+  'text_answer_it' => 'アピールを閉じます',
+  'text_unanswer_it' => '控訴を再開します',
+  'th_complain_at' => '苦情の時間',
+  'th_complain_account' => '控訴アカウント',
+  'th_action_view' => 'チェック',
+  'pending_complaints' => '保留中の控訴',
+  'no_pending_complaints' => '保留中の苦情はありません',
+  'complaints_processed' => '苦情が処理されました',
+  'no_complaints_have_been_processed' => '苦情は処理されていません',
+  'text_view_band_log' => '禁止されたレコードを表示します',
+  'reply_notify_subject' => '控訴への返信',
+  'reply_notify_body' => 'Webサイトの苦情に対する返信があります。ここをクリックしてください<a href = "％s"ターゲット= "_ blank"> view </a>。',
+);

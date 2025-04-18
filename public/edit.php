@@ -50,7 +50,7 @@ stdhead($lang_edit['head_edit_torrent'] . "\"". $row["name"] . "\"");
 
 if (!isset($CURUSER) || ($CURUSER["id"] != $row["owner"] && !user_can('torrentmanage'))) {
 	print("<h1 align=\"center\">".$lang_edit['text_cannot_edit_torrent']."</h1>");
-	print("<p>".$lang_edit['text_cannot_edit_torrent_note']."</p>");
+	echo sprintf("<p>".$lang_edit['text_cannot_edit_torrent_note']."</p>", $_SERVER["REQUEST_URI"] ?? '');
 }
 else {
 	print("<form method=\"post\" id=\"compose\" name=\"edittorrent\" action=\"takeedit.php\" enctype=\"multipart/form-data\">");

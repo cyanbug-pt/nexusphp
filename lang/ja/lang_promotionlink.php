@@ -1,0 +1,27 @@
+<?php
+
+$lang_promotionlink = array (
+  'head_promotion_link' => 'プロモーションリンク',
+  'text_promotion_link' => 'プロモーションリンク',
+  'text_promotion_link_note_one' => 'このサイトがとても気に入っていて、より多くの人々にそれについて知ってほしいなら、あなたはあなたのプロモーションリンクを使用して私たちがそれを宣伝するのを助けることができます。',
+  'text_promotion_link_note_two' => '各ユーザーには、システムによってランダムに生成されるアイデンティティを決定する独自のプロモーションリンクがあります。ネチズンがあなたのプロモーションリンクをクリックすると、彼はこのサイトに頼られ、システムはあなたに報酬を与えます。',
+  'text_you_would_get' => 'あなたは得るでしょう',
+  'text_bonus_points' => 'プロモーションリンクが録画されていないIPからクリックされた場合、マジック値。',
+  'text_seconds' => '1秒以内にワンクリックまで報酬を与えます。',
+  'text_your_promotion_link_is' => 'プロモーションリンクは次のとおりです。',
+  'text_promotion_link_note_four' => 'プロモーションリンクをさまざまな方法で広めることができます。いくつかの例があります。',
+  'col_type' => 'タイプ',
+  'col_code' => 'コード',
+  'col_result' => '効果',
+  'col_note' => 'コメント',
+  'row_xhtml' => 'XHTML 1.0',
+  'text_xhtml_note' => '個人のWebサイトがある場合は、ページでXHTMLコードを使用できます。',
+  'row_html' => 'HTML 4.01',
+  'text_html_note' => '個人Webサイトがある場合は、ページでHTMLコードを使用できます。',
+  'row_bbcode' => 'BBCodeフォーラムコード',
+  'text_bbcode_note' => 'ほとんどのフォーラムプログラム（Vbulletin、Discuz！、Phpwindなど）は、BBCodeと呼ばれるフォーラムコードをサポートしています。このコードを署名ファイルに配置できます。',
+  'row_bbcode_userbar' => 'フォーラムコード - パーソナリティバー',
+  'text_bbcode_userbar_note' => 'あなたの性格バーを手に入れてください。コントロールパネルでプライバシーレベルを「高」に設定した場合、パーソナリティバーを使用することはできません。',
+  'row_bbcode_userbar_alt' => 'フォーラムコード - パーソナリティバー（別の方法）',
+  'text_bbcode_userbar_alt_note' => '上記の方法が利用できない場合は、この方法を使用します。コントロールパネルでプライバシーレベルを「高」に設定した場合、パーソナリティバーを使用することはできません。',
+);

@@ -20,11 +20,13 @@ if(!empty($_POST['conusr'])) {
 }
 $title = $SITENAME.$lang_takeconfirm['mail_title'];
 $baseUrl = getSchemeAndHttpHost();
+$siteName = \App\Models\Setting::getSiteName();
+$mailContentTwo = sprintf($lang_takeconfirm['mail_content_two'], $siteName, $REPORTMAIL, $siteName);
 $body = <<<EOD
 {$lang_takeconfirm['mail_content_1']}
 <b><a href="javascript:void(null)" onclick="window.open('{$baseUrl}/login.php')">{$lang_takeconfirm['mail_here']}</a></b><br />
 {$baseUrl}/login.php
-{$lang_takeconfirm['mail_content_2']}
+{$mailContentTwo}
 EOD;
 
 //this mail is sent when the site is using admin(open/closed)/inviter(closed) confirmation and the admin/inviter confirmed the pending user

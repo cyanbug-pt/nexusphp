@@ -29,3 +29,4 @@ yarn-error.log
 auth.json
 /.vscode
 /.history
+/public/dev.php

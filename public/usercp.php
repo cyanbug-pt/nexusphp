@@ -4,6 +4,7 @@ dbconn();
 require_once(get_langfile_path());
 loggedinorreturn();
 $userInfo = \App\Models\User::query()->findOrFail($CURUSER["id"]);
+$siteName = \App\Models\Setting::getSiteName();
 function bark($msg) {
 	stdhead();
 	global $lang_usercp;
@@ -812,8 +813,10 @@ tr_small($lang_usercp['row_funbox'],"<input type=checkbox name=showfb".($CURUSER
 					$obemail = rawurlencode($email);
 					$updateset[] = "editsecret = " . sqlesc($sec);
 					$subject = "$SITENAME".$lang_usercp['mail_profile_change_confirmation'];
+                    $changeEmailOne = sprintf($lang_usercp['mail_change_email_one'], $siteName);
+                    $changeEmailNine = sprintf($lang_usercp['mail_change_email_nine'], $siteName);
 					$body = <<<EOD
-{$lang_usercp['mail_change_email_one']}{$CURUSER["username"]}{$lang_usercp['mail_change_email_two']}($email){$lang_usercp['mail_change_email_three']}
+{$changeEmailOne}{$CURUSER["username"]}{$lang_usercp['mail_change_email_two']}($email){$lang_usercp['mail_change_email_three']}
 
 {$lang_usercp['mail_change_email_four']}{$_SERVER["REMOTE_ADDR"]}{$lang_usercp['mail_change_email_five']}
 
@@ -823,7 +826,7 @@ http://$BASEURL/confirmemail.php/{$CURUSER["id"]}/$hash/$obemail
 {$lang_usercp['mail_change_email_seven']}
 
 ------{$lang_usercp['mail_change_email_eight']}
-{$lang_usercp['mail_change_email_nine']}
+{$changeEmailNine}
 EOD;
 
 					sent_mail($email,$SITENAME,$SITEEMAIL,$subject,str_replace("<br />","<br />",nl2br($body)),"profile change",false,false,'');

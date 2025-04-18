@@ -288,7 +288,7 @@ if (get_user_class() >= UC_PEASANT)
 		print("<br />(".$lang_subtitles['text_maximum_file_size'].mksize($maxsubsize_main).".)");
 	print("</td></tr>\n");
 	if($in_detail == "")
-	print("<tr><td class=rowhead>".$lang_subtitles['row_torrent_id']."<font color=red>*</font></td><td class=rowfollow align=left><input type=text name=torrent_id style=\"width:300px\"><br />".$lang_subtitles['text_torrent_id_note']."</td></tr>\n");
+	print("<tr><td class=rowhead>".$lang_subtitles['row_torrent_id']."<font color=red>*</font></td><td class=rowfollow align=left><input type=text name=torrent_id style=\"width:300px\"><br />".sprintf($lang_subtitles['text_torrent_id_note'], getSchemeAndHttpHost())."</td></tr>\n");
 	else
 	{
 		print("<tr><td class=rowhead>".$lang_subtitles['row_torrent_id']."<font color=red>*</font></td><td class=rowfollow align=left><input type=text name=torrent_id value=$detail_torrent_id style=\"width:300px\"><br />".$lang_subtitles['text_torrent_id_note']."</td></tr>\n");

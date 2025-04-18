@@ -18,21 +18,21 @@ $lang_recover = array
 	'submit_recover_it' => "確定",
 	'text_you_have' => "你還有",
 	'text_remaining_tries' => "次嘗試機會。",
-	
+
 	'mail_this_link' => "這個鏈接",
 	'mail_here' => "這裏",
-	
+
 	'mail_title' => " 網站密碼重置驗證",
-	'mail_one' => "你好,<br /><br />你請求重置你在".$SITENAME."網站賬戶的密碼。<br />該賬戶的郵箱地址為 ",
+	'mail_one' => "你好,<br /><br />你請求重置你在%s網站賬戶的密碼。<br />該賬戶的郵箱地址為 ",
 	'mail_two' => " 。<br /><br />發送請求的IP地址為 ",
 	'mail_three' => ".<br /><br />如果你沒有發過該請求，請忽視本郵件。請勿回復本郵件。<br /><br />如果你的確發過該請求，請點擊這個鏈接來確認: ",
-	'mail_four' => "<br />確認後，你的密碼將被重置並通過另一封郵件發送給你。<br /><br />------<br />".$SITENAME." 網站",
-	
+	'mail_four' => "<br />確認後，你的密碼將被重置並通過另一封郵件發送給你。<br /><br />------<br />%s 網站",
+
 	'mail_two_title' => " 網站賬戶信息",
 	'mail_two_one' => "你好，<br /><br />依你的請求，我們給你的賬戶生成了新的密碼。<br /><br />以下是你的賬戶重置後的信息：<br /><br />用戶名：",
 	'mail_two_two' => "<br />密碼：",
 	'mail_two_three' => "<br /><br />你可以從這裏登錄： ",
-	'mail_two_four' => "<br /><br />登錄後你可以在控制面板-安全設定中修改密碼。<br />------<br />".$SITENAME." 網站",
+	'mail_two_four' => "<br /><br />登錄後你可以在控制面板-安全設定中修改密碼。<br />------<br />%s 網站",
 	'text_select_lang' => "Select Site Language: ",
 	'std_user_account_unconfirmed' => "該賬戶還未通過驗證。如果你沒有收到驗證郵件，試試<a href='confirm_resend.php'><b>重新發送驗證郵件</b></a>。",
 );

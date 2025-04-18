@@ -45,7 +45,9 @@ function get_langfile_path($script_name ="", $target = false, $lang_folder = "")
 	{
 		$lang_folder = $CURLANGDIR;
 	}
-	return "lang/" . ($target == false ? $lang_folder : "_target") ."/lang_". ( $script_name == "" ? substr(strrchr($_SERVER['SCRIPT_NAME'],'/'),1) : $script_name);
+	$result = "lang/" . ($target == false ? $lang_folder : "_target") ."/lang_". ( $script_name == "" ? substr(strrchr($_SERVER['SCRIPT_NAME'],'/'),1) : $script_name);
+    do_log($result);
+    return $result;
 }
 
 function get_row_sum($table, $field, $suffix = "")
@@ -1715,7 +1717,7 @@ function registration_check($type = "invitesystem", $maxuserscheck = true, $ipch
 		$ip = getip () ;
 		$a = (@mysql_fetch_row(@sql_query("select count(*) from users where ip='" . mysql_real_escape_string($ip) . "'"))) or sqlerr(__FILE__, __LINE__);
 		if ($a[0] > $maxip)
-		stderr($lang_functions['std_sorry'], $lang_functions['std_the_ip']."<b>" . htmlspecialchars($ip) ."</b>". $lang_functions['std_used_many_times'],false, true);
+		stderr($lang_functions['std_sorry'], $lang_functions['std_the_ip']."<b>" . htmlspecialchars($ip) ."</b>". sprintf($lang_functions['std_used_many_times'], \App\Models\Setting::getSiteName()),false, true);
 	}
 	return true;
 }
@@ -4273,7 +4275,7 @@ function permissiondenied($allowMinimumClass = null){
 	if ($allowMinimumClass === null) {
         stderr($lang_functions['std_error'], $lang_functions['std_permission_denied']);
     } else {
-        stderr($lang_functions['std_sorry'],$lang_functions['std_permission_denied_only'].get_user_class_name($allowMinimumClass,false,true,true).$lang_functions['std_or_above_can_view'],false);
+        stderr($lang_functions['std_sorry'],$lang_functions['std_permission_denied_only'].get_user_class_name($allowMinimumClass,false,true,true).sprintf($lang_functions['std_or_above_can_view'], \App\Models\Setting::getSiteName()),false);
     }
 }
 

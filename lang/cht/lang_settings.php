@@ -227,7 +227,6 @@ $lang_settings = array
 	'text_bonus_formula_twelve' => "。預設為'300'",
 	'text_misc_ways_get_bonus' => "其他抓取方式",
 	'row_uploading_torrent' => "發布新種子",
-	'text_user_would_get' => "用戶將獲得",
 	'text_uploading_torrent_note' => "個魔力值，如果他發布一個新種子。預設'15'。",
 	'row_uploading_subtitle' => "上傳一個字幕",
 	'text_uploading_subtitle_note' => "個魔力值，如果他上傳一個字幕。預設'5'。",

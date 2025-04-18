@@ -1,0 +1,138 @@
+<?php
+
+return array (
+  'sidebar' => 
+  array (
+    'exam_users' => 'ユーザー評価',
+    'hit_and_runs' => 'ユーザーH＆R',
+    'users_list' => 'ユーザーリスト',
+    'tags_list' => 'ラベル',
+    'agent_allows' => 'クライアントを許可します',
+    'agent_denies' => 'クライアントを拒否します',
+    'exams_list' => '評価とタスク',
+    'medals_list' => 'メダル',
+    'settings' => '設定',
+    'users_medals' => 'ユーザーメダル',
+    'claims' => '受信したユーザー',
+    'torrent_list' => 'シード',
+    'torrent_state' => 'サイト全体の割引',
+    'seed_box_records' => 'シードボックス',
+    'upload_speed' => 'アップリンク帯域幅',
+    'download_speed' => 'ダウンリンク帯域幅',
+    'isp' => 'ISP',
+    'menu' => 'メニューをカスタマイズします',
+    'username_change_log' => '名前の変更レコード',
+    'torrent_deny_reason' => '拒絶の理由',
+    'roles' => '役割',
+    'permissions' => '権限',
+    'section' => '分類モード',
+    'icon' => 'カテゴリアイコン',
+    'plugin' => 'プラグイン',
+    'category' => 'メインカテゴリ',
+    'second_icon' => '2番目のアイコン',
+    'torrent_operation_log' => 'シード操作記録',
+    'invite' => 'ユーザーの招待',
+    'user_props' => 'ユーザーの小道具',
+    'login_log' => 'ログイン履歴',
+    'bonus_log' => 'マジックレコード',
+    'torrent_buy_log' => '種子購入',
+    'attendance_log' => 'サインインの歴史',
+    'oauth_client' => 'クライアント',
+    'oauth_access_token' => 'アクセストークン',
+    'oauth_auth_code' => '承認コード',
+    'oauth_refresh_token' => 'トークンを更新します',
+    'token' => 'アクセストークン',
+  ),
+  'resources' => 
+  array (
+    'agent_allow' => 
+    array (
+      'check_modal_btn' => 'テスト',
+      'check_modal_header' => 'クライアントが許可されているかどうかを確認してください',
+      'check_pass_msg' => 'おめでとうございます、このクライアントはルール：IDによって渡されます！',
+    ),
+    'user' => 
+    array (
+      'actions' => 
+      array (
+        'enable_modal_btn' => '有効にする',
+        'enable_modal_title' => 'ユーザーを有効にします',
+        'enable_disable_reason' => '理由',
+        'enable_disable_reason_placeholder' => 'オプション',
+        'disable_modal_btn' => '無効',
+        'disable_modal_title' => 'ユーザーを無効にします',
+        'disable_two_step_authentication' => '2段階のログイン検証をキャンセルします',
+        'change_bonus_etc_btn' => 'アップロードボリュームなどを変更します。',
+        'change_bonus_etc_action_increment' => '増加',
+        'change_bonus_etc_action_decrement' => '減らす',
+        'change_bonus_etc_field_label' => 'カテゴリ',
+        'change_bonus_etc_action_label' => 'アクション',
+        'change_bonus_etc_value_label' => '量',
+        'change_bonus_etc_value_help' => 'カテゴリがアップロード/ダウンロードの場合、ユニットは次のとおりです',
+        'change_bonus_etc_reason_label' => '理由',
+        'reset_password_btn' => 'パスワードをリセットします',
+        'reset_password_label' => '新しいパスワード',
+        'reset_password_confirmation_label' => '新しいパスワードを確認します',
+        'assign_exam_btn' => '割り当て評価',
+        'assign_exam_exam_label' => '評価を選択します',
+        'assign_exam_begin_label' => '開始時間',
+        'assign_exam_end_label' => '終了時間',
+        'assign_exam_end_help' => '開始/終了時間が指定されていない場合、評価自体によって設定された時間範囲が使用されます',
+        'grant_medal_btn' => 'メダルを受賞',
+        'grant_medal_medal_label' => 'メダルを選択します',
+        'grant_medal_duration_label' => '有効な期間',
+        'grant_medal_duration_help' => 'ユニット：日。空白のままにすると、ユーザーは常にそれを持っています',
+        'confirm_btn' => '確認する',
+        'disable_download_privileges_btn' => 'ダウンロード許可を無効にします',
+        'enable_download_privileges_btn' => 'ダウンロード権限を有効にします',
+        'grant_prop_btn' => '小道具を付与します',
+        'grant_prop_form_prop' => '小道具を選択します',
+        'grant_prop_form_duration' => '有効な期間',
+        'grant_prop_form_duration_help' => 'ユニット：日。空白のままにしておくと、ユーザーはそれを永久に持っています。注：名前カードを変更するための時間制限はありません。この値を無視します。',
+        'confirm_bulk' => 'バッチ確認',
+        'change_bonus_etc_duration_label' => '有効期間',
+        'change_bonus_etc_duration_help' => '一時的な招待状を追加するとき、ユニット：日',
+        'change_class_btn' => 'レベルを変更します',
+      ),
+    ),
+    'exam_user' => 
+    array (
+      'bulk_action_avoid_label' => 'バルク免除',
+      'bulk_action_update_end_label' => 'バッチ変更の時間の終了',
+      'action_avoid' => '免除',
+      'action_update_end' => '変更の終了時間',
+      'result_passed' => '合格！',
+      'result_not_passed' => '失敗した！',
+    ),
+    'exam' => 
+    array (
+      'index_duplicate' => 'インジケータ：：インデックスリピート！',
+    ),
+    'hit_and_run' => 
+    array (
+      'bulk_action_pardon' => 'バッチの免除',
+      'action_pardon' => '免除',
+    ),
+    'torrent' => 
+    array (
+      'bulk_action_pos_state' => 'トップ',
+      'bulk_action_remove_tag' => 'クリアタグ',
+      'bulk_action_attach_tag' => 'タグの設定',
+      'action_approval' => 'レビュー',
+      'bulk_action_attach_tag_remove_old' => '古いタグを同時に削除します',
+      'bulk_action_recommend' => '推薦する',
+      'bulk_action_sp_state' => '割引',
+      'bulk_action_hr' => 'H＆R',
+    ),
+    'seed_box_record' => 
+    array (
+      'toggle_status' => 'ステータスを変更します',
+      'check_modal_btn' => 'テスト',
+      'check_modal_header' => 'IPがシードボックスであるかどうかを検出します',
+    ),
+    'tag' => 
+    array (
+      'detach_torrents' => 'すべての種子を分離します',
+    ),
+  ),
+);

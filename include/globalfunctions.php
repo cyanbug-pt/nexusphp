@@ -242,8 +242,8 @@ function getLogFile($append = '')
         return $logFiles[$append];
     }
     $config = nexus_config('nexus');
-    if (!empty($config['log_file']) && in_array($config['log_files'], ["/dev/stdout", "/dev/stderr"])) {
-        return $logFiles[$append] = $config['log_files'];
+    if (!empty($config['log_file']) && in_array($config['log_file'], ["/dev/stdout", "/dev/stderr"])) {
+        return $logFiles[$append] = $config['log_file'];
     }
     $path = getenv('NEXUS_LOG_DIR', true);
     $fromEnv = true;
@@ -1227,7 +1227,7 @@ function user_can($permission, $fail = false, $uid = 0): bool
         global $lang_functions;
         $requireClass = get_setting("authority.$permission");
         if (isset(\App\Models\User::$classes[$requireClass])) {
-            stderr($lang_functions['std_sorry'],$lang_functions['std_permission_denied_only'].get_user_class_name($requireClass,false,true,true).$lang_functions['std_or_above_can_view'],false);
+            stderr($lang_functions['std_sorry'],$lang_functions['std_permission_denied_only'].get_user_class_name($requireClass,false,true,true).sprintf($lang_functions['std_or_above_can_view'], \App\Models\Setting::getSiteName()),false);
         } else {
             stderr($lang_functions['std_error'], $lang_functions['std_permission_denied']);
         }

@@ -90,13 +90,17 @@ if ($_POST['hash'] == 'permanent') {
 $title = $SITENAME.$lang_takeinvite['mail_tilte'];
 
 $signupUrl = getSchemeAndHttpHost() . "/signup.php?type=invite&invitenumber=$hash";
+$siteName = \App\Models\Setting::getSiteName();
+$mailTwo = sprintf($lang_takeinvite['mail_two'], $siteName);
+$mailFour = sprintf($lang_takeinvite['mail_four'], $siteName);
+$mailSix = sprintf($lang_takeinvite['mail_six'], $REPORTMAIL, $siteName);
 $message = <<<EOD
-{$lang_takeinvite['mail_one']}{$arr['username']}{$lang_takeinvite['mail_two']}
+{$lang_takeinvite['mail_one']}{$arr['username']}{$mailTwo}
 <b><a href="javascript:void(null)" onclick="window.open($signupUrl)">{$lang_takeinvite['mail_here']}</a></b><br />
 $signupUrl
-<br />{$lang_takeinvite['mail_three']}$invite_timeout{$lang_takeinvite['mail_four']}{$arr['username']}{$lang_takeinvite['mail_five']}<br />
+<br />{$lang_takeinvite['mail_three']}$invite_timeout{$mailFour}{$arr['username']}{$lang_takeinvite['mail_five']}<br />
 $body
-<br /><br />{$lang_takeinvite['mail_six']}
+<br /><br />{$mailSix}
 EOD;
 
 $sendResult = sent_mail($email,$SITENAME,$SITEEMAIL,$title,$message,"invitesignup",false,false,'');

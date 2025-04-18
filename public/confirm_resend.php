@@ -70,8 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	$id = $arr["id"];
 	$title = $SITENAME.$lang_confirm_resend['mail_title'];
     $baseUrl = getSchemeAndHttpHost();
+    $siteName = \App\Models\Setting::getSiteName();
+    $mailTwo = sprintf($lang_confirm_resend['mail_two'], $siteName);
+    $mailFive = sprintf($lang_confirm_resend['mail_five'], $siteName, $siteName, $REPORTMAIL, $siteName);
 $body = <<<EOD
-{$lang_confirm_resend['mail_one']}$usern{$lang_confirm_resend['mail_two']}($email){$lang_confirm_resend['mail_three']}$ip{$lang_confirm_resend['mail_four']}
+{$lang_confirm_resend['mail_one']}$usern{$mailTwo}($email){$lang_confirm_resend['mail_three']}$ip{$lang_confirm_resend['mail_four']}
 <b><a href="javascript:void(null)" onclick="window.open('{$baseUrl}/confirm.php?id=$id&secret=$psecret')">
 {$lang_confirm_resend['mail_this_link']} </a></b><br />
 {$baseUrl}/confirm.php?id=$id&secret=$psecret
@@ -104,7 +107,7 @@ else
 	print("<div align=\"right\">".$lang_confirm_resend['text_select_lang']. $s . "</div>");
 ?>
 	</form>
-	<?php echo $lang_confirm_resend['text_resend_confirmation_mail_note']?>
+	<?php echo sprintf($lang_confirm_resend['text_resend_confirmation_mail_note'], $maxloginattempts)?>
 	<p><?php echo $lang_confirm_resend['text_you_have'] ?><b><?php echo remaining ();?></b><?php echo $lang_confirm_resend['text_remaining_tries'] ?></p>
 	<form method="post" action="confirm_resend.php">
 	<table border="1" cellspacing="0" cellpadding="10">

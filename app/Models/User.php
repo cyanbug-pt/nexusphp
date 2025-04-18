@@ -296,7 +296,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         }
         if (!$locale) {
             $lang = $this->language->site_lang_folder;
-            $locale = Locale::$languageMaps[$lang] ?? 'en';
+            $locale = Locale::$languageMaps[$lang] ?? $lang;
             $log .= ", [NO_DATA_FROM_COOKIE], lang from database: $lang, locale: $locale";
         }
         do_log($log);

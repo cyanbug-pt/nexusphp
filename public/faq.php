@@ -14,7 +14,7 @@ $Cache->add_whole_row();
 begin_main_frame();
 
 begin_frame($lang_faq['text_welcome_to'].$SITENAME." - ".$SLOGAN);
-print($lang_faq['text_welcome_content_one'].$lang_faq['text_welcome_content_two']);
+print($lang_faq['text_welcome_content_one'].sprintf($lang_faq['text_welcome_content_two'], \App\Models\Setting::getSiteName()));
 end_frame();
 
 $lang_id = get_guest_lang_id();

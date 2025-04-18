@@ -23,7 +23,8 @@ function bark($msg) {
 	stdfoot();
 	exit;
 }
-
+$siteName = $SITENAME;
+$mailTwoFour = sprintf($lang_recover['mail_two_four'], $siteName);
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	if ($iv == "yes")
@@ -48,11 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	$hash = md5($sec . $email . $arr["passhash"] . $sec);
 	$ip = getip() ;
 	$title = $SITENAME.$lang_recover['mail_title'];
+    $mailOne = sprintf($lang_recover['mail_one'], $siteName);
+    $mailFour = sprintf($lang_recover['mail_four'], $siteName);
+
 	$body = <<<EOD
-{$lang_recover['mail_one']}($email){$lang_recover['mail_two']}$ip{$lang_recover['mail_three']}
+{$mailOne}($email){$lang_recover['mail_two']}$ip{$lang_recover['mail_three']}
 <b><a href="$baseUrl/recover.php?id={$arr["id"]}&secret=$hash" target="_blank"> {$lang_recover['mail_this_link']} </a></b><br />
 $baseUrl/recover.php?id={$arr["id"]}&secret=$hash
-{$lang_recover['mail_four']}
+{$mailFour}
 EOD;
 
 //	sent_mail($arr["email"],$SITENAME,$SITEEMAIL,change_email_encode(get_langfolder_cookie(), $title),change_email_encode(get_langfolder_cookie(),$body),"confirmation",true,false,'',get_email_encode(get_langfolder_cookie()));
@@ -98,7 +102,7 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET" && $take_recover && isset($_GET["id"]
 {$lang_recover['mail_two_two']}$newpassword
 {$lang_recover['mail_two_three']}
 <b><a href="$baseUrl/login.php">{$lang_recover['mail_here']}</a></b>
-{$lang_recover['mail_two_four']}
+{$mailTwoFour}
 EOD;
 
 	sent_mail($email,$SITENAME,$SITEEMAIL,$title,$body,"details",true,false,'');

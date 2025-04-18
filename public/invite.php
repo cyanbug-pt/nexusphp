@@ -75,7 +75,7 @@ if ($type == 'new'){
         ->orderBy('expired_at', 'asc')
         ->get()
     ;
-	$invitation_body =  $lang_invite['text_invitation_body'].$CURUSER['username'];
+	$invitation_body =  sprintf($lang_invite['text_invitation_body'], \App\Models\Setting::getSiteName()).$CURUSER['username'];
 	//$invitation_body_insite = str_replace("<br />","\n",$invitation_body);
     $inviteSelectOptions = '';
     if ($inv['invites'] > 0) {

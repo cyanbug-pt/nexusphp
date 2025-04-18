@@ -187,7 +187,7 @@ while ($arr = mysql_fetch_assoc($res))
 
 begin_frame($lang_staff['text_vip']);
 ?>
-<?php echo $lang_staff['text_vip_note'] ?>
+<?php echo sprintf($lang_staff['text_vip_note'], \App\Models\Setting::getSiteName()) ?>
 <br /><br />
 <table width=100% cellspacing=0 align=center>
 	<tr>

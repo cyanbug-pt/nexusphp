@@ -1,0 +1,30 @@
+<?php
+
+$lang_takeinvite = array (
+  'head_invitation_failed' => '招待状は失敗しました！',
+  'std_username_too_long' => '申し訳ありませんが、ユーザー名は長すぎます（最大12文字）',
+  'std_must_enter_email' => 'メールアドレスを入力する必要があります！',
+  'std_invalid_email_address' => '無効なメールアドレス！',
+  'std_must_enter_personal_message' => '手紙にプライベートコンテンツを追加してください。',
+  'std_email_address' => '電子メールアドレス',
+  'std_is_in_use' => 'すでに使用されています。',
+  'mail_here' => 'ここ',
+  'mail_tilte' => 'ウェブサイトの招待状',
+  'mail_one' => 'こんにちは、<br /> <br />ユーザー',
+  'mail_two' => '％Sコミュニティに参加するよう招待されています。
+％Sには知識豊富なユーザーがいます。 <br />参加に興味がある場合は、ウェブサイトのルールを読んだ後に招待状を確認してください。 <br /> <br />次のリンクをクリックして、招待状を確認してください。',
+  'mail_three' => 'お願いします',
+  'mail_four' => '招待状は数日以内に確認され、招待状はその後無効になります。 <br />％s私たちのコミュニティに参加することを心から歓迎します！ <br /> <br /> inviterから',
+  'mail_five' => '言葉：',
+  'mail_six' => 'Inviterがまったくわからない場合は、このメールを％S <br /> <br /> ------ <br />％sウェブサイトに転送してください',
+  'std_error' => '間違い',
+  'std_invite_denied' => 'ユーザーレベルでは、招待状の送信は許可されていません。どうやってここに来たの？',
+  'std_email_address_banned' => 'メールアドレスは無効です！',
+  'std_wrong_email_address_domains' => '招待状をこのメールアドレスに送信することは許可されていません！次のメールアドレスを使用してください。',
+  'std_no_invite' => '残りの招待スロットはありません。どうやってここに来たの？',
+  'std_invitation_already_sent_to' => '失敗した送信！このメールアドレス',
+  'std_await_user_registeration' => '招待状が受け取られました。繰り返し送信しないでください。ユーザーが登録するのを待ってください。',
+  'std_must_select_invite' => '使用する招待状を選択してください。',
+  'hash_not_exists' => 'ハッシュは存在しません。',
+  'hash_expired' => 'ハッシュは期限切れになりました。',
+);

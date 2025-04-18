@@ -9,7 +9,7 @@ loggedinorreturn();
 if (get_user_class() < UC_SYSOP)
     stderr("Sorry", "Permission denied.");
 
-$validTypeMap = $lang_increment_bulk['types'];
+$validTypeMap = $lang_incrementbulk['types'];
 $sender_id = ($_POST['sender'] == 'system' ? 0 : (int)$CURUSER['id']);
 $dt = sqlesc(date("Y-m-d H:i:s"));
 $msg = trim($_POST['msg']);

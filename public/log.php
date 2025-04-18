@@ -5,7 +5,7 @@ require_once(get_langfile_path());
 loggedinorreturn();
 if (!user_can('log'))
 {
-stderr($lang_log['std_sorry'],$lang_log['std_permission_denied_only'].get_user_class_name($log_class,false,true,true).$lang_log['std_or_above_can_view'],false);
+stderr($lang_log['std_sorry'],$lang_log['std_permission_denied_only'].get_user_class_name($log_class,false,true,true).sprintf($lang_log['std_or_above_can_view'], \App\Models\Setting::getSiteName()),false);
 }
 
 $q = htmlspecialchars(trim($_GET['query'] ?? ''));

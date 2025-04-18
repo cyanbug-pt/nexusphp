@@ -55,8 +55,7 @@ class Test extends Command
      */
     public function handle()
     {
-       $rep = new ExamRepository();
-       $result = $rep->getUserExamProgress(10041, ExamUser::STATUS_NORMAL);
+       $result = dirname(__FILE__);
        dd($result);
     }
 

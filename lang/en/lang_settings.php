@@ -227,7 +227,6 @@ $lang_settings = array
 	'text_bonus_formula_twelve' => ". Default '300'",
 	'text_misc_ways_get_bonus' => "Miscellaneous ways to get bonus",
 	'row_uploading_torrent' => "Uploading torrent",
-	'text_user_would_get' => "User would get ",
 	'text_uploading_torrent_note' => " bonus points for uploading a new torrent. Default '15'.",
 	'row_uploading_subtitle' => "Uploading subtitle",
 	'text_uploading_subtitle_note' => " bonus points for uploading a new subtitle. Default '5'.",

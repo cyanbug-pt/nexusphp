@@ -5,7 +5,7 @@ $lang_topten = array
 	'std_error' => "错误！",
 	'std_sorry' => "对不起...",
 	'std_permission_denied_only' => "你没有该权限。只有",
-	'std_or_above_can_view' => "及以上等级的用户才能查看排行榜。<br /><br />请查看"."<a class=\"faqlink\" href=\"faq.php#id22\"><b>常见问题</b></a>了解更多关于用户等级和权限的信息。<br /><br /><b></p>" .$SITENAME."管理组</b>",
+	'std_or_above_can_view' => "及以上等级的用户才能查看排行榜。<br /><br />请查看"."<a class=\"faqlink\" href=\"faq.php#id22\"><b>常见问题</b></a>了解更多关于用户等级和权限的信息。<br /><br /><b></p>%s管理组</b>",
 	'col_rank' => "排名",
 	'col_user' => "用户",
 	'col_donated' => "捐赠",
@@ -55,34 +55,34 @@ $lang_topten = array
 	'text_most_donated_CNY' => "人民币捐赠者",
 	'col_donated_usd' => "捐赠(＄)",
 	'col_donated_cny' => "捐赠(￥)",
-	
+
 	'text_most_supplied' => "最大资源提供者<font class=\"small\">(不包括被删除的种子)</font>",
 	'text_most_snatched' => " 最大资源完成者<font class=\"small\">(不包括被删除的种子)</font>",
 	'col_torrent_uploaded' => "# 上传",
 	'col_torrent_downloaded' => "# 完成",
-	
+
 	'text_most_topic' => " 论坛主题发起者<font class=\"small\">(不包括被删除的主题)</font>",
 	'text_most_post' => " 论坛发帖者<font class=\"small\">(不包括被删除的帖子)</font>",
 	'col_topics' => "主题",
 	'col_posts' => "帖子",
-	
-	
+
+
 	'text_biggest_topics' => "最热主题<font class=\"small\">(不计特权论坛内的主题)</font>",
 	'col_subject' => "主题",
-	
+
 	'col_number' => "数量",
 	'text_most_browser' => "浏览器",
 	'text_most_client' => "BT客户端<font class=\"small\">(按最近访问服务器的客户端)</font>",
-	
+
 	'col_comments' => "评论",
 	'text_most_commenter' => "种子评论者<font class=\"small\">(不包括被删除的评论)</font>",
-	
+
 	'col_reviews' => "点评",
 	'text_most_reviewer' => "电影点评者<font class=\"small\">(不包括被删除的点评)</font>",
-	
+
 	'col_location' => "位置",
 	'text_most_locations' => "同伴位置",
-	
+
 	'col_keyword' => "关键字",
 	'col_times' => "次数",
 	'col_datetime' => "时间",
@@ -90,7 +90,7 @@ $lang_topten = array
 	'text_current_month_search' => "本月搜索",
 	'text_last_month_search' => "上月搜索",
 	'text_current_year_search' => "今年搜索",
-	
+
 	'text_most_bonuses' => "魔力值",
 	'col_bonus' => "魔力值",
 	'text_countries_users' => "用户数",

@@ -22,8 +22,9 @@ stdhead($lang_tags['head_tags']);
 begin_main_frame();
 begin_frame($lang_tags['text_tags']);
 $test = $_POST["test"] ?? '';
+$siteName = \App\Models\Setting::getSiteName();
 ?>
-<p><?php echo $lang_tags['text_bb_tags_note'] ?></p>
+<p><?php echo sprintf($lang_tags['text_bb_tags_note'], $siteName) ?></p>
 
 <form method=post action=?>
 <textarea name=test cols=60 rows=3><?php print($test ? htmlspecialchars($test) : "")?></textarea>
@@ -94,7 +95,7 @@ insert_tag(
 	$lang_tags['text_hyperlink_one'],
 	$lang_tags['text_hyperlink_one_description'],
 	$lang_tags['text_hyperlink_one_syntax'],
-	$lang_tags['text_hyperlink_one_example'],
+	sprintf($lang_tags['text_hyperlink_one_example'], getSchemeAndHttpHost()),
 	$lang_tags['text_hyperlink_one_remarks']
 );
 
@@ -102,7 +103,7 @@ insert_tag(
 	$lang_tags['text_hyperlink_two'],
 	$lang_tags['text_hyperlink_two_description'],
 	$lang_tags['text_hyperlink_two_syntax'],
-	$lang_tags['text_hyperlink_two_example'],
+	sprintf($lang_tags['text_hyperlink_two_example'], getSchemeAndHttpHost(), $siteName),
 	$lang_tags['text_hyperlink_two_remarks']
 );
 
@@ -110,7 +111,7 @@ insert_tag(
 	$lang_tags['text_image_one'],
 	$lang_tags['text_image_one_description'],
 	$lang_tags['text_image_one_syntax'],
-	$lang_tags['text_image_one_example'],
+	sprintf($lang_tags['text_image_one_example'], getSchemeAndHttpHost()),
 	$lang_tags['text_image_one_remarks']
 );
 
@@ -118,7 +119,7 @@ insert_tag(
 	$lang_tags['text_image_two'],
 	$lang_tags['text_image_two_description'],
 	$lang_tags['text_image_two_syntax'],
-	$lang_tags['text_image_two_example'],
+	sprintf($lang_tags['text_image_two_example'], getSchemeAndHttpHost()),
 	$lang_tags['text_image_two_remarks']
 );
 
@@ -126,7 +127,7 @@ insert_tag(
 	$lang_tags['text_quote_one'],
 	$lang_tags['text_quote_one_description'],
 	$lang_tags['text_quote_one_syntax'],
-	$lang_tags['text_quote_one_example'],
+	sprintf($lang_tags['text_quote_one_example'], $siteName),
 	""
 );
 
@@ -134,7 +135,7 @@ insert_tag(
 	$lang_tags['text_quote_two'],
 	$lang_tags['text_quote_two_description'],
 	$lang_tags['text_quote_two_syntax'],
-	$lang_tags['text_quote_two_example'],
+	sprintf($lang_tags['text_quote_two_example'], $CURUSER['username'], $siteName),
 	""
 );
 
@@ -215,7 +216,7 @@ insert_tag(
 	$lang_tags['text_flash'],
 	$lang_tags['text_flash_description'],
 	$lang_tags['text_flash_syntax'],
-	$lang_tags['text_flash_example'],
+	sprintf($lang_tags['text_flash_example'], getSchemeAndHttpHost()),
 	""
 );
 
@@ -223,7 +224,7 @@ insert_tag(
 	$lang_tags['text_flash_two'],
 	$lang_tags['text_flash_two_description'],
 	$lang_tags['text_flash_two_syntax'],
-	$lang_tags['text_flash_two_example'],
+	sprintf($lang_tags['text_flash_two_example'], getSchemeAndHttpHost()),
 	""
 );
 
@@ -231,7 +232,7 @@ insert_tag(
 	$lang_tags['text_flv_one'],
 	$lang_tags['text_flv_one_description'],
 	$lang_tags['text_flv_one_syntax'],
-	$lang_tags['text_flv_one_example'],
+	sprintf($lang_tags['text_flv_one_example'], getSchemeAndHttpHost()),
 	""
 );
 
@@ -239,7 +240,7 @@ insert_tag(
 	$lang_tags['text_flv_two'],
 	$lang_tags['text_flv_two_description'],
 	$lang_tags['text_flv_two_syntax'],
-	$lang_tags['text_flv_two_example'],
+	sprintf($lang_tags['text_flv_two_example'], getSchemeAndHttpHost()),
 	""
 );
 

@@ -4,7 +4,7 @@ $lang_edit = array
 (
 	'head_edit_torrent' => "Edit torrent - ",
 	'text_cannot_edit_torrent' => "Can't edit this torrent",
-	'text_cannot_edit_torrent_note' => "You're not the rightful owner, or you're not <a href=\"login.php?returnto=" . rawurlencode($_SERVER["REQUEST_URI"]) . "&nowarn=1\">logged in</a> properly.\n",
+	'text_cannot_edit_torrent_note' => "You're not the rightful owner, or you're not <a href=\"login.php?returnto=%s&nowarn=1\">logged in</a> properly.\n",
 	'row_torrent_name' => "Torrent name",
 	'row_small_description' => "Small description",
 	'row_nfo_file' => "NFO file",

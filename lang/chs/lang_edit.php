@@ -4,7 +4,7 @@ $lang_edit = array
 (
 	'head_edit_torrent' => "编辑种子 - ",
 	'text_cannot_edit_torrent' => "无法编辑该种子",
-	'text_cannot_edit_torrent_note' => "你不是发种者，或者你没有正确<a href=\"login.php?returnto=" . rawurlencode($_SERVER["REQUEST_URI"]) . "&nowarn=1\">登录。</a>\n",
+	'text_cannot_edit_torrent_note' => "你不是发种者，或者你没有正确<a href=\"login.php?returnto=%s&nowarn=1\">登录。</a>\n",
 	'row_torrent_name' => "标题",
 	'row_small_description' => "副标题",
 	'row_nfo_file' => "NFO文件",

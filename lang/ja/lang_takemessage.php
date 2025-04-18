@@ -1,0 +1,26 @@
+<?php
+
+$lang_takemessage = array (
+  'std_error' => '間違い',
+  'std_permission_denied' => 'あなたは許可を持っていません！',
+  'std_please_enter_something' => '空にすることはできません！',
+  'std_message_flooding_denied' => '無差別にテキストメッセージを送信します。お願いします',
+  'std_before_sending_pm' => 'もう一度数秒で送ってください。',
+  'std_invalid_id' => 'このアカウントは期限切れになりました',
+  'std_user_not_exist' => 'このアカウントは存在しません',
+  'std_refused' => '拒否する',
+  'std_account_parked' => 'アカウントがブロックされています。',
+  'std_user_blocks_your_pms' => 'このユーザーはあなたのメッセージを受け入れることを拒否します。',
+  'std_user_accepts_friends_pms' => 'このユーザーは、友人からのテキストメッセージのみを受け入れます。',
+  'std_user_blocks_all_pms' => 'ユーザーはすべてのテキストメッセージを受け入れることを拒否しました。',
+  'std_succeeded' => '成功',
+  'std_messages_out_of' => 'SMS（合計',
+  'std_were' => '記事）があります',
+  'std_message_was' => 'メッセージはあります',
+  'std_successfully_sent' => '正常に送られます！',
+  'std_s_were' => 'すでに',
+  'std_was' => 'すでに',
+  'std_updated' => '更新します',
+  'std_no_permission_forwarding' => 'メッセージを転送する許可はありません。',
+  'std_must_enter_username' => '転送したいユーザーのユーザー名を入力する必要があります。',
+);

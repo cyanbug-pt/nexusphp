@@ -14,12 +14,12 @@ class FaqTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('faq')->delete();
-        
+
         \DB::table('faq')->insert(array (
-            0 => 
+            0 =>
             array (
                 'id' => 1,
                 'link_id' => 1,
@@ -31,7 +31,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 1,
             ),
-            1 => 
+            1 =>
             array (
                 'id' => 2,
                 'link_id' => 2,
@@ -43,7 +43,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 2,
             ),
-            2 => 
+            2 =>
             array (
                 'id' => 3,
                 'link_id' => 3,
@@ -55,7 +55,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 3,
             ),
-            3 => 
+            3 =>
             array (
                 'id' => 4,
                 'link_id' => 4,
@@ -67,7 +67,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 4,
             ),
-            4 => 
+            4 =>
             array (
                 'id' => 5,
                 'link_id' => 5,
@@ -79,7 +79,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 5,
             ),
-            5 => 
+            5 =>
             array (
                 'id' => 6,
                 'link_id' => 6,
@@ -91,7 +91,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 6,
             ),
-            6 => 
+            6 =>
             array (
                 'id' => 7,
                 'link_id' => 7,
@@ -103,7 +103,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 7,
             ),
-            7 => 
+            7 =>
             array (
                 'id' => 8,
                 'link_id' => 8,
@@ -115,7 +115,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 8,
             ),
-            8 => 
+            8 =>
             array (
                 'id' => 9,
                 'link_id' => 9,
@@ -127,7 +127,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 0,
                 'order' => 9,
             ),
-            9 => 
+            9 =>
             array (
                 'id' => 10,
                 'link_id' => 10,
@@ -139,7 +139,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 1,
                 'order' => 1,
             ),
-            10 => 
+            10 =>
             array (
                 'id' => 11,
                 'link_id' => 11,
@@ -151,7 +151,7 @@ class FaqTableSeeder extends Seeder
                 'categ' => 1,
                 'order' => 2,
             ),
-            11 => 
+            11 =>
             array (
                 'id' => 12,
                 'link_id' => 12,
@@ -164,7 +164,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 1,
                 'order' => 3,
             ),
-            12 => 
+            12 =>
             array (
                 'id' => 13,
                 'link_id' => 13,
@@ -177,7 +177,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 1,
             ),
-            13 => 
+            13 =>
             array (
                 'id' => 14,
                 'link_id' => 14,
@@ -189,7 +189,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 2,
             ),
-            14 => 
+            14 =>
             array (
                 'id' => 15,
                 'link_id' => 15,
@@ -201,7 +201,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 3,
             ),
-            15 => 
+            15 =>
             array (
                 'id' => 16,
                 'link_id' => 16,
@@ -213,7 +213,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 4,
             ),
-            16 => 
+            16 =>
             array (
                 'id' => 17,
                 'link_id' => 17,
@@ -234,7 +234,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 5,
             ),
-            17 => 
+            17 =>
             array (
                 'id' => 18,
                 'link_id' => 18,
@@ -246,7 +246,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 6,
             ),
-            18 => 
+            18 =>
             array (
                 'id' => 21,
                 'link_id' => 21,
@@ -270,7 +270,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 9,
             ),
-            19 => 
+            19 =>
             array (
                 'id' => 22,
                 'link_id' => 22,
@@ -379,7 +379,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 10,
             ),
-            20 => 
+            20 =>
             array (
                 'id' => 23,
                 'link_id' => 23,
@@ -484,7 +484,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 11,
             ),
-            21 => 
+            21 =>
             array (
                 'id' => 25,
                 'link_id' => 25,
@@ -498,7 +498,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 13,
             ),
-            22 => 
+            22 =>
             array (
                 'id' => 26,
                 'link_id' => 26,
@@ -512,7 +512,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 2,
                 'order' => 14,
             ),
-            23 => 
+            23 =>
             array (
                 'id' => 27,
                 'link_id' => 27,
@@ -527,7 +527,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 3,
                 'order' => 1,
             ),
-            24 => 
+            24 =>
             array (
                 'id' => 28,
                 'link_id' => 28,
@@ -543,7 +543,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 3,
                 'order' => 2,
             ),
-            25 => 
+            25 =>
             array (
                 'id' => 29,
                 'link_id' => 29,
@@ -551,7 +551,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'type' => 'item',
                 'question' => '我可以任意选择Bittorrent客户端软件么？',
                 'answer' => '根据<a class="faqlink" href="aboutnexus.php">NexusPHP</a>对常见BitTorrent客户端的测试，目前本站Tracker<b>只允许</b>使用以下的BitTorrent客户端软件。<br />
-<a class="faqlink" href="aboutnexus.php">NexusPHP</a>的测试报告可<a class="faqlink" href="http://www.nexusphp.com/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A">在此查看</a>。
+<a class="faqlink" href="aboutnexus.php">NexusPHP</a>的测试报告可<a class="faqlink" href="https://nexusphp.org/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A">在此查看</a>。
 <br />
 <b>Windows:</b>
 <ul>
@@ -598,7 +598,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 3,
             ),
-            26 => 
+            26 =>
             array (
                 'id' => 30,
                 'link_id' => 30,
@@ -610,7 +610,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 3,
                 'order' => 4,
             ),
-            27 => 
+            27 =>
             array (
                 'id' => 31,
                 'link_id' => 31,
@@ -622,7 +622,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 3,
                 'order' => 5,
             ),
-            28 => 
+            28 =>
             array (
                 'id' => 33,
                 'link_id' => 33,
@@ -635,7 +635,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 3,
                 'order' => 7,
             ),
-            29 => 
+            29 =>
             array (
                 'id' => 36,
                 'link_id' => 36,
@@ -647,7 +647,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 4,
                 'order' => 1,
             ),
-            30 => 
+            30 =>
             array (
                 'id' => 37,
                 'link_id' => 37,
@@ -672,7 +672,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 4,
                 'order' => 2,
             ),
-            31 => 
+            31 =>
             array (
                 'id' => 38,
                 'link_id' => 38,
@@ -688,7 +688,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 4,
                 'order' => 3,
             ),
-            32 => 
+            32 =>
             array (
                 'id' => 39,
                 'link_id' => 39,
@@ -700,7 +700,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 1,
             ),
-            33 => 
+            33 =>
             array (
                 'id' => 40,
                 'link_id' => 40,
@@ -712,7 +712,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 2,
             ),
-            34 => 
+            34 =>
             array (
                 'id' => 41,
                 'link_id' => 41,
@@ -728,7 +728,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 3,
             ),
-            35 => 
+            35 =>
             array (
                 'id' => 42,
                 'link_id' => 42,
@@ -740,7 +740,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 4,
             ),
-            36 => 
+            36 =>
             array (
                 'id' => 43,
                 'link_id' => 43,
@@ -752,7 +752,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 5,
             ),
-            37 => 
+            37 =>
             array (
                 'id' => 44,
                 'link_id' => 44,
@@ -766,7 +766,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 6,
             ),
-            38 => 
+            38 =>
             array (
                 'id' => 45,
                 'link_id' => 45,
@@ -778,7 +778,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 7,
             ),
-            39 => 
+            39 =>
             array (
                 'id' => 46,
                 'link_id' => 46,
@@ -822,7 +822,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 8,
             ),
-            40 => 
+            40 =>
             array (
                 'id' => 47,
                 'link_id' => 47,
@@ -873,7 +873,7 @@ NexusPHP的代码是根据TBSource的源码改写的。TBDev网站，Tracker源�
                 'categ' => 5,
                 'order' => 9,
             ),
-            41 => 
+            41 =>
             array (
                 'id' => 48,
                 'link_id' => 48,
@@ -889,7 +889,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
                 'categ' => 5,
                 'order' => 10,
             ),
-            42 => 
+            42 =>
             array (
                 'id' => 50,
                 'link_id' => 50,
@@ -905,7 +905,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
             'categ' => 6,
             'order' => 1,
         ),
-        43 => 
+        43 =>
         array (
             'id' => 51,
             'link_id' => 51,
@@ -925,7 +925,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 6,
         'order' => 2,
     ),
-    44 => 
+    44 =>
     array (
         'id' => 52,
         'link_id' => 52,
@@ -937,7 +937,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 6,
         'order' => 3,
     ),
-    45 => 
+    45 =>
     array (
         'id' => 53,
         'link_id' => 53,
@@ -949,7 +949,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 6,
         'order' => 4,
     ),
-    46 => 
+    46 =>
     array (
         'id' => 54,
         'link_id' => 54,
@@ -961,7 +961,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 6,
         'order' => 5,
     ),
-    47 => 
+    47 =>
     array (
         'id' => 55,
         'link_id' => 55,
@@ -975,7 +975,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 6,
         'order' => 6,
     ),
-    48 => 
+    48 =>
     array (
         'id' => 56,
         'link_id' => 56,
@@ -1017,7 +1017,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 7,
         'order' => 1,
     ),
-    49 => 
+    49 =>
     array (
         'id' => 57,
         'link_id' => 57,
@@ -1029,7 +1029,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 7,
         'order' => 2,
     ),
-    50 => 
+    50 =>
     array (
         'id' => 75,
         'link_id' => 75,
@@ -1041,7 +1041,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 7,
         'order' => 3,
     ),
-    51 => 
+    51 =>
     array (
         'id' => 62,
         'link_id' => 62,
@@ -1055,7 +1055,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 8,
         'order' => 1,
     ),
-    52 => 
+    52 =>
     array (
         'id' => 63,
         'link_id' => 63,
@@ -1071,7 +1071,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 8,
         'order' => 2,
     ),
-    53 => 
+    53 =>
     array (
         'id' => 65,
         'link_id' => 65,
@@ -1087,7 +1087,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 9,
         'order' => 1,
     ),
-    54 => 
+    54 =>
     array (
         'id' => 66,
         'link_id' => 66,
@@ -1141,7 +1141,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 5,
         'order' => 12,
     ),
-    55 => 
+    55 =>
     array (
         'id' => 67,
         'link_id' => 67,
@@ -1155,7 +1155,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 5,
         'order' => 13,
     ),
-    56 => 
+    56 =>
     array (
         'id' => 68,
         'link_id' => 68,
@@ -1168,7 +1168,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 5,
         'order' => 14,
     ),
-    57 => 
+    57 =>
     array (
         'id' => 69,
         'link_id' => 69,
@@ -1181,7 +1181,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 5,
         'order' => 15,
     ),
-    58 => 
+    58 =>
     array (
         'id' => 70,
         'link_id' => 70,
@@ -1194,7 +1194,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 5,
         'order' => 16,
     ),
-    59 => 
+    59 =>
     array (
         'id' => 71,
         'link_id' => 71,
@@ -1206,7 +1206,7 @@ IO错误指的是输入-输出错误，这是一个文件系统错误，而非�
         'categ' => 0,
         'order' => 8,
     ),
-    60 => 
+    60 =>
     array (
         'id' => 72,
         'link_id' => 72,
@@ -1221,7 +1221,7 @@ So, if you think you could help, feel free to <a class="faqlink" href="contactst
         'categ' => 71,
         'order' => 1,
     ),
-    61 => 
+    61 =>
     array (
         'id' => 73,
         'link_id' => 73,
@@ -1252,7 +1252,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 71,
         'order' => 2,
     ),
-    62 => 
+    62 =>
     array (
         'id' => 74,
         'link_id' => 74,
@@ -1278,7 +1278,7 @@ convert drive_letter:/fs:ntfs<br />
         'categ' => 5,
         'order' => 17,
     ),
-    63 => 
+    63 =>
     array (
         'id' => 374,
         'link_id' => 74,
@@ -1304,7 +1304,7 @@ convert drive_letter:/fs:ntfs<br />
         'categ' => 5,
         'order' => 17,
     ),
-    64 => 
+    64 =>
     array (
         'id' => 368,
         'link_id' => 68,
@@ -1317,7 +1317,7 @@ convert drive_letter:/fs:ntfs<br />
         'categ' => 5,
         'order' => 14,
     ),
-    65 => 
+    65 =>
     array (
         'id' => 369,
         'link_id' => 69,
@@ -1330,7 +1330,7 @@ convert drive_letter:/fs:ntfs<br />
         'categ' => 5,
         'order' => 15,
     ),
-    66 => 
+    66 =>
     array (
         'id' => 370,
         'link_id' => 70,
@@ -1343,7 +1343,7 @@ convert drive_letter:/fs:ntfs<br />
         'categ' => 5,
         'order' => 16,
     ),
-    67 => 
+    67 =>
     array (
         'id' => 371,
         'link_id' => 71,
@@ -1355,7 +1355,7 @@ convert drive_letter:/fs:ntfs<br />
         'categ' => 0,
         'order' => 8,
     ),
-    68 => 
+    68 =>
     array (
         'id' => 372,
         'link_id' => 72,
@@ -1370,7 +1370,7 @@ So, if you think you could help, feel free to <a class="faqlink" href="contactst
         'categ' => 71,
         'order' => 1,
     ),
-    69 => 
+    69 =>
     array (
         'id' => 373,
         'link_id' => 73,
@@ -1401,7 +1401,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 71,
         'order' => 2,
     ),
-    70 => 
+    70 =>
     array (
         'id' => 362,
         'link_id' => 62,
@@ -1415,7 +1415,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 8,
         'order' => 1,
     ),
-    71 => 
+    71 =>
     array (
         'id' => 363,
         'link_id' => 63,
@@ -1431,7 +1431,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 8,
         'order' => 2,
     ),
-    72 => 
+    72 =>
     array (
         'id' => 365,
         'link_id' => 65,
@@ -1447,7 +1447,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 9,
         'order' => 1,
     ),
-    73 => 
+    73 =>
     array (
         'id' => 366,
         'link_id' => 66,
@@ -1501,7 +1501,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 5,
         'order' => 12,
     ),
-    74 => 
+    74 =>
     array (
         'id' => 367,
         'link_id' => 67,
@@ -1515,7 +1515,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 5,
         'order' => 13,
     ),
-    75 => 
+    75 =>
     array (
         'id' => 301,
         'link_id' => 1,
@@ -1527,7 +1527,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 1,
     ),
-    76 => 
+    76 =>
     array (
         'id' => 302,
         'link_id' => 2,
@@ -1539,7 +1539,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 2,
     ),
-    77 => 
+    77 =>
     array (
         'id' => 303,
         'link_id' => 3,
@@ -1551,7 +1551,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 3,
     ),
-    78 => 
+    78 =>
     array (
         'id' => 304,
         'link_id' => 4,
@@ -1563,7 +1563,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 4,
     ),
-    79 => 
+    79 =>
     array (
         'id' => 305,
         'link_id' => 5,
@@ -1575,7 +1575,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 5,
     ),
-    80 => 
+    80 =>
     array (
         'id' => 306,
         'link_id' => 6,
@@ -1587,7 +1587,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 6,
     ),
-    81 => 
+    81 =>
     array (
         'id' => 307,
         'link_id' => 7,
@@ -1599,7 +1599,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 7,
     ),
-    82 => 
+    82 =>
     array (
         'id' => 308,
         'link_id' => 8,
@@ -1611,7 +1611,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 8,
     ),
-    83 => 
+    83 =>
     array (
         'id' => 309,
         'link_id' => 9,
@@ -1623,7 +1623,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 0,
         'order' => 9,
     ),
-    84 => 
+    84 =>
     array (
         'id' => 310,
         'link_id' => 10,
@@ -1635,7 +1635,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 1,
         'order' => 1,
     ),
-    85 => 
+    85 =>
     array (
         'id' => 311,
         'link_id' => 11,
@@ -1647,7 +1647,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
         'categ' => 1,
         'order' => 2,
     ),
-    86 => 
+    86 =>
     array (
         'id' => 312,
         'link_id' => 12,
@@ -1660,7 +1660,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 1,
         'order' => 3,
     ),
-    87 => 
+    87 =>
     array (
         'id' => 313,
         'link_id' => 13,
@@ -1673,7 +1673,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 1,
     ),
-    88 => 
+    88 =>
     array (
         'id' => 314,
         'link_id' => 14,
@@ -1685,7 +1685,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 2,
     ),
-    89 => 
+    89 =>
     array (
         'id' => 315,
         'link_id' => 15,
@@ -1697,7 +1697,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 3,
     ),
-    90 => 
+    90 =>
     array (
         'id' => 316,
         'link_id' => 16,
@@ -1709,7 +1709,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 4,
     ),
-    91 => 
+    91 =>
     array (
         'id' => 317,
         'link_id' => 17,
@@ -1730,7 +1730,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 5,
     ),
-    92 => 
+    92 =>
     array (
         'id' => 318,
         'link_id' => 18,
@@ -1742,7 +1742,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 6,
     ),
-    93 => 
+    93 =>
     array (
         'id' => 321,
         'link_id' => 21,
@@ -1766,7 +1766,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 9,
     ),
-    94 => 
+    94 =>
     array (
         'id' => 322,
         'link_id' => 22,
@@ -1875,7 +1875,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 10,
     ),
-    95 => 
+    95 =>
     array (
         'id' => 323,
         'link_id' => 23,
@@ -1980,7 +1980,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 11,
     ),
-    96 => 
+    96 =>
     array (
         'id' => 325,
         'link_id' => 25,
@@ -1994,7 +1994,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 13,
     ),
-    97 => 
+    97 =>
     array (
         'id' => 326,
         'link_id' => 26,
@@ -2008,7 +2008,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 2,
         'order' => 14,
     ),
-    98 => 
+    98 =>
     array (
         'id' => 327,
         'link_id' => 27,
@@ -2023,7 +2023,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 3,
         'order' => 1,
     ),
-    99 => 
+    99 =>
     array (
         'id' => 328,
         'link_id' => 28,
@@ -2039,7 +2039,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 3,
         'order' => 2,
     ),
-    100 => 
+    100 =>
     array (
         'id' => 329,
         'link_id' => 29,
@@ -2047,7 +2047,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'type' => 'item',
         'question' => '我可以任意選取Bittorrent用戶端軟體么？',
         'answer' => '根據<a class="faqlink" href="aboutnexus.php">NexusPHP</a>對常見BitTorrent用戶端的測試，目前本站Tracker<b>只允許</b>使用以下的BitTorrent用戶端軟體。<br />
-<a class="faqlink" href="aboutnexus.php">NexusPHP</a>的測試報告可<a class="faqlink" href="http://www.nexusphp.com/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A">在此檢視</a>。
+<a class="faqlink" href="aboutnexus.php">NexusPHP</a>的測試報告可<a class="faqlink" href="https://nexusphp.org/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A">在此檢視</a>。
 <br />
 <b>Windows:</b>
 <ul>
@@ -2094,7 +2094,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 3,
     ),
-    101 => 
+    101 =>
     array (
         'id' => 330,
         'link_id' => 30,
@@ -2106,7 +2106,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 3,
         'order' => 4,
     ),
-    102 => 
+    102 =>
     array (
         'id' => 331,
         'link_id' => 31,
@@ -2118,7 +2118,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 3,
         'order' => 5,
     ),
-    103 => 
+    103 =>
     array (
         'id' => 333,
         'link_id' => 33,
@@ -2131,7 +2131,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 3,
         'order' => 7,
     ),
-    104 => 
+    104 =>
     array (
         'id' => 336,
         'link_id' => 36,
@@ -2143,7 +2143,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 4,
         'order' => 1,
     ),
-    105 => 
+    105 =>
     array (
         'id' => 337,
         'link_id' => 37,
@@ -2168,7 +2168,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 4,
         'order' => 2,
     ),
-    106 => 
+    106 =>
     array (
         'id' => 338,
         'link_id' => 38,
@@ -2184,7 +2184,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 4,
         'order' => 3,
     ),
-    107 => 
+    107 =>
     array (
         'id' => 339,
         'link_id' => 39,
@@ -2196,7 +2196,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 1,
     ),
-    108 => 
+    108 =>
     array (
         'id' => 340,
         'link_id' => 40,
@@ -2208,7 +2208,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 2,
     ),
-    109 => 
+    109 =>
     array (
         'id' => 341,
         'link_id' => 41,
@@ -2224,7 +2224,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 3,
     ),
-    110 => 
+    110 =>
     array (
         'id' => 342,
         'link_id' => 42,
@@ -2236,7 +2236,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 4,
     ),
-    111 => 
+    111 =>
     array (
         'id' => 343,
         'link_id' => 43,
@@ -2248,7 +2248,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 5,
     ),
-    112 => 
+    112 =>
     array (
         'id' => 344,
         'link_id' => 44,
@@ -2262,7 +2262,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 6,
     ),
-    113 => 
+    113 =>
     array (
         'id' => 345,
         'link_id' => 45,
@@ -2274,7 +2274,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 7,
     ),
-    114 => 
+    114 =>
     array (
         'id' => 346,
         'link_id' => 46,
@@ -2318,7 +2318,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 8,
     ),
-    115 => 
+    115 =>
     array (
         'id' => 347,
         'link_id' => 47,
@@ -2369,7 +2369,7 @@ NexusPHP的程式碼是根據TBSource的源碼改寫的。TBDev網站，Tracker�
         'categ' => 5,
         'order' => 9,
     ),
-    116 => 
+    116 =>
     array (
         'id' => 348,
         'link_id' => 48,
@@ -2385,7 +2385,7 @@ IO錯誤指的是匯入-匯出錯誤，這是一個檔案系統錯誤，而非�
         'categ' => 5,
         'order' => 10,
     ),
-    117 => 
+    117 =>
     array (
         'id' => 350,
         'link_id' => 50,
@@ -2401,7 +2401,7 @@ IO錯誤指的是匯入-匯出錯誤，這是一個檔案系統錯誤，而非�
     'categ' => 6,
     'order' => 1,
 ),
-118 => 
+118 =>
 array (
     'id' => 351,
     'link_id' => 51,
@@ -2421,7 +2421,7 @@ array (
 'categ' => 6,
 'order' => 2,
 ),
-119 => 
+119 =>
 array (
 'id' => 352,
 'link_id' => 52,
@@ -2433,7 +2433,7 @@ array (
 'categ' => 6,
 'order' => 3,
 ),
-120 => 
+120 =>
 array (
 'id' => 353,
 'link_id' => 53,
@@ -2445,7 +2445,7 @@ array (
 'categ' => 6,
 'order' => 4,
 ),
-121 => 
+121 =>
 array (
 'id' => 354,
 'link_id' => 54,
@@ -2457,7 +2457,7 @@ array (
 'categ' => 6,
 'order' => 5,
 ),
-122 => 
+122 =>
 array (
 'id' => 355,
 'link_id' => 55,
@@ -2471,7 +2471,7 @@ array (
 'categ' => 6,
 'order' => 6,
 ),
-123 => 
+123 =>
 array (
 'id' => 356,
 'link_id' => 56,
@@ -2513,7 +2513,7 @@ array (
 'categ' => 7,
 'order' => 1,
 ),
-124 => 
+124 =>
 array (
 'id' => 357,
 'link_id' => 57,
@@ -2525,7 +2525,7 @@ array (
 'categ' => 7,
 'order' => 2,
 ),
-125 => 
+125 =>
 array (
 'id' => 375,
 'link_id' => 75,
@@ -2537,7 +2537,7 @@ array (
 'categ' => 7,
 'order' => 3,
 ),
-126 => 
+126 =>
 array (
 'id' => 401,
 'link_id' => 1,
@@ -2549,7 +2549,7 @@ array (
 'categ' => 0,
 'order' => 1,
 ),
-127 => 
+127 =>
 array (
 'id' => 402,
 'link_id' => 2,
@@ -2561,7 +2561,7 @@ array (
 'categ' => 0,
 'order' => 2,
 ),
-128 => 
+128 =>
 array (
 'id' => 403,
 'link_id' => 3,
@@ -2573,7 +2573,7 @@ array (
 'categ' => 0,
 'order' => 3,
 ),
-129 => 
+129 =>
 array (
 'id' => 404,
 'link_id' => 4,
@@ -2585,7 +2585,7 @@ array (
 'categ' => 0,
 'order' => 4,
 ),
-130 => 
+130 =>
 array (
 'id' => 405,
 'link_id' => 5,
@@ -2597,7 +2597,7 @@ array (
 'categ' => 0,
 'order' => 5,
 ),
-131 => 
+131 =>
 array (
 'id' => 406,
 'link_id' => 6,
@@ -2609,7 +2609,7 @@ array (
 'categ' => 0,
 'order' => 6,
 ),
-132 => 
+132 =>
 array (
 'id' => 407,
 'link_id' => 7,
@@ -2621,7 +2621,7 @@ array (
 'categ' => 0,
 'order' => 7,
 ),
-133 => 
+133 =>
 array (
 'id' => 408,
 'link_id' => 8,
@@ -2633,7 +2633,7 @@ array (
 'categ' => 0,
 'order' => 8,
 ),
-134 => 
+134 =>
 array (
 'id' => 409,
 'link_id' => 9,
@@ -2645,7 +2645,7 @@ array (
 'categ' => 0,
 'order' => 9,
 ),
-135 => 
+135 =>
 array (
 'id' => 410,
 'link_id' => 10,
@@ -2657,7 +2657,7 @@ array (
 'categ' => 1,
 'order' => 1,
 ),
-136 => 
+136 =>
 array (
 'id' => 411,
 'link_id' => 11,
@@ -2669,7 +2669,7 @@ array (
 'categ' => 1,
 'order' => 2,
 ),
-137 => 
+137 =>
 array (
 'id' => 412,
 'link_id' => 12,
@@ -2682,7 +2682,7 @@ The first stage of NexusPHP forks from TBSource. You may find more information a
 'categ' => 1,
 'order' => 3,
 ),
-138 => 
+138 =>
 array (
 'id' => 413,
 'link_id' => 13,
@@ -2695,7 +2695,7 @@ Typically registered users would be deleted after 24 hours if not confirmed, so 
 'categ' => 2,
 'order' => 1,
 ),
-139 => 
+139 =>
 array (
 'id' => 414,
 'link_id' => 14,
@@ -2707,7 +2707,7 @@ array (
 'categ' => 2,
 'order' => 2,
 ),
-140 => 
+140 =>
 array (
 'id' => 415,
 'link_id' => 15,
@@ -2719,7 +2719,7 @@ array (
 'categ' => 2,
 'order' => 3,
 ),
-141 => 
+141 =>
 array (
 'id' => 416,
 'link_id' => 16,
@@ -2731,7 +2731,7 @@ array (
 'categ' => 2,
 'order' => 4,
 ),
-142 => 
+142 =>
 array (
 'id' => 417,
 'link_id' => 17,
@@ -2752,7 +2752,7 @@ You may see two symbols instead of a number: "Inf.", which is just an abbreviati
 'categ' => 2,
 'order' => 5,
 ),
-143 => 
+143 =>
 array (
 'id' => 418,
 'link_id' => 18,
@@ -2764,17 +2764,17 @@ array (
 'categ' => 2,
 'order' => 6,
 ),
-144 => 
+144 =>
 array (
 'id' => 421,
 'link_id' => 21,
 'lang_id' => 6,
 'type' => 'item',
 'question' => 'Why am I listed as not connectable? (And why should I care?)',
-'answer' => 'The tracker has determined that you are firewalled or NATed and cannot accept incoming connections. 
+'answer' => 'The tracker has determined that you are firewalled or NATed and cannot accept incoming connections.
 <br />
 <br />
-This means that other peers in the swarm will be unable to connect to you, only you to them. Even worse, if two peers are both in this state they will not be able to connect at all. This has obviously a detrimental effect on the overall speed. 
+This means that other peers in the swarm will be unable to connect to you, only you to them. Even worse, if two peers are both in this state they will not be able to connect at all. This has obviously a detrimental effect on the overall speed.
 <br />
 <br />
 The way to solve the problem involves opening the ports used for incoming connections (the same range you defined in your client) on the firewall and/or configuring your NAT server to use a basic form of NAT for that range instead of NAPT (the actual process differs widely between different router models. Check your router documentation and/or support forum. You will also find lots of information on the subject at <a class="faqlink" href="http://portforward.com/">PortForward</a>).
@@ -2788,7 +2788,7 @@ The way to solve the problem involves opening the ports used for incoming connec
 'categ' => 2,
 'order' => 9,
 ),
-145 => 
+145 =>
 array (
 'id' => 422,
 'link_id' => 22,
@@ -2897,7 +2897,7 @@ array (
 'categ' => 2,
 'order' => 10,
 ),
-146 => 
+146 =>
 array (
 'id' => 423,
 'link_id' => 23,
@@ -2999,7 +2999,7 @@ Note that you will be automatically demoted from this status if your ratio drops
 'categ' => 2,
 'order' => 11,
 ),
-147 => 
+147 =>
 array (
 'id' => 425,
 'link_id' => 25,
@@ -3012,7 +3012,7 @@ When are inactive user accounts deleted? See <a class="faqlink" href="rules.php"
 'categ' => 2,
 'order' => 13,
 ),
-148 => 
+148 =>
 array (
 'id' => 426,
 'link_id' => 26,
@@ -3026,7 +3026,7 @@ Please do not make a post just to test your avatar. If everything is all right y
 'categ' => 2,
 'order' => 14,
 ),
-149 => 
+149 =>
 array (
 'id' => 427,
 'link_id' => 27,
@@ -3041,7 +3041,7 @@ array (
 'categ' => 3,
 'order' => 1,
 ),
-150 => 
+150 =>
 array (
 'id' => 428,
 'link_id' => 28,
@@ -3057,7 +3057,7 @@ array (
 'categ' => 3,
 'order' => 2,
 ),
-151 => 
+151 =>
 array (
 'id' => 429,
 'link_id' => 29,
@@ -3065,7 +3065,7 @@ array (
 'type' => 'item',
 'question' => 'May I use any bittorrent client?',
 'answer' => 'No. According to tests of common bittorrent clients by <a class="faqlink" href="aboutnexus.php">NexusPHP</a>, we allowed <b>only</b> the following bittorrent clients.<br />
-The test report by <a class="faqlink" href="aboutnexus.php">NexusPHP</a> is <a class="faqlink" href="http://www.nexusphp.com/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A">here</a>. 
+The test report by <a class="faqlink" href="aboutnexus.php">NexusPHP</a> is <a class="faqlink" href="https://nexusphp.org/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A">here</a>.
 <br />
 <b>Windows:</b>
 <ul>
@@ -3110,7 +3110,7 @@ Please do not use any beta or testing version of bittorrent clients, e.g. uTorre
 'categ' => 5,
 'order' => 3,
 ),
-152 => 
+152 =>
 array (
 'id' => 430,
 'link_id' => 30,
@@ -3122,7 +3122,7 @@ array (
 'categ' => 3,
 'order' => 4,
 ),
-153 => 
+153 =>
 array (
 'id' => 431,
 'link_id' => 31,
@@ -3134,7 +3134,7 @@ array (
 'categ' => 3,
 'order' => 5,
 ),
-154 => 
+154 =>
 array (
 'id' => 433,
 'link_id' => 33,
@@ -3147,7 +3147,7 @@ However, there is a limit for a single torrent. Per torrent 3 simultaneous conne
 'categ' => 3,
 'order' => 7,
 ),
-155 => 
+155 =>
 array (
 'id' => 436,
 'link_id' => 36,
@@ -3159,7 +3159,7 @@ array (
 'categ' => 4,
 'order' => 1,
 ),
-156 => 
+156 =>
 array (
 'id' => 437,
 'link_id' => 37,
@@ -3184,7 +3184,7 @@ Only well written letters with serious intent will be considered.',
 'categ' => 4,
 'order' => 2,
 ),
-157 => 
+157 =>
 array (
 'id' => 438,
 'link_id' => 38,
@@ -3201,7 +3201,7 @@ However, the files you download from us are yours to do as you please (except th
 'categ' => 4,
 'order' => 3,
 ),
-158 => 
+158 =>
 array (
 'id' => 439,
 'link_id' => 39,
@@ -3213,7 +3213,7 @@ array (
 'categ' => 5,
 'order' => 1,
 ),
-159 => 
+159 =>
 array (
 'id' => 440,
 'link_id' => 40,
@@ -3225,7 +3225,7 @@ array (
 'categ' => 5,
 'order' => 2,
 ),
-160 => 
+160 =>
 array (
 'id' => 441,
 'link_id' => 41,
@@ -3241,7 +3241,7 @@ array (
 'categ' => 5,
 'order' => 3,
 ),
-161 => 
+161 =>
 array (
 'id' => 442,
 'link_id' => 42,
@@ -3253,7 +3253,7 @@ array (
 'categ' => 5,
 'order' => 4,
 ),
-162 => 
+162 =>
 array (
 'id' => 443,
 'link_id' => 43,
@@ -3265,7 +3265,7 @@ array (
 'categ' => 5,
 'order' => 5,
 ),
-163 => 
+163 =>
 array (
 'id' => 444,
 'link_id' => 44,
@@ -3279,7 +3279,7 @@ Some clients have an (advanced) option/preference to \'kick/ban clients that sen
 'categ' => 5,
 'order' => 6,
 ),
-164 => 
+164 =>
 array (
 'id' => 445,
 'link_id' => 45,
@@ -3291,7 +3291,7 @@ array (
 'categ' => 5,
 'order' => 7,
 ),
-165 => 
+165 =>
 array (
 'id' => 446,
 'link_id' => 46,
@@ -3335,7 +3335,7 @@ This delay in downloading will only affect users with a low ratio and downloaded
 'categ' => 5,
 'order' => 8,
 ),
-166 => 
+166 =>
 array (
 'id' => 447,
 'link_id' => 47,
@@ -3388,7 +3388,7 @@ firewall, should you have them.',
     'categ' => 5,
     'order' => 9,
 ),
-167 => 
+167 =>
 array (
     'id' => 448,
     'link_id' => 48,
@@ -3403,7 +3403,7 @@ A more uncommon occurrence is a corrupted FAT. A crash may result in corruption 
     'categ' => 5,
     'order' => 10,
 ),
-168 => 
+168 =>
 array (
     'id' => 450,
     'link_id' => 50,
@@ -3417,7 +3417,7 @@ array (
     'categ' => 6,
     'order' => 1,
 ),
-169 => 
+169 =>
 array (
     'id' => 451,
     'link_id' => 51,
@@ -3438,7 +3438,7 @@ If you are running more than one instance of a client it is the overall upload s
     'categ' => 6,
     'order' => 2,
 ),
-170 => 
+170 =>
 array (
     'id' => 452,
     'link_id' => 52,
@@ -3450,7 +3450,7 @@ array (
     'categ' => 6,
     'order' => 3,
 ),
-171 => 
+171 =>
 array (
     'id' => 453,
     'link_id' => 53,
@@ -3462,7 +3462,7 @@ array (
     'categ' => 6,
     'order' => 4,
 ),
-172 => 
+172 =>
 array (
     'id' => 454,
     'link_id' => 54,
@@ -3474,7 +3474,7 @@ array (
     'categ' => 6,
     'order' => 5,
 ),
-173 => 
+173 =>
 array (
     'id' => 455,
     'link_id' => 55,
@@ -3488,7 +3488,7 @@ Browsing was used just as an example, the same would apply to gaming, IMing, etc
     'categ' => 6,
     'order' => 6,
 ),
-174 => 
+174 =>
 array (
     'id' => 456,
     'link_id' => 56,
@@ -3530,7 +3530,7 @@ A transparent proxy may or may not be anonymous, and there are several levels of
     'categ' => 7,
     'order' => 1,
 ),
-175 => 
+175 =>
 array (
     'id' => 457,
     'link_id' => 57,
@@ -3542,7 +3542,7 @@ array (
     'categ' => 7,
     'order' => 2,
 ),
-176 => 
+176 =>
 array (
     'id' => 475,
     'link_id' => 75,
@@ -3554,7 +3554,7 @@ array (
     'categ' => 7,
     'order' => 3,
 ),
-177 => 
+177 =>
 array (
     'id' => 462,
     'link_id' => 62,
@@ -3568,14 +3568,14 @@ If somehow your address is blocked by mistake, contact us about it.',
     'categ' => 8,
     'order' => 1,
 ),
-178 => 
+178 =>
 array (
     'id' => 463,
     'link_id' => 63,
     'lang_id' => 6,
     'type' => 'item',
     'question' => 'Your ISP blocks the site\'s address',
-'answer' => '(In first place, it\'s unlikely your ISP is doing so. DNS name resolution and/or network problems are the usual culprits.) 
+'answer' => '(In first place, it\'s unlikely your ISP is doing so. DNS name resolution and/or network problems are the usual culprits.)
 <br />
 There\'s nothing we can do. You should contact your ISP (or get a new one). Note that you can still visit the site via a proxy, follow the instructions in the relevant section. In this case it doesn\'t matter if the proxy is anonymous or not, or which port it listens to.<br />
 <br />
@@ -3584,7 +3584,7 @@ Notice that you will always be listed as an "unconnectable" client because the t
     'categ' => 8,
     'order' => 2,
 ),
-179 => 
+179 =>
 array (
     'id' => 465,
     'link_id' => 65,
@@ -3600,7 +3600,7 @@ array (
     'categ' => 9,
     'order' => 1,
 ),
-180 => 
+180 =>
 array (
     'id' => 466,
     'link_id' => 66,
@@ -3654,7 +3654,7 @@ Any time, you can check your available slots in the member bar on top of the pag
     'categ' => 5,
     'order' => 12,
 ),
-181 => 
+181 =>
 array (
     'id' => 467,
     'link_id' => 67,
@@ -3667,7 +3667,7 @@ array (
     'categ' => 5,
     'order' => 13,
 ),
-182 => 
+182 =>
 array (
     'id' => 468,
     'link_id' => 68,
@@ -3680,7 +3680,7 @@ There is a chance to get this error also, at the first time you download anythin
     'categ' => 5,
     'order' => 14,
 ),
-183 => 
+183 =>
 array (
     'id' => 469,
     'link_id' => 69,
@@ -3693,7 +3693,7 @@ array (
     'categ' => 5,
     'order' => 15,
 ),
-184 => 
+184 =>
 array (
     'id' => 470,
     'link_id' => 70,
@@ -3707,7 +3707,7 @@ Fortunately, this tracker would parse uploaded .torrent files and automatically 
     'categ' => 5,
     'order' => 16,
 ),
-185 => 
+185 =>
 array (
     'id' => 471,
     'link_id' => 71,
@@ -3719,7 +3719,7 @@ array (
     'categ' => 1,
     'order' => 8,
 ),
-186 => 
+186 =>
 array (
     'id' => 472,
     'link_id' => 72,
@@ -3734,7 +3734,7 @@ So, if you think you could help, feel free to <a class="faqlink" href="contactst
     'categ' => 71,
     'order' => 1,
 ),
-187 => 
+187 =>
 array (
     'id' => 473,
     'link_id' => 73,
@@ -3765,7 +3765,7 @@ The text of language files must be encoded in UTF-8. When saving files, be sure 
     'categ' => 71,
     'order' => 2,
 ),
-188 => 
+188 =>
 array (
     'id' => 474,
     'link_id' => 74,
@@ -3779,7 +3779,7 @@ array (
     'order' => 17,
 ),
 ));
-        
-        
+
+
     }
 }

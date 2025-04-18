@@ -9,14 +9,15 @@ if (isset($_GET['action']) && $_GET['action'] == "apply")
 if (user_can('applylink')){
 stdhead($lang_linksmanage['head_apply_for_links']);
 begin_main_frame();
+$siteName = \App\Models\Setting::getSiteName();
 begin_frame($lang_linksmanage['text_apply_for_links'], true,10,"100%","center");
 	print("<p align=left><b><font size=5>".$lang_linksmanage['text_rules']."</font></b></p>\n");
-	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".$lang_linksmanage['text_rule_one']."</p>\n");
-	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".$lang_linksmanage['text_rule_two']."</p>\n");
+	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".sprintf($lang_linksmanage['text_rule_one'], getSchemeAndHttpHost(), $SLOGAN, $siteName)."</p>\n");
+	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".sprintf($lang_linksmanage['text_rule_two'], $siteName)."</p>\n");
 	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".$lang_linksmanage['text_rule_three']."</p>\n");
 	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".$lang_linksmanage['text_rule_four']."</p>\n");
-	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".$lang_linksmanage['text_rule_five']."</p>\n");
-	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".$lang_linksmanage['text_rule_six']."</p>\n");
+	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".sprintf($lang_linksmanage['text_rule_five'], $siteName)."</p>\n");
+	print("<p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ".sprintf($lang_linksmanage['text_rule_six'], $siteName)."</p>\n");
 
 	print("<p>".$lang_linksmanage['text_red_star_required']."</p>");
 ?>

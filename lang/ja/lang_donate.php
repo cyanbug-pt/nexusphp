@@ -1,0 +1,28 @@
+<?php
+
+$lang_donate = array (
+  'std_sorry' => 'ごめん',
+  'std_do_not_accept_donation' => '現在、寄付は受け付けていません。',
+  'std_success' => '成功',
+  'std_donation_success_note_one' => '寄付ありがとうございます！あなたの支払いは完了しました。クリックしてください',
+  'std_here' => 'ここ',
+  'std_donation_success_note_two' => 'お客様の寄付を確認できるように、お支払い情報をお送りください。',
+  'head_donation' => '寄付する',
+  'text_donate' => '寄付する',
+  'std_error' => '間違い',
+  'std_no_donation_account_available' => '寄付を受け取るアカウントはありません。この状況については、管理グループに伝えてください。',
+  'text_donation_note' => '寄付するつもりでありがとう。何回寄付があっても、心から感謝します！',
+  'text_donate_with_paypal' => 'PayPalに寄付してください',
+  'text_donate_paypal_note' => '1.寄付金額を選択します。 <br /> 2。 [PayPal]ボタンをクリックします。 <br /> 3。 PayPalのWebサイトでの完全な支払い。',
+  'text_select_donation_amount' => '寄付金額を選択してください：',
+  'select_choose_donation_amount' => '---寄付金額を選択します---',
+  'select_other_donation_amount' => 'その他の金額',
+  'text_usd_mark' => '',
+  'text_donation' => 'ドル',
+  'text_donate_with_alipay' => 'Alipayに寄付してください',
+  'text_donate_alipay_note_one' => '1. Alipayボタンをクリックします。 <br /> 2。 「奇妙な売り手への支払い」を選択します。 <br /> 3。 「Payee Alipayアカウント」にAlipayアカウントに入力してください',
+  'text_donate_alipay_note_two' => '。 <br /> 4。支払いが完了するまで続行します。',
+  'text_after_donation_note_one' => '寄付を完了したら、サイトを通して<b>支払い情報を必ず渡してください</b>',
+  'text_send_us' => '私たちに送ってください',
+  'text_after_donation_note_two' => '、あなたの寄付の確認を促進するため。',
+);

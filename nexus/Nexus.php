@@ -5,6 +5,7 @@ use App\Http\Middleware\Locale;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Nexus\Plugin\Hook;
+use Nexus\Translation\NexusTranslator;
 
 final class Nexus
 {
@@ -29,6 +30,8 @@ final class Nexus
     private static array $translationNamespaces = [];
 
     private static array $translations = [];
+
+    private static ?NexusTranslator $translator = null;
 
     const PLATFORM_USER = 'user';
     const PLATFORM_ADMIN = 'admin';
@@ -280,29 +283,38 @@ final class Nexus
         return self::$appendFooters;
     }
 
-    public static function addTranslationNamespace($path, $namespace)
+    public static function addTranslationNamespace($path, $namespace): void
     {
         if (empty($namespace)) {
             throw new \InvalidArgumentException("namespace can not be empty");
         }
         self::$translationNamespaces[$namespace] = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if (IN_NEXUS) {
+            //只有 Nexus 下需要，Laravel 下是通过 configurePackage 中 hasTranslations() 加载的
+            self::getTranslator()->addNamespace($namespace, $path);
+        }
     }
 
     public static function trans($key, $replace = [], $locale = null)
     {
-        if (!IN_NEXUS) {
-            return trans($key, $replace, $locale ?? get_langfolder_cookie(true));
+        if (is_null($locale)) {
+            $locale = get_langfolder_cookie(true);
         }
-        if (empty(self::$translations)) {
-            //load from default lang dir
-            $langDir = ROOT_PATH . 'resources/lang/';
-            self::loadTranslations($langDir);
-            //load from namespace
-            foreach (self::$translationNamespaces as $namespace => $path) {
-                self::loadTranslations($path, $namespace);
-            }
+        if (IN_NEXUS) {
+            return self::getTranslator()->trans($key, $replace, $locale);
+        } else {
+            return trans($key, $replace, $locale);
         }
-        return self::getTranslation($key, $replace, $locale ?? get_langfolder_cookie(true));
+//        if (empty(self::$translations)) {
+//            //load from default lang dir
+//            $langDir = ROOT_PATH . 'resources/lang/';
+//            self::loadTranslations($langDir);
+//            //load from namespace
+//            foreach (self::$translationNamespaces as $namespace => $path) {
+//                self::loadTranslations($path, $namespace);
+//            }
+//        }
+//        return self::getTranslation($key, $replace, $locale ?? get_langfolder_cookie(true));
     }
 
     private static function loadTranslations($path, $namespace = null)
@@ -362,6 +374,14 @@ final class Nexus
         }
 //        do_log("key: $key, locale: $locale, namespace: $namespace, getKey: $getKey", 'debug');
         return $getKey;
+    }
+
+    private static function getTranslator(): NexusTranslator
+    {
+        if (is_null(self::$translator)) {
+            self::$translator = new NexusTranslator(Locale::getDefault());
+        }
+        return self::$translator;
     }
 
 

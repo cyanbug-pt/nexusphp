@@ -10,7 +10,7 @@ function bark($msg) {
 	genbark($msg, $lang_topten['std_error']);
 }
 if (!user_can('topten')){
-	stderr($lang_topten['std_sorry'],$lang_topten['std_permission_denied_only'].get_user_class_name($topten_class,false,true,true).$lang_topten['std_or_above_can_view'],false);
+	stderr($lang_topten['std_sorry'],$lang_topten['std_permission_denied_only'].get_user_class_name($topten_class,false,true,true).sprintf($lang_topten['std_or_above_can_view'], \App\Models\Setting::getSiteName()),false);
 }
 
 function usershare_table($res, $frame_caption)

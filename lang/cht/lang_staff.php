@@ -22,7 +22,7 @@ $lang_staff = array
 	'title_offline' => "不在線",
 	'title_send_pm' => "發送短訊",
 	'text_vip' => "VIP",
-	'text_vip_note' => "VIP資格只授予對".$SITENAME."做出過特殊貢獻的用戶。如曾經的管理組成員。",
+	'text_vip_note' => "VIP資格只授予對%s做出過特殊貢獻的用戶。如曾經的管理組成員。",
 	'text_reason' => "原因",
 	'text_apply_for_it' => "申請加入",
 	'text_forum_moderators' => "論壇版主",
@@ -30,7 +30,7 @@ $lang_staff = array
 	'text_forums' => "版塊",
     'std_sorry' => "對不起...",
     'std_permission_denied_only' => "你沒有該權限。只有",
-    'std_or_above_can_view' => "及以上等級的用戶才能查看管理組。<br /><br />請查看<a class=faqlink href=faq.php#id22><b>常見問題</b></a>了解更多關於用戶等級和權限的信息。<br /><br /><b></p>" .$SITENAME."管理組</b>",
+    'std_or_above_can_view' => "及以上等級的用戶才能查看管理組。<br /><br />請查看<a class=faqlink href=faq.php#id22><b>常見問題</b></a>了解更多關於用戶等級和權限的信息。<br /><br /><b></p>%s管理組</b>",
 );
 
 ?>

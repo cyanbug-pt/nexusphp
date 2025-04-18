@@ -1,0 +1,37 @@
+<?php
+
+return array (
+  'title_for_torrent' => 'シードクレームの詳細',
+  'title_for_user' => '種子を主張するユーザーの詳細',
+  'th_id' => 'id',
+  'th_username' => 'ユーザー',
+  'th_torrent_name' => 'シード名',
+  'th_torrent_size' => '種子サイズ',
+  'th_torrent_ttl' => '種子は生き残ります',
+  'th_claim_at' => '請求時間',
+  'th_last_settle' => '最後のチェックアウト時間',
+  'th_seed_time_this_month' => '今月の植え付け時間',
+  'th_uploaded_this_month' => '今月はアップロードします',
+  'th_reached_or_not' => '今月は基準が満たされますか',
+  'th_action' => '動作します',
+  'msg_title' => '先月の請求決済（：月）は次のとおりです。',
+  'msg_subject' => '：月の請求決済',
+  'claim_total' => '主張された種子の数：<b>：合計</b>',
+  'claim_reached_counts' => '会議基準の数：<b>：カウント</b>',
+  'claim_reached_summary' => '1時間あたりの魔法：<b>：bonus_per_hour </b>、種子の平均数：<b>：時間</b>、魔法を取得：<b>：bonus_total </b>',
+  'claim_unreached_remain_counts' => '保持カウントは満たされていません：<b>：カウント</b>',
+  'claim_unreached_remove_counts' => '満たされていない削除の数：<b>：カウント</b>',
+  'claim_unreached_summary' => '各シードの魔法のパワーを差し引く：<b>：decuct_per_torrent </b>、総控除魔法のパワー：<b>：decuct_total </b>',
+  'confirm_give_up' => 'この種を主張するのをあきらめたいですか？',
+  'add_claim' => '請求',
+  'add_claim_confirm' => '請求を確認しますか？',
+  'remove_claim' => 'あきらめる',
+  'remove_claim_confirm' => '主張をあきらめることを確認しますか？',
+  'already_claimed' => '認識された',
+  'not_claim_yet' => '請求されていない',
+  'fields' => 
+  array (
+    'torrent_id' => 'シードID',
+  ),
+  'claim_all_seeding_confirmation' => '現在生産中のすべての種子を請求したいですか？',
+);

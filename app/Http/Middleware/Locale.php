@@ -56,13 +56,13 @@ class Locale
             $log = "Cookie::get(): $lang";
         }
         do_log($log);
-        return self::$languageMaps[$lang] ?? null;
+        return self::$languageMaps[$lang] ?? $lang;
     }
 
     public static function getDefault()
     {
         $defaultLang = get_setting("main.defaultlang");
-        return self::$languageMaps[$defaultLang] ?? null;
+        return self::$languageMaps[$defaultLang] ?? $defaultLang;
     }
 
 }

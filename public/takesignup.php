@@ -180,7 +180,8 @@ if ($tmpInviteCount > 0) {
 
 $dt = sqlesc(date("Y-m-d H:i:s"));
 $subject = sqlesc($lang_takesignup['msg_subject'].$SITENAME."!");
-$msg = sqlesc($lang_takesignup['msg_congratulations'].htmlspecialchars($wantusername).$lang_takesignup['msg_you_are_a_member']);
+$siteName = \App\Models\Setting::getSiteName();
+$msg = sqlesc($lang_takesignup['msg_congratulations'].htmlspecialchars($wantusername).sprintf($lang_takesignup['msg_you_are_a_member'],$siteName, $siteName));
 sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, $id, $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
 
 //write_log("User account $id ($wantusername) was created");
@@ -192,8 +193,10 @@ $usern = htmlspecialchars($wantusername);
 $title = $SITENAME.$lang_takesignup['mail_title'];
 $confirmUrl = getSchemeAndHttpHost() . "/confirm.php?id=$id&secret=$psecret";
 $confirmResendUrl = getSchemeAndHttpHost() . "/confirm_resend.php";
+$mailTwo = sprintf($lang_takeinvite['mail_two'], $siteName);
+$mailFive = sprintf($lang_takeinvite['mail_five'], $siteName, $siteName, $REPORTMAIL, $siteName);
 $body = <<<EOD
-{$lang_takesignup['mail_one']}$usern{$lang_takesignup['mail_two']}($email){$lang_takesignup['mail_three']}$ip{$lang_takesignup['mail_four']}
+{$lang_takesignup['mail_one']}$usern{$mailTwo}($email){$lang_takesignup['mail_three']}$ip{$lang_takesignup['mail_four']}
 <b><a href="javascript:void(null)" onclick="window.open($confirmUrl)">
 {$lang_takesignup['mail_this_link']} </a></b><br />
 $confirmUrl
@@ -201,7 +204,7 @@ $confirmUrl
 <b><a href="javascript:void(null)" onclick="window.open($confirmResendUrl)">{$lang_takesignup['mail_here']}</a></b><br />
 $confirmResendUrl
 <br />
-{$lang_takesignup['mail_five']}
+{$mailFive}
 EOD;
 
 if ($type == 'invite')

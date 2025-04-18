@@ -1,0 +1,25 @@
+<?php
+
+$lang_viewpeerlist = array (
+  'col_user_ip' => 'ユーザー',
+  'col_location' => '場所',
+  'col_connectable' => '接続可能',
+  'col_uploaded' => 'アップロード',
+  'col_rate' => '即時速度',
+  'col_av_rate' => '平均速度',
+  'col_downloaded' => 'ダウンロード',
+  'col_ratio' => '共有率',
+  'col_complete' => '仕上げる',
+  'col_connected' => '接続時間',
+  'col_idle' => '最近のレポート',
+  'col_client' => 'クライアント',
+  'text_anonymous' => '匿名',
+  'text_unknown' => '（未知）',
+  'text_seeders' => 'シードメーカー',
+  'text_leechers' => 'ダウンローダー',
+  'row_seeders' => 'シードメーカー',
+  'row_leechers' => 'ダウンローダー',
+  'text_yes' => 'はい',
+  'text_no' => 'いいえ',
+  'text_inf' => '無制限',
+);

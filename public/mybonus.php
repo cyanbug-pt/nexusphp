@@ -317,7 +317,7 @@ if (isset($do)) {
 	elseif ($do == "vipfalse")
 	$msg =  $lang_mybonus['text_no_permission'];
 	elseif ($do == "title")
-	$msg = $lang_mybonus['text_success_custom_title'];
+	$msg = sprintf($lang_mybonus['text_success_custom_title'], $CURUSER['title']);
 	elseif ($do == "transfer")
 	$msg =  $lang_mybonus['text_success_gift'];
 	elseif ($do == "noad")
