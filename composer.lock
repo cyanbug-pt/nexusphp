@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1de7765d56f7550f8cae764df3f7753",
+    "content-hash": "ddf28a5319617f17b23bda81b4761d4e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -9825,6 +9825,68 @@
                 }
             ],
             "time": "2024-09-19T14:15:21+00:00"
+        },
+        {
+            "name": "crowdin/crowdin-api-client",
+            "version": "1.18.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crowdin/crowdin-api-client-php.git",
+                "reference": "25b9dddfe1b99059e462bdde2d2cef5ed50d2bb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crowdin/crowdin-api-client-php/zipball/25b9dddfe1b99059e462bdde2d2cef5ed50d2bb6",
+                "reference": "25b9dddfe1b99059e462bdde2d2cef5ed50d2bb6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.2 || ^7",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.3.0",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CrowdinApiClient\\FrameworkSupport\\Laravel\\CrowdinServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CrowdinApiClient\\": "src/CrowdinApiClient"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Crowdin",
+                    "homepage": "https://crowdin.com"
+                }
+            ],
+            "description": "PHP client library for Crowdin API v2",
+            "homepage": "https://github.com/crowdin/crowdin-api-client-php",
+            "keywords": [
+                "API-Client",
+                "api",
+                "client",
+                "crowdin",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/crowdin/crowdin-api-client-php/issues",
+                "source": "https://github.com/crowdin/crowdin-api-client-php/tree/1.18.0"
+            },
+            "time": "2025-03-28T16:06:40+00:00"
         },
         {
             "name": "dragon-code/contracts",

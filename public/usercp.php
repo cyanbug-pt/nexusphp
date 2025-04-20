@@ -623,7 +623,7 @@ if ($showaudiocodec) $audiocodecs = searchbox_item_list("audiocodecs");
 
 			$s = "<select name=\"sitelanguage\">\n";
 
-			$langs = langlist("site_lang");
+			$langs = langlist("site_lang", true);
 
 			foreach ($langs as $row)
 			{
@@ -1110,11 +1110,11 @@ jQuery('#add-seed-box-btn').on('click', function () {
 });
 jQuery('#seed-box-table').on('click', '.remove-seed-box-btn', function () {
     let params = {action: "removeSeedBoxRecord", params: {id: jQuery(this).attr("data-id")}}
-    layer.confirm("{$lang_functions['std_confirm_remove']}", {btnAlign: 'c'}, function (index) {
+    layer.confirm("{$lang_functions['std_confirm_remove']}", window.nexusLayerOptions.confirm, function (index) {
         jQuery.post('ajax.php', params, function (response) {
             console.log(response)
             if (response.ret != 0) {
-                layer.alert(response.msg)
+                layer.alert(response.msg, window.nexusLayerOptions.alert)
                 return
             }
             window.location.reload()
@@ -1190,9 +1190,9 @@ jQuery('#add-token-box-btn').on('click', function () {
                  jQuery('body').loading('stop');
                 console.log(response)
                 if (response.ret != 0) {
-                    layer.alert(response.msg)
+                    layer.alert(response.msg, window.nexusLayerOptions.alert)
                 } else {
-                    layer.alert(response.msg, function(index) {
+                    layer.alert(response.msg, window.nexusLayerOptions.alert, function(index) {
                         layer.close(index);
                         window.location.reload()
                     })
@@ -1203,14 +1203,14 @@ jQuery('#add-token-box-btn').on('click', function () {
 });
 jQuery('#token-table').on('click', '.token-del', function () {
     let params = {id: jQuery(this).attr("data-id")}
-    layer.confirm("{$lang_functions['std_confirm_remove']}", {btnAlign: 'c'}, function (index) {
+    layer.confirm("{$lang_functions['std_confirm_remove']}", window.nexusLayerOptions.confirm, function (index) {
         layer.close(index)
         jQuery('body').loading({stoppable: false});
         jQuery.post('/web/token/del', params, function (response) {
             console.log(response)
             if (response.ret != 0) {
                 jQuery('body').loading('stop');
-                layer.alert(response.msg)
+                layer.alert(response.msg, window.nexusLayerOptions.alert)
                 return
             }
             window.location.reload()

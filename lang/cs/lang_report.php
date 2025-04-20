@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Chyba",
+	'std_missing_reason' => "Chybějící důvod!",
+	'std_message' => "Zpráva",
+	'std_successfully_reported' => "Úspěšně nahlášeno!",
+	'std_already_reported_this' => "Již jste to nahlásili!",
+	'std_sorry' => "Omlouváme se",
+	'std_cannot_report_oneself' => "Nemůžete nahlásit sami sebe!",
+	'std_invalid_user_id' => "Neplatné ID uživatele!",
+	'std_cannot_report' => "Nemůžete nahlásit ",
+	'std_are_you_sure' => "Jste si jisti?",
+	'text_are_you_sure_user' => "Jste si jisti, že chcete nahlásit tohoto uživatele ",
+	'text_to_staff' => " zaměstnancům za porušení pravidel?",
+	'text_not_for_leechers' => "Vezměte prosím na vědomí, že toto <b>není</b> k nahlášení pórovitých chyb, máme k dispozici skripty na místě, abychom se s nimi vypořádali!",
+	'text_reason_is' => "Důvod <font class=striking>(povinný)</font>: ",
+	'submit_confirm' => "Potvrdit",
+	'text_reason_note' => "<b><font class=striking> PLEASE Poznámka! </font></b>&nbsp;Pokud není dán žádný důvod, dostanete varování sami.",
+	'std_invalid_torrent_id' => "Neplatné ID Torrentu!",
+	'text_are_you_sure_torrent' => "Jste si jisti, že chcete nahlásit tento torrent ",
+	'std_invalid_post_id' => "Neplatné ID příspěvku!",
+	'text_are_you_sure_post' => "Jste si jisti, že chcete nahlásit příspěvek ve fóru (ID ",
+	'text_of_topic' => " z tématu ",
+	'text_of_torrent' => " torrent ",
+	'text_of_offer' => " nabízené ",
+	'text_of_request' => " žádost ",
+	'text_by' => ") od ",
+	'std_invalid_comment_id' => "Neplatné ID komentáře!",
+	'std_orphaned_comment' => "Osiřelý komentář. Prosím nahlaste to správci.",
+	'text_are_you_sure_comment' => "Jste si jisti, že chcete nahlásit komentář (ID ",
+	'std_invalid_offer_id' => "Neplatné ID nabídky!",
+	'text_are_you_sure_offer' => "Jste si jisti, že chcete nahlásit následující nabídku ",
+	'std_invalid_request_id' => "Neplatné ID požadavku!",
+	'std_are_you_sure_request' => "Jste si jisti, že chcete nahlásit následující požadavek ",
+	'std_invalid_action' => "Neplatná akce.",
+	'std_invalid_subtitle_id' => "Neplatné ID titulků!",
+	'text_are_you_sure_subtitle' => "Jste si jisti, že chcete nahlásit titulky ",
+);
+
+?>

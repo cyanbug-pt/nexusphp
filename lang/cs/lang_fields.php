@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Správa vlastního pole',
+    'text_manage' => 'Spravovat',
+    'text_add' => 'Přidat',
+    'text_field' => 'Pole',
+    'text_delete' => 'Vymazat',
+    'text_edit' => 'Upravit',
+    'col_id' => 'ID',
+    'col_name' => 'Název',
+    'col_name_help' => 'Povolte pouze číslici, abecedu, podtržení',
+    'col_label' => 'Zobrazit popisek',
+    'col_type' => 'Typ',
+    'col_required' => 'Požadováno',
+    'col_help' => 'Text nápovědy',
+    'col_options' => 'Možnosti',
+    'col_options_help' => 'Vyžadováno pokud je typ rádio, zaškrtávací políčko, výběr. Jeden řádek, jedna volba, formát: hodnota|zobrazit text',
+    'col_action' => 'Akce',
+    'col_is_single_row' => 'Zobrazit na jednom řádku',
+    'js_sure_to_delete_this' => 'Určitě odstranit?',
+    'submit_submit' => 'Odeslat',
+    'field_type_text' => 'Krátký text',
+    'field_type_textarea' => 'Dlouhý text',
+    'field_type_radio' => 'Horizontální jediný výběr',
+    'field_type_checkbox' => 'Horizontální výběr více',
+    'field_type_select' => 'Svislý jednoduchý výběr',
+    'field_type_image' => 'Obrázek',
+    'col_display' => 'Vlastní displej',
+
+];

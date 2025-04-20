@@ -30,3 +30,4 @@ auth.json
 /.vscode
 /.history
 /public/dev.php
+crowdin.yml

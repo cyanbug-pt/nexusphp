@@ -6,6 +6,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
+/**
+ * use google translate
+ */
 class TranslateLang extends Command
 {
     protected $signature = 'lang:translate {runEnv} {source} {target}

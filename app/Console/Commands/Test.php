@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ExamUser;
+use App\Models\Language;
 use App\Models\PersonalAccessToken;
 use App\Models\Torrent;
 use App\Models\User;
@@ -55,8 +56,7 @@ class Test extends Command
      */
     public function handle()
     {
-       $result = dirname(__FILE__);
-       dd($result);
+       Language::updateTransStatus();
     }
 
 }

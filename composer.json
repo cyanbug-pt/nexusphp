@@ -55,6 +55,7 @@
         "stichoza/google-translate-php": "^5.2"
     },
     "require-dev": {
+        "crowdin/crowdin-api-client": "^1.18",
         "fakerphp/faker": "^1.9.1",
         "kitloong/laravel-migrations-generator": "^7.0",
         "laravel-lang/lang": "^15.10",

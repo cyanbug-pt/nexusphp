@@ -139,7 +139,8 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
 function get_langfolder_list()
 {
 	//do not access db for speed up, or for flexibility
-	return array("en", "chs", "cht", "ko", "ja");
+//	return array("en", "chs", "cht", "ko", "ja");
+    return \App\Models\Language::listAvailable();
 }
 
 function printLine($line, $exist = false)
