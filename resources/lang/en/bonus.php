@@ -26,4 +26,10 @@ return [
         'medal_addition' => 'Medal addition',
     ],
     'not_enough' => 'No enough bonus! Requires :require_bonus, you currently only have: :now_bonus',
+    'msg_someone_loves_you' => "Someone Loves you",
+    'msg_you_have_been_given' => "You have been given a gift of ",
+    'msg_after_tax' => " (after tax it's ",
+    'msg_karma_points_by' => ") Karma points by ",
+    'msg_personal_message_from' => "Personal message from ",
+    'msg_colon' => ": ",
 ];

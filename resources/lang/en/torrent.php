@@ -92,4 +92,18 @@ return [
         \App\Models\Torrent::PROMOTION_TIME_TYPE_DEADLINE => 'Until',
     ],
     'paid_torrent' => 'Paid torrent',
+    'msg_torrent_deleted' => "Your torrent was deleted",
+    'msg_the_torrent_you_uploaded' => "The torrent you uploaded '",
+    'msg_was_deleted_by' => "' was delete by ",
+    'msg_reason_is' => ". The reason: ",
+    'msg_reseed_request' => "Reseed Request",
+    'msg_reseed_user' => "User ",
+    'msg_ask_reseed' => " asked for a reseed on torrent ",
+    'msg_thank_you' => " !\nThank You!",
+
+    'msg_offer_you_voted' => "The Offer you voted for: ",
+    'msg_was_uploaded_by' => " was uploaded by ",
+    'msg_you_can_download' => ".\nYou can Download the Torrent",
+    'msg_here' => " [b]here[/b]",
+    'msg_offer' => "Offer ",
 ];

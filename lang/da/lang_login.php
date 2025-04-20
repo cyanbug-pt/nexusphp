@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Ikke logget ind!",
+	'p_error' => "Fejl:",
+	'p_after_logged_in' => "Den side, du forsøgte at se, kan kun bruges, når du er logget ind.",
+	'p_need_cookies_enables' => "<b>Note</b>: Du skal have cookies aktiveret for at logge ind eller skifte sprog.",
+	'p_fail_ban' => "mislykkede logins i en række vil resultere i udelukkelse af din ip!",
+	'p_you_have' => "Du har",
+	'p_remaining_tries' => "resterende forsøg.",
+	'p_no_account_signup' => "Har du ikke en konto? <a href=\"signup.php\"><b>Tilmeld</b></a> lige nu!",
+	'p_forget_pass_recover' => "Glem din adgangskode? Gendan din adgangskode <a href=\"recover.php\"><b>via e-mail</b></a>",
+    'p_account_banned' => "Konto banned? se årsag til<a href=\"user-ban-log.php\"><b>bruger ban log</b></a>",
+	'p_resend_confirm' => "Har du ikke modtaget bekræftelsesmail, eller bekræftelseslinket er i stykker? <a href=\"confirm_resend.php\"><b>Send bekræftelsesmail igen</b></a>",
+	'rowhead_username' => "Brugernavn:",
+	'rowhead_password' => "Adgangskode:",
+	'button_login' => "Login!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Automatisk Logout:",
+	'text_restrict_ip' => "Begræns IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Log mig ud efter 15 minutter",
+	'checkbox_restrict_ip' => " Begræns session til min IP",
+	'checkbox_ssl' => " Gennemse hjemmeside med SSL-kryptering (webbrowser)",
+	'checkbox_ssl_tracker' => " Forbind tracker med SSL-kryptering (BitTorrent-klient)",
+	'text_advanced_options' => "Avancerede Tilvalg:",
+	'text_helpbox' => "Hjælpboks",
+	'text_helpbox_note' => "Har du problemer med at tilmelde dig eller logge ind? Skriv en besked her",
+	'text_message' => "Besked: ",
+	'sumbit_shout' => "råb",
+	'submit_clear' => "ryd",
+	'text_select_lang' => "Vælg Websted Sprog: ",
+	'head_login' => "Login",
+    'rowhead_two_step_code' => 'To-Faktor Godkendelse',
+    'two_step_code_tooltip' => 'Hvis aktiveret skal udfyldes',
+    'text_complain' => 'Klager Kanal',
+);
+
+?>

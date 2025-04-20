@@ -221,8 +221,9 @@ if ($type == 'invite')
     \App\Models\Invite::query()->where('id', $inv['id'])->update($update);
 
     $dt = sqlesc(date("Y-m-d H:i:s"));
-    $subject = sqlesc($lang_takesignup_target[get_user_lang($inviter)]['msg_invited_user_has_registered']);
-    $msg = sqlesc($lang_takesignup_target[get_user_lang($inviter)]['msg_user_you_invited'].$usern.$lang_takesignup_target[get_user_lang($inviter)]['msg_has_registered']);
+    $locale = get_user_locale($inviter);
+    $subject = sqlesc(nexus_trans("user.msg_invited_user_has_registered", [], $locale));
+    $msg = sqlesc(nexus_trans("user.msg_user_you_invited", [],$locale).$usern.nexus_trans("user.msg_has_registered", [], $locale));
     //sql_query("UPDATE users SET uploaded = uploaded + 10737418240 WHERE id = $inviter"); //add 10GB to invitor's uploading credit
     sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, $inviter, $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
     $Cache->delete_value('user_'.$inviter.'_unread_message_count');

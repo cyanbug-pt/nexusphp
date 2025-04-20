@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Geen rapport.",
+	'head_reports' => "Rapporten",
+	'text_reports' => "Rapporten",
+	'col_added' => "Toegevoegd",
+	'col_reporter' => "Rapporteur",
+	'col_reporting' => "Rapportage",
+	'col_type' => "Type",
+	'col_reason' => "Reden",
+	'col_dealt_with' => "Dealt Met",
+	'col_action' => "Act.",
+	'text_yes' => "ja",
+	'text_no' => "Neen",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Torrent bestaat niet of is verwijderd.",
+	'text_user' => "Gebruiker",
+	'text_user_does_not_exist' => "Gebruiker bestaat niet of is verwijderd.",
+	'text_offer' => "Aanbieding",
+	'text_offer_does_not_exist' => "Aanbieding bestaat niet of is verwijderd.",
+	'text_forum_post' => "Forum bericht",
+	'text_post_does_not_exist' => "Forumbericht bestaat niet of is verwijderd.",
+	'text_post_id' => "Post ID ",
+	'text_of_topic' => " van Onderwerp ",
+	'text_by' => " door ",
+	'text_comment' => "Opmerking",
+	'text_comment_does_not_exist' => "Reactie bestaat niet of is verwijderd.",
+	'text_of_torrent' => " van torrent ",
+	'text_of_offer' => " van aanbieding ",
+	'text_comment_id' => "Commentaar ID ",
+	'text_subtitle' => "Ondertiteling",
+	'text_subtitle_does_not_exist' => "Ondertiteling bestaat niet of is verwijderd.",
+	'text_for_torrent_id' => " voor torrent ID ",
+	'submit_set_dealt' => "Zet Dealt",
+	'submit_delete' => "Verwijderen",
+);
+
+?>

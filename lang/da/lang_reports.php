@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Ingen rapport.",
+	'head_reports' => "Rapporter",
+	'text_reports' => "Rapporter",
+	'col_added' => "Tilføjet",
+	'col_reporter' => "Rapporter",
+	'col_reporting' => "Rapportering",
+	'col_type' => "Type",
+	'col_reason' => "Årsag",
+	'col_dealt_with' => "Forhandl Med",
+	'col_action' => "Akt.",
+	'text_yes' => "Ja",
+	'text_no' => "Nej",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Torrent findes ikke eller slettes.",
+	'text_user' => "Bruger",
+	'text_user_does_not_exist' => "Brugeren findes ikke eller er slettet.",
+	'text_offer' => "Tilbud",
+	'text_offer_does_not_exist' => "Tilbuddet findes ikke eller slettes.",
+	'text_forum_post' => "Forum Indlæg",
+	'text_post_does_not_exist' => "Debatforumindlæg findes ikke eller er slettet.",
+	'text_post_id' => "Indsend ID ",
+	'text_of_topic' => " af emne ",
+	'text_by' => " af ",
+	'text_comment' => "Kommentar",
+	'text_comment_does_not_exist' => "Kommentar findes ikke eller er slettet.",
+	'text_of_torrent' => " af torrent ",
+	'text_of_offer' => " af tilbud ",
+	'text_comment_id' => "Kommentar ID ",
+	'text_subtitle' => "Undertekst",
+	'text_subtitle_does_not_exist' => "Undertekst findes ikke eller slettes.",
+	'text_for_torrent_id' => " for torrent ID ",
+	'submit_set_dealt' => "Sæt Dealt",
+	'submit_delete' => "Slet",
+);
+
+?>

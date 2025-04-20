@@ -183,9 +183,11 @@ if ($action == 'ban')
 		$Cache->delete_value('current_fun_vote_count');
 		$Cache->delete_value('current_fun_vote_funny_count');
 
-		$subject = $lang_fun_target[get_user_lang($arr['userid'])]['msg_fun_item_banned'];
-		$msg = $lang_fun_target[get_user_lang($arr['userid'])]['msg_your_fun_item'].$title.$lang_fun_target[get_user_lang($arr['userid'])]['msg_is_ban_by'].$CURUSER['username'].$lang_fun_target[get_user_lang($arr['userid'])]['msg_reason'].$banreason;
-		sql_query("INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).", ".$arr['userid'].", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
+		$locale = get_user_lang($arr['userid']);
+        $subject = nexus_trans("fun.msg_fun_item_banned", [], $locale);
+        $msg = nexus_trans("fun.msg_your_fun_item", [], $locale).$title.nexus_trans("fun.msg_is_ban_by", [], $locale).$CURUSER['username'].nexus_trans("fun.msg_reason", [], $locale).$banreason;
+
+        sql_query("INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).", ".$arr['userid'].", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
 		$Cache->delete_value('user_'.$arr['userid'].'_unread_message_count');
 		$Cache->delete_value('user_'.$arr['userid'].'_inbox_count');
 		write_log("Fun item $id ($title) was banned by {$CURUSER['username']}. Reason: $banreason", 'normal');
@@ -197,11 +199,12 @@ if ($action == 'ban')
 }
 function funreward($funvote, $totalvote, $title, $posterid, $bonus)
 {
-	global $lang_fun_target, $lang_fun, $Cache;
+	global $lang_fun, $Cache;
 	KPS("+",$bonus,$posterid);
-	$subject = $lang_fun_target[get_user_lang($posterid)]['msg_fun_item_reward'];
-	$msg = $funvote.$lang_fun_target[get_user_lang($posterid)]['msg_out_of'].$totalvote.$lang_fun_target[get_user_lang($posterid)]['msg_people_think'].$title.$lang_fun_target[get_user_lang($posterid)]['msg_is_fun'].$bonus.$lang_fun_target[get_user_lang($posterid)]['msg_bonus_as_reward'];
-	$sql = "INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).",". $posterid. ",'" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")";
+	$locale = get_user_lang($posterid);
+    $subject = nexus_trans("fun.msg_fun_item_reward", [], $locale);
+    $msg = $funvote.nexus_trans("fun.msg_out_of", [], $locale).$totalvote.nexus_trans("fun.msg_people_think", [], $locale).$title.nexus_trans("fun.msg_is_fun", [], $locale).$bonus.nexus_trans("fun.msg_bonus_as_reward", [], $locale);
+    $sql = "INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).",". $posterid. ",'" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")";
 	sql_query($sql) or sqlerr(__FILE__, __LINE__);
 	$Cache->delete_value('user_'.$posterid.'_unread_message_count');
 	$Cache->delete_value('user_'.$posterid.'_inbox_count');
@@ -270,9 +273,10 @@ if ($action == 'vote')
 				else{
 					sql_query("UPDATE fun SET status = 'dull' WHERE id = ".sqlesc($id));
 				 	//write a message to fun item poster
-					$subject = $lang_fun_target[get_user_lang($arr['userid'])]['msg_fun_item_dull'];
-					$msg = ($totalvote - $funvote).$lang_fun_target[get_user_lang($arr['userid'])]['msg_out_of'].$totalvote.$lang_fun_target[get_user_lang($arr['userid'])]['msg_people_think'].$arr['title'].$lang_fun_target[get_user_lang($arr['userid'])]['msg_is_dull'];
-					$sql = "INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).",". $arr['userid'].", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")";
+                    $locale = get_user_locale($arr['userid']);
+                    $subject = nexus_trans("fun.msg_fun_item_dull", [], $locale);
+                    $msg = ($totalvote - $funvote).nexus_trans("fun.msg_out_of", [], $locale).$totalvote.nexus_trans("fun.msg_people_think", [], $locale).$arr['title'].nexus_trans("fun.msg_is_dull", [], $locale);
+                    $sql = "INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).",". $arr['userid'].", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")";
 					sql_query($sql) or sqlerr(__FILE__, __LINE__);
 					$Cache->delete_value('user_'.$arr['userid'].'_unread_message_count');
 					$Cache->delete_value('user_'.$arr['userid'].'_inbox_count');

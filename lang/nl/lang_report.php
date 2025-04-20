@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Foutmelding",
+	'std_missing_reason' => "Redenen ontbreken!",
+	'std_message' => "bericht",
+	'std_successfully_reported' => "Succesvol gerapporteerd!",
+	'std_already_reported_this' => "Je hebt dit al gerapporteerd!",
+	'std_sorry' => "Sorry",
+	'std_cannot_report_oneself' => "Je kunt jezelf niet melden!",
+	'std_invalid_user_id' => "Ongeldige gebruikers-ID!",
+	'std_cannot_report' => "U kunt niet rapporteren ",
+	'std_are_you_sure' => "Weet je het zeker?",
+	'text_are_you_sure_user' => "Weet u zeker dat u deze gebruiker wilt rapporteren ",
+	'text_to_staff' => " aan het personeel dat de regels overtreedt?",
+	'text_not_for_leechers' => "Let op, dit is <b>niet</b> om leechers te rapporteren, we hebben scripts om ermee om te gaan!",
+	'text_reason_is' => "Oorzaak <font class=striking>(verplicht)</font>: ",
+	'submit_confirm' => "Bevestigen",
+	'text_reason_note' => "<b><font class=striking> LEEFTIJD NU! </font></b>&nbsp;Als er geen reden is gegeven zal u zelf een waarschuwing krijgen.",
+	'std_invalid_torrent_id' => "Ongeldig Torrent Id!",
+	'text_are_you_sure_torrent' => "Weet je zeker dat je deze torrent wil rapporteren ",
+	'std_invalid_post_id' => "Ongeldig bericht-Id!",
+	'text_are_you_sure_post' => "Weet u zeker dat u het bericht wilt rapporteren (ID ",
+	'text_of_topic' => " van onderwerp ",
+	'text_of_torrent' => " van torrent ",
+	'text_of_offer' => " van aanbieding ",
+	'text_of_request' => " van verzoek ",
+	'text_by' => ") door ",
+	'std_invalid_comment_id' => "Ongeldige Reactie ID!",
+	'std_orphaned_comment' => "Orphaned commentaar. Meld dit aan de admin.",
+	'text_are_you_sure_comment' => "Weet u zeker dat u het commentaar wilt rapporteren (ID ",
+	'std_invalid_offer_id' => "Ongeldige aanbieding Id!",
+	'text_are_you_sure_offer' => "Weet u zeker dat u de volgende aanbieding wilt melden ",
+	'std_invalid_request_id' => "Ongeldige verzoek-Id!",
+	'std_are_you_sure_request' => "Weet u zeker dat u het volgende verzoek wilt melden ",
+	'std_invalid_action' => "Ongeldige actie.",
+	'std_invalid_subtitle_id' => "Ongeldige ondertitel Id!",
+	'text_are_you_sure_subtitle' => "Weet u zeker dat u de ondertitel wilt rapporteren ",
+);
+
+?>

@@ -58,7 +58,6 @@ class NexusWebGuard implements StatefulGuard
 
     /**
      * Validate a user's credentials.
-     *
      * @param  array  $credentials
      * @return bool
      */

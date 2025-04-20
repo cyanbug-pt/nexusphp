@@ -16,8 +16,9 @@ elseif (strtotime($row['last_reseed']) > (TIMENOW - 900))
 else{
 $res = sql_query("SELECT snatched.userid, snatched.torrentid, torrents.name as torrent_name, users.id FROM snatched inner join users on snatched.userid = users.id inner join torrents on snatched.torrentid = torrents.id  where snatched.finished = 'Yes' AND snatched.torrentid = $reseedid") or sqlerr();
 while($row = mysql_fetch_assoc($res)) {
-$rs_subject = $lang_takereseed_target[get_user_lang($row["userid"])]['msg_reseed_request'];
-$pn_msg = $lang_takereseed_target[get_user_lang($row["userid"])]['msg_user'].$CURUSER["username"].$lang_takereseed_target[get_user_lang($row["userid"])]['msg_ask_reseed']."[url=" . get_protocol_prefix() . "$BASEURL/details.php?id=".$reseedid."]".$row["torrent_name"]."[/url]".$lang_takereseed_target[get_user_lang($row["userid"])]['msg_thank_you'];
+    $locale = get_user_locale($row['userid']);
+$rs_subject = nexus_trans("torrent.msg_reseed_request", [], $locale);
+$pn_msg = nexus_trans("torrent.msg_user", [], $locale).$CURUSER["username"].nexus_trans("user.msg_ask_reseed", [], $locale)."[url=" . get_protocol_prefix() . "$BASEURL/details.php?id=".$reseedid."]".$row["torrent_name"]."[/url]".nexus_trans("torrent.msg_thank_you", [], $locale);
 sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, $row[userid], '" . date("Y-m-d H:i:s") . "'," . sqlesc($rs_subject) . ", " . sqlesc($pn_msg) . ")") or sqlerr(__FILE__, __LINE__);
 }
 sql_query("UPDATE torrents SET last_reseed = ".sqlesc(date("Y-m-d H:i:s"))." WHERE id=".sqlesc($reseedid));

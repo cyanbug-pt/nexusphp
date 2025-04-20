@@ -39,6 +39,16 @@ class Language extends NexusModel
             'lang_name' => 'Czech',
             'lang_name_cn' => '捷克语',
             'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'da' => [
+            'lang_name' => 'Danish',
+            'lang_name_cn' => '丹麦语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'nl' => [
+            'lang_name' => 'Dutch',
+            'lang_name_cn' => '荷兰语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
         ]
     ];
 
@@ -71,9 +81,10 @@ class Language extends NexusModel
     public static function updateTransStatus(): void
     {
         foreach (self::CONFIG as $locale => $info) {
-            self::query()->where('site_lang_folder', $locale)->update([
-                'trans_state' => $info['trans_state'],
+            self::query()->where('lang_name', $info['lang_name'])->update([
+                'site_lang_folder' => $locale,
                 'site_lang' => 1,
+                'trans_state' => $info['trans_state'],
             ]);
         }
         NexusDB::cache_del("site_lang_lang_list");

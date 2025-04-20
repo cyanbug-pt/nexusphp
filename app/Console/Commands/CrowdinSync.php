@@ -16,9 +16,7 @@ class CrowdinSync extends Command
     protected $signature = 'crowdin:sync
                             {action : Action to perform (upload|download)}
                             {--file= : Specific file to upload or download(affect pre translate)}
-                            {--lang=* : Target languages to download (multiple values allowed, affect build)}
-                            {--project-id= : Crowdin project ID}
-                            {--token= : Crowdin Personal Access Token}
+                            {--lang=* : Target languages to download (multiple values allowed, affect build + pre translate)}
                             {--runEnv= : laravel or nexus}
                             {--mtType= : Machine translation type}
                             {--noPreTrans= : Whether do pre translation when action = download}
@@ -83,8 +81,8 @@ class CrowdinSync extends Command
      */
     public function handle()
     {
-        $this->projectId = $this->option('project-id') ?? config('services.crowdin.project_id');
-        $this->token = $this->option('token') ?? config('services.crowdin.access_token');
+        $this->projectId = config('services.crowdin.project_id');
+        $this->token = config('services.crowdin.access_token');
 
         if (empty($this->projectId) || empty($this->token)) {
             $this->error('Crowdin project ID and token are required.');
@@ -119,7 +117,7 @@ class CrowdinSync extends Command
             mtType: $this->mtType,
             noPreTrans: $this->noPreTrans,
             sourceDir: $this->sourceDir
-            ...");
+            ");
 
         switch ($action) {
             case 'upload':
@@ -147,11 +145,10 @@ class CrowdinSync extends Command
 
         if ($specificFile) {
             // Upload specific file only
-            $filePath = $this->sourceDir . '/' . $specificFile;
+            $filePath = $this->sourceDir . '/en/' . $specificFile;
 
             if (!File::exists($filePath)) {
-                $this->error("File not found: {$filePath}");
-                return;
+               throw new \RuntimeException("file '$specificFile' does not exists.");
             }
 
             $this->info("Uploading specific file: {$specificFile}");
@@ -182,11 +179,11 @@ class CrowdinSync extends Command
      */
     protected function uploadFile($filePath, $relativePath)
     {
+        $directoryId = $this->getDirectoryId();
         // First, check if the file exists in the project
-        $response = Http::withHeaders([
-            'Authorization' => "Bearer {$this->token}",
-            'Content-Type' => 'application/json',
-        ])->get("{$this->apiBaseUrl}/projects/{$this->projectId}/files?filter=$relativePath");
+        $response = $this->getHttpClient()->get(
+            $this->getProjectApiEndpoint("files?directoryId=$directoryId&filter=$relativePath")
+        );
 
         $files = $response->json('data');
 
@@ -194,37 +191,26 @@ class CrowdinSync extends Command
         $fileId = null;
 
         foreach ($files as $file) {
-            if ($file['data']['path'] === "/{$relativePath}") {
+            if ($file['data']['name'] === $relativePath) {
                 $fileExists = true;
                 $fileId = $file['data']['id'];
                 break;
             }
         }
 
+        // Add new file
+        $storageId = $this->uploadToStorage($filePath);
+        if (!$storageId) {
+            throw new \RuntimeException("Failed to upload {$filePath} to storage");
+        }
+
         if ($fileExists) {
             // Update existing file
-            $response = Http::withHeaders([
-                'Authorization' => "Bearer {$this->token}",
-                'Crowdin-API-FileName' => basename($relativePath),
-            ])->withBody(
-                file_get_contents($filePath), 'application/octet-stream'
-            )->put("{$this->apiBaseUrl}/projects/{$this->projectId}/files/{$fileId}/update");
+            $response = $this->getHttpClient()->put($this->getProjectApiEndpoint("files/$fileId"), [
+                'storageId' => $storageId
+            ]);
         } else {
-
-            $directoryId = $this->getDirectoryId();
-
-            // Add new file
-            $storageId = $this->uploadToStorage($filePath);
-
-            if (!$storageId) {
-                $this->error("Failed to upload {$relativePath} to storage");
-                return;
-            }
-
-            $response = Http::withHeaders([
-                'Authorization' => "Bearer {$this->token}",
-                'Content-Type' => 'application/json',
-            ])->post("{$this->apiBaseUrl}/projects/{$this->projectId}/files", [
+            $response = $this->getHttpClient()->post($this->getProjectApiEndpoint("files"), [
                 'storageId' => $storageId,
                 'name' => basename($relativePath),
                 'directoryId' => $directoryId,
@@ -234,7 +220,7 @@ class CrowdinSync extends Command
         $this->info("filePath: $filePath, relativePath: $relativePath, fileExists: $fileExists");
 
         if (!$response->successful()) {
-            $this->error("Failed to process {$relativePath}: " . $response->body());
+            throw new \RuntimeException("Failed to process {$relativePath}: " . $response->body());
         }
     }
 
@@ -573,4 +559,5 @@ class CrowdinSync extends Command
         }
         return $result;
     }
+
 }

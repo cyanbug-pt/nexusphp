@@ -469,10 +469,11 @@ if ($is_offer)
 
 	while($row = mysql_fetch_assoc($res))
 	{
-		$pn_msg = $lang_takeupload_target[get_user_lang($row["userid"])]['msg_offer_you_voted'].$torrent.$lang_takeupload_target[get_user_lang($row["userid"])]['msg_was_uploaded_by']. $CURUSER["username"] .$lang_takeupload_target[get_user_lang($row["userid"])]['msg_you_can_download'] ."[url=" . get_protocol_prefix() . "$BASEURL/details.php?id=$id&hit=1]".$lang_takeupload_target[get_user_lang($row["userid"])]['msg_here']."[/url]";
+        $locale = get_user_locale($row['userid']);
+		$pn_msg = nexus_trans("torrent.msg_offer_you_voted", [], $locale).$torrent.nexus_trans("torrent.msg_was_uploaded_by", [], $locale). $CURUSER["username"] .nexus_trans("torrent.msg_you_can_download", [], $locale) ."[url=" . get_protocol_prefix() . "$BASEURL/details.php?id=$id&hit=1]".nexus_trans("torrent.msg_here", [], $locale)."[/url]";
 
 		//=== use this if you DO have subject in your PMs
-		$subject = $lang_takeupload_target[get_user_lang($row["userid"])]['msg_offer'].$torrent.$lang_takeupload_target[get_user_lang($row["userid"])]['msg_was_just_uploaded'];
+		$subject = nexus_trans("torrent.msg_offer", [], $locale).$torrent.nexus_trans("torrent.msg_was_just_uploaded", [], $locale);
 		//=== use this if you DO NOT have subject in your PMs
 		//$some_variable .= "(0, $row[userid], '" . date("Y-m-d H:i:s") . "', " . sqlesc($pn_msg) . ")";
 
@@ -492,65 +493,66 @@ if ($is_offer)
 //=== end notify people who voted on offer
 
 /* Email notifs */
-if ($emailnotify_smtp=='yes' && $smtptype != 'none')
-{
-$cat = get_single_value("categories","name","WHERE id=".sqlesc($catid));
-$res = sql_query("SELECT id, email, lang FROM users WHERE enabled='yes' AND parked='no' AND status='confirmed' AND notifs LIKE '%[cat$catid]%' AND notifs LIKE '%[email]%' ORDER BY lang ASC") or sqlerr(__FILE__, __LINE__);
-
-$uploader = $anon;
-
-$size = mksize($totallen);
-
-$description = format_comment($descr);
-
-//dirty code, change later
-$baseUrl = getSchemeAndHttpHost();
-$langfolder_array = array("en", "chs", "cht", "ko", "ja");
-$body_arr = array("en" => "", "chs" => "", "cht" => "", "ko" => "", "ja" => "");
-$i = 0;
-foreach($body_arr as $body)
-{
-$body_arr[$langfolder_array[$i]] = <<<EOD
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_hi']}
-
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_new_torrent']}
-
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_name']}$torrent
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_size']}$size
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_category']}$cat
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_uppedby']}$uploader
-
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_description']}
--------------------------------------------------------------------------------------------------------------------------
-$description
--------------------------------------------------------------------------------------------------------------------------
-
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent']}<b><a href="javascript:void(null)" onclick="window.open('$baseUrl/details.php?id=$id&hit=1')">{$lang_takeupload_target[$langfolder_array[$i]]['mail_here']}</a></b><br />
-$baseUrl/details.php?id=$id&hit=1
-
-------{$lang_takeupload_target[$langfolder_array[$i]]['mail_yours']}
-{$lang_takeupload_target[$langfolder_array[$i]]['mail_team']}
-EOD;
-
-$body_arr[$langfolder_array[$i]] = str_replace("<br />","<br />",nl2br($body_arr[$langfolder_array[$i]]));
-	$i++;
-}
-
-while($arr = mysql_fetch_array($res))
-{
-		$current_lang = $arr["lang"];
-		$to = $arr["email"];
-
-		sent_mail(
-            $to,$SITENAME,$SITEEMAIL,
-            $lang_takeupload_target[validlang($current_lang)]['mail_title'],
-            $torrent,
-            validlang($current_lang),
-            $body_arr[validlang($current_lang)],
-            "torrent upload",false,false,'',
-        );
-}
-}
+////move to event listener
+//if ($emailnotify_smtp=='yes' && $smtptype != 'none')
+//{
+//$cat = get_single_value("categories","name","WHERE id=".sqlesc($catid));
+//$res = sql_query("SELECT id, email, lang FROM users WHERE enabled='yes' AND parked='no' AND status='confirmed' AND notifs LIKE '%[cat$catid]%' AND notifs LIKE '%[email]%' ORDER BY lang ASC") or sqlerr(__FILE__, __LINE__);
+//
+//$uploader = $anon;
+//
+//$size = mksize($totallen);
+//
+//$description = format_comment($descr);
+//
+////dirty code, change later
+//$baseUrl = getSchemeAndHttpHost();
+//$langfolder_array = array("en", "chs", "cht", "ko", "ja");
+//$body_arr = array("en" => "", "chs" => "", "cht" => "", "ko" => "", "ja" => "");
+//$i = 0;
+//foreach($body_arr as $body)
+//{
+//$body_arr[$langfolder_array[$i]] = <<<EOD
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_hi']}
+//
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_new_torrent']}
+//
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_name']}$torrent
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_size']}$size
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_category']}$cat
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_uppedby']}$uploader
+//
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent_description']}
+//-------------------------------------------------------------------------------------------------------------------------
+//$description
+//-------------------------------------------------------------------------------------------------------------------------
+//
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_torrent']}<b><a href="javascript:void(null)" onclick="window.open('$baseUrl/details.php?id=$id&hit=1')">{$lang_takeupload_target[$langfolder_array[$i]]['mail_here']}</a></b><br />
+//$baseUrl/details.php?id=$id&hit=1
+//
+//------{$lang_takeupload_target[$langfolder_array[$i]]['mail_yours']}
+//{$lang_takeupload_target[$langfolder_array[$i]]['mail_team']}
+//EOD;
+//
+//$body_arr[$langfolder_array[$i]] = str_replace("<br />","<br />",nl2br($body_arr[$langfolder_array[$i]]));
+//	$i++;
+//}
+//
+//while($arr = mysql_fetch_array($res))
+//{
+//		$current_lang = $arr["lang"];
+//		$to = $arr["email"];
+//
+//		sent_mail(
+//            $to,$SITENAME,$SITEEMAIL,
+//            $lang_takeupload_target[validlang($current_lang)]['mail_title'],
+//            $torrent,
+//            validlang($current_lang),
+//            $body_arr[validlang($current_lang)],
+//            "torrent upload",false,false,'',
+//        );
+//}
+//}
 
 header("Location: " . get_protocol_prefix() . "$BASEURL/details.php?id=".htmlspecialchars($id)."&uploaded=1");
 ?>

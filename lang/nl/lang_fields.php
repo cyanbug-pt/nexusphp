@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Aangepast veldbeheer',
+    'text_manage' => 'Beheren',
+    'text_add' => 'Toevoegen',
+    'text_field' => 'Veld',
+    'text_delete' => 'Verwijderen',
+    'text_edit' => 'Bewerken',
+    'col_id' => 'ID',
+    'col_name' => 'naam',
+    'col_name_help' => 'Alleen cijfers, alfabet, onderstreping',
+    'col_label' => 'Toon label',
+    'col_type' => 'Type',
+    'col_required' => 'vereist',
+    'col_help' => 'Help tekst',
+    'col_options' => 'Instellingen',
+    'col_options_help' => 'Vereist wanneer het type radio, selectievakje is. Eén regel, één optie, formaat: waarde! display tekst',
+    'col_action' => 'actie',
+    'col_is_single_row' => 'Weergeven op één rij',
+    'js_sure_to_delete_this' => 'zeker om te verwijderen?',
+    'submit_submit' => 'Bevestigen',
+    'field_type_text' => 'Korte tekst',
+    'field_type_textarea' => 'Lange tekst',
+    'field_type_radio' => 'Horizontale selectie',
+    'field_type_checkbox' => 'Horizontale meerdere selecties',
+    'field_type_select' => 'Verticale enkelselectie',
+    'field_type_image' => 'Afbeelding',
+    'col_display' => 'Aangepaste weergave',
+
+];

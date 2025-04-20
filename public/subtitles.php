@@ -222,8 +222,9 @@ if (user_can('delownsub'))
 					    KPS("-",$uploadsubtitle_bonus,$a["uppedby"]); //subtitle uploader loses bonus for deleted subtitle
 					}
 					if ($CURUSER['id'] != $a['uppedby']){
-						$msg = $CURUSER['username'].$lang_subtitles_target[get_user_lang($a['uppedby'])]['msg_deleted_your_sub']. $a['title'].($reason != "" ? $lang_subtitles_target[get_user_lang($a['uppedby'])]['msg_reason_is'].$reason : "");
-						$subject = $lang_subtitles_target[get_user_lang($a['uppedby'])]['msg_your_sub_deleted'];
+                        $locale = get_user_locale($a['uppedby']);
+						$msg = $CURUSER['username'].nexus_trans("subtitle.msg_deleted_your_sub", [], $locale). $a['title'].($reason != "" ? nexus_trans("subtitle.msg_reason_is", [], $locale).$reason : "");
+						$subject = nexus_trans("subtitle.msg_your_sub_deleted", [], $locale);
 						$time = date("Y-m-d H:i:s");
 						sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, $a[uppedby], '" . $time . "', " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
 					}
