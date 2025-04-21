@@ -34,6 +34,7 @@ class MedalResource extends Resource
         return self::getNavigationLabel();
     }
 
+
     public static function form(Form $form): Form
     {
         return $form
@@ -82,6 +83,12 @@ class MedalResource extends Resource
                     ->numeric()
                     ->default(0)
                 ,
+                Forms\Components\TextInput::make('priority')
+                    ->label(__('label.priority'))
+                    ->helperText(__('label.priority_help'))
+                    ->numeric()
+                    ->default(0)
+                ,
                 Forms\Components\Textarea::make('description')
                     ->label(__('label.description'))
                 ,
@@ -107,13 +114,12 @@ class MedalResource extends Resource
 
                 Tables\Columns\TextColumn::make('duration')->label(__('label.medal.duration')),
 
-                Tables\Columns\TextColumn::make('inventory')
+                Tables\Columns\TextColumn::make('inventoryText')
                     ->label(__('medal.fields.inventory'))
-                    ->formatStateUsing(fn ($record) => $record->inventory ?? nexus_trans('label.infinite'))
                 ,
                 Tables\Columns\TextColumn::make('users_count')->label(__('medal.fields.users_count')),
+                Tables\Columns\TextColumn::make('priority')->label(__('label.priority')),
             ])
-            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])
@@ -122,7 +128,9 @@ class MedalResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->orderBy("priority", 'desc')->orderBy('id', 'desc'))
+            ;
     }
 
     public static function getRelations(): array
