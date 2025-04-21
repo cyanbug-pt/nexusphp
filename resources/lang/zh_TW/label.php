@@ -44,6 +44,7 @@ return [
     'create' => '創建',
     'created_at_begin' => '創建時間開始',
     'created_at_end' => '創建時間結束',
+    'text_quote' => '引用',
     'setting' => [
         'nav_text' => '設置',
         'backup' => [

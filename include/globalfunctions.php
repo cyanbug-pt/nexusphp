@@ -272,8 +272,10 @@ function getLogFile($append = '')
         $scriptUserInfo = posix_getpwuid(posix_getuid());
         $name .= sprintf("-cli-%s", $scriptUserInfo['name']);
     }
-    $logFile = sprintf('%s-%s%s', $name, date('Y-m-d'), $suffix);
-    return $logFiles[$append] = $logFile;
+    if (IN_NEXUS) {
+        $name .= "-" . date('Y-m-d');
+    }
+    return $logFiles[$append] = $name . $suffix;
 
 }
 

@@ -98,7 +98,6 @@ function sqlerr($file = '', $line = '')
 
 function format_quotes($s)
 {
-	global $lang_functions;
 	preg_match_all('/\\[quote.*?\\]/i', $s, $result, PREG_PATTERN_ORDER);
 	$openquotecount = count($openquote = $result[0]);
 	preg_match_all('/\\[\/quote\\]/i', $s, $result, PREG_PATTERN_ORDER);
@@ -124,9 +123,9 @@ function format_quotes($s)
 	for ($i=0; $i < count($openval); $i++)
 	if ($openval[$i] > $closeval[$i]) return $s; // Cannot close before opening. Return raw string...
 
-
-	$s = preg_replace("/\\[quote\\]/i","<fieldset><legend> ".$lang_functions['text_quote']." </legend><br />",$s);
-	$s = preg_replace("/\\[quote=(.+?)\\]/i", "<fieldset><legend> ".$lang_functions['text_quote'].": \\1 </legend><br />", $s);
+    $textQuote = nexus_trans("label.text_quote");
+	$s = preg_replace("/\\[quote\\]/i","<fieldset><legend> ".$textQuote." </legend><br />",$s);
+	$s = preg_replace("/\\[quote=(.+?)\\]/i", "<fieldset><legend> ".$textQuote.": \\1 </legend><br />", $s);
 	$s = preg_replace("/\\[\\/quote\\]/i","</fieldset><br />",$s);
 	return $s;
 }
