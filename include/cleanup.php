@@ -107,7 +107,7 @@ function promotion($class, $down_floor_gb, $minratio, $time_week, $addinvite = 0
 		{
 			$dt = sqlesc(date("Y-m-d H:i:s"));
 			while ($arr = mysql_fetch_assoc($res))
-			{ƒ
+			{
 				$locale = get_user_locale($arr['id']);
                 $subject = sqlesc(nexus_trans("cleanup.msg_promoted_to", [], $locale).get_user_class_name($class,false,false,false));
                 $msg = sqlesc(nexus_trans("cleanup.msg_now_you_are", [], $locale).get_user_class_name($class,false,false,false).nexus_trans("cleanup.msg_see_faq", [], $locale));
