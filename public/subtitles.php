@@ -2,7 +2,7 @@
 require "../include/bittorrent.php";
 dbconn();
 require_once(get_langfile_path());
-require_once(get_langfile_path("",true));
+//require_once(get_langfile_path("",true));
 loggedinorreturn();
 
 if (!isset($CURUSER))
