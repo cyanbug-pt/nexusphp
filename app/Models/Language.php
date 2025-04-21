@@ -49,7 +49,17 @@ class Language extends NexusModel
             'lang_name' => 'Dutch',
             'lang_name_cn' => '荷兰语',
             'trans_state' => self::TRANS_STATE_INCOMPLETE,
-        ]
+        ],
+        'fi' => [
+            'lang_name' => 'Finnish',
+            'lang_name_cn' => '芬兰语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'fr' => [
+            'lang_name' => 'French',
+            'lang_name_cn' => '法语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
     ];
 
     protected $table = 'language';

@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Virhe",
+	'std_missing_reason' => "Puuttuva Syy!",
+	'std_message' => "Viesti",
+	'std_successfully_reported' => "Onnistuneesti raportoitu!",
+	'std_already_reported_this' => "Olet jo raportoinut tästä!",
+	'std_sorry' => "Anteeksi",
+	'std_cannot_report_oneself' => "Et voi ilmoittaa itseäsi!",
+	'std_invalid_user_id' => "Virheellinen Käyttäjätunnus!",
+	'std_cannot_report' => "Et voi raportoida ",
+	'std_are_you_sure' => "Oletko varma?",
+	'text_are_you_sure_user' => "Oletko varma, että haluat raportoida tämän käyttäjän ",
+	'text_to_staff' => " henkilöstölle sen vuoksi, että hän rikkoo sääntöjä?",
+	'text_not_for_leechers' => "Please note, this is <b>not</b> to be used to report leechers, we have scripts in place to deal with them!",
+	'text_reason_is' => "Syy <font class=striking>(pakollinen)</font>: ",
+	'submit_confirm' => "Vahvista",
+	'text_reason_note' => "<b><font class=striking> LEASE Huom! </font></b>&nbsp;Jos mitään syytä ei anneta, saat varoituksen itse.",
+	'std_invalid_torrent_id' => "Virheellinen Torrent-Tunnus!",
+	'text_are_you_sure_torrent' => "Oletko varma, että haluat raportoida tästä torrentista ",
+	'std_invalid_post_id' => "Virheellinen Viestin Tunnus!",
+	'text_are_you_sure_post' => "Oletko varma, että haluat raportoida foorumin viesti (ID ",
+	'text_of_topic' => " aihepiiri ",
+	'text_of_torrent' => " torrentti ",
+	'text_of_offer' => " tarjous ",
+	'text_of_request' => " pyyntö ",
+	'text_by' => ") mennessä ",
+	'std_invalid_comment_id' => "Virheellinen Kommentin Tunnus!",
+	'std_orphaned_comment' => "Orvot kommentti. Ilmoita tästä ylläpitäjälle.",
+	'text_are_you_sure_comment' => "Oletko varma, että haluat raportoida kommentin (ID ",
+	'std_invalid_offer_id' => "Virheellinen tarjouksen tunnus!",
+	'text_are_you_sure_offer' => "Oletko varma, että haluat raportoida seuraavan tarjouksen ",
+	'std_invalid_request_id' => "Virheellinen Pyyntötunnus!",
+	'std_are_you_sure_request' => "Oletko varma, että haluat raportoida seuraavan pyynnön ",
+	'std_invalid_action' => "Virheellinen toiminto.",
+	'std_invalid_subtitle_id' => "Virheellinen Tekstityksen Tunnus!",
+	'text_are_you_sure_subtitle' => "Oletko varma, että haluat raportoida tekstityksen ",
+);
+
+?>

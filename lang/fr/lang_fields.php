@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Gestion des champs personnalisés',
+    'text_manage' => 'Gérer',
+    'text_add' => 'Ajouter',
+    'text_field' => 'Champ',
+    'text_delete' => 'Supprimez',
+    'text_edit' => 'Editer',
+    'col_id' => 'ID',
+    'col_name' => 'Nom',
+    'col_name_help' => 'Autorise uniquement les chiffres, l\'alphabet, le souligné',
+    'col_label' => 'Afficher le libellé',
+    'col_type' => 'Type de texte',
+    'col_required' => 'Requis',
+    'col_help' => 'Texte d\'aide',
+    'col_options' => 'Options',
+    'col_options_help' => 'Requis lorsque le type est radio, case à cocher, sélection. Une ligne, une option, format: valeur|afficher le texte',
+    'col_action' => 'Action',
+    'col_is_single_row' => 'Afficher sur une seule ligne',
+    'js_sure_to_delete_this' => 'Êtes-vous sûr de vouloir supprimer ?',
+    'submit_submit' => 'Soumettre',
+    'field_type_text' => 'Texte court',
+    'field_type_textarea' => 'Texte long',
+    'field_type_radio' => 'Simple sélection horizontale',
+    'field_type_checkbox' => 'Sélection horizontale multiple',
+    'field_type_select' => 'Simple sélection verticale',
+    'field_type_image' => 'Image',
+    'col_display' => 'Affichage personnalisé',
+
+];
