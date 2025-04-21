@@ -45,6 +45,7 @@ return [
     'created_at_begin' => '創建時間開始',
     'created_at_end' => '創建時間結束',
     'text_quote' => '引用',
+    'text_code' => "代碼",
     'setting' => [
         'nav_text' => '設置',
         'backup' => [

@@ -45,6 +45,7 @@ return [
     'created_at_begin' => 'Created at begin',
     'created_at_end' => 'Created at end',
     'text_quote' => 'Quote',
+    'text_code' => "CODE",
     'setting' => [
         'nav_text' => 'Setting',
         'backup' => [

@@ -229,8 +229,8 @@ function formatUrl($url, $newWindow = false, $text = '', $linkClass = '') {
 	return addTempCode("<a".($linkClass ? " class=\"$linkClass\"" : '')." href=\"$url\"" . ($newWindow==true? " target=\"_blank\"" : "").">$text</a>");
 }
 function formatCode($text) {
-	global $lang_functions;
-	return addTempCode("<br /><div class=\"codetop\">".$lang_functions['text_code']."</div><div class=\"codemain\"><pre><code>$text</code></pre></div><br />");
+    $textCode = nexus_trans("label.text_code");
+	return addTempCode("<br /><div class=\"codetop\">".$textCode."</div><div class=\"codemain\"><pre><code>$text</code></pre></div><br />");
 }
 
 function formatImg($src, $enableImageResizer, $image_max_width, $image_max_height, $imgId = "") {
