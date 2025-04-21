@@ -1393,11 +1393,24 @@ function get_challenge_key(string $challenge): string {
 
 function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models\User|null {
     $log = "cookie: " . json_encode($cookie);
-    if (empty($_COOKIE["c_secure_pass"])) {
+    if (empty($cookie["c_secure_pass"])) {
         do_log("$log, param not enough");
         return null;
     }
-    list($tokenJson, $signature) = explode('.', base64_decode($_COOKIE["c_secure_pass"]));
+    $base64Decoded = base64_decode($cookie["c_secure_pass"]);
+    if (empty($base64Decoded)) {
+        do_log("$log, invalid c_secure_pass");
+        return null;
+    }
+    $log .= ", base64 decoded: " . $base64Decoded;
+    $tokenJsonAndSignature = explode(".", $base64Decoded);
+    if (count($tokenJsonAndSignature) != 2) {
+        do_log("$log, invalid c_secure_pass base64_decoded");
+        return null;
+    }
+    $tokenJson = $tokenJsonAndSignature[0];
+    $signature = $tokenJsonAndSignature[1];
+//    list($tokenJson, $signature) = explode('.', base64_decode($_COOKIE["c_secure_pass"]));
     if (empty($tokenJson) || empty($signature)) {
         do_log("$log, no tokenJson or signature");
         return null;
