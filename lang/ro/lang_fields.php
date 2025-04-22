@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Administrarea câmpurilor personalizate',
+    'text_manage' => 'Gestionează',
+    'text_add' => 'Adăugare',
+    'text_field' => 'Câmp',
+    'text_delete' => 'Ștergere',
+    'text_edit' => 'Editare',
+    'col_id' => 'ID',
+    'col_name' => 'Nume',
+    'col_name_help' => 'Permite doar cifre, alfabet, subliniere',
+    'col_label' => 'Afişare etichetă',
+    'col_type' => 'Tip',
+    'col_required' => 'Necesar',
+    'col_help' => 'Text ajutător',
+    'col_options' => 'Opţiuni',
+    'col_options_help' => 'Necesar cand tipul este radio, caseta de selectare. O linie, o singura optiune, format: valoare afisare text',
+    'col_action' => 'Acțiune',
+    'col_is_single_row' => 'Afişare pe un singur rând',
+    'js_sure_to_delete_this' => 'Sigur ștergeți?',
+    'submit_submit' => 'Trimiteți',
+    'field_type_text' => 'Text scurt',
+    'field_type_textarea' => 'Text lung',
+    'field_type_radio' => 'Selectare unică orizontală',
+    'field_type_checkbox' => 'Selectare multiplă orizontală',
+    'field_type_select' => 'Selectare unică verticală',
+    'field_type_image' => 'Imagine',
+    'col_display' => 'Afișaj personalizat',
+
+];

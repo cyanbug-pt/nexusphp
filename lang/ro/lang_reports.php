@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Niciun raport.",
+	'head_reports' => "Rapoarte",
+	'text_reports' => "Rapoarte",
+	'col_added' => "Adăugat",
+	'col_reporter' => "Raportor",
+	'col_reporting' => "Raportare",
+	'col_type' => "Tip",
+	'col_reason' => "Motiv",
+	'col_dealt_with' => "Depășit cu",
+	'col_action' => "Act.",
+	'text_yes' => "Da",
+	'text_no' => "Nr",
+	'text_torrent' => "Torent",
+	'text_torrent_does_not_exist' => "Torentul nu există sau este șters.",
+	'text_user' => "Utilizator",
+	'text_user_does_not_exist' => "Utilizatorul nu există sau este șters.",
+	'text_offer' => "Ofertă",
+	'text_offer_does_not_exist' => "Oferta nu există sau este ștearsă.",
+	'text_forum_post' => "Postare pe Forum",
+	'text_post_does_not_exist' => "Postarea pe forum nu există sau este ştearsă.",
+	'text_post_id' => "ID Postare ",
+	'text_of_topic' => " de topic ",
+	'text_by' => " de ",
+	'text_comment' => "Comentariu",
+	'text_comment_does_not_exist' => "Comentariul nu există sau este șters.",
+	'text_of_torrent' => " al torentului ",
+	'text_of_offer' => " de ofertă ",
+	'text_comment_id' => "ID comentariu ",
+	'text_subtitle' => "Subtitrare",
+	'text_subtitle_does_not_exist' => "Subtitrarea nu există sau este ștearsă.",
+	'text_for_torrent_id' => " pentru ID torrent ",
+	'submit_set_dealt' => "Setează Dealt",
+	'submit_delete' => "Ștergere",
+);
+
+?>

@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Fehler",
+	'std_missing_reason' => "Fehlender Grund!",
+	'std_message' => "Nachricht",
+	'std_successfully_reported' => "Erfolgreich gemeldet!",
+	'std_already_reported_this' => "Du hast dies bereits gemeldet!",
+	'std_sorry' => "Tut uns leid",
+	'std_cannot_report_oneself' => "Du kannst dich nicht selbst melden!",
+	'std_invalid_user_id' => "Ungültige Benutzer-Id!",
+	'std_cannot_report' => "Sie können nicht melden ",
+	'std_are_you_sure' => "Bist du sicher?",
+	'text_are_you_sure_user' => "Sind Sie sicher, dass Sie diesen Benutzer melden möchten ",
+	'text_to_staff' => " an das Personal wegen Verletzung der Regeln?",
+	'text_not_for_leechers' => "Bitte beachten Sie, dass dies <b>und nicht</b> ist, um Leecher zu melden, wir haben Skripte, um mit ihnen umzugehen!",
+	'text_reason_is' => "Grund <font class=striking>(erforderlich)</font>: ",
+	'submit_confirm' => "Bestätigen",
+	'text_reason_note' => "<b><font class=striking> BITTE Notiz! </font></b>&nbsp;Wenn kein Grund angegeben ist, werden Sie selbst eine Warnung erhalten.",
+	'std_invalid_torrent_id' => "Ungültige Torrent-Id!",
+	'text_are_you_sure_torrent' => "Sind Sie sicher, dass Sie diesen Torrent melden möchten ",
+	'std_invalid_post_id' => "Ungültige Beitrags-Id!",
+	'text_are_you_sure_post' => "Sind Sie sicher, dass Sie den Forumbeitrag melden möchten (ID ",
+	'text_of_topic' => " des Themas ",
+	'text_of_torrent' => " von Torrent ",
+	'text_of_offer' => " von Angebot ",
+	'text_of_request' => " der Anfrage ",
+	'text_by' => ") von ",
+	'std_invalid_comment_id' => "Ungültige Kommentar-Id!",
+	'std_orphaned_comment' => "Verwaiste Kommentare. Bitte melden Sie dies an den Administrator.",
+	'text_are_you_sure_comment' => "Sind Sie sicher, dass Sie den Kommentar melden möchten (ID ",
+	'std_invalid_offer_id' => "Ungültige Angebots-Id!",
+	'text_are_you_sure_offer' => "Sind Sie sicher, dass Sie das folgende Angebot melden möchten ",
+	'std_invalid_request_id' => "Ungültige Anfrage-Id!",
+	'std_are_you_sure_request' => "Sind Sie sicher, dass Sie die folgende Anfrage melden möchten ",
+	'std_invalid_action' => "Ungültige Aktion.",
+	'std_invalid_subtitle_id' => "Ungültige Untertitel-Id!",
+	'text_are_you_sure_subtitle' => "Sind Sie sicher, dass Sie den Untertitel melden möchten ",
+);
+
+?>

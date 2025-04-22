@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Benutzerdefinierte Feldverwaltung',
+    'text_manage' => 'Verwalten',
+    'text_add' => 'Neu',
+    'text_field' => 'Feld',
+    'text_delete' => 'Löschen',
+    'text_edit' => 'Bearbeiten',
+    'col_id' => 'ID',
+    'col_name' => 'Name',
+    'col_name_help' => 'Nur Ziffern, Alphabet, unterstreichen',
+    'col_label' => 'Label anzeigen',
+    'col_type' => 'Typ',
+    'col_required' => 'Benötigt',
+    'col_help' => 'Hilfetext',
+    'col_options' => 'Optionen',
+    'col_options_help' => 'Erforderlich, wenn der Typ Radio ist, das Kontrollkästchen markieren. Eine Zeile, eine Option, Format: Wert|Anzeigetext',
+    'col_action' => 'Aktion',
+    'col_is_single_row' => 'In einer Zeile anzeigen',
+    'js_sure_to_delete_this' => 'Sicher löschen?',
+    'submit_submit' => 'Absenden',
+    'field_type_text' => 'Kurzer Text',
+    'field_type_textarea' => 'Lange Text',
+    'field_type_radio' => 'Horizontale Einzelauswahl',
+    'field_type_checkbox' => 'Horizontale Mehrfachauswahl',
+    'field_type_select' => 'Vertikale Einzelauswahl',
+    'field_type_image' => 'Bild',
+    'col_display' => 'Eigene Anzeige',
+
+];

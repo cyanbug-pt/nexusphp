@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Nu ești logat!",
+	'p_error' => "Eroare:",
+	'p_after_logged_in' => "Pagina pe care ați încercat să o vedeți poate fi utilizată numai când sunteți conectat.",
+	'p_need_cookies_enables' => "<b>Nota</b>: Ai nevoie de cookie-uri activate pentru a te conecta sau a schimba limba.",
+	'p_fail_ban' => "Conectările la rând au eșuat vor duce la interzicerea IP-ului tău!",
+	'p_you_have' => "Ai",
+	'p_remaining_tries' => "încercări rămase.",
+	'p_no_account_signup' => "Nu ai un cont? <a href=\"signup.php\"><b>Înscrie-te la</b></a> acum!",
+	'p_forget_pass_recover' => "V-ați uitat parola? Recuperați-vă parola <a href=\"recover.php\"><b>prin e-mail</b></a>",
+    'p_account_banned' => "Contul este banat? Vezi motivul pentru<a href=\"user-ban-log.php\"><b>banul de utilizator</b></a>",
+	'p_resend_confirm' => "Nu a primit e-mail de confirmare sau link-ul de confirmare este întrerupt? <a href=\"confirm_resend.php\"><b>Trimite e-mail de confirmare din nou</b></a>",
+	'rowhead_username' => "Utilizator:",
+	'rowhead_password' => "Parola:",
+	'button_login' => "Autentificare!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Deconectare automată:",
+	'text_restrict_ip' => "Restricționează IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Deconectaţi-mă după 15 minute",
+	'checkbox_restrict_ip' => " Restricționează sesiunea la adresa mea IP",
+	'checkbox_ssl' => " Navigați pe site cu criptare SSL (browser web)",
+	'checkbox_ssl_tracker' => " Conectează trackerul la criptarea SSL (client BitTorrent)",
+	'text_advanced_options' => "Opțiuni avansate:",
+	'text_helpbox' => "Caseta de Ajutor",
+	'text_helpbox_note' => "Aveți probleme cu înregistrarea sau autentificarea? Lăsați un mesaj aici",
+	'text_message' => "Mesaj: ",
+	'sumbit_shout' => "strigăt",
+	'submit_clear' => "curățare",
+	'text_select_lang' => "Selecteaza Limba Site-ului: ",
+	'head_login' => "Autentificare",
+    'rowhead_two_step_code' => 'Autentificare în doi pași',
+    'two_step_code_tooltip' => 'Dacă este activat, trebuie completat',
+    'text_complain' => 'Canal de reclamații',
+);
+
+?>

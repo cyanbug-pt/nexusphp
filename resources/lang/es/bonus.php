@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Gastar :bonus buy :medal_name',
+    'comment_buy_attendance_card' => 'Gastar :bonus compra una tarjeta de regalo',
+    'comment_buy_temporary_invite' => 'Gastar :bonus buy :count invitación temporal',
+    'comment_buy_rainbow_id' => 'Gastar :bonus buy :duration days rainbow ID',
+    'comment_buy_change_username_card' => 'Gasta :bonus buy change username card',
+    'comment_gift_medal' => 'Gasta :bonus compra :medal_name y regalo a :to_username',
+    'comment_buy_torrent' => 'Gastar :bonus de compra de torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Procede desde el torrent descargado por :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Tipo de recompensa',
+        'count' => 'Contador',
+        'size' => 'Tamaño',
+        'a_value' => 'Un valor',
+        'bonus_base' => 'Bono básico',
+        'factor' => 'Factor',
+        'got_bonus' => 'Obtener bono',
+        'total' => 'Total',
+    ],
+    'reward_types' => [
+        'basic' => 'Recompensa básica',
+        'harem_addition' => 'Añadir Harem',
+        'official_addition' => 'Agregación oficial',
+        'medal_addition' => 'Medalla añadida',
+    ],
+    'not_enough' => '¡No hay suficiente bono! Requiere :require_bonus, actualmente sólo tienes: :now_bonus',
+    'msg_someone_loves_you' => "Alguien te ama",
+    'msg_you_have_been_given' => "Has recibido un regalo de ",
+    'msg_after_tax' => " (después de impuestos es ",
+    'msg_karma_points_by' => ") Puntos de Karma por ",
+    'msg_personal_message_from' => "Mensaje personal de ",
+    'msg_colon' => ": ",
+];

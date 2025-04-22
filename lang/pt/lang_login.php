@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Não está logado!",
+	'p_error' => "Erro:",
+	'p_after_logged_in' => "A página que você tentou ver só pode ser usada quando você estiver logado.",
+	'p_need_cookies_enables' => "<b>Note</b>: Você precisa de cookies ativados para efetuar login ou mudar de idioma.",
+	'p_fail_ban' => "logins falhados em sequência resultarão em banir seu ip!",
+	'p_you_have' => "Você tem",
+	'p_remaining_tries' => "tentativas restantes.",
+	'p_no_account_signup' => "Não tem uma conta? <a href=\"signup.php\"><b>Cadastre-se</b></a> agora mesmo!",
+	'p_forget_pass_recover' => "Esqueceu sua senha? Recupere a sua senha <a href=\"recover.php\"><b>por email</b></a>",
+    'p_account_banned' => "Conta banida? Veja a razão no log de banimento<a href=\"user-ban-log.php\"><b>do usuário Banido</b></a>",
+	'p_resend_confirm' => "Não recebeu e-mail de confirmação ou o link de confirmação está quebrado? <a href=\"confirm_resend.php\"><b>Enviar e-mail de confirmação novamente</b></a>",
+	'rowhead_username' => "Usuário:",
+	'rowhead_password' => "Senha:",
+	'button_login' => "Entrar!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Desconexão Automática:",
+	'text_restrict_ip' => "IP restrito:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Deslogar-me após 15 minutos",
+	'checkbox_restrict_ip' => " Restringir sessão ao meu IP",
+	'checkbox_ssl' => " Procurar site com criptografia SSL (navegador da Web)",
+	'checkbox_ssl_tracker' => " Conectar rastreador com criptografia SSL (cliente BitTorrent)",
+	'text_advanced_options' => "Opções Avançadas:",
+	'text_helpbox' => "Ajuda",
+	'text_helpbox_note' => "Tem problemas para se registrar ou fazer login? Deixe uma mensagem aqui",
+	'text_message' => "Mensagem: ",
+	'sumbit_shout' => "gritar",
+	'submit_clear' => "Limpar",
+	'text_select_lang' => "Selecione Idioma do Site: ",
+	'head_login' => "Conectar-se",
+    'rowhead_two_step_code' => 'Autenticação dupla',
+    'two_step_code_tooltip' => 'Se habilitado deve ser preenchido',
+    'text_complain' => 'Canal da reclamação',
+);
+
+?>

@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Вход не выполнен!",
+	'p_error' => "Ошибка:",
+	'p_after_logged_in' => "Страница, которую вы пытаетесь просмотреть, может быть использована только при входе в систему.",
+	'p_need_cookies_enables' => "<b>Примечание</b>: Для входа или переключения языка необходимо включить cookies.",
+	'p_fail_ban' => "неудавшиеся входы подряд приведут к запрету на ваш ip!",
+	'p_you_have' => "У вас есть",
+	'p_remaining_tries' => "оставшихся попыток.",
+	'p_no_account_signup' => "Don't have an account? <a href=\"signup.php\"><b>Sign up</b></a> right now!",
+	'p_forget_pass_recover' => "Забыли пароль? Восстановить пароль <a href=\"recover.php\"><b>по электронной почте</b></a>",
+    'p_account_banned' => "Учетная запись заблокирована? Просмотрите причину бана<a href=\"user-ban-log.php\"><b>пользователя журнала</b></a>",
+	'p_resend_confirm' => "Не получили письмо с подтверждением или ссылку для подтверждения повреждена? <a href=\"confirm_resend.php\"><b>Отправьте письмо с подтверждением еще раз</b></a>",
+	'rowhead_username' => "Имя пользователя:",
+	'rowhead_password' => "Пароль:",
+	'button_login' => "Войти!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Автовыход из системы:",
+	'text_restrict_ip' => "Ограничить IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Выйти через 15 минут",
+	'checkbox_restrict_ip' => " Ограничить сеанс IP",
+	'checkbox_ssl' => " Просмотр веб-сайта с шифрованием SSL (веб-браузер)",
+	'checkbox_ssl_tracker' => " Подключить трекер к шифрованию SSL (клиент BitTorrent)",
+	'text_advanced_options' => "Расширенные настройки:",
+	'text_helpbox' => "Справка",
+	'text_helpbox_note' => "Проблемы с регистрацией или входом? Оставьте сообщение здесь",
+	'text_message' => "Сообщение: ",
+	'sumbit_shout' => "кричать",
+	'submit_clear' => "очистить",
+	'text_select_lang' => "Выберите язык сайта: ",
+	'head_login' => "Логин",
+    'rowhead_two_step_code' => 'Двухфакторная аутентификация',
+    'two_step_code_tooltip' => 'Если включено должно быть заполнено',
+    'text_complain' => 'Канал подачи жалоб',
+);
+
+?>

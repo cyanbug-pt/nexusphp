@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "ERRO",
+	'std_missing_reason' => "Motivo faltando!",
+	'std_message' => "mensagem",
+	'std_successfully_reported' => "Denunciado com sucesso!",
+	'std_already_reported_this' => "Você já denunciou isso!",
+	'std_sorry' => "Desculpa",
+	'std_cannot_report_oneself' => "Você não pode se denunciar!",
+	'std_invalid_user_id' => "ID de usuário inválido!",
+	'std_cannot_report' => "Você não pode denunciar ",
+	'std_are_you_sure' => "Você tem certeza?",
+	'text_are_you_sure_user' => "Tem certeza de que deseja denunciar este usuário ",
+	'text_to_staff' => " aos funcionários que violam as regras?",
+	'text_not_for_leechers' => "Por favor note que isto é <b>não</b> para ser usado para reportar leechers, nós temos scripts em vigor para lidar com eles!",
+	'text_reason_is' => "Reason <font class=striking>(obrigatório)</font>: ",
+	'submit_confirm' => "Confirmar",
+	'text_reason_note' => "<b><font class=striking> POR FAVOR, Note! </font></b>&nbsp;Se nenhum motivo for dado, você receberá um aviso a si mesmo.",
+	'std_invalid_torrent_id' => "Identificação de Torrent Inválida!",
+	'text_are_you_sure_torrent' => "Tem certeza que deseja reportar este torrent ",
+	'std_invalid_post_id' => "ID de postagem inválida!",
+	'text_are_you_sure_post' => "Tem certeza de que deseja relatar a postagem no fórum (ID ",
+	'text_of_topic' => " do tópico ",
+	'text_of_torrent' => " de torrent ",
+	'text_of_offer' => " de oferta ",
+	'text_of_request' => " de pedido ",
+	'text_by' => ") por ",
+	'std_invalid_comment_id' => "Identificação de Comentário Inválida!",
+	'std_orphaned_comment' => "Comentário órfão. Por favor, reporte isto ao administrador.",
+	'text_are_you_sure_comment' => "Tem certeza de que deseja denunciar o comentário (ID ",
+	'std_invalid_offer_id' => "ID de oferta inválido!",
+	'text_are_you_sure_offer' => "Tem certeza de que deseja relatar a seguinte oferta ",
+	'std_invalid_request_id' => "ID de solicitação inválida!",
+	'std_are_you_sure_request' => "Tem certeza de que deseja denunciar o seguinte pedido ",
+	'std_invalid_action' => "Ação inválida.",
+	'std_invalid_subtitle_id' => "Identificação de Legenda Inválida!",
+	'text_are_you_sure_subtitle' => "Tem certeza de que deseja denunciar a legenda ",
+);
+
+?>

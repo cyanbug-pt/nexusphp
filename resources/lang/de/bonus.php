@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => ':bonus ausgeben :medal_name kaufen',
+    'comment_buy_attendance_card' => 'Gib :bonus eine Visitenkarte aus',
+    'comment_buy_temporary_invite' => ':bonus bonus kaufen :count vorübergehend einladen',
+    'comment_buy_rainbow_id' => 'Spend :bonus Bonus kaufen :Dauer Tage Regenbogen-ID',
+    'comment_buy_change_username_card' => 'Geben Sie :bonus Bonus Kaufen Sie Benutzername Karte ändern',
+    'comment_gift_medal' => ':bonus ausgeben :medal_name und Geschenk an :to_username kaufen',
+    'comment_buy_torrent' => 'Gib :bonus Kauf-Torrent aus: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Erlös aus Torrent heruntergeladen von :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Prämientyp',
+        'count' => 'Anzahl',
+        'size' => 'Größe',
+        'a_value' => 'Ein Wert',
+        'bonus_base' => 'Grundbonus',
+        'factor' => 'Faktor',
+        'got_bonus' => 'Bonus erhalten',
+        'total' => 'Gesamt',
+    ],
+    'reward_types' => [
+        'basic' => 'Grundbelohnung',
+        'harem_addition' => 'Harem-Ergänzung',
+        'official_addition' => 'Offizieller Zusatz',
+        'medal_addition' => 'Medaillenzusatz',
+    ],
+    'not_enough' => 'Nicht genug Bonus! Benötigt :require_bonus, du hast derzeit nur :now_bonus',
+    'msg_someone_loves_you' => "Jemand liebt dich",
+    'msg_you_have_been_given' => "Du hast ein Geschenk erhalten von ",
+    'msg_after_tax' => " (nach Steuern ist es ",
+    'msg_karma_points_by' => ") Karma Punkte von ",
+    'msg_personal_message_from' => "Persönliche Nachricht von ",
+    'msg_colon' => ": ",
+];

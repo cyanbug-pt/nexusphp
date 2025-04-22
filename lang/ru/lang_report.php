@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Ошибка",
+	'std_missing_reason' => "Отсутствует причина!",
+	'std_message' => "Сообщение",
+	'std_successfully_reported' => "Сообщение успешно отправлено!",
+	'std_already_reported_this' => "Вы уже пожаловались на это!",
+	'std_sorry' => "Извините",
+	'std_cannot_report_oneself' => "Вы не можете пожаловаться на себя!",
+	'std_invalid_user_id' => "Неверный ID пользователя!",
+	'std_cannot_report' => "Вы не можете пожаловаться ",
+	'std_are_you_sure' => "Вы уверены?",
+	'text_are_you_sure_user' => "Вы уверены, что хотите сообщить об этом пользователе ",
+	'text_to_staff' => " в Персонал за нарушение правил?",
+	'text_not_for_leechers' => "Please note, this is <b>not</b> to be used to report leechers, we have scripts in place to deal with them!",
+	'text_reason_is' => "Причина <font class=striking>(обязательно)</font>: ",
+	'submit_confirm' => "Подтвердить",
+	'text_reason_note' => "<b><font class=striking> PLEASE Note! </font></b>&nbsp;Если нет причин, вы получите предупреждение самостоятельно.",
+	'std_invalid_torrent_id' => "Неверный Торрент Id!",
+	'text_are_you_sure_torrent' => "Вы уверены, что хотите сообщить об этом торренте ",
+	'std_invalid_post_id' => "Неверный идентификатор записи!",
+	'text_are_you_sure_post' => "Вы уверены, что хотите пожаловаться на сообщение форума (ID ",
+	'text_of_topic' => " темы ",
+	'text_of_torrent' => " торрент ",
+	'text_of_offer' => " оферты ",
+	'text_of_request' => " запроса ",
+	'text_by' => ") от ",
+	'std_invalid_comment_id' => "Неверный ID комментария!",
+	'std_orphaned_comment' => "Осиротевший комментарий. Пожалуйста, сообщите об этом администратору.",
+	'text_are_you_sure_comment' => "Вы уверены, что хотите пожаловаться на комментарий (ID ",
+	'std_invalid_offer_id' => "Неверный идентификатор предложения!",
+	'text_are_you_sure_offer' => "Вы уверены, что хотите сообщить о следующем предложении ",
+	'std_invalid_request_id' => "Неверный ID запроса!",
+	'std_are_you_sure_request' => "Вы уверены, что хотите сообщить о следующем запросе ",
+	'std_invalid_action' => "Неверное действие.",
+	'std_invalid_subtitle_id' => "Неверный ID субтитров!",
+	'text_are_you_sure_subtitle' => "Вы уверены, что хотите сообщить о субтитрах ",
+);
+
+?>

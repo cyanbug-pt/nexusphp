@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Zarządzanie niestandardowymi polami',
+    'text_manage' => 'Zarządzaj',
+    'text_add' => 'Dodaj',
+    'text_field' => 'Pole',
+    'text_delete' => 'Usuń',
+    'text_edit' => 'Edytuj',
+    'col_id' => 'ID',
+    'col_name' => 'Nazwisko',
+    'col_name_help' => 'Zezwalaj tylko na cyfrę, alfabet, podkreślenie',
+    'col_label' => 'Wyświetl etykietę',
+    'col_type' => 'Typ',
+    'col_required' => 'Wymagane',
+    'col_help' => 'Tekst pomocy',
+    'col_options' => 'Opcje',
+    'col_options_help' => 'Wymagane, gdy typ jest radio, pole wyboru, wybierz jedną linię, jedną opcję, format: wartość|wyświetlanie tekstu',
+    'col_action' => 'Akcja',
+    'col_is_single_row' => 'Wyświetl w jednym wierszu',
+    'js_sure_to_delete_this' => 'Na pewno chcesz usunąć?',
+    'submit_submit' => 'Prześlij',
+    'field_type_text' => 'Krótki tekst',
+    'field_type_textarea' => 'Długi tekst',
+    'field_type_radio' => 'Poziomy pojedynczy wybór',
+    'field_type_checkbox' => 'Poziomy wybór wielokrotny',
+    'field_type_select' => 'Pionowy wybór',
+    'field_type_image' => 'Obraz',
+    'col_display' => 'Niestandardowy ekran',
+
+];

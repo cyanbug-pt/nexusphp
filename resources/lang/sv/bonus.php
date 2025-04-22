@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Spendera :bonus bonus köp :medal_name',
+    'comment_buy_attendance_card' => 'Spendera :bonus bonus köp ett kort',
+    'comment_buy_temporary_invite' => 'Spendera :bonus bonus buy :count temporär inbjudan',
+    'comment_buy_rainbow_id' => 'Spendera :bonus bonus köp :varaktighet dagar regnbågs-ID',
+    'comment_buy_change_username_card' => 'Spendera :bonus bonus köp ändra användarnamn kort',
+    'comment_gift_medal' => 'Spendera :bonus bonus köp :medal_name och gåva till :to_username',
+    'comment_buy_torrent' => 'Spendera :bonus bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Intäkter från torrent laddas ner av :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Belöningstyp',
+        'count' => 'Antal',
+        'size' => 'Storlek',
+        'a_value' => 'Ett värde',
+        'bonus_base' => 'Grundläggande bonus',
+        'factor' => 'Faktor',
+        'got_bonus' => 'Fick bonus',
+        'total' => 'Totalt',
+    ],
+    'reward_types' => [
+        'basic' => 'Grundläggande belöning',
+        'harem_addition' => 'Harem tillägg',
+        'official_addition' => 'Officiellt tillägg',
+        'medal_addition' => 'Tillägg till medalj',
+    ],
+    'not_enough' => 'Ingen tillräckligt bonus! Kräver :require_bonus, du har för närvarande endast: :now_bonus',
+    'msg_someone_loves_you' => "Någon älskar dig",
+    'msg_you_have_been_given' => "Du har fått en gåva av ",
+    'msg_after_tax' => " (Efter skatt är det ",
+    'msg_karma_points_by' => ") Karma poäng av ",
+    'msg_personal_message_from' => "Personligt meddelande från ",
+    'msg_colon' => ": ",
+];

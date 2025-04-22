@@ -60,6 +60,51 @@ class Language extends NexusModel
             'lang_name_cn' => '法语',
             'trans_state' => self::TRANS_STATE_INCOMPLETE,
         ],
+        'de' => [
+            'lang_name' => 'German',
+            'lang_name_cn' => '德语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'el' => [
+            'lang_name' => 'Greek',
+            'lang_name_cn' => '希腊语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'nb' => [
+            'lang_name' => 'Norwegian',
+            'lang_name_cn' => '挪威语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'pl' => [
+            'lang_name' => 'Polish',
+            'lang_name_cn' => '波兰语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'pt' => [
+            'lang_name' => 'Portuguese',
+            'lang_name_cn' => '葡萄牙语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'ro' => [
+            'lang_name' => 'Romanian',
+            'lang_name_cn' => '罗马尼亚语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'ru' => [
+            'lang_name' => 'Russian',
+            'lang_name_cn' => '俄语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'es' => [
+            'lang_name' => 'Spanish',
+            'lang_name_cn' => '西班牙语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
+        'sv' => [
+            'lang_name' => 'Swedish',
+            'lang_name_cn' => '瑞典语',
+            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+        ],
     ];
 
     protected $table = 'language';

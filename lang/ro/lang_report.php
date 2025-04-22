@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Eroare",
+	'std_missing_reason' => "Lipsește motivul!",
+	'std_message' => "Mesaj",
+	'std_successfully_reported' => "Raportat cu succes!",
+	'std_already_reported_this' => "Ați raportat deja acest lucru!",
+	'std_sorry' => "Scuze",
+	'std_cannot_report_oneself' => "Nu te poți raporta!",
+	'std_invalid_user_id' => "Identitate de utilizator invalidă!",
+	'std_cannot_report' => "Nu puteți raporta ",
+	'std_are_you_sure' => "Ești sigur?",
+	'text_are_you_sure_user' => "Sunteţi sigur că doriţi să raportaţi acest utilizator ",
+	'text_to_staff' => " personalului pentru încălcarea normelor?",
+	'text_not_for_leechers' => "Vă rugăm să reţineţi, acesta este un <b>nu</b> pentru a fi folosit pentru a raporta leechers, avem scripturi disponibile pentru a ne ocupa de ele!",
+	'text_reason_is' => "Motivul <font class=striking>(obligatoriu)</font>: ",
+	'submit_confirm' => "Confirmare",
+	'text_reason_note' => "<b><font class=striking> Nota de răspuns! </font></b>&nbsp;Dacă nu este dat niciun motiv, veți primi un avertisment.",
+	'std_invalid_torrent_id' => "Id-ul torentului este invalid!",
+	'text_are_you_sure_torrent' => "Ești sigur că vrei să raportezi acest torent ",
+	'std_invalid_post_id' => "Identitate postare invalidă!",
+	'text_are_you_sure_post' => "Sunteţi sigur că doriţi să raportaţi postarea pe forum (ID ) ",
+	'text_of_topic' => " de subiect ",
+	'text_of_torrent' => " al torentului ",
+	'text_of_offer' => " de ofertă ",
+	'text_of_request' => " de cerere ",
+	'text_by' => ") de ",
+	'std_invalid_comment_id' => "Id-ul comentariului este invalid!",
+	'std_orphaned_comment' => "Comentariu orphaned. Vă rugăm să raportați acest lucru administratorului.",
+	'text_are_you_sure_comment' => "Sunteţi sigur că doriţi să raportaţi comentariul (ID ",
+	'std_invalid_offer_id' => "Id-ul ofertei este invalid!",
+	'text_are_you_sure_offer' => "Sunteți sigur că doriți să raportați următoarea ofertă ",
+	'std_invalid_request_id' => "Identitate solicitare invalidă!",
+	'std_are_you_sure_request' => "Sunteți sigur că doriți să raportați următoarea solicitare ",
+	'std_invalid_action' => "Acțiune invalidă.",
+	'std_invalid_subtitle_id' => "Identitate de subtitrare invalida!",
+	'text_are_you_sure_subtitle' => "Sunteți sigur că doriți să raportați subtitrarea ",
+);
+
+?>

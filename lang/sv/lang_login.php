@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Inte inloggad!",
+	'p_error' => "Fel:",
+	'p_after_logged_in' => "Sidan du försökte visa kan endast användas när du är inloggad.",
+	'p_need_cookies_enables' => "<b>Notera</b>: Du måste ha cookies aktiverat för att logga in eller byta språk.",
+	'p_fail_ban' => "misslyckade inloggningar i rad kommer att resultera i bannlysning av din ip!",
+	'p_you_have' => "Du har",
+	'p_remaining_tries' => "återstående försök.",
+	'p_no_account_signup' => "Har du inget konto? <a href=\"signup.php\"><b>Registrera dig</b></a> just nu!",
+	'p_forget_pass_recover' => "Glöm ditt lösenord? Återställ ditt lösenord <a href=\"recover.php\"><b>via e-post</b></a>",
+    'p_account_banned' => "Kontot bannad? visa anledning för<a href=\"user-ban-log.php\"><b>användarens bannlysning logg</b></a>",
+	'p_resend_confirm' => "Har du inte fått bekräftelsemeddelande eller bekräftelselänk? <a href=\"confirm_resend.php\"><b>Skicka bekräftelsemeddelande igen</b></a>",
+	'rowhead_username' => "Användarnamn:",
+	'rowhead_password' => "Lösenord:",
+	'button_login' => "Logga in!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Automatisk utloggning:",
+	'text_restrict_ip' => "Begränsa IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Logga ut mig efter 15 minuter",
+	'checkbox_restrict_ip' => " Begränsa sessionen till min IP",
+	'checkbox_ssl' => " Bläddra på webbplatsen med SSL-kryptering (webbläsare)",
+	'checkbox_ssl_tracker' => " Anslut tracker med SSL Encryption (BitTorrent-klient)",
+	'text_advanced_options' => "Avancerade alternativ:",
+	'text_helpbox' => "Hjälplåda",
+	'text_helpbox_note' => "Har du problem med att registrera dig eller logga in? Lämna ett meddelande här",
+	'text_message' => "Meddelande: ",
+	'sumbit_shout' => "rop",
+	'submit_clear' => "rensa",
+	'text_select_lang' => "Välj webbplatsspråk: ",
+	'head_login' => "Inloggning",
+    'rowhead_two_step_code' => 'Tvåfaktorsautentisering',
+    'two_step_code_tooltip' => 'Om aktiverad måste fyllas i',
+    'text_complain' => 'Klagomål Kanal',
+);
+
+?>

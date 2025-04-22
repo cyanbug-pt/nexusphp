@@ -77,6 +77,19 @@ class CrowdinSync extends Command
     protected array $languages;
 
     /**
+     * laravel-lang to crowdin map
+     * some is not the same
+     * --lang option use laravel-lang style
+     *
+     * @var array|string[]
+     */
+    protected array $customMap = [
+        'pt' => 'pt-PT',
+        'es' => 'es-ES',
+        'sv' => 'sv-SE',
+    ];
+
+    /**
      * Execute the console command.
      */
     public function handle()
@@ -419,6 +432,10 @@ class CrowdinSync extends Command
                 $this->warn("skip extra to lang code: {$langCode} due to not in specified language code.");
                 continue;
             }
+            $customMap = array_flip($this->customMap);
+            if (isset($customMap[$langCode])) {
+                $langCode = $customMap[$langCode];
+            }
             //use underline
             $targetDir = "{$this->translationsDir}/" . str_replace("-", "_", $langCode);
             $this->info("Moving translations to {$targetDir}");
@@ -489,6 +506,9 @@ class CrowdinSync extends Command
     {
         $engineInfo = $this->getMachineTranslationEngine();
         $languages = array_intersect($targetLanguages,  $engineInfo['supportedLanguageIds']);
+        if (empty($languages)) {
+            throw new \RuntimeException('No languages available, target: ' . json_encode($targetLanguages) . ', supported: ' . json_encode($engineInfo['supportedLanguageIds']));
+        }
         $params = [
             'languageIds' => $languages,
             'fileIds' => $fileIds,
@@ -518,7 +538,7 @@ class CrowdinSync extends Command
 
     protected function wait(callable $callback)
     {
-        $maxAttempts = 20;
+        $maxAttempts = 60;
         $attempt = 0;
         $isDone = false;
         while (!$isDone && $attempt < $maxAttempts) {
@@ -553,6 +573,9 @@ class CrowdinSync extends Command
         foreach ($languages as $language) {
             if (empty(trim($language))) {
                 continue;
+            }
+            if (isset($this->customMap[$language])) {
+                $language = $this->customMap[$language];
             }
             //crowdin use -
             $result[] = str_replace('_', '-', $language);

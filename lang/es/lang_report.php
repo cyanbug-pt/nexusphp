@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Error",
+	'std_missing_reason' => "Razón perdida!",
+	'std_message' => "Mensaje",
+	'std_successfully_reported' => "¡Reportado con éxito!",
+	'std_already_reported_this' => "¡Ya has reportado esto!",
+	'std_sorry' => "Disculpe",
+	'std_cannot_report_oneself' => "¡No puedes reportarte a ti mismo!",
+	'std_invalid_user_id' => "¡Id de usuario inválido!",
+	'std_cannot_report' => "No puede reportar ",
+	'std_are_you_sure' => "¿Estás seguro?",
+	'text_are_you_sure_user' => "¿Está seguro de que desea reportar a este usuario ",
+	'text_to_staff' => " al Personal por violación de las reglas?",
+	'text_not_for_leechers' => "Ten en cuenta que esto es <b>no</b> para reportar a los leechers, ¡tenemos scripts para hacerles frente!",
+	'text_reason_is' => "Razón <font class=striking>(requerida)</font>: ",
+	'submit_confirm' => "Confirmar",
+	'text_reason_note' => "<b><font class=striking> ¡POR FAVOR Nota! </font></b>&nbsp;Si no se da ninguna razón, recibirás una advertencia por ti mismo.",
+	'std_invalid_torrent_id' => "¡ID Torrent no válido!",
+	'text_are_you_sure_torrent' => "¿Estás seguro de que quieres reportar este torrent ",
+	'std_invalid_post_id' => "¡ID de Post no válido!",
+	'text_are_you_sure_post' => "¿Está seguro de que desea reportar el mensaje del foro (ID ",
+	'text_of_topic' => " del tema ",
+	'text_of_torrent' => " del torrent ",
+	'text_of_offer' => " de oferta ",
+	'text_of_request' => " de solicitud ",
+	'text_by' => ") por ",
+	'std_invalid_comment_id' => "¡Id del comentario no válido!",
+	'std_orphaned_comment' => "Comentario huérfano. Por favor reporta esto al administrador.",
+	'text_are_you_sure_comment' => "¿Está seguro de que desea reportar el comentario (ID ",
+	'std_invalid_offer_id' => "¡ID de oferta no válido!",
+	'text_are_you_sure_offer' => "¿Está seguro de que desea reportar la siguiente oferta ",
+	'std_invalid_request_id' => "¡Solicitud Id inválida!",
+	'std_are_you_sure_request' => "¿Está seguro de que desea reportar la siguiente solicitud ",
+	'std_invalid_action' => "Acción inválida.",
+	'std_invalid_subtitle_id' => "¡ID de subtítulos no válido!",
+	'text_are_you_sure_subtitle' => "¿Está seguro de que desea reportar el subtítulo ",
+);
+
+?>

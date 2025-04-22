@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Gerenciamento de campos personalizados',
+    'text_manage' => 'Administrar',
+    'text_add' => 'Adicionar',
+    'text_field' => 'Campo',
+    'text_delete' => 'excluir',
+    'text_edit' => 'Alterar',
+    'col_id' => 'ID',
+    'col_name' => 'Nome:',
+    'col_name_help' => 'Permitir apenas dígito, alfabeto, sublinhado',
+    'col_label' => 'Rótulo de exibição',
+    'col_type' => 'tipo',
+    'col_required' => 'Obrigatório',
+    'col_help' => 'Texto de ajuda',
+    'col_options' => 'Opções',
+    'col_options_help' => 'Requerido quando o tipo é rádio, caixa de seleção. Uma linha, uma opção, formato: valorQueria exibir texto',
+    'col_action' => 'Acão',
+    'col_is_single_row' => 'Exibir em uma única linha',
+    'js_sure_to_delete_this' => 'Deseja realmente excluir?',
+    'submit_submit' => 'submeter',
+    'field_type_text' => 'Texto curto',
+    'field_type_textarea' => 'Texto longo',
+    'field_type_radio' => 'Seleção horizontal única',
+    'field_type_checkbox' => 'Múltipla seleção horizontal',
+    'field_type_select' => 'Seleção vertical única',
+    'field_type_image' => 'Imagem:',
+    'col_display' => 'Exibição personalizada',
+
+];
