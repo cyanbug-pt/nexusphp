@@ -64,8 +64,10 @@ if (!$action) {
     		$pmid = $arr["id"];
 		print("<tr><td width=100% class=rowfollow align=left><a href=staffbox.php?action=viewpm&pmid=$pmid&return=".urlencode($_SERVER['QUERY_STRING']).">".htmlspecialchars($arr['subject'])."</td><td class=rowfollow align=center>" . get_username($arr['sender']) . "</td><td class=rowfollow align=center><nobr>".gettime($arr['added'], true, false)."</nobr></td><td class=rowfollow align=center>$answered</td><td class=rowfollow align=center><input type=\"checkbox\" name=\"setanswered[]\" value=\"" . $arr['id'] . "\" /></td></tr>\n");
 	}
-	print("<tr><td class=rowfollow align=right colspan=5><input type=\"submit\" name=\"setdealt\" value=\"".$lang_staffbox['submit_set_answered']."\" /><input type=\"submit\" name=\"delete\" value=\"".$lang_staffbox['submit_delete']."\" /></td></tr>");
-	print("</table>\n");
+    $checkAll = $lang_functions['input_check_all'];
+    $uncheckAll = $lang_functions['input_uncheck_all'];
+    print("<tr><td class=rowfollow align=right colspan=5><input type=\"button\" value=\"$checkAll\" onclick=\"this.value=check(form, '$checkAll', '$uncheckAll')\"/><input type=\"submit\" name=\"setdealt\" value=\"".$lang_staffbox['submit_set_answered']."\" /><input type=\"submit\" name=\"delete\" value=\"".$lang_staffbox['submit_delete']."\" /></td></tr>");
+    print("</table>\n");
 	print("</form>");
 	echo $pagerbottom;
 	end_main_frame();
