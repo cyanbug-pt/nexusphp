@@ -1369,7 +1369,7 @@ function convertNamespaceToSnake(string $str): string
 
 function get_user_locale(int $uid): string
 {
-    $sql = "select language.site_lang_folder from useers inner join language on users.lang = language.id where users.id = $uid limit 1";
+    $sql = "select language.site_lang_folder from users inner join language on users.lang = language.id where users.id = $uid limit 1";
     $result = \Nexus\Database\NexusDB::select($sql);
     if (empty($result) || empty($result[0]['site_lang_folder'])) {
         return "en";

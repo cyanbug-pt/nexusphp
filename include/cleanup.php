@@ -256,7 +256,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 	global $rootpath;
     $requestId = nexus()->getRequestId();
 
-	require_once($rootpath . '/lang/_target/lang_cleanup.php');
+//	require_once($rootpath . '/lang/_target/lang_cleanup.php');
 
 	set_time_limit(0);
 	ignore_user_abort(1);
