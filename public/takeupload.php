@@ -5,7 +5,7 @@ require_once("../include/bittorrent.php");
 ini_set("upload_max_filesize",$max_torrent_size);
 dbconn();
 require_once(get_langfile_path());
-require(get_langfile_path("",true));
+//require(get_langfile_path("",true));
 loggedinorreturn();
 
 function bark($msg) {

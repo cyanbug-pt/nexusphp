@@ -1,7 +1,7 @@
 <?php
 require "../include/bittorrent.php";
 dbconn();
-require(get_langfile_path("",true));
+//require(get_langfile_path("",true));
 loggedinorreturn();
 
 function puke()
