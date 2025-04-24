@@ -41,6 +41,7 @@ return [
         'oauth_auth_code' => '授权码',
         'oauth_refresh_token' => '刷新令牌',
         'token' => '访问令牌',
+        'oauth_provider' => '身份验证',
     ],
     'resources' => [
         'agent_allow' => [

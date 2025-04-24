@@ -11,4 +11,11 @@ return [
     'btn_approve' => 'Authorize',
     'btn_deny' => 'Cancel',
     'skips_authorization' => 'Skips authorization',
+    'client_id' => 'Client ID',
+    'authorization_endpoint_url' => 'Authorization URL',
+    'token_endpoint_url' => 'Get token URL',
+    'user_info_endpoint_url' => 'Get user info URL',
+    'id_claim' => 'ID claim',
+    'username_claim' => 'username claim',
+    'email_claim' => 'email claim',
 ];

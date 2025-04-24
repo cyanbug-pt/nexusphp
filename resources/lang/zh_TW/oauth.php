@@ -11,4 +11,11 @@ return [
     'btn_approve' => '授權',
     'btn_deny' => '取消',
     'skips_authorization' => '跳過授權',
+    'client_id' => '客戶端 ID',
+    'authorization_endpoint_url' => '授權地址',
+    'token_endpoint_url' => '獲取 token 地址',
+    'user_info_endpoint_url' => '獲取用戶信息地址',
+    'id_claim' => 'ID 字段名',
+    'username_claim' => '用戶名字段名',
+    'email_claim' => '郵箱字段名',
 ];

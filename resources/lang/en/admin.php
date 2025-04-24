@@ -43,6 +43,7 @@ return [
         'oauth_auth_code' => 'Auth codes',
         'oauth_refresh_token' => 'Refresh tokens',
         'token' => 'Access tokens',
+        'oauth_provider' => 'Authorization provider',
     ],
     'resources' => [
         'agent_allow' => [

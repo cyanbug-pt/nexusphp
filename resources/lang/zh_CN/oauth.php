@@ -11,4 +11,11 @@ return [
     'btn_approve' => '授权',
     'btn_deny' => '取消',
     'skips_authorization' => '跳过授权',
+    'client_id' => '客户端 ID',
+    'authorization_endpoint_url' => '授权地址',
+    'token_endpoint_url' => '获取 token 地址',
+    'user_info_endpoint_url' => '获取用户信息地址',
+    'id_claim' => 'ID 字段名',
+    'username_claim' => '用户名字段名',
+    'email_claim' => '邮箱字段名',
 ];

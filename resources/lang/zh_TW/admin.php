@@ -43,6 +43,7 @@ return [
         'oauth_auth_code' => '授權碼',
         'oauth_refresh_token' => '刷新令牌',
         'token' => '訪問令牌',
+        'oauth_provider' => '身份驗證',
     ],
     'resources' => [
         'agent_allow' => [

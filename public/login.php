@@ -93,8 +93,20 @@ if ($useChallengeResponseAuthentication) {
     print('<input type="hidden" name="response" />');
 }
 ?>
-
 </form>
+<?php
+$oauthProviders = \App\Models\OauthProvider::query()
+    ->orderBy("priority", 'desc')
+    ->where('enabled', '=', 1)
+    ->get();
+$items = [];
+foreach ($oauthProviders as $oauthProvider) {
+    $items[] = sprintf('[<b><a href="oauth/redirect/%s">%s</a></b>]', $oauthProvider->uuid, $oauthProvider->name);
+}
+if (!empty($items)) {
+    echo sprintf("<p>%s: %s</p>", $lang_login['other_methods'], implode("&nbsp;&nbsp;", $items));
+}
+?>
 <p>[<b><a href="complains.php"><?= $lang_login['text_complain'] ?></a></b>]</p>
 <p><?php echo $lang_login['p_no_account_signup']?></p>
 <?php
