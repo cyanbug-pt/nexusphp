@@ -73,7 +73,7 @@ KPS("-",$uploadtorrent_bonus,$row["owner"]);
 if ($CURUSER["id"] != $row["owner"] && \App\Models\User::exists($row["owner"])){
 	$dt = sqlesc(date("Y-m-d H:i:s"));
     $locale = get_user_locale($row["owner"]);
-    $subject = nexus_trans("torrent.msg_torrent_deleted", [], $locale);
+    $subject = sqlesc(nexus_trans("torrent.msg_torrent_deleted", [], $locale));
     $msg = sqlesc(nexus_trans("torrent.msg_the_torrent_you_uploaded", [], $locale).$row['name'].nexus_trans("torrent.msg_was_deleted_by", [], $locale)."[url=userdetails.php?id=".$CURUSER['id']."]".$CURUSER['username']."[/url]".nexus_trans("torrent.msg_reason_is", [], $locale).$reasonstr);
     sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, {$row['owner']}, $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
 }
