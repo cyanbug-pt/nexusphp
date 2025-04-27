@@ -2980,7 +2980,7 @@ function logincookie($id, $authKey, $duration = 0)
     $tokenJson = json_encode($tokenData);
     $signature = hash_hmac('sha256', $tokenJson, $authKey);
     $authToken = base64_encode($tokenJson . '.' . $signature);
-	setcookie("c_secure_pass", $authToken, $expires, "/", "", true, true);
+	setcookie("c_secure_pass", $authToken, $expires, "/", "", isHttps(), true);
     $update = [
         'last_login' => now(),
     ];

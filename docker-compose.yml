@@ -1,0 +1,157 @@
+services:
+  php:
+    build:
+      context: ./.docker/php
+    container_name: nexusphp-php
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  queue:
+    image: nexusphp-php
+    container_name: nexusphp-queue
+    command: >
+      sh -c '
+        echo "Start Queue Worker...";
+        while true; do
+          if [ -f /var/www/html/.env ] && [ -d /var/www/html/vendor ]; then
+            echo "[Queue] Run queue:work at $(date '+%Y-%m-%d %H:%M:%S')";
+            php artisan queue:work --verbose --tries=3;
+          else
+            echo "[Queue] .env or vendor not exists，wait 5 seconds ...";
+            sleep 5;
+          fi
+        done
+      '
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - php
+      - redis
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  scheduler:
+    image: nexusphp-php
+    container_name: nexusphp-scheduler
+    command: >
+      sh -c '
+        echo "Start Scheduler ...";
+        while true; do
+          if [ -f /var/www/html/.env ] && [ -d /var/www/html/vendor ]; then
+            echo "[Scheduler] Run schedule:run at $(date '+%Y-%m-%d %H:%M:%S')";
+            php artisan schedule:run --verbose --no-interaction;
+            sleep 60;
+          else
+            echo "[Scheduler] .env or vendor not exists，wait 5 seconds...";
+            sleep 5;
+          fi
+        done
+      '
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - php
+      - redis
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  openresty:
+    build:
+      context: ./.docker/openresty
+    container_name: nexusphp-openresty
+    ports:
+      - "8080:80"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./.docker/openresty/sites:/etc/nginx/conf.d/sites
+      - ./.docker/openresty/certs:/certs
+      - ./.docker/openresty/entrypoint.sh:/usr/local/bin/entrypoint.sh
+      - .:/var/www/html
+    depends_on:
+      - php
+      - phpmyadmin
+    command: ["/bin/sh", "/usr/local/bin/entrypoint.sh"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  redis:
+    image: redis:alpine
+    container_name: nexusphp-redis
+    command: redis-server
+    volumes:
+      - redis-data:/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  mysql:
+    image: mysql:9
+    container_name: nexusphp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nexusphp
+      MYSQL_USER: nexusphp
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysql-data:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: nexusphp-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  appnet:

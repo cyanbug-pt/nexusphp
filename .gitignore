@@ -31,3 +31,10 @@ auth.json
 /.history
 /public/dev.php
 crowdin.yml
+install.lock
+update.lock
+.env.bak
+attachments
+bitbucket
+/public/attachments
+/public/bitbucket

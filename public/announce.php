@@ -118,14 +118,14 @@ if (!$az = $Cache->get_value('user_passkey_'.$passkey.'_content')){
 }
 if (!$az) {
     $redis->set("$passkeyInvalidKey:$passkey", TIMENOW, ['ex' => 24*3600]);
-    warn("Invalid passkey! Re-download the .torrent from $BASEURL");
+    err("Invalid passkey! Re-download the .torrent from $BASEURL");
 }
 if ($az["enabled"] == "no")
-    warn("Your account is disabled!", 300);
+    err("Your account is disabled!", 300);
 elseif ($az["parked"] == "yes")
-    warn("Your account is parked! (Read the FAQ)", 300);
+    err("Your account is parked! (Read the FAQ)", 300);
 elseif ($az["downloadpos"] == "no")
-    warn("Your downloading privileges have been disabled! (Read the rules)", 300);
+    err("Your downloading privileges have been disabled! (Read the rules)", 300);
 
 $userid = intval($az['id'] ?? 0);
 unset($GLOBALS['CURUSER']);
