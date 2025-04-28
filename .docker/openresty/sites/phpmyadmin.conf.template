@@ -4,7 +4,7 @@ server {
     server_name ${PHPMYADMIN_SERVER_NAME};
 
     ssl_certificate     /certs/fullchain.pem;
-    ssl_certificate_key /certs/private.pem;
+    ssl_certificate_key /certs/private.key;
 
     location / {
         proxy_pass http://phpmyadmin:80;

@@ -42,6 +42,9 @@ echo_info "NP_DOMAIN: $NP_DOMAIN"
 # 检查证书是否存在
 if [ -f "$CERT_DIR/$FULLCHAIN" ] && [ -f "$CERT_DIR/$PRIVATE_KEY" ]; then
     echo_info "ssl certs already exists at: ${CERT_DIR}"
+    chmod 644 "$CERT_DIR/$FULLCHAIN"
+    chmod 644 "$CERT_DIR/$PRIVATE_KEY"
+    ls -l "$CERT_DIR"
 else
     echo_info "no ssl certs at: ${CERT_DIR}"
     USE_HTTPS="0"
