@@ -40,6 +40,7 @@ if [ "$SERVICE_NAME" = "php" ]; then
     if [ ! -f "$ENV_FILE" ]; then
       echo_info ".env file: $ENV_FILE not exists, copy $SOURCE_DIR to $TARGET_DIR ..."
       cp -r "$SOURCE_DIR" "$TARGET_DIR"
+      sed -i 's|LOG_FILE.*|LOG_FILE=/dev/stdout|g' "$ROOT_PATH/.env.example"
     else
       echo_success ".env file: $ENV_FILE already exists, skip copy install file ..."
     fi
