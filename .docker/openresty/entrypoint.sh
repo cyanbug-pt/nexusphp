@@ -62,9 +62,11 @@ envsubst '$PHPMYADMIN_SERVER_NAME' < /etc/nginx/conf.d/sites/phpmyadmin.conf.tem
 if [ "$USE_HTTPS" = "0" ]; then
     echo_info "remove https related configuration ..."
     sed -i '/ssl_certificate/d' "$APP_CONF"
+    sed -i '/http2/d' "$APP_CONF"
     sed -i 's/listen.*/listen 80;/g' "$APP_CONF"
 
     sed -i '/ssl_certificate/d' "$PMA_CONF"
+    sed -i '/http2/d' "$PMA_CONF"
     sed -i 's/listen.*/listen 80;/g' "$PMA_CONF"
 fi
 

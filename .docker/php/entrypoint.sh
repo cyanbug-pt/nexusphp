@@ -34,6 +34,8 @@ TARGET_DIR="${ROOT_PATH}/public"
 ENV_FILE="${ROOT_PATH}/.env"
 VENDOR_DIR="${ROOT_PATH}/vendor"
 
+chown -R www-data:www-data $ROOT_PATH
+
 if [ "$SERVICE_NAME" = "php" ]; then
     if [ ! -f "$ENV_FILE" ]; then
       echo_info ".env file: $ENV_FILE not exists, copy $SOURCE_DIR to $TARGET_DIR ..."
