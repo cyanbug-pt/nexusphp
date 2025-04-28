@@ -243,7 +243,7 @@ function getLogFile($append = '')
         return $logFiles[$append];
     }
     $config = nexus_config('nexus');
-    if (!empty($config['log_file']) && in_array($config['log_file'], ["/dev/stdout", "/dev/stderr"])) {
+    if (!empty($config['log_file']) && in_array($config['log_file'], ["php://stdout", "php://stderr"])) {
         return $logFiles[$append] = $config['log_file'];
     }
     $path = getenv('NEXUS_LOG_DIR', true);
