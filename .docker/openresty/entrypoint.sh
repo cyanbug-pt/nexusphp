@@ -32,12 +32,12 @@ FULLCHAIN="fullchain.pem"
 PRIVATE_KEY="private.key"
 USE_HTTPS="1"
 
-if [ -z "$DOMAIN" ]; then
-  echo_error "❌ 错误：必须设置 DOMAIN 环境变量！"
+if [ -z "$NP_DOMAIN" ]; then
+  echo_error "❌ 错误：必须设置 NP_DOMAIN 环境变量！"
   exit 1
 fi
 
-echo_info "DOMAIN: $DOMAIN"
+echo_info "NP_DOMAIN: $NP_DOMAIN"
 
 # 检查证书是否存在
 if [ -f "$CERT_DIR/$FULLCHAIN" ] && [ -f "$CERT_DIR/$PRIVATE_KEY" ]; then
@@ -50,12 +50,12 @@ fi
 echo_info "USE_HTTPS: $USE_HTTPS"
 
 # 组合子域名变量
-export PHPMYADMIN_SERVER_NAME="phpmyadmin.${DOMAIN}"
+export PHPMYADMIN_SERVER_NAME="phpmyadmin.${NP_DOMAIN}"
 
 # 生成配置
 APP_CONF="/etc/nginx/conf.d/app.conf"
 PMA_CONF="/etc/nginx/conf.d/phpmyadmin.conf"
-envsubst '$DOMAIN' < /etc/nginx/conf.d/sites/app.conf.template > "$APP_CONF"
+envsubst '$NP_DOMAIN' < /etc/nginx/conf.d/sites/app.conf.template > "$APP_CONF"
 envsubst '$PHPMYADMIN_SERVER_NAME' < /etc/nginx/conf.d/sites/phpmyadmin.conf.template > "$PMA_CONF"
 
 # if no certs, remove ssl configuration

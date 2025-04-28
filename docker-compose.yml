@@ -62,7 +62,7 @@ services:
       context: ./.docker/openresty
     container_name: nexusphp-openresty
     environment:
-      DOMAIN: ${DOMAIN}
+      DOMAIN: ${NP_DOMAIN}
     volumes:
       - ./.docker/openresty/sites:/etc/nginx/conf.d/sites
       - ./.docker/openresty/certs:/certs
