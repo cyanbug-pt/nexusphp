@@ -31,7 +31,7 @@ class UserPolicy extends BasePolicy
      */
     public function view(User $user, User $model)
     {
-        return $model->privacy != "strong" || $user->id == $model->id|| Permission::canManageUserBasicInfo();
+        return $model->privacy != "strong" || $user->id == $model->id || Permission::canManageUserBasicInfo();
     }
 
     public function viewEmail(User $user, User $model)

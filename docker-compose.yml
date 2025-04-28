@@ -2,7 +2,10 @@ services:
   php:
     build:
       context: ./.docker/php
+    image: nexusphp_php
     container_name: nexusphp-php
+    environment:
+      SERVICE_NAME: php
     volumes:
       - .:/var/www/html
     depends_on:
@@ -17,21 +20,10 @@ services:
       - appnet
 
   queue:
-    image: nexusphp-php
+    image: nexusphp_php
     container_name: nexusphp-queue
-    command: >
-      sh -c '
-        echo "Start Queue Worker...";
-        while true; do
-          if [ -f /var/www/html/.env ] && [ -d /var/www/html/vendor ]; then
-            echo "[Queue] Run queue:work at $(date '+%Y-%m-%d %H:%M:%S')";
-            php artisan queue:work --verbose --tries=3;
-          else
-            echo "[Queue] .env or vendor not exists，wait 5 seconds ...";
-            sleep 5;
-          fi
-        done
-      '
+    environment:
+      SERVICE_NAME: queue
     volumes:
       - .:/var/www/html
     depends_on:
@@ -47,22 +39,10 @@ services:
       - appnet
 
   scheduler:
-    image: nexusphp-php
+    image: nexusphp_php
     container_name: nexusphp-scheduler
-    command: >
-      sh -c '
-        echo "Start Scheduler ...";
-        while true; do
-          if [ -f /var/www/html/.env ] && [ -d /var/www/html/vendor ]; then
-            echo "[Scheduler] Run schedule:run at $(date '+%Y-%m-%d %H:%M:%S')";
-            php artisan schedule:run --verbose --no-interaction;
-            sleep 60;
-          else
-            echo "[Scheduler] .env or vendor not exists，wait 5 seconds...";
-            sleep 5;
-          fi
-        done
-      '
+    environment:
+      SERVICE_NAME: scheduler
     volumes:
       - .:/var/www/html
     depends_on:
@@ -81,8 +61,6 @@ services:
     build:
       context: ./.docker/openresty
     container_name: nexusphp-openresty
-    ports:
-      - "8080:80"
     environment:
       DOMAIN: ${DOMAIN}
     volumes:
@@ -94,6 +72,8 @@ services:
       - php
       - phpmyadmin
     command: ["/bin/sh", "/usr/local/bin/entrypoint.sh"]
+    ports:
+      - "${NP_PORT:-80}:80"
     logging:
       driver: "json-file"
       options:
@@ -120,10 +100,10 @@ services:
     image: mysql:9
     container_name: nexusphp-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: nexusphp
-      MYSQL_USER: nexusphp
-      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: ${NP_MYSQL_ROOT_PWD:-root}
+      MYSQL_DATABASE: ${NP_MYSQL_DB:-nexusphp}
+      MYSQL_USER: ${NP_MYSQL_USER:-nexusphp}
+      MYSQL_PASSWORD: ${NP_MYSQL_PWD:-nexusphp}
     volumes:
       - mysql-data:/var/lib/mysql
     logging:

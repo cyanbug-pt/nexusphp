@@ -91,7 +91,7 @@ $title = $SITENAME.$lang_takeinvite['mail_tilte'];
 
 $signupUrl = getSchemeAndHttpHost() . "/signup.php?type=invite&invitenumber=$hash";
 $siteName = \App\Models\Setting::getSiteName();
-$mailTwo = sprintf($lang_takeinvite['mail_two'], $siteName);
+$mailTwo = sprintf($lang_takeinvite['mail_two'], $siteName, $siteName);
 $mailFour = sprintf($lang_takeinvite['mail_four'], $siteName);
 $mailSix = sprintf($lang_takeinvite['mail_six'], $REPORTMAIL, $siteName);
 $message = <<<EOD
