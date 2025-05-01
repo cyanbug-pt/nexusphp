@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
         });
 
         //Other Only handle in json request
-        if (!$request->expectsJson()) {
+        if (!$request->expectsJson() && !$request->ajax()) {
             $this->renderable(function (NexusException $e) use ($request) {
                 return redirect(url('/error?error=' . urlencode($e->getMessage())));
             });

@@ -67,6 +67,8 @@ services:
       - ./.docker/openresty/sites:/etc/nginx/conf.d/sites
       - ./.docker/openresty/certs:/certs
       - ./.docker/openresty/entrypoint.sh:/usr/local/bin/entrypoint.sh
+      - ./.docker/openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./.docker/openresty/lua:/usr/local/openresty/lua
       - .:/var/www/html
     depends_on:
       - php
