@@ -9,6 +9,10 @@ $isAdmin = user_can('staffmem');
 if($isLogin && !$isAdmin) {
     permissiondenied();
 }
+if (!$isAdmin && !\App\Models\Setting::getIsComplainEnabled()) {
+    stderr($lang_functions['std_error'], $lang_complains['complain_not_enabled']);
+}
+
 $uid = $CURUSER['id'] ?? 0;
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     switch($action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS)){

@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => '查看封禁記錄',
     'reply_notify_subject' => '申訴回復',
     'reply_notify_body' => '你在網站 %s 的申訴有了回復，點此 <a href="%s" target="_blank">查看</a>。',
+    'complain_not_enabled' => '申訴功能未啟用',
 ];

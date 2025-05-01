@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'When enabled, users with permission can set a certain amount of bonus to be charged to users who download the torrents when they are sent, default: no',
     'row_use_challenge_response_authentication' => 'Challenge-Response Authentication',
     'text_use_challenge_response_authentication_note' => 'If enabled, no plaintext passwords will be transmitted at login, recommended. Future releases will remove this configuration and enable this feature.' ,
+    'row_complain_enabled' => 'Whether to enable complaints',
+    'row_complain_enabled_note' => 'default: "yes"',
 );
 
 ?>

@@ -192,6 +192,11 @@ class Setting extends NexusModel
         return self::get('main.spsct') == 'yes';
     }
 
+    public static function getIsComplainEnabled(): bool
+    {
+        return self::get('main.complain_enabled') == 'yes';
+    }
+
     public static function getIsAllowUserReceiveEmailNotification(): bool
     {
         return self::get('smtp.emailnotify') == 'yes';

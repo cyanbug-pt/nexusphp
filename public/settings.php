@@ -42,7 +42,7 @@ if ($action == 'savesettings_main')	// save main
 		'smalldescription','altname','extforum','extforumurl','defaultlang','defstylesheet', 'donation','spsct','browsecat','specialcat','waitsystem',
 		'maxdlsystem','bitbucket','torrentnameprefix', 'showforumstats','verification','invite_count','invite_timeout', 'seeding_leeching_time_calc_start',
 		'startsubid', 'logo', 'showlastxforumposts', 'enable_technical_info', 'site_language_enabled', 'show_top_uploader', 'imdb_language', 'offer_skip_approved_count',
-        'upload_deny_approval_deny_count', 'enable_global_search', 'tmp_invite_count',
+        'upload_deny_approval_deny_count', 'enable_global_search', 'tmp_invite_count', 'complain_enabled'
 	);
 	GetVar($validConfig);
 	$MAIN = [];
@@ -799,6 +799,7 @@ elseif ($action == 'mainsettings')	// main settings
 	tr($lang_settings['row_initial_invites'],"<input type='text' name=invite_count style=\"width: 50px\" value={$MAIN['invite_count']}> ".$lang_settings['text_initial_invites_note'], 1);
 	tr($lang_settings['row_initial_tmp_invites'],"<input type='text' name=tmp_invite_count style=\"width: 50px\" value={$MAIN['tmp_invite_count']}> ".$lang_settings['text_initial_tmp_invites_note'], 1);
 	tr($lang_settings['row_invite_timeout'],"<input type='text' name=invite_timeout style=\"width: 50px\" value={$MAIN['invite_timeout']}> ".$lang_settings['text_invite_timeout_note'], 1);
+	yesorno($lang_settings['row_complain_enabled'], 'complain_enabled', $MAIN['complain_enabled'], $lang_settings['row_complain_enabled_note']);
 	yesorno($lang_settings['row_enable_registration_system'], 'registration', $MAIN['registration'], $lang_settings['row_allow_registrations']);
 	tr($lang_settings['row_verification_type'],"<input type='radio' name='verification'" . ($MAIN["verification"] == "email" ? " checked" : " checked") . " value='email'> ".$lang_settings['text_email'] ." <input type='radio' name='verification'" . ($MAIN["verification"] == "admin" ? " checked" : "") . " value='admin'> ".$lang_settings['text_admin']." <input type='radio' name='verification'" . ($MAIN["verification"] == "automatic" ? " checked" : "") . " value='automatic'> ".$lang_settings['text_automatically']."<br />".$lang_settings['text_verification_type_note'], 1);
 	yesorno($lang_settings['row_enable_wait_system'],'waitsystem', $MAIN['waitsystem'], $lang_settings['text_wait_system_note']);

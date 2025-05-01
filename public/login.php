@@ -106,8 +106,10 @@ foreach ($oauthProviders as $oauthProvider) {
 if (!empty($items)) {
     echo sprintf("<p>%s: %s</p>", $lang_login['other_methods'], implode("&nbsp;&nbsp;", $items));
 }
+if (\App\Models\Setting::getIsComplainEnabled()) {
+    echo sprintf('<p>[<b><a href="complains.php">%s</a></b>]</p>', $lang_login['text_complain']);
+}
 ?>
-<p>[<b><a href="complains.php"><?= $lang_login['text_complain'] ?></a></b>]</p>
 <p><?php echo $lang_login['p_no_account_signup']?></p>
 <?php
 if ($smtptype != 'none'){
