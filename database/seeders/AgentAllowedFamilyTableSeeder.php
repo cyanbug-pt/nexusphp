@@ -341,7 +341,7 @@ class AgentAllowedFamilyTableSeeder extends Seeder
                 'exception' => 'no',
                 'allowhttps' => 'yes',
                 'comment' => '',
-                'hits' => 0,
+                'hits' => 1,
             ),
             18 => 
             array (
@@ -377,7 +377,7 @@ class AgentAllowedFamilyTableSeeder extends Seeder
                 'exception' => 'no',
                 'allowhttps' => 'yes',
                 'comment' => '',
-                'hits' => 0,
+                'hits' => 6,
             ),
             20 => 
             array (
@@ -431,7 +431,7 @@ class AgentAllowedFamilyTableSeeder extends Seeder
                 'exception' => 'no',
                 'allowhttps' => 'yes',
                 'comment' => '',
-                'hits' => 0,
+                'hits' => 3,
             ),
             23 => 
             array (
@@ -449,6 +449,42 @@ class AgentAllowedFamilyTableSeeder extends Seeder
                 'exception' => 'no',
                 'allowhttps' => 'yes',
                 'comment' => '',
+                'hits' => 0,
+            ),
+            24 => 
+            array (
+                'id' => 25,
+                'family' => 'Transmission4.x',
+                'start_name' => 'Transmission 4.0.0',
+            'peer_id_pattern' => '/^-TR4([0-9])([0-9])([0-9])-/',
+                'peer_id_match_num' => 3,
+                'peer_id_matchtype' => 'dec',
+                'peer_id_start' => '-TR4000-',
+            'agent_pattern' => '/^Transmission\\/4\\.([0-9])\\.([0-9])/',
+                'agent_match_num' => 2,
+                'agent_matchtype' => 'dec',
+                'agent_start' => 'Transmission/4.0.0',
+                'exception' => 'no',
+                'allowhttps' => 'yes',
+                'comment' => NULL,
+                'hits' => 0,
+            ),
+            25 => 
+            array (
+                'id' => 26,
+                'family' => 'qBittorrent 5.x',
+                'start_name' => 'qBittorrent 5.0.0',
+            'peer_id_pattern' => '/^-qB5([0-9])([0-9])/',
+                'peer_id_match_num' => 2,
+                'peer_id_matchtype' => 'dec',
+                'peer_id_start' => '-qB500',
+            'agent_pattern' => '/^qBittorrent\\/5\\.([0-9])\\.([0-9])/',
+                'agent_match_num' => 2,
+                'agent_matchtype' => 'dec',
+                'agent_start' => 'qBittorrent/5.0.0',
+                'exception' => 'no',
+                'allowhttps' => 'yes',
+                'comment' => NULL,
                 'hits' => 0,
             ),
         ));

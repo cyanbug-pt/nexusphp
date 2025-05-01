@@ -344,6 +344,7 @@ class Update extends Install
             Artisan::call("upgrade:migrate_torrents_table_text_column");
         }
         Language::updateTransStatus();
+        $this->addSetting('main.complain_enabled', 'yes');
     }
 
     public function runExtraMigrate()
