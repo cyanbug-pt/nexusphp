@@ -41,7 +41,7 @@ class Locale
         /** @var Response $response */
         $response = $next($request);
         if ($response instanceof Response || $response instanceof JsonResponse) {
-            $response->header('X-Request-Id', nexus()->getRequestId())->header('X-NexusPHP-Version', VERSION_NUMBER);
+            $response->header('X-Request-Id', nexus()->getRequestId())->header('X-Nexusphp-Version', VERSION_NUMBER);
         }
         return $response;
     }

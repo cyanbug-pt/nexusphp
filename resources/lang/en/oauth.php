@@ -18,4 +18,12 @@ return [
     'id_claim' => 'ID claim',
     'username_claim' => 'username claim',
     'email_claim' => 'email claim',
+    'level_claim' => 'Level field name',
+    'level_limit' => 'Level limit',
+    'level_limit_help' => 'Allow only users not below this level to log in',
+    'get_access_token_error' => 'Getting access token error: :error',
+    'get _provider_user_id_error' => 'Unable to get user ID via field :id_claim',
+    'get_provider_level_error' => 'Unable to get user level via field :level_claim',
+    'provider_level_not_ allowed' => 'Only users with level :level_limit or above are allowed to log in',
+    'provider_email_already_exists' => 'Email: :email is already in use',
 ];

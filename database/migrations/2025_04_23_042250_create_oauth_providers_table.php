@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('id_claim');
             $table->string('username_claim')->nullable();
             $table->string('email_claim')->nullable();
+            $table->string('level_claim')->nullable();
+            $table->string('level_limit')->nullable();
             $table->boolean('enabled');
             $table->integer('priority');
             $table->timestamps();

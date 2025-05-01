@@ -36,6 +36,18 @@ VENDOR_DIR="${ROOT_PATH}/vendor"
 
 chown -R www-data:www-data $ROOT_PATH
 
+until nc -z mysql 3306; do
+  echo_info "Waiting for MySQL to be ready..."
+  sleep 2
+done
+echo_success "MySQL is ready."
+
+until nc -z redis 6379; do
+  echo_info "Waiting for Redis to be ready..."
+  sleep 2
+done
+echo_success "Redis is ready."
+
 if [ "$SERVICE_NAME" = "php" ]; then
     if [ ! -f "$ENV_FILE" ]; then
       echo_info ".env file: $ENV_FILE not exists, copy $SOURCE_DIR to $TARGET_DIR ..."

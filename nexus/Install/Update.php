@@ -9,6 +9,7 @@ use App\Models\Exam;
 use App\Models\ExamUser;
 use App\Models\HitAndRun;
 use App\Models\Icon;
+use App\Models\Language;
 use App\Models\SearchBox;
 use App\Models\Setting;
 use App\Models\Tag;
@@ -342,6 +343,7 @@ class Update extends Install
             $this->runMigrate("database/migrations/2025_01_08_133552_create_torrent_extra_table.php");
             Artisan::call("upgrade:migrate_torrents_table_text_column");
         }
+        Language::updateTransStatus();
     }
 
     public function runExtraMigrate()

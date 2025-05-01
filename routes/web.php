@@ -17,6 +17,8 @@ Route::get('/', function () {
     return redirect('index.php');
 });
 
+Route::get("/error", [\App\Http\Controllers\ToolController::class, "error"]);
+
 Route::group(['prefix' => 'web', 'middleware' => ['auth.nexus:nexus-web']], function () {
     Route::get('torrent-approval-page', [\App\Http\Controllers\TorrentController::class, 'approvalPage']);
     Route::get('torrent-approval-logs', [\App\Http\Controllers\TorrentController::class, 'approvalLogs']);

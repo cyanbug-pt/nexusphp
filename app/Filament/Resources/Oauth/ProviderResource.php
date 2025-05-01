@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Oauth;
 use App\Filament\Resources\Oauth\ProviderResource\Pages;
 use App\Filament\Resources\Oauth\ProviderResource\RelationManagers;
 use App\Models\OauthProvider;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -71,6 +72,14 @@ class ProviderResource extends Resource
                 Forms\Components\TextInput::make('email_claim')
                     ->label(__('oauth.email_claim'))
                 ,
+                Forms\Components\TextInput::make('level_claim')
+                    ->label(__('oauth.level_claim'))
+                ,
+                Forms\Components\TextInput::make('level_limit')
+                    ->numeric()
+                    ->label(__('oauth.level_limit'))
+                    ->helperText(__('oauth.level_limit_help'))
+                ,
                 Forms\Components\TextInput::make('priority')
                     ->label(__('label.priority'))
                     ->default(0)
@@ -88,6 +97,7 @@ class ProviderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('name')->label(__('label.name')),
                 Tables\Columns\TextColumn::make('client_id')->label(__('oauth.client_id')),
                 Tables\Columns\TextColumn::make('client_secret')->label(__('oauth.secret')),
                 Tables\Columns\TextColumn::make('authorization_endpoint_url')->label(__('oauth.authorization_endpoint_url')),
@@ -97,6 +107,7 @@ class ProviderResource extends Resource
                 ,
                 Tables\Columns\TextColumn::make('priority')->label(__('label.priority')),
                 Tables\Columns\TextColumn::make('updated_at')->label(__('label.updated_at')),
+                Tables\Columns\TextColumn::make('level_limit')->label(__('oauth.level_limit')),
                 Tables\Columns\IconColumn::make('enabled')->boolean()->label(__('label.enabled')),
             ])
             ->defaultSort('priority', 'desc')

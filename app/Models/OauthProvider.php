@@ -10,6 +10,7 @@ class OauthProvider extends NexusModel
     protected $fillable = [
         'uuid', 'name', 'client_id', 'client_secret', 'authorization_endpoint_url', 'token_endpoint_url',
         'user_info_endpoint_url', 'id_claim', 'username_claim', 'email_claim', 'enabled', 'priority',
+        'level_claim', 'level_limit',
     ];
 
     public $timestamps = true;

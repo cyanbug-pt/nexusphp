@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Claim settle result last month(:month):',
     'msg_subject' => ':month claim settlement',
-    'claim_total' => 'Claim torrent total: <b>:total</b>',
-    'claim_reached_counts' => 'Reached torrent counts: <b>:counts</b>',
-    'claim_reached_summary' => 'Reached torrent get bonus per hour: <b>:bonus_per_hour</b>, seed time average(hour): <b>:hours</b>, get bonus total: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Unreached torrent remain counts: <b>:counts</b>',
-    'claim_unreached_remove_counts' => 'Unreached torrent remove counts: <b>:counts</b>',
-    'claim_unreached_summary' => 'Deduct bonus every unreached torrent：<b>:deduct_per_torrent</b>, total deduct: <b>:deduct_total</b>',
+    'claim_total' => 'Claim torrent total: [b]:total[/b]',
+    'claim_reached_counts' => 'Reached torrent counts: [b]:counts[/b]',
+    'claim_reached_summary' => 'Reached torrent get bonus per hour: [b]:bonus_per_hour[/b], seed time average(hour): [b]:hours[/b], get bonus total: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Unreached torrent remain counts: [b]:counts[/b]',
+    'claim_unreached_remove_counts' => 'Unreached torrent remove counts: [b]:counts[/b]',
+    'claim_unreached_summary' => 'Deduct bonus every unreached torrent：[b]:deduct_per_torrent[/b], total deduct: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Are you sure you want to give up claiming this torrent?',
     'add_claim' => 'Claim',

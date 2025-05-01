@@ -229,7 +229,6 @@ $reply = " [ <a href=\"sendmessage.php?receiver=" . $message['sender'] . "&reply
 }
 }
 $body = format_comment($message['msg'], true);
-//$body = htmlspecialchars_decode($body);
 $added = $message['added'];
 if ($message['sender'] == $CURUSER['id'])
 {

@@ -45,20 +45,23 @@ class Handler extends ExceptionHandler
         if (app()->runningInConsole()) {
             return;
         }
-        $this->reportable(function (InsufficientPermissionException $e) {
-            if (request()->expectsJson()) {
-                return response()->json(fail($e->getMessage(), request()->all()), 403);
+        $request = request();
+        $this->reportable(function (InsufficientPermissionException $e) use ($request) {
+            if ($request->expectsJson()) {
+                return response()->json(fail($e->getMessage(), $request->all()), 403);
             } else {
                 return abort(403);
             }
         });
-        $this->renderable(function (PassportAuthenticationException $e) {
-            $request = request();
+        $this->renderable(function (PassportAuthenticationException $e) use ($request) {
             return response()->redirectTo(sprintf("%s/login.php?returnto=%s", $request->getSchemeAndHttpHost(), urlencode($request->fullUrl())));
         });
 
         //Other Only handle in json request
-        if (!request()->expectsJson()) {
+        if (!$request->expectsJson()) {
+            $this->renderable(function (NexusException $e) use ($request) {
+                return redirect(url('/error?error=' . urlencode($e->getMessage())));
+            });
             return;
         }
 

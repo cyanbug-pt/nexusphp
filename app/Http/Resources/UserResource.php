@@ -27,6 +27,8 @@ class UserResource extends JsonResource
             'added_human' => gettime($this->added),
             'last_access' => format_datetime($this->last_access),
             'last_access_human' => gettime($this->last_access),
+            'last_login' => format_datetime($this->last_login),
+            'last_login_human' => gettime($this->last_login),
             'class' => $this->class,
             'class_text' => $this->class_text,
             'avatar' => $this->avatar,
@@ -44,6 +46,7 @@ class UserResource extends JsonResource
             'seedtime_text' => mkprettytime($this->seedtime),
             'leechtime' => $this->leechtime,
             'leechtime_text' => mkprettytime($this->leechtime),
+            'share_ratio' => get_ratio($this->id),
             'inviter' => new UserResource($this->whenLoaded('inviter')),
             'valid_medals' => MedalResource::collection($this->whenLoaded('valid_medals')),
         ];

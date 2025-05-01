@@ -4890,7 +4890,6 @@ function get_searchbox_value($mode = 1, $item = 'showsubcat'){
 }
 
 function get_ratio($userid, $html = true){
-	global $lang_functions;
 	$row = get_user_row($userid);
 	$uped = $row['uploaded'];
 	$downed = $row['downloaded'];
@@ -4905,7 +4904,7 @@ function get_ratio($userid, $html = true){
 				$ratio = "<font color=\"".$color."\">".$ratio."</font>";
 		}
 		elseif ($uped > 0)
-			$ratio = $lang_functions['text_inf'];
+			$ratio = nexus_trans("label.infinite");
 		else
 			$ratio = "---";
 	}

@@ -37,4 +37,9 @@ class ToolController extends Controller
         return $this->success($resource);
     }
 
+    public function error(Request $request)
+    {
+        return view('error', ['error' => $request->query('error')]);
+    }
+
 }

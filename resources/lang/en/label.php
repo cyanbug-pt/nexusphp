@@ -34,7 +34,7 @@ return [
     'cancel' => 'Cancel',
     'reset' => 'Reset',
     'anonymous' => 'Anonymous',
-    'infinite' => 'Infinite',
+    'infinite' => 'Inf.',
     'save' => 'Save',
     'country' => 'Country',
     'city' => 'City',

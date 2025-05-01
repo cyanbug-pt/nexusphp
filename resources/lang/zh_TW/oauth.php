@@ -18,4 +18,12 @@ return [
     'id_claim' => 'ID 字段名',
     'username_claim' => '用戶名字段名',
     'email_claim' => '郵箱字段名',
+    'level_claim' => '等級字段名',
+    'level_limit' => '等級限製',
+    'level_limit_help' => '只允許不低於此等級的用戶登錄',
+    'get_access_token_error' => '獲取訪問令牌錯誤：:error',
+    'get_provider_user_id_error' => '無法通過字段 :id_claim 獲取用戶 ID',
+    'get_provider_level_error' => '無法通過字段 :level_claim 獲取用戶等級',
+    'provider_level_not_allowed' => '僅允許 :level_limit 或以上等級的用戶登錄',
+    'provider_email_already_exists' => '郵箱：:email 已經被使用',
 ];

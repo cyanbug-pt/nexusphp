@@ -50,7 +50,13 @@ if (\App\Models\User::query()->where("id", $row['owner'])->exists()) {
         $dt = sqlesc(date("Y-m-d H:i:s"));
         $subject = nexus_trans("torrent.msg_torrent_deleted", [], get_user_locale($row['owner']));
         $msg = nexus_trans("torrent.msg_the_torrent_you_uploaded", [], get_user_locale($row['owner']));
-        sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, $row[owner], $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
+        \App\Models\Message::add([
+            'sender' => 0,
+            'receiver' => $row['owner'],
+            'subject' => $subject,
+            'msg' => $msg,
+            'added' => $dt,
+        ]);
     }
 }
 header("Location: torrents.php");

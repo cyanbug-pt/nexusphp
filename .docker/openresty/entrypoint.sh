@@ -53,7 +53,17 @@ fi
 echo_info "USE_HTTPS: $USE_HTTPS"
 
 # 组合子域名变量
-export PHPMYADMIN_SERVER_NAME="phpmyadmin.${NP_DOMAIN}"
+dot_count_tmp="${NP_DOMAIN//[^.]/}"
+dot_count="${#dot_count_tmp}"
+PHPMYADMIN="phpmyadmin"
+if [ "$dot_count" -eq 1 ]; then
+    PHPMYADMIN="${PHPMYADMIN}."
+else
+    PHPMYADMIN="${PHPMYADMIN}-"
+fi
+export PHPMYADMIN_SERVER_NAME="${PHPMYADMIN}${NP_DOMAIN}"
+
+echo_info "PHPMYADMIN_SERVER_NAME: ${PHPMYADMIN_SERVER_NAME}"
 
 # 生成配置
 APP_CONF="/etc/nginx/conf.d/app.conf"
