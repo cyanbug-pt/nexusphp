@@ -89,9 +89,20 @@ class OauthController extends Controller
         $response = Http::withToken($tokenInfo['access_token'])->get($provider->user_info_endpoint_url);
         $userInfo = $response->json();
         do_log("userInfo: " . $response->body());
+        $homeUrl = getSchemeAndHttpHost() . "/index.php";
         $providerUserId = data_get($userInfo, $provider->id_claim);
         if (empty($providerUserId)) {
             throw new NexusException(nexus_trans('oauth.get_provider_user_id_error', ['id_claim' => $provider->id_claim]));
+        }
+        $socialAccount = SocialAccount::query()
+            ->where('provider_id', $provider->id)
+            ->where('provider_user_id', $providerUserId)
+            ->first();
+        if ($socialAccount) {
+            //already bind, login directly
+            $authUser = $socialAccount->user;
+            logincookie($authUser->id, $authUser->auth_key);
+            return redirect($homeUrl);
         }
         $providerEmail = data_get($userInfo, $provider->email_claim);
         if (empty($providerEmail)) {
@@ -104,17 +115,7 @@ class OauthController extends Controller
         }
         $providerUsername = data_get($userInfo, $provider->username_claim);
         $providerLevel = data_get($userInfo, $provider->level_claim);
-        $homeUrl = getSchemeAndHttpHost() . "/index.php";
-        $socialAccount = SocialAccount::query()
-            ->where('provider_id', $provider->id)
-            ->where('provider_user_id', $providerUserId)
-            ->first();
-        if ($socialAccount) {
-            //already bind, login directly
-            $authUser = $socialAccount->user;
-            logincookie($authUser->id, $authUser->auth_key);
-            return redirect($homeUrl);
-        }
+
         $minLevel = $provider->level_limit;
         if ($minLevel) {
             if (!$providerLevel) {

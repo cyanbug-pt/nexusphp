@@ -18,7 +18,6 @@ class NexusFormatter
         if (nexus()) {
             $id = nexus()->getRequestId();
         }
-        $id .= " -> " . getLogFile();
         $format = "[%datetime%] [" . $id . "] %channel%.%level_name%: %message% %context% %extra%\n";
         return tap(new LineFormatter($format, 'Y-m-d H:i:s', true, true), function ($formatter) {
             $formatter->includeStacktraces();
