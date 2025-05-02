@@ -93,8 +93,16 @@ class OauthController extends Controller
         if (empty($providerUserId)) {
             throw new NexusException(nexus_trans('oauth.get_provider_user_id_error', ['id_claim' => $provider->id_claim]));
         }
-        $providerUsername = data_get($userInfo, $provider->username_claim);
         $providerEmail = data_get($userInfo, $provider->email_claim);
+        if (empty($providerEmail)) {
+            throw new NexusException(nexus_trans('oauth.get_provider_email_error', ['email_claim' => $provider->email_claim]));
+        }
+        $sameEmailUser = User::query()->where('email', $providerEmail)->first();
+        if ($sameEmailUser) {
+            //login to bind is better, not implement this time
+            throw new NexusException(nexus_trans('oauth.provider_email_already_exists', ['email' => $providerEmail]));
+        }
+        $providerUsername = data_get($userInfo, $provider->username_claim);
         $providerLevel = data_get($userInfo, $provider->level_claim);
         $homeUrl = getSchemeAndHttpHost() . "/index.php";
         $socialAccount = SocialAccount::query()
@@ -116,13 +124,7 @@ class OauthController extends Controller
                 throw new NexusException(nexus_trans("oauth.provider_level_not_allowed", ['level_limit' => $provider->level_limit]));
             }
         }
-        if ($providerEmail) {
-            $sameEmailUser = User::query()->where('email', $providerEmail)->first();
-            if ($sameEmailUser) {
-                //login to bind is better, not implement this time
-                throw new NexusException(nexus_trans('oauth.provider_email_already_exists', ['email' => $providerEmail]));
-            }
-        }
+
         $newUser = $this->createUser($providerUsername, $providerEmail);
         $socialAccountData = [
             'user_id' => $newUser->id,

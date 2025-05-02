@@ -26,4 +26,5 @@ return [
     'get_provider_level_error' => '無法通過字段 :level_claim 獲取用戶等級',
     'provider_level_not_allowed' => '僅允許 :level_limit 或以上等級的用戶登錄',
     'provider_email_already_exists' => '郵箱：:email 已經被使用',
+    'get_provider_email_error' => '無法通過字段 :email_claim 獲取用戶郵箱',
 ];

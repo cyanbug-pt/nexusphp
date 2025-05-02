@@ -41,8 +41,8 @@ class ClientResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')->label(__('label.name')),
-                Forms\Components\TextInput::make('redirect')->label(__('oauth.redirect')),
+                Forms\Components\TextInput::make('name')->label(__('label.name'))->required(),
+                Forms\Components\TextInput::make('redirect')->label(__('oauth.redirect'))->required(),
                 Forms\Components\Radio::make('skips_authorization')
                     ->options(self::getYesNoOptions())
                     ->inline()

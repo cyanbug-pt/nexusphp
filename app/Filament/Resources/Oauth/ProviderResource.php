@@ -68,12 +68,14 @@ class ProviderResource extends Resource
                     ->label(__('oauth.id_claim'))
                     ->required()
                 ,
+                Forms\Components\TextInput::make('email_claim')
+                    ->label(__('oauth.email_claim'))
+                    ->required()
+                ,
                 Forms\Components\TextInput::make('username_claim')
                     ->label(__('oauth.username_claim'))
                 ,
-                Forms\Components\TextInput::make('email_claim')
-                    ->label(__('oauth.email_claim'))
-                ,
+
                 Forms\Components\TextInput::make('level_claim')
                     ->label(__('oauth.level_claim'))
                 ,

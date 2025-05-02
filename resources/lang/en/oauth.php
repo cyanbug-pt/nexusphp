@@ -26,4 +26,5 @@ return [
     'get_provider_level_error' => 'Unable to get user level via field :level_claim',
     'provider_level_not_ allowed' => 'Only users with level :level_limit or above are allowed to log in',
     'provider_email_already_exists' => 'Email: :email is already in use',
+    'get_provider_email_error' => 'Unable to get user email via field :email_claim',
 ];
