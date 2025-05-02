@@ -125,7 +125,7 @@ class OauthController extends Controller
             }
         }
 
-        $newUser = $this->createUser($providerUsername, $providerEmail);
+        $newUser = $this->createUser($providerUsername, $providerEmail, $provider->id);
         $socialAccountData = [
             'user_id' => $newUser->id,
             'provider_id' => $provider->id,
@@ -139,7 +139,7 @@ class OauthController extends Controller
         return redirect($homeUrl);
     }
 
-    private function createUser($username, $email): User
+    private function createUser($username, $email, $providerId): User
     {
         if ($username) {
             if (User::query()->where('username', $username)->exists()) {
@@ -154,6 +154,7 @@ class OauthController extends Controller
             'email' => $email,
             'password' => $password,
             'password_confirmation' => $password,
+            'provider_id' => $providerId,
         ];
         $userRep = new UserRepository();
         for ($i = 0; $i < 3; $i++) {

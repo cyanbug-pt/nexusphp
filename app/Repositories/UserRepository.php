@@ -10,6 +10,7 @@ use App\Models\ExamUser;
 use App\Models\Invite;
 use App\Models\LoginLog;
 use App\Models\Message;
+use App\Models\OauthProvider;
 use App\Models\Setting;
 use App\Models\Snatch;
 use App\Models\Torrent;
@@ -89,7 +90,7 @@ class UserRepository extends BaseRepository
     /**
      * create user
      *
-     * @param array $params must: username, email, password, password_confirmation. optional: id, class
+     * @param array $params must: username, email, password, password_confirmation. optional: id, class, provider_id
      * @return User
      */
     public function store(array $params)
@@ -154,6 +155,13 @@ class UserRepository extends BaseRepository
             }
             do_log("[CREATE_USER], specific id: " . $params['id']);
             $user->id = $params['id'];
+        }
+        if (!empty($params['provider_id'])) {
+            if (!OauthProvider::query()->find($params['provider_id'])) {
+                throw new \InvalidArgumentException("provider_id: {$params['provider_id']} not exists.");
+            }
+            do_log("[CREATE_USER], specific provider_id: " . $params['provider_id']);
+            $user->provider_id = $params['provider_id'];
         }
         $user->save();
         fire_event("user_created", $user);
