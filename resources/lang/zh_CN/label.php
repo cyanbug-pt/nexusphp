@@ -124,7 +124,12 @@ return [
             'upload_api_endpoint' => '上传接口地址',
             'base_url' => '图片 URL 前缀',
             'upload_token' => '上传令牌',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => '权限',
+            'user_token_allowed' => '用户 token 可用权限',
+            'user_token_allowed_help' => '不在此列表的权限，用户 token 无权调用',
+        ],
     ],
     'user' => [
         'label' => '用户',

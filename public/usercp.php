@@ -1128,8 +1128,7 @@ JS;
 //end seed box
 
 //token start
-$tokenRep = new \App\Repositories\TokenRepository();
-$permissions = $tokenRep->listUserTokenPermissions();
+$permissions = \App\Repositories\TokenRepository::listUserTokenPermissions();
 $permissionOptions = [];
 foreach ($permissions as $name => $label) {
     $permissionOptions[] = sprintf('<label><input type="checkbox" name="permissions[]" value="%s">%s</label>', $name, $label);

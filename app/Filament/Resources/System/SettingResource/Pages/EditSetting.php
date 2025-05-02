@@ -2,15 +2,18 @@
 
 namespace App\Filament\Resources\System\SettingResource\Pages;
 
+use App\Auth\Permission;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\System\SettingResource;
 use App\Models\HitAndRun;
 use App\Models\SearchBox;
 use App\Models\Setting;
 use App\Models\User;
+use App\Repositories\TokenRepository;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\Page;
 use Filament\Forms;
+use Illuminate\Support\HtmlString;
 
 class EditSetting extends Page implements Forms\Contracts\HasForms
 {
@@ -103,12 +106,12 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
                 Forms\Components\Radio::make('backup.frequency')->options(['daily' => 'daily', 'hourly' => 'hourly'])->inline(true)->label(__('label.setting.backup.frequency'))->helperText(__('label.setting.backup.frequency_help')),
                 Forms\Components\Select::make('backup.hour')->options(range(0, 23))->label(__('label.setting.backup.hour'))->helperText(__('label.setting.backup.hour_help')),
                 Forms\Components\Select::make('backup.minute')->options(range(0, 59))->label(__('label.setting.backup.minute'))->helperText(__('label.setting.backup.minute_help')),
-                Forms\Components\TextInput::make('backup.google_drive_client_id')->label(__('label.setting.backup.google_drive_client_id')),
-                Forms\Components\TextInput::make('backup.google_drive_client_secret')->label(__('label.setting.backup.google_drive_client_secret')),
-                Forms\Components\TextInput::make('backup.google_drive_refresh_token')->label(__('label.setting.backup.google_drive_refresh_token')),
-                Forms\Components\TextInput::make('backup.google_drive_folder_id')->label(__('label.setting.backup.google_drive_folder_id')),
-                Forms\Components\Radio::make('backup.via_ftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_ftp'))->helperText(__('label.setting.backup.via_ftp_help')),
-                Forms\Components\Radio::make('backup.via_sftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_sftp'))->helperText(__('label.setting.backup.via_sftp_help')),
+//                Forms\Components\TextInput::make('backup.google_drive_client_id')->label(__('label.setting.backup.google_drive_client_id')),
+//                Forms\Components\TextInput::make('backup.google_drive_client_secret')->label(__('label.setting.backup.google_drive_client_secret')),
+//                Forms\Components\TextInput::make('backup.google_drive_refresh_token')->label(__('label.setting.backup.google_drive_refresh_token')),
+//                Forms\Components\TextInput::make('backup.google_drive_folder_id')->label(__('label.setting.backup.google_drive_folder_id')),
+                Forms\Components\Radio::make('backup.via_ftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_ftp'))->helperText(new HtmlString(__('label.setting.backup.via_ftp_help'))),
+                Forms\Components\Radio::make('backup.via_sftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_sftp'))->helperText(new HtmlString(__('label.setting.backup.via_sftp_help'))),
             ])->columns(2);
 
         $tabs[] = Forms\Components\Tabs\Tab::make(__('label.setting.seed_box.tab_header'))
@@ -132,6 +135,12 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
         $tabs[] = Forms\Components\Tabs\Tab::make(__("label.setting.$id.tab_header"))
             ->id($id)
             ->schema($this->getTabImageHostingSchema($id))
+            ->columns(2)
+        ;
+        $id = "permission";
+        $tabs[] = Forms\Components\Tabs\Tab::make(__("label.setting.$id.tab_header"))
+            ->id($id)
+            ->schema($this->getTabPermissionSchema($id))
             ->columns(2)
         ;
 
@@ -275,6 +284,22 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
         ;
         $driverSection = Forms\Components\Section::make($driverName)->schema($driverSchemas);
         $schema[] = $driverSection;
+
+
+        return $schema;
+    }
+
+    private function getTabPermissionSchema($id): array
+    {
+        $schema = [];
+
+        $name = "$id.user_token_allowed";
+        $schema[] = Forms\Components\CheckboxList::make($name)
+            ->options(TokenRepository::listUserTokenPermissions())
+            ->label(__("label.setting.{$name}"))
+            ->helperText(__("label.setting.{$name}_help"))
+            ->columns(2)
+        ;
 
 
         return $schema;

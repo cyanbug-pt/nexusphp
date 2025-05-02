@@ -124,7 +124,12 @@ return [
             'upload_api_endpoint' => 'Upload interface address',
             'base_url' => 'Image URL prefix',
             'upload_token' => 'Upload token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Permission',
+            'user_token_allowed' => 'Permission available to user token',
+            'user_token_allowed_help' => 'User token has no right to invoke without permission from this tabular list',
+        ],
     ],
     'user' => [
         'label' => 'User',

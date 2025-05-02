@@ -242,19 +242,23 @@ function getLogFile($append = '')
     if (isset($logFiles[$append])) {
         return $logFiles[$append];
     }
-    $config = nexus_config('nexus');
-    if (!empty($config['log_file']) && in_array($config['log_file'], ["php://stdout", "php://stderr"])) {
-        return $logFiles[$append] = $config['log_file'];
+    $std = ["php://stdout", "php://stderr"];
+    $logFileFromDotEnv = nexus_env('LOG_FILE');
+    if ($logFileFromDotEnv && in_array($logFileFromDotEnv, $std)) {
+        return $logFiles[$append] = $logFileFromDotEnv;
     }
     $path = getenv('NEXUS_LOG_DIR', true);
+    if (in_array($path, $std)) {
+        return $logFiles[$append] = $path;
+    }
     $fromEnv = true;
     if ($path === false) {
         $fromEnv = false;
         $path = sys_get_temp_dir();
     }
     $logFile = rtrim($path, '/') . '/nexus.log';
-    if (!$fromEnv && !empty($config['log_file'])) {
-        $logFile = $config['log_file'];
+    if (!$fromEnv && $logFileFromDotEnv) {
+        $logFile = $logFileFromDotEnv;
     }
     $lastDotPos = strrpos($logFile, '.');
     if ($lastDotPos !== false) {

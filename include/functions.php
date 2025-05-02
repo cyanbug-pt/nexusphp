@@ -46,7 +46,6 @@ function get_langfile_path($script_name ="", $target = false, $lang_folder = "")
 		$lang_folder = $CURLANGDIR;
 	}
 	$result = "lang/" . ($target == false ? $lang_folder : "_target") ."/lang_". ( $script_name == "" ? substr(strrchr($_SERVER['SCRIPT_NAME'],'/'),1) : $script_name);
-    do_log($result);
     return $result;
 }
 

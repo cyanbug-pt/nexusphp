@@ -33,6 +33,7 @@ class ToolController extends Controller
     public function test(Request $request)
     {
         $result = ['id' => 1];
+        $result['logFile'] = getLogFile();
         $resource = new JsonResource($result);
         return $this->success($resource);
     }
