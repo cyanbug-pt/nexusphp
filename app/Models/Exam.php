@@ -223,7 +223,7 @@ class Exam extends NexusModel
             return Carbon::parse($this->end);
         }
         if (!empty($this->duration)) {
-            return $this->getBeginForUser()->clone()->addDays($this->duration);
+            return $this->getBeginForUser()->clone()->addDays((int)$this->duration);
         }
         if (!empty($this->recurring)) {
             return $this->getRecurringEnd(Carbon::now());

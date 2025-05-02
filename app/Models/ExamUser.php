@@ -104,7 +104,7 @@ class ExamUser extends NexusModel
         $duration = $exam->duration;
         if ($duration > 0) {
             do_log(sprintf('examUser: %s, end from self created_at + exam(%s) created_at: %s + %s days', $this->id, $exam->id, $this->getRawOriginal('created_at'), $duration));
-            return $this->created_at->addDays($duration)->toDateTimeString();
+            return $this->created_at->addDays((int)$duration)->toDateTimeString();
         }
         return null;
     }

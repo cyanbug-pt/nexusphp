@@ -592,7 +592,7 @@ class UserRepository extends BaseRepository
         $operatorInfo = get_user_row($operatorId);
         $message['msg'] = nexus_trans('user.grant_props_notification.body', ['name' => $metaName, 'operator' => $operatorInfo['username'], 'duration' => $durationText], $locale);
         if (!empty($metaData['duration'])) {
-            $metaData['deadline'] = now()->addDays($metaData['duration']);
+            $metaData['deadline'] = now()->addDays((int)$metaData['duration']);
         }
         if ($allowMultiple) {
             //Allow multiple, just insert
@@ -614,10 +614,10 @@ class UserRepository extends BaseRepository
                     $log .= ", has duration: {$keyExistsUpdates['duration']}";
                     if ($metaExists->deadline && $metaExists->deadline->gte(now())) {
                         $log .= ", not expire";
-                        $keyExistsUpdates['deadline'] = $metaExists->deadline->addDays($keyExistsUpdates['duration']);
+                        $keyExistsUpdates['deadline'] = $metaExists->deadline->addDays((int)$keyExistsUpdates['duration']);
                     } else {
                         $log .= ", expired or not set";
-                        $keyExistsUpdates['deadline'] = now()->addDays($keyExistsUpdates['duration']);
+                        $keyExistsUpdates['deadline'] = now()->addDays((int)$keyExistsUpdates['duration']);
                     }
                     unset($keyExistsUpdates['duration']);
                 } else {
@@ -740,7 +740,7 @@ class UserRepository extends BaseRepository
                     'invitee' => '',
                     'hash' => $hash,
                     'valid' => 0,
-                    'expired_at' => Carbon::now()->addDays($days),
+                    'expired_at' => Carbon::now()->addDays((int)$days),
                     'created_at' => Carbon::now(),
                 ];
             }

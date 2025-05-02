@@ -70,7 +70,7 @@ class MedalRepository extends BaseRepository
         }
         $expireAt = null;
         if ($duration > 0) {
-            $expireAt = Carbon::now()->addDays($duration)->toDateTimeString();
+            $expireAt = Carbon::now()->addDays(intval($duration))->toDateTimeString();
         }
         clear_user_cache($uid);
         return $user->medals()->attach([$medal->id => ['expire_at' => $expireAt, 'status' => UserMedal::STATUS_NOT_WEARING]]);
