@@ -615,6 +615,13 @@ class User extends Authenticatable implements FilamentUser, HasName
         return is_null($this->original['notifs']) || str_contains($this->notifs, "[{$name}]");
     }
 
+    public function tokenCan(string $ability)
+    {
+        $redis = NexusDB::redis();
+        return $redis->sismember(Setting::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY, $ability)
+            && $this->accessToken && $this->accessToken->can($ability);
+    }
+
 
 
 

@@ -14,6 +14,7 @@ use Filament\Facades\Filament;
 use Filament\Resources\Pages\Page;
 use Filament\Forms;
 use Illuminate\Support\HtmlString;
+use Nexus\Database\NexusDB;
 
 class EditSetting extends Page implements Forms\Contracts\HasForms
 {
@@ -85,9 +86,20 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
             }
         }
         Setting::query()->upsert($data, ['name'], ['value']);
+        $this->doAfterUpdate();
         do_action("nexus_setting_update");
         clear_setting_cache();
         send_admin_success_notification();
+    }
+
+    /**
+     * this actions get config must not use cache !!!
+     *
+     * @return void
+     */
+    private function doAfterUpdate(): void
+    {
+        Setting::updateUserTokenPermissionAllowedCache();
     }
 
     private function getTabs(): array

@@ -19,6 +19,7 @@ class Setting extends NexusModel
     const ROLE_PERMISSION_CACHE_KEY_PREFIX = 'nexus_role_permissions_';
 
     const TORRENT_GLOBAL_STATE_CACHE_KEY = 'global_promotion_state';
+    const USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY = 'user_token_permission_allowed';
 
     /**
      * get setting autoload = yes with cache
@@ -98,6 +99,18 @@ class Setting extends NexusModel
             }
         }
         return $value;
+    }
+
+    public static function updateUserTokenPermissionAllowedCache(): void
+    {
+        $redis = NexusDB::redis();
+        $key = self::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY;
+        $redis->del($key);
+        //must not use cache
+        $allowed = self::getFromDb("permission.user_token_allowed");
+        if (!empty($allowed)) {
+            $redis->sAdd($key, ...$allowed);
+        }
     }
 
     public static function getDefaultLang(): string
@@ -222,5 +235,11 @@ class Setting extends NexusModel
     {
         return self::get("smtp.smtptype");
     }
+
+    public static function getPermissionUserTokenAllowed(): array
+    {
+        return self::get("permission.user_token_allowed");
+    }
+
 
 }

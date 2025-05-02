@@ -30,7 +30,7 @@ $userRep = new \App\Repositories\UserRepository();
 if ($user['added'] == "0000-00-00 00:00:00" || $user['added'] == null) {
     $joindate = $lang_userdetails['text_not_available'];
 } else {
-    $weeks = abs($userInfo->added->diffInWeeks()) . nexus_trans('nexus.time_units.week');
+    $weeks = abs(number_format($userInfo->added->diffInWeeks(), 1)) . nexus_trans('nexus.time_units.week');
     $joindate = $user['added']." (" . gettime($user["added"], true, false, true).", $weeks)";
 }
 $lastseen = $user["last_access"];

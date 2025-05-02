@@ -2,21 +2,32 @@
 namespace App\Repositories;
 
 use App\Enums\Permission\RoutePermissionEnum;
+use App\Models\Setting;
 
 class TokenRepository extends BaseRepository
 {
     private static array $userTokenPermissions = [
-        RoutePermissionEnum::TORRENT_LIST,
-        RoutePermissionEnum::TORRENT_VIEW,
-        RoutePermissionEnum::TORRENT_UPLOAD,
-        RoutePermissionEnum::USER_VIEW,
+        RoutePermissionEnum::TORRENT_LIST->value,
+        RoutePermissionEnum::TORRENT_VIEW->value,
+        RoutePermissionEnum::TORRENT_UPLOAD->value,
+        RoutePermissionEnum::USER_VIEW->value,
     ];
 
     public static function listUserTokenPermissions(): array
     {
+        return self::formatPermissions(self::$userTokenPermissions);
+    }
+
+    public static function listUserTokenPermissionAllowed(): array
+    {
+        return self::formatPermissions(Setting::getPermissionUserTokenAllowed());
+    }
+
+    private static function formatPermissions(array $permissions): array
+    {
         $result = [];
-        foreach (self::$userTokenPermissions as $permission) {
-            $result[$permission->value] = nexus_trans("route-permission.{$permission->value}.text");
+        foreach ($permissions as $permission) {
+            $result[$permission] = nexus_trans("route-permission.{$permission}.text");
         }
         return $result;
     }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PluginStore;
+use App\Models\Setting;
+use App\Repositories\TokenRepository;
 use App\Repositories\ToolRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Http\Request;
@@ -33,7 +35,8 @@ class ToolController extends Controller
     public function test(Request $request)
     {
         $result = ['id' => 1];
-        $result['logFile'] = getLogFile();
+        $result['permissions'] = TokenRepository::listUserTokenPermissionAllowed();
+//        $result['permissions'] = Setting::getPermissionUserTokenAllowed();
         $resource = new JsonResource($result);
         return $this->success($resource);
     }
