@@ -128,6 +128,7 @@ return array (
     'login_secret_lifetime' => '10',
     'login_secret_deadline' => '2021-02-03 18:55:46',
     'login_secret' => '8e19c6a796602bda113fb2f5bc9da2b0',
+      'use_challenge_response_authentication' =>'yes',
   ),
   'authority' =>
   array (
@@ -453,5 +454,8 @@ return array (
         'maximum_upload_speed' => 8000,
         'is_invite_pre_email_and_username' => 'No',
         'access_admin_class_min' => User::CLASS_ADMINISTRATOR,
+    ],
+    'permission' => [
+        'user_token_allowed' => \App\Repositories\TokenRepository::listUserTokenPermissions(false),
     ],
 );

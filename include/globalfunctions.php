@@ -1327,7 +1327,7 @@ function get_snatch_info($torrentId, $userId)
 /**
  * 完整的 Laravel 事件, 在 php 端有监听者的需要触发. 同样会执行 publish_model_event()
  */
-function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, \Illuminate\Database\Eloquent\Model $oldModel = null): void
+function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, ?\Illuminate\Database\Eloquent\Model $oldModel = null): void
 {
     if (!isset(\App\Enums\ModelEventEnum::$eventMaps[$name])) {
         throw new \InvalidArgumentException("Event $name is not a valid event enumeration");
