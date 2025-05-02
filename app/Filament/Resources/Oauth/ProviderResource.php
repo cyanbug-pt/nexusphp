@@ -13,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Nexus\Database\NexusDB;
+use Ramsey\Uuid;
 
 class ProviderResource extends Resource
 {
@@ -89,7 +91,20 @@ class ProviderResource extends Resource
                 Forms\Components\Toggle::make('enabled')
                     ->label(__('label.enabled'))
                 ,
+                Forms\Components\TextInput::make('redirect')
+                    ->default(fn ($record) => OauthProvider::getCallbackUrl($record->uuid ?? self::getNewUuid()))
+                    ->disabled()
+                    ->label(__('oauth.redirect'))
+                    ->columnSpanFull()
+                ,
             ]);
+    }
+
+    private static function getNewUuid(): string
+    {
+        return NexusDB::remember("new_oauth_provider_uuid", 86400 * 365, function () {
+            return UUid\v4();
+        });
     }
 
     public static function table(Table $table): Table

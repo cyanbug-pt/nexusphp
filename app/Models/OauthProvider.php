@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Laravel\Passport\Client;
+use Nexus\Database\NexusDB;
 use Ramsey\Uuid;
 
 class OauthProvider extends NexusModel
@@ -15,13 +16,30 @@ class OauthProvider extends NexusModel
 
     public $timestamps = true;
 
+    const NEW_UUID_CACHE_KEY = 'new_oauth_provider_uuid';
+
     protected $casts = [
         'enabled' => 'boolean',
     ];
     protected static function booted(): void
     {
         static::creating(function (OauthProvider $model) {
-            $model->uuid = Uuid\v4();
+            $model->uuid = self::getNewUuid();
+        });
+        static::created(function (OauthProvider $model) {
+            NexusDB::cache_del(self::NEW_UUID_CACHE_KEY);
+        });
+    }
+
+    public static function getCallbackUrl(string $uuid): string
+    {
+        return sprintf("%s/oauth/callback/%s", getSchemeAndHttpHost(), $uuid);
+    }
+
+    private static function getNewUuid(): string
+    {
+        return NexusDB::remember(self::NEW_UUID_CACHE_KEY, 86400 * 365, function () {
+            return UUid\v4();
         });
     }
 }

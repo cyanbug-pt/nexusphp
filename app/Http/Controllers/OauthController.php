@@ -30,7 +30,7 @@ class OauthController extends Controller
 
         $query = http_build_query([
             'client_id' => $provider->client_id,
-            'redirect_uri' => $this->getRedirectUri($provider),
+            'redirect_uri' => $this->getCallbackUrl($provider),
             'response_type' => 'code',
             'scope' => '',
             'state' => $state,
@@ -46,9 +46,9 @@ class OauthController extends Controller
 
     }
 
-    private function getRedirectUri(OauthProvider $provider): string
+    private function getCallbackUrl(OauthProvider $provider): string
     {
-        return sprintf("%s/oauth/callback/%s", getSchemeAndHttpHost(), $provider->uuid);
+        return OauthProvider::getCallbackUrl($provider->uuid);
     }
 
     /**
@@ -76,7 +76,7 @@ class OauthController extends Controller
             'grant_type' => 'authorization_code',
             'client_id' => $provider->client_id,
             'client_secret' => $provider->client_secret,
-            'redirect_uri' => $this->getRedirectUri($provider),
+            'redirect_uri' => $this->getCallbackUrl($provider),
             'code' => $request->code,
         ];
         $response = Http::asForm()->post($provider->token_endpoint_url, $params);
