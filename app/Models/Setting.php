@@ -101,13 +101,15 @@ class Setting extends NexusModel
         return $value;
     }
 
-    public static function updateUserTokenPermissionAllowedCache(): void
+    public static function updateUserTokenPermissionAllowedCache(array $allowed = []): void
     {
         $redis = NexusDB::redis();
         $key = self::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY;
         $redis->del($key);
         //must not use cache
-        $allowed = self::getFromDb("permission.user_token_allowed");
+        if (empty($allowed)) {
+            $allowed = self::getFromDb("permission.user_token_allowed");
+        }
         if (!empty($allowed)) {
             $redis->sAdd($key, ...$allowed);
         }

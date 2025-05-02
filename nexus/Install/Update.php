@@ -22,6 +22,7 @@ use App\Repositories\BonusRepository;
 use App\Repositories\ExamRepository;
 use App\Repositories\SearchBoxRepository;
 use App\Repositories\TagRepository;
+use App\Repositories\TokenRepository;
 use App\Repositories\ToolRepository;
 use App\Repositories\TorrentRepository;
 use Carbon\Carbon;
@@ -42,7 +43,7 @@ class Update extends Install
 
     public function getLogFile()
     {
-        return sprintf('%s/nexus-update-%s.log', sys_get_temp_dir(), date('Ymd'));
+        return getLogFile("update");
     }
 
     public function getUpdateDirectory()
@@ -94,6 +95,7 @@ class Update extends Install
     public function runExtraQueries()
     {
         $toolRep = new ToolRepository();
+        $redis = NExusDB::redis();
         /**
          * @since 1.7.13
          */
@@ -342,9 +344,13 @@ class Update extends Install
         if (!Schema::hasTable("torrent_extras")) {
             $this->runMigrate("database/migrations/2025_01_08_133552_create_torrent_extra_table.php");
             Artisan::call("upgrade:migrate_torrents_table_text_column");
+            Language::updateTransStatus();
+            $this->addSetting('main.complain_enabled', 'yes');
         }
-        Language::updateTransStatus();
-        $this->addSetting('main.complain_enabled', 'yes');
+        if (!$redis->exists(Setting::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY)) {
+            Setting::updateUserTokenPermissionAllowedCache(TokenRepository::listUserTokenPermissions(false));
+        }
+
     }
 
     public function runExtraMigrate()

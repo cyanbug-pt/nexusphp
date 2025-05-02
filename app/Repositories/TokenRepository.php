@@ -13,8 +13,11 @@ class TokenRepository extends BaseRepository
         RoutePermissionEnum::USER_VIEW->value,
     ];
 
-    public static function listUserTokenPermissions(): array
+    public static function listUserTokenPermissions(bool $format = true): array
     {
+        if (!$format) {
+            return self::$userTokenPermissions;
+        }
         return self::formatPermissions(self::$userTokenPermissions);
     }
 
