@@ -43,6 +43,7 @@
         "imdbphp/imdbphp": "^8.0",
         "irazasyed/telegram-bot-sdk": "^3.11",
         "laravel/framework": "^12.0",
+        "laravel/horizon": "^5.31",
         "laravel/passport": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.5",

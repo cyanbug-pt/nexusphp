@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SettleClaim;
 use App\Models\ExamUser;
 use App\Models\Language;
 use App\Models\PersonalAccessToken;
@@ -56,7 +57,9 @@ class Test extends Command
      */
     public function handle()
     {
-       Language::updateTransStatus();
+        $a = [1,2,3];
+        $b = array_slice($a, 0, 2);
+        dd($a, $b);
     }
 
 }

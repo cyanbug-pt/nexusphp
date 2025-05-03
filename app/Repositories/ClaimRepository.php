@@ -1,21 +1,24 @@
 <?php
 namespace App\Repositories;
 
-use App\Exceptions\InsufficientPermissionException;
+use App\Jobs\SettleClaim;
 use App\Models\Claim;
 use App\Models\Message;
-use App\Models\Peer;
 use App\Models\Snatch;
 use App\Models\Torrent;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Nexus\Database\NexusDB;
 
 class ClaimRepository extends BaseRepository
 {
     const STAT_CACHE_PREFIX = 'claim_stats_';
+
+    const SETTLE_PAGINATE_STARTS = 2000;
+    const SETTLE_MSG_SLICE_COUNT = 1000;
 
     public function getList(array $params)
     {
@@ -125,7 +128,7 @@ class ClaimRepository extends BaseRepository
     {
         $startOfThisMonth = Carbon::now()->startOfMonth();
         $query = Claim::query()
-            ->select(['uid'])
+            ->select(['uid', 'count(*) as count'])
             ->where("created_at", "<", $startOfThisMonth)
             ->where(function (Builder $query) use ($startOfThisMonth) {
                 $query->where('last_settle_at', '<', $startOfThisMonth)->orWhereNull('last_settle_at');
@@ -145,18 +148,22 @@ class ClaimRepository extends BaseRepository
             do_log("get counts: " . $result->count());
             foreach ($result as $row) {
                 $uid = $row->uid;
-                do_log("$logPrefix, begin to settle user: $uid...");
-                try {
-                    $result = $this->settleUser($uid);
-                    do_log("$logPrefix, settle user: $uid done!, result: " . var_export($result, true));
-                    if ($result) {
-                        $successCount++;
-                    } else {
+                if ($row->count > self::SETTLE_PAGINATE_STARTS) {
+                    SettleClaim::dispatch($uid);
+                } else {
+                    do_log("$logPrefix, begin to settle user: $uid...");
+                    try {
+                        $result = $this->settleUser($uid);
+                        do_log("$logPrefix, settle user: $uid done!, result: " . var_export($result, true));
+                        if ($result) {
+                            $successCount++;
+                        } else {
+                            $failCount++;
+                        }
+                    } catch (\Throwable $exception) {
+                        do_log("$logPrefix, settle user: $uid fail!, error: " . $exception->getMessage() . $exception->getTraceAsString(), 'error');
                         $failCount++;
                     }
-                } catch (\Throwable $exception) {
-                    do_log("$logPrefix, settle user: $uid fail!, error: " . $exception->getMessage() . $exception->getTraceAsString(), 'error');
-                    $failCount++;
                 }
             }
             $page++;
@@ -164,22 +171,22 @@ class ClaimRepository extends BaseRepository
         return ['success_count' => $successCount, 'fail_count' => $failCount];
     }
 
-    public function settleUser($uid, $force = false, $test = false): bool
+    public function settleUser($uid, $force = false, $test = false, $paginate = false): bool
     {
+        $logMsg = sprintf("uid: %s, force: %s, test: %s, paginate: %s", $uid, $force, $test, $paginate);
         $hasRoleWorkSeeding = has_role_work_seeding($uid);
         if ($hasRoleWorkSeeding) {
-            do_log("uid: $uid, filter: user_has_role_work_seeding => true, skip");
+            do_log("$logMsg, filter: user_has_role_work_seeding => true, skip");
             return false;
         }
         $now = Carbon::now();
         $startOfThisMonth = $now->clone()->startOfMonth();
         $user = User::query()->with('language')->findOrFail($uid);
-        $list = Claim::query()
+        $baseQuery = Claim::query()
             ->where('uid', $uid)
             ->where("created_at", "<", $startOfThisMonth)
-            ->with(['snatch', 'torrent' => fn ($query) => $query->select(Torrent::$commentFields)])
-            ->get()
         ;
+        $totalRecordCount = (clone $baseQuery)->count();
         $seedTimeRequiredHours = Claim::getConfigStandardSeedTimeHours();
         $uploadedRequiredTimes = Claim::getConfigStandardUploadedTimes();
         $bonusMultiplier = Claim::getConfigBonusMultiplier();
@@ -189,53 +196,40 @@ class ClaimRepository extends BaseRepository
         $seedTimeCaseWhen = $uploadedCaseWhen = [];
         $toDelClaimId = [];
         do_log(
-            "uid: $uid, claim torrent count: " . $list->count()
+            "$logMsg, claim torrent count: $totalRecordCount"
             . ", seedTimeRequiredHours: $seedTimeRequiredHours"
             . ", uploadedRequiredTimes: $uploadedRequiredTimes"
             . ", bonusMultiplier: $bonusMultiplier"
             . ", bonusDeduct: $bonusDeduct"
         );
-        foreach ($list as $row) {
-            if ($row->last_settle_at && $row->last_settle_at->gte($startOfThisMonth)) {
-                do_log("ID: {$row->id} already settle", 'alert');
-                if (!$force) {
-                    do_log("No force, return", 'alert');
+        if ($paginate) {
+            $page = 1;
+            while (true) {
+                $list = (clone $baseQuery)->forPage($page, self::SETTLE_PAGINATE_STARTS)->get();
+                if ($list->isEmpty()) {
+                    break;
+                }
+                $handleResult = $this->handleClaimSettlement(
+                    $uid, $list, $startOfThisMonth, $seedTimeRequiredHours, $uploadedRequiredTimes,
+                    $reachedTorrentIdArr,$unReachedTorrentIdArr,$remainTorrentIdArr, $seedTimeCaseWhen, $uploadedCaseWhen,
+                    $toUpdateIdArr, $unReachedIdArr, $toDelClaimId, $totalSeedTime, $force
+                );
+                if ($handleResult === false) {
+                    do_log("$logMsg, handleClaimSettlement result false, return");
                     return false;
                 }
+                $page++;
             }
-            if (!$row->snatch) {
-                $toDelClaimId[$row->id] = $row->id;
-                do_log("No snatch, continue", 'alert');
-                continue;
-            }
-            if (!$row->torrent) {
-                $toDelClaimId[$row->id] = $row->id;
-                do_log("No torrent, continue", 'alert');
-                continue;
-            }
-            if (
-                bcsub($row->snatch->seedtime, $row->seed_time_begin) >= $seedTimeRequiredHours * 3600
-                || bcsub($row->snatch->uploaded, $row->uploaded_begin) >= $uploadedRequiredTimes * $row->torrent->size
-            ) {
-                do_log("[REACHED], uid: $uid, torrent: " . $row->torrent_id);
-                $reachedTorrentIdArr[] = $row->torrent_id;
-                $toUpdateIdArr[] = $row->id;
-                $totalSeedTime += bcsub($row->snatch->seedtime, $row->seed_time_begin);
-                $seedTimeCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->seedtime);
-                $uploadedCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->uploaded);
-            } else {
-                $targetStartOfMonth = $row->created_at->startOfMonth();
-                if ($startOfThisMonth->diffInMonths($targetStartOfMonth, true) > 1) {
-                    do_log("[UNREACHED_REMOVE], uid: $uid, torrent: " . $row->torrent_id);
-                    $unReachedIdArr[] = $row->id;
-                    $unReachedTorrentIdArr[] = $row->torrent_id;
-                } else {
-                    do_log("[UNREACHED_FIRST_MONTH], uid: $uid, torrent: " . $row->torrent_id);
-                    $seedTimeCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->seedtime);
-                    $uploadedCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->uploaded);
-                    $toUpdateIdArr[] = $row->id;
-                    $remainTorrentIdArr[] = $row->torrent_id;
-                }
+        } else {
+            $list = $baseQuery->with(['snatch', 'torrent' => fn ($query) => $query->select(Torrent::$commentFields)])->get();
+            $handleResult = $this->handleClaimSettlement(
+                $uid, $list, $startOfThisMonth, $seedTimeRequiredHours, $uploadedRequiredTimes,
+                $reachedTorrentIdArr,$unReachedTorrentIdArr,$remainTorrentIdArr, $seedTimeCaseWhen, $uploadedCaseWhen,
+                $toUpdateIdArr, $unReachedIdArr, $toDelClaimId, $totalSeedTime, $force
+            );
+            if ($handleResult === false) {
+                do_log("$logMsg, handleClaimSettlement result false, return");
+                return false;
             }
         }
         $bonusResult = calculate_seed_bonus($uid, $reachedTorrentIdArr);
@@ -316,24 +310,25 @@ class ClaimRepository extends BaseRepository
         $msg[] = nexus_trans('claim.msg_title', ['month' => $now->clone()->subMonths(1)->format('Y-m')], $locale);
         $msg[] = nexus_trans('claim.claim_total', [ 'total' => count($allTorrentIdArr)], $locale);
 
-        $reachList = collect($reachedTorrentIdArr)->map(
+        //列表数据只取部分展示
+        $reachList = collect(array_slice($reachedTorrentIdArr, 0, self::SETTLE_MSG_SLICE_COUNT))->map(
             fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
         )->implode("\n");
         $msg[] = nexus_trans("claim.claim_reached_counts", ['counts' => count($reachedTorrentIdArr)], $locale) . "\n$reachList";
         $msg[] = nexus_trans(
             "claim.claim_reached_summary", [
-            'bonus_per_hour' => number_format($bonusResult['seed_bonus'], 2),
-            'hours'=> number_format($seedTimeHoursAvg, 2),
-            'bonus_total'=> number_format($bonusFinal, 2)
-        ], $locale
+                'bonus_per_hour' => number_format($bonusResult['seed_bonus'], 2),
+                'hours'=> number_format($seedTimeHoursAvg, 2),
+                'bonus_total'=> number_format($bonusFinal, 2)
+            ], $locale
         );
 
-        $remainList = collect($remainTorrentIdArr)->map(
+        $remainList = collect(array_slice($remainTorrentIdArr, 0, self::SETTLE_MSG_SLICE_COUNT))->map(
             fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
         )->implode("\n");
         $msg[] = nexus_trans("claim.claim_unreached_remain_counts", ['counts' => count($remainTorrentIdArr)], $locale) . "\n$remainList";
 
-        $unReachList = collect($unReachedTorrentIdArr)->map(
+        $unReachList = collect(array_slice($unReachedTorrentIdArr, 0, self::SETTLE_MSG_SLICE_COUNT))->map(
             fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
         )->implode("\n");
         $msg[] = nexus_trans("claim.claim_unreached_remove_counts", ['counts' => count($unReachedTorrentIdArr)], $locale) . "\n$unReachList";
@@ -351,6 +346,59 @@ class ClaimRepository extends BaseRepository
             'subject' => nexus_trans('claim.msg_subject', ['month' => $now->clone()->subMonths(1)->format('Y-m')], $locale),
             'msg' => implode("\n\n", $msg),
         ];
+    }
+
+    private function handleClaimSettlement(
+        int $uid, Collection $list, Carbon $startOfThisMonth, int $seedTimeRequiredHours, int $uploadedRequiredTimes,
+        array &$reachedTorrentIdArr, array &$unReachedTorrentIdArr, array &$remainTorrentIdArr, array &$seedTimeCaseWhen, array &$uploadedCaseWhen,
+        array &$toUpdateIdArr, array &$unReachedIdArr, array &$toDelIdArr, int &$totalSeedTime, bool $force
+    ): bool|null
+    {
+        foreach ($list as $row) {
+            $logItem = "uid: $uid, claimId: {$row['id']}";
+            if ($row->last_settle_at && $row->last_settle_at->gte($startOfThisMonth)) {
+                do_log("$logItem already settle", 'alert');
+                if (!$force) {
+                    do_log("$logItem,already settle, No force, return", 'alert');
+                    return false;
+                }
+            }
+            if (!$row->snatch) {
+                $toDelIdArr[$row->id] = $row->id;
+                do_log("$logItem, No snatch, continue", 'alert');
+                continue;
+            }
+            if (!$row->torrent) {
+                $toDelIdArr[$row->id] = $row->id;
+                do_log("$logItem, No torrent, continue", 'alert');
+                continue;
+            }
+            if (
+                bcsub($row->snatch->seedtime, $row->seed_time_begin) >= $seedTimeRequiredHours * 3600
+                || bcsub($row->snatch->uploaded, $row->uploaded_begin) >= $uploadedRequiredTimes * $row->torrent->size
+            ) {
+                do_log("$logItem, [REACHED], uid: $uid, torrent: " . $row->torrent_id);
+                $reachedTorrentIdArr[] = $row->torrent_id;
+                $toUpdateIdArr[] = $row->id;
+                $totalSeedTime += (int)bcsub($row->snatch->seedtime, $row->seed_time_begin);
+                $seedTimeCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->seedtime);
+                $uploadedCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->uploaded);
+            } else {
+                $targetStartOfMonth = $row->created_at->startOfMonth();
+                if ($startOfThisMonth->diffInMonths($targetStartOfMonth, true) > 1) {
+                    do_log("$logItem, [UNREACHED_REMOVE], uid: $uid, torrent: " . $row->torrent_id);
+                    $unReachedIdArr[] = $row->id;
+                    $unReachedTorrentIdArr[] = $row->torrent_id;
+                } else {
+                    do_log("$logItem, [UNREACHED_FIRST_MONTH], uid: $uid, torrent: " . $row->torrent_id);
+                    $seedTimeCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->seedtime);
+                    $uploadedCaseWhen[] = sprintf('when %s then %s', $row->id, $row->snatch->uploaded);
+                    $toUpdateIdArr[] = $row->id;
+                    $remainTorrentIdArr[] = $row->torrent_id;
+                }
+            }
+        }
+        return null;
     }
 
     public function buildActionButtons($torrentId, $claimData, $reload = 0): string
