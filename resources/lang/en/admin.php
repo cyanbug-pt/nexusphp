@@ -44,6 +44,7 @@ return [
         'oauth_refresh_token' => 'Refresh tokens',
         'token' => 'Access tokens',
         'oauth_provider' => 'Authorization provider',
+        'queue_monitor' => 'Queue monitor',
     ],
     'resources' => [
         'agent_allow' => [

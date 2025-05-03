@@ -44,6 +44,7 @@ return [
         'oauth_refresh_token' => '刷新令牌',
         'token' => '訪問令牌',
         'oauth_provider' => '身份驗證',
+        'queue_monitor' => '隊列監控',
     ],
     'resources' => [
         'agent_allow' => [

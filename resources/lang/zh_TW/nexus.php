@@ -17,4 +17,8 @@ return [
     'sum' => '累計',
     'do_not_repeat' => '請不要重復操作！',
     'no_permission' => '無權限!',
+    'sort' => '排序字段',
+    'order' => '排序',
+    'asc' => '正序',
+    'desc' => '倒序',
 ];
