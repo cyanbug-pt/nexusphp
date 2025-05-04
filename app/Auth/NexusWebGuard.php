@@ -47,6 +47,9 @@ class NexusWebGuard implements StatefulGuard
         $credentials = $this->request->cookie();
         if ($this->validate($credentials)) {
             $user = $this->provider->retrieveByCredentials($credentials);
+            if (empty($user)) {
+                return null;
+            }
             if ($this->provider->validateCredentials($user, $credentials)) {
                if ($user->checkIsNormal()) {
                    return $this->user = $user;
