@@ -373,6 +373,8 @@ class Update extends Install
             $this->doLog("torrents table does not has column: tags");
         }
 
+        clear_setting_cache();
+
     }
 
     private function addMenu($table, array $menus)
