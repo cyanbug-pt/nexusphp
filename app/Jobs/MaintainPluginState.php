@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Nexus\Database\NexusDB;
 use Nexus\Plugin\Plugin;
 
-class MaintainPluginState implements ShouldQueue
+class MaintainPluginState
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

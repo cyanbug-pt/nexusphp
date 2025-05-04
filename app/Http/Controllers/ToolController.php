@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SettleClaim;
 use App\Models\PluginStore;
 use App\Models\Setting;
 use App\Repositories\TokenRepository;
@@ -29,16 +30,6 @@ class ToolController extends Controller
         $user = Auth::user();
         $result = $this->repository->getNotificationCount($user);
         return $this->success($result);
-    }
-
-
-    public function test(Request $request)
-    {
-        $result = ['id' => 1];
-        $result['permissions'] = TokenRepository::listUserTokenPermissionAllowed();
-//        $result['permissions'] = Setting::getPermissionUserTokenAllowed();
-        $resource = new JsonResource($result);
-        return $this->success($resource);
     }
 
     public function error(Request $request)

@@ -72,7 +72,7 @@ elif [ "$SERVICE_NAME" = "queue" ]; then
     while true; do
       if [ -f "$ENV_FILE" ] && [ -d "$VENDOR_DIR" ]; then
         echo_success "[Queue] Run queue:work at $(date '+%Y-%m-%d %H:%M:%S')";
-        php artisan queue:horizon;
+        php artisan horizon;
       else
         echo_info "[Queue] .env or vendor not exists，wait 5 seconds ...";
         sleep 5;

@@ -209,9 +209,11 @@ function do_log($log, $level = 'info', $echo = false)
         }
     }
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $dt = DateTime::createFromFormat('U.u', microtime(true));
+    $dt->setTimezone(new DateTimeZone(nexus_env('TIMEZONE', 'UTC')));
     $content = sprintf(
         "[%s] [%s] [%s] [%s] [%s] [%s] %s.%s %s:%s %s%s%s %s%s",
-        date('Y-m-d H:i:s'),
+        $dt->format("Y-m-d\TH:i:s.vP"),
         nexus() ? nexus()->getRequestId() : 'NO_REQUEST_ID',
         nexus() ? nexus()->getLogSequence() : 0,
         sprintf('%.3f', microtime(true) - (nexus() ? nexus()->getStartTimestamp() : 0)),
@@ -276,9 +278,7 @@ function getLogFile($append = '')
         $scriptUserInfo = posix_getpwuid(posix_getuid());
         $name .= sprintf("-cli-%s", $scriptUserInfo['name']);
     }
-    if (IN_NEXUS) {
-        $name .= "-" . date('Y-m-d');
-    }
+    $name .= "-" . date('Y-m-d');
     return $logFiles[$append] = $name . $suffix;
 
 }
