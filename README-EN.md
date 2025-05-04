@@ -40,7 +40,7 @@ Welcome to participate in internationalization work, click [here](https://github
 - Section H&R
 - TGBot
 ## System Requirements
-- PHP: 8.2|8.3|8.4, must have extensions: bcmath, ctype, curl, fileinfo, json, mbstring, openssl, pdo_mysql, tokenizer, xml, mysqli, gd, redis, pcntl, sockets, posix, gmp, zend opcache
+- PHP: 8.2|8.3|8.4, must have extensions: bcmath, ctype, curl, fileinfo, json, mbstring, openssl, pdo_mysql, tokenizer, xml, mysqli, gd, redis, pcntl, sockets, posix, gmp, zend opcache, zip, intl, pdo_sqlite, sqlite3
 - Mysql: 5.7 latest version or above
 - Redis：2.6.12 or above
 - Others: supervisor, rsync

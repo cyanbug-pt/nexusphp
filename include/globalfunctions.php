@@ -1399,40 +1399,14 @@ function get_challenge_key(string $challenge): string {
 
 function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models\User|null {
     $log = "cookie: " . json_encode($cookie);
-    if (empty($cookie["c_secure_pass"])) {
-        do_log("$log, param not enough");
+    $result = get_user_id_and_signature_from_cookie($cookie);
+    if (empty($result)) {
         return null;
     }
-    $base64Decoded = base64_decode($cookie["c_secure_pass"]);
-    if (empty($base64Decoded)) {
-        do_log("$log, invalid c_secure_pass");
-        return null;
-    }
-    $log .= ", base64 decoded: " . $base64Decoded;
-    $tokenJsonAndSignature = explode(".", $base64Decoded);
-    if (count($tokenJsonAndSignature) != 2) {
-        do_log("$log, invalid c_secure_pass base64_decoded");
-        return null;
-    }
-    $tokenJson = $tokenJsonAndSignature[0];
-    $signature = $tokenJsonAndSignature[1];
-//    list($tokenJson, $signature) = explode('.', base64_decode($_COOKIE["c_secure_pass"]));
-    if (empty($tokenJson) || empty($signature)) {
-        do_log("$log, no tokenJson or signature");
-        return null;
-    }
-    $tokenData = json_decode($tokenJson, true);
-    if (!isset($tokenData['user_id'])) {
-        do_log("$log, no user_id");
-        return null;
-    }
-    if (!isset($tokenData['expires']) || $tokenData['expires'] < time()) {
-        do_log("$log, signature expired");
-        return null;
-    }
-    $id = $tokenData['user_id'];
+    $id = $result['user_id'];
+    $tokenJson = $result['token_json'];
+    $signature = $result['signature'];
     $log .= ", uid = $id";
-
     if ($isArray) {
         $res = sql_query("SELECT * FROM users WHERE users.id = ".sqlesc($id)." AND users.enabled='yes' AND users.status = 'confirmed' LIMIT 1");
         $row = mysql_fetch_array($res);
@@ -1462,6 +1436,46 @@ function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models
         return null;
     }
     return $row;
+}
+
+function get_user_id_and_signature_from_cookie(array $cookie): array|null
+{
+    $log = "cookie: " . json_encode($cookie);
+    if (empty($cookie["c_secure_pass"])) {
+        do_log("$log, param not enough");
+        return null;
+    }
+    $base64Decoded = base64_decode($cookie["c_secure_pass"]);
+    if (empty($base64Decoded)) {
+        do_log("$log, invalid c_secure_pass");
+        return null;
+    }
+    $log .= ", base64 decoded: " . $base64Decoded;
+    $tokenJsonAndSignature = explode(".", $base64Decoded);
+    if (count($tokenJsonAndSignature) != 2) {
+        do_log("$log, invalid c_secure_pass base64_decoded");
+        return null;
+    }
+    $tokenJson = $tokenJsonAndSignature[0];
+    $signature = $tokenJsonAndSignature[1];
+    if (empty($tokenJson) || empty($signature)) {
+        do_log("$log, no tokenJson or signature");
+        return null;
+    }
+    $tokenData = json_decode($tokenJson, true);
+    if (!isset($tokenData['user_id'])) {
+        do_log("$log, no user_id");
+        return null;
+    }
+    if (!isset($tokenData['expires']) || $tokenData['expires'] < time()) {
+        do_log("$log, signature expired");
+        return null;
+    }
+    return [
+        "user_id" => $tokenData['user_id'],
+        'token_json' => $tokenJson,
+        'signature' => $signature,
+    ];
 }
 
 function render_password_hash_js(string $formId, string $passwordOriginalClass, string $passwordHashedName, bool $passwordRequired, string $passwordConfirmClass = "password_confirmation", string $usernameName = "username"): void {

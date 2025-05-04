@@ -34,7 +34,8 @@ class Install
 
     protected array $requiredExtensions = [
         'ctype', 'curl', 'fileinfo', 'json', 'mbstring', 'openssl', 'pdo_mysql', 'tokenizer', 'xml',
-        'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets', 'zip', 'intl'
+        'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets', 'zip', 'intl',
+        'sqlite3', 'pdo_sqlite'
     ];
     protected array $optionalExtensions = [
 //        ['name' => 'swoole', 'desc' => "If use swoole for Octane, make sure 'current' shows 1"],

@@ -61,15 +61,11 @@ class NexusWebUserProvider implements UserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        list($tokenJson, $signature) = explode('.', base64_decode($credentials["c_secure_pass"]));
-        if (empty($tokenJson) || empty($signature)) {
+        $result = get_user_id_and_signature_from_cookie($credentials);
+        if (empty($result)) {
             return null;
         }
-        $tokenData = json_decode($tokenJson, true);
-        if (!isset($tokenData['user_id'])) {
-            return null;
-        }
-        return $this->retrieveById($tokenData['user_id']);
+        return $this->retrieveById($result['user_id']);
     }
 
     /**
