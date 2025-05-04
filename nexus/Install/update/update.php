@@ -152,7 +152,7 @@ if ($currentStep == 3) {
 
 if ($currentStep == 4) {
     $settingTableRows = $update->listSettingTableRows();
-    $settings = $settingTableRows['settings'];
+//    $settings = $settingTableRows['settings'];
     $symbolicLinks = $settingTableRows['symbolic_links'];
     $tableRows = $settingTableRows['table_rows'];
     $pass = $settingTableRows['pass'];
@@ -163,7 +163,8 @@ if ($currentStep == 4) {
         try {
 //            $update->updateDependencies();
             $update->createSymbolicLinks($symbolicLinks);
-            $update->saveSettings($settings);
+            //new setting should add in extraQueries(), this step only do when install
+//            $update->saveSettings($settings);
             $update->runExtraQueries();
             $update->runMigrate();
             $update->runExtraMigrate();

@@ -91,18 +91,6 @@ class NexusUpdate extends Command
             $this->doLog("Code update successfully, run this command without --tag option to run the upgrade please!", 'warn');
             return 0;
         }
-        if ($includeComposer) {
-            $requireCommand = 'composer';
-            if (!command_exists($requireCommand)) {
-                $this->doLog("Error: require $requireCommand");
-                return 0;
-            }
-            $command = "composer install";
-            $log = "Running $command ...";
-            $this->doLog($log);
-            $this->update->executeCommand($command);
-        }
-
         //Step 2
         $log = sprintf('Step %s, %s, cli skip...', $step, $this->update->getStepName($step));
         $this->doLog($log);
@@ -117,7 +105,7 @@ class NexusUpdate extends Command
         $log = sprintf('Step %s, %s...', $step, $this->update->getStepName($step));
         $this->doLog($log);
         $settingTableRows = $this->update->listSettingTableRows();
-        $settings = $settingTableRows['settings'];
+//        $settings = $settingTableRows['settings'];
         $symbolicLinks = $settingTableRows['symbolic_links'];
         $fails = $settingTableRows['fails'];
         $mysqlInfo = $this->update->getMysqlVersionInfo();
@@ -147,9 +135,9 @@ class NexusUpdate extends Command
         $this->update->createSymbolicLinks($symbolicLinks);
         $this->doLog("createSymbolicLinks done!");
 
-        $this->doLog("going to saveSettings...");
-        $this->update->saveSettings($settings);
-        $this->doLog("saveSettings done!");
+//        $this->doLog("going to saveSettings...");
+//        $this->update->saveSettings($settings);
+//        $this->doLog("saveSettings done!");
 
         $this->doLog("going to runExtraQueries...");
         $this->update->runExtraQueries();
