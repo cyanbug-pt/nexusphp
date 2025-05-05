@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\NexusException;
 use App\Http\Middleware\Locale;
 use App\Repositories\ExamRepository;
 use Carbon\Carbon;
@@ -277,12 +278,11 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function checkIsNormal(array $fields = ['status', 'enabled']): bool
     {
         if (in_array('status', $fields) && $this->getAttribute('status') != self::STATUS_CONFIRMED) {
-            throw new \InvalidArgumentException(sprintf('User: %s is not confirmed.', $this->id));
+            throw new NexusException(nexus_trans("user.user_is_not_confirmed", ['user_id' => $this->id, 'username' => $this->username]));
         }
         if (in_array('enabled', $fields) && $this->getAttribute('enabled') != self::ENABLED_YES) {
-            throw new \InvalidArgumentException(sprintf('User: %s is not enabled.', $this->id));
+            throw new NexusException(nexus_trans("user.user_is_disabled", ['user_id' => $this->id, 'username' => $this->username]));
         }
-
         return true;
     }
 

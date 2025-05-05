@@ -100,7 +100,7 @@ class PluginStoreResource extends Resource
                         }
                         return nexus_trans("plugin.actions.install");
                     })
-                    ->modalHeading(fn (PluginStore $record) => sprintf("%s: %s", nexus_trans("plugin.actions.install_or_update") ,$record->title))
+                    ->modalHeading(fn (PluginStore $record) => sprintf("%s: %s", nexus_trans("plugin.actions.install_or_update"), data_get($record, self::getColumnLabelKey("title"))))
                     ->modalContent(function (PluginStore $record) {
                         $infolist = new Infolist();
                         $infolist->record = $record;
