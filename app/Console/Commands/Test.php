@@ -14,12 +14,10 @@ use Illuminate\Console\Command;
 use NexusPlugin\Menu\Filament\MenuItemResource\Pages\ManageMenuItems;
 use NexusPlugin\Menu\MenuRepository;
 use NexusPlugin\Menu\Models\MenuItem;
-use NexusPlugin\Permission\Models\Permission;
 use NexusPlugin\Permission\Models\Role;
 use NexusPlugin\PostLike\PostLikeRepository;
 use NexusPlugin\StickyPromotion\Models\StickyPromotion;
 use NexusPlugin\StickyPromotion\Models\StickyPromotionParticipator;
-use NexusPlugin\Tracker\TrackerRepository;
 use NexusPlugin\Work\Models\RoleWork;
 use NexusPlugin\Work\WorkRepository;
 use Stichoza\GoogleTranslate\GoogleTranslate;
@@ -57,9 +55,9 @@ class Test extends Command
      */
     public function handle()
     {
-        $a = [1,2,3];
-        $b = array_slice($a, 0, 2);
-        dd($a, $b);
+        $rep = new MenuRepository();
+        $result = \Nexus\Plugin\Plugin::listEnabled();
+        dd($result);
     }
 
 }

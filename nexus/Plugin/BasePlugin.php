@@ -27,7 +27,7 @@ abstract class BasePlugin extends BaseRepository
 
     public function checkMainApplicationVersion()
     {
-        $constantName = "static::COMPATIBLE_VERSION";
+        $constantName = "static::COMPATIBLE_NP_VERSION";
         if (defined($constantName) && version_compare(VERSION_NUMBER, constant($constantName), '<')) {
             throw new \RuntimeException(sprintf(
                 "NexusPHP version: %s is too low, this plugin require: %s",
@@ -56,5 +56,18 @@ abstract class BasePlugin extends BaseRepository
     public static function getInstance(): static
     {
         return Plugin::getById(static::ID);
+    }
+
+    public function getVersion(): string
+    {
+        $constantName = "static::VERSION";
+        return defined($constantName) ? constant($constantName) : '';
+    }
+
+    public function getId(): string
+    {
+        $className = str_replace("Repository", "", get_called_class());
+        $plugin = call_user_func([$className, "make"]);
+        return $plugin->getId();
     }
 }

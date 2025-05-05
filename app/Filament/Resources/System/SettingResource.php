@@ -24,7 +24,7 @@ class SettingResource extends Resource
 
     protected static ?string $navigationGroup = 'System';
 
-    protected static ?int $navigationSort = 100;
+    protected static ?int $navigationSort = 1000;
 
     public static function getNavigationLabel(): string
     {

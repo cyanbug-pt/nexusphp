@@ -24,7 +24,7 @@ class TorrentStateResource extends Resource
 
     protected static ?string $navigationGroup = 'System';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 9;
 
     public static function getNavigationLabel(): string
     {

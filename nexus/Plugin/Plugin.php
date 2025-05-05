@@ -5,6 +5,9 @@ class Plugin
 {
     private static mixed $providers = null;
 
+    /**
+     * @var BasePlugin[]
+     */
     private static array $plugins = [];
 
 //    public function __construct()
@@ -28,7 +31,7 @@ class Plugin
         $result = [];
         //plugins are more exactly
         foreach (self::$plugins as $id => $plugin) {
-            $result[$id] = 1;
+            $result[$id] = $plugin->getVersion();
         }
         return $result;
     }
@@ -60,15 +63,19 @@ class Plugin
             if ($parts[0] == 'NexusPlugin') {
                 $className = str_replace('ServiceProvider', 'Repository', $provider);
                 if (class_exists($className)) {
-                    $constantName = "$className::COMPATIBLE_VERSION";
+                    $constantName = "$className::COMPATIBLE_NP_VERSION";
                     if (defined($constantName) && version_compare(VERSION_NUMBER, constant($constantName), '<')) {
                         continue;
                     }
+                    /**
+                     * @var BasePlugin $className
+                     */
                     $plugin = new $className;
-                    $pluginIdName = "$className::ID";
-                    if (defined($pluginIdName)) {
-                        self::$plugins[constant($pluginIdName)] = $plugin;
-                    }
+//                    $pluginIdName = "$className::ID";
+//                    if (defined($pluginIdName)) {
+//                        self::$plugins[constant($pluginIdName)] = $plugin;
+//                    }
+                    self::$plugins[$plugin->getId()] = $plugin;
                     call_user_func([$plugin, 'boot']);
                 }
             }
