@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Просмотр журнала банов',
     'reply_notify_subject' => 'Жалоба отвечена',
     'reply_notify_body' => 'You have a reply to your complaint on the site %s, click here <a href="%s" target="_blank">to see it</a>.',
+    'complain_not_enabled' => 'Жалоба не включена',
 ];

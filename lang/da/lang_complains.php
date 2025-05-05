@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Se ban log',
     'reply_notify_subject' => 'Klager besvaret',
     'reply_notify_body' => 'Du har et svar på din klage på siden %s, klik her <a href="%s" target="_blank">for at se det</a>.',
+    'complain_not_enabled' => 'Klager ikke aktiveret',
 ];

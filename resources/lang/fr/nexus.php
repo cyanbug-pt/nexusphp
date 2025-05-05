@@ -17,4 +17,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Veuillez ne pas répéter l\'opération !',
     'no_permission' => 'Pas de permission!',
+    'sort' => 'champ de tri',
+    'order' => 'trier',
+    'asc' => 'ordre croissant',
+    'desc' => 'ordre décroissant',
 ];

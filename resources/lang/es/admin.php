@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Códigos de autenticación',
         'oauth_refresh_token' => 'Actualizar seales',
         'token' => 'Tokens de acceso',
+        'oauth_provider' => 'Proveedor de autorización',
+        'queue_monitor' => 'Monitor de cola',
     ],
     'resources' => [
         'agent_allow' => [

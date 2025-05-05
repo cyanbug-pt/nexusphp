@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Când este activată, utilizatorii cu permisiunea pot seta o anumită sumă de bonus pentru a fi încărcați de utilizatorii care descarcă torentele când sunt trimise, implicit: nu',
     'row_use_challenge_response_authentication' => 'Autentificare provocare-răspuns',
     'text_use_challenge_response_authentication_note' => 'Dacă este activată, nici o parolă text nu va fi transmisă la autentificare, recomandată. Partajările viitoare vor elimina această configurare și vor activa această caracteristică.' ,
+    'row_complain_enabled' => 'Posibilitatea de a permite reclamații',
+    'row_complain_enabled_note' => 'implicit: "da"',
 );
 
 ?>

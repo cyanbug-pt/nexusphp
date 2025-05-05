@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Kody uwierzytelniania',
         'oauth_refresh_token' => 'Odśwież tokeny',
         'token' => 'Tokeny dostępu',
+        'oauth_provider' => 'Dostawca autoryzacji',
+        'queue_monitor' => 'Monitor kolejki',
     ],
     'resources' => [
         'agent_allow' => [

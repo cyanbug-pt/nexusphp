@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Auth koder',
         'oauth_refresh_token' => 'Uppdatera tokens',
         'token' => 'Tillgång till tokens',
+        'oauth_provider' => 'Tillstånd leverantör',
+        'queue_monitor' => 'Kö monitor',
     ],
     'resources' => [
         'agent_allow' => [

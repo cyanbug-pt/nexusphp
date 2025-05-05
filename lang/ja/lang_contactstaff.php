@@ -1,9 +1,12 @@
 <?php
 
-$lang_contactstaff = array (
-  'head_contact_staff' => '管理グループに連絡してください',
-  'text_message_to_staff' => '管理チームにテキストメッセージを送信します',
-  'row_subject' => 'タイトル',
-  'row_body' => '文章',
-  'submit_send_it' => '送信',
+$lang_contactstaff = array
+(
+	'head_contact_staff' => "スタッフにお問い合わせ",
+	'text_message_to_staff' => "スタッフにメッセージを送信",
+	'row_subject' => "件名",
+	'row_body' => "本文",
+	'submit_send_it' => "Send&nbsp;It!"
 );
+
+?>

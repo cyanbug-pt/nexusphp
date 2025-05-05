@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Näytä porttikielto loki',
     'reply_notify_subject' => 'Vastattu valitus',
     'reply_notify_body' => 'Sinulla on vastaus valitukseen sivustolla %s, klikkaa tästä <a href="%s" target="_blank">nähdäksesi sen</a>.',
+    'complain_not_enabled' => 'Valitus ei ole käytössä',
 ];

@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Anspråk reglera resultat förra månaden (:month):',
     'msg_subject' => ':month anspråk uppgörelse',
-    'claim_total' => 'Anspråk torrent totalt: <b>:total</b>',
-    'claim_reached_counts' => 'Nådda torrentantal: <b>:counts</b>',
-    'claim_reached_summary' => 'Nådd torrent få bonus per timme: <b>:bonus_per_hour</b>, frö tid genomsnitt(timme): <b>:hours</b>, få bonus totalt: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Onått torrent förblir räkningar: <b>:counts</b>',
-    'claim_unreached_remove_counts' => 'Onått torrent ta bort siffror: <b>:counts</b>',
-    'claim_unreached_summary' => 'Dra bonus varje ouppnådd torrent：<b>:deduct_per_torrent</b>, total avdrag: <b>:deduct_total</b>',
+    'claim_total' => 'Anspråk torrent totalt: [b]:total[/b]',
+    'claim_reached_counts' => 'Nådda torrentantal: [b]:counts[/b]',
+    'claim_reached_summary' => 'Nådd torrent få bonus per timme: [b]:bonus_per_hour[/b], frö tid genomsnitt(timme): [b]:hours[/b], få bonus totalt: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Onått torrent förblir räkningar: [b]:counts[/b]',
+    'claim_unreached_remove_counts' => 'Onått torrent ta bort siffror: [b]:counts[/b]',
+    'claim_unreached_summary' => 'Dra bonus varje ouppnådd torrent：[b]:deduct_per_torrent[/b], total avdrag: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Är du säker på att du vill ge upp att hävda denna torrent?',
     'add_claim' => 'Claim',

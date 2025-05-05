@@ -34,7 +34,7 @@ return [
     'cancel' => 'annuleren',
     'reset' => 'Reset',
     'anonymous' => 'Anoniem',
-    'infinite' => 'Oneindig',
+    'infinite' => 'Inf.',
     'save' => 'Opslaan',
     'country' => 'Land:',
     'city' => 'Woonplaats',
@@ -44,6 +44,8 @@ return [
     'create' => 'Aanmaken',
     'created_at_begin' => 'Begin aangemaakt',
     'created_at_end' => 'Aan het eind aangemaakt',
+    'text_quote' => 'Offerte',
+    'text_code' => "CODE",
     'setting' => [
         'nav_text' => 'Instellingen',
         'backup' => [

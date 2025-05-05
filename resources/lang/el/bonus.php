@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Περάστε :bonus αγορά :medal_name',
+    'comment_buy_attendance_card' => 'Ξοδέψτε :bonus μπόνους αγοράστε μία κάρτα παρακολουθήσει',
+    'comment_buy_temporary_invite' => 'Ξοδέψτε :bonus bonus αγοράστε :count προσωρινή πρόσκληση',
+    'comment_buy_rainbow_id' => 'Περάστε :bonus αγοράστε :duration ημέρες ουράνιο τόξο ID',
+    'comment_buy_change_username_card' => 'Περάστε :bonus μπόνους αγοράσει αλλαγή ονόματος χρήστη κάρτα',
+    'comment_gift_medal' => 'Περάστε :bonus αγορά :medal_name και δώρο σε :to_username',
+    'comment_buy_torrent' => 'Περάστε :bonus μπόνους αγορά torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Προϊόν από torrent που λήφθηκε από :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Τύπος ανταμοιβής',
+        'count' => 'Μέτρηση',
+        'size' => 'Μέγεθος',
+        'a_value' => 'Μια Τιμή',
+        'bonus_base' => 'Βασικό μπόνους',
+        'factor' => 'Παράγοντας',
+        'got_bonus' => 'Έχεις μπόνους',
+        'total' => 'Σύνολο',
+    ],
+    'reward_types' => [
+        'basic' => 'Βασική ανταμοιβή',
+        'harem_addition' => 'Προσθήκη λόχου',
+        'official_addition' => 'Επίσημη προσθήκη',
+        'medal_addition' => 'Προσθήκη μεταλλίου',
+    ],
+    'not_enough' => 'Δεν υπάρχει αρκετό μπόνους! Απαιτεί :require_bonus, έχετε μόνο :now_bonus',
+    'msg_someone_loves_you' => "Κάποιος σας αγαπά",
+    'msg_you_have_been_given' => "Σας έχει δοθεί ένα δώρο ",
+    'msg_after_tax' => " (μετά από φόρο είναι ",
+    'msg_karma_points_by' => ") Σημεία Κάρμα από ",
+    'msg_personal_message_from' => "Προσωπικό μήνυμα από ",
+    'msg_colon' => ": ",
+];

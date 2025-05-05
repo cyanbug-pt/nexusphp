@@ -1,8 +1,7 @@
 <?php
 
-return array (
-  'index' => 
-  array (
-    'page_title' => 'コンパニオンリスト',
-  ),
-);
+return [
+    'index' => [
+        'page_title' => 'ピア',
+    ],
+];

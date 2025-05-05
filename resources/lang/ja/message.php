@@ -1,61 +1,68 @@
 <?php
 
-return array (
-  'index' => 
-  array (
-    'page_title' => 'プライベートメッセージリスト',
-  ),
-  'show' => 
-  array (
-    'page_title' => 'プライベートメッセージの詳細',
-  ),
-  'field_value_change_message_body' => '：フィールドが変更されます：old：new by the Administrator：Operator。理由::理由。',
-  'field_value_change_message_subject' => '：フィールド変更',
-  'download_disable' => 
-  array (
-    'subject' => 'キャンセルされた許可をダウンロードします',
-    'body' => 'ダウンロード許可は、おそらく共有率が低すぎるか、不適切な動作が原因でキャンセルされます。 by ：：オペレーター',
-  ),
-  'download_disable_upload_over_speed' => 
-  array (
-    'subject' => 'キャンセルされた許可をダウンロードします',
-    'body' => 'アップロード速度が高速であるため、ダウンロード許可はキャンセルされました。ボックスユーザーの場合は、登録してください。',
-  ),
-  'download_disable_announce_paid_torrent_too_many_times' => 
-  array (
-    'subject' => 'キャンセルされた許可をダウンロードします',
-    'body' => 'ダウンロード許可は、有料の種子に報告する過剰な数の失敗のためにキャンセルされました。十分な魔法があることを確認してください。',
-  ),
-  'download_enable' => 
-  array (
-    'subject' => '許可リカバリをダウンロードしてください',
-    'body' => 'ダウンロード許可が復元され、シードをダウンロードできるようになりました。 by ：：オペレーター',
-  ),
-  'temporary_invite_change' => 
-  array (
-    'subject' => '一時的な招待状：change_type',
-    'body' => '一時的な招待状は、管理者：オペレーター：Change_Type：Count、Reason ::理由です。',
-  ),
-  'receive_medal' => 
-  array (
-    'subject' => 'メダルを受け取りました',
-    'body' => 'ユーザー：ユーザー名は魔法を支出します：cost_bonusはメダル[：medal_name]を購入し、それをあなたに与えました。このメダルの価値は次のとおりです。価格、取り扱い料は次のとおりです。Gift_fee_total（factor ：： gift_fee_factor）、このメダルが有効になります。',
-  ),
-  'login_notify' => 
-  array (
-    'subject' => '：別の場所でログインするためのsite_nameリマインダー',
-    'body' => '：： this_login_timeにログインしました。 IP :: this_ip、場所:: this_location。 <br/>
-最終ログイン時間：： last_login_time、ip ：： last_ip、location ：： last_location。 <br/>
-自分の操作がなければ、アカウントのパスワードが漏れていた可能性があります。時間内に変更してください！',
-  ),
-  'buy_torrent_success' => 
-  array (
-    'subject' => '種子の購入を成功させるためのリマインダー',
-    'body' => 'あなたが使った：ボーナスマジックはシードを成功裏に購入しました：[url =：url]：torrent_name [/url]',
-  ),
-  'exam_user_end_time_updated' => 
-  array (
-    'subject' => '評価：Exam_Name終了時間の変更',
-    'body' => '継続的な評価：Exam_Nameの終了時間は、old_end_timeへ：new_end_timeから変更されました。管理者::オペレーター、理由::理由。',
-  ),
-);
+return [
+
+    'index' => [
+        'page_title' => 'メッセージ一覧',
+    ],
+    'show' => [
+        'page_title' => 'メッセージの詳細',
+    ],
+    'field_value_change_message_body' => ':operatorによって:fieldが:oldから:new に変更されました。理由：:reason。',
+    'field_value_change_message_subject' => ':フィールドが変更されました',
+
+    'download_disable' => [
+        'subject' => 'ダウンロード権限がキャンセルされました',
+        'body' => 'ダウンロード権限が取り消されました。共有レートや誤動作が原因かもしれません。',
+    ],
+    'download_disable_upload_over_speed' => [
+        'subject' => 'ダウンロード権限がキャンセルされました',
+        'body' => 'アップロード速度が高すぎるため、ダウンロード権限がキャンセルされました。シードボックスユーザーの場合はファイルを送信してください。' ,
+    ],
+    'download_disable_announce_paid_torrent_too_many_times' => [
+        'subject' => 'ダウンロード権限がキャンセルされました',
+        'body' => 'お支払い済みのトレントを何度もお知らせしたため、ダウンロードの許可が取り消されました。ボーナスが十分あることを確認してください。' ,
+    ],
+    'download_enable' => [
+        'subject' => 'ダウンロード権限が復元されました',
+        'body' => 'ダウンロード権限が復元され、トレントをダウンロードできるようになりました。',
+    ],
+    'temporary_invite_change' => [
+        'subject' => '一時招待：change_type',
+        'body' => ':operator, reason: :reasonによる:change_type :count 回招待しました。',
+    ],
+    'receive_medal' => [
+        'subject' => 'ギフト勲章を受け取る',
+        'body' => "ユーザー名:usernameは:cost_bonの費用でメダル[:medal_name]を購入し、あなたにそれを与えました。 メダルは:priceの価値があり、手数料は :gift_fee_total(factor: :gift_fee_factor) です。このメダルは:expire_atまで、メダルのボーナス加算率は:bonus_addition_factorです。",
+    ],
+    'login_notify' => [
+        'subject' => ':site_name オフサイトログインアラート',
+        'body' => <<<BODY
+You logged in at::this_login_time, IP::this_ip, location::this_location.<br/>
+Last login time::last_login_time, IP::last_ip, location::last_location.<br/>
+If it is not your own operation, the account password may have been leaked, please change it in time!
+BODY,
+    ],
+    'buy_torrent_success' => [
+        'subject' => 'Torrent 購入の通知に成功',
+        'body' => 'トレントの購入に:bonus bonus を費やしました:[url=:url]:torrent_name[/url]',
+    ],
+    'exam_user_end_time_updated' => [
+        'subject' => '試験終了時刻が変更されました :exam_name',
+        'body' => '進行中の試験の終了時刻が :exam_name から :new_end_time に変更されました。admin: :operator, reason: :reason',
+    ],
+
+    'mail_dear' => "Dear ",
+    'mail_you_received_a_pm' => "PMを受け取りました。",
+    'mail_sender' => "Sender(sender)	",
+    'mail_subject' => "Subject(主題)	",
+    'mail_date' => "日付		",
+    'mail_use_following_url' => "You can click&nbsp;",
+    'mail_use_following_url_1' => "&nbsp;メッセージを表示するには (ログインする必要があるかもしれません)",
+    'mail_yours' => "<br />あなたの,",
+    'mail_the_site_team' => "%s チーム",
+    'mail_received_pm_from' => "You have received a PM from ",
+    'mail_here' => "ここ",
+    'msg_system' => "システム",
+    'msg_original_message_from' => "元のメッセージ： ",
+];

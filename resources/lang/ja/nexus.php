@@ -1,21 +1,24 @@
 <?php
 
-return array (
-  'invalid_argument' => 'エラーパラメーター',
-  'require_argument' => '：引数は空にすることはできません',
-  'select_one_please' => '選択してください',
-  'user_not_exists' => '（そのようなアカウントはありません）',
-  'time_units' => 
-  array (
-    'week' => '週',
-  ),
-  'select_all' => 'すべてを選択します',
-  'unselect_all' => '何も選択しないでください',
-  'increment' => '増加',
-  'decrement' => '減らす',
-  'action' => '動作します',
-  'no_limit' => '制限なし',
-  'sum' => '総計',
-  'do_not_repeat' => '操作を繰り返さないでください！',
-  'no_permission' => '権限はありません！',
-);
+return [
+    'invalid_argument' => '引数が無効です',
+    'require_argument' => ':argumentは空にできません',
+    'select_one_please' => '1つ選択してください',
+    'user_not_exists' => '(孤児)',
+    'time_units' => [
+        'week' => '週間',
+    ],
+    'select_all' => 'すべて選択',
+    'unselect_all' => 'すべて選択解除',
+    'increment' => 'インクリメント',
+    'decrement' => 'decrement',
+    'action' => 'アクション',
+    'no_limit' => '制限なし',
+    'sum' => 'Sum',
+    'do_not_repeat' => '操作を繰り返さないでください!',
+    'no_permission' => '権限がありません！',
+    'sort' => 'ソートフィールド',
+    'order' => '並べ替え',
+    'asc' => '昇順',
+    'desc' => '降順',
+];

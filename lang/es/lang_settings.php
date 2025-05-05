@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Cuando está habilitado, los usuarios con permiso pueden establecer una cierta cantidad de bonus para ser cobrados a los usuarios que descargan los torrents cuando son enviados, por defecto: no',
     'row_use_challenge_response_authentication' => 'Autenticación de respuesta al desafío',
     'text_use_challenge_response_authentication_note' => 'Si está habilitado, no se transmitirán contraseñas de texto plano al iniciar sesión, recomendado. Las futuras versiones eliminarán esta configuración y habilitarán esta función.' ,
+    'row_complain_enabled' => 'Activar quejas',
+    'row_complain_enabled_note' => 'por defecto: "sí"',
 );
 
 ?>

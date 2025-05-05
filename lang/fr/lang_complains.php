@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Voir le journal des bannissements',
     'reply_notify_subject' => 'Plainte répondue',
     'reply_notify_body' => 'Vous avez une réponse à votre plainte sur le site %s, cliquez ici <a href="%s" target="_blank">pour la voir</a>.',
+    'complain_not_enabled' => 'La plainte n\'est pas activée',
 ];

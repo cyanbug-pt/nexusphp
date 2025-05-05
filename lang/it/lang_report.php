@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Errore",
+	'std_missing_reason' => "Motivo Mancante!",
+	'std_message' => "Messaggio",
+	'std_successfully_reported' => "Segnalato con successo!",
+	'std_already_reported_this' => "Hai già segnalato questo!",
+	'std_sorry' => "Spiacenti",
+	'std_cannot_report_oneself' => "Non puoi segnalare te stesso!",
+	'std_invalid_user_id' => "ID Utente Non Valido!",
+	'std_cannot_report' => "Non puoi segnalare ",
+	'std_are_you_sure' => "Sei sicuro?",
+	'text_are_you_sure_user' => "Sei sicuro di voler segnalare questo utente ",
+	'text_to_staff' => " al personale per violazione delle regole?",
+	'text_not_for_leechers' => "Si prega di notare, questo è <b>non</b> per essere utilizzato per segnalare leecher, abbiamo script in atto per affrontarli!",
+	'text_reason_is' => "Motivo <font class=striking>(richiesto)</font>: ",
+	'submit_confirm' => "Conferma",
+	'text_reason_note' => "<b><font class=striking> PLEASE Note! </font></b>&nbsp;Se non hai ragione riceverai un avvertimento.",
+	'std_invalid_torrent_id' => "ID Torrent Non Valido!",
+	'text_are_you_sure_torrent' => "Sei sicuro di voler segnalare questo torrent ",
+	'std_invalid_post_id' => "ID Post Non Valido!",
+	'text_are_you_sure_post' => "Sei sicuro di voler segnalare il post del forum (ID ",
+	'text_of_topic' => " di argomento ",
+	'text_of_torrent' => " di torrent ",
+	'text_of_offer' => " di offerta ",
+	'text_of_request' => " di richiesta ",
+	'text_by' => ") da ",
+	'std_invalid_comment_id' => "ID Commento Non Valido!",
+	'std_orphaned_comment' => "Commento orfano. Si prega di segnalare questo all'amministratore.",
+	'text_are_you_sure_comment' => "Sei sicuro di voler segnalare il commento (ID ",
+	'std_invalid_offer_id' => "ID offerta non valida!",
+	'text_are_you_sure_offer' => "Sei sicuro di voler segnalare la seguente offerta ",
+	'std_invalid_request_id' => "ID Richiesta Non Valida!",
+	'std_are_you_sure_request' => "Sei sicuro di voler segnalare la seguente richiesta ",
+	'std_invalid_action' => "Azione non valida.",
+	'std_invalid_subtitle_id' => "ID Sottotitolo Non Valido!",
+	'text_are_you_sure_subtitle' => "Sei sicuro di voler segnalare il sottotitolo ",
+);
+
+?>

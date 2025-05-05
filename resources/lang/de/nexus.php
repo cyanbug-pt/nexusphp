@@ -17,4 +17,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Bitte wiederholen Sie die Operation nicht!',
     'no_permission' => 'Keine Berechtigung!',
+    'sort' => 'sortierfeld',
+    'order' => 'sortieren',
+    'asc' => 'aufsteigend',
+    'desc' => 'absteigende Reihenfolge',
 ];

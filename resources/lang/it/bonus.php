@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Spendi :bonus bonus buy :medal_name',
+    'comment_buy_attendance_card' => 'Spendi :bonus bonus acquista una scheda frequente',
+    'comment_buy_temporary_invite' => 'Spendi :bonus bonus buy :count invito temporaneo',
+    'comment_buy_rainbow_id' => 'Spendi :bonus bonus buy :duration giorni arcobaleno ID',
+    'comment_buy_change_username_card' => 'Spendi :bonus bonus acquistare cambiare nome utente carta',
+    'comment_gift_medal' => 'Spendi :bonus bonus acquista :medal_name e regalo a :to_username',
+    'comment_buy_torrent' => 'Spendi :bonus bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Proventi dal torrent scaricato da :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Tipo ricompensa',
+        'count' => 'Conteggio',
+        'size' => 'Dimensione',
+        'a_value' => 'Un Valore',
+        'bonus_base' => 'Bonus base',
+        'factor' => 'Fattore',
+        'got_bonus' => 'Ottenuto bonus',
+        'total' => 'Totale',
+    ],
+    'reward_types' => [
+        'basic' => 'Ricompensa base',
+        'harem_addition' => 'Aggiunta di harem',
+        'official_addition' => 'Aggiunta ufficiale',
+        'medal_addition' => 'Aggiunta medaglia',
+    ],
+    'not_enough' => 'Nessun bonus sufficiente! Richiede :require_bonus, attualmente hai solo: :now_bonus',
+    'msg_someone_loves_you' => "Qualcuno ti ama",
+    'msg_you_have_been_given' => "Ti è stato dato un dono di ",
+    'msg_after_tax' => " (dopo le tasse è ",
+    'msg_karma_points_by' => ") Punti Karma di ",
+    'msg_personal_message_from' => "Messaggio personale da ",
+    'msg_colon' => ": ",
+];

@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Ověřovací kódy',
         'oauth_refresh_token' => 'Obnovit tokeny',
         'token' => 'Přístupové tokeny',
+        'oauth_provider' => 'Poskytovatel autorizace',
+        'queue_monitor' => 'Monitor fronty',
     ],
     'resources' => [
         'agent_allow' => [

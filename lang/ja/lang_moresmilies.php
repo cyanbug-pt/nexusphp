@@ -1,6 +1,9 @@
 <?php
 
-$lang_moresmilies = array (
-  'head_more_smilies' => 'より多くの表現',
-  'text_close' => '閉鎖',
+$lang_moresmilies = array
+(
+	'head_more_smilies' => "より多くのクリック可能なスマイリー",
+	'text_close' => "閉じる",
 );
+
+?>

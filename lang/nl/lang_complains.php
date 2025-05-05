@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Het banlogboek weergeven',
     'reply_notify_subject' => 'Klacht beantwoordde',
     'reply_notify_body' => 'Je hebt een antwoord op je klacht op de website %s, klik hier <a href="%s" target="_blank">om hem te zien</a>.',
+    'complain_not_enabled' => 'Klacht niet ingeschakeld',
 ];

@@ -26,4 +26,10 @@ return [
         'medal_addition' => 'Medalje tilføjelse',
     ],
     'not_enough' => 'Ingen bonus! Kræver :require_bonus, du har i øjeblikket kun: :now_bonus',
+    'msg_someone_loves_you' => "Nogen elsker dig",
+    'msg_you_have_been_given' => "Du har fået en gave af ",
+    'msg_after_tax' => " (efter skat er det ",
+    'msg_karma_points_by' => ") Karma point af ",
+    'msg_personal_message_from' => "Personlig besked fra ",
+    'msg_colon' => ": ",
 ];

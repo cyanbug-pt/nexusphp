@@ -92,4 +92,18 @@ return [
         \App\Models\Torrent::PROMOTION_TIME_TYPE_DEADLINE => 'Indtil',
     ],
     'paid_torrent' => 'Betalt torrent',
+    'msg_torrent_deleted' => "Din torrent blev slettet",
+    'msg_the_torrent_you_uploaded' => "Torrent du uploadede '",
+    'msg_was_deleted_by' => "' blev slettet af ",
+    'msg_reason_is' => "Årsagen: ",
+    'msg_reseed_request' => "Reseed Anmodning",
+    'msg_reseed_user' => "Bruger ",
+    'msg_ask_reseed' => " bad om en reseed på torrent ",
+    'msg_thank_you' => " !\nTak!",
+
+    'msg_offer_you_voted' => "Tilbuddet du stemte for: ",
+    'msg_was_uploaded_by' => " blev uploadet af ",
+    'msg_you_can_download' => ".\nDu kan downloade Torrent",
+    'msg_here' => " [b]her[/b]",
+    'msg_offer' => "Tilbud ",
 ];

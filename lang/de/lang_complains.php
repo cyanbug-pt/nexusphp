@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Sperrprotokoll anzeigen',
     'reply_notify_subject' => 'Beschwerde beantwortet',
     'reply_notify_body' => 'Sie haben eine Antwort auf Ihre Beschwerde auf der Website %s, klicken Sie hier <a href="%s" target="_blank">, um sie</a> zu sehen.',
+    'complain_not_enabled' => 'Beschwerde nicht aktiviert',
 ];

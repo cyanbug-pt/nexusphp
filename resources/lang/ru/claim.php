@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Запросить результат расчета в прошлом месяце(:month):',
     'msg_subject' => 'спор по требованию :month',
-    'claim_total' => 'Claim torrent total: <b>:total</b>',
-    'claim_reached_counts' => 'Достигнуто кол-во торрентов: <b>:counts</b>',
-    'claim_reached_summary' => 'Достигнутые торренты получают бонус в час: <b>:bonus_per_hour</b>, среднее семенное время (час): <b>:hours</b>, получают бонус всего: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Недостигнуто количество торрентов: <b>:counts</b>',
-    'claim_unreached_remove_counts' => 'Неполученные значения удаления торрентов: <b>:counts</b>',
-    'claim_unreached_summary' => 'Вычитать бонус каждого недостигнутого торрента：<b>:deduct_per_torrent</b>, всего вычета: <b>:deduct_total</b>',
+    'claim_total' => 'Claim torrent total: [b]:total[/b]',
+    'claim_reached_counts' => 'Достигнуто кол-во торрентов: [b]:counts[/b]',
+    'claim_reached_summary' => 'Достигнутые торренты получают бонус в час: [b]:bonus_per_hour[/b], среднее семенное время (час): [b]:hours[/b], получают бонус всего: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Недостигнуто количество торрентов: [b]:counts[/b]',
+    'claim_unreached_remove_counts' => 'Неполученные значения удаления торрентов: [b]:counts[/b]',
+    'claim_unreached_summary' => 'Вычитать бонус каждого недостигнутого торрента：[b]:deduct_per_torrent[/b], всего вычета: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Вы уверены, что хотите отказаться от этого торрента?',
     'add_claim' => 'Claim',

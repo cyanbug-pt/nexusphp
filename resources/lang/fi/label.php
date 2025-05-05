@@ -34,7 +34,7 @@ return [
     'cancel' => 'Peruuta',
     'reset' => 'Reset',
     'anonymous' => 'Anonyymi',
-    'infinite' => 'Loputon',
+    'infinite' => 'Inf.',
     'save' => 'Tallenna',
     'country' => 'Maa',
     'city' => 'Kaupunki',
@@ -44,6 +44,8 @@ return [
     'create' => 'Luo',
     'created_at_begin' => 'Luotu alkaessa',
     'created_at_end' => 'Luotu lopussa',
+    'text_quote' => 'Tarjous',
+    'text_code' => "KOODI",
     'setting' => [
         'nav_text' => 'Asetus',
         'backup' => [

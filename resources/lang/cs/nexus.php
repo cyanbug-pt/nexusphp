@@ -17,4 +17,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Prosím, neopakujte operaci!',
     'no_permission' => 'Nemáte oprávnění!',
+    'sort' => 'pole řazení',
+    'order' => 'seřadit',
+    'asc' => 'vzestupně',
+    'desc' => 'sestupně',
 ];

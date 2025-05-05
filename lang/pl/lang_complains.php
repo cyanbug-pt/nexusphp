@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Zobacz dziennik banów',
     'reply_notify_subject' => 'Odpowiedzi na skargę',
     'reply_notify_body' => 'Masz odpowiedź na swoją skargę na stronie %s, kliknij tutaj <a href="%s" target="_blank">, aby zobaczyć ją</a>.',
+    'complain_not_enabled' => 'Skarga nie włączona',
 ];

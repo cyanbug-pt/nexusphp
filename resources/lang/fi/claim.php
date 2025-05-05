@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Lunasta lopputulos viime kuussa(:kk):',
     'msg_subject' => ':month claim settlement',
-    'claim_total' => 'Lunasta torrent yhteensä: <b>:total</b>',
-    'claim_reached_counts' => 'Saavutettu torrenttien määrä: <b>:counts</b>',
-    'claim_reached_summary' => 'Saavutettu torrent-tiedosto saa bonuksen tunnissa: <b>:bonus_per_hour</b>, seed time average(hour): <b>:hours</b>, saat bonuksen yhteensä: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Päättämättömät torrent-tiedosto jäävät määrään: <b>:counts</b>',
-    'claim_unreached_remove_counts' => 'Saavuttamattomat torrent- poistomäärät: <b>:counts</b>',
-    'claim_unreached_summary' => 'Vähennä bonus jokaisesta keskeneräisestä torrent：<b>:deduct_per_torrent</b>, vähennys yhteensä: <b>:deduct_total</b>',
+    'claim_total' => 'Lunasta torrent yhteensä: [b]:total[/b]',
+    'claim_reached_counts' => 'Saavutettu torrenttien määrä: [b]:counts[/b]',
+    'claim_reached_summary' => 'Saavutettu torrent-tiedosto saa bonuksen tunnissa: [b]:bonus_per_hour[/b], seed time average(hour): [b]:hours[/b], saat bonuksen yhteensä: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Päättämättömät torrent-tiedosto jäävät määrään: [b]:counts[/b]',
+    'claim_unreached_remove_counts' => 'Saavuttamattomat torrent- poistomäärät: [b]:counts[/b]',
+    'claim_unreached_summary' => 'Vähennä bonus jokaisesta keskeneräisestä torrent：[b]:deduct_per_torrent[/b], vähennys yhteensä: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Oletko varma, että haluat luopua tämän torrentin vaatimuksesta?',
     'add_claim' => 'Claim',

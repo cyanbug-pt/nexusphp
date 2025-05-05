@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Nessun rapporto.",
+	'head_reports' => "Relazioni",
+	'text_reports' => "Relazioni",
+	'col_added' => "Aggiunto",
+	'col_reporter' => "Segnalatore",
+	'col_reporting' => "Relazioni",
+	'col_type' => "Tipo",
+	'col_reason' => "Motivo",
+	'col_dealt_with' => "Distribuisci Con",
+	'col_action' => "Atto",
+	'text_yes' => "Sì",
+	'text_no' => "No",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Il torrent non esiste o è stato eliminato.",
+	'text_user' => "Utente",
+	'text_user_does_not_exist' => "L'utente non esiste o è stato eliminato.",
+	'text_offer' => "Offerta",
+	'text_offer_does_not_exist' => "L'offerta non esiste o è stata eliminata.",
+	'text_forum_post' => "Post Del Forum",
+	'text_post_does_not_exist' => "Il post del Forum non esiste o è stato eliminato.",
+	'text_post_id' => "ID Post ",
+	'text_of_topic' => " del Topic ",
+	'text_by' => " di ",
+	'text_comment' => "Commento",
+	'text_comment_does_not_exist' => "Il commento non esiste o è stato eliminato.",
+	'text_of_torrent' => " di torrent ",
+	'text_of_offer' => " di offerta ",
+	'text_comment_id' => "Id Commento ",
+	'text_subtitle' => "Sottotitolo",
+	'text_subtitle_does_not_exist' => "Il sottotitolo non esiste o è eliminato.",
+	'text_for_torrent_id' => " per ID torrent ",
+	'submit_set_dealt' => "Imposta Dealt",
+	'submit_delete' => "Elimina",
+);
+
+?>

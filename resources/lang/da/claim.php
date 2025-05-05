@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Gør krav på afregningsresultat sidste måned(:måned):',
     'msg_subject' => ':måned fordringsafregning',
-    'claim_total' => 'Anmod om torrent i alt: <b>:total</b>',
-    'claim_reached_counts' => 'Nået torrent antal: <b>:counts</b>',
-    'claim_reached_summary' => 'Nået torrent få bonus per time: <b>:bonus_per_hour</b>, seed time gennemsnit (time): <b>:hours</b>, få bonus i alt: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Unået torrent forbliver tæller: <b>:counts</b>',
-    'claim_unreached_remove_counts' => 'Fjern tællinger: <b>:counts</b>',
-    'claim_unreached_summary' => 'Fradrag af bonus hver unået torrent：<b>:deduct_per_torrent</b>, samlet fradrag: <b>:deduct_total</b>',
+    'claim_total' => 'Anmod om torrent i alt: [b]:total[/b]',
+    'claim_reached_counts' => 'Nået torrent antal: [b]:counts[/b]',
+    'claim_reached_summary' => 'Nået torrent få bonus per time: [b]:bonus_per_hour[/b], seed time gennemsnit (time): [b]:hours[/b], få bonus i alt: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Unået torrent forbliver tæller: [b]:counts[/b]',
+    'claim_unreached_remove_counts' => 'Fjern tællinger: [b]:counts[/b]',
+    'claim_unreached_summary' => 'Fradrag af bonus hver unået torrent：[b]:deduct_per_torrent[/b], samlet fradrag: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Er du sikker på, at du vil opgive at gøre krav på denne torrent?',
     'add_claim' => 'Claim',

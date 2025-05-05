@@ -34,7 +34,7 @@ return [
     'cancel' => 'Anulează',
     'reset' => 'Reset',
     'anonymous' => 'Anonim',
-    'infinite' => 'Infinit',
+    'infinite' => 'Inf.',
     'save' => 'Salvează',
     'country' => 'Țară',
     'city' => 'Oraș',
@@ -44,6 +44,8 @@ return [
     'create' => 'Crează',
     'created_at_begin' => 'Creat la început',
     'created_at_end' => 'Creat la sfârșit',
+    'text_quote' => 'Ofertă',
+    'text_code' => "COD",
     'setting' => [
         'nav_text' => 'Setare',
         'backup' => [

@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Begleichung des Ergebnisses im letzten Monat(:Monat):',
     'msg_subject' => ':month Schadensabwicklung',
-    'claim_total' => 'Torrent insgesamt beanspruchen: <b>:total</b>',
-    'claim_reached_counts' => 'Erreichte Torrentanzahl: <b>:count</b>',
-    'claim_reached_summary' => 'Erreichter Torrent Bonus pro Stunde: <b>:bonus_per_hour</b>, Seedzeit Durchschnitt (Stunde): <b>:Stunden</b>, Bonus Gesamt: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Unerreichte Torrent-Restzahlen: <b>:count</b>',
-    'claim_unreached_remove_counts' => 'Unerreichte Torrent-Entfernungsanzahl: <b>:count</b>',
-    'claim_unreached_summary' => 'Erlebe Bonus jeden unerreichten Torrent：<b>:deduct_per_torrent</b>, Gesamtabzug <b>:deduct_total</b>',
+    'claim_total' => 'Torrent insgesamt beanspruchen: [b]:total[/b]',
+    'claim_reached_counts' => 'Erreichte Torrentanzahl: [b]:count[/b]',
+    'claim_reached_summary' => 'Erreichter Torrent Bonus pro Stunde: [b]:bonus_per_hour[/b], Seedzeit Durchschnitt (Stunde): [b]:Stunden[/b], Bonus Gesamt: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Unerreichte Torrent-Restzahlen: [b]:count[/b]',
+    'claim_unreached_remove_counts' => 'Unerreichte Torrent-Entfernungsanzahl: [b]:count[/b]',
+    'claim_unreached_summary' => 'Erlebe Bonus jeden unerreichten Torrent：[b]:deduct_per_torrent[/b], Gesamtabzug [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Bist du sicher, dass du den Anspruch auf diesen Torrent aufgeben möchtest?',
     'add_claim' => 'Claim',

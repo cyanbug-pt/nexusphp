@@ -28,8 +28,9 @@ class CrowdinSync extends Command
     protected string $runEnv = self::RUN_ENV_LARAVEL;
 
     protected string $mtType = "crowdin";
+    protected array|null $mtInfo = null;
 
-    protected bool $noPreTrans = false;
+    protected bool $noPreTrans = true;
     protected bool $debug = false;
 
     /**
@@ -87,6 +88,7 @@ class CrowdinSync extends Command
         'pt' => 'pt-PT',
         'es' => 'es-ES',
         'sv' => 'sv-SE',
+        'nb' => 'no',//挪威
     ];
 
     /**
@@ -379,9 +381,18 @@ class CrowdinSync extends Command
             throw new \RuntimeException('No project languages found.');
         }
 
-        $this->info('Found ' . count($languageIds) . ' project languages: ' . implode(', ', $languageIds));
+        $engineInfo = $this->getMachineTranslationEngine();
+        $engineSupportedLanguageIds = $engineInfo['supportedLanguageIds'];
+        $result = array_intersect($languageIds, $engineSupportedLanguageIds);
 
-        return $languageIds;
+        $this->info(sprintf(
+            "Found %s project languages: %s \nengine supported %s languages: %s \nresult: %s languages: %s",
+            count($languageIds), implode(', ', $languageIds),
+            count($engineSupportedLanguageIds), implode(', ', $engineSupportedLanguageIds),
+            count($result), implode(', ', $result)
+        ));
+
+        return $result;
     }
 
     /**
@@ -502,13 +513,9 @@ class CrowdinSync extends Command
         return $result;
     }
 
-    protected function doMachineTranslate($fileIds, $targetLanguages)
+    protected function doMachineTranslate($fileIds, $languages)
     {
         $engineInfo = $this->getMachineTranslationEngine();
-        $languages = array_intersect($targetLanguages,  $engineInfo['supportedLanguageIds']);
-        if (empty($languages)) {
-            throw new \RuntimeException('No languages available, target: ' . json_encode($targetLanguages) . ', supported: ' . json_encode($engineInfo['supportedLanguageIds']));
-        }
         $params = [
             'languageIds' => $languages,
             'fileIds' => $fileIds,
@@ -525,12 +532,15 @@ class CrowdinSync extends Command
 
     protected function getMachineTranslationEngine()
     {
+        if (!is_null($this->mtInfo)) {
+            return $this->mtInfo;
+        }
         $url = sprintf("%s/mts", trim($this->apiBaseUrl, '/'));
         $response = $this->getHttpClient()->get($url);
         $data = $response->json('data');
         foreach ($data as $mt) {
             if ($mt['data']['type'] === $this->mtType) {
-                return $mt['data'];
+                return $this->mtInfo = $mt['data'];
             }
         }
         throw new \RuntimeException("can not get machine-translation id for mtType: $this->mtType, data: " . json_encode($data));

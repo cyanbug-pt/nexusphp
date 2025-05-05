@@ -92,4 +92,18 @@ return [
         \App\Models\Torrent::PROMOTION_TIME_TYPE_DEADLINE => 'Do',
     ],
     'paid_torrent' => 'Placený torrent',
+    'msg_torrent_deleted' => "Váš torrent byl smazán",
+    'msg_the_torrent_you_uploaded' => "torrent, který jste nahráli '",
+    'msg_was_deleted_by' => "' byl smazán ",
+    'msg_reason_is' => ", důvod: ",
+    'msg_reseed_request' => "Znovu zaslat žádost",
+    'msg_reseed_user' => "Uživatel ",
+    'msg_ask_reseed' => " požádáno o opětovné uzení torrentu ",
+    'msg_thank_you' => " !\nDěkujeme!",
+
+    'msg_offer_you_voted' => "Nabídka, kterou jste hlasovali: ",
+    'msg_was_uploaded_by' => " byl nahrán uživatelem ",
+    'msg_you_can_download' => ".\nMůžete stáhnout Torrent",
+    'msg_here' => " [b]zde[/b]",
+    'msg_offer' => "Nabídka ",
 ];

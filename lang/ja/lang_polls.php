@@ -1,17 +1,20 @@
 <?php
 
-$lang_polls = array (
-  'std_error' => '間違い',
-  'std_permission_denied' => '許可はありません',
-  'std_delete_poll' => '投票を削除します',
-  'std_delete_poll_confirmation' => '投票を削除したいですか？クリック',
-  'std_here_if_sure' => '<b>ここで確認してください</b> </a>。',
-  'std_sorry' => 'ごめん...',
-  'std_no_polls' => 'まだ投票はありません！',
-  'head_previous_polls' => '以前の投票',
-  'text_previous_polls' => '以前の投票',
-  'text_ago' => '前に',
-  'text_edit' => '編集',
-  'text_delete' => '消去',
-  'text_votes' => '投票数：',
+$lang_polls = array
+(
+	'std_error' => "エラー",
+	'std_permission_denied' => "アクセスが拒否されました。",
+	'std_delete_poll' => "アンケートを削除",
+	'std_delete_poll_confirmation' => "Do you really want to delete a poll? Click\n",
+	'std_here_if_sure' => "<b></b></a> を確認してください。",
+	'std_sorry' => "Sorry...",
+	'std_no_polls' => "アンケートがありません！",
+	'head_previous_polls' => "以前の投票",
+	'text_previous_polls' => "以前の投票",
+	'text_ago' => " 前",
+	'text_edit' => "編集",
+	'text_delete' => "削除",
+	'text_votes' => "投票： "
 );
+
+?>

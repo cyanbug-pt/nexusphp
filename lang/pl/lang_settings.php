@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Gdy opcja jest włączona, użytkownicy z uprawnieniami mogą ustawić określoną ilość bonusów do obciążania użytkowników, którzy pobierają torrenty podczas wysyłania, domyślnie: nie',
     'row_use_challenge_response_authentication' => 'Uwierzytelnianie Wyzwania-Odpowiedzi',
     'text_use_challenge_response_authentication_note' => 'Jeśli opcja jest włączona, żadne hasła nie zostaną przesłane przy logowaniu, rekomendowane. Przyszłe wydania usuną tę konfigurację i włącz tę funkcję.' ,
+    'row_complain_enabled' => 'Czy włączyć skargi',
+    'row_complain_enabled_note' => 'domyślnie: "tak"',
 );
 
 ?>

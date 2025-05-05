@@ -34,7 +34,7 @@ return [
     'cancel' => 'Abbrechen',
     'reset' => 'Reset',
     'anonymous' => 'Anonym',
-    'infinite' => 'Unendlich',
+    'infinite' => 'Inf.',
     'save' => 'Speichern',
     'country' => 'Land',
     'city' => 'Stadt',
@@ -44,6 +44,8 @@ return [
     'create' => 'Anlegen',
     'created_at_begin' => 'Erstellt am Anfang',
     'created_at_end' => 'Erstellt am Ende',
+    'text_quote' => 'Zitat',
+    'text_code' => "CODE",
     'setting' => [
         'nav_text' => 'Einstellung',
         'backup' => [

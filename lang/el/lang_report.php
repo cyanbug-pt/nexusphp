@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Σφάλμα",
+	'std_missing_reason' => "Λόγος Που Λείπει!",
+	'std_message' => "Μήνυμα",
+	'std_successfully_reported' => "Αναφέρθηκε επιτυχώς!",
+	'std_already_reported_this' => "Το έχετε ήδη αναφέρει!",
+	'std_sorry' => "Συγνώμη",
+	'std_cannot_report_oneself' => "Δεν μπορείτε να αναφέρετε τον εαυτό σας!",
+	'std_invalid_user_id' => "Μη Έγκυρο Id Χρήστη!",
+	'std_cannot_report' => "Δεν μπορείτε να αναφέρετε ",
+	'std_are_you_sure' => "Είσαι σίγουρος?",
+	'text_are_you_sure_user' => "Είστε βέβαιοι ότι θα θέλατε να αναφέρετε αυτόν το χρήστη ",
+	'text_to_staff' => " στο προσωπικό για παραβίαση των κανόνων?",
+	'text_not_for_leechers' => "Παρακαλώ σημειώστε, αυτό είναι <b>όχι</b> για να χρησιμοποιηθεί για να αναφέρετε τους χρήστες σας, έχουμε δέσμες ενεργειών για να τους αντιμετωπίσουμε!",
+	'text_reason_is' => "Λόγος <font class=striking>(απαιτείται)</font>: ",
+	'submit_confirm' => "Επιβεβαίωση",
+	'text_reason_note' => "<b><font class=striking> PLEASE Note! </font></b>&nbsp;Αν δεν υπάρχει λόγος θα λάβετε μια προειδοποίηση.",
+	'std_invalid_torrent_id' => "Μη Έγκυρο Id Torrent!",
+	'text_are_you_sure_torrent' => "Είστε βέβαιοι ότι θα θέλατε να αναφέρετε αυτό το torrent ",
+	'std_invalid_post_id' => "Μη Έγκυρη Ταυτότητα Δημοσίευσης!",
+	'text_are_you_sure_post' => "Είστε βέβαιοι ότι θα θέλατε να αναφέρετε τη δημοσίευση του φόρουμ (ID ",
+	'text_of_topic' => " του θέματος ",
+	'text_of_torrent' => " του torrent ",
+	'text_of_offer' => " προσφοράς ",
+	'text_of_request' => " της αίτησης ",
+	'text_by' => ") από ",
+	'std_invalid_comment_id' => "Μη Έγκυρο Id Σχολιού!",
+	'std_orphaned_comment' => "Ορφανά σχόλιο. Παρακαλώ αναφέρετε αυτό στο διαχειριστή.",
+	'text_are_you_sure_comment' => "Είστε βέβαιοι ότι θα θέλατε να αναφέρετε το σχόλιο (ID ",
+	'std_invalid_offer_id' => "Μη έγκυρη ταυτότητα προσφοράς!",
+	'text_are_you_sure_offer' => "Είστε βέβαιοι ότι θα θέλατε να αναφέρετε την ακόλουθη προσφορά ",
+	'std_invalid_request_id' => "Μη Έγκυρο Id Αίτησης!",
+	'std_are_you_sure_request' => "Είστε βέβαιοι ότι θα θέλατε να αναφέρετε το ακόλουθο αίτημα ",
+	'std_invalid_action' => "Μη έγκυρη ενέργεια.",
+	'std_invalid_subtitle_id' => "Μη Έγκυρο Id Υποτίτλου!",
+	'text_are_you_sure_subtitle' => "Είστε βέβαιοι ότι θα θέλατε να αναφέρετε τον υπότιτλο ",
+);
+
+?>

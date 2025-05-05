@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Gestione campo personalizzato',
+    'text_manage' => 'Gestisci',
+    'text_add' => 'Aggiungi',
+    'text_field' => 'Campo',
+    'text_delete' => 'Elimina',
+    'text_edit' => 'Modifica',
+    'col_id' => 'ID',
+    'col_name' => 'Nome',
+    'col_name_help' => 'Permetti solo cifre, alfabeto, sottolineatura',
+    'col_label' => 'Visualizza etichetta',
+    'col_type' => 'Tipo',
+    'col_required' => 'Richiesto',
+    'col_help' => 'Testo di aiuto',
+    'col_options' => 'Opzioni',
+    'col_options_help' => 'Richiesto quando il tipo è radio, casella di controllo, seleziona. Una riga, una opzione, formato: valore <unk> testo di visualizzazione',
+    'col_action' => 'Azione',
+    'col_is_single_row' => 'Visualizza su una singola riga',
+    'js_sure_to_delete_this' => 'Sicuro di eliminare?',
+    'submit_submit' => 'Invia',
+    'field_type_text' => 'Testo breve',
+    'field_type_textarea' => 'Testo lungo',
+    'field_type_radio' => 'Selezione singola orizzontale',
+    'field_type_checkbox' => 'Selezione multipla orizzontale',
+    'field_type_select' => 'Selezione singola verticale',
+    'field_type_image' => 'Immagine',
+    'col_display' => 'Visualizzazione personalizzata',
+
+];

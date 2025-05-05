@@ -1,18 +1,21 @@
 <?php
 
-$lang_news = array (
-  'std_delete_news_item' => '最新のメッセージを削除します',
-  'std_are_you_sure' => 'あなたは本当に最近のメッセージを削除したいですか？確かな場合は、クリックしてください',
-  'std_here' => 'ここ',
-  'std_if_sure' => '。',
-  'std_error' => '間違い',
-  'std_news_body_empty' => '最新のニュースのテキストは空にすることはできません！',
-  'std_news_title_empty' => '最新のニュースのタイトルは空にすることはできません！',
-  'std_something_weird_happened' => '奇妙なことが起こりました。',
-  'std_invalid_news_id' => '最新のメッセージのIDは存在しません。',
-  'head_edit_site_news' => '最近のニュースを編集します',
-  'text_edit_site_news' => '最近のニュースを編集します',
-  'text_notify_users_of_this' => 'このメッセージを表示するようにユーザーに思い出させます。',
-  'head_site_news' => '最近のニュース',
-  'text_submit_news_item' => '新しいメッセージを送信します',
+$lang_news = array
+(
+	'std_delete_news_item' => "ニュース項目を削除",
+	'std_are_you_sure' => "ニュース項目を削除してもよろしいですか？ ",
+	'std_here' => "ここ",
+	'std_if_sure' => " 確信があるなら",
+	'std_error' => "エラー",
+	'std_news_body_empty' => "ニュース本文は空白にできません！",
+	'std_news_title_empty' => "ニュースのタイトルは空欄にできません！",
+	'std_something_weird_happened' => "奇妙なことが起こりました。",
+	'std_invalid_news_id' => "ID のニュース項目はありません ",
+	'head_edit_site_news' => "サイトのニュースを編集",
+	'text_edit_site_news' => "サイトのニュースを編集",
+	'text_notify_users_of_this' => "ユーザーに通知する",
+	'head_site_news' => "Site News",
+	'text_submit_news_item' => "ニュース項目を送信"
 );
+
+?>

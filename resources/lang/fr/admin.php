@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Codes d\'authentification',
         'oauth_refresh_token' => 'Rafraîchir les jetons',
         'token' => 'Jetons d\'accès',
+        'oauth_provider' => 'Fournisseur d\'autorisation',
+        'queue_monitor' => 'Moniteur de file d\'attente',
     ],
     'resources' => [
         'agent_allow' => [

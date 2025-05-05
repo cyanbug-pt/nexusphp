@@ -34,7 +34,7 @@ return [
     'cancel' => 'Zrušit',
     'reset' => 'Reset',
     'anonymous' => 'Anonymní',
-    'infinite' => 'Nekonečný',
+    'infinite' => 'Inspekce na místě',
     'save' => 'Uložit',
     'country' => 'L 343, 22.12.2009, s. 1).',
     'city' => 'Město',
@@ -44,6 +44,8 @@ return [
     'create' => 'Vytvořit',
     'created_at_begin' => 'Vytvořeno při začátku',
     'created_at_end' => 'Vytvořeno na konci',
+    'text_quote' => 'Cenová nabídka',
+    'text_code' => "STRUKTURA ČISTÝCH POZIC PODLE RIZIKOVÝCH VAH",
     'setting' => [
         'nav_text' => 'Nastavení',
         'backup' => [

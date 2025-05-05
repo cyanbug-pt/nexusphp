@@ -34,7 +34,7 @@ return [
     'cancel' => 'Abandonner',
     'reset' => 'Reset',
     'anonymous' => 'Anonyme',
-    'infinite' => 'Infini',
+    'infinite' => 'Inf',
     'save' => 'Enregistrer',
     'country' => 'Pays',
     'city' => 'Ville',
@@ -44,6 +44,8 @@ return [
     'create' => 'Créer',
     'created_at_begin' => 'Créé au début',
     'created_at_end' => 'Créé à la fin',
+    'text_quote' => 'Devis',
+    'text_code' => "CODE",
     'setting' => [
         'nav_text' => 'Réglages',
         'backup' => [

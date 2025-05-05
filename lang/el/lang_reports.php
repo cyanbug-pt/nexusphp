@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Καμία έκθεση.",
+	'head_reports' => "Αναφορές",
+	'text_reports' => "Αναφορές",
+	'col_added' => "Προστέθηκε",
+	'col_reporter' => "Δημοσιογράφος",
+	'col_reporting' => "Αναφορά",
+	'col_type' => "Τύπος",
+	'col_reason' => "Λόγος",
+	'col_dealt_with' => "Συμφωνία Με",
+	'col_action' => "Πράξη.",
+	'text_yes' => "Ναι",
+	'text_no' => "Όχι",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Το torrent δεν υπάρχει ή έχει διαγραφεί.",
+	'text_user' => "Χρήστης",
+	'text_user_does_not_exist' => "Ο χρήστης δεν υπάρχει ή έχει διαγραφεί.",
+	'text_offer' => "Προσφορά",
+	'text_offer_does_not_exist' => "Η προσφορά δεν υπάρχει ή έχει διαγραφεί.",
+	'text_forum_post' => "Δημοσίευση Φόρουμ",
+	'text_post_does_not_exist' => "Η δημοσίευση του φόρουμ δεν υπάρχει ή έχει διαγραφεί.",
+	'text_post_id' => "Αναγνωριστικό Ανάρτησης ",
+	'text_of_topic' => " του Θέματος ",
+	'text_by' => " από ",
+	'text_comment' => "Σχόλιο",
+	'text_comment_does_not_exist' => "Το σχόλιο δεν υπάρχει ή έχει διαγραφεί.",
+	'text_of_torrent' => " του torrent ",
+	'text_of_offer' => " προσφοράς ",
+	'text_comment_id' => "Id Σχόλιο ",
+	'text_subtitle' => "Υπότιτλος",
+	'text_subtitle_does_not_exist' => "Ο υπότιτλος δεν υπάρχει ή έχει διαγραφεί.",
+	'text_for_torrent_id' => " για το ID torrent ",
+	'submit_set_dealt' => "Ορισμός Προσφοράς",
+	'submit_delete' => "Διαγραφή",
+);
+
+?>

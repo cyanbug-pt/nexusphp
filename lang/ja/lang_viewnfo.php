@@ -1,11 +1,13 @@
 <?php
 
-$lang_viewnfo = array (
-  'std_puke' => 'ああ、o',
-  'head_view_nfo' => 'NFOファイルを表示します',
-  'text_nfo_for' => 'NFOファイル：',
-  'title_dos_vy' => 'DOSスタイルを表示します',
-  'text_dos_vy' => 'DOSスタイル',
-  'title_windows_vy' => 'Windowsスタイルを表示します',
-  'text_windows_vy' => 'Windowsスタイル',
+$lang_viewnfo = array
+(
+	'std_puke' => "Puke",
+	'head_view_nfo' => "NFO ファイルを表示",
+	'text_nfo_for' => "NFO for",
+	'title_dos_vy' => "",
+	'text_dos_vy' => "DOS-vy",
+	'title_windows_vy' => "Latin-1: Inget socker tack!",
+	'text_windows_vy' => "Windows-vy"
 );
+?>

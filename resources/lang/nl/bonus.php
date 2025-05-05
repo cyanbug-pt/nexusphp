@@ -26,4 +26,10 @@ return [
         'medal_addition' => 'Medaille toevoeging',
     ],
     'not_enough' => 'Niet genoeg bonus! Vereist :require_bonus, je hebt momenteel alleen :now_bonus',
+    'msg_someone_loves_you' => "Iemand houdt van je",
+    'msg_you_have_been_given' => "Je hebt een cadeau gekregen van ",
+    'msg_after_tax' => " (na BTW is het ",
+    'msg_karma_points_by' => ") Karma punten door ",
+    'msg_personal_message_from' => "Persoonlijk bericht van ",
+    'msg_colon' => ": ",
 ];

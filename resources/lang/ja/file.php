@@ -1,8 +1,6 @@
 <?php
-
-return array (
-  'index' => 
-  array (
-    'page_title' => 'ファイルリスト',
-  ),
-);
+return [
+    'index' => [
+        'page_title' => 'ファイル',
+    ],
+];

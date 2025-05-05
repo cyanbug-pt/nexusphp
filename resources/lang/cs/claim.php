@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Poslední měsíc(:month):',
     'msg_subject' => ':měsíc uhrazení pohledávky',
-    'claim_total' => 'Celková částka torrentu nároku: <b>:total</b>',
-    'claim_reached_counts' => 'Dosažen počet torrentů: <b>:count</b>',
-    'claim_reached_summary' => 'Dosažen bonus za hodinu: <b>:bonus_per_hour</b>, průměr času (hodina): <b>:hours</b>, získejte bonus celkem: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Nedosažený torrent zbývá počítat: <b>:count</b>',
-    'claim_unreached_remove_counts' => 'Počet odstranění torrentu nedosaženo: <b>:count</b>',
-    'claim_unreached_summary' => 'Snížit bonus každého nedosaženého torrentu：<b>:deduct_per_torrent</b>, celkový odpočet: <b>:deduct_total</b>',
+    'claim_total' => 'Celková částka torrentu nároku: [b]:total[/b]',
+    'claim_reached_counts' => 'Dosažen počet torrentů: [b]:count[/b]',
+    'claim_reached_summary' => 'Dosažen bonus za hodinu: [b]:bonus_per_hour[/b], průměr času (hodina): [b]:hours[/b], získejte bonus celkem: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Nedosažený torrent zbývá počítat: [b]:count[/b]',
+    'claim_unreached_remove_counts' => 'Počet odstranění torrentu nedosaženo: [b]:count[/b]',
+    'claim_unreached_summary' => 'Snížit bonus každého nedosaženého torrentu：[b]:deduct_per_torrent[/b], celkový odpočet: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Jste si jisti, že se chcete vzdát nároku na tento torrent?',
     'add_claim' => 'Claim',

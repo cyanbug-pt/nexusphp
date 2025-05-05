@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Wenn aktiviert, können Benutzer mit Erlaubnis einen bestimmten Bonus festlegen, der Benutzern in Rechnung gestellt wird, die die Torrents herunterladen, wenn sie gesendet werden, default: Nein',
     'row_use_challenge_response_authentication' => 'Challenge-Response-Authentifizierung',
     'text_use_challenge_response_authentication_note' => 'Wenn aktiviert, werden beim Login keine Klartext-Passwörter übermittelt, empfohlen. Zukünftige Versionen werden diese Konfiguration entfernen und diese Funktion aktivieren.' ,
+    'row_complain_enabled' => 'Ob Beschwerden aktiviert werden sollen',
+    'row_complain_enabled_note' => 'default: "Ja"',
 );
 
 ?>

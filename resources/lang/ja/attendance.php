@@ -1,15 +1,14 @@
 <?php
 
-return array (
-  'have_not_attendance_yet' => 'まだ署名していません',
-  'target_date_can_no_be_retroactive' => '日付::日付を再署名することはできません',
-  'already_attendance' => 'サインイン',
-  'card_not_enough' => '不十分な再署名カード',
-  'ranking' => '今日のサインインランキング：<b>：ランキング</b>/<b>：カウント</b>',
-  'fields' => 
-  array (
-    'date' => '日付',
-    'points' => '魔法を獲得します',
-    'is_retroactive' => '再署名するかどうか',
-  ),
-);
+return [
+    'have_not_attendance_yet' => "まだ出席していません",
+    'target_date_can_no_be_retroactive' => '日付：:date は遡って使用できません',
+    'already_attendance' => '既に出欠しています',
+    'card_not_enough' => '出席カードが足りません',
+    'ranking' => "今日のランキング： <b>:ranking</b> / <b>:count</b>",
+    'fields' => [
+        'date' => '日付',
+        'points' => 'ボーナス獲得',
+        'is_retroactive' => '後退しています',
+    ],
+];

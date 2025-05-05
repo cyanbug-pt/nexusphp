@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Lorsque cette option est activée, les utilisateurs ayant la permission peuvent définir un certain montant de bonus à facturer aux utilisateurs qui téléchargent les torrents lorsqu\'ils sont envoyés, par défaut: non',
     'row_use_challenge_response_authentication' => 'Authentification Challenge-Response',
     'text_use_challenge_response_authentication_note' => 'Si activé, aucun mot de passe en texte brut ne sera transmis lors de la connexion, recommandé. Les prochaines versions supprimeront cette configuration et activeront cette fonctionnalité.' ,
+    'row_complain_enabled' => 'Activer ou non les plaintes',
+    'row_complain_enabled_note' => 'par défaut: "oui"',
 );
 
 ?>

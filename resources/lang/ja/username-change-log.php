@@ -1,15 +1,13 @@
 <?php
 
-return array (
-  'change_type' => 
-  array (
-    1 => 'ユーザー',
-    2 => '管理者',
-  ),
-  'labels' => 
-  array (
-    'username_old' => '古いユーザー名',
-    'username_new' => '新しいユーザー名',
-    'change_type' => 'タイプを変更します',
-  ),
-);
+return [
+    'change_type' => [
+        \App\Models\UsernameChangeLog::CHANGE_TYPE_USER => 'ユーザー',
+        \App\Models\UsernameChangeLog::CHANGE_TYPE_ADMIN => '管理者',
+    ],
+    'labels' => [
+        'username_old' => '古いユーザー名',
+        'username_new' => '新しいユーザー名',
+        'change_type' => '種類の変更',
+    ],
+];

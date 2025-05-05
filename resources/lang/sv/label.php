@@ -34,7 +34,7 @@ return [
     'cancel' => 'Avbryt',
     'reset' => 'Reset',
     'anonymous' => 'Anonym',
-    'infinite' => 'Oändlig',
+    'infinite' => 'Inf.',
     'save' => 'Spara',
     'country' => 'Land',
     'city' => 'Stad',
@@ -44,6 +44,8 @@ return [
     'create' => 'Skapa',
     'created_at_begin' => 'Skapad vid start',
     'created_at_end' => 'Skapad vid slutet',
+    'text_quote' => 'Offert',
+    'text_code' => "Kod",
     'setting' => [
         'nav_text' => 'Inställning',
         'backup' => [

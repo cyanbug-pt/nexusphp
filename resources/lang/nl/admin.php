@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Authenticatie codes',
         'oauth_refresh_token' => 'Tokens vernieuwen',
         'token' => 'Toegangs-tokens',
+        'oauth_provider' => 'Autorisatie provider',
+        'queue_monitor' => 'Wachtrij monitor',
     ],
     'resources' => [
         'agent_allow' => [

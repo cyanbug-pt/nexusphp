@@ -17,4 +17,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Herhaal de bewerking alstublieft niet!',
     'no_permission' => 'Geen toegang!',
+    'sort' => 'sorteer veld',
+    'order' => 'sorteer',
+    'asc' => 'oplopende volgorde',
+    'desc' => 'aflopende volgorde',
 ];

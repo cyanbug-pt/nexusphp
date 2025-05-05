@@ -1,14 +1,12 @@
 <?php
 
-return array (
-  'topic' => 
-  array (
-    'replied_notify_subject' => '投稿への新しい返信',
-    'replied_notify_body' => 'あなたの投稿:: topic_subjectは新しい返信を受け取りました。',
-  ),
-  'post' => 
-  array (
-    'edited_notify_subject' => '返信を投稿しました',
-    'edited_notify_body' => '投稿での返信:: topic_subjectは:: editorによって変更されました。',
-  ),
-);
+return [
+    'topic' => [
+        'replied_notify_subject' => 'トピックに新しい返信があります',
+        'replied_notify_body' => 'トピック：:topic_subjectに新しい返信があります。',
+    ],
+    'post' => [
+        'edited_notify_subject' => '返信が変更されました',
+        'edited_notify_body' => 'トピックへの返信:topic_subjectは:editorによって変更されました。',
+    ]
+];

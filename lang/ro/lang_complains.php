@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Vezi jurnalul interdicțiilor',
     'reply_notify_subject' => 'Reclamație răspunsă',
     'reply_notify_body' => 'Ai un răspuns la reclamația ta de pe site-ul %s, apasă aici <a href="%s" target="_blank">pentru a-l vedea</a>.',
+    'complain_not_enabled' => 'Plângerea nu este activată',
 ];

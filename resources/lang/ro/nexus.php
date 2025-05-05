@@ -17,4 +17,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Vă rugăm să nu repetați operațiunea!',
     'no_permission' => 'Nici o permisiune!',
+    'sort' => 'câmp sortare',
+    'order' => 'sortare',
+    'asc' => 'Ordine ascendentă',
+    'desc' => 'Comanda descrescatoare',
 ];

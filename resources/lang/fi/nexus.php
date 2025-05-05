@@ -17,4 +17,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Älkää toistako toimenpidettä!',
     'no_permission' => 'Ei käyttöoikeutta!',
+    'sort' => 'lajittele kenttä',
+    'order' => 'lajittele',
+    'asc' => 'nouseva järjestys',
+    'desc' => 'laskeva järjestys',
 ];

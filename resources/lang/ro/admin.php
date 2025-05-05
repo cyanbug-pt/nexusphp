@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Coduri de autentificare',
         'oauth_refresh_token' => 'Reîmprospătare jetoane',
         'token' => 'Token-uri de acces',
+        'oauth_provider' => 'Furnizor de autorizare',
+        'queue_monitor' => 'Monitorul de coadă',
     ],
     'resources' => [
         'agent_allow' => [

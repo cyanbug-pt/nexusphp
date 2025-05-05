@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Auth koodit',
         'oauth_refresh_token' => 'Päivitä tokenit',
         'token' => 'Pääsy poletteihin',
+        'oauth_provider' => 'Valtuutuksen tarjoaja',
+        'queue_monitor' => 'Jonon monitori',
     ],
     'resources' => [
         'agent_allow' => [

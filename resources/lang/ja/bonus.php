@@ -1,31 +1,35 @@
 <?php
 
-return array (
-  'comment_buy_medal' => 'コスト：ボーナスマジック購入：Medal_Name',
-  'comment_buy_attendance_card' => 'コスト：ボーナスマジックは、1つの再署名カードを購入しました',
-  'comment_buy_temporary_invite' => '支出：ボーナスマジック購入：一時的な招待状をカウントします',
-  'comment_buy_rainbow_id' => '支出：購入したボーナスマジック：空の虹のID',
-  'comment_buy_change_username_card' => 'コスト：ボーナスマジックは名前の変更カードを購入しました',
-  'comment_gift_medal' => '支出：ボーナスマジック購入：medal_nameとそれを与えた：to_username',
-  'comment_buy_torrent' => '支出：ボーナスマジック購入シード：： torrent_id',
-  'comment_torrent_be_downloaded' => 'ゲインはシードダウンロードから来ます：username（uid ：： uid）',
-  'table_thead' => 
-  array (
-    'reward_type' => '報酬タイプ',
-    'count' => '量',
-    'size' => '音量',
-    'a_value' => '値',
-    'bonus_base' => '基本的な魔法',
-    'factor' => '係数',
-    'got_bonus' => '魔法を獲得します',
-    'total' => '合計',
-  ),
-  'reward_types' => 
-  array (
-    'basic' => '基本的な報酬',
-    'harem_addition' => 'ハーレムボーナス',
-    'official_addition' => '公式ボーナス',
-    'medal_addition' => 'メダルボーナス',
-  ),
-  'not_enough' => '不十分な魔法！要求：require_bonus、あなたは:: now_bonusのみを持っています',
-);
+return [
+    'comment_buy_medal' => '支出:bonus buy :medal_name',
+    'comment_buy_attendance_card' => ':bonus bonus buy one attential card.',
+    'comment_buy_temporary_invite' => ':bonus bonus buy :count temporary invite',
+    'comment_buy_rainbow_id' => ':bonus bonus buy :duration days レインボーID を使う',
+    'comment_buy_change_username_card' => 'USend :bonus bonus buy change username card',
+    'comment_gift_medal' => ':bonus bonus buy :medal_name and gift to :to_username',
+    'comment_buy_torrent' => ':bonus bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => ':username(UID:uid)がダウンロードしたトレントから収益を得ます。',
+    'table_thead' => [
+        'reward_type' => '報酬タイプ',
+        'count' => 'カウント',
+        'size' => 'サイズ',
+        'a_value' => '値',
+        'bonus_base' => '基本ボーナス',
+        'factor' => '係数',
+        'got_bonus' => 'ボーナス獲得',
+        'total' => '合計',
+    ],
+    'reward_types' => [
+        'basic' => '基本報酬',
+        'harem_addition' => 'ハーレムの追加',
+        'official_addition' => '公式追加',
+        'medal_addition' => '勲章追加',
+    ],
+    'not_enough' => 'ボーナスが足りません！:require_bonusが必要です。現在のボーナスは:now_bonです。',
+    'msg_someone_loves_you' => "誰かがあなたを愛しています",
+    'msg_you_have_been_given' => "以下のギフトが与えられました ",
+    'msg_after_tax' => " (税金の後 ",
+    'msg_karma_points_by' => ") カルマポイント ",
+    'msg_personal_message_from' => "個人からのメッセージ ",
+    'msg_colon' => ": ",
+];

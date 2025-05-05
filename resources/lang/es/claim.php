@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Resultado de reclamación el último mes(:month):',
     'msg_subject' => ':month liquidación de reclamación',
-    'claim_total' => 'Reclamar un total del torrent: <b>:total</b>',
-    'claim_reached_counts' => 'Cuentas de torrent alcanzadas: <b>:counts</b>',
-    'claim_reached_summary' => 'Obtener bonificación de torrent alcanzado por hora: <b>:bonus_per_hour</b>, promedio de tiempo de semilla (hora): <b>:horas</b>, obtener bonificación total: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Unreached torrent remain counts: <b>:counts</b>',
-    'claim_unreached_remove_counts' => 'Cuentas de eliminación de torrent no alcanzadas: <b>:counts</b>',
-    'claim_unreached_summary' => 'Deducir bonificación por torrent：<b>:deduct_per_torrent</b>, total deduct: <b>:deduct_total</b>',
+    'claim_total' => 'Reclamar un total del torrent: [b]:total[/b]',
+    'claim_reached_counts' => 'Cuentas de torrent alcanzadas: [b]:counts[/b]',
+    'claim_reached_summary' => 'Obtener bonificación de torrent alcanzado por hora: [b]:bonus_per_hour[/b], promedio de tiempo de semilla (hora): [b]:horas[/b], obtener bonificación total: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Unreached torrent remain counts: [b]:counts[/b]',
+    'claim_unreached_remove_counts' => 'Cuentas de eliminación de torrent no alcanzadas: [b]:counts[/b]',
+    'claim_unreached_summary' => 'Deducir bonificación por torrent：[b]:deduct_per_torrent[/b], total deduct: [b]:deduct_total[/b]',
 
     'confirm_give_up' => '¿Estás seguro de que quieres dejar de reclamar este torrent?',
     'add_claim' => 'Claim',

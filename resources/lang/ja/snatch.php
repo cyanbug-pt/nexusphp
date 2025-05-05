@@ -1,9 +1,8 @@
 <?php
 
-return array (
-  'share_ratio_infinity' => '無制限',
-  'index' => 
-  array (
-    'page_title' => '完了しました',
-  ),
-);
+return [
+    'share_ratio_infinity' => 'Inf ファイル.',
+    'index' => [
+        'page_title' => '<unk>',
+    ],
+];

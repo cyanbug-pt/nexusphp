@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Non hai effettuato l'accesso!",
+	'p_error' => "Errore:",
+	'p_after_logged_in' => "La pagina che hai cercato di visualizzare può essere utilizzata solo quando sei connesso.",
+	'p_need_cookies_enables' => "<b>Nota</b>: È necessario abilitare i cookie per accedere o cambiare lingua.",
+	'p_fail_ban' => "login falliti in una riga comporteranno il divieto del tuo ip!",
+	'p_you_have' => "Hai",
+	'p_remaining_tries' => "tentativi rimanenti.",
+	'p_no_account_signup' => "Non hai un account? <a href=\"signup.php\"><b>Registrati</b></a> adesso!",
+	'p_forget_pass_recover' => "Dimentica la password? Recupera la tua password <a href=\"recover.php\"><b>via email</b></a>",
+    'p_account_banned' => "Account bandito? visualizza il motivo su<a href=\"user-ban-log.php\"><b>user ban log</b></a>",
+	'p_resend_confirm' => "Non hai ricevuto email di conferma o il link di conferma è rotto? <a href=\"confirm_resend.php\"><b>Invia di nuovo email di conferma</b></a>",
+	'rowhead_username' => "Utente:",
+	'rowhead_password' => "Password,",
+	'button_login' => "Accedi!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Auto Logout:",
+	'text_restrict_ip' => "Limita IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Mi disconnetti dopo 15 minuti",
+	'checkbox_restrict_ip' => " Limita la sessione al mio IP",
+	'checkbox_ssl' => " Sfoglia il sito web con crittografia SSL (browser web)",
+	'checkbox_ssl_tracker' => " Connetti tracker con crittografia SSL (client BitTorrent)",
+	'text_advanced_options' => "Opzioni Avanzate:",
+	'text_helpbox' => "Helpbox",
+	'text_helpbox_note' => "Hai problemi nella registrazione o nel login? Lascia un messaggio qui",
+	'text_message' => "Messaggio: ",
+	'sumbit_shout' => "grida",
+	'submit_clear' => "cancella",
+	'text_select_lang' => "Seleziona Lingua Del Sito: ",
+	'head_login' => "Accedi",
+    'rowhead_two_step_code' => 'Autenticazione A Due Fattori',
+    'two_step_code_tooltip' => 'Se abilitato deve essere compilato',
+    'text_complain' => 'Canale Di Reclamo',
+);
+
+?>

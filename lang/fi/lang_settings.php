@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Kun käytössä, käyttäjät joilla on lupa voi asettaa tietyn määrän bonus veloitetaan käyttäjiltä, jotka lataavat torrentteja kun ne lähetetään, oletus: ei',
     'row_use_challenge_response_authentication' => 'Haaste-Vastaus Todennus',
     'text_use_challenge_response_authentication_note' => 'Jos käytössä, plaintext-salasanoja ei lähetetä kirjautumisen yhteydessä, suositellaan. Tulevat julkaisut poistavat tämän määrityksen ja ottavat käyttöön tämän ominaisuuden.' ,
+    'row_complain_enabled' => 'Otetaanko valitukset käyttöön',
+    'row_complain_enabled_note' => 'oletus: "kyllä"',
 );
 
 ?>

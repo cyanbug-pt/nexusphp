@@ -34,7 +34,7 @@ return [
     'cancel' => 'Отмена',
     'reset' => 'Reset',
     'anonymous' => 'Анонимный',
-    'infinite' => 'Бесконечный',
+    'infinite' => 'Inf.',
     'save' => 'Сохранить',
     'country' => 'Страна',
     'city' => 'Город',
@@ -44,6 +44,8 @@ return [
     'create' => 'Создать',
     'created_at_begin' => 'Создано в начале',
     'created_at_end' => 'Создано в конце',
+    'text_quote' => 'Цитата',
+    'text_code' => "КОД",
     'setting' => [
         'nav_text' => 'Настройка',
         'backup' => [

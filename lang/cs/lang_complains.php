@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Zobrazit záznam o zákazu',
     'reply_notify_subject' => 'Stížnost odpověděla',
     'reply_notify_body' => 'Máte odpověď na vaši stížnost na stránce %s, klikněte zde <a href="%s" target="_blank">a uvidíte ji</a>.',
+    'complain_not_enabled' => 'Stížnost není povolena',
 ];

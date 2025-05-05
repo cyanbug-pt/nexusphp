@@ -34,7 +34,7 @@ return [
     'cancel' => 'Annuller',
     'reset' => 'Reset',
     'anonymous' => 'Anonym',
-    'infinite' => 'Uendelig',
+    'infinite' => 'Inf.',
     'save' => 'Gem',
     'country' => 'Land',
     'city' => 'By',
@@ -44,6 +44,8 @@ return [
     'create' => 'Opret',
     'created_at_begin' => 'Oprettet i begyndelsen',
     'created_at_end' => 'Oprettet i slutningen',
+    'text_quote' => 'Tilbud',
+    'text_code' => "Kode",
     'setting' => [
         'nav_text' => 'Indstilling',
         'backup' => [

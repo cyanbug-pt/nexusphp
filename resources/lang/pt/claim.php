@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Solicitar pagamento no mês passado(:mês):',
     'msg_subject' => ':mês de reivindicação de liquidação',
-    'claim_total' => 'Reivindicar o total do torrent: <b>:total</b>',
-    'claim_reached_counts' => 'Número de torrents alcançados: <b>:count</b>',
-    'claim_reached_summary' => 'Torrent alcançado tem bônus por hora: <b>:bonus_per_hour</b>, média de semente (hora): <b>:hours</b>, receba o total de bônus: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Torrent não alcançado permanece a contagem: <b>:count</b>',
-    'claim_unreached_remove_counts' => 'Contagem para remover torrents não atingidos: <b>:count</b>',
-    'claim_unreached_summary' => 'Deduzir bônus a cada torrent não alcançado：<b>:deduct_per_torrent</b>, deduzir total: <b>:deduct_total</b>',
+    'claim_total' => 'Reivindicar o total do torrent: [b]:total[/b]',
+    'claim_reached_counts' => 'Número de torrents alcançados: [b]:count[/b]',
+    'claim_reached_summary' => 'Torrent alcançado tem bônus por hora: [b]:bonus_per_hour[/b], média de semente (hora): [b]:hours[/b], receba o total de bônus: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Torrent não alcançado permanece a contagem: [b]:count[/b]',
+    'claim_unreached_remove_counts' => 'Contagem para remover torrents não atingidos: [b]:count[/b]',
+    'claim_unreached_summary' => 'Deduzir bônus a cada torrent não alcançado：[b]:deduct_per_torrent[/b], deduzir total: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Você tem certeza que deseja desistir de reivindicar este torrent?',
     'add_claim' => 'Claim',

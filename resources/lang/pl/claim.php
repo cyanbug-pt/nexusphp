@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Wynik rozliczenia z ostatniego miesiąca (:month):',
     'msg_subject' => ':month roszczenie',
-    'claim_total' => 'Zgłoś wszystkie torrenty: <b>:suma</b>',
-    'claim_reached_counts' => 'Osiągnięto liczbę torrentów: <b>:count</b>',
-    'claim_reached_summary' => 'Osiągnięto bonus torrenta na godzinę: <b>:bonus_per_hour</b>, średni czas ziarenka (godzina): <b>:hours</b>, uzyskaj sumę premii: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Nieosiągnięty torrent pozostaje liczony: <b>:count</b>',
-    'claim_unreached_remove_counts' => 'Nieosiągnięta liczba usuwania torrent: <b>:count</b>',
-    'claim_unreached_summary' => 'Odlicz bonus każdego nieosiągniętego torrenta：<b>:deduct_per_torrent</b>, całkowitym odliczeniem: <b>:deduct_total</b>',
+    'claim_total' => 'Zgłoś wszystkie torrenty: [b]:suma[/b]',
+    'claim_reached_counts' => 'Osiągnięto liczbę torrentów: [b]:count[/b]',
+    'claim_reached_summary' => 'Osiągnięto bonus torrenta na godzinę: [b]:bonus_per_hour[/b], średni czas ziarenka (godzina): [b]:hours[/b], uzyskaj sumę premii: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Nieosiągnięty torrent pozostaje liczony: [b]:count[/b]',
+    'claim_unreached_remove_counts' => 'Nieosiągnięta liczba usuwania torrent: [b]:count[/b]',
+    'claim_unreached_summary' => 'Odlicz bonus każdego nieosiągniętego torrenta：[b]:deduct_per_torrent[/b], całkowitym odliczeniem: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Czy na pewno chcesz zrezygnować z pobierania tego torrentu?',
     'add_claim' => 'Claim',

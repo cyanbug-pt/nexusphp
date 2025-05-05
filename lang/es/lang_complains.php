@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Ver registro de bloqueo',
     'reply_notify_subject' => 'Queja respondida',
     'reply_notify_body' => 'Tienes una respuesta a tu reclamo en el sitio %s, haz clic aquí <a href="%s" target="_blank">para verla</a>.',
+    'complain_not_enabled' => 'Queja no habilitada',
 ];

@@ -1,23 +1,26 @@
 <?php
 
-$lang_userhistory = array (
-  'std_error' => '間違い',
-  'std_permission_denied' => '許可はありません',
-  'std_no_posts_found' => '投稿はありません',
-  'head_posts_history' => '履歴を投稿します',
-  'text_posts_history_for' => 'ユーザー投稿履歴 - ',
-  'text_forum' => '<b>フォーラム：</b>',
-  'text_topic' => '<b>件名：</b>',
-  'text_post' => '<b>投稿：</b>',
-  'text_new' => '新しい！',
-  'text_last_edited' => 'ついに',
-  'text_at' => '編集',
-  'std_no_comments_found' => 'コメントは見つかりませんでした',
-  'head_comments_history' => 'コメント履歴',
-  'text_comments_history_for' => 'ユーザーコメント履歴 - ',
-  'text_torrent' => '<b>シード：</b>',
-  'text_comment' => '<b>コメント：',
-  'std_history_error' => '間違い',
-  'std_unkown_action' => '未知の動作',
-  'std_invalid_or_no_query' => 'このアイテムが無効または持っていない。',
+$lang_userhistory = array
+(
+	'std_error' => "エラー",
+	'std_permission_denied' => "権限がありません",
+	'std_no_posts_found' => "投稿が見つかりません",
+	'head_posts_history' => "投稿履歴",
+	'text_posts_history_for' => "投稿履歴： ",
+	'text_forum' => "<b>フォーラム:&nbsp;</b>",
+	'text_topic' => "<b>トピック:&nbsp;</b>",
+	'text_post' => "<b>投稿:&nbsp;</b>",
+	'text_new' => "新着！",
+	'text_last_edited' => "最終編集者: ",
+	'text_at' => " に ",
+	'std_no_comments_found' => "コメントが見つかりません",
+	'head_comments_history' => "コメント履歴",
+	'text_comments_history_for' => "コメント履歴 ",
+	'text_torrent' => "<b>トレント:&nbsp;</b>",
+	'text_comment' => "<b>コメント:&nbsp;",
+	'std_history_error' => "履歴エラー",
+	'std_unkown_action' => "不明なアクション",
+	'std_invalid_or_no_query' => "無効またはクエリがありません。"
 );
+
+?>

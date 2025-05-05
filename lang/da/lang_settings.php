@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Når aktiveret, kan brugere med tilladelse indstille en vis mængde bonus, der skal debiteres brugere, der downloader torrents når de sendes, standard: nej',
     'row_use_challenge_response_authentication' => 'Challenge-Response Godkendelse',
     'text_use_challenge_response_authentication_note' => 'Hvis aktiveret, vil ingen klartekst adgangskoder blive sendt ved login, anbefales. Fremtidige udgivelser vil fjerne denne konfiguration og aktivere denne funktion.' ,
+    'row_complain_enabled' => 'Om klager skal aktiveres',
+    'row_complain_enabled_note' => 'default: "ja"',
 );
 
 ?>

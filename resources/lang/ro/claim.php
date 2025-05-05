@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Revendică rezultatul din ultima lună (:lună):',
     'msg_subject' => ':month Reclamație',
-    'claim_total' => 'Revendicare totală torrent: <b>:total</b>',
-    'claim_reached_counts' => 'Numărul torentelor atinse: <b>:count</b>',
-    'claim_reached_summary' => 'Primește bonus torrent pe oră: <b>:bonus_per_hour</b>, media timpului de seed (oră): <b>:hours</b>, obține totalul bonus_total <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Torrentul neatins rămâne cont: <b>:count</b>',
-    'claim_unreached_remove_counts' => 'Ștergerea torentului nereușită: <b>:count</b>',
-    'claim_unreached_summary' => 'Deduce-bonus pentru fiecare torrent inatins：<b>:deduct_per_torrent</b>, deducere totală: <b>:deduct_total</b>',
+    'claim_total' => 'Revendicare totală torrent: [b]:total[/b]',
+    'claim_reached_counts' => 'Numărul torentelor atinse: [b]:count[/b]',
+    'claim_reached_summary' => 'Primește bonus torrent pe oră: [b]:bonus_per_hour[/b], media timpului de seed (oră): [b]:hours[/b], obține totalul bonus_total [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Torrentul neatins rămâne cont: [b]:count[/b]',
+    'claim_unreached_remove_counts' => 'Ștergerea torentului nereușită: [b]:count[/b]',
+    'claim_unreached_summary' => 'Deduce-bonus pentru fiecare torrent inatins：[b]:deduct_per_torrent[/b], deducere totală: [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Ești sigur că vrei să renunți să revendici acest torent?',
     'add_claim' => 'Claim',

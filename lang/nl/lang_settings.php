@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Wanneer ingeschakeld, kunnen gebruikers met toestemming een bepaalde hoeveelheid bonus in rekening brengen voor gebruikers die de torrents downloaden wanneer ze worden verzonden, standaard: geen',
     'row_use_challenge_response_authentication' => 'Challenge-Response Authenticatie',
     'text_use_challenge_response_authentication_note' => 'Indien ingeschakeld, worden er geen onversleutelde wachtwoorden verstuurd bij het inloggen, aanbevolen. Toekomstige releases zullen deze configuratie verwijderen en deze functie inschakelen.' ,
+    'row_complain_enabled' => 'Of klachten moeten worden ingeschakeld',
+    'row_complain_enabled_note' => 'standaard: "ja"',
 );
 
 ?>

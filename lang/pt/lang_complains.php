@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Ver registro de banimento',
     'reply_notify_subject' => 'Reclamação respondida',
     'reply_notify_body' => 'Você tem uma resposta para a sua reclamação no site %s, clique aqui <a href="%s" target="_blank">para vê-la</a>.',
+    'complain_not_enabled' => 'Reclamação não habilitada',
 ];

@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'När den är aktiverad kan användare med tillstånd ange en viss mängd bonus som ska debiteras användare som laddar ner torrents när de skickas, default: nej',
     'row_use_challenge_response_authentication' => 'Challenge-Response Authentication',
     'text_use_challenge_response_authentication_note' => 'Om aktiverad, kommer inga klartext lösenord att överföras vid inloggning, rekommenderas. Kommande utgåvor kommer att ta bort denna konfiguration och aktivera denna funktion.' ,
+    'row_complain_enabled' => 'Om du vill aktivera klagomål',
+    'row_complain_enabled_note' => 'default: "ja"',
 );
 
 ?>

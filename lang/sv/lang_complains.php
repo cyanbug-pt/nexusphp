@@ -29,4 +29,5 @@ $lang_complains = [
     'text_view_band_log' => 'Visa bannlysningslogg',
     'reply_notify_subject' => 'Klagomål svarade',
     'reply_notify_body' => 'Du har ett svar på ditt klagomål på webbplatsen %s, klicka här <a href="%s" target="_blank">för att se den</a>.',
+    'complain_not_enabled' => 'Klagomålet är inte aktiverat',
 ];

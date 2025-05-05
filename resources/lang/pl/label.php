@@ -34,7 +34,7 @@ return [
     'cancel' => 'Anuluj',
     'reset' => 'Reset',
     'anonymous' => 'Anonimowe',
-    'infinite' => 'Nieskończone',
+    'infinite' => 'W imieniu Komisji',
     'save' => 'Zapisz',
     'country' => 'W związku z powyższym Komisja stwierdza, że w okresie objętym dochodzeniem przeglądowym przywóz produktu objętego postępowaniem z ChRL nie mógł zostać objęty środkami antydumpingowymi.',
     'city' => 'Miasto',
@@ -44,6 +44,8 @@ return [
     'create' => 'Utwórz',
     'created_at_begin' => 'Utworzono na początku',
     'created_at_end' => 'Utworzono na końcu',
+    'text_quote' => 'Oferta',
+    'text_code' => "KOD",
     'setting' => [
         'nav_text' => 'Ustawienie',
         'backup' => [

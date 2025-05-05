@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Δεν είστε συνδεδεμένοι!",
+	'p_error' => "Σφάλμα:",
+	'p_after_logged_in' => "Η σελίδα που προσπαθήσατε να δείτε μπορεί να χρησιμοποιηθεί μόνο όταν είστε συνδεδεμένοι.",
+	'p_need_cookies_enables' => "<b>Σημείωση</b>: Χρειάζεστε cookies ενεργοποιημένα για να συνδεθείτε ή να αλλάξετε γλώσσα.",
+	'p_fail_ban' => "οι αποτυχημένες συνδέσεις σε μια σειρά θα έχουν ως αποτέλεσμα την απαγόρευση του IP σας!",
+	'p_you_have' => "Έχετε",
+	'p_remaining_tries' => "εναπομείναντες προσπάθειες.",
+	'p_no_account_signup' => "Don't have an account? <a href=\"signup.php\"><b>Sign up</b></a> right now!",
+	'p_forget_pass_recover' => "Ξεχάστε τον κωδικό πρόσβασής σας? Ανάκτηση του κωδικού σας <a href=\"recover.php\"><b>μέσω email</b></a>",
+    'p_account_banned' => "Ο λογαριασμός απαγορεύθηκε? λόγος προβολής στο αρχείο καταγραφής απαγόρευσης<a href=\"user-ban-log.php\"><b></b></a>",
+	'p_resend_confirm' => "Δεν έλαβε email επιβεβαίωσης ή ο σύνδεσμος επιβεβαίωσης είναι σπασμένος? <a href=\"confirm_resend.php\"><b>Αποστολή email επιβεβαίωσης ξανά</b></a>",
+	'rowhead_username' => "Όνομα Χρήστη:",
+	'rowhead_password' => "Κωδικός:",
+	'button_login' => "Σύνδεση!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Αυτόματη Αποσύνδεση:",
+	'text_restrict_ip' => "Περιορισμός IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Αποσυνδεθείτε μετά από 15 λεπτά",
+	'checkbox_restrict_ip' => " Περιορισμός συνεδρίας στην IP μου",
+	'checkbox_ssl' => " Περιηγηθείτε στην ιστοσελίδα με κρυπτογράφηση SSL (πρόγραμμα περιήγησης)",
+	'checkbox_ssl_tracker' => " Σύνδεση ιχνηλάτη με κρυπτογράφηση SSL (BitTorrent client)",
+	'text_advanced_options' => "Προχωρημένες Επιλογές:",
+	'text_helpbox' => "Helpbox",
+	'text_helpbox_note' => "Έχετε πρόβλημα στην εγγραφή ή σύνδεση? Αφήστε ένα μήνυμα εδώ",
+	'text_message' => "Μήνυμα: ",
+	'sumbit_shout' => "shout",
+	'submit_clear' => "καθαρισμός",
+	'text_select_lang' => "Επιλογή Γλώσσας Ιστοσελίδας: ",
+	'head_login' => "Είσοδος",
+    'rowhead_two_step_code' => 'Έλεγχος Ταυτότητας Δύο Παραγόντων',
+    'two_step_code_tooltip' => 'Εάν ενεργοποιηθεί πρέπει να συμπληρωθεί',
+    'text_complain' => 'Κανάλι Καταγγελίας',
+);
+
+?>

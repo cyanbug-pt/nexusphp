@@ -814,6 +814,8 @@ $lang_settings = array
     'text_paid_torrent_enabled_note' => 'Pokud je povoleno, uživatelé s oprávněním mohou nastavit určitou výši bonusu, který bude účtován uživatelům, kteří si stáhnou torrenty při odeslání, výchozí: ne',
     'row_use_challenge_response_authentication' => 'Ověření odpovědi na výzvu',
     'text_use_challenge_response_authentication_note' => 'Pokud je povoleno, při přihlášení nebudou přenášena žádná klíčová hesla. Budoucí vydání tuto konfiguraci odstraní a povolí tuto funkci.' ,
+    'row_complain_enabled' => 'Zda povolit stížnosti',
+    'row_complain_enabled_note' => 'výchozí: "ano"',
 );
 
 ?>

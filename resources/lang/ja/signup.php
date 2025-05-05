@@ -1,8 +1,8 @@
 <?php
 
-return array (
-  'passwords_unmatched' => '2回入力されたパスワードは一貫性がありません！もう一度やり直してください。',
-  'password_too_short' => '申し訳ありませんが、パスワードが短すぎます（少なくとも6文字）',
-  'password_too_long' => '申し訳ありませんが、パスワードが長すぎます（最大40文字）',
-  'password_equals_username' => '申し訳ありませんが、ユーザー名とパスワードは同じではありません。',
-);
+return [
+    'passwords_unmatched' => "パスワードが一致しませんでした！タイプミスがありました。もう一度やり直してください。",
+    'password_too_short' => "パスワードが短すぎます（最小文字数は6文字）",
+    'password_too_long' => "パスワードが長すぎます（最大40文字）",
+    'password_equals_username' => "申し訳ありませんが、パスワードはユーザー名と同じにできません。",
+];

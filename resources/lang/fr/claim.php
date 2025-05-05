@@ -17,12 +17,12 @@ return [
 
     'msg_title' => 'Résultat de la demande de règlement le mois dernier(:mois):',
     'msg_subject' => 'règlement de réclamation de :month',
-    'claim_total' => 'Réclamer le total du torrent : <b>:total</b>',
-    'claim_reached_counts' => 'Nombre de torrents atteints: <b>:count</b>',
-    'claim_reached_summary' => 'Bonus de gain de torrent atteint par heure: <b>:bonus_per_hour</b>, durée moyenne de la seed (heure): <b>:hours</b>, gain de bonus total: <b>:bonus_total</b>',
-    'claim_unreached_remain_counts' => 'Nombre de torrents restants non atteints: <b>:count</b>',
-    'claim_unreached_remove_counts' => 'Nombre de suppressions de torrent non atteint : <b>:count</b>',
-    'claim_unreached_summary' => 'Déduire le bonus à chaque torrent：<b>:deduct_per_torrent</b>, total déduit : <b>:deduct_total</b>',
+    'claim_total' => 'Réclamer le total du torrent : [b]:total[/b]',
+    'claim_reached_counts' => 'Nombre de torrents atteints: [b]:count[/b]',
+    'claim_reached_summary' => 'Bonus de gain de torrent atteint par heure: [b]:bonus_per_hour[/b], durée moyenne de la seed (heure): [b]:hours[/b], gain de bonus total: [b]:bonus_total[/b]',
+    'claim_unreached_remain_counts' => 'Nombre de torrents restants non atteints: [b]:count[/b]',
+    'claim_unreached_remove_counts' => 'Nombre de suppressions de torrent non atteint : [b]:count[/b]',
+    'claim_unreached_summary' => 'Déduire le bonus à chaque torrent：[b]:deduct_per_torrent[/b], total déduit : [b]:deduct_total[/b]',
 
     'confirm_give_up' => 'Êtes-vous sûr de vouloir renoncer à revendiquer ce torrent?',
     'add_claim' => 'Claim',

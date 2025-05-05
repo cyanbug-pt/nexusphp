@@ -26,4 +26,10 @@ return [
         'medal_addition' => 'Mediální přidání',
     ],
     'not_enough' => 'Nedostatek bonusu! Vyžaduje :require_bonus, v současné době máte: :now_bonus',
+    'msg_someone_loves_you' => "Někdo tě miluje",
+    'msg_you_have_been_given' => "Dostali jste dárek ",
+    'msg_after_tax' => " (po zdanění ",
+    'msg_karma_points_by' => ") Karma body od ",
+    'msg_personal_message_from' => "Osobní zpráva od ",
+    'msg_colon' => ": ",
 ];

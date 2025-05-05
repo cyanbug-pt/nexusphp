@@ -1,7 +1,7 @@
 <?php
 
-return array (
-  'label' => 'pt-gen',
-  'tooltip' => ':: Sitesからのリンク',
-  'btn_get_desc' => '紹介を受けてください',
-);
+return [
+    'label' => 'PT-Gen',
+    'tooltip' => 'リンクは：:sites から来ています ',
+    'btn_get_desc' => 'desc を取得',
+];

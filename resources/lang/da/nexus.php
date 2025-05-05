@@ -17,4 +17,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Vær venlig ikke at gentage operationen!',
     'no_permission' => 'Ingen tilladelse!',
+    'sort' => 'sortere felt',
+    'order' => 'sortér',
+    'asc' => 'stigende rækkefølge',
+    'desc' => 'faldende rækkefølge',
 ];

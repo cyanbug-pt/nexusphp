@@ -1,25 +1,28 @@
 <?php
 
-$lang_cheaterbox = array (
-  'std_oho' => 'ああ！',
-  'std_no_suspect_detected' => '不正行為の容疑者は検出されていません。',
-  'head_cheaterbox' => '詐欺師',
-  'text_cheaterbox' => 'Cheater <font class = striking> beta </font>',
-  'col_added' => '時間',
-  'col_suspect' => '容疑者',
-  'col_hit' => '頻度',
-  'col_torrent' => 'シード',
-  'col_ul' => 'アップロード',
-  'col_dl' => 'ダウンロード',
-  'col_ann_time' => '報告時間',
-  'col_seeders' => 'シードメーカー',
-  'col_leechers' => 'ダウンローダー',
-  'col_comment' => '述べる',
-  'col_dealt_with' => '対処する',
-  'col_action' => '行動',
-  'text_torrent_does_not_exist' => '種子は存在しないか、削除されていません',
-  'text_yes' => 'はい',
-  'text_no' => 'いいえ',
-  'submit_set_dealt' => '処理されたまま設定します',
-  'submit_delete' => '消去',
+$lang_cheaterbox = array
+(
+	'std_oho' => "Oho!",
+	'std_no_suspect_detected' => "まだ容疑者が検出されていません。",
+	'head_cheaterbox' => "Cheaterbox",
+	'text_cheaterbox' => "Cheaterbox <font class=striking>ベータ</font>",
+	'col_added' => "追加しました",
+	'col_suspect' => "容疑者",
+	'col_hit' => "ヒット",
+	'col_torrent' => "Torrent",
+	'col_ul' => "UL",
+	'col_dl' => "DL",
+	'col_ann_time' => "An. Time",
+	'col_seeders' => "Seeders",
+	'col_leechers' => "Leechers",
+	'col_comment' => "コメント",
+	'col_dealt_with' => "送金する",
+	'col_action' => "Act.",
+	'text_torrent_does_not_exist' => "Torrent が存在しないか削除されます",
+	'text_yes' => "はい",
+	'text_no' => "いいえ",
+	'submit_set_dealt' => "送信済みを設定",
+	'submit_delete' => "削除"
 );
+
+?>

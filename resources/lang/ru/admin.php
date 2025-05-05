@@ -43,6 +43,8 @@ return [
         'oauth_auth_code' => 'Коды авторизации',
         'oauth_refresh_token' => 'Обновить токены',
         'token' => 'Маркеры доступа',
+        'oauth_provider' => 'Провайдер авторизации',
+        'queue_monitor' => 'Монитор очереди',
     ],
     'resources' => [
         'agent_allow' => [
