@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Invited user has registered",
     'msg_user_you_invited' => "The user you invited ",
     'msg_has_registered' => " has registered just now.",
+    'user_is_disabled' => 'User: :username(ID: :user_id) is disabled.',
+    'user_is_not_confirmed' => 'User: :username(ID: :user_id) not confirmed.',
 ];

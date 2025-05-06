@@ -109,6 +109,6 @@ return [
     'msg_invited_user_has_registered' => "你邀请的用户已注册",
     'msg_user_you_invited' => "你邀请的用户 ",
     'msg_has_registered' => " 刚刚已注册。",
-    'user_is_not_disabled' => '用户：:username(ID: :user_id) 已被封禁',
+    'user_is_disabled' => '用户：:username(ID: :user_id) 已被封禁',
     'user_is_not_confirmed' => '用户：:username(ID: :user_id) 未确认',
 ];
