@@ -34,7 +34,7 @@ class PluginStoreResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return PluginStore::getHasNewVersionCount();
+        return PluginStore::getHasNewVersionCount() ?: '';
     }
 
     public static function form(Form $form): Form

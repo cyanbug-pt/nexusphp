@@ -12,7 +12,8 @@ RUN apk add --no-cache \
     libwebp-dev \
     gmp-dev \
     oniguruma-dev \
-    linux-headers
+    linux-headers \
+    curl
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 
@@ -28,8 +29,15 @@ RUN docker-php-ext-install -j$(nproc) \
     intl \
     opcache
 
+# 检查 pecl.php.net 可用性
+RUN curl -Is https://pecl.php.net | head -n 1 | grep "200" \
+    || (echo "❌ pecl.php.net unreachable, aborting build." && exit 1)
+
+
 # 安装 redis 扩展
-RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl channel-update pecl.php.net \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 # 👨‍🍳 第二阶段：运行阶段，仅包含必要运行环境
 FROM php:8.2-fpm-alpine

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\HtmlString;
@@ -102,7 +104,12 @@ class PluginStore extends Model
 
     private static function listAllFromRemote()
     {
-        $list = Http::get(self::PLUGIN_LIST_API)->json();
+        $response = Http::get(self::PLUGIN_LIST_API);
+        if ($response->getStatusCode() != 200) {
+            do_log(sprintf("status code: %d, body: %s", $response->getStatusCode(), $response->getBody()), 'error');
+            return [];
+        }
+        $list = $response->json();
         foreach ($list as &$row) {
             foreach ($row as $key => $value) {
                 if (is_array($value)) {
@@ -115,6 +122,9 @@ class PluginStore extends Model
 
     public static function getHasNewVersionCount(): int
     {
+        if (!Gate::allows('viewAny', PluginStore::class)) {
+            return 0;
+        }
         $currentRouteName = Route::currentRouteName();
         $withoutCacheRouteName = ['filament.admin.resources.system.plugin-stores.index', 'filament.admin.pages.dashboard'];
         $list = self::listAll(in_array($currentRouteName, $withoutCacheRouteName));
