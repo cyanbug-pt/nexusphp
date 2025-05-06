@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Enums\ModelEventEnum;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\ExamUserResource;
@@ -697,7 +698,7 @@ class UserRepository extends BaseRepository
         NexusDB::statement(sprintf('DELETE FROM snatched WHERE userid IN (%s) and not exists (select 1 from torrents where id = snatched.torrentid)', $uidStr));
         if (is_int($id)) {
             do_action("user_delete", $id);
-            fire_event("user_destroyed", $users->first());
+            fire_event(ModelEventEnum::USER_DELETED, $users->first());
         }
         return true;
     }

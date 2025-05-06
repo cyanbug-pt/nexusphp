@@ -1422,12 +1422,7 @@ function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models
             do_log("$log, user not exists");
             return null;
         }
-        try {
-            $row->checkIsNormal();
-        } catch (\Exception $e) {
-            do_log("$log, " . $e->getMessage());
-            return null;
-        }
+        $row->checkIsNormal();
         $authKey = $row->auth_key;
     }
     $expectedSignature = hash_hmac('sha256', $tokenJson, $authKey);

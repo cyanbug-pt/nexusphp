@@ -100,7 +100,11 @@ class OauthController extends Controller
             ->first();
         if ($socialAccount) {
             //already bind, login directly
+            /**
+             * @var User $authUser
+             */
             $authUser = $socialAccount->user;
+            $authUser->checkIsNormal();
             logincookie($authUser->id, $authUser->auth_key);
             return redirect($homeUrl);
         }
