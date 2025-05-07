@@ -13,6 +13,7 @@ use App\Models\LoginLog;
 use App\Models\Message;
 use App\Models\OauthProvider;
 use App\Models\Setting;
+use App\Models\SiteLog;
 use App\Models\Snatch;
 use App\Models\Torrent;
 use App\Models\User;

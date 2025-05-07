@@ -43,6 +43,7 @@ return [
         'token' => '访问令牌',
         'oauth_provider' => '身份验证',
         'queue_monitor' => '队列监控',
+        'user_modify_logs' => '修改记录',
     ],
     'resources' => [
         'agent_allow' => [

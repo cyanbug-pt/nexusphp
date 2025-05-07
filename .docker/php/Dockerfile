@@ -12,8 +12,7 @@ RUN apk add --no-cache \
     libwebp-dev \
     gmp-dev \
     oniguruma-dev \
-    linux-headers \
-    curl
+    linux-headers
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 
@@ -58,7 +57,8 @@ RUN apk add --no-cache \
     icu \
     libxml2 \
     gmp \
-    oniguruma
+    oniguruma \
+    git
 
 # 配置 www.conf
 RUN sed -i \
