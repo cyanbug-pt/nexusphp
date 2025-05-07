@@ -76,7 +76,7 @@ class Kernel extends HttpKernel
         'permission' => \App\Http\Middleware\Permission::class,
         'admin' => \App\Http\Middleware\Admin::class,
         'locale' => \App\Http\Middleware\Locale::class,
-        'user' => \App\Http\Middleware\User::class,
+        'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
     ];
 
     protected $middlewareAliases = [

@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
-class User
+class CheckUserStatus
 {
     /**
      * Handle an incoming request.
@@ -17,6 +18,9 @@ class User
      */
     public function handle(Request $request, Closure $next)
     {
+        /** @var User $user */
+        $user = $request->user();
+        $user->checkIsNormal();
         return $next($request);
     }
 
@@ -29,12 +33,7 @@ class User
      */
     public function terminate($request, $response)
     {
-        $user = $request->user();
-        $update = [
-            'last_access' => Carbon::now()
-        ];
-        do_log("[ACTIVE] {$user->id}: " . nexus_json_encode($update));
-        $user->update($update);
+
     }
 
 }

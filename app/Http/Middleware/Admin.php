@@ -18,7 +18,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        /** @var User $user */
+        /** @var CheckUserStatus $user */
         $user = $request->user();
         if (!$user || !$user->canAccessAdmin()) {
             do_log("denied!");

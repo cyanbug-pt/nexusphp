@@ -17,7 +17,7 @@ use App\Enums\Permission\RoutePermissionEnum;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::group(['middleware' => []], function () {
+    Route::group(['middleware' => ['checkUserStatus']], function () {
 //        Route::post('logout', [\App\Http\Controllers\AuthenticateController::class, 'logout']);
 
 //        Route::get('user-me',[\App\Http\Controllers\UserController::class, 'me'])->name('user.me');

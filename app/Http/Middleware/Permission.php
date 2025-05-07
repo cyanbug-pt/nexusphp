@@ -18,7 +18,7 @@ class Permission
      */
     public function handle(Request $request, Closure $next)
     {
-        /** @var User $user */
+        /** @var CheckUserStatus $user */
         $user = $request->user();
         if (!$user || (nexus()->isPlatformAdmin() && !$user->canAccessAdmin())) {
             do_log("denied!");
