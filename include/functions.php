@@ -3039,7 +3039,7 @@ function make_folder($pre, $folder_name)
 
 function logoutcookie() {
 //	setcookie("c_secure_uid", "", 0x7fffffff, "/", "", false, true);
-	setcookie("c_secure_pass", "", 0x7fffffff, "/", "", true, true);
+	setcookie("c_secure_pass", "", 0x7fffffff, "/", "", isHttps(), true);
 // setcookie("c_secure_ssl", "", 0x7fffffff, "/", "", false, true);
 //	setcookie("c_secure_tracker_ssl", "", 0x7fffffff, "/", "", false, true);
 //	setcookie("c_secure_login", "", 0x7fffffff, "/", "", false, true);

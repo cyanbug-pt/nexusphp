@@ -1509,15 +1509,15 @@ $formVar.on("click", "input[type=button]", function() {
         return
     }
     if (password !== "") {
-        sha256(password).then((passwordHashed) => {
-            $formVar.find("input[name={$passwordHashedName}]").val(passwordHashed)
-            $formVar.submit()
-        })
+        const passwordHashed = sha256(password)
+        $formVar.find("input[name={$passwordHashedName}]").val(passwordHashed)
+        $formVar.submit()
     } else {
         $formVar.submit()
     }
 })
 JS;
+    \Nexus\Nexus::js("js/crypto-js.js", 'footer', true);
     \Nexus\Nexus::js($js, 'footer', false);
 }
 
@@ -1568,5 +1568,6 @@ async function login(username, password, jqForm) {
 }
 JS;
     \Nexus\Nexus::js("vendor/jquery-loading/jquery.loading.min.js", 'footer', true);
+    \Nexus\Nexus::js("js/crypto-js.js", 'footer', true);
     \Nexus\Nexus::js($js, 'footer', false);
 }

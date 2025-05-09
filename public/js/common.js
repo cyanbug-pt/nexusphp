@@ -406,24 +406,27 @@ function DelRow(anchor){
 }
 
 // 工具函数：SHA-256哈希
+// 因 crypto.subtle 在 http 下不可用，故引入三方库
 async function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // const msgBuffer = new TextEncoder().encode(message);
+    // const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    // const hashArray = Array.from(new Uint8Array(hashBuffer));
+    // return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
 }
 
 // 工具函数：HMAC-SHA256
 async function hmacSha256(key, message) {
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(key);
-    const messageData = encoder.encode(message);
-
-    const cryptoKey = await crypto.subtle.importKey(
-        'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
-    );
-
-    const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
-    const hashArray = Array.from(new Uint8Array(signature));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // const encoder = new TextEncoder();
+    // const keyData = encoder.encode(key);
+    // const messageData = encoder.encode(message);
+    //
+    // const cryptoKey = await crypto.subtle.importKey(
+    //     'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+    // );
+    //
+    // const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+    // const hashArray = Array.from(new Uint8Array(signature));
+    // return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return CryptoJS.HmacSHA256(message, key).toString(CryptoJS.enc.Hex);
 }

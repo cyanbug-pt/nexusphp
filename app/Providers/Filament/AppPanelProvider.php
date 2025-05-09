@@ -80,13 +80,13 @@ class AppPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make('Horizon')
-                ->label(nexus_trans('admin.sidebar.queue_monitor'))
+                ->label(nexus_trans('admin.sidebar.queue_monitor', [], Auth::user() ? get_langfolder_cookie(true) : 'en'))
                 ->icon('heroicon-o-presentation-chart-line')
                 ->group('System')
                 ->sort(99)
                 ->url('/horizon')
                 ->openUrlInNewTab()
-                ->hidden(fn() => Auth::user()->class < User::CLASS_SYSOP)
+                ->hidden(fn() => !(Auth::user() && Auth::user()->class >= User::CLASS_SYSOP))
             ])
             ;
     }
