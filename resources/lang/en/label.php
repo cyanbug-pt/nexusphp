@@ -278,7 +278,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Begin IP',
         'ip_end' => 'End IP',
-        'ip_help' => 'Fill in the ASN/begin IP + end IP/IP (Block), only one of the three',
+        'ip_help' => 'Fill in the IP address or ASN, not both!',
         'status' => 'Status',
         'is_allowed' => 'Is whitelisted',
         'is_allowed_help' => 'IPs in the whitelist are not affected by the SeedBox rule',

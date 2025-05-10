@@ -9,6 +9,7 @@ use App\Models\PersonalAccessToken;
 use App\Models\Torrent;
 use App\Models\User;
 use App\Repositories\ExamRepository;
+use App\Repositories\SeedBoxRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Console\Command;
 use NexusPlugin\Menu\Filament\MenuItemResource\Pages\ManageMenuItems;
@@ -55,9 +56,8 @@ class Test extends Command
      */
     public function handle()
     {
-        $rep = new MenuRepository();
-        $result = \Nexus\Plugin\Plugin::listEnabled();
-        dd($result);
+        $rep = new SeedBoxRepository();
+        $rep->updateCacheCronjob();
     }
 
 }

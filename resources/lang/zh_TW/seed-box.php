@@ -14,6 +14,6 @@ return [
         'subject' => 'SeedBox 記錄狀態變更',
         'body' => '你的 ID 為 :id 的 SeedBox 記錄狀態被 :operator 由 :old_status 變更為 :new_status。原因：:reason',
     ],
-    'is_seed_box_yes' => '此 IP 是 SeedBox, 由 ID 為 :id 的記錄確定',
+    'is_seed_box_yes' => '此 IP 是 SeedBox',
     'is_seed_box_no' => '此 IP 不是 SeedBox',
 ];

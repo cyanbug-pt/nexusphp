@@ -915,6 +915,15 @@ function isIPSeedBoxFromASN($ip, $exceptionWhenYes = false): bool
    return $result;
 }
 
+/**
+ * @deprecated
+ * @param $ip
+ * @param $uid
+ * @param $withoutCache
+ * @param $exceptionWhenYes
+ * @return bool
+ * @throws \App\Exceptions\SeedBoxYesException
+ */
 function isIPSeedBox($ip, $uid, $withoutCache = false, $exceptionWhenYes = false): bool
 {
     $key = "nexus_is_ip_seed_box:ip:$ip:uid:$uid";

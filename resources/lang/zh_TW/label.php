@@ -278,7 +278,7 @@ return [
         'ip' => 'IP(段)',
         'ip_begin' => '起始 IP',
         'ip_end' => '結束 IP',
-        'ip_help' => '填寫ASN/起始 IP + 結束 IP/IP(段)，不要同時填寫',
+        'ip_help' => '填寫IP地址或ASN，不要同時填寫',
         'status' => '狀態',
         'is_allowed' => '是否白名單',
         'is_allowed_help' => '位於白名單中的 IP 不受 SeedBox 規則影響',

@@ -6,6 +6,7 @@ use App\Jobs\CheckCleanup;
 use App\Jobs\CheckQueueFailedJobs;
 use App\Jobs\MaintainPluginState;
 use App\Jobs\ManagePlugin;
+use App\Jobs\UpdateIsSeedBoxFromUserRecordsCache;
 use App\Utils\ThirdPartyJob;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Event;
@@ -48,6 +49,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new CheckQueueFailedJobs())->everySixHours()->withoutOverlapping();
         $schedule->job(new ThirdPartyJob())->everyMinute()->withoutOverlapping();
         $schedule->job(new MaintainPluginState())->everyMinute()->withoutOverlapping();
+        $schedule->job(new UpdateIsSeedBoxFromUserRecordsCache())->everySixHours()->withoutOverlapping();
 
         $this->registerScheduleCleanup($schedule);
     }

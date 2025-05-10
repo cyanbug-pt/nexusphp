@@ -2812,7 +2812,7 @@ if ($msgalert)
 
     //seed box approval
     if (get_user_class() >= \App\Models\User::CLASS_ADMINISTRATOR && get_setting('seed_box.enabled') == 'yes') {
-        $cacheKey = 'SEED_BOX_RECORD_APPROVAL_NONE';
+        $cacheKey = \App\Repositories\SeedBoxRepository::APPROVAL_COUNT_CACHE_KEY;
         $toApprovalCounts = $Cache->get_value($cacheKey);
         if ($toApprovalCounts === false) {
             $toApprovalCounts = get_row_count('seed_box_records', 'where status = 0');

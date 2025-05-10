@@ -48,8 +48,8 @@ class SeedBoxRecordResource extends Resource
                 Forms\Components\TextInput::make('operator')->label(__('label.seed_box_record.operator')),
                 Forms\Components\TextInput::make('bandwidth')->label(__('label.seed_box_record.bandwidth'))->integer(),
                 Forms\Components\TextInput::make('asn')->label(__('label.seed_box_record.asn'))->integer(),
-                Forms\Components\TextInput::make('ip_begin')->label(__('label.seed_box_record.ip_begin')),
-                Forms\Components\TextInput::make('ip_end')->label(__('label.seed_box_record.ip_end')),
+//                Forms\Components\TextInput::make('ip_begin')->label(__('label.seed_box_record.ip_begin')),
+//                Forms\Components\TextInput::make('ip_end')->label(__('label.seed_box_record.ip_end')),
                 Forms\Components\TextInput::make('ip')->label(__('label.seed_box_record.ip'))->helperText(__('label.seed_box_record.ip_help')),
                 Forms\Components\Toggle::make('is_allowed')
                     ->label(__('label.seed_box_record.is_allowed'))

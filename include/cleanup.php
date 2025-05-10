@@ -78,9 +78,8 @@ function peasant_to_user($down_floor_gb, $down_roof_gb, $minratio){
 			while ($arr = mysql_fetch_assoc($res))
 			{
                 $locale = get_user_locale($arr['id']);
-                $subject = nexus_trans("cleanup.msg_low_ratio_warning_removed", [], $locale);
-                $msg = nexus_trans("cleanup.msg_your_ratio_warning_removed", [], $locale);
-
+                $subject = sqlesc(nexus_trans("cleanup.msg_low_ratio_warning_removed", [], $locale));
+                $msg = sqlesc(nexus_trans("cleanup.msg_your_ratio_warning_removed", [], $locale));
 				writecomment($arr['id'],"Leech Warning removed by System.");
 				sql_query("UPDATE users SET class = 1, leechwarn = 'no', leechwarnuntil = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
 				sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, $subject, $msg)") or sqlerr(__FILE__, __LINE__);

@@ -1007,8 +1007,8 @@ if (get_setting('seed_box.enabled') == 'yes') {
     $seedBox = '';
     $columnOperator = nexus_trans('label.seed_box_record.operator');
     $columnBandwidth = nexus_trans('label.seed_box_record.bandwidth');
-    $columnIPBegin = nexus_trans('label.seed_box_record.ip_begin');
-    $columnIPEnd = nexus_trans('label.seed_box_record.ip_end');
+//    $columnIPBegin = nexus_trans('label.seed_box_record.ip_begin');
+//    $columnIPEnd = nexus_trans('label.seed_box_record.ip_end');
     $columnIP = nexus_trans('label.seed_box_record.ip');
     $columnIPHelp = nexus_trans('label.seed_box_record.ip_help');
     $columnComment = nexus_trans('label.comment');
@@ -1069,14 +1069,6 @@ CSS;
         <div class="field"><input type="number" name="params[bandwidth]"></div>
     </div>
     <div class="form-control-row">
-        <div class="label">{$columnIPBegin}</div>
-        <div class="field"><input type="text" name="params[ip_begin]"></div>
-    </div>
-    <div class="form-control-row">
-        <div class="label">{$columnIPEnd}</div>
-        <div class="field"><input type="text" name="params[ip_end]"></div>
-    </div>
-    <div class="form-control-row">
         <div class="label">{$columnIP}</div>
         <div class="field"><input type="text" name="params[ip]"><div><small>{$columnIPHelp}</small></div></div>
     </div>
@@ -1097,8 +1089,9 @@ jQuery('#add-seed-box-btn').on('click', function () {
         btnAlign: 'c',
         yes: function () {
             let params = jQuery('#seed-box-form').serialize()
+            jQuery('body').loading({stoppable: false});
             jQuery.post('ajax.php', params + "&action=addSeedBoxRecord", function (response) {
-                console.log(response)
+                jQuery('body').loading('stop');
                 if (response.ret != 0) {
                     layer.alert(response.msg)
                     return
@@ -1111,8 +1104,9 @@ jQuery('#add-seed-box-btn').on('click', function () {
 jQuery('#seed-box-table').on('click', '.remove-seed-box-btn', function () {
     let params = {action: "removeSeedBoxRecord", params: {id: jQuery(this).attr("data-id")}}
     layer.confirm("{$lang_functions['std_confirm_remove']}", window.nexusLayerOptions.confirm, function (index) {
+        jQuery('body').loading({stoppable: false});
         jQuery.post('ajax.php', params, function (response) {
-            console.log(response)
+            jQuery('body').loading('stop');
             if (response.ret != 0) {
                 layer.alert(response.msg, window.nexusLayerOptions.alert)
                 return
