@@ -60,6 +60,7 @@ if [ "$SERVICE_NAME" = "php" ]; then
     # composer install
     if [ ! -d "$VENDOR_DIR" ]; then
       echo_info "vendor dir: $VENDOR_DIR not exists, run composer install ..."
+      git config --global --add safe.directory ${ROOT_PATH}
       composer install --working-dir=${ROOT_PATH}
     else
       echo_success "vendor dir: $VENDOR_DIR already exists, skip run composer install ..."

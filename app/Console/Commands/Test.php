@@ -56,8 +56,7 @@ class Test extends Command
      */
     public function handle()
     {
-        $rep = new SeedBoxRepository();
-        $rep->updateCacheCronjob();
+        Language::updateTransStatus();
     }
 
 }

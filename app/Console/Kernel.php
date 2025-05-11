@@ -68,7 +68,7 @@ class Kernel extends ConsoleKernel
 
     private function registerScheduleCleanup(Schedule $schedule): void
     {
-        if (!Schema::hasTable("settings")) {
+        if (!file_exists(base_path(".env")) || !Schema::hasTable("settings")) {
             return;
         }
         $interval = get_setting("main.autoclean_interval_one");

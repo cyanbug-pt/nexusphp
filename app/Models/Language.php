@@ -38,72 +38,72 @@ class Language extends NexusModel
         'cs' => [
             'lang_name' => 'Czech',
             'lang_name_cn' => '捷克语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'da' => [
             'lang_name' => 'Danish',
             'lang_name_cn' => '丹麦语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'nl' => [
             'lang_name' => 'Dutch',
             'lang_name_cn' => '荷兰语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'fi' => [
             'lang_name' => 'Finnish',
             'lang_name_cn' => '芬兰语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'fr' => [
             'lang_name' => 'French',
             'lang_name_cn' => '法语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'de' => [
             'lang_name' => 'German',
             'lang_name_cn' => '德语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'el' => [
             'lang_name' => 'Greek',
             'lang_name_cn' => '希腊语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'nb' => [
             'lang_name' => 'Norwegian',
             'lang_name_cn' => '挪威语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'pl' => [
             'lang_name' => 'Polish',
             'lang_name_cn' => '波兰语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'pt' => [
             'lang_name' => 'Portuguese',
             'lang_name_cn' => '葡萄牙语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'ro' => [
             'lang_name' => 'Romanian',
             'lang_name_cn' => '罗马尼亚语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'ru' => [
             'lang_name' => 'Russian',
             'lang_name_cn' => '俄语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'es' => [
             'lang_name' => 'Spanish',
             'lang_name_cn' => '西班牙语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
         'sv' => [
             'lang_name' => 'Swedish',
             'lang_name_cn' => '瑞典语',
-            'trans_state' => self::TRANS_STATE_INCOMPLETE,
+            'trans_state' => self::TRANS_STATE_NEED_NEW,
         ],
     ];
 

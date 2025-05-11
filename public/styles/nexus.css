@@ -74,3 +74,25 @@ img.hitandrun {
 .word-break-all {
     word-break: break-all;
 }
+
+.form-box {
+    padding: 15px;
+}
+.form-control-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+.form-control-row .label {
+    width: 80px
+}
+.form-control-row .field {
+
+}
+.form-control-row input[type=text],textarea {
+    width: 300px;
+    padding: 4px;
+}
+.form-control-row input[type=checkbox] {
+    vertical-align: sub;
+}

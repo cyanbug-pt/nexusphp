@@ -118,11 +118,11 @@ class NexusUpdate extends Command
             return 0;
         }
         if (!$mysqlInfo['match']) {
-            $this->doLog("Error: MySQL version: {$mysqlInfo['version']} is too low, please use the newest version of 5.7 or above.", 'error');
+            $this->doLog("Error: MySQL version: {$mysqlInfo['version']} is too low, please use the newest version of {$mysqlInfo['minVersion']} or above.", 'error');
             return 0;
         }
         if (!$redisInfo['match']) {
-            $this->doLog("Error: Redis version: {$mysqlInfo['version']} is too low, please use 2.0.0 or above.", 'error');
+            $this->doLog("Error: Redis version: {$mysqlInfo['version']} is too low, please use {$mysqlInfo['minVersion']} or above.", 'error');
             return 0;
         }
         if ($includeComposer) {

@@ -95,6 +95,7 @@ return array (
       'upload_deny_approval_deny_count' => 2,
       'enable_global_search' => 'yes',
       'tmp_invite_count' => 0,
+      'complain_enabled' => 'yes',
   ),
   'smtp' =>
   array (

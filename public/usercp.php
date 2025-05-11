@@ -1033,30 +1033,6 @@ if (get_setting('seed_box.enabled') == 'yes') {
     }
     $seedBox .= sprintf('<div><input type="button" id="add-seed-box-btn" value="%s"/></div>', $lang_usercp['add_seed_box_btn']);
     tr_small($lang_usercp['row_seed_box'], $seedBox, 1);
-    $seedBoxCss = <<<CSS
-.form-box {
-padding: 15px;
-}
-.form-control-row {
-display: flex;
-align-items: center;
-padding: 10px 0;
-}
-.form-control-row .label {
-width: 80px
-}
-.form-control-row .field {
-
-}
-.form-control-row input[type=text],textarea {
-width: 300px;
-padding: 4px;
-}
-.form-control-row input[type=checkbox] {
-vertical-align: sub;
-}
-CSS;
-
     $seedBoxForm = <<<FORM
 <div class="form-box">
 <form id="seed-box-form">
@@ -1117,7 +1093,6 @@ jQuery('#seed-box-table').on('click', '.remove-seed-box-btn', function () {
 });
 JS;
     \Nexus\Nexus::js($seedBoxJs, 'footer', false);
-    \Nexus\Nexus::css($seedBoxCss, 'footer', false);
 }
 //end seed box
 

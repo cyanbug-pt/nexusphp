@@ -37,6 +37,10 @@ class Install
         'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets', 'zip', 'intl',
         'sqlite3', 'pdo_sqlite'
     ];
+
+    protected array $conflictExtensions = [
+        'mysql',
+    ];
     protected array $optionalExtensions = [
 //        ['name' => 'swoole', 'desc' => "If use swoole for Octane, make sure 'current' shows 1"],
     ];
@@ -192,6 +196,16 @@ class Install
             'current' => empty($disabledFunctions) ? '1' : "These functions are Disabled: " . implode(',', $disabledFunctions),
             'result' => $this->yesOrNo(empty($disabledFunctions)),
         ];
+
+        foreach ($this->conflictExtensions as $extension) {
+            $loaded = extension_loaded($extension);
+            $tableRows[] = [
+                'label' => "PHP extension $extension",
+                'required' => 'disabled',
+                'current' => (int)$loaded,
+                'result' => $loaded ? 'NO' : 'YES',
+            ];
+        }
 
         foreach ($this->requiredExtensions as $extension) {
             if ($extension == 'pcntl' && function_exists('exec')) {
@@ -707,8 +721,9 @@ class Install
         $sql = 'select version() as v';
         $result = NexusDB::select($sql);
         $version = $result[0]['v'];
-        $match = version_compare($version, '5.7.8', '>=');
-        return compact('version', 'match');
+        $minVersion = '5.7.8';
+        $match = version_compare($version, $minVersion, '>=');
+        return compact('version', 'match', 'minVersion');
     }
 
     public function getRedisVersionInfo(): array
@@ -716,8 +731,9 @@ class Install
         $redis = NexusDB::redis();
         $result = $redis->info();
         $version = $result['redis_version'];
-        $match = version_compare($version, '2.6.12', '>=');
-        return compact('version', 'match');
+        $minVersion = '2.6.12';
+        $match = version_compare($version, $minVersion, '>=');
+        return compact('version', 'match', 'minVersion');
     }
 
     public function checkLock()

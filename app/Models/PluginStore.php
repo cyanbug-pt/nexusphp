@@ -22,7 +22,7 @@ class PluginStore extends Model
         'description' => 'array',
     ];
 
-    const PLUGIN_LIST_API = "https://nppl.nexusphp.workers.dev";
+    const PLUGIN_LIST_API = "https://nexusphp.org/plugin-store";
     const BLOG_POST_INFO_API = "https://nexusphp.org/wp-json/wp/v2/posts/%d";
     const BLOG_POST_URL = "https://nexusphp.org/?p=%d";
 
@@ -98,7 +98,7 @@ class PluginStore extends Model
         } else {
             $log .= ", not_null";
         }
-        do_log($log, 'debug');
+        do_log($log);
         return self::$rows;
     }
 
@@ -132,7 +132,7 @@ class PluginStore extends Model
         $count = 0;
         foreach ($list as $row) {
             $installedVersion = $enabled[$row['plugin_id']] ?? '';
-            if ($installedVersion && version_compare($installedVersion, $row['version'], '<=')) {
+            if ($installedVersion && version_compare($installedVersion, $row['version'], '<')) {
                 $count++;
             }
         }

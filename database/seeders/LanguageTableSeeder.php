@@ -48,9 +48,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'czechrep.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'cs',
+                'trans_state' => 'need-new',
             ),
             3 => 
             array (
@@ -59,9 +59,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'denmark.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'da',
+                'trans_state' => 'need-new',
             ),
             4 => 
             array (
@@ -70,9 +70,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'netherlands.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'nl',
+                'trans_state' => 'need-new',
             ),
             5 => 
             array (
@@ -103,9 +103,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'finland.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'fi',
+                'trans_state' => 'need-new',
             ),
             8 => 
             array (
@@ -114,9 +114,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'france.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'fr',
+                'trans_state' => 'need-new',
             ),
             9 => 
             array (
@@ -125,9 +125,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'germany.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'de',
+                'trans_state' => 'need-new',
             ),
             10 => 
             array (
@@ -136,9 +136,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'greece.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'el',
+                'trans_state' => 'need-new',
             ),
             11 => 
             array (
@@ -180,9 +180,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'japan.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'ja',
+                'trans_state' => 'need-new',
             ),
             15 => 
             array (
@@ -202,9 +202,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'norway.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'nb',
+                'trans_state' => 'need-new',
             ),
             17 => 
             array (
@@ -224,9 +224,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'poland.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'pl',
+                'trans_state' => 'need-new',
             ),
             19 => 
             array (
@@ -235,9 +235,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'portugal.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'pt',
+                'trans_state' => 'need-new',
             ),
             20 => 
             array (
@@ -246,9 +246,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'romania.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'ro',
+                'trans_state' => 'need-new',
             ),
             21 => 
             array (
@@ -257,9 +257,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'russia.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'ru',
+                'trans_state' => 'need-new',
             ),
             22 => 
             array (
@@ -301,9 +301,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'spain.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'es',
+                'trans_state' => 'need-new',
             ),
             26 => 
             array (
@@ -312,9 +312,9 @@ class LanguageTableSeeder extends Seeder
                 'flagpic' => 'sweden.gif',
                 'sub_lang' => 1,
                 'rule_lang' => 0,
-                'site_lang' => 0,
-                'site_lang_folder' => '',
-                'trans_state' => 'unavailable',
+                'site_lang' => 1,
+                'site_lang_folder' => 'sv',
+                'trans_state' => 'need-new',
             ),
             27 => 
             array (
