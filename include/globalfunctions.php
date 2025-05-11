@@ -915,17 +915,11 @@ function isIPSeedBoxFromASN($ip, $exceptionWhenYes = false): bool
    return $result;
 }
 
-/**
- * @deprecated
- * @param $ip
- * @param $uid
- * @param $withoutCache
- * @param $exceptionWhenYes
- * @return bool
- * @throws \App\Exceptions\SeedBoxYesException
- */
-function isIPSeedBox($ip, $uid, $withoutCache = false, $exceptionWhenYes = false): bool
+function isIPSeedBox($ip, $uid): bool
 {
+    return \App\Repositories\SeedBoxRepository::isSeedBoxFromUserRecords($uid, $ip)['result'];
+
+    /*
     $key = "nexus_is_ip_seed_box:ip:$ip:uid:$uid";
     $cacheData = \Nexus\Database\NexusDB::cache_get($key);
     if (in_array($cacheData, [0, 1, '0', '1'], true) && !$withoutCache) {
@@ -985,6 +979,7 @@ function isIPSeedBox($ip, $uid, $withoutCache = false, $exceptionWhenYes = false
     \Nexus\Database\NexusDB::cache_put($key, 0, 300);
     do_log("$key, no result, false");
     return false;
+    */
 }
 
 function getDataTraffic(array $torrent, array $queries, array $user, $peer, $snatch, $promotionInfo)

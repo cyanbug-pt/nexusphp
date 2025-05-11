@@ -337,10 +337,10 @@ $isSeedBoxRuleEnabled = get_setting('seed_box.enabled') == 'yes';
 $isIPSeedBox = false;
 if ($isSeedBoxRuleEnabled) {
     if (!empty($ipv4)) {
-        $isIPSeedBox = \App\Repositories\SeedBoxRepository::isSeedBoxFromUserRecords($userid, $ipv4)['result'];
+        $isIPSeedBox = isIPSeedBox($ipv4, $userid);
     }
     if (!$isIPSeedBox && !empty($ipv6)) {
-        $isIPSeedBox = \App\Repositories\SeedBoxRepository::isSeedBoxFromUserRecords($userid, $ipv6)['result'];
+        $isIPSeedBox = isIPSeedBox($ipv6, $userid);
     }
 }
 $log .= ", [SEED_BOX], isSeedBoxRuleEnabled: $isSeedBoxRuleEnabled, isIPSeedBox: $isIPSeedBox";
