@@ -265,7 +265,7 @@ HEAD;
 
     }
 
-    public function renderOnUploadPage($torrentId = 0, $searchBoxId)
+    public function renderOnUploadPage($torrentId, $searchBoxId)
     {
         $searchBox = NexusDB::getOne('searchbox', "id = $searchBoxId");
         if (empty($searchBox)) {

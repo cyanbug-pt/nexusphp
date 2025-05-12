@@ -581,7 +581,7 @@ if ($action == "exchange") {
 	$userid = $CURUSER['id'];
 	$art = $bonusarray['art'];
 
-	$bonuscomment = $CURUSER['bonuscomment'];
+//	$bonuscomment = $CURUSER['bonuscomment'];
 	$seedbonus=$CURUSER['seedbonus']-$points;
 
 	if($CURUSER['seedbonus'] >= $points) {

@@ -14,7 +14,7 @@ $claimRep = new \App\Repositories\ClaimRepository();
 $seedBoxRep = new \App\Repositories\SeedBoxRepository();
 $claimTorrentTTL = \App\Models\Claim::getConfigTorrentTTL();
 $id = intval($_GET['userid'] ?? 0);
-$type = $_GET['type'];
+$type = $_GET['type'] ?? '';
 if (!in_array($type,array('uploaded','seeding','leeching','completed','incomplete')))
     die;
 if(!user_can('torrenthistory') && $id != $CURUSER["id"])

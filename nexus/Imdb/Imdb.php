@@ -177,7 +177,7 @@ class Imdb
 			$temp .= $ak["title"].$ak["year"]. ($ak["country"] != "" ? " (".$ak["country"].")" : "") . ($ak["comment"] != "" ? " (" . $ak["comment"] . ")" : "") . ", ";
         }
         $autodata .= rtrim(trim($temp), ",");
-        $runtimes = str_replace(" min",$lang_details['text_mins'], $movie->runtime());
+        $runtimes = str_replace(" min",$lang_details['text_mins'], $movie->runtime() ?? '');
         $autodata .= "<br />\n<strong><font color=\"DarkRed\">".$lang_details['text_year']."</font></strong>" . "".$movie->year ()."<br />\n";
         $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_runtime']."</font></strong>".$runtimes."<br />\n";
         $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_votes']."</font></strong>" . "".$movie->votes ()."<br />\n";

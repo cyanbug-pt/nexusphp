@@ -47,7 +47,7 @@ class TagRepository extends BaseRepository
 
     public static function createBasicQuery()
     {
-        return Tag::query()->orderBy('priority', 'asc')->orderBy('id', 'asc');
+        return Tag::query()->orderBy('priority', 'desc')->orderBy('id', 'desc');
     }
 
     public function renderCheckbox(int $searchBoxId, array $checked = [], $ignorePermission = false): string
