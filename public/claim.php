@@ -57,13 +57,13 @@ $sortOptions = $orderOptions = '';
 foreach ($sortAllowed as $name => $text) {
     $sortOptions .= sprintf(
         '<option value="%s"%s>%s</option>',
-        $name, $_GET['sort'] == $name ? ' selected' : '', $text
+        $name, isset($_GET['sort']) && $_GET['sort'] == $name ? ' selected' : '', $text
     );
 }
 foreach ($orderAllowed as $name => $text) {
     $orderOptions .= sprintf(
         '<option value="%s"%s>%s</option>',
-        $name, $_GET['order'] == $name ? ' selected' : '', $text
+        $name, isset($_GET['order']) && $_GET['order'] == $name ? ' selected' : '', $text
     );
 }
 $resetText = nexus_trans('label.reset');

@@ -2124,6 +2124,7 @@ function mkprettytime($s) {
 	if ($s < 0)
 	$s = 0;
 	$t = array();
+    $s = round($s);
 	foreach (array("60:sec","60:min","24:hour","0:day") as $x) {
 		$y = explode(":", $x);
 		if ($y[0] > 1) {
@@ -4153,7 +4154,8 @@ function getimdb($imdb_id, $cache_stamp, $mode = 'minor')
 				}
 				else { //for tv series
 					$creator = $movie->creator();
-					$director_or_creator = "<strong><font color=\"DarkRed\">".$lang_functions['text_creator'].": </font></strong>".$creator;
+                    $names = array_column($creator, "name");
+					$director_or_creator = "<strong><font color=\"DarkRed\">".$lang_functions['text_creator'].": </font></strong>".implode(", ", $names);
 				}
 				$cast = $movie->cast();
 				$temp = "";
