@@ -459,4 +459,7 @@ return array (
     'permission' => [
         'user_token_allowed' => \App\Repositories\TokenRepository::listUserTokenPermissions(false),
     ],
+    'image_hosting' => [
+        'driver' => 'local',
+    ],
 );

@@ -168,6 +168,9 @@ where<ul><li><b>A</b> is an intermediate variable</li><li><b>Ti</b> is the <b>i<
     'text_success_buy_change_username_card' => "Congratulations on your successful purchase of a <b>change username card</b>!",
     'text_change_username_card_already_has' => 'Already have a change username card',
     'text_rainbow_id_already_valid_forever' => 'Already have a permanent Rainbow ID',
+    'text_get_by_medal' => 'Medal bonus will get the following additional bonus value per hour',
+    'medal_additional_desc' => 'Medal bonus calculation formula is the same as above, regardless of minimum guarantee',
+    'medal_additional_factor' => 'The final bonus is the calculated medal bonus multiplied by the medal_additional_factor',
 );
 
 ?>

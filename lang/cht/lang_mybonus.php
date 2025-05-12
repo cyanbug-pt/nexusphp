@@ -168,6 +168,9 @@ $lang_mybonus = array
     'text_success_buy_change_username_card' => "祝賀你，成功購買了<b>改名卡</b>！",
     'text_change_username_card_already_has' => '已經擁有改名卡',
     'text_rainbow_id_already_valid_forever' => '已永久擁有彩虹 ID',
+    'text_get_by_medal' => '勛章加成每小時將額外得到如下的魔力值',
+    'medal_additional_desc' => '勛章獎勵計算公式同上，不考慮低保',
+    'medal_additional_factor' => '最終獎勵為計算所得勛章獎勵乘以勛章加成系數，當前勛章加成系數為: ',
 );
 
 ?>

@@ -209,7 +209,7 @@ function do_log($log, $level = 'info', $echo = false)
         }
     }
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-    $dt = DateTime::createFromFormat('U.u', microtime(true));
+    $dt = DateTime::createFromFormat('U.u', sprintf('%.6f', microtime(true)));
     $dt->setTimezone(new DateTimeZone(nexus_env('TIMEZONE', 'UTC')));
     $content = sprintf(
         "[%s] [%s] [%s] [%s] [%s] [%s] %s.%s %s:%s %s%s%s %s%s",

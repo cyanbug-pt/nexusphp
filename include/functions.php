@@ -156,8 +156,9 @@ function print_attachment($dlkey, $enableimage = true, $imageresizer = true)
 //			else{
 //				$url = $httpdirectory_attachment."/".$row['location'];
 //			}
-            $url = \Nexus\Attachment\Storage::getDriver($row['driver'])->getImageUrl($row['location']);
-            do_log(sprintf("driver: %s, location: %s, url: %s", $row['driver'], $row['location'], $url));
+            $driver = $row['driver'] ?? 'local';
+            $url = \Nexus\Attachment\Storage::getDriver($driver)->getImageUrl($row['location']);
+            do_log(sprintf("driver: %s, location: %s, url: %s", $driver, $row['location'], $url));
 			if($imageresizer == true)
 				$onclick = " onclick=\"Previewurl('".$url."')\"";
 			else $onclick = "";

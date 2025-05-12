@@ -346,6 +346,8 @@ class Update extends Install
             Artisan::call("upgrade:migrate_torrents_table_text_column");
             Language::updateTransStatus();
             $this->addSetting('main.complain_enabled', 'yes');
+            $this->addSetting('image_hosting.driver', 'local');
+            $this->addSetting('permission.user_token_allowed', json_encode(TokenRepository::listUserTokenPermissions(false)));
         }
         if (!$redis->exists(Setting::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY)) {
             Setting::updateUserTokenPermissionAllowedCache(TokenRepository::listUserTokenPermissions(false));
