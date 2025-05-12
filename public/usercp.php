@@ -225,7 +225,7 @@ tr($lang_usercp['row_school'], "<select name=school>$schools</select>", 1);
 		case "tracker":
 			$showaddisabled = true;
 			if ($enablead_advertisement == 'yes'){
-				if (get_user_class() >= $noad_advertisement || ($enablebonusnoad_advertisement == 'yes' && strtotime($CURUSER['noaduntil']) >= TIMENOW)){
+				if (get_user_class() >= $noad_advertisement || ($enablebonusnoad_advertisement == 'yes' && !empty($CURUSER['noaduntil']) && strtotime($CURUSER['noaduntil']) >= TIMENOW)){
 					$showaddisabled = false;
 				}
 			}

@@ -4287,10 +4287,10 @@ function permissiondenied($allowMinimumClass = null){
 }
 
 function gettime($time, $withago = true, $twoline = false, $forceago = false, $oneunit = false, $isfuturetime = false){
+    if (empty($time)) {
+        return null;
+    }
 	if (!IN_NEXUS) {
-        if (empty($time)) {
-            return null;
-        }
         try {
             return \Carbon\Carbon::parse($time)->diffForHumans();
         } catch (\Exception $e) {

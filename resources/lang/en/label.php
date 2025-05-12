@@ -66,6 +66,8 @@ return [
             'via_ftp_help' => 'Whether to save via FTP. If so, add the configuration information to the .env file, refer to <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Backup via SFTP',
             'via_sftp_help' => 'Whether to save via FTP. If so, add the configuration information to the .env file, refer to <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Export to directory',
+            'export_path_help' => 'Not set to use the system temporary directory::default_path. you can use third-party specialized tools to transfer offsite saves.' ,
         ],
         'hr' => [
             'tab_header' => 'H&R',

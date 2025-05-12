@@ -19,6 +19,9 @@ class Torrent
      */
     public function listLeechingSeedingStatus(int $uid, array $torrentIdArr)
     {
+        if (empty($torrentIdArr)) {
+            return [];
+        }
         $torrentIdStr = implode(',', $torrentIdArr);
         //seeding or leeching, from peers
         $whereStr = sprintf("userid = %s and torrent in (%s)", sqlesc($uid), $torrentIdStr);

@@ -174,7 +174,7 @@ class Imdb
         $temp = "";
         foreach ($movie->alsoknow() as $ak)
         {
-			$temp .= $ak["title"].$ak["year"]. ($ak["country"] != "" ? " (".$ak["country"].")" : "") . ($ak["comment"] != "" ? " (" . $ak["comment"] . ")" : "") . ", ";
+			$temp .= $ak["title"].($ak["country"] != "" ? " (".$ak["country"].")" : "") . ($ak["comment"] != "" ? " (" . $ak["comment"] . ")" : "") . ", ";
         }
         $autodata .= rtrim(trim($temp), ",");
         $runtimes = str_replace(" min",$lang_details['text_mins'], $movie->runtime() ?? '');

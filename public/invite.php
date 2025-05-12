@@ -115,13 +115,13 @@ if ($type == 'new'){
         foreach (['yes', 'no'] as $item) {
             $enabledOptions .= sprintf(
                 '<option value="%s"%s>%s</option>',
-                $item, $_GET['enabled'] == $item ? ' selected' : '', strtoupper($item)
+                $item, isset($_GET['enabled']) && $_GET['enabled'] == $item ? ' selected' : '', strtoupper($item)
             );
         }
         foreach (['pending' => $lang_invite['text_pending'], 'confirmed' => $lang_invite['text_confirmed']] as $name => $text) {
             $statusOptions .= sprintf(
                 '<option value="%s"%s>%s</option>',
-                $name, $_GET['status'] == $name ? ' selected' : '', $text
+                $name, isset($_GET['status']) && $_GET['status'] == $name ? ' selected' : '', $text
             );
         }
 
@@ -251,7 +251,7 @@ JS;
             print("</form>");
         }
         print("</table>");
-        print("</td></tr></table>$pagertop");
+        print("</td></tr></table>" . ($pagertop ?? ''));
     } elseif (in_array($menuSelected, ['sent', 'tmp'])) {
         $whereStr = "inviter = " . sqlesc($id);
         if ($menuSelected == 'sent') {

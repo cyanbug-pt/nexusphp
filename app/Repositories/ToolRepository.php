@@ -32,7 +32,7 @@ class ToolRepository extends BaseRepository
         $webRoot = base_path();
         $dirName = basename($webRoot);
         $excludes = self::BACKUP_EXCLUDES;
-        $baseFilename = sprintf('%s/%s.web.%s', sys_get_temp_dir(), $dirName, date('Ymd.His'));
+        $baseFilename = sprintf('%s/%s.web.%s', Setting::getBackupExportPath(), $dirName, date('Ymd.His'));
         if (command_exists('tar') && ($method === 'tar' || $method === null)) {
             $filename = $baseFilename . ".tar.gz";
             $command = "tar";
@@ -89,7 +89,7 @@ class ToolRepository extends BaseRepository
     {
         $connectionName = config('database.default');
         $config = config("database.connections.$connectionName");
-        $filename = sprintf('%s/%s.database.%s.sql', sys_get_temp_dir(), basename(base_path()), date('Ymd.His'));
+        $filename = sprintf('%s/%s.database.%s.sql', Setting::getBackupExportPath(), basename(base_path()), date('Ymd.His'));
         $command = sprintf(
             'mysqldump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db %s >> %s 2>&1',
             $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
@@ -115,7 +115,7 @@ class ToolRepository extends BaseRepository
         if ($backupDatabase['result_code'] != 0) {
             throw new \RuntimeException("backup database fail: " . json_encode($backupDatabase));
         }
-        $baseFilename = sprintf('%s/%s.%s', sys_get_temp_dir(), basename(base_path()), date('Ymd.His'));
+        $baseFilename = sprintf('%s/%s.%s', Setting::getBackupExportPath(), basename(base_path()), date('Ymd.His'));
         if (command_exists('tar') && ($method === 'tar' || $method === null)) {
             $filename = $baseFilename . ".tar.gz";
             $command = sprintf(

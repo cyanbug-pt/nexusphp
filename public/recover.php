@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	if ($iv == "yes")
 	check_code ($_POST['imagehash'], $_POST['imagestring'],"recover.php",true);
-	$email = unesc(htmlspecialchars(trim($_POST["email"])));
+	$email = unesc(htmlspecialchars(trim($_POST["email"] ?? '')));
 	$email = safe_email($email);
 	if (!$email)
 	failedlogins($lang_recover['std_missing_email_address'],true);
