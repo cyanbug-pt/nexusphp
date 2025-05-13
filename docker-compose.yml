@@ -56,7 +56,7 @@ services:
         max-file: "3"
     networks:
       - appnet
-      -
+
   cleanup:
     image: nexusphp_php
     container_name: nexusphp-cleanup
