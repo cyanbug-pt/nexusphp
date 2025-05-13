@@ -938,6 +938,28 @@ function docleanup($forceAll = 0, $printProgress = false) {
 		printProgress($log);
 	}
 
+    //delete old ip log
+    $length = 90*86400; //90 days
+    $until = date("Y-m-d H:i:s",(TIMENOW - $length));
+    sql_query("DELETE FROM iplog WHERE access < ".sqlesc($until));
+    $log = "delete old ip log";
+    do_log($log);
+    if ($printProgress) {
+        printProgress($log);
+    }
+
+    //delete failed jobs
+    $length = 10*86400; //10 days
+    $until = date("Y-m-d H:i:s",(TIMENOW - $length));
+    sql_query("DELETE FROM failed_jobs WHERE failed_at < ".sqlesc($until));
+    $log = "delete failed jobs";
+    do_log($log);
+    if ($printProgress) {
+        printProgress($log);
+    }
+
+
+
     //cost too many time, migrate to schedule run command
     //sync to Meilisearch
 //    $meiliRep = new \App\Repositories\MeiliSearchRepository();
@@ -1021,16 +1043,6 @@ function docleanup($forceAll = 0, $printProgress = false) {
     if ($printProgress) {
         printProgress($log);
     }
-
-	//delete old ip log
-	$length = 365*86400; //a year
-	$until = date("Y-m-d H:i:s",(TIMENOW - $length));
-	sql_query("DELETE FROM iplog WHERE access < ".sqlesc($until));
-	$log = "delete old ip log";
-	do_log($log);
-	if ($printProgress) {
-		printProgress($log);
-	}
 
 	//delete old general log
 	$until = date("Y-m-d H:i:s",(TIMENOW - $length));
