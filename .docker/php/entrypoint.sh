@@ -91,6 +91,18 @@ elif [ "$SERVICE_NAME" = "scheduler" ]; then
         sleep 5;
       fi
     done
+elif [ "$SERVICE_NAME" = "cleanup" ]; then
+    echo_info "Start Cleanup ...";
+    while true; do
+      if [ -f "$ENV_FILE" ] && [ -d "$VENDOR_DIR" ]; then
+        echo_success "[Cleanup] Run cleanup:run at $(date '+%Y-%m-%d %H:%M:%S')";
+        php include/cleanup_cli.php;
+        sleep 60;
+      else
+        echo_info "[Cleanup] .env or vendor not exists，wait 5 seconds...";
+        sleep 5;
+      fi
+    done
 else
     echo_error "Unknown SERVICE_NAME: $SERVICE_NAME, exiting."
     exit 1
