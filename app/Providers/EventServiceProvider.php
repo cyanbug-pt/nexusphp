@@ -37,6 +37,8 @@ class EventServiceProvider extends ServiceProvider
             RemoveSeedBoxRecordCache::class,
         ],
         TorrentUpdated::class => [
+            FetchTorrentImdb::class,
+            FetchTorrentPTGen::class,
             SyncTorrentToElasticsearch::class,
             SyncTorrentToMeilisearch::class,
         ],
