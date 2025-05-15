@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\SearchBox;
-use Carbon\CarbonInterface;
+use App\Models\TorrentExtra;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
@@ -3386,6 +3386,7 @@ function torrenttable($rows, $variant = "torrent", $searchBoxId = 0) {
     $enablePtGen = get_setting('main.enable_pt_gen_systemyes') == 'yes';
 
 	$torrentSeedingLeechingStatus = $torrent->listLeechingSeedingStatus($CURUSER['id'], $torrentIdArr);
+    $ptGenInfo = TorrentExtra::query()->whereIn('torrent_id', $torrentIdArr)->pluck('pt_gen', 'torrent_id')->toArray();
     $tagRep = new \App\Repositories\TagRepository();
 	$torrentTagCollection = \App\Models\TorrentTag::query()->whereIn('torrent_id', $torrentIdArr)->get();
 	$torrentTagResult = $torrentTagCollection->groupBy('torrent_id');
@@ -3664,7 +3665,7 @@ foreach ($rows as $row)
 	print("</td>");
 
     if ($enableImdb || $enablePtGen) {
-        echo $torrent->renderTorrentsPageAverageRating($row);
+        echo $torrent->renderTorrentsPageAverageRating($row, $ptGenInfo[$row['id']] ?? []);
     }
 		$act = "";
 		if ($CURUSER["dlicon"] != 'no' && $CURUSER["downloadpos"] != "no")

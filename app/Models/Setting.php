@@ -120,6 +120,11 @@ class Setting extends NexusModel
         return self::get("main.defaultlang");
     }
 
+    public static function getIsPTGenEnabled(): bool
+    {
+        return self::get("main.enable_pt_gen_system") == "yes";
+    }
+
     public static function getIsUseChallengeResponseAuthentication(): bool
     {
         return self::get("security.use_challenge_response_authentication") == "yes";

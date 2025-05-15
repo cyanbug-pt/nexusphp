@@ -51,7 +51,7 @@ switch ($siteid)
 		{
 			$ptGen = new \Nexus\PTGen\PTGen();
 			try {
-				$ptGen->updateTorrentPtGen($row, $siteid);
+				$ptGen->updateTorrentPtGen($id);
 			} catch (\Exception $e) {
 				$log = $e->getMessage() . ", trace: " . $e->getTraceAsString();
 				do_log($log, 'error');

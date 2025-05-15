@@ -3,6 +3,7 @@
 namespace Nexus\Torrent;
 
 use App\Models\Setting;
+use App\Models\TorrentExtra;
 use Nexus\Database\NexusDB;
 use Nexus\Imdb\Imdb;
 use Nexus\PTGen\PTGen;
@@ -55,6 +56,12 @@ class Torrent
         return $snatchedList;
     }
 
+    public function listPTGenInfo(array $torrentIdArr)
+    {
+        $list = TorrentExtra::query()->whereIn('torrent_id', $torrentIdArr)->get(['torrent_id', 'pt_gen']);
+    }
+
+
     public function renderProgressBar($activeStatus, $progress): string
     {
         $color = '#aaa';
@@ -71,21 +78,15 @@ class Torrent
         return $result;
     }
 
-    public function renderTorrentsPageAverageRating(array $torrentInfo): string
+    public function renderTorrentsPageAverageRating(array $torrentInfo, array|string $ptGenInfo): string
     {
         static $ptGen;
         if (is_null($ptGen)) {
             $ptGen = new PTGen();
         }
-//        $ptGenInfo = $torrentInfo['pt_gen'];
-//        if (!is_array($torrentInfo['pt_gen']) && is_string($torrentInfo['pt_gen'])) {
-//            $ptGenInfo = json_decode($ptGenInfo, true);
-//        }
-
         $log = "torrent: " . $torrentInfo['id'];
-//        $siteIdAndRating = $ptGen->listRatings($ptGenInfo ?? [], $torrentInfo['url']);
-        $siteIdAndRating = $ptGen->listRatings([], $torrentInfo['url']);
-        $log .= "siteIdAndRating: " . json_encode($siteIdAndRating);
+        $siteIdAndRating = $ptGen->listRatings(is_array($ptGenInfo) && count($ptGenInfo) ? $ptGenInfo : [], $torrentInfo['url']);
+        $log .= ", siteIdAndRating: " . json_encode($siteIdAndRating);
         do_log($log);
         return $ptGen->buildRatingSpan($siteIdAndRating);
     }

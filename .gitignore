@@ -24,6 +24,7 @@ yarn-error.log
 /imdb/cache
 /imdb/images
 /resources/geoip
+/resources/upload
 .DS_Store
 /plugins
 auth.json

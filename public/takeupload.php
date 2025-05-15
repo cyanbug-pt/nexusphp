@@ -353,13 +353,14 @@ $insert = [
     'cache_stamp' => time(),
 ];
 /**
- * migrate to extra table and remove pt_gen field
+ * migrate to extra table
  * @since 1.9
  */
 $extra = [
     'descr' => $descr,
     'media_info' => $_POST['technical_info'] ?? '',
     'nfo' => $nfo,
+    'pt_gen' => $_POST['pt_gen'] ?? '',
 ];
 if (isset($_POST['hr'][$catmod]) && isset(\App\Models\Torrent::$hrStatus[$_POST['hr'][$catmod]]) && user_can('torrent_hr')) {
     $insert['hr'] = $_POST['hr'][$catmod];

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->mediumText('descr');
             $table->text('media_info')->nullable();
             $table->binary('nfo')->nullable();
+            $table->mediumText('pt_gen')->nullable();
             $table->timestamps();
         });
     }

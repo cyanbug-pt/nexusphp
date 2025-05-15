@@ -47,19 +47,19 @@ $url = parse_imdb_id($_POST['url'] ?? '');
  * add PT-Gen
  * @since 1.6
  *
- * @deprecated
- * @since 1.9
  */
-//if (!empty($_POST['pt_gen'])) {
-//    $postPtGen = $_POST['pt_gen'];
-//    $existsPtGenInfo = json_decode($row['pt_gen'], true) ?? [];
-//    $ptGen = new \Nexus\PTGen\PTGen();
-//    if ($postPtGen != $ptGen->getLink($existsPtGenInfo)) {
+if (!empty($_POST['pt_gen'])) {
+    $postPtGen = $_POST['pt_gen'];
+    $existsPtGenInfo = json_decode($row['pt_gen'], true) ?? [];
+    $ptGen = new \Nexus\PTGen\PTGen();
+    if ($postPtGen != $ptGen->getLink($existsPtGenInfo)) {
 //        $updateset[] = "pt_gen = " . sqlesc($postPtGen);
-//    }
-//} else {
+        $extraUpdate["pt_gen"] = $postPtGen;
+    }
+} else {
 //    $updateset[] = "pt_gen = ''";
-//}
+    $extraUpdate["pt_gen"] = "";
+}
 
 //$updateset[] = "technical_info = " . sqlesc($_POST['technical_info'] ?? '');
 $extraUpdate["media_info"] = $_POST['technical_info'] ?? '';

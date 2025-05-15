@@ -10,6 +10,7 @@ use App\Events\UserDeleted;
 use App\Events\UserDisabled;
 use App\Listeners\DeductUserBonusWhenTorrentDeleted;
 use App\Listeners\FetchTorrentImdb;
+use App\Listeners\FetchTorrentPTGen;
 use App\Listeners\RemoveOauthTokens;
 use App\Listeners\RemoveSeedBoxRecordCache;
 use App\Listeners\SendEmailNotificationWhenTorrentCreated;
@@ -41,6 +42,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         TorrentCreated::class => [
             FetchTorrentImdb::class,
+            FetchTorrentPTGen::class,
             SyncTorrentToElasticsearch::class,
             SyncTorrentToMeilisearch::class,
             SendEmailNotificationWhenTorrentCreated::class,

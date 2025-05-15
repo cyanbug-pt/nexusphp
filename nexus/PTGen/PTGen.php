@@ -9,10 +9,12 @@
 namespace Nexus\PTGen;
 
 use App\Models\Torrent;
+use App\Models\TorrentExtra;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Nexus\Database\NexusDB;
 use Nexus\Imdb\Imdb;
 
 class PTGen
@@ -163,12 +165,11 @@ HTML;
 
     private function request(string $url, bool $withoutCache = false): array
     {
-        global $Cache;
         $begin = microtime(true);
         $logPrefix = "url: $url";
         $cacheKey = $this->getApiPointResultCacheKey($url);
         if (!$withoutCache) {
-            $cache = $Cache->get_value($cacheKey);
+            $cache = NexusDB::cache_get($cacheKey);
             if ($cache) {
                 do_log("$logPrefix, from cache");
                 return $cache;
@@ -196,7 +197,7 @@ HTML;
             throw new PTGenException($msg);
         }
         if ($this->isRawPTGen($bodyArr) || $this->isIyuu($bodyArr)) {
-            $Cache->cache_value($cacheKey, $bodyArr, 24 * 3600);
+            NexusDB::cache_put($cacheKey, $bodyArr, 24 * 3600);
             do_log("$logPrefix, success get from api point, use time: " . (microtime(true) - $begin));
             $bodyArr['__updated_at'] = now()->toDateTimeString();
             return $bodyArr;
@@ -209,8 +210,7 @@ HTML;
 
     public function deleteApiPointResultCache($url)
     {
-        global $Cache;
-        $Cache->delete_value($this->getApiPointResultCacheKey($url));
+        NexusDB::cache_del($this->getApiPointResultCacheKey($url));
     }
 
     private function getApiPointResultCacheKey($url)
@@ -413,11 +413,17 @@ HTML;
         return $results;
     }
 
-    public function updateTorrentPtGen(array $torrentInfo): bool|array
+    public function updateTorrentPtGen(int $id): bool|array
     {
         $now = Carbon::now();
-        $log = "torrent: " . $torrentInfo['id'];
-        $arr = json_decode($torrentInfo['pt_gen'], true);
+        $log = "updateTorrentPtGen, torrent: " . $id;
+        $torrent = Torrent::query()->find($id);
+        if (empty($torrent)) {
+            do_log("$log, Torrent not found");
+            return false;
+        }
+        $extra = $torrent->extra;
+        $arr = $extra->pt_gen;
         if (is_array($arr)) {
             if (!empty($arr['__updated_at'])) {
                 $log .= ", updated_at: " . $arr['__updated_at'];
@@ -431,7 +437,7 @@ HTML;
             }
             $link = $this->getLink($arr);
         } else {
-            $link = $torrentInfo['pt_gen'];
+            $link = $arr;
         }
         if (empty($link)) {
             do_log("$log, no link...");
@@ -449,13 +455,13 @@ HTML;
                 do_log("$log, site: $site can not be updated: " . $exception->getMessage(), 'error');
             }
         }
-        $siteIdAndRating = $this->listRatings($ptGenInfo, $torrentInfo['url'], $torrentInfo['descr']);
+        $siteIdAndRating = $this->listRatings($ptGenInfo, $torrent->url, $extra->descr);
         foreach ($siteIdAndRating as $key => $value) {
             $ptGenInfo[$key]['data']["__rating"] = $value;
         }
         $ptGenInfo['__link'] = $link;
         $ptGenInfo['__updated_at'] = $now->toDateTimeString();
-        Torrent::query()->where('id', $torrentInfo['id'])->update(['pt_gen' => $ptGenInfo]);
+        TorrentExtra::query()->where('torrent_id', $id)->update(['pt_gen' => $ptGenInfo]);
         do_log("$log, success update");
         return $ptGenInfo;
     }
