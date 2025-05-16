@@ -248,9 +248,9 @@ class Setting extends NexusModel
         return self::get("permission.user_token_allowed");
     }
 
-    public static function getBackupExportPath(): string
+    public static function getBackupExportPath(): string|null
     {
-        return self::get("backup.export_path", sys_get_temp_dir());
+        return self::get("backup.export_path");
     }
 
 
