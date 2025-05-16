@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => '未达标保留数：[b]:counts[/b]',
     'claim_unreached_remove_counts' => '未达标删除数：[b]:counts[/b]',
     'claim_unreached_summary' => '未达标每个种子扣除魔力：[b]:deduct_per_torrent[/b]，总扣除魔力：[b]:deduct_total[/b]',
+    'slice_tip' => '只显示前 :slice_count 个',
 
     'confirm_give_up' => '确定要放弃认领此种子吗？',
     'add_claim' => '认领',

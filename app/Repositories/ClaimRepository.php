@@ -311,10 +311,16 @@ class ClaimRepository extends BaseRepository
         $msg[] = nexus_trans('claim.claim_total', [ 'total' => count($allTorrentIdArr)], $locale);
 
         //列表数据只取部分展示
-        $reachList = collect(array_slice($reachedTorrentIdArr, 0, self::SETTLE_MSG_SLICE_COUNT))->map(
-            fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
-        )->implode("\n");
-        $msg[] = nexus_trans("claim.claim_reached_counts", ['counts' => count($reachedTorrentIdArr)], $locale) . "\n$reachList";
+        $sliceCount = self::SETTLE_MSG_SLICE_COUNT;
+        $sliceTip = "... (" . nexus_trans('claim.slice_tip', ['slice_count' => $sliceCount], $locale) . ")";
+        $reachPart = nexus_trans("claim.claim_reached_counts", ['counts' => count($reachedTorrentIdArr), 'slice_count' => $sliceCount], $locale);
+        if (!empty($reachedTorrentIdArr)) {
+            $reachList = collect(array_slice($reachedTorrentIdArr, 0, $sliceCount))->map(
+                fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
+            )->implode("\n");
+            $reachPart .= sprintf("\n%s\n%s", $reachList, $sliceTip);
+        }
+        $msg[] = $reachPart;
         $msg[] = nexus_trans(
             "claim.claim_reached_summary", [
                 'bonus_per_hour' => number_format($bonusResult['seed_bonus'], 2),
@@ -323,15 +329,24 @@ class ClaimRepository extends BaseRepository
             ], $locale
         );
 
-        $remainList = collect(array_slice($remainTorrentIdArr, 0, self::SETTLE_MSG_SLICE_COUNT))->map(
-            fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
-        )->implode("\n");
-        $msg[] = nexus_trans("claim.claim_unreached_remain_counts", ['counts' => count($remainTorrentIdArr)], $locale) . "\n$remainList";
+        $remainPart = nexus_trans("claim.claim_unreached_remain_counts", ['counts' => count($remainTorrentIdArr), 'slice_count' => $sliceCount], $locale);
+        if (!empty($remainTorrentIdArr)) {
+            $remainList = collect(array_slice($remainTorrentIdArr, 0, $sliceCount))->map(
+                fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
+            )->implode("\n");
+            $remainPart .= sprintf("\n%s\n%s", $remainList, $sliceTip);
+        }
+        $msg[] = $remainPart;
 
-        $unReachList = collect(array_slice($unReachedTorrentIdArr, 0, self::SETTLE_MSG_SLICE_COUNT))->map(
-            fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
-        )->implode("\n");
-        $msg[] = nexus_trans("claim.claim_unreached_remove_counts", ['counts' => count($unReachedTorrentIdArr)], $locale) . "\n$unReachList";
+        $removePart = nexus_trans("claim.claim_unreached_remove_counts", ['counts' => count($unReachedTorrentIdArr), 'slice_count' => $sliceCount], $locale);
+        if (!empty($unReachedTorrentIdArr)) {
+            $unReachList = collect(array_slice($unReachedTorrentIdArr, 0, $sliceCount))->map(
+                fn($item) => sprintf("[url=details.php?id=%s]%s[/url]", $item, $torrentInfo->get($item)->name)
+            )->implode("\n");
+            $removePart .= sprintf("\n%s\n%s", $unReachList, $sliceTip);
+        }
+        $msg[] = $removePart;
+
         if ($deductTotal) {
             $msg[] = nexus_trans(
                 "claim.claim_unreached_summary", [

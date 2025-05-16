@@ -56,12 +56,6 @@ class Torrent
         return $snatchedList;
     }
 
-    public function listPTGenInfo(array $torrentIdArr)
-    {
-        $list = TorrentExtra::query()->whereIn('torrent_id', $torrentIdArr)->get(['torrent_id', 'pt_gen']);
-    }
-
-
     public function renderProgressBar($activeStatus, $progress): string
     {
         $color = '#aaa';

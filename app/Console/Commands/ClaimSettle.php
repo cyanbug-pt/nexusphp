@@ -40,8 +40,8 @@ class ClaimSettle extends Command
     {
         $rep = new ClaimRepository();
         $uid = $this->option('uid');
-        $force = $this->option('force');
-        $test = $this->option('test');
+        $force = $this->option('force') ?? false;
+        $test = $this->option('test') ?? false;
         $this->info(sprintf('uid: %s, force: %s, test: %s', $uid, $force, $test));
         if (!$uid) {
             $result = $rep->settleCronjob();

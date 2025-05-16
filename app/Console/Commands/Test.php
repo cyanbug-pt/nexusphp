@@ -9,6 +9,7 @@ use App\Models\PersonalAccessToken;
 use App\Models\Torrent;
 use App\Models\TorrentExtra;
 use App\Models\User;
+use App\Repositories\ClaimRepository;
 use App\Repositories\ExamRepository;
 use App\Repositories\SeedBoxRepository;
 use App\Repositories\UploadRepository;

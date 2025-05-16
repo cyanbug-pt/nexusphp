@@ -22,6 +22,7 @@ return [
     'claim_unreached_remain_counts' => '未達標保留數：[b]:counts[/b]',
     'claim_unreached_remove_counts' => '未達標刪除數：[b]:counts[/b]',
     'claim_unreached_summary' => '未達標每個種子扣除魔力：[b]:deduct_per_torrent[/b]，總扣除魔力：[b]:deduct_total[/b]',
+    'slice_tip' => '只顯示前 :slice_count 個',
 
     'confirm_give_up' => '確定要放棄認領此種子嗎？',
     'add_claim' => '認領',
