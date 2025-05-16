@@ -31,6 +31,10 @@ class Torrent extends NexusModel
         'last_action' => 'datetime',
     ];
 
+    protected $hidden = [
+        'info_hash',
+    ];
+
     public static $commentFields = [
         'id', 'name', 'added', 'visible', 'banned', 'owner', 'sp_state', 'promotion_time_type', 'promotion_until', 'pos_state',
         'hr', 'picktype', 'picktime', 'last_action', 'leechers', 'seeders', 'times_completed', 'views', 'size', 'cover', 'anonymous',

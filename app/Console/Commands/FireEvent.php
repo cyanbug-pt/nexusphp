@@ -15,7 +15,7 @@ class FireEvent extends Command
      *
      * @var string
      */
-    protected $signature = 'event:fire {--name=} {--idKey=} {--idKeyOld=""}';
+    protected $signature = 'event:fire {--name=} {--idKey=} {--idKeyOld=}';
 
     /**
      * The console command description.
@@ -35,25 +35,26 @@ class FireEvent extends Command
         $idKey = $this->option('idKey');
         $idKeyOld = $this->option('idKeyOld');
         $log = "FireEvent, name: $name, idKey: $idKey, idKeyOld: $idKeyOld";
+        $this->info("$log, begin ...");
         if (isset(ModelEventEnum::$eventMaps[$name])) {
             $eventName = ModelEventEnum::$eventMaps[$name]['event'];
-            $model = unserialize(NexusDB::cache_get($idKey));
-            if ($model instanceof Model) {
-                $params = [$model];
-                if ($idKeyOld) {
-                    $modelOld = unserialize(NexusDB::cache_get($idKeyOld));
-                    if ($modelOld instanceof Model) {
-                        $params[] = $modelOld;
-                    } else {
-                        $log .= ", invalid idKeyOld";
-                    }
-                }
-                $result = call_user_func_array([$eventName, "dispatch"], $params);
-                $log .= ", success call dispatch, result: " . var_export($result, true);
-                publish_model_event($name, $model->id);
-            } else {
-                $log .= ", invalid argument to call, it should be instance of: " . Model::class;
+            $modelClassName = ModelEventEnum::$eventMaps[$name]['model'];
+            $modelBasic = new $modelClassName();
+            $modelData = unserialize(NexusDB::cache_get($idKey));
+            $useArray = str_ends_with($name, '_deleted');
+            $model = call_user_func_array([$modelBasic, "newInstance"], [$modelData, true]);
+            //由于 id 不属于 fillable，初始化新对象时是没有值的
+            $model->id = $modelData['id'];
+            $params = [$useArray ? $modelData: $model];
+            if ($idKeyOld) {
+                $modelOldData = unserialize(NexusDB::cache_get($idKeyOld));
+                $modelOld = call_user_func_array([$modelBasic, "newInstance"], [$modelOldData, true]);
+                $modelOld->id = $modelOldData['id'];
+                $params[] = $useArray ? $modelOldData: $modelOld;
             }
+            $result = call_user_func_array([$eventName, "dispatch"], $params);
+            $log .= ", success call dispatch, result: " . var_export($result, true);
+            publish_model_event($name, $model->id);
         } else {
             $log .= ", no event match this name";
         }

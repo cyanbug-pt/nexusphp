@@ -6136,7 +6136,7 @@ function build_search_box_category_table($mode, $checkboxValue, $categoryHrefPre
     //Category
     $html .= sprintf('<tr><td class="embedded" align="left">%s</td></tr>', nexus_trans('label.search_box.category'));
     /** @var \Illuminate\DataBase\Eloquent\Collection $categoryCollection */
-    $categoryCollection = $searchBox->categories()->orderBy('sort_index', 'desc')->get();
+    $categoryCollection = $searchBox->categories()->with('icon')->orderBy('sort_index', 'desc')->get();
     if (!empty($options['select_unselect'])) {
         $categoryCollection->push(new \App\Models\Category(['mode' => -1]));
     }

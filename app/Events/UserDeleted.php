@@ -15,16 +15,16 @@ class UserDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public ?Model $model = null;
+    public ?array $data = null;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Model $model)
+    public function __construct(array $data)
     {
-        $this->model = $model;
+        $this->data = $data;
     }
 
     /**

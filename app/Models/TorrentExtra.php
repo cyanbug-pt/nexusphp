@@ -16,6 +16,9 @@ class TorrentExtra extends NexusModel
     {
         return Attribute::make(
             get: function ($value) {
+                if (is_null($value)) {
+                    return null;
+                }
                 $jsonDecoded = json_decode($value, true);
                 if (is_array($jsonDecoded)) {
                     return $jsonDecoded;

@@ -1340,17 +1340,25 @@ function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, ?\
         $prefix = "fire_event:";
         $idKey = $prefix . \Illuminate\Support\Str::random();
         $idKeyOld = "";
-        \Nexus\Database\NexusDB::cache_put($idKey, serialize($model), 3600*24*30);
+        \Nexus\Database\NexusDB::cache_put($idKey, serialize($model->toArray()), 3600*24*30);
         if ($oldModel) {
             $idKeyOld = $prefix . \Illuminate\Support\Str::random();
-            \Nexus\Database\NexusDB::cache_put($idKeyOld, serialize($oldModel), 3600*24*30);
+            \Nexus\Database\NexusDB::cache_put($idKeyOld, serialize($oldModel->toArray()), 3600*24*30);
         }
         executeCommand("event:fire --name=$name --idKey=$idKey --idKeyOld=$idKeyOld", "string", true, false);
     } else {
         $eventClass = \App\Enums\ModelEventEnum::$eventMaps[$name]['event'];
-        $params = [$model];
-        if ($oldModel) {
-            $params[] = $oldModel;
+        if (str_ends_with($name, '_deleted')) {
+            //if deleted from database, can not pass model instance, use array
+            $params = [$model->toArray()];
+            if ($oldModel) {
+                $params[] = $oldModel->toArray();
+            }
+        } else {
+            $params = [$model];
+            if ($oldModel) {
+                $params[] = $oldModel;
+            }
         }
         call_user_func_array([$eventClass, "dispatch"], $params);
         publish_model_event($name, $model->id);
