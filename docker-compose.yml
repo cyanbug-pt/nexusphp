@@ -38,6 +38,7 @@ services:
         max-file: "3"
     networks:
       - appnet
+    restart: always
 
   scheduler:
     image: nexusphp_php
@@ -57,6 +58,7 @@ services:
         max-file: "3"
     networks:
       - appnet
+    restart: always
 
   cleanup:
     image: nexusphp_php
@@ -76,6 +78,7 @@ services:
         max-file: "3"
     networks:
       - appnet
+    restart: always
 
   openresty:
     build:

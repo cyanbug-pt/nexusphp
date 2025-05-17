@@ -93,10 +93,17 @@ class ToolRepository extends BaseRepository
         $connectionName = config('database.default');
         $config = config("database.connections.$connectionName");
         $filename = sprintf('%s/%s.database.%s.sql', $this->getBackupExportPath(), basename(base_path()), date('Ymd.His'));
-        $command = sprintf(
-            'mysqldump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db --no-tablespaces %s >> %s 2>&1',
-            $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
-        );
+        if (command_exists("mariadb-dump")) {
+            $command = sprintf(
+                'mariadb-dump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db --no-tablespaces --ssl=0 %s >> %s 2>&1',
+                $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
+            );
+        } else {
+            $command = sprintf(
+                'mysqldump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db --no-tablespaces --ssl-mode=DISABLED %s >> %s 2>&1',
+                $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
+            );
+        }
         $result = exec($command, $output, $result_code);
         do_log(sprintf(
             "command: %s, output: %s, result_code: %s, result: %s, filename: %s",
