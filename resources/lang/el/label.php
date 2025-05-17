@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Αν θα αποθηκευτεί μέσω FTP. Αν ναι, προσθέστε τις πληροφορίες ρύθμισης παραμέτρων στο αρχείο .env, ανατρέξτε στο <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Αντίγραφο ασφαλείας μέσω SFTP',
             'via_sftp_help' => 'Αν θα αποθηκευτεί μέσω FTP. Αν ναι, προσθέστε τις πληροφορίες ρύθμισης παραμέτρων στο αρχείο .env, ανατρέξτε στο <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Εξαγωγή σε κατάλογο',
+            'export_path_help' => 'Δεν ορίστηκε να χρησιμοποιήσετε τον προσωρινό κατάλογο συστήματος::default_path. μπορείτε να χρησιμοποιήσετε εξειδικευμένα εργαλεία τρίτων για να μεταφέρετε offsite αποθηκεύει.' ,
+            'retention_count' => 'Αριθμός διατήρησης',
+            'retention_count_help' => 'Διατήρηση μόνο των τελευταίων εγγραφών αντιγράφων ασφαλείας, οι παλιές θα διαγράφονται τακτικά. Προεπιλογή: :default_count',
         ],
         'hr' => [
             'tab_header' => 'Ε&Α',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Μεταφόρτωση διεύθυνσης διασύνδεσης',
             'base_url' => 'Πρόθεμα URL εικόνας',
             'upload_token' => 'Διακριτικό αποστολής',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Άδεια',
+            'user_token_allowed' => 'Άδεια διαθέσιμη στο διακριτικό χρήστη',
+            'user_token_allowed_help' => 'Το διακριτικό χρήστη δεν έχει δικαίωμα να επικαλεστεί χωρίς άδεια από αυτή τη λίστα πινάκων',
+        ],
     ],
     'user' => [
         'label' => 'Χρήστης',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Κύκλωμα)',
         'ip_begin' => 'Έναρξη IP',
         'ip_end' => 'Τέλος IP',
-        'ip_help' => 'Συμπληρώστε το ASN/start IP + end IP/IP (Block), μόνο ένα από τα τρία',
+        'ip_help' => 'Συμπληρώστε τη διεύθυνση IP ή το ASN, όχι και τα δύο!',
         'status' => 'Κατάσταση',
         'is_allowed' => 'Είναι επιτρεπτή λίστα',
         'is_allowed_help' => 'Οι διευθύνσεις IP στη λίστα επιτρεπόμενων δεν επηρεάζονται από τον κανόνα SeedBox',

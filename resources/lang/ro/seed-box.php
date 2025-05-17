@@ -14,6 +14,6 @@ return [
         'subject' => 'Starea înregistrării SeedBox a fost modificată',
         'body' => 'Starea înregistrării SeedBox cu ID-ul :id a fost schimbată de :operator de la :old_status la :new_status. Motiv: :reason',
     ],
-    'is_seed_box_yes' => 'Acest IP este SeedBox, identificat de înregistrare cu ID-ul :id',
+    'is_seed_box_yes' => 'Acest IP este SeedBox',
     'is_seed_box_no' => 'Acest IP nu este SeedBox',
 ];

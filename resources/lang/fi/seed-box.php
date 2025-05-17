@@ -14,6 +14,6 @@ return [
         'subject' => 'SeedBox-tietueen tila muuttunut',
         'body' => 'SeedBox-tietueen tila tunnisteella :id muuttui :operator paikasta :old_status muotoon :new_status. Syy: :reason',
     ],
-    'is_seed_box_yes' => 'Tämä IP on SeedBox, tunnistaa tietue ID :id',
+    'is_seed_box_yes' => 'Tämä IP on SeedBox',
     'is_seed_box_no' => 'Tämä IP-osoite ei ole SeedBox',
 ];

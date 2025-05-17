@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Nieosiągnięty torrent pozostaje liczony: [b]:count[/b]',
     'claim_unreached_remove_counts' => 'Nieosiągnięta liczba usuwania torrent: [b]:count[/b]',
     'claim_unreached_summary' => 'Odlicz bonus każdego nieosiągniętego torrenta：[b]:deduct_per_torrent[/b], całkowitym odliczeniem: [b]:deduct_total[/b]',
+    'slice_tip' => 'Pokaż tylko pierwsze :slice_count elementów',
 
     'confirm_give_up' => 'Czy na pewno chcesz zrezygnować z pobierania tego torrentu?',
     'add_claim' => 'Claim',

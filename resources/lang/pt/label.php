@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Salvar via FTP. Se sim, adicionar a informação de configuração para o arquivo .env, consulte <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Backup via SFTP',
             'via_sftp_help' => 'Salvar via FTP. Se sim, adicionar a informação de configuração para o arquivo .env, consulte <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Exportar para diretório',
+            'export_path_help' => 'Não definido como usar o diretório temporário do sistema::default_path. Você pode usar ferramentas especializadas de terceiros para transferir saves.' ,
+            'retention_count' => 'Contagem de retenção',
+            'retention_count_help' => 'Manter apenas os últimos registros de backup, os antigos serão excluídos regularmente. Padrão: :default_count',
         ],
         'hr' => [
             'tab_header' => 'R&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Carregar endereço de interface',
             'base_url' => 'Prefixo da imagem URL',
             'upload_token' => 'Token de envio',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Permisschar@@0o',
+            'user_token_allowed' => 'Permissão disponível para token de usuário',
+            'user_token_allowed_help' => 'O token do usuário não tem direito de invocar sem permissão desta lista tabular',
+        ],
     ],
     'user' => [
         'label' => 'Usuário',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Iniciar IP',
         'ip_end' => 'Ip Final',
-        'ip_help' => 'Preencha o IP ASN/start + IP / fim (Bloco), apenas um dos três',
+        'ip_help' => 'Preencha o endereço IP ou ASN, não ambos!',
         'status' => 'SItuação',
         'is_allowed' => 'É permitido',
         'is_allowed_help' => 'Os IPs na lista branca não são afetados pela regra SeedBox',

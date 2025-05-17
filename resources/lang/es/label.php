@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Si desea guardar o no a través de FTP. Si es así, agregue la información de configuración al archivo .env, consulte el documento <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel</a>',
             'via_sftp' => 'Copia de seguridad vía SFTP',
             'via_sftp_help' => 'Si desea guardar o no a través de FTP. Si es así, agregue la información de configuración al archivo .env, consulte el documento <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel</a>',
+            'export_path' => 'Exportar al directorio',
+            'export_path_help' => 'No establecido para utilizar el sistema de directorio temporal::default_path. Puede utilizar herramientas especializadas de terceros para transferir guardados fuera del sitio.' ,
+            'retention_count' => 'Contador de retención',
+            'retention_count_help' => 'Conservar solo los últimos registros de copia de seguridad, los antiguos se eliminarán regularmente. Por defecto: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Subir dirección de la interfaz',
             'base_url' => 'Prefijo URL de imagen',
             'upload_token' => 'Subir token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Permiso',
+            'user_token_allowed' => 'Permiso disponible para el token de usuario',
+            'user_token_allowed_help' => 'El token de usuario no tiene derecho a invocar sin permiso de esta lista de tablas',
+        ],
     ],
     'user' => [
         'label' => 'Usuario',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Bloqueo)',
         'ip_begin' => 'Iniciar IP',
         'ip_end' => 'IP final',
-        'ip_help' => 'Rellena el ASN/IP de inicio + IP final (bloqueo), sólo uno de los tres',
+        'ip_help' => 'Rellena la dirección IP o ASN, no ambos!',
         'status' => 'Estado',
         'is_allowed' => 'Está en la lista blanca',
         'is_allowed_help' => 'La regla SeedBox no afecta a los nombres en la lista blanca',

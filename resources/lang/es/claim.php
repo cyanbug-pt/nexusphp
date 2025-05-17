@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Unreached torrent remain counts: [b]:counts[/b]',
     'claim_unreached_remove_counts' => 'Cuentas de eliminación de torrent no alcanzadas: [b]:counts[/b]',
     'claim_unreached_summary' => 'Deducir bonificación por torrent：[b]:deduct_per_torrent[/b], total deduct: [b]:deduct_total[/b]',
+    'slice_tip' => 'Mostrar solo los primeros artículos :slice_count',
 
     'confirm_give_up' => '¿Estás seguro de que quieres dejar de reclamar este torrent?',
     'add_claim' => 'Claim',

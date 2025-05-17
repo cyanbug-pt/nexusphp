@@ -14,6 +14,6 @@ return [
         'subject' => 'Stato record SeedBox cambiato',
         'body' => 'Lo stato del tuo record SeedBox con ID :id è stato cambiato da :operator da :old_status a :new_status. Motivo: :reason',
     ],
-    'is_seed_box_yes' => 'Questo IP è SeedBox, identificato dal record con ID :id',
+    'is_seed_box_yes' => 'Questo IP è SeedBox',
     'is_seed_box_no' => 'Questo IP non è SeedBox',
 ];

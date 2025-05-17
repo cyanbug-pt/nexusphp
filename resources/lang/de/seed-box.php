@@ -14,6 +14,6 @@ return [
         'subject' => 'Status des SeedBox-Datensatzes geändert',
         'body' => 'Der Status Ihres SeedBox-Datensatzes mit der ID :id wurde von :operator von :old_status zu :new_status geändert. Grund: :reason',
     ],
-    'is_seed_box_yes' => 'Diese IP ist SeedBox, durch den Datensatz mit der ID :id identifiziert',
+    'is_seed_box_yes' => 'Diese IP ist SeedBox',
     'is_seed_box_no' => 'Diese IP ist nicht SeedBox',
 ];

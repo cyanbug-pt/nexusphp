@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Onått torrent förblir räkningar: [b]:counts[/b]',
     'claim_unreached_remove_counts' => 'Onått torrent ta bort siffror: [b]:counts[/b]',
     'claim_unreached_summary' => 'Dra bonus varje ouppnådd torrent：[b]:deduct_per_torrent[/b], total avdrag: [b]:deduct_total[/b]',
+    'slice_tip' => 'Visa bara de första :slice_count objekten',
 
     'confirm_give_up' => 'Är du säker på att du vill ge upp att hävda denna torrent?',
     'add_claim' => 'Claim',

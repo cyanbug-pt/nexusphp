@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Czy zapisać przez FTP. Jeśli tak, dodaj informacje konfiguracyjne do pliku .env, odwołaj się do <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Kopia zapasowa przez SFTP',
             'via_sftp_help' => 'Czy zapisać przez FTP. Jeśli tak, dodaj informacje konfiguracyjne do pliku .env, odwołaj się do <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Eksportuj do katalogu',
+            'export_path_help' => 'Nie ustawiono aby używać tymczasowego katalogu systemowego::default_path. Możesz użyć innych specjalistycznych narzędzi do przenoszenia zapisów offsit.' ,
+            'retention_count' => 'Liczba zatrzymań',
+            'retention_count_help' => 'Zachowaj tylko najnowsze rekordy kopii zapasowej, stare będą usuwane regularnie. Domyślnie: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Prześlij adres interfejsu',
             'base_url' => 'Prefiks URL obrazu',
             'upload_token' => 'Prześlij token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Uprawnienie',
+            'user_token_allowed' => 'Uprawnienia dostępne dla tokena użytkownika',
+            'user_token_allowed_help' => 'Token użytkownika nie ma prawa wywoływać bez uprawnień z tej listy tabulacyjnej',
+        ],
     ],
     'user' => [
         'label' => 'Użytkownik',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Rozpocznij IP',
         'ip_end' => 'Koniec IP',
-        'ip_help' => 'Wypełnij adres IP ASN/start + koniec IP/IP (Block), tylko jeden z trzech',
+        'ip_help' => 'Wypełnij adres IP lub ASN, nie obo!',
         'status' => 'Status',
         'is_allowed' => 'Jest na białej liście',
         'is_allowed_help' => 'Na adresy IP na białej liście nie ma wpływu reguła SeedBox',

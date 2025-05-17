@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Si vous voulez enregistrer via FTP. Si c\'est le cas, ajoutez les informations de configuration au fichier .env, reportez-vous à <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Sauvegarde via SFTP',
             'via_sftp_help' => 'Si vous voulez enregistrer via FTP. Si c\'est le cas, ajoutez les informations de configuration au fichier .env, reportez-vous à <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Exporter vers le répertoire',
+            'export_path_help' => 'Non défini pour utiliser le répertoire temporaire du système::default_path. Vous pouvez utiliser des outils spécialisés tiers pour transférer des sauvegardes hors site.' ,
+            'retention_count' => 'Nombre de rétention',
+            'retention_count_help' => 'Ne conserver que les derniers enregistrements de sauvegarde, les anciens seront supprimés régulièrement. Par défaut: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Envoyer l\'adresse de l\'interface',
             'base_url' => 'Préfixe de l\'URL de l\'image',
             'upload_token' => 'Télécharger le jeton',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Permission',
+            'user_token_allowed' => 'Autorisation disponible pour le jeton utilisateur',
+            'user_token_allowed_help' => 'Le jeton d\'utilisateur n\'a pas le droit d\'appeler sans permission de cette liste',
+        ],
     ],
     'user' => [
         'label' => 'Utilisateur',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Bloc)',
         'ip_begin' => 'Commencer l\'IP',
         'ip_end' => 'IP de fin',
-        'ip_help' => 'Remplissez l\'IP ASN/début + IP de fin / IP (Block), seulement l\'un des trois',
+        'ip_help' => 'Remplissez l\'adresse IP ou ASN, pas les deux!',
         'status' => 'Statut',
         'is_allowed' => 'Est en liste blanche',
         'is_allowed_help' => 'Les adresses IP de la liste blanche ne sont pas affectées par la règle SeedBox',

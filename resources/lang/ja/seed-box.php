@@ -14,6 +14,6 @@ return [
         'subject' => 'SeedBoxレコードの状態が変更されました',
         'body' => 'ID :idを持つSeedBoxレコードのステータスが:operatorによって:old_statusから:new_statusに変更されました。理由: ::reason',
     ],
-    'is_seed_box_yes' => 'この IP は SeedBox であり、ID は :id でレコードによって識別されます。',
+    'is_seed_box_yes' => 'この IP は SeedBox です',
     'is_seed_box_no' => 'この IP は SeedBox ではありません',
 ];

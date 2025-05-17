@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'FTP経由で保存するかどうか。設定情報を.envファイルに追加する場合は、 <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a> を参照してください。',
             'via_sftp' => 'SFTP 経由でバックアップ',
             'via_sftp_help' => 'FTP経由で保存するかどうか。設定情報を.envファイルに追加する場合は、 <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a> を参照してください。',
+            'export_path' => 'ディレクトリにエクスポート',
+            'export_path_help' => 'システム一時ディレクトリ::default_pathを使用しないように設定します。サードパーティの専用ツールを使用して、オフサイトのセーブを転送できます。' ,
+            'retention_count' => '保持数',
+            'retention_count_help' => '最新のバックアップレコードのみを保持します。古いものは定期的に削除されます。デフォルト: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'インターフェースアドレスをアップロード',
             'base_url' => '画像のURLの接頭辞：',
             'upload_token' => 'トークンをアップロード',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'アクセス許可',
+            'user_token_allowed' => 'ユーザートークンへのアクセス許可',
+            'user_token_allowed_help' => 'ユーザートークンには、この表形式のリストから許可なく呼び出す権限がありません。',
+        ],
     ],
     'user' => [
         'label' => 'ユーザー',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(ブロック)',
         'ip_begin' => 'IP アドレスの開始',
         'ip_end' => '終了IP',
-        'ip_help' => 'ASN/begin IP + end IP/IP (ブロック)を入力してください。3つのうちの1つだけです。',
+        'ip_help' => '両方ではなく、IP アドレスまたは ASN を入力してください。',
         'status' => 'ステータス',
         'is_allowed' => 'ホワイトリストに登録',
         'is_allowed_help' => 'ホワイトリスト内の IP は、SeedBox ルールの影響を受けません。',

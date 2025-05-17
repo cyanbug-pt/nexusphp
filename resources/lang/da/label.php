@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Om der skal gemmes via FTP. Hvis dette er tilfældet, så tilføj konfigurationsoplysningerne til .env-filen, henvises til <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Sikkerhedskopiering via SFTP',
             'via_sftp_help' => 'Om der skal gemmes via FTP. Hvis dette er tilfældet, så tilføj konfigurationsoplysningerne til .env-filen, henvises til <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Eksporter til mappe',
+            'export_path_help' => 'Ikke indstillet til at bruge systemet midlertidig mappe: default_path. du kan bruge tredjeparts specialiserede værktøjer til at overføre offsite gemme.' ,
+            'retention_count' => 'Antal tilbageholdelser',
+            'retention_count_help' => 'Bevar kun de nyeste backup-poster, vil gamle blive slettet regelmæssigt. Standard: default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Upload brugerflade adresse',
             'base_url' => 'Billede URL præfiks',
             'upload_token' => 'Upload token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Tilladelse',
+            'user_token_allowed' => 'Tilladelse tilgængelig for bruger token',
+            'user_token_allowed_help' => 'Bruger-token har ingen ret til at påberåbe sig uden tilladelse fra denne tabelliste',
+        ],
     ],
     'user' => [
         'label' => 'Bruger',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Start IP',
         'ip_end' => 'Afslut IP',
-        'ip_help' => 'Udfyld ASN/start IP + slut IP/IP (Block), kun en af de tre',
+        'ip_help' => 'Udfyld IP-adressen eller ASN, ikke begge!',
         'status' => 'Status',
         'is_allowed' => 'Er hvidlistet',
         'is_allowed_help' => 'IP\'er i hvidlisten påvirkes ikke af SeedBox-reglen',

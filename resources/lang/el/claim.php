@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Απεικόνιση torrent παραμένει μετρήσεις: [b]:counts[/b]',
     'claim_unreached_remove_counts' => 'Unreached torrent remove counts: [b]:counts[/b]',
     'claim_unreached_summary' => 'Μείωση μπόνους κάθε μη επιτευχθέν torrent：[b]:deduct_per_torrent[/b], συνολική έκπτωση: [b]:deduct_total[/b]',
+    'slice_tip' => 'Εμφάνιση μόνο των πρώτων στοιχείων :slice_count',
 
     'confirm_give_up' => 'Είστε σίγουροι ότι θέλετε να εγκαταλείψετε την διεκδίκηση αυτού του torrent?',
     'add_claim' => 'Claim',

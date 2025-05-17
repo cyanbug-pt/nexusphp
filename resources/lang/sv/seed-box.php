@@ -14,6 +14,6 @@ return [
         'subject' => 'SeedBox poststatus ändrad',
         'body' => 'Status för din SeedBox post med ID :id ändrades av :operator från :old_status till :new_status. Anledning: :reason',
     ],
-    'is_seed_box_yes' => 'Denna IP är SeedBox, identifierad av posten med ID :id',
+    'is_seed_box_yes' => 'Denna IP är SeedBox',
     'is_seed_box_no' => 'Denna IP är inte SeedBox',
 ];

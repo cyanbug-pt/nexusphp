@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Nedosažený torrent zbývá počítat: [b]:count[/b]',
     'claim_unreached_remove_counts' => 'Počet odstranění torrentu nedosaženo: [b]:count[/b]',
     'claim_unreached_summary' => 'Snížit bonus každého nedosaženého torrentu：[b]:deduct_per_torrent[/b], celkový odpočet: [b]:deduct_total[/b]',
+    'slice_tip' => 'Zobrazit pouze první :slice_count položky',
 
     'confirm_give_up' => 'Jste si jisti, že se chcete vzdát nároku na tento torrent?',
     'add_claim' => 'Claim',

@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Ikke oppnådd torrent forblir antall: [b]:count[/b]',
     'claim_unreached_remove_counts' => 'Ikke oppnådd antall torrent-fjerning: [b]:count[/b]',
     'claim_unreached_summary' => 'Trekk fra bonusen hver uoppnådd torrent：[b]:deduct_per_torrent[/b], total trekk: [b]:deduct_total[/b]',
+    'slice_tip' => 'Vis bare de første :slice_count elementene',
 
     'confirm_give_up' => 'Er du sikker på at du ønsker å hevde denne torrenten?',
     'add_claim' => 'Claim',

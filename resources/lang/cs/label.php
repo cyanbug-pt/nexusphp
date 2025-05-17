@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Zda chcete uložit prostřednictvím FTP. Pokud ano, přidejte konfigurační informace do .env souboru, podívejte se na <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Zálohovat pomocí SFTP',
             'via_sftp_help' => 'Zda chcete uložit prostřednictvím FTP. Pokud ano, přidejte konfigurační informace do .env souboru, podívejte se na <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Exportovat do adresáře',
+            'export_path_help' => 'Není nastaveno pro použití systémového dočasného adresáře::default_path. Pro přenos dat přes stránky můžete použít specializované nástroje třetích stran.' ,
+            'retention_count' => 'Počet zadržení',
+            'retention_count_help' => 'Zachovat pouze nejnovější záložní záznamy, staré záznamy budou pravidelně smazány. Výchozí: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Nahrát adresu rozhraní',
             'base_url' => 'Předpona URL obrázku',
             'upload_token' => 'Nahrát token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Právo',
+            'user_token_allowed' => 'Oprávnění k dispozici pro token uživatele',
+            'user_token_allowed_help' => 'Token uživatele nemá právo dovolávat se bez oprávnění z tohoto seznamu tabulek',
+        ],
     ],
     'user' => [
         'label' => 'Uživatel',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Začít IP',
         'ip_end' => 'Konečná IP',
-        'ip_help' => 'Vyplňte ASN/start IP + konec IP/IP (blokace), pouze jeden ze tří',
+        'ip_help' => 'Vyplňte IP adresu nebo ASN, ne obojí!',
         'status' => 'Stav',
         'is_allowed' => 'Je na seznamu povolených',
         'is_allowed_help' => 'IP adresy v seznamu povolených nejsou ovlivněny pravidlem SeedBox',

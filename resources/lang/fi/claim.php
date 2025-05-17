@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Päättämättömät torrent-tiedosto jäävät määrään: [b]:counts[/b]',
     'claim_unreached_remove_counts' => 'Saavuttamattomat torrent- poistomäärät: [b]:counts[/b]',
     'claim_unreached_summary' => 'Vähennä bonus jokaisesta keskeneräisestä torrent：[b]:deduct_per_torrent[/b], vähennys yhteensä: [b]:deduct_total[/b]',
+    'slice_tip' => 'Näytä vain ensimmäiset :slice_count kohteet',
 
     'confirm_give_up' => 'Oletko varma, että haluat luopua tämän torrentin vaatimuksesta?',
     'add_claim' => 'Claim',

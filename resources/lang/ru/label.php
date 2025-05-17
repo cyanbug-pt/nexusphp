@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Сохранение через FTP. Если это так, добавьте информацию о конфигурации в .env файл, обратитесь к <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Резервное копирование через SFTP',
             'via_sftp_help' => 'Сохранение через FTP. Если это так, добавьте информацию о конфигурации в .env файл, обратитесь к <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Экспорт в каталог',
+            'export_path_help' => 'Не установлено использование временного каталога системы::default_path. Вы можете использовать сторонние специализированные инструменты для переноса сохранений вне сайта.' ,
+            'retention_count' => 'Количество удержаний',
+            'retention_count_help' => 'Сохранять только последние записи резервной копии, старые будут регулярно удаляться. По умолчанию: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Загрузить адрес интерфейса',
             'base_url' => 'Префикс URL изображения',
             'upload_token' => 'Загрузить токен',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Разрешение',
+            'user_token_allowed' => 'Разрешение доступное для токена пользователя',
+            'user_token_allowed_help' => 'Токен пользователя не имеет права вызывать без разрешения из этого списка',
+        ],
     ],
     'user' => [
         'label' => 'Пользователь',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Начать IP',
         'ip_end' => 'Конечный IP',
-        'ip_help' => 'Заполните ASN/begin IP + end IP/IP (Block), только одну из трех',
+        'ip_help' => 'Заполните IP-адрес или ASN, а не обои!',
         'status' => 'Статус',
         'is_allowed' => 'Белый список',
         'is_allowed_help' => 'IP в белом списке не зависят от правила SeedBox',

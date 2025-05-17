@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Of u moet opslaan via FTP. Zo ja, voeg de configuratie-informatie toe aan het .env-bestand, raadpleeg <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Back-up maken via SFTP',
             'via_sftp_help' => 'Of u moet opslaan via FTP. Zo ja, voeg de configuratie-informatie toe aan het .env-bestand, raadpleeg <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Exporteren naar map',
+            'export_path_help' => 'Niet ingesteld op gebruik van de tijdelijke systeemmap::default_path. U kunt hulpmiddelen van derden gebruiken om offsite saves over te brengen.' ,
+            'retention_count' => 'Aantal bestellingen',
+            'retention_count_help' => 'Alleen de laatste back-up records behouden zullen regelmatig worden verwijderd. Standaard: default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Upload interface adres',
             'base_url' => 'URL afbeelding voorvoegsel',
             'upload_token' => 'Sleutel uploaden',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Bevoegdheden',
+            'user_token_allowed' => 'Toestemming beschikbaar voor gebruikerstoken',
+            'user_token_allowed_help' => 'Gebruikerstoken heeft geen recht om zonder toestemming uit deze tabulaire lijst op te roepen',
+        ],
     ],
     'user' => [
         'label' => 'Gebruiker',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Blok)',
         'ip_begin' => 'Begin IP',
         'ip_end' => 'Eind IP',
-        'ip_help' => 'Vul de ASN/begin IP in + einde IP/IP (Blok), slechts een van de drie',
+        'ip_help' => 'Vul het IP-adres of ASN in, niet beide!',
         'status' => 'status',
         'is_allowed' => 'Is gewhitelist',
         'is_allowed_help' => 'IP\'s op de whitelist worden niet beïnvloed door de SeedBox regel',

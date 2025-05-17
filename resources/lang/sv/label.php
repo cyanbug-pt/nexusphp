@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Om du vill spara via FTP. Lägg i så fall till konfigurationsinformationen i .sv-filen, se <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Säkerhetskopiera via SFTP',
             'via_sftp_help' => 'Om du vill spara via FTP. Lägg i så fall till konfigurationsinformationen i .sv-filen, se <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Exportera till katalog',
+            'export_path_help' => 'Inte inställd på att använda systemets temporära katalog::default_path. du kan använda tredje parts specialiserade verktyg för att överföra offsite sparar.' ,
+            'retention_count' => 'Antal kvarhållande',
+            'retention_count_help' => 'Behåll endast de senaste säkerhetskopieringsposterna, gamla kommer att raderas regelbundet. Standard: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Ladda upp gränssnittets adress',
             'base_url' => 'Bild URL-prefix',
             'upload_token' => 'Ladda upp token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Behörighet',
+            'user_token_allowed' => 'Tillstånd tillgängligt för användartoken',
+            'user_token_allowed_help' => 'Användartoken har ingen rätt att åberopa utan tillstånd från denna tabelllista',
+        ],
     ],
     'user' => [
         'label' => 'Användare',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Börja IP',
         'ip_end' => 'Avsluta IP',
-        'ip_help' => 'Fyll i ASN/start IP + slutet IP/IP (Block), endast en av de tre',
+        'ip_help' => 'Fyll i IP-adressen eller ASN, inte båda!',
         'status' => 'Status',
         'is_allowed' => 'Är vitlistad',
         'is_allowed_help' => 'IP-adresser i vitlistan påverkas inte av SeedBox-regeln',

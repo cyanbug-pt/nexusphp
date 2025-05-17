@@ -14,6 +14,6 @@ return [
         'subject' => 'Stav záznamu SeedBox byl změněn',
         'body' => 'Stav vašeho SeedBox záznamu s ID :id byl změněn :operator z :old_status na :new_status. Důvod: :reason',
     ],
-    'is_seed_box_yes' => 'Tato IP adresa je SeedBox, označená záznamem s ID :id',
+    'is_seed_box_yes' => 'Tato IP adresa je SeedBox',
     'is_seed_box_no' => 'Tato IP adresa není SeedBox',
 ];

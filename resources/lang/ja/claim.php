@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => '未達トレントの残り数： [b]:counts[/b]',
     'claim_unreached_remove_counts' => '未達の Torrent 削除数： [b]:counts[/b]',
     'claim_unreached_summary' => '未到のトレント：[b]:deduct_per_torrent[/b]、合計控除額: [b]:deduct_total[/b]',
+    'slice_tip' => ':slice_count 個目のアイテムのみ表示',
 
     'confirm_give_up' => 'このトレントの主張を放棄してもよろしいですか？',
     'add_claim' => 'Claim',

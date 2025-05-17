@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Недостигнуто количество торрентов: [b]:counts[/b]',
     'claim_unreached_remove_counts' => 'Неполученные значения удаления торрентов: [b]:counts[/b]',
     'claim_unreached_summary' => 'Вычитать бонус каждого недостигнутого торрента：[b]:deduct_per_torrent[/b], всего вычета: [b]:deduct_total[/b]',
+    'slice_tip' => 'Показать только первые элементы :slice_count',
 
     'confirm_give_up' => 'Вы уверены, что хотите отказаться от этого торрента?',
     'add_claim' => 'Claim',

@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Se salvare tramite FTP. In tal caso, aggiungere le informazioni di configurazione al file .env, fare riferimento a <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Backup tramite SFTP',
             'via_sftp_help' => 'Se salvare tramite FTP. In tal caso, aggiungere le informazioni di configurazione al file .env, fare riferimento a <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Esporta nella directory',
+            'export_path_help' => 'Non impostato per utilizzare la directory temporanea di sistema::default_path. è possibile utilizzare strumenti specializzati di terze parti per trasferire i salvataggi fuori sito.' ,
+            'retention_count' => 'Conteggio della conservazione',
+            'retention_count_help' => 'Mantenere solo gli ultimi record di backup, quelli vecchi verranno eliminati regolarmente. Predefinito: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Carica indirizzo interfaccia',
             'base_url' => 'Prefisso URL immagine',
             'upload_token' => 'Carica token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Permesso',
+            'user_token_allowed' => 'Permesso disponibile per il token utente',
+            'user_token_allowed_help' => 'Il token utente non ha il diritto di invocare senza l\'autorizzazione di questa lista tabulare',
+        ],
     ],
     'user' => [
         'label' => 'Utente',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Inizia IP',
         'ip_end' => 'IP Finale',
-        'ip_help' => 'Compila l\'IP ASN/start + IP/IP finale (Block), solo uno dei tre',
+        'ip_help' => 'Compila l\'indirizzo IP o ASN, non entrambi!',
         'status' => 'Stato',
         'is_allowed' => 'È whitelist',
         'is_allowed_help' => 'Gli IP nella whitelist non sono influenzati dalla regola SeedBox',

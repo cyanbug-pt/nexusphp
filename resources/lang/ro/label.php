@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Dacă doriți să salvați prin FTP. Dacă da, adăugați informațiile de configurare în fișierul .env, consultați <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Backup prin SFTP',
             'via_sftp_help' => 'Dacă doriți să salvați prin FTP. Dacă da, adăugați informațiile de configurare în fișierul .env, consultați <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Exportă în director',
+            'export_path_help' => 'Nu este setat să utilizați directorul temporar de sistem::default_path. Puteți utiliza instrumente specializate terțe pentru a transfera salvările offsite.' ,
+            'retention_count' => 'Număr de retenții',
+            'retention_count_help' => 'Păstrați numai cele mai recente înregistrări de rezervă, cele vechi vor fi șterse în mod regulat. Implicit: :default_count',
         ],
         'hr' => [
             'tab_header' => 'S&o',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Încarcă adresa interfeței',
             'base_url' => 'Prefix URL imagine',
             'upload_token' => 'Cod de încărcare',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Permisiune',
+            'user_token_allowed' => 'Permisiune disponibilă pentru jetonul utilizatorului',
+            'user_token_allowed_help' => 'Token-ul utilizatorului nu are dreptul de a invoca fără permisiune din această listă tabulară',
+        ],
     ],
     'user' => [
         'label' => 'Utilizator',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Blocat)',
         'ip_begin' => 'Începe IP-ul',
         'ip_end' => 'Sfârșit IP',
-        'ip_help' => 'Completează ASN/start IP + sfârșit IP/IP (Block), doar unul dintre cele trei',
+        'ip_help' => 'Completează adresa IP sau ASN, nu ambele!',
         'status' => 'Status',
         'is_allowed' => 'Este albăstruit',
         'is_allowed_help' => 'IP-urile din lista albă nu sunt afectate de regula SeedBox',

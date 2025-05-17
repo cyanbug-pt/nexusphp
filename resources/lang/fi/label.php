@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Tallennetaanko FTP:llä. Jos näin on, lisää asetustiedot .env-tiedostoon, katso <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Varmuuskopioi SFTP:n kautta',
             'via_sftp_help' => 'Tallennetaanko FTP:llä. Jos näin on, lisää asetustiedot .env-tiedostoon, katso <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Vie kansioon',
+            'export_path_help' => 'Ei ole asetettu käyttämään järjestelmän väliaikaista hakemistoa::default_path. Voit käyttää kolmannen osapuolen erikoistyökaluja siirtääksesi säästöjä sivuston ulkopuolelle.' ,
+            'retention_count' => 'Säilytysten määrä',
+            'retention_count_help' => 'Säilytä vain viimeisimmät varmuuskopiot, vanhat poistetaan säännöllisesti. Oletus: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Lataa käyttöliittymän osoite',
             'base_url' => 'Kuvan URL-etuliite',
             'upload_token' => 'Lataa tunnus',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Käyttöoikeus',
+            'user_token_allowed' => 'Käyttäjätunnuksen käytettävissä oleva käyttöoikeus',
+            'user_token_allowed_help' => 'Käyttäjätunnuksella ei ole oikeutta vedota ilman tämän taulukkolistan lupaa',
+        ],
     ],
     'user' => [
         'label' => 'Käyttäjä',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Block)',
         'ip_begin' => 'Aloita IP-osoite',
         'ip_end' => 'Lopeta IP-osoite',
-        'ip_help' => 'Täytä ASN/start IP + end IP/IP (Block), vain yksi kolmesta',
+        'ip_help' => 'Täytä IP-osoite tai ASN, ei molemmat!',
         'status' => 'Tila',
         'is_allowed' => 'On sallittuja',
         'is_allowed_help' => 'SeedBox-sääntö ei vaikuta sallitun listan IP-osoitteisiin',

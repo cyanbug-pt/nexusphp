@@ -66,6 +66,10 @@ return [
             'via_ftp_help' => 'Hvorvidt det er mulig å lagre via FTP. Legg til konfigurasjonsinformasjonen til .env filen, se <a href="https://laravel.com/docs/master/filesystem#ftp-driver-configuration">Laravel doc</a>',
             'via_sftp' => 'Sikkerhetskopier via SFTP',
             'via_sftp_help' => 'Hvorvidt det er mulig å lagre via FTP. Legg til konfigurasjonsinformasjonen til .env filen, se <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel doc</a>',
+            'export_path' => 'Eksporter til mappe',
+            'export_path_help' => 'Ikke satt til å bruke systemets midlertidige katalog::default_path. Du kan bruke tredjeparts spesialiserte verktøy for å overføre lagring på nettstedet.' ,
+            'retention_count' => 'Antall tilbaketall',
+            'retention_count_help' => 'Prøv igjen bare de siste sikkerhetskopiene, gamle vil bli slettet regelmessig. Standard: :default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',
@@ -124,7 +128,12 @@ return [
             'upload_api_endpoint' => 'Adresse for opplastingsgrensesnitt',
             'base_url' => 'Prefiks for bildeadresse',
             'upload_token' => 'Last opp token',
-        ]
+        ],
+        'permission' => [
+            'tab_header' => 'Tillatelse',
+            'user_token_allowed' => 'Rettigheter tilgjengelig for brukertokenet',
+            'user_token_allowed_help' => 'Brukertokenet har ikke rett til å innlede uten tillatelse fra denne tabelllisten',
+        ],
     ],
     'user' => [
         'label' => 'Bruker',
@@ -273,7 +282,7 @@ return [
         'ip' => 'IP(Lås)',
         'ip_begin' => 'Start IP',
         'ip_end' => 'Til IP',
-        'ip_help' => 'Fyll inn ASN/start IP + end IP/IP (Block), bare en av de tre',
+        'ip_help' => 'Fyll inn IP-adressen eller ASN, ikke begge!',
         'status' => 'Status:',
         'is_allowed' => 'Er hvitelistet',
         'is_allowed_help' => 'IPer i hvitelisten påvirkes ikke av regelen SeedBox',

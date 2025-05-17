@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Onbereikte torrent blijft tellen: [b]:counts[/b]',
     'claim_unreached_remove_counts' => 'Niet bereikt torrent verwijder tellen: [b]:counts[/b]',
     'claim_unreached_summary' => 'Verwijder elke onbereikte torrent：[b]:deduct_per_torrent[/b], totale aftreking: [b]:deduct_total[/b]',
+    'slice_tip' => 'Toon alleen de eerste :slice_count items',
 
     'confirm_give_up' => 'Weet u zeker dat u wilt stoppen met het claimen van deze torrent?',
     'add_claim' => 'Claim',

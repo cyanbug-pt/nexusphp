@@ -14,6 +14,6 @@ return [
         'subject' => 'Η κατάσταση εγγραφής SeedBox άλλαξε',
         'body' => 'Η κατάσταση της εγγραφής σας στο SeedBox με ID :id άλλαξε από :operator από :old_status σε :new_status. Λόγος: :reason',
     ],
-    'is_seed_box_yes' => 'Αυτό το IP είναι SeedBox, αναγνωρίζεται από την εγγραφή με αναγνωριστικό :id',
+    'is_seed_box_yes' => 'Αυτό το IP είναι SeedBox',
     'is_seed_box_no' => 'Αυτό το IP δεν είναι SeedBox',
 ];

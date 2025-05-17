@@ -23,6 +23,7 @@ return [
     'claim_unreached_remain_counts' => 'Torrentul neatins rămâne cont: [b]:count[/b]',
     'claim_unreached_remove_counts' => 'Ștergerea torentului nereușită: [b]:count[/b]',
     'claim_unreached_summary' => 'Deduce-bonus pentru fiecare torrent inatins：[b]:deduct_per_torrent[/b], deducere totală: [b]:deduct_total[/b]',
+    'slice_tip' => 'Arată doar primele elemente :slice_count',
 
     'confirm_give_up' => 'Ești sigur că vrei să renunți să revendici acest torent?',
     'add_claim' => 'Claim',
