@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # 定义颜色
 COLOR_RED='\033[0;31m'
@@ -36,15 +36,27 @@ VENDOR_DIR="${ROOT_PATH}/vendor"
 
 chown -R www-data:www-data $ROOT_PATH
 
+mysql_timeout=30
 until nc -z mysql 3306; do
   echo_info "Waiting for MySQL to be ready..."
   sleep 2
+  ((mysql_timeout--))
+  if [ $mysql_timeout -le 0 ]; then
+    echo "❌ MySQL connection timeout."
+    exit 1
+  fi
 done
 echo_success "MySQL is ready."
 
+redis_timeout=30
 until nc -z redis 6379; do
   echo_info "Waiting for Redis to be ready..."
   sleep 2
+  ((redis_timeout--))
+  if [ $redis_timeout -le 0 ]; then
+    echo "❌ Redis connection timeout."
+    exit 1
+  fi
 done
 echo_success "Redis is ready."
 
@@ -107,7 +119,3 @@ else
     echo_error "Unknown SERVICE_NAME: $SERVICE_NAME, exiting."
     exit 1
 fi
-
-
-
-

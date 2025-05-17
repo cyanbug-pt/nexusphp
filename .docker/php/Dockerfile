@@ -1,37 +1,40 @@
 # 👷‍♀️ 第一阶段：构建阶段，包含所有开发依赖
-FROM php:8.2-fpm-alpine AS builder
+FROM php:8.2-fpm AS builder
 
-RUN apk add --no-cache \
-    $PHPIZE_DEPS \
+# 安装依赖
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
     libzip-dev \
     libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    icu-dev \
-    libxml2-dev \
+    libjpeg-dev \
     libwebp-dev \
-    gmp-dev \
-    oniguruma-dev \
-    linux-headers
-
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
-
-RUN docker-php-ext-install -j$(nproc) \
-    bcmath \
-    pdo_mysql \
-    mysqli \
-    gd \
-    pcntl \
-    sockets \
-    gmp \
-    zip \
-    intl \
-    opcache
+    libfreetype6-dev \
+    libicu-dev \
+    libxml2-dev \
+    libgmp-dev \
+    libonig-dev \
+    curl \
+    wget \
+    rsync \
+    pkg-config \
+    build-essential \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) \
+        bcmath \
+        pdo_mysql \
+        mysqli \
+        gd \
+        pcntl \
+        sockets \
+        gmp \
+        zip \
+        intl \
+        opcache
 
 # 检查 pecl.php.net 可用性
 RUN curl -Is https://pecl.php.net | head -n 1 | grep "200" \
     || (echo "❌ pecl.php.net unreachable, aborting build." && exit 1)
-
 
 # 安装 redis 扩展
 RUN pecl channel-update pecl.php.net \
@@ -39,32 +42,38 @@ RUN pecl channel-update pecl.php.net \
     && docker-php-ext-enable redis
 
 # 👨‍🍳 第二阶段：运行阶段，仅包含必要运行环境
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm
 
-# 复制已构建的扩展
-COPY --from=builder /usr/local/lib/php/extensions /usr/local/lib/php/extensions
-COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
-
-# 安装运行时所需依赖
-RUN apk add --no-cache \
+# 安装运行所需依赖（无需 dev 工具）
+RUN apt-get update && apt-get install -y \
+    libzip4 \
+    libpng-dev \
+    libjpeg-dev \
+    libwebp-dev \
+    libfreetype6 \
+    libicu-dev \
+    libxml2 \
+    libgmp-dev \
+    libonig-dev \
+    git \
+    curl \
     wget \
     rsync \
-    libzip \
-    libpng \
-    libjpeg-turbo \
-    libwebp \
-    freetype \
-    icu \
-    libxml2 \
-    gmp \
-    oniguruma \
-    git
+    unzip \
+    bash \
+    netcat-openbsd \
+    default-mysql-client \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 复制构建好的 PHP 扩展配置
+COPY --from=builder /usr/local/lib/php/extensions /usr/local/lib/php/extensions
+COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
 # 配置 www.conf
 RUN sed -i \
     -e 's/;catch_workers_output = .*/catch_workers_output = yes/g' \
-    -e 's/;php_admin_flag\[log_errors\] = .*/php_admin_flag\[log_errors\] = on/g' \
-    -e 's/;php_admin_value\[error_log\] = .*/php_admin_value\[error_log\] = \/dev\/stderr/g' \
+    -e 's/;php_admin_flag\[log_errors\] = .*/php_admin_flag[log_errors] = on/g' \
+    -e 's/;php_admin_value\[error_log\] = .*/php_admin_value[error_log] = \/dev\/stderr/g' \
     /usr/local/etc/php-fpm.d/www.conf
 
 # 配置 PHP 错误日志输出到 stderr
@@ -75,6 +84,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 ENV LOG_CHANNEL=stderr
 
+# 复制入口脚本
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

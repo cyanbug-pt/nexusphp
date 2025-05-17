@@ -32,7 +32,7 @@ class ToolRepository extends BaseRepository
         $webRoot = base_path();
         $dirName = basename($webRoot);
         $excludes = self::BACKUP_EXCLUDES;
-        $baseFilename = sprintf('%s/%s.web.%s', Setting::getBackupExportPath() ?: sys_get_temp_dir(), $dirName, date('Ymd.His'));
+        $baseFilename = sprintf('%s/%s.web.%s', $this->getBackupExportPath(), $dirName, date('Ymd.His'));
         if (command_exists('tar') && ($method === 'tar' || $method === null)) {
             $filename = $baseFilename . ".tar.gz";
             $command = "tar";
@@ -89,9 +89,9 @@ class ToolRepository extends BaseRepository
     {
         $connectionName = config('database.default');
         $config = config("database.connections.$connectionName");
-        $filename = sprintf('%s/%s.database.%s.sql', Setting::getBackupExportPath() ?: sys_get_temp_dir(), basename(base_path()), date('Ymd.His'));
+        $filename = sprintf('%s/%s.database.%s.sql', $this->getBackupExportPath(), basename(base_path()), date('Ymd.His'));
         $command = sprintf(
-            'mysqldump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db %s >> %s 2>&1',
+            'mysqldump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db --no-tablespaces %s >> %s 2>&1',
             $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
         );
         $result = exec($command, $output, $result_code);
@@ -115,7 +115,7 @@ class ToolRepository extends BaseRepository
         if ($backupDatabase['result_code'] != 0) {
             throw new \RuntimeException("backup database fail: " . json_encode($backupDatabase));
         }
-        $baseFilename = sprintf('%s/%s.%s', Setting::getBackupExportPath() ?: sys_get_temp_dir(), basename(base_path()), date('Ymd.His'));
+        $baseFilename = sprintf('%s/%s.%s', $this->getBackupExportPath(), basename(base_path()), date('Ymd.His'));
         if (command_exists('tar') && ($method === 'tar' || $method === null)) {
             $filename = $baseFilename . ".tar.gz";
             $command = sprintf(
@@ -147,6 +147,20 @@ class ToolRepository extends BaseRepository
             return compact('result_code', 'filename');
         }
         return $this->transfer($filename, $result_code);
+    }
+
+    private function getBackupExportPath(): string
+    {
+        $path = Setting::getBackupExportPath();
+        if (empty($path)) {
+            $path = self::getBackupExportPathDefault();
+        }
+        return $path;
+    }
+
+    public static function getBackupExportPathDefault(): string
+    {
+        return sys_get_temp_dir() . "/nexusphp_backup";
     }
 
     /**

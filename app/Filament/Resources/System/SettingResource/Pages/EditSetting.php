@@ -10,6 +10,7 @@ use App\Models\SearchBox;
 use App\Models\Setting;
 use App\Models\User;
 use App\Repositories\TokenRepository;
+use App\Repositories\ToolRepository;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\Page;
 use Filament\Forms;
@@ -122,7 +123,7 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
 //                Forms\Components\TextInput::make('backup.google_drive_client_secret')->label(__('label.setting.backup.google_drive_client_secret')),
 //                Forms\Components\TextInput::make('backup.google_drive_refresh_token')->label(__('label.setting.backup.google_drive_refresh_token')),
 //                Forms\Components\TextInput::make('backup.google_drive_folder_id')->label(__('label.setting.backup.google_drive_folder_id')),
-                Forms\Components\TextInput::make('backup.export_path')->label(__('label.setting.backup.export_path'))->helperText(new HtmlString(__('label.setting.backup.export_path_help', ['default_path' => sys_get_temp_dir()]))),
+                Forms\Components\TextInput::make('backup.export_path')->label(__('label.setting.backup.export_path'))->helperText(new HtmlString(__('label.setting.backup.export_path_help', ['default_path' => ToolRepository::getBackupExportPathDefault()]))),
                 Forms\Components\Radio::make('backup.via_ftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_ftp'))->helperText(new HtmlString(__('label.setting.backup.via_ftp_help'))),
                 Forms\Components\Radio::make('backup.via_sftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_sftp'))->helperText(new HtmlString(__('label.setting.backup.via_sftp_help'))),
             ])->columns(2);
