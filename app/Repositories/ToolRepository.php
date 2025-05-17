@@ -12,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
@@ -26,6 +27,8 @@ use Symfony\Component\Mime\Email;
 class ToolRepository extends BaseRepository
 {
     const BACKUP_EXCLUDES = ['vendor', 'node_modules', '.git', '.idea', '.settings', '.DS_Store', '.github'];
+
+    const BACKUP_RETENTION_COUNT_DEFAULT = 10;
 
     public function backupWeb($method = null, $transfer = false): array
     {
@@ -206,6 +209,7 @@ class ToolRepository extends BaseRepository
         $transferResult = $this->transfer($backupResult['filename'], $backupResult['result_code'], $setting);
         $backupResult['transfer_result'] = $transferResult;
         do_log("[BACKUP_ALL_DONE]: " . json_encode($backupResult));
+        $this->cleanupBackupFiles();
         return $backupResult;
     }
 
@@ -322,6 +326,28 @@ class ToolRepository extends BaseRepository
         } catch (\Throwable $exception) {
             do_log("Transfer error: " . $exception->getMessage(), 'error');
             return $exception->getMessage();
+        }
+    }
+
+    private function cleanupBackupFiles(): void
+    {
+        $retentionCount = Setting::getBackupRetentionCount();
+        if ($retentionCount <= 0) {
+            $retentionCount = self::BACKUP_RETENTION_COUNT_DEFAULT;
+        }
+        $path = self::getBackupExportPath();
+        $allFiles = collect(File::allFiles($path));
+        // 按创建时间降序排序
+        $allFiles = $allFiles->sortByDesc(fn (\Symfony\Component\Finder\SplFileInfo $file) => $file->getCTime());
+        $filesToDelete = $allFiles->slice($retentionCount);
+        do_log(sprintf(
+            "retentionCount: %s, path: %s, fileCount: %s, toDeleteCount: %s",
+            $retentionCount, $path, $allFiles->count(), $filesToDelete->count()
+        ));
+        foreach ($filesToDelete as $file) {
+            $realPath = $file->getRealPath();
+            File::delete($realPath);
+            do_log(sprintf("delete backup file: %s", $realPath));
         }
     }
 

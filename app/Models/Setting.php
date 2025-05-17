@@ -253,5 +253,10 @@ class Setting extends NexusModel
         return self::get("backup.export_path");
     }
 
+    public static function getBackupRetentionCount(): int
+    {
+        return (int)self::get("backup.retention_count");
+    }
+
 
 }

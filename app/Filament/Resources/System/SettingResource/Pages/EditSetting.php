@@ -15,6 +15,7 @@ use Filament\Facades\Filament;
 use Filament\Resources\Pages\Page;
 use Filament\Forms;
 use Illuminate\Support\HtmlString;
+use Meilisearch\Contracts\Index\Settings;
 use Nexus\Database\NexusDB;
 
 class EditSetting extends Page implements Forms\Contracts\HasForms
@@ -124,6 +125,7 @@ class EditSetting extends Page implements Forms\Contracts\HasForms
 //                Forms\Components\TextInput::make('backup.google_drive_refresh_token')->label(__('label.setting.backup.google_drive_refresh_token')),
 //                Forms\Components\TextInput::make('backup.google_drive_folder_id')->label(__('label.setting.backup.google_drive_folder_id')),
                 Forms\Components\TextInput::make('backup.export_path')->label(__('label.setting.backup.export_path'))->helperText(new HtmlString(__('label.setting.backup.export_path_help', ['default_path' => ToolRepository::getBackupExportPathDefault()]))),
+                Forms\Components\TextInput::make('backup.retention_count')->numeric()->label(__('label.setting.backup.retention_count'))->helperText(new HtmlString(__('label.setting.backup.retention_count_help', ['default_count' => ToolRepository::BACKUP_RETENTION_COUNT_DEFAULT]))),
                 Forms\Components\Radio::make('backup.via_ftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_ftp'))->helperText(new HtmlString(__('label.setting.backup.via_ftp_help'))),
                 Forms\Components\Radio::make('backup.via_sftp')->options(self::$yesOrNo)->inline(true)->label(__('label.setting.backup.via_sftp'))->helperText(new HtmlString(__('label.setting.backup.via_sftp_help'))),
             ])->columns(2);

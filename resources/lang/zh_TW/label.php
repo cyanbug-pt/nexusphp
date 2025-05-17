@@ -68,6 +68,8 @@ return [
             'via_sftp_help' => '是否通過 SFTP 保存。如果通過，把配置信息添加到 .env 文件，參考 <a href="https://laravel.com/docs/master/filesystem#sftp-driver-configuration">Laravel 文檔</a>',
             'export_path' => '導出到目錄',
             'export_path_help' => '不設置使用系統臨時目錄：:default_path。可以使用第三方專業工具轉移異地保存。',
+            'retention_count' => '保留數量',
+            'retention_count_help' => '只保留最新的備份記錄，舊的會定時刪除。默認：:default_count',
         ],
         'hr' => [
             'tab_header' => 'H&R',

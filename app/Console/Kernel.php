@@ -13,6 +13,7 @@ use Illuminate\Console\Scheduling\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Schema;
+use Nexus\Database\NexusDB;
 
 class Kernel extends ConsoleKernel
 {
@@ -50,8 +51,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ThirdPartyJob())->everyMinute()->withoutOverlapping();
         $schedule->job(new MaintainPluginState())->everyMinute()->withoutOverlapping();
         $schedule->job(new UpdateIsSeedBoxFromUserRecordsCache())->everySixHours()->withoutOverlapping();
+        $schedule->job(new CheckCleanup())->everyFifteenMinutes()->withoutOverlapping();
 
-        $this->registerScheduleCleanup($schedule);
     }
 
     /**
@@ -66,17 +67,4 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 
-    private function registerScheduleCleanup(Schedule $schedule): void
-    {
-        if (!file_exists(base_path(".env")) || !Schema::hasTable("settings")) {
-            return;
-        }
-        $interval = get_setting("main.autoclean_interval_one");
-        if (!$interval || $interval < 60) {
-            $interval = 7200;
-        }
-        $schedule->job(new CheckCleanup())
-            ->cron(sprintf("*/%d * * * *", ceil($interval/60)))
-            ->withoutOverlapping();
-    }
 }
