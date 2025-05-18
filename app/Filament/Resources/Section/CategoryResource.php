@@ -95,7 +95,7 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('icon.name')->label(__('label.search_box.taxonomy.icon_id')),
                 Tables\Columns\TextColumn::make('image')->label(__('label.search_box.taxonomy.image')),
                 Tables\Columns\TextColumn::make('class_name')->label(__('label.search_box.taxonomy.class_name')),
-                Tables\Columns\TextColumn::make('sort_index')->label(__('label.search_box.taxonomy.sort_index'))->sortable(),
+                Tables\Columns\TextColumn::make('sort_index')->label(__('label.priority'))->sortable(),
             ])
             ->defaultSort('sort_index', 'desc')
             ->filters([
