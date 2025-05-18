@@ -25,15 +25,24 @@ abstract class BasePlugin extends BaseRepository
         }
     }
 
-    public function checkMainApplicationVersion()
+    public static function checkMainApplicationVersion($silent = true): bool
     {
-        $constantName = "static::COMPATIBLE_NP_VERSION";
-        if (defined($constantName) && version_compare(VERSION_NUMBER, constant($constantName), '<')) {
-            throw new \RuntimeException(sprintf(
-                "NexusPHP version: %s is too low, this plugin require: %s",
-                VERSION_NUMBER, constant($constantName)
-            ));
+        $constantNameArr = [
+            "static::COMPATIBLE_NP_VERSION",
+            "static::COMPATIBLE_VERSION", //before use
+        ];
+        foreach ($constantNameArr as $constantName) {
+            if (defined($constantName) && version_compare(VERSION_NUMBER, constant($constantName), '<')) {
+                if ($silent) {
+                    return false;
+                }
+                throw new \RuntimeException(sprintf(
+                    "NexusPHP version: %s is too low, this plugin require: %s",
+                    VERSION_NUMBER, constant($constantName)
+                ));
+            }
         }
+        return true;
     }
 
     public function getNexusView($name): string
