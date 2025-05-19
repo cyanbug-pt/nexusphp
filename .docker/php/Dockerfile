@@ -76,6 +76,7 @@ RUN echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error-logging.in
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 ENV LOG_CHANNEL=stderr
+ENV RUNNING_IN_DOCKER=1
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh

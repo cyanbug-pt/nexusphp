@@ -35,23 +35,23 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('cache:prune-stale-tags')->hourly();
-        $schedule->command('exam:assign_cronjob')->everyMinute()->withoutOverlapping();
-        $schedule->command('exam:checkout_cronjob')->everyFiveMinutes()->withoutOverlapping();
-        $schedule->command('exam:update_progress --bulk=1')->hourly()->withoutOverlapping();
-        $schedule->command('backup:cronjob')->everyMinute()->withoutOverlapping();
-        $schedule->command('hr:update_status')->everyTenMinutes()->withoutOverlapping();
-        $schedule->command('hr:update_status --ignore_time=1')->hourly()->withoutOverlapping();
-        $schedule->command('user:delete_expired_token')->dailyAt('04:00')->withoutOverlapping();
+        $schedule->command('exam:assign_cronjob')->everyMinute();
+        $schedule->command('exam:checkout_cronjob')->everyFiveMinutes();
+        $schedule->command('exam:update_progress --bulk=1')->hourly();
+        $schedule->command('backup:cronjob')->everyMinute();
+        $schedule->command('hr:update_status')->everyTenMinutes();
+        $schedule->command('hr:update_status --ignore_time=1')->hourly();
+        $schedule->command('user:delete_expired_token')->dailyAt('04:00');
         $schedule->command('claim:settle')->hourly()->when(function () {
             return Carbon::now()->format('d') == '01';
-        })->withoutOverlapping();
-        $schedule->command('meilisearch:import')->weeklyOn(1, "03:00")->withoutOverlapping();
-        $schedule->command('torrent:load_pieces_hash')->dailyAt("01:00")->withoutOverlapping();
-        $schedule->job(new CheckQueueFailedJobs())->everySixHours()->withoutOverlapping();
-        $schedule->job(new ThirdPartyJob())->everyMinute()->withoutOverlapping();
-        $schedule->job(new MaintainPluginState())->everyMinute()->withoutOverlapping();
-        $schedule->job(new UpdateIsSeedBoxFromUserRecordsCache())->everySixHours()->withoutOverlapping();
-        $schedule->job(new CheckCleanup())->everyFifteenMinutes()->withoutOverlapping();
+        });
+        $schedule->command('meilisearch:import')->weeklyOn(1, "03:00");
+        $schedule->command('torrent:load_pieces_hash')->dailyAt("01:00");
+        $schedule->job(new CheckQueueFailedJobs())->everySixHours();
+        $schedule->job(new ThirdPartyJob())->everyMinute();
+        $schedule->job(new MaintainPluginState())->everyMinute();
+        $schedule->job(new UpdateIsSeedBoxFromUserRecordsCache())->everySixHours();
+        $schedule->job(new CheckCleanup())->everyFifteenMinutes();
 
     }
 
