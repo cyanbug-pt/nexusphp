@@ -407,7 +407,7 @@ function DelRow(anchor){
 
 // 工具函数：SHA-256哈希
 // 因 crypto.subtle 在 http 下不可用，故引入三方库
-async function sha256(message) {
+function sha256(message) {
     // const msgBuffer = new TextEncoder().encode(message);
     // const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
     // const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -416,7 +416,7 @@ async function sha256(message) {
 }
 
 // 工具函数：HMAC-SHA256
-async function hmacSha256(key, message) {
+function hmacSha256(key, message) {
     // const encoder = new TextEncoder();
     // const keyData = encoder.encode(key);
     // const messageData = encoder.encode(message);

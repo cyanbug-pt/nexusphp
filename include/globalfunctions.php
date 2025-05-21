@@ -1566,11 +1566,11 @@ async function login(username, password, jqForm) {
             return
         }
 
-        const clientHashedPassword = await sha256(password);
+        const clientHashedPassword = sha256(password);
 
-        const serverSideHash = await sha256(challengeData.data.secret + clientHashedPassword);
+        const serverSideHash = sha256(challengeData.data.secret + clientHashedPassword);
 
-        const clientResponse = await hmacSha256(challengeData.data.challenge, serverSideHash);
+        const clientResponse = hmacSha256(challengeData.data.challenge, serverSideHash);
         jqForm.find("input[name=response]").val(clientResponse)
         jqForm.submit()
     } catch (error) {
