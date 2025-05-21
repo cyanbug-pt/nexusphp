@@ -45,6 +45,7 @@ return [
         'token' => 'Toegangs-tokens',
         'oauth_provider' => 'Autorisatie provider',
         'queue_monitor' => 'Wachtrij monitor',
+        'user_modify_logs' => 'Gebruiker wijzigt logs',
     ],
     'resources' => [
         'agent_allow' => [

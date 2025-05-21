@@ -45,6 +45,7 @@ return [
         'token' => 'Маркеры доступа',
         'oauth_provider' => 'Провайдер авторизации',
         'queue_monitor' => 'Монитор очереди',
+        'user_modify_logs' => 'Изменение журналов',
     ],
     'resources' => [
         'agent_allow' => [

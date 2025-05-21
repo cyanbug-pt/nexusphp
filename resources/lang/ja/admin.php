@@ -45,6 +45,7 @@ return [
         'token' => 'アクセストークン',
         'oauth_provider' => '認証プロバイダー',
         'queue_monitor' => 'キューモニター',
+        'user_modify_logs' => 'ユーザーの変更ログ',
     ],
     'resources' => [
         'agent_allow' => [

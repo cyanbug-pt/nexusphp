@@ -45,6 +45,7 @@ return [
         'token' => 'Zugangs-Tokens',
         'oauth_provider' => 'Autorisierungsanbieter',
         'queue_monitor' => 'Warteschlange Monitor',
+        'user_modify_logs' => 'Benutzerprotokolle ändern',
     ],
     'resources' => [
         'agent_allow' => [

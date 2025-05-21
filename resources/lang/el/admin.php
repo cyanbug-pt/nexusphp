@@ -45,6 +45,7 @@ return [
         'token' => 'Σημεία πρόσβασης',
         'oauth_provider' => 'Πάροχος εξουσιοδότησης',
         'queue_monitor' => 'Οθόνη αναμονής',
+        'user_modify_logs' => 'Αρχεία καταγραφής τροποποίησης χρήστη',
     ],
     'resources' => [
         'agent_allow' => [

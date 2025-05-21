@@ -45,6 +45,7 @@ return [
         'token' => 'Pääsy poletteihin',
         'oauth_provider' => 'Valtuutuksen tarjoaja',
         'queue_monitor' => 'Jonon monitori',
+        'user_modify_logs' => 'Käyttäjä muokkaa lokeja',
     ],
     'resources' => [
         'agent_allow' => [

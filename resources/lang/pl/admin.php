@@ -45,6 +45,7 @@ return [
         'token' => 'Tokeny dostępu',
         'oauth_provider' => 'Dostawca autoryzacji',
         'queue_monitor' => 'Monitor kolejki',
+        'user_modify_logs' => 'Logi modyfikacji użytkownika',
     ],
     'resources' => [
         'agent_allow' => [

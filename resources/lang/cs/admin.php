@@ -45,6 +45,7 @@ return [
         'token' => 'Přístupové tokeny',
         'oauth_provider' => 'Poskytovatel autorizace',
         'queue_monitor' => 'Monitor fronty',
+        'user_modify_logs' => 'Záznamy změn uživatele',
     ],
     'resources' => [
         'agent_allow' => [

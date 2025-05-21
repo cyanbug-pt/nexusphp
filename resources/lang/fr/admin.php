@@ -45,6 +45,7 @@ return [
         'token' => 'Jetons d\'accès',
         'oauth_provider' => 'Fournisseur d\'autorisation',
         'queue_monitor' => 'Moniteur de file d\'attente',
+        'user_modify_logs' => 'Journaux de modification de l\'utilisateur',
     ],
     'resources' => [
         'agent_allow' => [

@@ -45,6 +45,7 @@ return [
         'token' => 'Tillgång till tokens',
         'oauth_provider' => 'Tillstånd leverantör',
         'queue_monitor' => 'Kö monitor',
+        'user_modify_logs' => 'Användare ändra loggar',
     ],
     'resources' => [
         'agent_allow' => [

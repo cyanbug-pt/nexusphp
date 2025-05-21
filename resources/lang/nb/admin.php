@@ -45,6 +45,7 @@ return [
         'token' => 'Tilgangsnøkler',
         'oauth_provider' => 'Autorisasjons leverandør',
         'queue_monitor' => 'Overvåk av kø',
+        'user_modify_logs' => 'Bruker modifiserer logger',
     ],
     'resources' => [
         'agent_allow' => [

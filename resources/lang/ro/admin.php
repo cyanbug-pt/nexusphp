@@ -45,6 +45,7 @@ return [
         'token' => 'Token-uri de acces',
         'oauth_provider' => 'Furnizor de autorizare',
         'queue_monitor' => 'Monitorul de coadă',
+        'user_modify_logs' => 'Jurnalele de modificare ale utilizatorului',
     ],
     'resources' => [
         'agent_allow' => [

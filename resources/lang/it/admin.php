@@ -45,6 +45,7 @@ return [
         'token' => 'Token di accesso',
         'oauth_provider' => 'Provider di autorizzazione',
         'queue_monitor' => 'Monitor coda',
+        'user_modify_logs' => 'Modificare i log dell\'utente',
     ],
     'resources' => [
         'agent_allow' => [

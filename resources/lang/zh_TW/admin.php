@@ -45,6 +45,7 @@ return [
         'token' => '訪問令牌',
         'oauth_provider' => '身份驗證',
         'queue_monitor' => '隊列監控',
+        'user_modify_logs' => '修改記錄',
     ],
     'resources' => [
         'agent_allow' => [
