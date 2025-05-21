@@ -178,11 +178,17 @@ if ($tmpInviteCount > 0) {
     $userRep->addTemporaryInvite(null, $id, 'increment', $tmpInviteCount, 7);
 }
 
-$dt = sqlesc(date("Y-m-d H:i:s"));
-$subject = sqlesc($lang_takesignup['msg_subject'].$SITENAME."!");
+$dt = date("Y-m-d H:i:s");
+$subject = $lang_takesignup['msg_subject'].$SITENAME."!";
 $siteName = \App\Models\Setting::getSiteName();
-$msg = sqlesc($lang_takesignup['msg_congratulations'].htmlspecialchars($wantusername).sprintf($lang_takesignup['msg_you_are_a_member'],$siteName, $siteName));
-sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, $id, $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
+$msg = $lang_takesignup['msg_congratulations'].$wantusername.sprintf($lang_takesignup['msg_you_are_a_member'],$siteName, $siteName);
+\App\Models\Message::add([
+    'sender' => 0,
+    'receiver' => $id,
+    'subject' => $subject,
+    'added' => $dt,
+    'msg' => $msg,
+]);
 
 //write_log("User account $id ($wantusername) was created");
 $res = sql_query("SELECT passhash, secret, editsecret, status FROM users WHERE id = ".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
