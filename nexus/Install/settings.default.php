@@ -148,7 +148,7 @@ return array (
     'viewuserlist' => '2',
     'torrentmanage' => '13',
     'torrentsticky' => '14',
-    'torrentonpromotion' => '0',
+    'torrentonpromotion' => '14',
     'askreseed' => '2',
     'viewnfo' => '2',
     'torrentstructure' => '8',
