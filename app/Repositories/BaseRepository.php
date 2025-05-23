@@ -23,7 +23,12 @@ class BaseRepository
 
     protected function getPerPageFromRequest(Request $request)
     {
-        return $request->get('per_page');
+        $perPage =  $request->get('per_page');
+        if ($perPage && $perPage > 100) {
+            do_log("per_page: $perPage > 100", "warning");
+            $perPage = 100;
+        }
+        return $perPage;
     }
 
     protected function handleAnonymous($username, $user, User $authenticator, Torrent $torrent = null)
