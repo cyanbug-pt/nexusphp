@@ -76,16 +76,21 @@ class AuthenticateController extends Controller
             $user = $this->repository->nasToolsApprove($request->data);
             $resource = new UserResource($user);
             //temporarily compatible
-            $data = $resource->response($request)->getData(true)['data'];
-            $result = $data;
-            $result['data'] = $data;
-            return $this->success($result, "Please use data.data");
+            return $this->success($this->polyfillArray($resource, $request), "Please use data.data");
         } catch (\Exception $exception) {
             $msg = $exception->getMessage();
             $params = $request->all();
             do_log(sprintf("nasToolsApprove fail: %s, params: %s", $msg, nexus_json_encode($params)));
             return $this->fail($params, $msg);
         }
+    }
+
+    private function polyfillArray(JsonResource $resource, Request $request)
+    {
+        $data = $resource->response($request)->getData(true)['data'];
+        $result = $data;
+        $result['data'] = $data;
+        return $result;
     }
 
     public function iyuuApprove(Request $request)
@@ -115,7 +120,8 @@ class AuthenticateController extends Controller
             ]);
             $user = $this->repository->ammdsApprove($request);
             $resource = new UserResource($user);
-            return $this->success($resource);
+            //temporarily compatible
+            return $this->success($this->polyfillArray($resource, $request), "Please use data.data");
         } catch (\Exception $exception) {
             $msg = $exception->getMessage();
             $params = $request->all();
