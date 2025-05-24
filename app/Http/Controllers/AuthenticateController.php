@@ -76,7 +76,7 @@ class AuthenticateController extends Controller
             $user = $this->repository->nasToolsApprove($request->data);
             $resource = new UserResource($user);
             //temporarily compatible
-            $data = $resource->response($request)->getData(true);
+            $data = $resource->response($request)->getData(true)['data'];
             $result = $data;
             $result['data'] = $data;
             return $this->success($result, "Please use data.data");
