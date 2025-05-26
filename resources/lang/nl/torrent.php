@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Betaalde torrent',
     'msg_torrent_deleted' => "Je torrent is verwijderd",
     'msg_the_torrent_you_uploaded' => "De torrent die je hebt geüpload \"",
-    'msg_was_deleted_by' => "' is verwijderd door ",
+    'msg_was_deleted_by' => "'is verwijderd door :admin",
     'msg_reason_is' => ". De reden: ",
     'msg_reseed_request' => "Opnieuw doorgaan verzoek",
     'msg_reseed_user' => "Gebruiker ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nJe kunt de Torrent downloaden",
     'msg_here' => " [b]hier[/b]",
     'msg_offer' => "Aanbieding ",
+    'msg_blank' => ".",
 ];

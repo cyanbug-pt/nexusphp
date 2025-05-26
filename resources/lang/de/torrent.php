@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Bezahlter Torrent',
     'msg_torrent_deleted' => "Ihr Torrent wurde gelöscht",
     'msg_the_torrent_you_uploaded' => "Der Torrent den Sie hochgeladen haben '",
-    'msg_was_deleted_by' => "' wurde gelöscht von ",
+    'msg_was_deleted_by' => "'wurde von :admin gelöscht",
     'msg_reason_is' => ". Der Grund: ",
     'msg_reseed_request' => "Reseed Anfrage",
     'msg_reseed_user' => "Benutzer ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nDu kannst den Torrent herunterladen",
     'msg_here' => " [b]hier[/b]",
     'msg_offer' => "Angebot ",
+    'msg_blank' => ".",
 ];

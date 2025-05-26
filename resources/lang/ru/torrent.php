@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Платный торрент',
     'msg_torrent_deleted' => "Ваш торрент был удален",
     'msg_the_torrent_you_uploaded' => "Торрент, который вы загрузили '",
-    'msg_was_deleted_by' => "' был удалён ",
+    'msg_was_deleted_by' => "'был удален :admin",
     'msg_reason_is' => ". Причина: ",
     'msg_reseed_request' => "Запрос отправлен",
     'msg_reseed_user' => "Пользователь ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nYou can Download the Torrent",
     'msg_here' => " [b]here[/b]",
     'msg_offer' => "Предложение ",
+    'msg_blank' => ".",
 ];

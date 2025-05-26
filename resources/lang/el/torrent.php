@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Καταβεβλημένο torrent',
     'msg_torrent_deleted' => "Το torrent σας διαγράφηκε",
     'msg_the_torrent_you_uploaded' => "Το torrent που ανεβάσατε '",
-    'msg_was_deleted_by' => "' διαγράφηκε από ",
+    'msg_was_deleted_by' => "'διαγράφηκε από τον :admin",
     'msg_reason_is' => ". Ο λόγος: ",
     'msg_reseed_request' => "Αίτημα Ανησυχίας",
     'msg_reseed_user' => "Χρήστης ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nYou can Download the Torrent",
     'msg_here' => " [b]here[/b]",
     'msg_offer' => "Προσφορά ",
+    'msg_blank' => ".",
 ];

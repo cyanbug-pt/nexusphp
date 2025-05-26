@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Płatny torrent',
     'msg_torrent_deleted' => "Twój torrent został usunięty",
     'msg_the_torrent_you_uploaded' => "Przesłany torrent '",
-    'msg_was_deleted_by' => "' został usunięty przez ",
+    'msg_was_deleted_by' => "'został usunięty przez :admin",
     'msg_reason_is' => ". Powód: ",
     'msg_reseed_request' => "Żądanie reseedowania",
     'msg_reseed_user' => "Użytkownik ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nMożesz pobrać torrent",
     'msg_here' => " [b]tutaj[/b]",
     'msg_offer' => "Oferta ",
+    'msg_blank' => ".",
 ];

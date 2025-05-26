@@ -94,7 +94,7 @@ return [
     'paid_torrent' => '收費種子',
     'msg_torrent_deleted' => "種子被刪除",
     'msg_the_torrent_you_uploaded' => "你上傳的種子'",
-    'msg_was_deleted_by' => "'被管理員",
+    'msg_was_deleted_by' => "'被管理員: :admin 刪除",
     'msg_reason_is' => "刪除。原因：",
     'msg_reseed_request' => "續種請求",
     'msg_reseed_user' => "用戶",

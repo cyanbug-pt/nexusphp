@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Maksettu torrentti',
     'msg_torrent_deleted' => "Sinun torrentti poistettiin",
     'msg_the_torrent_you_uploaded' => "The torrent you uploaded '",
-    'msg_was_deleted_by' => "' poistettiin ",
+    'msg_was_deleted_by' => "'oli poistanut :admin",
     'msg_reason_is' => ". Syy: ",
     'msg_reseed_request' => "Palautettu Pyyntö",
     'msg_reseed_user' => "Käyttäjä ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nVoit ladata Torrentin",
     'msg_here' => " [b]tässä[/b]",
     'msg_offer' => "Tarjous ",
+    'msg_blank' => ".",
 ];

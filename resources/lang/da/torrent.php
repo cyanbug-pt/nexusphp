@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Betalt torrent',
     'msg_torrent_deleted' => "Din torrent blev slettet",
     'msg_the_torrent_you_uploaded' => "Torrent du uploadede '",
-    'msg_was_deleted_by' => "' blev slettet af ",
+    'msg_was_deleted_by' => "'blev slettet af :admin",
     'msg_reason_is' => "Årsagen: ",
     'msg_reseed_request' => "Reseed Anmodning",
     'msg_reseed_user' => "Bruger ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nDu kan downloade Torrent",
     'msg_here' => " [b]her[/b]",
     'msg_offer' => "Tilbud ",
+    'msg_blank' => ".",
 ];

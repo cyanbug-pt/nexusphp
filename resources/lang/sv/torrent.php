@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Betald torrent',
     'msg_torrent_deleted' => "Din torrent har tagits bort",
     'msg_the_torrent_you_uploaded' => "Den torrent du laddat upp '",
-    'msg_was_deleted_by' => "' togs bort av ",
+    'msg_was_deleted_by' => "'togs bort av :admin",
     'msg_reason_is' => ". Anledningen till detta: ",
     'msg_reseed_request' => "Återupphäv begäran",
     'msg_reseed_user' => "Användare ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nDu kan ladda ner Torrent",
     'msg_here' => " [b]här[/b]",
     'msg_offer' => "Erbjudande ",
+    'msg_blank' => ".",
 ];

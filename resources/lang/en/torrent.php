@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Paid torrent',
     'msg_torrent_deleted' => "Your torrent was deleted",
     'msg_the_torrent_you_uploaded' => "The torrent you uploaded '",
-    'msg_was_deleted_by' => "' was delete by ",
+    'msg_was_deleted_by' => "'was deleted by :admin",
     'msg_reason_is' => ". The reason: ",
     'msg_reseed_request' => "Reseed Request",
     'msg_reseed_user' => "User ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nYou can Download the Torrent",
     'msg_here' => " [b]here[/b]",
     'msg_offer' => "Offer ",
+    'msg_blank' => ".",
 ];

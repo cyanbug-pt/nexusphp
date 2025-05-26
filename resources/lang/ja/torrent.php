@@ -94,7 +94,7 @@ return [
     'paid_torrent' => '有料Torrent',
     'msg_torrent_deleted' => "トレントが削除されました",
     'msg_the_torrent_you_uploaded' => "アップロードされた Torrent '",
-    'msg_was_deleted_by' => "によって削除された ",
+    'msg_was_deleted_by' => "was deleted by :admin",
     'msg_reason_is' => "理由: ",
     'msg_reseed_request' => "リクエストを再送する",
     'msg_reseed_user' => "ユーザー ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => "\nTorrent をダウンロードできます",
     'msg_here' => " ここ [b][/b]",
     'msg_offer' => "オファー ",
+    'msg_blank' => ".",
 ];

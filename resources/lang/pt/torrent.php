@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Torrent pago',
     'msg_torrent_deleted' => "Seu torrent foi excluído",
     'msg_the_torrent_you_uploaded' => "O torrent que você enviou '",
-    'msg_was_deleted_by' => "' foi apagado por ",
+    'msg_was_deleted_by' => "'foi excluído por :admin",
     'msg_reason_is' => ". O motivo: ",
     'msg_reseed_request' => "Solicitação de Reenvio",
     'msg_reseed_user' => "Usuário ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nVocê pode baixar o Torrent",
     'msg_here' => " [b]aqui[/b]",
     'msg_offer' => "Oferta ",
+    'msg_blank' => ".",
 ];

@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Torrent payé',
     'msg_torrent_deleted' => "Votre torrent a été supprimé",
     'msg_the_torrent_you_uploaded' => "Le torrent que vous avez téléchargé '",
-    'msg_was_deleted_by' => "' a été supprimé par ",
+    'msg_was_deleted_by' => "'a été supprimé par :admin",
     'msg_reason_is' => ". - La raison: ",
     'msg_reseed_request' => "Remise en page de la requête",
     'msg_reseed_user' => "Utilisateur ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nVous pouvez télécharger le Torrent",
     'msg_here' => " [b]ici[/b]",
     'msg_offer' => "Offre ",
+    'msg_blank' => ".",
 ];

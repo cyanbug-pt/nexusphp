@@ -47,9 +47,13 @@ if ($row['anonymous'] == 'yes' && $CURUSER["id"] == $row["owner"]) {
 //Send pm to torrent uploader
 if (\App\Models\User::query()->where("id", $row['owner'])->exists()) {
     if ($CURUSER["id"] != $row["owner"]){
-        $dt = sqlesc(date("Y-m-d H:i:s"));
-        $subject = nexus_trans("torrent.msg_torrent_deleted", [], get_user_locale($row['owner']));
-        $msg = nexus_trans("torrent.msg_the_torrent_you_uploaded", [], get_user_locale($row['owner']));
+        $locale = get_user_locale($row["owner"]);
+        $dt = date("Y-m-d H:i:s");
+        $subject = nexus_trans("torrent.msg_torrent_deleted", [], $locale);
+        $msg = nexus_trans("torrent.msg_the_torrent_you_uploaded", [], $locale)
+            .$row['name']
+            .nexus_trans("torrent.msg_was_deleted_by", ['admin' => $CURUSER['username']], $locale)
+        ;
         \App\Models\Message::add([
             'sender' => 0,
             'receiver' => $row['owner'],

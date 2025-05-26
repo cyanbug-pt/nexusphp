@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Torent plătit',
     'msg_torrent_deleted' => "Torentul tău a fost șters",
     'msg_the_torrent_you_uploaded' => "Torentul pe care l-ai încărcat '",
-    'msg_was_deleted_by' => "' a fost șters de ",
+    'msg_was_deleted_by' => "'a fost șters de :admin",
     'msg_reason_is' => ". Motivul: ",
     'msg_reseed_request' => "Cerere retrimisă",
     'msg_reseed_user' => "Utilizator ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nPoți descărca Torentul",
     'msg_here' => " [b]aici[/b]",
     'msg_offer' => "Ofertă ",
+    'msg_blank' => ".",
 ];

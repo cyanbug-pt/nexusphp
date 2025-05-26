@@ -94,7 +94,7 @@ return [
     'paid_torrent' => 'Placený torrent',
     'msg_torrent_deleted' => "Váš torrent byl smazán",
     'msg_the_torrent_you_uploaded' => "torrent, který jste nahráli '",
-    'msg_was_deleted_by' => "' byl smazán ",
+    'msg_was_deleted_by' => "'byl smazán :admin",
     'msg_reason_is' => ", důvod: ",
     'msg_reseed_request' => "Znovu zaslat žádost",
     'msg_reseed_user' => "Uživatel ",
@@ -106,4 +106,5 @@ return [
     'msg_you_can_download' => ".\nMůžete stáhnout Torrent",
     'msg_here' => " [b]zde[/b]",
     'msg_offer' => "Nabídka ",
+    'msg_blank' => ".",
 ];

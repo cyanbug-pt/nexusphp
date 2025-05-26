@@ -94,7 +94,7 @@ return [
     'paid_torrent' => '收费种子',
     'msg_torrent_deleted' => "种子被删除",
     'msg_the_torrent_you_uploaded' => "你上传的种子'",
-    'msg_was_deleted_by' => "'被管理员",
+    'msg_was_deleted_by' => "'被管理员: :admin 删除",
     'msg_reason_is' => "删除。原因：",
     'msg_reseed_request' => "续种请求",
     'msg_reseed_user' => "用户",
@@ -105,4 +105,5 @@ return [
     'msg_you_can_download' => "上传。\n下载请到",
     'msg_here' => "[b]这里[/b]",
     'msg_offer' => "候选 ",
+    'msg_blank' => "刪除。",
 ];
