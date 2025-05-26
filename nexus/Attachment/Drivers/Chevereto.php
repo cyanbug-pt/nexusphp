@@ -10,8 +10,6 @@ class Chevereto extends Storage {
     {
         $api = get_setting("image_hosting_chevereto.upload_api_endpoint");
         $token = get_setting("image_hosting_chevereto.upload_token");
-        $apiQueryString = parse_url($api, PHP_URL_QUERY);
-        $api .= (!empty($apiQueryString) ? "&" : "?") . "key=$token";
         $logPrefix = "filepath: $filepath, api: $api, token: $token";
         $httpClient = new \GuzzleHttp\Client();
         $response = $httpClient->request('POST', $api, [
@@ -22,6 +20,10 @@ class Chevereto extends Storage {
                 [
                     'name'     => 'source',
                     'contents' => Psr7\Utils::tryFopen($filepath, 'r')
+                ],
+                [
+                    'name'     => 'key',
+                    'contents' => $token
                 ]
             ]
         ]);
