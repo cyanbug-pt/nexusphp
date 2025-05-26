@@ -44,6 +44,9 @@ abstract class Storage {
 
     public function getImageUrl(string $location): string
     {
+        if (str_starts_with($location, "http://") || str_starts_with($location, "https://")) {
+            return $location;
+        }
         return sprintf('%s/%s', trim($this->getBaseUrl(), '/'), trim($location, '/'));
     }
 
