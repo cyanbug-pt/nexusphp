@@ -72,7 +72,7 @@ class TorrentRepository extends BaseRepository
         if (empty($searchBox)) {
             throw new NexusException(nexus_trans("upload.invalid_section"));
         }
-        if ($searchBox->isSectionSpecial() && !Permission::canViewSpecialSection()) {
+        if (!$searchBox->isSectionBrowse() && $searchBox->isSectionSpecial() && !Permission::canViewSpecialSection()) {
             throw new InsufficientPermissionException();
         }
         $categoryIdList = $searchBox->categories()->pluck('id')->toArray();
