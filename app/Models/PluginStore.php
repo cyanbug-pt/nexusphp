@@ -104,20 +104,25 @@ class PluginStore extends Model
 
     private static function listAllFromRemote()
     {
-        $response = Http::get(self::PLUGIN_LIST_API);
-        if ($response->getStatusCode() != 200) {
-            do_log(sprintf("status code: %d, body: %s", $response->getStatusCode(), $response->getBody()), 'error');
-            return [];
-        }
-        $list = $response->json();
-        foreach ($list as &$row) {
-            foreach ($row as $key => $value) {
-                if (is_array($value)) {
-                    $row[$key] = json_encode($value);
+        try {
+            $response = Http::get(self::PLUGIN_LIST_API);
+            if ($response->getStatusCode() != 200) {
+                do_log(sprintf("status code: %d, body: %s", $response->getStatusCode(), $response->getBody()), 'error');
+                return [];
+            }
+            $list = $response->json();
+            foreach ($list as &$row) {
+                foreach ($row as $key => $value) {
+                    if (is_array($value)) {
+                        $row[$key] = json_encode($value);
+                    }
                 }
             }
+            return $list;
+        } catch (\Exception $e) {
+            do_log(sprintf("listAllFromRemote from: %s error: %s", self::PLUGIN_LIST_API, $e->getMessage()), 'error');
+            return [];
         }
-        return $list;
     }
 
     public static function getHasNewVersionCount(): int
