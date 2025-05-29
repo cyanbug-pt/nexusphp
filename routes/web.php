@@ -25,7 +25,6 @@ Route::group(['prefix' => 'web', 'middleware' => ['auth.nexus:nexus-web']], func
     Route::post('torrent-approval', [\App\Http\Controllers\TorrentController::class, 'approval']);
     Route::post('token/add', [\App\Http\Controllers\TokenController::class, 'addToken']);
     Route::post('token/del', [\App\Http\Controllers\TokenController::class, 'delToken']);
-    Route::post('token/get-plain', [\App\Http\Controllers\TokenController::class, 'getPlainText']);
 });
 
 if (!isRunningInConsole()) {
