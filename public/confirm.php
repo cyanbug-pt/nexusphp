@@ -29,7 +29,7 @@ sql_query("UPDATE users SET status='confirmed', editsecret='' WHERE id=".sqlesc(
 if (!mysql_affected_rows())
 	httperr();
 
-
+publish_model_event(\App\Enums\ModelEventEnum::USER_UPDATED, $id);
 //if ($securelogin == "yes")
 //{
 //	$securelogin_indentity_cookie = true;
