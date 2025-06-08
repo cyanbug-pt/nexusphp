@@ -163,8 +163,8 @@ JS;
             print("<tr><td colspan=7 align=center>".$lang_invite['text_no_invites']."</tr>");
         } else {
             list($pagertop, $pagerbottom, $limit) = pager($pageSize, $number, "?id=$id&menu=$menuSelected&");
-            $haremAdditionFactor = get_setting('bonus.harem_addition');
-            $ret = sql_query("SELECT id, username, email, uploaded, downloaded, status, warned, enabled, donor, email FROM users WHERE $whereStr $limit") or sqlerr();
+            $haremAdditionFactor = (float)get_setting('bonus.harem_addition');
+            $ret = sql_query("SELECT id, username, email, uploaded, downloaded, status, warned, enabled, donor, email,seeding_torrent_count, seeding_torrent_size, last_announce_at FROM users WHERE $whereStr $limit") or sqlerr();
             $num = mysql_num_rows($ret);
 
             print("<tr>
@@ -208,7 +208,6 @@ JS;
                     $status = "<a href=userdetails.php?id={$arr['id']}><font color=#1f7309>".$lang_invite['text_confirmed']."</font></a>";
                 else
                     $status = "<a href=checkuser.php?id={$arr['id']}><font color=#ca0226>".$lang_invite['text_pending']."</font></a>";
-                $seedBonusResult = calculate_seed_bonus($arr['id']);
                 print("<tr class=rowfollow>
 <td class=rowfollow>".get_username($arr['id'])."</td>
 <td>{$arr['email']}</td>
@@ -216,15 +215,15 @@ JS;
 <td class=rowfollow>" . mksize($arr['uploaded']) . "</td>
 <td class=rowfollow>" . mksize($arr['downloaded']) . "</td>
 <td class=rowfollow>$ratio</td>
-<td class=rowfollow>{$seedBonusResult['count']}</td>
-<td class=rowfollow>".mksize($seedBonusResult['size'])."</td>
-<td class=rowfollow>".number_format($seedBonusResult['seed_points'], 3)."</td>
+<td class=rowfollow>".number_format($arr['seeding_torrent_count'])."</td>
+<td class=rowfollow>".mksize($arr['seeding_torrent_size'])."</td>
+<td class=rowfollow>".number_format($arr['seed_points_per_hour'], 3)."</td>
 ");
 
                 if ($haremAdditionFactor > 0) {
-                    print ("<td class=rowfollow>".number_format($seedBonusResult['seed_points'] * $haremAdditionFactor, 3)."</td>");
+                    print ("<td class=rowfollow>".number_format(floatval($arr['seed_points_per_hour']) * $haremAdditionFactor, 3)."</td>");
                 }
-                print("<td class=rowfollow>{$seedBonusResult['last_action']}</td>");
+                print("<td class=rowfollow>{$arr['last_announce_at']}</td>");
                 print("<td class=rowfollow>$status</td>");
                 if ($CURUSER['id'] == $id || get_user_class() >= UC_SYSOP){
                     print("<td>");
@@ -240,7 +239,7 @@ JS;
         if ($CURUSER['id'] == $id || get_user_class() >= UC_SYSOP)
         {
             $pendingcount = number_format(get_row_count("users", "WHERE  status='pending' AND invited_by={$CURUSER['id']}"));
-            $colSpan = 7;
+            $colSpan = 12;
             if (isset($haremAdditionFactor) && $haremAdditionFactor > 0) {
                 $colSpan += 1;
             }

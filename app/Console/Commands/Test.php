@@ -14,6 +14,7 @@ use App\Repositories\ExamRepository;
 use App\Repositories\SeedBoxRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Nexus\PTGen\PTGen;
 use NexusPlugin\Menu\Filament\MenuItemResource\Pages\ManageMenuItems;
 use NexusPlugin\Menu\MenuRepository;
@@ -59,7 +60,15 @@ class Test extends Command
      */
     public function handle()
     {
+        $failedJob = DB::table('failed_jobs')->find(555);
 
+        $payload = json_decode($failedJob->payload, true);
+        dd($payload);
+
+        $base64 = $payload['data']['command'];
+        $job = unserialize($base64);
+
+        dd($job);
     }
 
 }

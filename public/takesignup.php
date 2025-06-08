@@ -229,7 +229,7 @@ if ($type == 'invite')
     $dt = date("Y-m-d H:i:s");
     $locale = get_user_locale($inviter);
     $subject = nexus_trans("user.msg_invited_user_has_registered", [], $locale);
-    $msg = nexus_trans("user.msg_user_you_invited", [],$locale).$usern.nexus_trans("user.msg_has_registered", [], $locale);
+    $msg = nexus_trans("user.msg_user_you_invited", [],$locale).$wantusername.nexus_trans("user.msg_has_registered", [], $locale);
     //sql_query("UPDATE users SET uploaded = uploaded + 10737418240 WHERE id = $inviter"); //add 10GB to invitor's uploading credit
     \App\Models\Message::add([
         'sender' => 0,

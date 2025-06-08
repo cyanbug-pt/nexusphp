@@ -596,6 +596,7 @@ if (count($updateset) || $hasChangeSeederLeecher) // Update only when there is c
 if($client_familyid != 0 && $client_familyid != $az['clientselect']) {
     $USERUPDATESET[] = "clientselect = ".sqlesc($client_familyid);
 }
+$USERUPDATESET[] = "last_announce_at = $dt";
 /**
  * VIP do not calculate downloaded
  * @since 1.7.13

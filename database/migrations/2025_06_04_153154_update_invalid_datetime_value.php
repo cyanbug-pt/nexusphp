@@ -8,35 +8,29 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         $tableFields = \App\Repositories\UpgradeRepository::DATETIME_INVALID_VALUE_FIELDS;
 
         foreach ($tableFields as $table => $fields) {
             $columnInfo = \Nexus\Database\NexusDB::getMysqlColumnInfo($table);
-            $modifies = [];
             foreach ($fields as $field) {
-                if (isset($columnInfo[$field]) && $columnInfo[$field]['COLUMN_DEFAULT'] == '0000-00-00 00:00:00') {
-                    $modifies[] = sprintf('modify `%s` datetime default null', $field);
+                if (isset($columnInfo[$field]) && $columnInfo[$field]['DATA_TYPE'] == 'datetime') {
+                    \Illuminate\Support\Facades\DB::statement("update $table set $field = null where $field = '0000-00-00 00:00:00'");
                 }
             }
-            if (!empty($modifies)) {
-                $sql = sprintf("alter table `%s` %s", $table, implode(', ', $modifies));
-                \Illuminate\Support\Facades\DB::statement($sql);
-            }
         }
-
+        $columnInfo = \Nexus\Database\NexusDB::getMysqlColumnInfo("snatched");
+        if (isset($columnInfo["finish_ip"])) {
+            \Illuminate\Support\Facades\DB::statement("alter table snatched drop column finish_ip");
+        }
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         //
     }

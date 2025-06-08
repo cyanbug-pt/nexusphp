@@ -46,7 +46,7 @@ class AuthCodeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('user.username')
+                Tables\Columns\TextColumn::make('user_id')
                     ->label(__('label.username'))
                     ->formatStateUsing(fn ($record) => username_for_admin($record->user_id)),
                 Tables\Columns\TextColumn::make('client.name')
