@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\CheckQueueFailedJobs;
 use App\Jobs\SettleClaim;
 use App\Models\ExamUser;
 use App\Models\Language;
@@ -60,15 +61,17 @@ class Test extends Command
      */
     public function handle()
     {
-        $failedJob = DB::table('failed_jobs')->find(555);
+//        $failedJob = DB::table('failed_jobs')->find(555);
+//
+//        $payload = json_decode($failedJob->payload, true);
+//        dd($payload);
+//
+//        $base64 = $payload['data']['command'];
+//        $job = unserialize($base64);
+//
+//        dd($job);
 
-        $payload = json_decode($failedJob->payload, true);
-        dd($payload);
-
-        $base64 = $payload['data']['command'];
-        $job = unserialize($base64);
-
-        dd($job);
+        CheckQueueFailedJobs::dispatch();
     }
 
 }
