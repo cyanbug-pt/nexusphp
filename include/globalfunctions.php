@@ -1345,7 +1345,8 @@ function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, ?\
             $idKeyOld = $prefix . \Illuminate\Support\Str::random();
             \Nexus\Database\NexusDB::cache_put($idKeyOld, serialize($oldModel->toArray()), 3600*24*30);
         }
-        executeCommand("event:fire --name=$name --idKey=$idKey --idKeyOld=$idKeyOld", "string", true, false);
+//        executeCommand("event:fire --name=$name --idKey=$idKey --idKeyOld=$idKeyOld", "string", true, false);
+        \Nexus\Nexus::dispatchQueueJob(new \App\Jobs\FireEvent($name, $idKey, $idKeyOld));
     } else {
         $eventClass = \App\Enums\ModelEventEnum::$eventMaps[$name]['event'];
         if (str_ends_with($name, '_deleted')) {

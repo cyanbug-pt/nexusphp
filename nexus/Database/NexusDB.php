@@ -4,6 +4,7 @@ namespace Nexus\Database;
 
 use App\Models\OauthClient;
 use App\Models\PersonalAccessToken;
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Query\Expression;
@@ -257,7 +258,7 @@ class NexusDB
 
     public static function bootEloquent(array $config)
     {
-        $capsule = new Capsule;
+        $capsule = new Capsule(Container::getInstance());
         $connectionName = self::ELOQUENT_CONNECTION_NAME;
         $capsule->addConnection($config, $connectionName);
         $capsule->setAsGlobal();
