@@ -1,6 +1,8 @@
 <?php
 # IMPORTANT: Do not edit below unless you know what you are doing!
 
+use App\Enums\ModelEventEnum;
+
 if(!defined('IN_TRACKER'))
 die('Hacking attempt!');
 
@@ -60,10 +62,19 @@ function torrent_promotion_expire($days, $type = 2, $targettype = 1){
 	}
 	while($arr = mysql_fetch_assoc($res)){
 		sql_query("UPDATE torrents SET sp_state = ".sqlesc($sp_state)." WHERE id={$arr['id']}") or sqlerr(__FILE__, __LINE__);
+        publish_model_event(ModelEventEnum::TORRENT_UPDATED, $arr['id']);
 		if ($sp_state == 1)
 			write_log("Torrent {$arr['id']} ({$arr['name']}) is no longer on promotion (time expired)",'normal');
 		else write_log("Promotion type for torrent {$arr['id']} ({$arr['name']}) is changed to ".$become." (time expired)",'normal');
 	}
+}
+
+function torrent_promotion_individual_expire() {
+    $res = sql_query("select id from torrents  WHERE promotion_time_type=2 AND promotion_until < ".sqlesc(date("Y-m-d H:i:s")));
+    while ($arr = mysql_fetch_assoc($res)) {
+        sql_query("update torrents set sp_state = 1, promotion_time_type=0, promotion_until=null where id=" . $arr['id']);
+        publish_model_event(ModelEventEnum::TORRENT_UPDATED, $arr['id']);
+    }
 }
 
 function peasant_to_user($down_floor_gb, $down_roof_gb, $minratio){
@@ -83,6 +94,7 @@ function peasant_to_user($down_floor_gb, $down_roof_gb, $minratio){
 				writecomment($arr['id'],"Leech Warning removed by System.");
 				sql_query("UPDATE users SET class = 1, leechwarn = 'no', leechwarnuntil = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
 				sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, $subject, $msg)") or sqlerr(__FILE__, __LINE__);
+                publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
 			}
 		}
 	}
@@ -119,6 +131,7 @@ function promotion($class, $down_floor_gb, $minratio, $time_week, $addinvite = 0
                     sql_query("UPDATE users SET class = $class, max_class_once=$class, invites=invites+$addinvite WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
                 }
 				sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, $subject, $msg)") or sqlerr(__FILE__, __LINE__);
+                publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
 			}
 		}
 	}
@@ -141,6 +154,7 @@ function demotion($class,$deratio){
 
             sql_query("UPDATE users SET class = $newclass WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
 			sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
+            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
 		}
 	}
 }
@@ -164,6 +178,7 @@ function user_to_peasant($down_floor_gb, $minratio){
             writecomment($arr['id'],"Leech Warned by System - Low Ratio.");
 			sql_query("UPDATE users SET class = 0 , leechwarn = 'yes', leechwarnuntil = ".sqlesc($until)." WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
 			sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
+            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
 		}
 	}
 }
@@ -203,6 +218,9 @@ function ban_user_with_leech_warning_expired()
     \App\Models\User::query()->whereIn('id', $uidArr)->update($update);
     \App\Models\UserBanLog::query()->insert($userBanLogData);
     do_log("ban user: " . implode(', ', $uidArr));
+    foreach ($uidArr as $uid) {
+        publish_model_event(ModelEventEnum::USER_UPDATED, $uid);
+    }
     return $uidArr;
 }
 
@@ -241,6 +259,9 @@ function disable_user(\Illuminate\Database\Eloquent\Builder $query, $reasonKey)
     \App\Models\UserBanLog::query()->insert($userBanLogData);
     \App\Models\UserModifyLog::query()->insert($userModifyLogs);
     do_log("[DISABLE_USER]($reasonKey): " . implode(', ', $uidArr));
+    foreach ($uidArr as $uid) {
+        publish_model_event(ModelEventEnum::USER_DISABLED, $uid);
+    }
     return $uidArr;
 }
 
@@ -494,8 +515,8 @@ function docleanup($forceAll = 0, $printProgress = false) {
 		torrent_promotion_expire($expirenormal_torrent, 1, $normalbecome_torrent);
 
 	//expire individual torrent promotion
-	sql_query("UPDATE torrents SET sp_state = 1, promotion_time_type=0, promotion_until=null WHERE promotion_time_type=2 AND promotion_until < ".sqlesc(date("Y-m-d H:i:s",TIMENOW))) or sqlerr(__FILE__, __LINE__);
-
+//	sql_query("UPDATE torrents SET sp_state = 1, promotion_time_type=0, promotion_until=null WHERE promotion_time_type=2 AND promotion_until < ".sqlesc(date("Y-m-d H:i:s",TIMENOW))) or sqlerr(__FILE__, __LINE__);
+    torrent_promotion_individual_expire();
 	//End: expire torrent promotion
 	$log = "expire torrent promotion";
 	do_log($log);
@@ -734,6 +755,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
                 sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
                 sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
             }
+            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
 		}
 	}
     if (!empty($userModifyLogs)) {
@@ -764,6 +786,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
             ];
             sql_query("UPDATE users SET donor = 'no' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
             sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
+            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
         }
     }
     if (!empty($userModifyLogs)) {

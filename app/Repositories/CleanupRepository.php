@@ -257,6 +257,9 @@ LUA;
             "lastcleantime5" => "five",
         ];
         $avps = Avp::query()->get()->keyBy("arg");
+        if ($avps->isEmpty()) {
+            return;
+        }
         foreach ($arvToLevel as $arg => $level) {
             /** @var NexusModel $value */
             $value = $avps->get($arg);

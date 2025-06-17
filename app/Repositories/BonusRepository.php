@@ -252,11 +252,11 @@ class BonusRepository extends BaseRepository
 
     }
 
-    public function consumeToBuyTorrent($uid, $torrentId, $channel = 'Web'): bool
+    public function consumeToBuyTorrent($uid, $torrentId, $channel = 'Web'): TorrentBuyLog
     {
         $torrent = Torrent::query()->findOrFail($torrentId, Torrent::$commentFields);
         $requireBonus = $torrent->price;
-        NexusDB::transaction(function () use ($requireBonus, $torrent, $channel, $uid) {
+        return NexusDB::transaction(function () use ($requireBonus, $torrent, $channel, $uid) {
             $userQuery = User::query();
             if ($requireBonus > 0) {
                 $userQuery = $userQuery->lockForUpdate();
@@ -269,7 +269,7 @@ class BonusRepository extends BaseRepository
             ], $buyerLocale);
             do_log("comment: $comment");
             $this->consumeUserBonus($user, $requireBonus, BonusLogs::BUSINESS_TYPE_BUY_TORRENT, $comment);
-            TorrentBuyLog::query()->create([
+            $buyLog = TorrentBuyLog::query()->create([
                 'uid' => $user->id,
                 'torrent_id' => $torrent->id,
                 'price' => $requireBonus,
@@ -314,10 +314,8 @@ class BonusRepository extends BaseRepository
                 ], $buyerLocale),
             ];
             Message::add($buyTorrentSuccessMessage);
+            return $buyLog;
         });
-
-        return true;
-
     }
 
     public function consumeUserBonus($user, $requireBonus, $logBusinessType, $logComment = '', array $userUpdates = [])

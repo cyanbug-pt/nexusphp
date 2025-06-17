@@ -347,6 +347,46 @@ $log .= ", [SEED_BOX], isSeedBoxRuleEnabled: $isSeedBoxRuleEnabled, isIPSeedBox:
 
 do_log($log);
 
+//handle paid torrent
+if (
+    $seeder == 'no'
+    && isset($az['seedbonus'])
+    && isset($torrent['price'])
+    && $torrent['price'] > 0
+    && $torrent['owner'] != $userid
+    && get_setting("torrent.paid_torrent_enabled") == "yes"
+) {
+    $torrentRep = new \App\Repositories\TorrentRepository();
+    $buyStatus = $torrentRep->getBuyStatus($userid, $torrentid);
+    do_log("user: $userid buy torrent: $torrentid, status: $buyStatus");
+    if ($buyStatus > 0) {
+        do_log(sprintf("user: %s buy torrent： %s fail count: %s", $userid, $torrentid, $buyStatus), "error");
+        if ($buyStatus > 3) {
+            //warn
+            \App\Utils\MsgAlert::getInstance()->add(
+                "announce_paid_torrent_too_many_times",
+                time() + 86400,
+                "announce to paid torrent and fail too many times, please make sure you have enough bonus!",
+                "",
+                "black"
+            );
+        }
+        if ($buyStatus > 10) {
+            //disable download
+            (new \App\Repositories\UserRepository())->updateDownloadPrivileges(null, $userid, 'no', 'announce_paid_torrent_too_many_times');
+        }
+        \Nexus\Nexus::dispatchQueueJob(new \App\Jobs\BuyTorrent($userid, $torrentid));
+        //already fail, add fail times
+        $torrentRep->addBuyFailCache($userid, $torrentid);
+        warn("purchase in progress, please try again later, and make sure you have enough bonus", 300);
+    }
+    if ($buyStatus == \App\Repositories\TorrentRepository::BUY_STATUS_UNKNOWN) {
+        //just enqueue job
+        \Nexus\Nexus::dispatchQueueJob(new \App\Jobs\BuyTorrent($userid, $torrentid));
+        warn("purchase started, please wait", 300);
+    }
+}
+
 // current peer_id, or you could say session with tracker not found in table peers
 if (!isset($self))
 {
@@ -393,42 +433,6 @@ if (!isset($self))
 			}
 		}
 	}
-    if (
-        $seeder == 'no'
-        && isset($az['seedbonus'])
-        && isset($torrent['price'])
-        && $torrent['price'] > 0
-        && $torrent['owner'] != $userid
-        && get_setting("torrent.paid_torrent_enabled") == "yes"
-    ) {
-        $torrentRep = new \App\Repositories\TorrentRepository();
-        $buyStatus = $torrentRep->getBuyStatus($userid, $torrentid);
-        if ($buyStatus > 0) {
-            do_log(sprintf("user: %v buy torrent： %v fail count: %v", $userid, $torrentid, $buyStatus), "error");
-            if ($buyStatus > 3) {
-                //warn
-                \App\Utils\MsgAlert::getInstance()->add(
-                    "announce_paid_torrent_too_many_times",
-                    time() + 86400,
-                    "announce to paid torrent and fail too many times, please make sure you have enough bonus!",
-                    "",
-                    "black"
-                );
-            }
-            if ($buyStatus > 10) {
-                //disable download
-                (new \App\Repositories\UserRepository())->updateDownloadPrivileges(null, $userid, 'no', 'announce_paid_torrent_too_many_times');
-            }
-            //already fail, add fail times
-            $torrentRep->addBuyFailCache($userid, $torrentid);
-            warn("purchase fail, please try again later, please make sure you have enough bonus", 300);
-        }
-        if ($buyStatus == \App\Repositories\TorrentRepository::BUY_STATUS_UNKNOWN) {
-            //just enqueue job
-            \App\Utils\ThirdPartyJob::addBuyTorrent($userid, $torrentid);
-            warn("purchase in progress, please wait", 300);
-        }
-    }
 }
 else // continue an existing session
 {
@@ -567,7 +571,11 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
                     $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, $nowStr
                 );
                 $affectedRows = sql_query($sql);
-                do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} >= required: $requiredDownloaded, [INSERT_H&R], sql: $sql, affectedRows: $affectedRows");
+                $hitAndRunId = mysql_insert_id();
+                do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} >= required: $requiredDownloaded, [INSERT_H&R], sql: $sql, affectedRows: $affectedRows, hitAndRunId: $hitAndRunId");
+                if ($hitAndRunId > 0) {
+                    sql_query("update snatched set hit_and_run_id = $hitAndRunId where id = {$snatchInfo['id']}");
+                }
             } else {
                 do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} < required: $requiredDownloaded", "debug");
             }

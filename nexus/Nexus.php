@@ -422,6 +422,7 @@ final class Nexus
     public static function dispatchQueueJob(ShouldQueue $job): void
     {
         self::getQueueManager()->connection(self::QUEUE_CONNECTION_NAME)->push($job);
+        do_log("dispatchQueueJob: " . nexus_json_encode($job));
     }
 
 

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Auth\Permission;
+use App\Enums\ModelEventEnum;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\TorrentResource;
@@ -843,20 +844,51 @@ HTML;
     }
 
     /**
-     * 购买成功缓存，保存为 hash，一个种子一个 hash，永久有效
+     * 购买成功，缓存 30 天并更新到 snatched 上
      * @param $uid
      * @param $torrentId
      * @return void
      * @throws \RedisException
      */
-    public function addBuySuccessCache($uid, $torrentId): void
+    public function addBuySuccessCache($uid, $torrentId, $buyLogId): void
     {
-        NexusDB::redis()->hSet($this->getBoughtUserCacheKey($torrentId), $uid, 1);
+        NexusDB::redis()->set($this->getBoughtUserCacheKey($torrentId, $uid), 1, ['NX', 'EX' => 86400*30]);
+        $record = Snatch::query()
+            ->where("torrentid", $torrentId)
+            ->where("userid", $uid)
+            ->first();
+        if ($record) {
+            $record->buy_log_id = $buyLogId;
+            $record->save();
+            publish_model_event(ModelEventEnum::SNATCHED_UPDATED, $record->id);
+        } else {
+            do_log("addBuySuccessCache, uid: $uid, torrentId: $torrentId, buyLogId: $buyLogId, snatched not exists", 'error');
+        }
+
     }
 
     public function hasBuySuccessCache($uid, $torrentId): bool
     {
-        return NexusDB::redis()->hGet($this->getBoughtUserCacheKey($torrentId), $uid) == 1;
+        $key = $this->getBoughtUserCacheKey($torrentId, $uid);
+        if (NexusDB::redis()->exists($key)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function hasBuySuccess($uid, $torrentId): bool
+    {
+        if ($this->hasBuySuccessCache($uid, $torrentId)) {
+            return true;
+        }
+        $buyLog = TorrentBuyLog::query()
+            ->where("torrent_id", $torrentId)
+            ->where("uid", $uid)
+            ->first();
+        if ($buyLog) {
+            $this->addBuySuccessCache($uid, $torrentId, $buyLog->id);
+        }
+        return $buyLog != null;
     }
 
     /**
@@ -868,8 +900,8 @@ HTML;
      */
     public function getBuyStatus($uid, $torrentId): int
     {
-        //查询是否已经购买
-        if ($this->hasBuySuccessCache($uid, $torrentId)) {
+        //从缓存中判断是否购买过
+        if ($this->hasBuySuccess($uid, $torrentId)) {
             return self::BUY_STATUS_SUCCESS;
         }
         //是否购买失败过
@@ -913,12 +945,13 @@ HTML;
 
     /**
      * 购买成功缓存 key
+     * @update 改为使用字符串判断键是否存在即可
      * @param $torrentId
      * @return string
      */
-    public function getBoughtUserCacheKey($torrentId): string
+    public function getBoughtUserCacheKey($torrentId, $userId): string
     {
-        return  sprintf("%s:%s", self::BOUGHT_USER_CACHE_KEY_PREFIX, $torrentId);
+        return  sprintf("%s:%s:%s", self::BOUGHT_USER_CACHE_KEY_PREFIX, $torrentId, $userId);
     }
 
     /**

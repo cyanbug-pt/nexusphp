@@ -769,7 +769,8 @@ if (isset($searchstr))
 		case 1	:	// torrent description
 		{
 			foreach ($like_expression_array as &$like_expression_array_element)
-			$like_expression_array_element = "torrents.descr". $like_expression_array_element;
+//			$like_expression_array_element = "torrents.descr". $like_expression_array_element;
+			$like_expression_array_element = "torrent_extras.descr". $like_expression_array_element;
 			$wherea[] =  implode($ANDOR,  $like_expression_array);
 			break;
 		}
@@ -913,12 +914,16 @@ if ($tagId > 0) {
     $tagFilter = " inner join torrent_tags on torrents.id = torrent_tags.torrent_id and torrent_tags.tag_id = $tagId ";
     $addparam .= "tag_id={$tagId}&";
 }
+$torrentExtraFilter = "";
+if ($search_area == 1) {
+    $torrentExtraFilter = " inner join torrent_extras on torrents.id = torrent_extras.torrent_id ";
+}
 if ($allsec == 1 || $enablespecial != 'yes')
 {
 	if ($where != "")
 		$where = "WHERE $where ";
 	else $where = "";
-	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where;
+	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
 }
 else
 {
@@ -930,7 +935,7 @@ else
         $where = "WHERE $where";
     else $where = "";
 //	$sql = "SELECT COUNT(*), categories.mode FROM torrents LEFT JOIN categories ON category = categories.id " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where . " GROUP BY categories.mode";
-	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where;
+	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
 }
 
 if ($shouldUseMeili) {
@@ -986,7 +991,7 @@ if ($count)
 //        $query = "SELECT $fieldsStr FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")." $tagFilter $where $orderby $limit";
 //    } else {
 //        $query = "SELECT $fieldsStr, categories.mode as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")." LEFT JOIN categories ON torrents.category=categories.id $tagFilter $where $orderby $limit";
-        $query = "SELECT $fieldsStr, $sectiontype as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")."$tagFilter $where $orderby $limit";
+        $query = "SELECT $fieldsStr, $sectiontype as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")."$tagFilter $torrentExtraFilter $where $orderby $limit";
 //    }
     do_log("[TORRENT_LIST_SQL] $query", 'debug');
     if (!$shouldUseMeili) {

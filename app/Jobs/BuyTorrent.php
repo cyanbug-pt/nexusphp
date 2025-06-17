@@ -34,6 +34,7 @@ class BuyTorrent implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Throwable
      */
     public function handle()
     {
@@ -42,27 +43,28 @@ class BuyTorrent implements ShouldQueue
         $userId = $this->userId;
         $torrentId = $this->torrentId;
 
-        $hasBuy = TorrentBuyLog::query()
+        $buyLog = TorrentBuyLog::query()
             ->where("uid", $userId)
             ->where("torrent_id", $torrentId)
-            ->exists()
+            ->first();
         ;
-        if ($hasBuy) {
+        if ($buyLog) {
             //标记购买成功
             do_log("$logPrefix, already bought");
-            $torrentRep->addBuySuccessCache($userId, $torrentId);
+            $torrentRep->addBuySuccessCache($userId, $torrentId, $buyLog->id);
             return;
         }
         try {
             $bonusRep = new BonusRepository();
-            $bonusRep->consumeToBuyTorrent($this->userId, $this->torrentId);
+            $buyLog = $bonusRep->consumeToBuyTorrent($this->userId, $this->torrentId);
             //标记购买成功
             do_log("$logPrefix, buy torrent success");
-            $torrentRep->addBuySuccessCache($userId, $torrentId);
+            $torrentRep->addBuySuccessCache($userId, $torrentId, $buyLog->id);
         } catch (\Throwable $throwable) {
             //标记购买失败，缓存 3600 秒，这个时间内不能再次购买
             do_log("$logPrefix, buy torrent fail: " . $throwable->getMessage(), "error");
             $torrentRep->addBuyFailCache($userId, $torrentId);
+            throw $throwable;
         }
     }
 }

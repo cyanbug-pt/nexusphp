@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\CheckQueueFailedJobs;
 use App\Jobs\SettleClaim;
+use App\Jobs\UpdateUserDownloadPrivilege;
 use App\Models\ExamUser;
 use App\Models\Language;
 use App\Models\PersonalAccessToken;
@@ -61,7 +62,7 @@ class Test extends Command
      */
     public function handle()
     {
-//        $failedJob = DB::table('failed_jobs')->find(555);
+//        $failedJob = DB::table('failed_jobs')->find(569);
 //
 //        $payload = json_decode($failedJob->payload, true);
 //        dd($payload);
@@ -71,7 +72,11 @@ class Test extends Command
 //
 //        dd($job);
 
-        CheckQueueFailedJobs::dispatch();
+//        UpdateUserDownloadPrivilege::dispatch(1, "yes", "test_key");
+//        $res = unserialize("O:36:\"App\\Jobs\\UpdateUserDownloadPrivilege\":3:{s:6:\"userId\";i:1;s:6:\"status\";s:3:\"yes\";s:9:\"reasonKey\";s:8:\"test_key\";}");
+//        $res = unserialize("O:36:\"App\\Jobs\\UpdateUserDownloadPrivilege\":3:{s:6:\"userId\";i:1;s:6:\"status\";s:3:\"yes\";s:9:\"reasonKey\";s:8:\"test_key\";}");
+//        dd($res);
+        UpdateUserDownloadPrivilege::dispatch(1, "yes", "test_key");
     }
 
 }

@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('meilisearch:import')->weeklyOn(1, "03:00");
         $schedule->command('torrent:load_pieces_hash')->dailyAt("01:00");
         $schedule->job(new CheckQueueFailedJobs())->everySixHours();
-        $schedule->job(new ThirdPartyJob())->everyMinute();
+//        $schedule->job(new ThirdPartyJob())->everyMinute();
         $schedule->job(new MaintainPluginState())->everyMinute();
         $schedule->job(new UpdateIsSeedBoxFromUserRecordsCache())->everySixHours();
         $schedule->job(new CheckCleanup())->everyFifteenMinutes();

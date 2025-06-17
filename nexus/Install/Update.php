@@ -353,6 +353,15 @@ class Update extends Install
             Setting::updateUserTokenPermissionAllowedCache(TokenRepository::listUserTokenPermissions(false));
         }
 
+        /**
+         * @since 1.9.5
+         */
+        if (!Schema::hasColumn("snatched", "hit_and_run_id")) {
+            $this->runMigrate("database/migrations/2025_06_09_222012_add_hr_and_buy_id_to_snatched_table.php");
+            Artisan::call("upgrade:migrate_snatched_hr_id");
+            Artisan::call("upgrade:migrate_snatched_buy_log_id");
+        }
+
     }
 
     public function runExtraMigrate()
