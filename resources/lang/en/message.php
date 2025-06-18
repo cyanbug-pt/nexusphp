@@ -23,6 +23,10 @@ return [
         'subject' => 'Download permission canceled',
         'body' => 'Your download permission has been cancelled due to announce to paid torrent too many times, please make sure you have enough bonus.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Download permission canceled',
+        'body' => 'Your download permission has been cancelled due to announce fake data.',
+    ],
     'download_enable' => [
         'subject' => 'Download permission restored',
         'body' => 'Your download privileges restored, you can now download torrents. By: :operator',

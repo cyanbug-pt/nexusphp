@@ -22,6 +22,10 @@ return [
         'subject' => '下载权限取消',
         'body' => '你因向付費種子匯報失敗次數過多下載權限被取消，請確保你有足夠的魔力。',
     ],
+    'download_disable_fake_announce' => [
+        'subject' => '下载权限取消',
+        'body' => '你因虛假匯報下載權限被取消。',
+    ],
     'download_enable' => [
         'subject' => '下載權限恢復',
         'body' => '你的下載權限恢復，你現在可以下載種子。By: :operator',

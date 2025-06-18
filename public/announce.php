@@ -193,6 +193,13 @@ if ($torrent['approval_status'] != \App\Models\Torrent::APPROVAL_STATUS_ALLOW &&
     }
 }
 
+if ($left > $torrent['size']) {
+    //disable download
+    (new \App\Repositories\UserRepository())->updateDownloadPrivileges(null, $userid, 'no', 'fake_announce');
+    do_log(sprintf("fake announce, user: %s, torrent: %s, announce left: %s > size: %s", $userid, $torrentid, $left, $torrent['size']), 'warn');
+    warn("fake announce");
+}
+
 // select peers info from peers table for this torrent
 
 $numpeers = $torrent["seeders"]+$torrent["leechers"];
