@@ -405,11 +405,12 @@ class UserRepository extends BaseRepository
             $message['subject'] = nexus_trans('message.download_enable.subject', [], $targetUser->locale);
             $message['msg'] = nexus_trans('message.download_enable.body', ['operator' => $operatorUsername], $targetUser->locale);
         }
-        return NexusDB::transaction(function () use ($targetUser, $update, $modComment, $message) {
+        $result = NexusDB::transaction(function () use ($targetUser, $update, $modComment, $message) {
             Message::add($message);
-            $this->clearCache($targetUser);
             return $targetUser->updateWithModComment($update, $modComment);
         });
+        $this->clearCache($targetUser);
+        return $result;
     }
 
 
@@ -506,8 +507,8 @@ class UserRepository extends BaseRepository
             $targetUser->usernameChangeLogs()->create($changeLog);
             $targetUser->username = $changeLog['username_new'];
             $targetUser->save();
-            $this->clearCache($targetUser);
         });
+        $this->clearCache($targetUser);
         return true;
     }
 
@@ -566,8 +567,8 @@ class UserRepository extends BaseRepository
             } else {
                 $targetUser->update($userUpdates);
             }
-            $this->clearCache($targetUser);
         });
+        $this->clearCache($targetUser);
 
         return true;
     }
