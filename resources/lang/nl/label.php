@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Aan het eind aangemaakt',
     'text_quote' => 'Offerte',
     'text_code' => "CODE",
+    'language' => 'Taal',
+    'content' => 'Inhoud',
     'setting' => [
         'nav_text' => 'Instellingen',
         'backup' => [

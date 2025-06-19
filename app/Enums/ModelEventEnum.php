@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use App\Events\MessageCreated;
 use App\Events\NewsCreated;
 use App\Events\SnatchedUpdated;
 use App\Events\TorrentCreated;
@@ -12,6 +13,7 @@ use App\Events\UserDeleted;
 use App\Events\UserDisabled;
 use App\Events\UserEnabled;
 use App\Events\UserUpdated;
+use App\Models\Message;
 use App\Models\News;
 use App\Models\Snatch;
 use App\Models\Torrent;
@@ -31,6 +33,7 @@ final class ModelEventEnum {
     const NEWS_CREATED = 'news_created';
 
     const SNATCHED_UPDATED = 'snatched_updated';
+    const MESSAGE_CREATED = 'message_created';
 
     public static array $eventMaps = [
         self::TORRENT_CREATED => ['event' => TorrentCreated::class, 'model' => Torrent::class],
@@ -46,5 +49,7 @@ final class ModelEventEnum {
         self::NEWS_CREATED => ['event' => NewsCreated::class, 'model' => News::class],
 
         self::SNATCHED_UPDATED => ['event' => SnatchedUpdated::class, 'model' => Snatch::class],
+
+        self::MESSAGE_CREATED => ['event' => MessageCreated::class, 'model' => Message::class],
     ];
 }

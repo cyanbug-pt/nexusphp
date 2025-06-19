@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Créé à la fin',
     'text_quote' => 'Devis',
     'text_code' => "CODE",
+    'language' => 'Langue',
+    'content' => 'Contenus',
     'setting' => [
         'nav_text' => 'Réglages',
         'backup' => [

@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Oprettet i slutningen',
     'text_quote' => 'Tilbud',
     'text_code' => "Kode",
+    'language' => 'Sprog',
+    'content' => 'Indhold',
     'setting' => [
         'nav_text' => 'Indstilling',
         'backup' => [

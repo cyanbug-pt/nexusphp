@@ -69,8 +69,13 @@ class PluginStore extends Model
 
     public function hasNewVersion(): bool
     {
-        return $this->installed_version
+        $result = $this->installed_version
             && version_compare($this->version, $this->installed_version, '>');
+        do_log(sprintf(
+            "%s, installed_version: %s, version: %s, hasNew: %s",
+            $this->plugin_id, $this->installed_version, $this->version, $result
+        ));
+        return $result;
     }
 
     public static function getInfo(string $id)

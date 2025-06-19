@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Autorisierungsanbieter',
         'queue_monitor' => 'Warteschlange Monitor',
         'user_modify_logs' => 'Benutzerprotokolle ändern',
+        'message_templates' => 'Nachrichtenvorlagen',
     ],
     'resources' => [
         'agent_allow' => [

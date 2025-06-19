@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Provedor de autorização',
         'queue_monitor' => 'Monitor de fila',
         'user_modify_logs' => 'Modificação de logs do usuário',
+        'message_templates' => 'Modelos de mensagem',
     ],
     'resources' => [
         'agent_allow' => [

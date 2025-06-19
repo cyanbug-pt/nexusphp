@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Создано в конце',
     'text_quote' => 'Цитата',
     'text_code' => "КОД",
+    'language' => 'Язык',
+    'content' => 'Содержание',
     'setting' => [
         'nav_text' => 'Настройка',
         'backup' => [

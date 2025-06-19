@@ -7,4 +7,5 @@ return array (
   'create_success_tip' => 'Das Token wurde erfolgreich erstellt. Diese Daten werden nur einmal angezeigt, bitte speichern Sie es ordnungsgemäß<br/><br/>:token',
   'last_used_at' => 'Letzte Benutzungszeit',
   'token' => 'summary',
+    "permission_not_allowed" => "Berechtigung：:permission_text nicht erlaubt"
 );

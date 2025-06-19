@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Valtuutuksen tarjoaja',
         'queue_monitor' => 'Jonon monitori',
         'user_modify_logs' => 'Käyttäjä muokkaa lokeja',
+        'message_templates' => 'Viestin pohjat',
     ],
     'resources' => [
         'agent_allow' => [

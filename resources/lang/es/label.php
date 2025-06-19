@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Creado al final',
     'text_quote' => 'Cotización',
     'text_code' => "CÓDIGO",
+    'language' => 'Idioma',
+    'content' => 'Contenido',
     'setting' => [
         'nav_text' => 'Ajustes',
         'backup' => [

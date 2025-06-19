@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Autorisatie provider',
         'queue_monitor' => 'Wachtrij monitor',
         'user_modify_logs' => 'Gebruiker wijzigt logs',
+        'message_templates' => 'Bericht sjabloon',
     ],
     'resources' => [
         'agent_allow' => [

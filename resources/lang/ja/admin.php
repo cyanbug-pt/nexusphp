@@ -46,6 +46,7 @@ return [
         'oauth_provider' => '認証プロバイダー',
         'queue_monitor' => 'キューモニター',
         'user_modify_logs' => 'ユーザーの変更ログ',
+        'message_templates' => 'メッセージ・テンプレート',
     ],
     'resources' => [
         'agent_allow' => [

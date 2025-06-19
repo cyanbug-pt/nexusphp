@@ -46,6 +46,7 @@ return [
         'oauth_provider' => '身份驗證',
         'queue_monitor' => '隊列監控',
         'user_modify_logs' => '修改記錄',
+        'message_templates' => '消息模板',
     ],
     'resources' => [
         'agent_allow' => [

@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Furnizor de autorizare',
         'queue_monitor' => 'Monitorul de coadă',
         'user_modify_logs' => 'Jurnalele de modificare ale utilizatorului',
+        'message_templates' => 'Şabloane de mesaje',
     ],
     'resources' => [
         'agent_allow' => [

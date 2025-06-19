@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Πάροχος εξουσιοδότησης',
         'queue_monitor' => 'Οθόνη αναμονής',
         'user_modify_logs' => 'Αρχεία καταγραφής τροποποίησης χρήστη',
+        'message_templates' => 'Πρότυπα μηνυμάτων',
     ],
     'resources' => [
         'agent_allow' => [

@@ -299,7 +299,7 @@ class User extends Authenticatable implements FilamentUser, HasName
             $log .= ", locale from cookie: $locale";
         }
         if (!$locale) {
-            $lang = $this->language->site_lang_folder;
+            $lang = $this->language?->site_lang_folder ?? null;
             $locale = Locale::$languageMaps[$lang] ?? $lang;
             $log .= ", [NO_DATA_FROM_COOKIE], lang from database: $lang, locale: $locale";
         }

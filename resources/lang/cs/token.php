@@ -7,4 +7,5 @@ return array (
   'create_success_tip' => 'Token byl úspěšně vytvořen, tato data se zobrazí pouze jednou, uložte jej správně<br/><br/>:token',
   'last_used_at' => 'Poslední čas používání',
   'token' => 'summary',
+    "permission_not_allowed" => "Oprávnění：:permission_text není povoleno"
 );

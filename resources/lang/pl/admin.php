@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Dostawca autoryzacji',
         'queue_monitor' => 'Monitor kolejki',
         'user_modify_logs' => 'Logi modyfikacji użytkownika',
+        'message_templates' => 'Szablony wiadomości',
     ],
     'resources' => [
         'agent_allow' => [

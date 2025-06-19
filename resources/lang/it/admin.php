@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Provider di autorizzazione',
         'queue_monitor' => 'Monitor coda',
         'user_modify_logs' => 'Modificare i log dell\'utente',
+        'message_templates' => 'Modelli di messaggi',
     ],
     'resources' => [
         'agent_allow' => [

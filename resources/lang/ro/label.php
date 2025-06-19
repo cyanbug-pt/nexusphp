@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Creat la sfârșit',
     'text_quote' => 'Ofertă',
     'text_code' => "COD",
+    'language' => 'Limba',
+    'content' => 'Conținut',
     'setting' => [
         'nav_text' => 'Setare',
         'backup' => [

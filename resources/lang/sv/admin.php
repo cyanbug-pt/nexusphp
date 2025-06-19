@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Tillstånd leverantör',
         'queue_monitor' => 'Kö monitor',
         'user_modify_logs' => 'Användare ändra loggar',
+        'message_templates' => 'Mallar för meddelande',
     ],
     'resources' => [
         'agent_allow' => [

@@ -46,6 +46,8 @@ return [
     'created_at_end' => '創建時間結束',
     'text_quote' => '引用',
     'text_code' => "代碼",
+    'language' => '語言',
+    'content' => '內容',
     'setting' => [
         'nav_text' => '設置',
         'backup' => [

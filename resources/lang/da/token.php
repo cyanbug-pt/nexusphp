@@ -7,4 +7,5 @@ return array (
   'create_success_tip' => 'Token blev oprettet med succes, denne data vises kun én gang, gem den korrekt<br/><br/>:token',
   'last_used_at' => 'Seneste anvendelsestid',
   'token' => 'summary',
+    "permission_not_allowed" => "Tilladelse：:permission_text ikke tilladt"
 );

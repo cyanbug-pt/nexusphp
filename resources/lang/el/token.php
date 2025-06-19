@@ -7,4 +7,5 @@ return array (
   'create_success_tip' => 'Το διακριτικό δημιουργήθηκε με επιτυχία, αυτά τα δεδομένα εμφανίζονται μόνο μία φορά, παρακαλώ αποθηκεύστε τα σωστά<br/><br/>:token',
   'last_used_at' => 'Πρόσφατος χρόνος χρήσης',
   'token' => 'summary',
+    "permission_not_allowed" => "Permission：:permission_text not allowed"
 );

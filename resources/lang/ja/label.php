@@ -46,6 +46,8 @@ return [
     'created_at_end' => '最後に作成',
     'text_quote' => '引用',
     'text_code' => "コード",
+    'language' => '言語',
+    'content' => 'コンテンツ',
     'setting' => [
         'nav_text' => '設定',
         'backup' => [

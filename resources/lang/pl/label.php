@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Utworzono na końcu',
     'text_quote' => 'Oferta',
     'text_code' => "KOD",
+    'language' => 'Język',
+    'content' => 'Zawartość',
     'setting' => [
         'nav_text' => 'Ustawienie',
         'backup' => [

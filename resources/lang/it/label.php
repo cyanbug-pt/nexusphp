@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Creato alla fine',
     'text_quote' => 'Preventivo',
     'text_code' => "CODICE",
+    'language' => 'Lingua',
+    'content' => 'Contenuto',
     'setting' => [
         'nav_text' => 'Impostazione',
         'backup' => [

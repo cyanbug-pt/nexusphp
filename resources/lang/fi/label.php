@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Luotu lopussa',
     'text_quote' => 'Tarjous',
     'text_code' => "KOODI",
+    'language' => 'Kieli',
+    'content' => 'Sisältö',
     'setting' => [
         'nav_text' => 'Asetus',
         'backup' => [

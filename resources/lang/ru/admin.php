@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Провайдер авторизации',
         'queue_monitor' => 'Монитор очереди',
         'user_modify_logs' => 'Изменение журналов',
+        'message_templates' => 'Шаблоны сообщений',
     ],
     'resources' => [
         'agent_allow' => [

@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Δημιουργήθηκε στο τέλος',
     'text_quote' => 'Παράθεση',
     'text_code' => "ΚΩΔΙΚΟΣ",
+    'language' => 'Γλώσσα',
+    'content' => 'Περιεχόμενο',
     'setting' => [
         'nav_text' => 'Ρύθμιση',
         'backup' => [

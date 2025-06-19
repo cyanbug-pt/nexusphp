@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Poskytovatel autorizace',
         'queue_monitor' => 'Monitor fronty',
         'user_modify_logs' => 'Záznamy změn uživatele',
+        'message_templates' => 'Šablony zpráv',
     ],
     'resources' => [
         'agent_allow' => [

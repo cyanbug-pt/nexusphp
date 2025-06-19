@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Autorisationsudbyder',
         'queue_monitor' => 'Overvågning af kø',
         'user_modify_logs' => 'Bruger ændre logs',
+        'message_templates' => 'Besked skabeloner',
     ],
     'resources' => [
         'agent_allow' => [

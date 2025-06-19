@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Fournisseur d\'autorisation',
         'queue_monitor' => 'Moniteur de file d\'attente',
         'user_modify_logs' => 'Journaux de modification de l\'utilisateur',
+        'message_templates' => 'Modèles de message',
     ],
     'resources' => [
         'agent_allow' => [

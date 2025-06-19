@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Created at end',
     'text_quote' => 'Quote',
     'text_code' => "CODE",
+    'language' => 'Language',
+    'content' => 'Content',
     'setting' => [
         'nav_text' => 'Setting',
         'backup' => [

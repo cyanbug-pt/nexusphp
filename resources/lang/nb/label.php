@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Opprettet på slutten',
     'text_quote' => 'Sitat',
     'text_code' => "KODE",
+    'language' => 'Språk',
+    'content' => 'Innhold',
     'setting' => [
         'nav_text' => 'Innstilling',
         'backup' => [

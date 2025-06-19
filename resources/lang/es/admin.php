@@ -46,6 +46,7 @@ return [
         'oauth_provider' => 'Proveedor de autorización',
         'queue_monitor' => 'Monitor de cola',
         'user_modify_logs' => 'Usuario modificar registros',
+        'message_templates' => 'Plantillas de mensaje',
     ],
     'resources' => [
         'agent_allow' => [

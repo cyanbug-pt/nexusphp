@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Vytvořeno na konci',
     'text_quote' => 'Cenová nabídka',
     'text_code' => "STRUKTURA ČISTÝCH POZIC PODLE RIZIKOVÝCH VAH",
+    'language' => 'Jazyk',
+    'content' => 'Obsah',
     'setting' => [
         'nav_text' => 'Nastavení',
         'backup' => [

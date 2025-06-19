@@ -46,6 +46,8 @@ return [
     'created_at_end' => 'Skapad vid slutet',
     'text_quote' => 'Offert',
     'text_code' => "Kod",
+    'language' => 'Språk',
+    'content' => 'Innehåll',
     'setting' => [
         'nav_text' => 'Inställning',
         'backup' => [
