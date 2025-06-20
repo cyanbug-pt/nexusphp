@@ -84,9 +84,9 @@ if ($CURUSER['downloadpos']=="no") {
     denyDownload();
 }
 
-$trackerSchemaAndHost = get_tracker_schema_and_host();
-$ssl_torrent = $trackerSchemaAndHost['ssl_torrent'];
-$base_announce_url = $trackerSchemaAndHost['base_announce_url'];
+//$trackerSchemaAndHost = get_tracker_schema_and_host();
+//$ssl_torrent = $trackerSchemaAndHost['ssl_torrent'];
+//$base_announce_url = $trackerSchemaAndHost['base_announce_url'];
 
 $res = sql_query("SELECT torrents.name, torrents.filename, torrents.save_as, torrents.size, torrents.owner, torrents.banned, torrents.approval_status, torrents.price, categories.mode as search_box_id FROM torrents left join categories on torrents.category = categories.id WHERE torrents.id = ".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 $row = mysql_fetch_assoc($res);
@@ -140,7 +140,7 @@ if (strlen($CURUSER['passkey']) != 32) {
 	sql_query("UPDATE users SET passkey=".sqlesc($CURUSER['passkey'])." WHERE id=".sqlesc($CURUSER['id']));
 }
 $dict = \Rhilip\Bencode\Bencode::load($fn);
-$dict['announce'] = $ssl_torrent . $base_announce_url . "?passkey=" . $CURUSER['passkey'];
+$dict['announce'] = \App\Models\TrackerUrl::getById($CURUSER['tracker_url_id']) . "?passkey=" . $CURUSER['passkey'];
 $dict['comment'] = getSchemeAndHttpHost(true) . "/details.php?id=" . $id;
 do_log(sprintf("[ANNOUNCE_URL], user: %s, torrent: %s, url: %s", $CURUSER['id'] ?? '', $id, $dict['announce']));
 /**

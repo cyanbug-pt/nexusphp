@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => '登记',
     'checkbox_pm_on_topic_reply' => '论坛帖子有新回复时通知我',
     'checkbox_pm_on_hr_reached' => 'H&R 达标时通知我',
+    'row_tracker_url' => 'Tracker URL',
+    'row_tracker_url_help' => '<b>注意：</b>选择后只能向选中的链接汇报。默认只能向列表中的第 1 个默认链接汇报。',
 );
 
 ?>

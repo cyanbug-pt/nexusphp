@@ -45,6 +45,7 @@ return [
         'queue_monitor' => '队列监控',
         'user_modify_logs' => '修改记录',
         'message_templates' => '消息模板',
+        'tracker_url' => 'Tracker URL',
     ],
     'resources' => [
         'agent_allow' => [

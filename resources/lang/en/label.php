@@ -48,6 +48,7 @@ return [
     'text_code' => "CODE",
     'language' => 'Language',
     'content' => 'Content',
+    'is_default' => 'Is default',
     'setting' => [
         'nav_text' => 'Setting',
         'backup' => [

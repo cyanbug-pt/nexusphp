@@ -15,6 +15,7 @@ use App\Models\Setting;
 use App\Models\Tag;
 use App\Models\Torrent;
 use App\Models\TorrentTag;
+use App\Models\TrackerUrl;
 use App\Models\User;
 use App\Models\UserBanLog;
 use App\Repositories\AttendanceRepository;
@@ -360,6 +361,19 @@ class Update extends Install
             $this->runMigrate("database/migrations/2025_06_09_222012_add_hr_and_buy_id_to_snatched_table.php");
             Artisan::call("upgrade:migrate_snatched_hr_id");
             Artisan::call("upgrade:migrate_snatched_buy_log_id");
+        }
+        if (!Schema::hasTable("tracker_urls")) {
+            $this->runMigrate("database/migrations/2025_06_19_194137_create_tracker_urls_table.php");
+            $announceUrl = get_setting("security.https_announce_url");
+            if (empty($announceUrl)) {
+                $announceUrl = get_setting("basic.announce_url");
+            }
+            TrackerUrl::query()->create([
+                "url" => $announceUrl,
+                "enabled" => 1,
+                "is_default" => 1,
+            ]);
+            NexusDB::cache_del("nexus_plugin_store_all");
         }
 
     }

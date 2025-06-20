@@ -87,7 +87,7 @@ class PluginStore extends Model
     {
         $log = "listAll, withoutCache: $withoutCache";
         $cacheKey = "nexus_plugin_store_all";
-        $cacheTime = 86400*100;
+        $cacheTime = 86400;
         if (is_null(self::$rows)) {
             $log .= ", is_null";
             if ($withoutCache) {

@@ -672,6 +672,7 @@ function command_exists($command): bool
 
 function get_tracker_schema_and_host($combine = false): array|string
 {
+    /*
     global $https_announce_urls, $announce_urls;
     $httpsAnnounceUrls = array_filter($https_announce_urls);
     $log = "cookie: " . json_encode($_COOKIE) . ", https_announce_urls: " . json_encode($httpsAnnounceUrls);
@@ -703,6 +704,16 @@ function get_tracker_schema_and_host($combine = false): array|string
     do_log($log);
     if ($combine) {
         return $ssl_torrent . $base_announce_url;
+    }
+    */
+    $url = \App\Models\TrackerUrl::getById(0);
+    if (empty($url)) {
+        return $combine ? "" : [];
+    }
+    $ssl_torrent = parse_url($url, PHP_URL_SCHEME) . "://" ;
+    $base_announce_url = parse_url($url, PHP_URL_HOST);
+    if ($combine) {
+        return $ssl_torrent .  $base_announce_url;
     }
     return compact('ssl_torrent', 'base_announce_url');
 }

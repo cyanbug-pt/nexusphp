@@ -129,6 +129,7 @@ if ($action){
 				//	$updateset[] = "tzoffset = " . sqlesc($tzoffset);
 
 				$updateset[] = "info = " . sqlesc($info);
+				$updateset[] = "tracker_url_id = " . sqlesc($_POST["tracker_url_id"]);
 
 				//notifs
                 if (!empty($_POST['notifs'])) {
@@ -145,10 +146,12 @@ if ($action){
                 }
 				$query = "UPDATE users SET " . implode(",", $updateset) . " WHERE id = ".sqlesc($CURUSER["id"]);
 				$result = sql_query($query);
-				if (!$result)
-				sqlerr(__FILE__,__LINE__);
-				else
-				header("Location: usercp.php?action=personal&type=saved");
+				if (!$result) {
+                    sqlerr(__FILE__,__LINE__);
+                } else {
+                    clear_user_cache($CURUSER["id"], $CURUSER['passkey']);
+                    header("Location: usercp.php?action=personal&type=saved");
+                }
 			}
 			stdhead($lang_usercp['head_control_panel'].$lang_usercp['head_personal_settings'],true);
 
@@ -156,11 +159,18 @@ if ($action){
 			$ct_r = sql_query("SELECT id,name FROM countries ORDER BY name") or die;
 			while ($ct_a = mysql_fetch_array($ct_r))
 			$countries .= "<option value=".htmlspecialchars($ct_a['id'])."" . (htmlspecialchars($CURUSER["country"]) == htmlspecialchars($ct_a['id']) ? " selected" : "") . ">".htmlspecialchars($ct_a['name'])."</option>\n";
-			$isplist = "<option value=0>---- ".$lang_usercp['select_none_selected']." ----</option>\n";
+
+            $trackerUrls = "<option value=0>---- ".$lang_usercp['select_none_selected']." ----</option>\n";
+            $trackerUrlList = \App\Models\TrackerUrl::listAll();
+            foreach ($trackerUrlList as $item) {
+                $trackerUrls .= "<option value=".htmlspecialchars($item->id)."" . (htmlspecialchars($CURUSER["tracker_url_id"]) == htmlspecialchars($item->id) ? " selected" : "") . ">".htmlspecialchars($item->url)."</option>\n";
+            }
+            $isplist = "<option value=0>---- ".$lang_usercp['select_none_selected']." ----</option>\n";
 			$isp_r = sql_query("SELECT id,name FROM isp ORDER BY id ASC") or die;
 			while ($isp_a = mysql_fetch_array($isp_r))
 			$isplist .= "<option value=".htmlspecialchars($isp_a['id'])."" . (htmlspecialchars($CURUSER["isp"]) == htmlspecialchars($isp_a['id']) ? " selected" : "") . ">".htmlspecialchars($isp_a['name'])."</option>\n";
-			$downloadspeed = "<option value=0>---- ".$lang_usercp['select_none_selected']." ----</option>\n";
+
+            $downloadspeed = "<option value=0>---- ".$lang_usercp['select_none_selected']." ----</option>\n";
 			$ds_a = sql_query("SELECT id,name FROM downloadspeed ORDER BY id") or die;
 			while ($ds_b = mysql_fetch_array($ds_a))
 			$downloadspeed .= "<option value=".htmlspecialchars($ds_b['id'])."" . (htmlspecialchars($CURUSER["download"]) == htmlspecialchars($ds_b['id']) ? " selected" : "") . ">".htmlspecialchars($ds_b['name'])."</option>\n";
@@ -199,7 +209,8 @@ if ($action){
 			tr_small($lang_usercp['row_gender'],
 			"<input type=radio name=gender" . ($CURUSER["gender"] == "N/A" ? " checked" : "") . " value=N/A>".$lang_usercp['radio_not_available']."
 <input type=radio name=gender" . ($CURUSER["gender"] == "Male" ? " checked" : "") . " value=Male>".$lang_usercp['radio_male']."<input type=radio name=gender" .  ($CURUSER["gender"] == "Female" ? " checked" : "") . " value=Female>".$lang_usercp['radio_female'],1);
-			tr_small($lang_usercp['row_country'], "<select name=country>\n$countries\n</select>",1);
+            tr_small($lang_usercp['row_tracker_url'], "<select name=tracker_url_id>\n$trackerUrls\n</select>" . "<br /><font class=small size=1>".$lang_usercp['row_tracker_url_help']."</font>",1);
+            tr_small($lang_usercp['row_country'], "<select name=country>\n$countries\n</select>",1);
 		//School select
 if ($showschool == 'yes'){
 $schools = "<option value=35>---- ".$lang_usercp['select_none_selected']." ----</option>n";

@@ -111,7 +111,7 @@ $seeder = ($left == 0) ? "yes" : "no";
 
 // check passkey
 if (!$az = $Cache->get_value('user_passkey_'.$passkey.'_content')){
-	$res = sql_query("SELECT id, username, downloadpos, enabled, uploaded, downloaded, class, parked, clientselect, showclienterror, passkey, donor, donoruntil, seedbonus FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
+	$res = sql_query("SELECT id, username, downloadpos, enabled, uploaded, downloaded, class, parked, clientselect, showclienterror, passkey, donor, donoruntil, seedbonus, tracker_url_id FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
 	$az = mysql_fetch_array($res);
 	do_log("[check passkey], currentUser: " . nexus_json_encode($az));
 	$Cache->cache_value('user_passkey_'.$passkey.'_content', $az, 3600);
@@ -133,6 +133,13 @@ $CURUSER = $GLOBALS["CURUSER"] = $az;
 $isDonor = is_donor($az);
 $az['__is_donor'] = $isDonor;
 $log = "user: $userid, isDonor: $isDonor, seeder: $seeder, ip: $ip, ipv4: $ipv4, ipv6: $ipv6";
+//check tracker url
+$trackerUrl = \App\Models\TrackerUrl::getById($az['tracker_url_id']);
+$currentUrl = getSchemeAndHttpHost();
+if (!str_contains($trackerUrl, $currentUrl)) {
+    do_log("announce check tracker url, trackerUrl: $trackerUrl does not contains: $currentUrl");
+    warn("you should announce to: $trackerUrl");
+}
 
 //3. CHECK IF CLIENT IS ALLOWED
 //$clicheck_res = check_client($peer_id,$agent,$client_familyid);
