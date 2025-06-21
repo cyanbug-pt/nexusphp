@@ -32,8 +32,8 @@ class PluginStore extends Model
     {
         $list = self::listAll(true);
         $enabled = Plugin::listEnabled();
-        foreach ($list as &$row) {
-            $row['installed_version'] = $enabled[$row['plugin_id']] ?? '';
+        foreach ($list as $key => $row) {
+            $list[$key]['installed_version'] = $enabled[$row['plugin_id']] ?? '';
         }
         return $list;
     }

@@ -7,6 +7,7 @@ use App\Jobs\SettleClaim;
 use App\Jobs\UpdateUserDownloadPrivilege;
 use App\Models\ExamUser;
 use App\Models\Language;
+use App\Models\Message;
 use App\Models\PersonalAccessToken;
 use App\Models\Torrent;
 use App\Models\TorrentExtra;
@@ -17,6 +18,7 @@ use App\Repositories\SeedBoxRepository;
 use App\Repositories\UploadRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Nexus\Database\NexusDB;
 use Nexus\PTGen\PTGen;
 use NexusPlugin\Menu\Filament\MenuItemResource\Pages\ManageMenuItems;
 use NexusPlugin\Menu\MenuRepository;
@@ -76,7 +78,15 @@ class Test extends Command
 //        $res = unserialize("O:36:\"App\\Jobs\\UpdateUserDownloadPrivilege\":3:{s:6:\"userId\";i:1;s:6:\"status\";s:3:\"yes\";s:9:\"reasonKey\";s:8:\"test_key\";}");
 //        $res = unserialize("O:36:\"App\\Jobs\\UpdateUserDownloadPrivilege\":3:{s:6:\"userId\";i:1;s:6:\"status\";s:3:\"yes\";s:9:\"reasonKey\";s:8:\"test_key\";}");
 //        dd($res);
-        UpdateUserDownloadPrivilege::dispatch(1, "yes", "test_key");
+        NexusDB::transaction(function () {
+            User::query()->where("id", 1)->update(["last_access" => now()]);
+            Message::add([
+                'receiver' => 1,
+                'subject' => 'test',
+                'msg' => microtime(true),
+                'added' => now()
+            ]);
+        });
     }
 
 }

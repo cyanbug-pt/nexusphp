@@ -1356,6 +1356,7 @@ function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, ?\
         }
 //        executeCommand("event:fire --name=$name --idKey=$idKey --idKeyOld=$idKeyOld", "string", true, false);
         \Nexus\Nexus::dispatchQueueJob(new \App\Jobs\FireEvent($name, $idKey, $idKeyOld));
+        do_log("success fire_event in nexus, name: $name, idKey: $idKey, idKeyOld: $idKeyOld");
     } else {
         $eventClass = \App\Enums\ModelEventEnum::$eventMaps[$name]['event'];
         if (str_ends_with($name, '_deleted')) {
@@ -1372,6 +1373,7 @@ function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, ?\
         }
         call_user_func_array([$eventClass, "dispatch"], $params);
         publish_model_event($name, $model->id);
+        do_log("success fire_event in laravel, name: $name, id: $model->id, oldId: " . ($oldModel ? $oldModel->id : ""));
     }
 }
 
