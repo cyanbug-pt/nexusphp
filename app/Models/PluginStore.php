@@ -32,10 +32,16 @@ class PluginStore extends Model
     {
         $list = self::listAll(true);
         $enabled = Plugin::listEnabled();
+//        dd($list, $enabled);
         foreach ($list as $key => $row) {
             $list[$key]['installed_version'] = $enabled[$row['plugin_id']] ?? '';
         }
         return $list;
+    }
+
+    protected function sushiShouldCache()
+    {
+        return false;
     }
 
     public function getBlogPostUrl(): string
