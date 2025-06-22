@@ -368,6 +368,9 @@ class Update extends Install
             if (empty($announceUrl)) {
                 $announceUrl = get_setting("basic.announce_url");
             }
+            if (!str_starts_with($announceUrl, "http")) {
+                $announceUrl = (isHttps() ? "https://" : "http://"). $announceUrl;
+            }
             TrackerUrl::query()->create([
                 "url" => $announceUrl,
                 "enabled" => 1,
