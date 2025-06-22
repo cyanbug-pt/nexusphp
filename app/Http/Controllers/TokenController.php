@@ -30,7 +30,7 @@ class TokenController extends Controller
             }
             $allowed = TokenRepository::listUserTokenPermissionAllowed();
             foreach ($request->permissions as $permission) {
-                if (!in_array($permission, $allowed)) {
+                if (!isset($allowed[$permission])) {
                     throw new NexusException(nexus_trans("token.permission_not_allowed", ['permission_text' => nexus_trans("route-permission.{$permission}.text")]));
                 }
             }
