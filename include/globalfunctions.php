@@ -670,7 +670,7 @@ function command_exists($command): bool
     return !(trim(exec("command -v $command")) == '');
 }
 
-function get_tracker_schema_and_host($combine = false): array|string
+function get_tracker_schema_and_host($trackerUrlId, $combine = false): array|string
 {
     /*
     global $https_announce_urls, $announce_urls;
@@ -706,12 +706,18 @@ function get_tracker_schema_and_host($combine = false): array|string
         return $ssl_torrent . $base_announce_url;
     }
     */
-    $url = \App\Models\TrackerUrl::getById(0);
+    $log = "tracker_url_id: $trackerUrlId, combine: $combine";
+    $url = \App\Models\TrackerUrl::getById($trackerUrlId);
     if (empty($url)) {
-        return $combine ? "" : [];
+        $ssl_torrent = isHttps() ? 'https://' : 'http://';
+        $base_announce_url = sprintf("%s/%s", \App\Models\Setting::getBaseUrl(), DEFAULT_TRACKER_URI);
+        $log .= ", ById no value";
+    } else {
+        $ssl_torrent = parse_url($url, PHP_URL_SCHEME) . "://" ;
+        $base_announce_url = substr($url, strlen($ssl_torrent));
+        $log .= ", ById has value";
     }
-    $ssl_torrent = parse_url($url, PHP_URL_SCHEME) . "://" ;
-    $base_announce_url = parse_url($url, PHP_URL_HOST);
+    do_log("$log, ssl_torrent: $ssl_torrent, base_announce_url: $base_announce_url");
     if ($combine) {
         return $ssl_torrent .  $base_announce_url;
     }
