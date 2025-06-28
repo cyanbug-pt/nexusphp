@@ -1698,7 +1698,7 @@ function registration_check($type = "invitesystem", $maxuserscheck = true, $ipch
 		$res = sql_query("SELECT COUNT(*) FROM users") or sqlerr(__FILE__, __LINE__);
 		$arr = mysql_fetch_row($res);
 		if ($arr[0] >= $maxusers)
-		stderr($lang_functions['std_sorry'], $lang_functions['std_account_limit_reached'], 0, true);
+		stderr($lang_functions['std_sorry'], $lang_functions['std_account_limit_reached'], 0, false);
 	}
 
 	if ($ipcheck) {
