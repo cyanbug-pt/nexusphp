@@ -140,7 +140,7 @@ if (strlen($CURUSER['passkey']) != 32) {
 	sql_query("UPDATE users SET passkey=".sqlesc($CURUSER['passkey'])." WHERE id=".sqlesc($CURUSER['id']));
 }
 $dict = \Rhilip\Bencode\Bencode::load($fn);
-$dict['announce'] = \App\Models\TrackerUrl::getById($CURUSER['tracker_url_id']) . "?passkey=" . $CURUSER['passkey'];
+$dict['announce'] = get_tracker_schema_and_host($CURUSER['tracker_url_id'], true) . "?passkey=" . $CURUSER['passkey'];
 $dict['comment'] = getSchemeAndHttpHost(true) . "/details.php?id=" . $id;
 do_log(sprintf("[ANNOUNCE_URL], user: %s, torrent: %s, url: %s", $CURUSER['id'] ?? '', $id, $dict['announce']));
 /**
