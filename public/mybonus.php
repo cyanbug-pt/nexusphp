@@ -369,6 +369,7 @@ for ($i=0; $i < count($allBonus); $i++)
     ) {
         continue;
     }
+    $bonusarrray['points'] = floatval($bonusarray['points']);
 
 	print("<tr>");
 	print("<form action=\"?action=exchange\" method=\"post\">");

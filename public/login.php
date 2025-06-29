@@ -64,6 +64,19 @@ if (!$useChallengeResponseAuthentication) {
 <tr><td class="rowhead"><?php echo $lang_login['rowhead_two_step_code']?></td><td class="rowfollow" align="left"><input type="text" name="two_step_code"  placeholder="<?php echo $lang_login['two_step_code_tooltip'] ?>" style="width: 180px; border: 1px solid gray"/></td></tr>
 <?php
 show_image_code ();
+//\Nexus\Nexus::js("https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback", "footer", true);
+//echo sprintf('<tr><td colspan="2"><div id="example-container"></div></td></tr>');
+//$script = <<<JS
+//window.onloadTurnstileCallback = function () {
+//  turnstile.render("#example-container", {
+//    sitekey: "0x4AAAAAABcl4hBpOruc_7NH",
+//    callback: function (token) {
+//      console.log(`Challenge Success: ` + token);
+//    },
+//  });
+//};
+//JS;
+//\Nexus\Nexus::js($script, "footer", false);
 if ($securelogin == "yes")
 	$sec = "checked=\"checked\" disabled=\"disabled\"";
 elseif ($securelogin == "no")
@@ -83,9 +96,10 @@ elseif ($securetracker == "op")
 <!--<tr><td class="rowhead">--><?php //echo $lang_login['text_restrict_ip']?><!--</td><td class="rowfollow" align="left"><input class="checkbox" type="checkbox" name="securelogin" value="yes" />--><?php //echo $lang_login['checkbox_restrict_ip']?><!--</td></tr>-->
 <!--<tr><td class="rowhead">--><?php //echo $lang_login['text_ssl']?><!--</td><td class="rowfollow" align="left"><input class="checkbox" type="checkbox" name="ssl" value="yes" --><?php //echo $sec?><!-- />--><?php //echo $lang_login['checkbox_ssl']?><!--<br /><input class="checkbox" type="checkbox" name="trackerssl" value="yes" --><?php //echo $sectra?><!-- />--><?php //echo $lang_login['checkbox_ssl_tracker']?><!--</td></tr>-->
 <tr><td class="toolbox" colspan="2" align="right"><input id="submit-btn" type="button" value="<?php echo $lang_login['button_login']?>" class="btn" /> <input type="reset" value="<?php echo $lang_login['button_reset']?>" class="btn" /></td></tr>
+<tr><td colspan="2"><div class="cf-turnstile" data-sitekey="0x4AAAAAABiU8qHu0dBVuioD"></div></td></tr>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 </table>
 <?php
-
 if (isset($returnto)) {
     print("<input type=\"hidden\" name=\"returnto\" value=\"" . htmlspecialchars($returnto) . "\" />\n");
 }

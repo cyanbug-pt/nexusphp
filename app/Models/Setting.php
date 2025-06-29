@@ -258,5 +258,10 @@ class Setting extends NexusModel
         return (int)self::get("backup.retention_count");
     }
 
+    public static function getIsRecordAnnounceLog(): bool
+    {
+        return self::get('security.record_announce_logs') == 'yes';
+    }
+
 
 }

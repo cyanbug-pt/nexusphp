@@ -46,6 +46,8 @@ return [
         'user_modify_logs' => '修改记录',
         'message_templates' => '消息模板',
         'tracker_url' => 'Tracker URL',
+        'announce_logs' => '汇报记录',
+        'announce_monitor' => '汇报监控',
     ],
     'resources' => [
         'agent_allow' => [

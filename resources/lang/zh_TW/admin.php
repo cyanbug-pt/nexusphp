@@ -48,6 +48,8 @@ return [
         'user_modify_logs' => '修改記錄',
         'message_templates' => '消息模板',
         'tracker_url' => 'Tracker URL',
+        'announce_logs' => '匯報記錄',
+        'announce_monitor' => '匯報監控',
     ],
     'resources' => [
         'agent_allow' => [

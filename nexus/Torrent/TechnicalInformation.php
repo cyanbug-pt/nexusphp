@@ -20,12 +20,12 @@ class TechnicalInformation
         $result = [];
         $parentKey = "";
         foreach ($arr as $key => $value) {
-            $value = trim($value);
+            $value = $this->trim($value);
             if (empty($value)) {
                 continue;
             }
             $rowKeyValue = explode(':', $value);
-            $rowKeyValue = array_filter(array_map('trim', $rowKeyValue));
+            $rowKeyValue = array_filter(array_map([$this, 'trim'], $rowKeyValue));
             if (count($rowKeyValue) == 1) {
                 $parentKey = $rowKeyValue[0];
             } elseif (count($rowKeyValue) == 2) {
@@ -37,6 +37,11 @@ class TechnicalInformation
         }
         return $result;
 
+    }
+
+    private function trim(string $value): string
+    {
+        return trim($value, " \n\r\t\v\0\u{A0}");
     }
 
     public function getRuntime()

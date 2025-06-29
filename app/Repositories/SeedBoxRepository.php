@@ -128,7 +128,7 @@ class SeedBoxRepository extends BaseRepository
         return SeedBoxRecord::query()->whereIn('id', Arr::wrap($id))->where('uid', $uid)->delete();
     }
 
-    public function updateStatus(SeedBoxRecord $seedBoxRecord, $status, $reason = ''): bool
+    public function updateStatus(SeedBoxRecord $seedBoxRecord, $status, $reason = '')
     {
         if (Auth::user()->class < User::CLASS_ADMINISTRATOR) {
             throw new InsufficientPermissionException();

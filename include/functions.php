@@ -149,15 +149,16 @@ function print_attachment($dlkey, $enableimage = true, $imageresizer = true)
 	if ($row['isimage'] == 1)
 	{
 		if ($enableimage){
-//			if ($row['thumb'] == 1){
-//				$url = $httpdirectory_attachment."/".$row['location'].".thumb.jpg";
-//                $url = $httpdirectory_attachment."/".$row['location'];
-//			}
-//			else{
-//				$url = $httpdirectory_attachment."/".$row['location'];
-//			}
             $driver = $row['driver'] ?? 'local';
-            $url = \Nexus\Attachment\Storage::getDriver($driver)->getImageUrl($row['location']);
+            if ($driver == "local") {
+                if ($row['thumb'] == 1){
+                    $url = $httpdirectory_attachment."/".$row['location'].".thumb.jpg";
+                } else {
+                    $url = $httpdirectory_attachment."/".$row['location'];
+                }
+            } else {
+                $url = \Nexus\Attachment\Storage::getDriver($driver)->getImageUrl($row['location']);
+            }
             do_log(sprintf("driver: %s, location: %s, url: %s", $driver, $row['location'], $url));
 			if($imageresizer == true)
 				$onclick = " onclick=\"Previewurl('".$url."')\"";
@@ -1993,6 +1994,7 @@ function userlogin() {
 
 	$oldip = $row['ip'];
 	$row['ip'] = $ip;
+    $row['seedbonus'] = floatval($row['seedbonus']);
 	$GLOBALS["CURUSER"] = $row;
 	if (isset($_GET['clearcache']) && $_GET['clearcache'] && get_user_class() >= UC_MODERATOR) {
 	    $Cache->setClearCache(1);
@@ -5816,27 +5818,14 @@ function can_access_torrent($torrent, $uid)
 
 function get_ip_location_from_geoip($ip): bool|array
 {
-    $database = nexus_env('GEOIP2_DATABASE');
-    if (empty($database)) {
-        do_log("no geoip2 database.");
-        return false;
-    }
-    if (!is_readable($database)) {
-        do_log("geoip2 database: $database is not readable.");
-        return false;
-    }
-    static $reader;
-    if (is_null($reader)) {
-        $reader = new \GeoIp2\Database\Reader($database);
-    }
-    $lang = get_langfolder_cookie();
-    $langMap = [
-        'chs' => 'zh-CN',
-        'cht' => 'zh-CN',
-        'en' => 'en',
-    ];
-    $locale = $langMap[$lang] ?? $lang;
-    $locationInfo = \Nexus\Database\NexusDB::remember("locations_{$ip}", 3600, function () use ($locale, $ip, $reader) {
+    $locationInfo = \Nexus\Database\NexusDB::remember("locations_{$ip}", 3600, function () use ($ip) {
+        $lang = get_langfolder_cookie();
+        $langMap = [
+            'chs' => 'zh-CN',
+            'cht' => 'zh-CN',
+            'en' => 'en',
+        ];
+        $locale = $langMap[$lang] ?? $lang;
         $info = [
             'ip' => $ip,
             'version' => '',
@@ -5846,9 +5835,20 @@ function get_ip_location_from_geoip($ip): bool|array
             'city_en' => '',
         ];
         try {
+            $database = nexus_env('GEOIP2_DATABASE');
+            if (empty($database)) {
+                do_log("no geoip2 database.");
+                return false;
+            }
+            if (!is_readable($database)) {
+                do_log("geoip2 database: $database is not readable.");
+                return false;
+            }
+            $reader = new \GeoIp2\Database\Reader($database);
             $record = $reader->city($ip);
             $countryName =  $record->country->names[$locale] ?? $record->country->names['en'] ?? '';
             $cityName = $record->city->names[$locale] ?? $record->city->names['en'] ?? '';
+            $continentName = $record->continent->names[$locale] ?? $record->continent->names['en'] ?? '';
             if (isIPV4($ip)) {
                 $info['version'] = 4;
             } elseif (isIPV6($ip)) {
@@ -5858,13 +5858,17 @@ function get_ip_location_from_geoip($ip): bool|array
             $info['country_en'] = $record->country->names['en'] ?? '';
             $info['city'] = $cityName;
             $info['city_en'] = $record->city->names['en'] ?? '';
-
+            $info['continent'] = $continentName;
+            $info['continent_en'] = $record->continent->names['en'] ?? '';
         } catch (\Exception $exception) {
             do_log($exception->getMessage() . $exception->getTraceAsString(), 'error');
         }
         return $info;
     });
-    do_log("ip: $ip, locale: $locale, result: " . nexus_json_encode($locationInfo));
+    do_log("ip: $ip, result: " . nexus_json_encode($locationInfo));
+    if ($locationInfo === false) {
+        return false;
+    }
     $name = sprintf('%s[v%s]', $locationInfo['city'] ? ($locationInfo['city'] . "·" . $locationInfo['country']) : $locationInfo['country'], $locationInfo['version']);
     return [
         'name' => $name,
@@ -5876,6 +5880,7 @@ function get_ip_location_from_geoip($ip): bool|array
         'ip_version' => $locationInfo['version'],
         'country_en' => $locationInfo['country_en'],
         'city_en' => $locationInfo['city_en'],
+        'continent_en' => $locationInfo['continent_en'],
     ];
 }
 

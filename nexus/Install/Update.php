@@ -378,7 +378,12 @@ class Update extends Install
             ]);
             NexusDB::cache_del("nexus_plugin_store_all");
         }
-
+        /**
+         * @since 1.9.7
+         */
+        if (env("CLICKHOUSE_HOST")) {
+            Artisan::call("clickhouse:migrate");
+        }
     }
 
     public function runExtraMigrate()

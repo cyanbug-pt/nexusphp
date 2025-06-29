@@ -816,6 +816,8 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => '如果启用，登录时将不传输明文密码，建议启用。未来版本会删除此配置且启用此功能。',
     'row_complain_enabled' => '启用申诉',
     'row_complain_enabled_note' => '默认: "yes"',
+    'row_record_announce_logs' => '记录汇报日志',
+    'text_record_announce_logs_note' => '要启用，请先安装并启动 ClickHouse，并在 .env 文件中添加配置',
 );
 
 ?>
