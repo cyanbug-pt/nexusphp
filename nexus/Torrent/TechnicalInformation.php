@@ -151,6 +151,11 @@ class TechnicalInformation
         return $this->mediaInfoArr['Video']['HDR format'] ?? '';
     }
 
+    public function getVideoFormat()
+    {
+        return $this->mediaInfoArr['Video']['Format'] ?? '';
+    }
+
     public function getBitDepth()
     {
         return $this->mediaInfoArr['Video']['Bit depth'] ?? '';
@@ -213,6 +218,7 @@ class TechnicalInformation
             'Bit depth' => $this->getBitDepth(),
             'Frame rate' => $this->getFramerate(),
             'Profile' => $this->getProfile(),
+            'Format' => $this->getVideoFormat(),
             'Ref.Frames' => $this->getRefFrame(),
         ];
         $videos = array_filter($videos) ?: null;
