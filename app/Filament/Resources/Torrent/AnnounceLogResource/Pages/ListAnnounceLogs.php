@@ -21,18 +21,24 @@ class ListAnnounceLogs extends PageListSingle
 
     public function getTableRecords(): Collection|Paginator|CursorPaginator
     {
-        $filterableColumns = ['user_id', 'torrent_id', 'peer_id', 'ip', 'event'];
+        $filterableColumns = [
+            'user_id' => 'is_numeric',
+            'torrent_id'=> 'is_numeric',
+            'peer_id' => 'is_string',
+            'ip' => 'is_string',
+            'event' => 'is_string',
+        ];
         $sortableColumns = ['timestamp', 'uploaded_total', 'uploaded_increment', 'downloaded_total', 'downloaded_increment', 'left', 'announce_time'];
         $sortableDirections = ['asc', 'desc'];
         $request = request();
 //        dd($request->all());
         $filters = [];
         foreach ($request->get('tableFilters', []) as $field => $values) {
-            if (!in_array($field, $filterableColumns)) {
+            if (!isset($filterableColumns[$field])) {
                 continue;
             }
             foreach ($values as $k => $v) {
-                if (in_array($k, $filterableColumns)) {
+                if (isset($filterableColumns[$k])) {
                     $filters[$field] = $v;
                 }
             }
@@ -77,7 +83,7 @@ class ListAnnounceLogs extends PageListSingle
 //                dd($snapshot['data']['tableFilters']);
                 foreach ($snapshot['data']['tableFilters'] as  $filterItems) {
                     foreach ($filterItems as $field => $items) {
-                        if (!in_array($field, $filterableColumns) || !is_array($items)) {
+                        if (!isset($filterableColumns[$field]) || !is_array($items)) {
                             continue;
                         }
                         foreach ($items as $values) {
@@ -121,12 +127,16 @@ class ListAnnounceLogs extends PageListSingle
                     }
                 }
             }
-            foreach ($filterableColumns as $field) {
+            foreach ($filterableColumns as $field => $filterFunc) {
                 if (isset($component['updates']["tableFilters.$field.$field"])) {
                     $filters[$field] = $component['updates']["tableFilters.$field.$field"];
                 }
             }
-
+        }
+        foreach ($filters as $field => $value) {
+            if (!isset($filterableColumns[$field]) || !call_user_func($filterableColumns[$field], $value)) {
+                unset($filters[$field]);
+            }
         }
         $rep = new AnnounceLogRepository();
         $result = $rep->listAll($filters, $page, $perPage, $sortColumn, $sortDirection);

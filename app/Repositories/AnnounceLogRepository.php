@@ -12,6 +12,10 @@ class AnnounceLogRepository extends BaseRepository
     public function listAll(array $filters, int $page, int $perPage, ?string $sortColumn, ?string $sortDirection)
     {
         $beginTimestamp = microtime(true);
+        do_log(sprintf(
+            "[REQUEST_CLICKHOUSE] [BEGIN], filters: %s, page: %s, perPage: %s, sortColumn: %s, sortDirection: %s",
+            json_encode($filters), $page, $perPage, $sortColumn, $sortDirection
+        ));
         $totalAlias = "total";
         $offset = ($page - 1) * $perPage;
         $client = $this->getClient();
@@ -37,8 +41,8 @@ class AnnounceLogRepository extends BaseRepository
         $data = $client->select($selectSql, $bindValues);
         $total = $client->select($countSql, $bindValues)->rows()[0][$totalAlias] ?? 0;
         do_log(sprintf(
-            "[REQUEST_CLICKHOUSE], filters: %s, page: %s, perPage: %s, sortColumn: %s, sortDirection: %s, selectSql: %s, binds: %s, costTime: %.3f sec.",
-            json_encode($filters), $page, $perPage, $sortColumn, $sortDirection, $selectSql, json_encode($bindValues), microtime(true) - $beginTimestamp
+            "[REQUEST_CLICKHOUSE] [END], selectSql: %s, binds: %s, costTime: %.3f sec.",
+            $selectSql, json_encode($bindValues), microtime(true) - $beginTimestamp
         ));
         return [
             'data' => $data->rows(),

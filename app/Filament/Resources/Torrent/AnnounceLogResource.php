@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Torrent;
 use App\Filament\Resources\Torrent\AnnounceLogResource\Pages;
 use App\Filament\Resources\Torrent\AnnounceLogResource\RelationManagers;
 use App\Models\AnnounceLog;
+use App\Models\Torrent;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,6 +15,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Fieldset;
+
 
 class AnnounceLogResource extends Resource
 {
@@ -39,50 +43,79 @@ class AnnounceLogResource extends Resource
     {
         return $infolist
             ->schema([
-                Infolists\Components\TextEntry::make('timestamp')->label(__('announce-log.timestamp')),
-                Infolists\Components\TextEntry::make('request_id')->label(__('announce-log.request_id'))->copyable(),
-                Infolists\Components\TextEntry::make('user_id')->label(__('announce-log.user_id'))->copyable(),
+                Tabs::make('Tabs')
+                    ->tabs([
+                        Tabs\Tab::make(__('announce-log.tab_primary'))
+                            ->schema([
+                                Fieldset::make(__('announce-log.fieldset_basic'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('timestamp')->label(__('announce-log.timestamp')),
+                                        Infolists\Components\TextEntry::make('user_id')->label(__('announce-log.user_id'))->copyable(),
+                                        Infolists\Components\TextEntry::make('torrent_id')->label(__('announce-log.torrent_id'))->copyable(),
+                                        Infolists\Components\TextEntry::make('torrent_size')->label(__('announce-log.torrent_size'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('seeder_count')->label(__('announce-log.seeder_count')),
+                                        Infolists\Components\TextEntry::make('leecher_count')->label(__('announce-log.leecher_count')),
+                                        Infolists\Components\TextEntry::make('promotion_state')->label(__('announce-log.promotion_state'))->formatStateUsing(fn($state) => Torrent::$promotionTypes[$state]['text'] ?? ''),
+                                        Infolists\Components\TextEntry::make('promotion_state_desc')->label(__('announce-log.promotion_state_desc')),
+                                        Infolists\Components\TextEntry::make('event')->label(__('announce-log.event')),
+                                        Infolists\Components\TextEntry::make('left')->label(__('announce-log.left'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('announce_time')->label(__('announce-log.announce_time')),
+                                        Infolists\Components\TextEntry::make('speed')->label(__('announce-log.speed'))->formatStateUsing(fn($state) => mksize($state) . "/s"),
+                                    ])->columns(4),
 
+                                Fieldset::make(__('announce-log.fieldset_uploaded'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('uploaded_offset')->label(__('announce-log.uploaded_offset'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('uploaded_total_last')->label(__('announce-log.uploaded_total_last'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('uploaded_total')->label(__('announce-log.uploaded_total'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('uploaded_increment')->label(__('announce-log.uploaded_increment'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('up_factor')->label(__('announce-log.up_factor')),
+                                        Infolists\Components\TextEntry::make('up_factor_desc')->label(__('announce-log.up_factor_desc')),
+                                        Infolists\Components\TextEntry::make('uploaded_increment_for_user')->label(__('announce-log.uploaded_increment_for_user'))->formatStateUsing(fn($state) => mksize($state)),
+                                    ])->columns(4),
 
-                Infolists\Components\TextEntry::make('torrent_id')->label(__('announce-log.torrent_id'))->copyable(),
-                Infolists\Components\TextEntry::make('torrent_size')->label(__('announce-log.torrent_size'))->formatStateUsing(fn($state) => mksize($state)),
-                Infolists\Components\TextEntry::make('peer_id')->label(__('announce-log.peer_id'))->copyable(),
+                                Fieldset::make(__('announce-log.fieldset_downloaded'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('downloaded_offset')->label(__('announce-log.downloaded_offset'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('downloaded_total_last')->label(__('announce-log.downloaded_total_last'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('downloaded_total')->label(__('announce-log.downloaded_total'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('downloaded_increment')->label(__('announce-log.downloaded_increment'))->formatStateUsing(fn($state) => mksize($state)),
+                                        Infolists\Components\TextEntry::make('down_factor')->label(__('announce-log.down_factor')),
+                                        Infolists\Components\TextEntry::make('down_factor_desc')->label(__('announce-log.down_factor_desc')),
+                                        Infolists\Components\TextEntry::make('downloaded_increment_for_user')->label(__('announce-log.downloaded_increment_for_user'))->formatStateUsing(fn($state) => mksize($state)),
+                                    ])->columns(4),
+                            ]),
+                        Tabs\Tab::make(__('announce-log.tab_secondary'))
+                            ->schema([
+                                Fieldset::make(__('announce-log.fieldset_client'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('port')->label(__('announce-log.port')),
+                                        Infolists\Components\TextEntry::make('agent')->label(__('announce-log.agent')),
+                                        Infolists\Components\TextEntry::make('peer_id')->label(__('announce-log.peer_id'))->copyable(),
+                                        Infolists\Components\TextEntry::make('client_select')->label(__('announce-log.client_select')),
+                                    ])->columns(4),
+                                Fieldset::make(__('announce-log.fieldset_location'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('ip')->label(__('announce-log.ip'))->copyable()->limit(25),
+                                        Infolists\Components\TextEntry::make('ipv4')->label(__('announce-log.ipv4'))->copyable(),
+                                        Infolists\Components\TextEntry::make('ipv6')->label(__('announce-log.ipv6'))->copyable()->limit(25),
+                                        Infolists\Components\TextEntry::make('continent')->label(__('announce-log.continent')),
+                                        Infolists\Components\TextEntry::make('country')->label(__('announce-log.country')),
+                                        Infolists\Components\TextEntry::make('city')->label(__('announce-log.city')),
 
-                Infolists\Components\TextEntry::make('announce_time')->label(__('announce-log.announce_time'))->copyable(),
-                Infolists\Components\TextEntry::make('seeder_count')->label(__('announce-log.seeder_count')),
-                Infolists\Components\TextEntry::make('leecher_count')->label(__('announce-log.leecher_count')),
+                                    ])->columns(4),
+                                Fieldset::make(__('announce-log.fieldset_request'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('scheme')->label(__('announce-log.scheme')),
+                                        Infolists\Components\TextEntry::make('host')->label(__('announce-log.host')),
+                                        Infolists\Components\TextEntry::make('path')->label(__('announce-log.path')),
+                                        Infolists\Components\TextEntry::make('request_id')->label(__('announce-log.request_id'))->copyable()->limit(25),
+                                        Infolists\Components\TextEntry::make('batch_no')->label(__('announce-log.batch_no'))->copyable(),
 
-                Infolists\Components\TextEntry::make('uploaded_offset')->label(__('announce-log.uploaded_offset'))->formatStateUsing(fn($state) => mksize($state)),
-                Infolists\Components\TextEntry::make('uploaded_total')->label(__('announce-log.uploaded_total'))->formatStateUsing(fn($state) => mksize($state)),
-                Infolists\Components\TextEntry::make('uploaded_increment')->label(__('announce-log.uploaded_increment'))->formatStateUsing(fn($state) => mksize($state)),
-
-                Infolists\Components\TextEntry::make('downloaded_offset')->label(__('announce-log.downloaded_offset'))->formatStateUsing(fn($state) => mksize($state)),
-                Infolists\Components\TextEntry::make('downloaded_total')->label(__('announce-log.downloaded_total'))->formatStateUsing(fn($state) => mksize($state)),
-                Infolists\Components\TextEntry::make('downloaded_increment')->label(__('announce-log.downloaded_increment'))->formatStateUsing(fn($state) => mksize($state)),
-
-                Infolists\Components\TextEntry::make('left')->label(__('announce-log.left'))->formatStateUsing(fn($state) => mksize($state)),
-                Infolists\Components\TextEntry::make('port')->label(__('announce-log.port')),
-                Infolists\Components\TextEntry::make('agent')->label(__('announce-log.agent')),
-
-                Infolists\Components\TextEntry::make('started')->label(__('announce-log.started')),
-                Infolists\Components\TextEntry::make('last_action')->label(__('announce-log.last_action')),
-                Infolists\Components\TextEntry::make('prev_action')->label(__('announce-log.prev_action')),
-
-
-                Infolists\Components\TextEntry::make('scheme')->label(__('announce-log.scheme')),
-                Infolists\Components\TextEntry::make('host')->label(__('announce-log.host')),
-                Infolists\Components\TextEntry::make('path')->label(__('announce-log.path')),
-                Infolists\Components\TextEntry::make('ip')->label(__('announce-log.ip'))->copyable(),
-                Infolists\Components\TextEntry::make('ipv4')->label(__('announce-log.ipv4'))->copyable(),
-                Infolists\Components\TextEntry::make('ipv6')->label(__('announce-log.ipv6'))->copyable(),
-                Infolists\Components\TextEntry::make('continent')->label(__('announce-log.continent')),
-                Infolists\Components\TextEntry::make('country')->label(__('announce-log.country')),
-                Infolists\Components\TextEntry::make('city')->label(__('announce-log.city')),
-
-                Infolists\Components\TextEntry::make('event')->label(__('announce-log.event')),
-                Infolists\Components\TextEntry::make('passkey')->label(__('announce-log.passkey'))->copyable(),
-                Infolists\Components\TextEntry::make('client_select')->label(__('announce-log.client_select')),
-            ])->columns(3);
+                                    ])->columns(4),
+                            ]),
+                    ])->columnSpanFull()
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -171,7 +204,7 @@ class AnnounceLogResource extends Resource
                 ,
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->modalWidth('5xl'),
             ])
             ->bulkActions([
 //                Tables\Actions\BulkActionGroup::make([
