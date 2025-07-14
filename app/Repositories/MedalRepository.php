@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserMedal;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Nexus\Database\NexusDB;
 
@@ -146,6 +147,53 @@ class MedalRepository extends BaseRepository
         do_log("sql: $sql");
         clear_user_cache($userId);
         return NexusDB::statement($sql);
+    }
+
+    public function increaseExpireAt(Collection $collection, string $field, int $duration): void
+    {
+        $this->checkExpireField($field);
+        $idArr = $collection->pluck('id')->toArray();
+        $result = NexusDB::table("user_medals")
+            ->whereIn('id', $idArr)
+            ->whereNotNull($field)
+            ->update([$field => NexusDB::raw("`$field` + INTERVAL $duration DAY")]);
+        do_log(sprintf(
+            "operator: %s, increase records: %s $field + $duration day, result: %s",
+            get_pure_username(), implode(', ', $idArr), $result
+        ));
+    }
+
+    public function updateExpireAt(Collection $collection, string $field, Carbon $expireAt): void
+    {
+        $this->checkExpireField($field);
+        $idArr = $collection->pluck('id')->toArray();
+        $result = NexusDB::table("user_medals")
+            ->whereIn('id', $idArr)
+            ->update([$field => $expireAt]);
+        do_log(sprintf(
+            "operator: %s, update records: %s $field $expireAt, result: %s",
+            get_pure_username(), implode(', ', $idArr), $result
+        ));
+    }
+
+    public function cancelExpireAt(Collection $collection, string $field): void
+    {
+        $this->checkExpireField($field);
+        $idArr = $collection->pluck('id')->toArray();
+        $result = NexusDB::table("user_medals")
+            ->whereIn('id', $idArr)
+            ->update([$field => NexusDB::raw("null")]);
+        do_log(sprintf(
+            "operator: %s, update records: %s $field null, result: %s",
+            get_pure_username(), implode(', ', $idArr), $result
+        ));
+    }
+
+    private function checkExpireField(string $field): void
+    {
+        if (!in_array($field, ['expire_at', 'bonus_addition_expire_at'])) {
+            throw new \InvalidArgumentException("invalid field: $field");
+        }
     }
 
 }

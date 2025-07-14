@@ -49,6 +49,7 @@ return [
     'language' => 'Language',
     'content' => 'Content',
     'is_default' => 'Is default',
+    'bulk' => 'Bulk',
     'setting' => [
         'nav_text' => 'Setting',
         'backup' => [

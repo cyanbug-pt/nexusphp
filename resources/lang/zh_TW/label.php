@@ -49,6 +49,7 @@ return [
     'language' => '語言',
     'content' => '內容',
     'is_default' => '是否默認',
+    'bulk' => '批量',
     'setting' => [
         'nav_text' => '設置',
         'backup' => [

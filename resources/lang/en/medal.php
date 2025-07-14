@@ -50,4 +50,22 @@ return [
         0 => 'Wearing',
         1 => 'Not wearing'
     ],
+    'bonus_addition_expire_at' => 'Bonus addition Expiration Time',
+    'is_expired' => 'Is Expired',
+    'is_bonus_addition_expired' => 'Is Bonus addition expired',
+    'is_wearing' => 'Is Wearing',
+    'increase_duration' => 'Increase Duration',
+    'increase_duration_help' => 'Unit: days. Uniformly extend the expiration time from the original value',
+    'update_expire_at' => 'Set expiration time',
+    'update_expire_at_help' => 'Uniformly set the expiration time to a specified value',
+    'bulk_action_increase' => 'Increase',
+    'bulk_action_update' => 'Update',
+    'bulk_action_cancel' => 'Cancel',
+    'bulk_action_increase_expire_at' => 'Bulk increase expiration time',
+    'bulk_action_update_expire_at' => 'Bulk update expiration time',
+    'bulk_action_cancel_expire_at' => 'Bulk cancel expiration time',
+    'bulk_action_increase_bonus_addition_expire_at' => 'Bulk extend bonus addition expiration time',
+    'bulk_action_update_bonus_addition_expire_at' => 'Bulk update bonus expiration time',
+    'bulk_action_cancel_bonus_addition_expire_at' => 'Bulk cancel bonus expiration time',
+
 ];

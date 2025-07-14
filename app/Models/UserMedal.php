@@ -9,9 +9,17 @@ class UserMedal extends NexusModel
     const STATUS_NOT_WEARING = 0;
     const STATUS_WEARING = 1;
 
-    public function getWearingStatusTextAttribute()
+    public function getWearingStatusTextAttribute(): string
     {
         return nexus_trans("medal.wearing_status_text." . $this->status);
+    }
+
+    public static function listWearingStatusLabels(): array
+    {
+        return [
+            self::STATUS_WEARING => nexus_trans("medal.wearing_status_text." . self::STATUS_WEARING),
+            self::STATUS_NOT_WEARING => nexus_trans("medal.wearing_status_text." . self::STATUS_NOT_WEARING),
+        ];
     }
 
     public function medal()
