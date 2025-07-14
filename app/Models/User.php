@@ -476,7 +476,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function medals(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Medal::class, 'user_medals', 'uid', 'medal_id')
-            ->withPivot(['id', 'expire_at', 'status', 'priority'])
+            ->withPivot(['id', 'expire_at', 'status', 'priority', 'bonus_addition_expire_at'])
             ->withTimestamps()
             ->orderByPivot('priority', 'desc')
             ;

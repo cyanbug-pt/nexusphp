@@ -5904,11 +5904,13 @@ function build_medal_image(\Illuminate\Support\Collection $medals, $maxHeight = 
         $html = sprintf('<div style="display: flex;flex-direction: column;justify-content: space-between;margin-right: 10px"><div><img src="%s" title="%s" class="preview" style="max-height: %spx;max-width: %spx"/></div>', $medal->image_large, $medal->name, $maxHeight, $maxHeight);
         if ($withActions) {
             $html .= sprintf(
-                '<div style="display: flex;flex-direction: column;align-items:flex-start"><span>%s: %s</span><span>%s: %s</span><label>%s: <input type="number" name="priority_%s" value="%s" style="width: 50px" placeholder="%s"></label>',
+                '<div style="display: flex;flex-direction: column;align-items:flex-start"><span>%s: %s</span><span>%s: %s</span><span>%s: %s</span><label>%s: <input type="number" name="priority_%s" value="%s" style="width: 50px" placeholder="%s"></label>',
                 nexus_trans('label.expire_at'),
                 $medal->pivot->expire_at ? format_datetime($medal->pivot->expire_at) : nexus_trans('label.permanent'),
                 nexus_trans('medal.fields.bonus_addition_factor'),
                 $medal->bonus_addition_factor ?? 0,
+                nexus_trans('medal.bonus_addition_expire_at'),
+                $medal->pivot->bonus_addition_expire_at ? format_datetime($medal->pivot->bonus_addition_expire_at) : nexus_trans('label.permanent'),
                 nexus_trans('label.priority'),
                 $medal->pivot->id,
                 $medal->pivot->priority ?? 0,
