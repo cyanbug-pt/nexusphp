@@ -4,7 +4,7 @@ namespace App\Models;
 
 class UserMedal extends NexusModel
 {
-    protected $fillable = ['uid', 'medal_id', 'expire_at', 'status'];
+    protected $fillable = ['uid', 'medal_id', 'expire_at', 'status', 'bonus_addition_expire_at'];
 
     const STATUS_NOT_WEARING = 0;
     const STATUS_WEARING = 1;

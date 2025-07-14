@@ -32,6 +32,8 @@ return [
         'gift_fee_factor' => '赠送手续费系数',
         'gift_fee' => '手续费',
         'gift_fee_factor_help' => '赠送给其他用户时额外收取手续费等于价格乘以此系数',
+        'bonus_addition_duration' => '魔力加成有效时长',
+        'bonus_addition_duration_help' => '单位：天，设置为 0 表示永久有效。从获得时开始算，无论是否佩戴',
     ],
     'buy_already' => '已经购买',
     'buy_btn' => '购买',

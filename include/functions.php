@@ -6035,7 +6035,7 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
     $officialAdditionalFactor = \App\Models\Setting::get('bonus.official_addition');
     $zeroBonusTag = \App\Models\Setting::get('bonus.zero_bonus_tag');
     $zeroBonusFactor = \App\Models\Setting::get('bonus.zero_bonus_factor');
-    $userMedalResult = \Nexus\Database\NexusDB::select("select sum(bonus_addition_factor) as factor from medals where id in (select medal_id from user_medals where uid = $uid and (expire_at is null or expire_at > '$nowStr'))");
+    $userMedalResult = \Nexus\Database\NexusDB::select("select sum(bonus_addition_factor) as factor from medals where id in (select medal_id from user_medals where uid = $uid and (expire_at is null or expire_at > '$nowStr') and (bonus_addition_expire_at is null or bonus_addition_expire_at > '$nowStr'))");
     $medalAdditionalFactor = floatval($userMedalResult[0]['factor'] ?? 0);
     do_log("$logPrefix, sql: $sql, count: " . count($torrentResult) . ", officialTag: $officialTag, officialAdditionalFactor: $officialAdditionalFactor, zeroBonusTag: $zeroBonusTag, zeroBonusFactor: $zeroBonusFactor, medalAdditionalFactor: $medalAdditionalFactor");
     $last_action = "";
@@ -6350,7 +6350,7 @@ function build_bonus_table(array $user, array $bonusResult = [], array $options 
         $baseBonusFactor,
         number_format($baseBonus,3),
         $rowSpan,
-        $totalBonus
+        number_format($totalBonus, 3)
     );
     if ($hasMedalAddition) {
         $table .= sprintf(
@@ -6360,7 +6360,7 @@ function build_bonus_table(array $user, array $bonusResult = [], array $options 
             mksize($bonusResult['size']),
             number_format($bonusResult['A'], 3),
             number_format($bonusResult['medal_bonus'], 3),
-            $bonusResult['medal_additional_factor'],
+            number_format($bonusResult['medal_additional_factor'], 3),
             number_format($bonusResult['medal_bonus'] * $bonusResult['medal_additional_factor'], 3)
         );
     }
@@ -6373,7 +6373,7 @@ function build_bonus_table(array $user, array $bonusResult = [], array $options 
             mksize($bonusResult['official_size']),
             number_format($bonusResult['official_a'], 3),
             number_format($bonusResult['official_bonus'], 3),
-            $officialAdditionalFactor,
+            number_format($officialAdditionalFactor, 3),
             number_format($bonusResult['official_bonus'] * $officialAdditionalFactor, 3)
         );
     }
@@ -6386,7 +6386,7 @@ function build_bonus_table(array $user, array $bonusResult = [], array $options 
             '--',
             '--',
             number_format($haremAddition, 3),
-            $haremFactor,
+            number_format($haremFactor, 3),
             number_format($haremAddition * $haremFactor, 3)
         );
     }

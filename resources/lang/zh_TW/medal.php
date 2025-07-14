@@ -32,6 +32,8 @@ return [
         'gift_fee_factor' => '贈送手續費系數',
         'gift_fee' => '手續費',
         'gift_fee_factor_help' => '贈送給其他用戶時額外收取手續費等於價格乘以此系數',
+        'bonus_addition_duration' => '魔力加成有效時長',
+        'bonus_addition_duration_help' => '單位：天，設置爲 0 表示永久有效。從獲得時開始算，無論是否佩戴',
     ],
     'buy_already' => '已經購買',
     'buy_btn' => '購買',

@@ -32,6 +32,8 @@ return [
         'gift_fee_factor' => 'Gift fee factor',
         'gift_fee' => 'Gift fee',
         'gift_fee_factor_help' => 'The additional fee charged for gifts to other users is equal to the price multiplied by this factor',
+        'bonus_addition_duration' => 'Bonus addition duration',
+        'bonus_addition_duration_help' => 'Unit: days. Set to 0 for permanent effect. Counts from the time of acquisition, regardless of whether it is equipped or not',
     ],
     'buy_already' => 'Already buy',
     'buy_btn' => 'Buy',

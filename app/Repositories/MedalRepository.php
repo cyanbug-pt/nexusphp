@@ -68,12 +68,27 @@ class MedalRepository extends BaseRepository
         if ($exists) {
             throw new \LogicException("user: $uid already own this medal: $medalId.");
         }
+        $this->userAttachMedal($user, $medal);
+    }
+
+    public function userAttachMedal(User $user, Medal $medal): void
+    {
         $expireAt = null;
-        if ($duration > 0) {
-            $expireAt = Carbon::now()->addDays(intval($duration))->toDateTimeString();
+        $bonusAdditionExpireAt = null;
+        if ($medal->duration > 0) {
+            $expireAt = Carbon::now()->addDays((int)$medal->duration)->toDateTimeString();
         }
-        clear_user_cache($uid);
-        return $user->medals()->attach([$medal->id => ['expire_at' => $expireAt, 'status' => UserMedal::STATUS_NOT_WEARING]]);
+        if ($medal->bonus_addition_duration > 0) {
+            $bonusAdditionExpireAt = Carbon::now()->addDays((int)$medal->bonus_addition_duration)->toDateTimeString();
+        }
+        $user->medals()->attach([
+            $medal->id => [
+                'expire_at' => $expireAt,
+                'bonus_addition_expire_at' => $bonusAdditionExpireAt,
+                'status' => UserMedal::STATUS_NOT_WEARING,
+            ]
+        ]);
+        clear_user_cache($user->id);
     }
 
     public function toggleUserMedalStatus($id, $userId)

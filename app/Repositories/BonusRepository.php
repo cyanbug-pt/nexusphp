@@ -70,11 +70,8 @@ class BonusRepository extends BaseRepository
             ], $user->locale);
             do_log("comment: $comment");
             $this->consumeUserBonus($user, $requireBonus, BonusLogs::BUSINESS_TYPE_BUY_MEDAL, "$comment(medal ID: {$medal->id})");
-            $expireAt = null;
-            if ($medal->duration > 0) {
-                $expireAt = Carbon::now()->addDays((int)$medal->duration)->toDateTimeString();
-            }
-            $user->medals()->attach([$medal->id => ['expire_at' => $expireAt, 'status' => UserMedal::STATUS_NOT_WEARING]]);
+            $medalRep = new MedalRepository();
+            $medalRep->userAttachMedal($user, $medal);
             if ($medal->inventory !== null) {
                 $affectedRows = NexusDB::table('medals')
                     ->where('id', $medal->id)

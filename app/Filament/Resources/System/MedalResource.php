@@ -75,6 +75,14 @@ class MedalResource extends Resource
                     ->label(__('medal.fields.bonus_addition_factor'))
                     ->helperText(__('medal.fields.bonus_addition_factor_help'))
                     ->numeric()
+                    ->minValue(0)
+                    ->default(0)
+                ,
+                Forms\Components\TextInput::make('bonus_addition_duration')
+                    ->label(__('medal.fields.bonus_addition_duration'))
+                    ->helperText(__('medal.fields.bonus_addition_duration_help'))
+                    ->numeric()
+                    ->minValue(0)
                     ->default(0)
                 ,
                 Forms\Components\TextInput::make('gift_fee_factor')
@@ -109,6 +117,7 @@ class MedalResource extends Resource
                     ->formatStateUsing(fn ($record) => new HtmlString(sprintf('%s ~<br/>%s', $record->sale_begin_time ?? nexus_trans('nexus.no_limit'), $record->sale_end_time ?? nexus_trans('nexus.no_limit'))))
                 ,
                 Tables\Columns\TextColumn::make('bonus_addition_factor')->label(__('medal.fields.bonus_addition_factor')),
+                Tables\Columns\TextColumn::make('bonus_addition_duration')->label(__('medal.fields.bonus_addition_duration')),
                 Tables\Columns\TextColumn::make('gift_fee_factor')->label(__('medal.fields.gift_fee_factor')),
                 Tables\Columns\TextColumn::make('price')->label(__('label.price'))->formatStateUsing(fn ($state) => number_format($state)),
 

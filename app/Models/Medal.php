@@ -18,7 +18,7 @@ class Medal extends NexusModel
     protected $fillable = [
         'name', 'description', 'image_large', 'image_small', 'price', 'duration', 'get_type',
         'display_on_medal_page', 'sale_begin_time', 'sale_end_time', 'inventory', 'bonus_addition_factor',
-        'gift_fee_factor', 'priority'
+        'gift_fee_factor', 'priority', 'bonus_addition_duration'
     ];
 
     public $timestamps = true;
