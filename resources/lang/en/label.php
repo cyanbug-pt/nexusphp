@@ -82,6 +82,8 @@ return [
             'inspect_time_help' => 'The duration of the examination is calculated from the completion of the download, in hours',
             'seed_time_minimum' => 'Seed time minimum',
             'seed_time_minimum_help' => 'The shortest time to do the seeds to meet the standard, in hours, must be less than the length of the expedition',
+            'leech_time_minimum' => 'Leech time minimum',
+            'leech_time_minimum_help' => 'The minimum download time required to meet the standard, in hours, must be less than the length of the expedition. Set to 0 to disable',
             'ignore_when_ratio_reach' => 'Achievement Sharing Rate',
             'ignore_when_ratio_reach_help' => 'The minimum sharing rate to meet the standard',
             'ban_user_when_counts_reach' => 'H&R counts limit',

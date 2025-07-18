@@ -82,6 +82,8 @@ return [
             'inspect_time_help' => '考察时长自下载完成后开始计算，单位：小时',
             'seed_time_minimum' => '达标做种时长',
             'seed_time_minimum_help' => '达标的最短做种时长，单位：小时，必须小于考察时长',
+            'leech_time_minimum' => '达标下载时长',
+            'leech_time_minimum_help' => '达标的最短下载时长，单位：小时，必须小于考察时长。设置为 0 不启用',
             'ignore_when_ratio_reach' => '达标分享率',
             'ignore_when_ratio_reach_help' => '达标的最小分享率',
             'ban_user_when_counts_reach' => 'H&R 数量上限',

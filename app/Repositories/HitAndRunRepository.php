@@ -202,6 +202,20 @@ class HitAndRunRepository extends BaseRepository
                     continue;
                 }
 
+                //check leech time
+                if (isset($setting['leech_time_minimum']) && $setting['leech_time_minimum'] > 0) {
+                    $targetLeechTime = $row->snatch->leechtime;
+                    $requireLeechTime = bcmul($setting['leech_time_minimum'], 3600);
+                    do_log("$currentLog, targetLeechTime: $targetLeechTime, requireLeechTime: $requireLeechTime");
+                    if ($targetLeechTime >= $requireLeechTime) {
+                        $result = $this->reachedByLeechTime($row, $setting);
+                        if ($result) {
+                            $successCounts++;
+                        }
+                        continue;
+                    }
+                }
+
                 //check share ratio
                 $targetShareRatio = bcdiv($row->snatch->uploaded, $row->torrent->size, 4);
                 $requireShareRatio = $setting['ignore_when_ratio_reach'];
@@ -266,6 +280,20 @@ class HitAndRunRepository extends BaseRepository
             'now' => Carbon::now()->toDateTimeString(),
             'seed_time' => bcdiv($hitAndRun->snatch->seedtime, 3600, 1),
             'seed_time_minimum' => $setting['seed_time_minimum'],
+        ], $hitAndRun->user->locale);
+        $update = [
+            'comment' => $comment
+        ];
+        return $this->inspectingToReached($hitAndRun, $update, __FUNCTION__);
+    }
+
+    private function reachedByLeechTime(HitAndRun $hitAndRun, array $setting): bool
+    {
+        do_log(__METHOD__);
+        $comment = nexus_trans('hr.reached_by_leech_time_comment', [
+            'now' => Carbon::now()->toDateTimeString(),
+            'leech_time' => bcdiv($hitAndRun->snatch->leechtime, 3600, 1),
+            'leech_time_minimum' => $setting['leech_time_minimum'],
         ], $hitAndRun->user->locale);
         $update = [
             'comment' => $comment
