@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\ModelEventEnum;
 use Carbon\Carbon;
-use Carbon\Exceptions\InvalidArgumentException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Nexus\Database\NexusDB;
 
 class HitAndRun extends NexusModel
 {
@@ -42,6 +43,31 @@ class HitAndRun extends NexusModel
     ];
 
     const MINIMUM_IGNORE_USER_CLASS = User::CLASS_VIP;
+
+    protected static function booted()
+    {
+        static::saved(function ($model) {
+            self::clearCache($model);
+        });
+        static::deleted(function ($model) {
+            self::clearCache($model, ModelEventEnum::HIT_AND_RUN_DELETED);
+        });
+    }
+
+    public static function getCacheKey(int $userId, int $torrentId): string
+    {
+        return sprintf("hit_and_run:user:%d:torrent:%d", $userId, $torrentId);
+    }
+
+    public static function clearCache(HitAndRun $hitAndRun, string $event = ModelEventEnum::HIT_AND_RUN_UPDATED): void
+    {
+        NexusDB::cache_del(self::getCacheKey($hitAndRun->uid, $hitAndRun->torrent_id));
+        fire_event($event, $hitAndRun);
+        do_log(sprintf(
+            "userId: %s, torrentId: %s hit and run cache cleared, and trigger event: %s",
+            $hitAndRun->uid, $hitAndRun->torrent_id, $event
+        ));
+    }
 
     protected function seedTimeRequired(): Attribute
     {

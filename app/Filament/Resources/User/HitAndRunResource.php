@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 use Filament\Infolists\Components;
 use Filament\Infolists;
+use Nette\Utils\Html;
 
 class HitAndRunResource extends Resource
 {
@@ -146,7 +147,7 @@ class HitAndRunResource extends Resource
                     ->label(__("label.inspect_time_left"))
                 ,
                 Infolists\Components\TextEntry::make('comment')
-                    ->formatStateUsing(fn ($record) => nl2br($record->comment))
+                    ->formatStateUsing(fn ($record) => new HtmlString(nl2br($record->comment)))
                     ->label(__("label.comment"))
                 ,
                 Infolists\Components\TextEntry::make('created_at')

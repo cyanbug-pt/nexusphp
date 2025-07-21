@@ -8,6 +8,7 @@ use App\Events\TorrentDeleted;
 use App\Events\TorrentUpdated;
 use App\Events\UserDeleted;
 use App\Events\UserDisabled;
+use App\Listeners\ClearTorrentCache;
 use App\Listeners\DeductUserBonusWhenTorrentDeleted;
 use App\Listeners\FetchTorrentImdb;
 use App\Listeners\FetchTorrentPTGen;
@@ -48,6 +49,7 @@ class EventServiceProvider extends ServiceProvider
             SyncTorrentToElasticsearch::class,
             SyncTorrentToMeilisearch::class,
             SendEmailNotificationWhenTorrentCreated::class,
+            ClearTorrentCache::class,
         ],
         TorrentDeleted::class => [
             DeductUserBonusWhenTorrentDeleted::class,

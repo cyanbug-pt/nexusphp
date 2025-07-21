@@ -562,9 +562,11 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
     $hrMode = \App\Models\HitAndRun::getConfig('mode', $torrent['mode']);
     $hrLog = sprintf("[HR_LOG] user: %d, torrent: %d, hrMode: %s", $userid, $torrentid, $hrMode);
     if ($hrMode == \App\Models\HitAndRun::MODE_GLOBAL || ($hrMode == \App\Models\HitAndRun::MODE_MANUAL && $torrent['hr'] == \App\Models\Torrent::HR_YES)) {
-        $hrCacheKey = sprintf("hit_and_run:%d:%d", $userid, $torrentid);
-        $hrExists = \Nexus\Database\NexusDB::remember($hrCacheKey, mt_rand(86400*365*5, 86400*365*10), function () use ($torrentid, $userid) {
-            return \App\Models\HitAndRun::query()->where("uid", $userid)->where("torrent_id", $torrentid)->exists() ? 1 : 0;
+        //change key to expire cache, so ttl don't set too long
+        $hrCacheKey = \App\Models\HitAndRun::getCacheKey( $userid, $torrentid);
+        $hrExists = \Nexus\Database\NexusDB::remember($hrCacheKey, mt_rand(86400, 86400*3), function () use ($torrentid, $userid) {
+            $record = \App\Models\HitAndRun::query()->where("uid", $userid)->where("torrent_id", $torrentid)->first();
+            return $record ? $record->toJson() : null;
         });
         $hrLog .= ", hrExists: $hrExists";
         if (!$hrExists) {
@@ -589,12 +591,30 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
                 do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} >= required: $requiredDownloaded, [INSERT_H&R], sql: $sql, affectedRows: $affectedRows, hitAndRunId: $hitAndRunId");
                 if ($hitAndRunId > 0) {
                     sql_query("update snatched set hit_and_run_id = $hitAndRunId where id = {$snatchInfo['id']}");
+                    $hitAndRunRecord = \App\Models\HitAndRun::query()->where("uid", $userid)->where("torrent_id", $torrentid)->first();
+                    fire_event(\App\Enums\ModelEventEnum::HIT_AND_RUN_CREATED, $hitAndRunRecord);
                 }
             } else {
                 do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} < required: $requiredDownloaded", "debug");
             }
         } else {
-            do_log("$hrLog, already exists", "debug");
+            $hrLog .= ", already exists";
+            if (isset($self) && $torrent['seeders'] <= 0) {
+                $hrLeechTimeMin = \App\Models\HitAndRun::getConfig('leech_time_minimum', $torrent['mode']);
+                if ($hrLeechTimeMin > 0) {
+                    $hrLog .= ", enable hrLeechTimeMin: $hrLeechTimeMin";
+                    $hrInfo = json_decode($hrExists, true);
+                    if ($hrInfo['status'] == \App\Models\HitAndRun::STATUS_INSPECTING) {
+                        sql_query("update hit_and_runs set leech_time_no_seeder = leech_time_no_seeder + {$self['announcetime']} where id = {$hrInfo['id']} limit 1");
+                    } else {
+                        do_log("$hrLog, hr status != STATUS_INSPECTING", "debug");
+                    }
+                } else {
+                    do_log("$hrLog, not enable hrLeechTimeMin", "debug");
+                }
+            } else {
+                do_log("$hrLog, no self or seeders({$torrent['seeders']}) > 0", "debug");
+            }
         }
     } else {
         do_log("$hrLog, not match", "debug");

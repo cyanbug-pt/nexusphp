@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Enums\ModelEventEnum;
 use App\Models\HitAndRun;
 use App\Models\Message;
 use App\Models\SearchBox;
@@ -60,16 +61,27 @@ class HitAndRunRepository extends BaseRepository
     {
         $model = HitAndRun::query()->findOrFail($id);
         $result = $model->delete();
+        HitAndRun::clearCache($model, ModelEventEnum::HIT_AND_RUN_DELETED);
         return $result;
     }
 
     public function bulkDelete(array $params, User $user)
     {
-        $result = $this->getBulkQuery($params)->delete();
+        $baseQuery = $this->getBulkQuery($params);
+        $list = $baseQuery->clone()->get();
+        if ($list->isEmpty()) {
+            return 0;
+        }
+        $result = $baseQuery->delete();
         do_log(sprintf(
             'user: %s bulk delete by filter: %s, result: %s',
             $user->id, json_encode($params), json_encode($result)
         ), 'alert');
+        if ($result) {
+            foreach ($list as $record) {
+                HitAndRun::clearCache($record, ModelEventEnum::HIT_AND_RUN_DELETED);
+            }
+        }
         return $result;
     }
 
@@ -204,7 +216,8 @@ class HitAndRunRepository extends BaseRepository
 
                 //check leech time
                 if (isset($setting['leech_time_minimum']) && $setting['leech_time_minimum'] > 0) {
-                    $targetLeechTime = $row->snatch->leechtime;
+//                    $targetLeechTime = $row->snatch->leechtime;
+                    $targetLeechTime = $row->leech_time_no_seeder;//使用自身记录的值
                     $requireLeechTime = bcmul($setting['leech_time_minimum'], 3600);
                     do_log("$currentLog, targetLeechTime: $targetLeechTime, requireLeechTime: $requireLeechTime");
                     if ($targetLeechTime >= $requireLeechTime) {
@@ -331,6 +344,7 @@ class HitAndRunRepository extends BaseRepository
         } else {
             do_log($hitAndRun->toJson() . ", [$logPrefix], user do not accept hr_reached notification", 'notice');
         }
+        HitAndRun::clearCache($hitAndRun);
         return true;
     }
 
@@ -369,7 +383,7 @@ class HitAndRunRepository extends BaseRepository
             ], $hitAndRun->user->locale),
         ];
         Message::query()->insert($message);
-
+        HitAndRun::clearCache($hitAndRun);
         return true;
     }
 
@@ -423,6 +437,7 @@ class HitAndRunRepository extends BaseRepository
                 'reason' => $comment
             ];
             UserBanLog::query()->insert($userBanLog);
+            fire_event(ModelEventEnum::USER_UPDATED, $user);
             do_log("Disable user: " . nexus_json_encode($userBanLog));
         }
     }
@@ -499,16 +514,25 @@ class HitAndRunRepository extends BaseRepository
 
     public function bulkPardon(array $params, User $user): int
     {
-        $query = $this->getBulkQuery($params)->whereIn('status', $this->getCanPardonStatus());
+        $baseQuery = $this->getBulkQuery($params)->whereIn('status', $this->getCanPardonStatus());
+        $list = $baseQuery->clone()->get();
+        if ($list->isEmpty()) {
+            return 0;
+        }
         $update = [
             'status' => HitAndRun::STATUS_PARDONED,
             'comment' => $this->getCommentUpdateRaw(addslashes('Pardon by ' . $user->username)),
         ];
-        $affected =  $query->update($update);
+        $affected =  $baseQuery->update($update);
         do_log(sprintf(
             'user: %s bulk pardon by filter: %s, affected: %s',
             $user->id, json_encode($params), $affected
         ), 'alert');
+        if ($affected) {
+            foreach ($list as $item) {
+                HitAndRun::clearCache($item);
+            }
+        }
         return $affected;
     }
 

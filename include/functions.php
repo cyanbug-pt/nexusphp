@@ -5935,11 +5935,14 @@ function build_medal_image(\Illuminate\Support\Collection $medals, $maxHeight = 
 function insert_torrent_tags($torrentId, $tagIdArr, $sync = false)
 {
     $specialTags = \App\Models\Tag::listSpecial();
-    $canSetSpecialTag = user_can('torrent-set-special-tag');
+    $canSetSpecialTag = \App\Auth\Permission::canSetTorrentSpecialTag();
     $dateTimeStringNow = date('Y-m-d H:i:s');
     if ($sync) {
-        \App\Models\TorrentTag::query()->where("torrent_id", $torrentId)->delete();
-//        sql_query("delete from torrent_tags where torrent_id = $torrentId");
+        $delQuery = \App\Models\TorrentTag::query()->where("torrent_id", $torrentId);
+        if (!$canSetSpecialTag) {
+            $delQuery->whereNotIn("tag_id", $specialTags);
+        }
+        $delQuery->delete();
     }
     if (empty($tagIdArr)) {
         return;
@@ -5956,7 +5959,6 @@ function insert_torrent_tags($torrentId, $tagIdArr, $sync = false)
     $insertTagsSql .= implode(', ', $values);
     do_log("[INSERT_TAGS], torrent: $torrentId with tags: " . nexus_json_encode($tagIdArr));
     \Nexus\Database\NexusDB::statement($insertTagsSql);
-//    sql_query($insertTagsSql);
 }
 
 function get_smile($num)

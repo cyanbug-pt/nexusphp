@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ModelEventEnum;
+
 class AgentAllow extends NexusModel
 {
     protected $table = 'agent_allowed_family';
@@ -19,6 +21,19 @@ class AgentAllow extends NexusModel
         self::MATCH_TYPE_DEC => 'dec',
         self::MATCH_TYPE_HEX => 'hex',
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            fire_event(ModelEventEnum::AGENT_ALLOW_CREATED, $model);
+        });
+        static::updated(function ($model) {
+            fire_event(ModelEventEnum::AGENT_ALLOW_UPDATED, $model);
+        });
+        static::deleted(function ($model) {
+            fire_event(ModelEventEnum::AGENT_ALLOW_DELETED, $model);
+        });
+    }
 
     public function denies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

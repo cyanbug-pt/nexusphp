@@ -1208,6 +1208,19 @@ function clear_agent_allow_deny_cache()
         \Nexus\Database\NexusDB::cache_del($denyCacheKey . $suffix);
     }
 }
+
+/**
+ * @see announce.php
+ * @param $infoHash
+ * @return void
+ */
+function clear_torrent_cache($infoHash)
+{
+    do_log("clear_torrent_cache");
+    \Nexus\Database\NexusDB::cache_del('torrent_hash_'.$infoHash.'_content');
+    \Nexus\Database\NexusDB::cache_del("torrent_not_exists:$infoHash");
+}
+
 function user_can($permission, $fail = false, $uid = 0): bool
 {
     $log = "permission: $permission, fail: $fail, user: $uid";
@@ -1338,6 +1351,7 @@ function is_danger_url($url): bool
     return false;
 }
 
+//here must retrieve the real time info, no cache!!!
 function get_snatch_info($torrentId, $userId)
 {
     return mysql_fetch_assoc(sql_query(sprintf('select * from snatched where torrentid = %s and userid = %s order by id desc limit 1', $torrentId, $userId)));
