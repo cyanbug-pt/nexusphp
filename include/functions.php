@@ -2242,7 +2242,7 @@ function menu ($selected = "home") {
 	global $USERUPDATESET;
 	//no this option in config.php
     $enablerequest = 'yes';
-	$script_name = $_SERVER["SCRIPT_FILENAME"];
+	$script_name = $_SERVER["SCRIPT_NAME"];
 	if (preg_match("/index/i", $script_name)) {
 		$selected = "home";
 	}elseif (preg_match("/forums/i", $script_name)) {
