@@ -35,6 +35,16 @@ $lang_linksmanage = array
 	'text_sitename_note' => "申請網站的名字，如<i>NexusPHP</i>",
 	'text_url_note' => "如<i>https://nexusphp.org</i>",
 	'text_email_note' => "請填寫申請網站的管理員的郵箱地址，便于我們聯系",
+    'std_missing_form_data' => "請填寫必填項目。",
+	'std_unable_creating_new_link' => "無法創建新的鏈接。",
+	'std_links_manage' => "管理鏈接",
+	'text_add_link' => "添加鏈接",
+	'text_manage_links' => "管理鏈接",
+	'text_modify' => "修改",
+	'text_edit' => "編輯",
+	'text_delete' => "刪除",
+	'text_no_links_found' => "對不起，當前沒有任何鏈接！",
+	'text_edit_link' => "編輯鏈接",
 	'js_sure_to_delete_link' => "你確定要刪除此鏈接？",
 );
 
