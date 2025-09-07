@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\BonusLogs;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -86,22 +87,33 @@ class CalculateUserSeedBonus implements ShouldQueue
         }
         $sql = sprintf("select %s from users where id in (%s)", implode(',', User::$commonFields), $idStr);
         $results = NexusDB::select($sql);
+        if (empty($results)) {
+            do_log("$logPrefix, no data from idStr: $idStr", "error");
+            return;
+        }
         $logFile = getLogFile("seed-bonus-points");
         do_log("$logPrefix, [GET_UID_REAL], count: " . count($results) . ", logFile: $logFile");
         $fd = fopen($logFile, 'a');
         $seedPointsUpdates = $seedPointsPerHourUpdates = $seedBonusUpdates = [];
         $seedingTorrentCountUpdates = $seedingTorrentSizeUpdates = [];
         $logStr = "";
+        $bonusLogInsert = [];
         foreach ($results as $userInfo)
         {
             $uid = $userInfo['id'];
+            $donorAddition = $officialAddition = $haremAddition = $medalAddition = 0;
             $isDonor = is_donor($userInfo);
             $seedBonusResult = calculate_seed_bonus($uid);
             $bonusLog = "[CLEANUP_CLI_CALCULATE_SEED_BONUS_HANDLE_USER], user: $uid, seedBonusResult: " . nexus_json_encode($seedBonusResult);
-            $all_bonus = $seedBonusResult['seed_bonus'];
+            $all_bonus = $basicBonus = $seedBonusResult['seed_bonus'];
             $bonusLog .= ", all_bonus: $all_bonus";
+            if ($all_bonus == 0) {
+                do_log("$bonusLog, all_bonus is zero, skip");
+                continue;
+            }
             if ($isDonor && $donortimes_bonus != 0) {
-                $all_bonus = $all_bonus * $donortimes_bonus;
+                $donorAddition = $basicBonus * $donortimes_bonus;
+                $all_bonus += $donorAddition;
                 $bonusLog .= ", isDonor, donortimes_bonus: $donortimes_bonus, all_bonus: $all_bonus";
             }
             if ($officialAdditionFactor > 0) {
@@ -133,6 +145,14 @@ class CalculateUserSeedBonus implements ShouldQueue
             $seedingTorrentCountUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['count']);
             $seedingTorrentSizeUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['size']);
             $seedBonusUpdates[] = sprintf("when %d then seedbonus + %f", $uid, $all_bonus);
+            //here before/after not correct, don't record it, fill with -1
+            $this->appendBonusLogInsert($bonusLogInsert, $uid, [
+                BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => $basicBonus,
+                BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => $donorAddition,
+                BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => $officialAddition,
+                BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => $haremAddition,
+                BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => $medalAddition,
+            ]);
             if ($fd) {
                 $log = sprintf(
                     '%s|%s|%s|%s|%s|%s|%s|%s',
@@ -155,6 +175,9 @@ class CalculateUserSeedBonus implements ShouldQueue
         if ($delIdRedisKey) {
             NexusDB::cache_del($this->idRedisKey);
         }
+        if (!empty($bonusLogInsert)) {
+            BonusLogs::query()->insert($bonusLogInsert);
+        }
         fwrite($fd, $logStr);
         $costTime = time() - $beginTimestamp;
         do_log(sprintf(
@@ -173,5 +196,23 @@ class CalculateUserSeedBonus implements ShouldQueue
     public function failed(\Throwable $exception)
     {
         do_log("failed: " . $exception->getMessage() . $exception->getTraceAsString(), 'error');
+    }
+
+    private function appendBonusLogInsert(array &$bonusLogInsert, int $userId, array $typeValues): void
+    {
+        foreach ($typeValues as $type => $value) {
+            if ($value > 0) {
+                $bonusLogInsert[] = [
+                    'business_type' => $type,
+                    'uid' => $userId,
+                    'old_total_value' => -1,
+                    'value' => $value,
+                    'new_total_value' => -1,
+                    'comment' => BonusLogs::$businessTypes[$type]['text'],
+                    'created_at' => now()->toDateTimeString(),
+                    'updated_at' => now()->toDateTimeString(),
+                ];
+            }
+        }
     }
 }

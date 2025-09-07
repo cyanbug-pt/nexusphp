@@ -47,7 +47,7 @@ class FireEvent implements ShouldQueue
             }
             $result = call_user_func_array([$eventName, "dispatch"], $params);
             $log .= ", success call dispatch, result: " . var_export($result, true);
-            publish_model_event($name, $model->id);
+            publish_model_event($name, $model->id, $model->toJson());
         } else {
             $log .= ", no event match this name";
         }

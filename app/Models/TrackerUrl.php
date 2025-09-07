@@ -19,28 +19,33 @@ class TrackerUrl extends NexusModel
             if ($model->is_default == 1) {
                 self::query()->where("id", "!=", $model->id)->update(["is_default" => 0]);
             }
-            //添加 id 与 URL 映射
-            $redis = NexusDB::redis();
-            $redis->del(self::TRACKER_URL_CACHE_KEY);
-            $list = self::listAll();
-            $first = $list->first();
-            $hasDefault = false;
-            foreach ($list as $item) {
-                $redis->hset(self::TRACKER_URL_CACHE_KEY, $item->id, $item->url);
-                if ($item->is_default == 1) {
-                    $hasDefault = true;
-                    $redis->set(self::TRACKER_URL_DEFAULT_CACHE_KEY, $item->url);
-                }
-            }
-            if (!$hasDefault && $first) {
-                $redis->set(self::TRACKER_URL_DEFAULT_CACHE_KEY, $first->url);
-            }
+            self::saveUrlCache();
         });
         static::saving(function (TrackerUrl $model) {
             if ($model->is_default == 1) {
                 $model->enabled = 1;
             }
         });
+    }
+
+    public static function saveUrlCache(): void
+    {
+        //添加 id 与 URL 映射
+        $redis = NexusDB::redis();
+        $redis->del(self::TRACKER_URL_CACHE_KEY);
+        $list = self::listAll();
+        $first = $list->first();
+        $hasDefault = false;
+        foreach ($list as $item) {
+            $redis->hset(self::TRACKER_URL_CACHE_KEY, $item->id, $item->url);
+            if ($item->is_default == 1) {
+                $hasDefault = true;
+                $redis->set(self::TRACKER_URL_DEFAULT_CACHE_KEY, $item->url);
+            }
+        }
+        if (!$hasDefault && $first) {
+            $redis->set(self::TRACKER_URL_DEFAULT_CACHE_KEY, $first->url);
+        }
     }
 
     public static function listAll()

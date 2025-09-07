@@ -47,17 +47,16 @@ class Imdb
 
     private function checkDir($dir, $langKeyPrefix)
     {
-        global $lang_functions;
         if (!is_dir($dir)) {
             $mkdirResult = mkdir($dir, 0777, true);
             if ($mkdirResult !== true) {
-                $msg = $lang_functions["{$langKeyPrefix}_can_not_create"];
+                $msg = nexus_trans("torrent.{$langKeyPrefix}_can_not_create");
                 do_log("$msg, dir: $dir");
                 throw new ImdbException($msg);
             }
         }
         if (!is_writable($dir)) {
-            $msg = $lang_functions["{$langKeyPrefix}_is_not_writeable"];
+            $msg = nexus_trans("torrent.{$langKeyPrefix}_is_not_writeable");
             do_log("$msg, dir: $dir");
             throw new ImdbException($msg);
         }

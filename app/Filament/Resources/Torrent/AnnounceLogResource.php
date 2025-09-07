@@ -169,6 +169,7 @@ class AnnounceLogResource extends Resource
                         Forms\Components\TextInput::make('user_id')
                             ->label(__('announce-log.user_id'))
                             ->numeric()
+                            ->minValue(1)
                         ,
                     ])
                 ,
@@ -177,6 +178,7 @@ class AnnounceLogResource extends Resource
                         Forms\Components\TextInput::make('torrent_id')
                             ->label(__('announce-log.torrent_id'))
                             ->numeric()
+                            ->minValue(1)
                         ,
                     ])
                 ,

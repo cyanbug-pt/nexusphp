@@ -111,7 +111,9 @@ if ($action == "edituser")
 		if ($arr['email'] != $email){
 			$updateset[] = "email = " . sqlesc($email);
 //			$modcomment = date("Y-m-d") . " - Email changed from $arr[email] to $email by {$CURUSER['username']}.\n". $modcomment;
-			$userModifyLogs[] = "Email changed from $arr[email] to $email by {$CURUSER['username']}.";
+			$modifyLog = "Email changed from $arr[email] to $email by {$CURUSER['username']}.";
+            do_log($modifyLog, "alert");
+            $userModifyLogs[] = $modifyLog;
             $locale = get_user_locale($userid);
 			$subject = sqlesc(nexus_trans("user.msg_email_change", [], $locale));
 			$msg = sqlesc(nexus_trans("user.msg_your_email_changed_from", [], $locale).$arr['email'].nexus_trans("user.msg_to_new", [], $locale) . $email .nexus_trans("user.msg_by", [], $locale).$CURUSER['username']);

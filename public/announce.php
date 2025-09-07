@@ -401,6 +401,8 @@ if (
     }
 }
 
+$leechTimeNoSeeder = "";
+
 // current peer_id, or you could say session with tracker not found in table peers
 if (!isset($self))
 {
@@ -473,13 +475,18 @@ else // continue an existing session
 	}
 
 	do_log("upthis: $upthis, downthis: $downthis, announcetime: $announcetime, is_cheater: $is_cheater");
-    $snatchInfo = get_snatch_info($torrentid, $userid);
+    if (!isset($snatchInfo)) {
+        $snatchInfo = get_snatch_info($torrentid, $userid);
+    }
 	if (!$is_cheater && ($trueupthis > 0 || $truedownthis > 0))
 	{
         $dataTraffic = getDataTraffic($torrent, $_GET, $az, $self, $snatchInfo, apply_filter('torrent_promotion', $torrent));
         $USERUPDATESET[] = "uploaded = uploaded + " . $dataTraffic['uploaded_increment_for_user'];
         $USERUPDATESET[] = "downloaded = downloaded + " . $dataTraffic['downloaded_increment_for_user'];
 	}
+    if ($torrent['seeders'] <= 0 && $seeder == 'no' && $self['announcetime'] > 0) {
+        $leechTimeNoSeeder = ", leech_time_no_seeder = leech_time_no_seeder + {$self['announcetime']}";
+    }
 }
 
 $dt = sqlesc(date("Y-m-d H:i:s"));
@@ -495,7 +502,7 @@ if (isset($self) && $event == "stopped")
 	{
 		$updateset[] = ($self["seeder"] == "yes" ? "seeders = seeders - 1" : "leechers = leechers - 1");
         $hasChangeSeederLeecher = true;
-		sql_query("UPDATE snatched SET uploaded = uploaded + $trueupthis, downloaded = downloaded + $truedownthis, to_go = $left, $announcetime, last_action = ".$dt." WHERE id = {$snatchInfo['id']}") or err("SL Err 1");
+		sql_query("UPDATE snatched SET uploaded = uploaded + $trueupthis, downloaded = downloaded + $truedownthis, to_go = $left, $announcetime $leechTimeNoSeeder, last_action = ".$dt." WHERE id = {$snatchInfo['id']}") or err("SL Err 1");
 	}
 }
 elseif(isset($self))
@@ -518,7 +525,7 @@ elseif(isset($self))
             $hasChangeSeederLeecher = true;
         }
 		if (!empty($snatchInfo)) {
-            sql_query("UPDATE snatched SET uploaded = uploaded + $trueupthis, downloaded = downloaded + $truedownthis, to_go = $left, $announcetime, last_action = ".$dt." $finished_snatched WHERE id = {$snatchInfo['id']}") or err("SL Err 2");
+            sql_query("UPDATE snatched SET uploaded = uploaded + $trueupthis, downloaded = downloaded + $truedownthis, to_go = $left, $announcetime, last_action = ".$dt." $finished_snatched $leechTimeNoSeeder WHERE id = {$snatchInfo['id']}") or err("SL Err 2");
             do_action('snatched_saved', $torrent, $snatchInfo);
         }
 	}
@@ -571,14 +578,16 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
         $hrLog .= ", hrExists: $hrExists";
         if (!$hrExists) {
             //last check include rate
-            $includeRate = \App\Models\HitAndRun::getConfig('include_rate', $torrent['mode']);
-            if ($includeRate === "" || $includeRate === null) {
-                //not set yet
-                $includeRate = 1;
-            }
+            $includeRate = (float)\App\Models\HitAndRun::getConfig('include_rate', $torrent['mode']);
+//            if ($includeRate === "" || $includeRate === null) {
+//                //not set yet
+//                $includeRate = 1;
+//            }
             $hrLog .= ", includeRate: $includeRate";
             //get newest snatch info
-            $snatchInfo = get_snatch_info($torrentid, $userid);
+            if (!isset($snatchInfo)) {
+                $snatchInfo = get_snatch_info($torrentid, $userid);
+            }
             $requiredDownloaded = $torrent['size'] * $includeRate;
             if ($snatchInfo['downloaded'] >= $requiredDownloaded) {
                 $nowStr = date('Y-m-d H:i:s');
@@ -598,28 +607,13 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
                 do_log("$hrLog, total downloaded: {$snatchInfo['downloaded']} < required: $requiredDownloaded", "debug");
             }
         } else {
-            $hrLog .= ", already exists";
-            if (isset($self) && $torrent['seeders'] <= 0) {
-                $hrLeechTimeMin = \App\Models\HitAndRun::getConfig('leech_time_minimum', $torrent['mode']);
-                if ($hrLeechTimeMin > 0) {
-                    $hrLog .= ", enable hrLeechTimeMin: $hrLeechTimeMin";
-                    $hrInfo = json_decode($hrExists, true);
-                    if ($hrInfo['status'] == \App\Models\HitAndRun::STATUS_INSPECTING) {
-                        sql_query("update hit_and_runs set leech_time_no_seeder = leech_time_no_seeder + {$self['announcetime']} where id = {$hrInfo['id']} limit 1");
-                    } else {
-                        do_log("$hrLog, hr status != STATUS_INSPECTING", "debug");
-                    }
-                } else {
-                    do_log("$hrLog, not enable hrLeechTimeMin", "debug");
-                }
-            } else {
-                do_log("$hrLog, no self or seeders({$torrent['seeders']}) > 0", "debug");
-            }
+            do_log("$hrLog, already exists", 'debug');
         }
     } else {
         do_log("$hrLog, not match", "debug");
     }
 }
+
 // revert to only increment/decrement
 //if (isset($event) && !empty($event)) {
 //    $updateset[] = 'seeders = ' . get_row_count("peers", "where torrent = $torrentid and to_go = 0");
@@ -659,6 +653,12 @@ if(count($USERUPDATESET) && $userid)
 $lockKey = sprintf("record_batch_lock:%s:%s", $userid, $torrentid);
 if ($redis->set($lockKey, TIMENOW, ['nx', 'ex' => $autoclean_interval_one])) {
     \App\Repositories\CleanupRepository::recordBatch($redis, $userid, $torrentid);
+}
+if (\App\Repositories\RequireSeedTorrentRepository::shouldRecordUser($redis, $userid, $torrentid)) {
+    if (!isset($snatchInfo)) {
+        $snatchInfo = get_snatch_info($torrentid, $userid);
+    }
+    \App\Repositories\RequireSeedTorrentRepository::recordUser($redis, $userid, $torrentid, $snatchInfo);
 }
 do_action('announced', $torrent, $az, $_REQUEST);
 benc_resp($rep_dict);

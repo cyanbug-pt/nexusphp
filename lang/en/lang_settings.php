@@ -816,6 +816,9 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'If enabled, no plaintext passwords will be transmitted at login, recommended. Future releases will remove this configuration and enable this feature.' ,
     'row_complain_enabled' => 'Whether to enable complaints',
     'row_complain_enabled_note' => 'default: "yes"',
+    'row_min_size' => 'Minimum volume',
+    'text_bonus_mini_size'=> 'The minimum volume required for torrent is',
+    'text_bonus_mini_size_help' => '. Torrent size smaller than this volume are not included in the bonus calculation. Unit: bytes (Byte), e.g., 1 Byte = 1024 KiB.',
 );
 
 ?>

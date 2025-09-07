@@ -89,6 +89,10 @@ class UpdateTorrentSeedersEtc implements ShouldQueue
             ->whereRaw("torrent in ($idStr)")
             ->groupBy(['torrent', 'seeder'])
             ->get();
+        if ($res->isEmpty()) {
+            do_log("$logPrefix, no data from idStr: $idStr", "error");
+            return;
+        }
         foreach ($res as $row) {
             if ($row->seeder == "yes")
             $key = "seeders";

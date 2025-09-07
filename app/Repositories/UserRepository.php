@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Enums\ModelEventEnum;
+use App\Enums\RedisKeysEnum;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\ExamUserResource;
@@ -252,7 +253,13 @@ class UserRepository extends BaseRepository
         do_log("user: $uid, $modCommentText, update: " . nexus_json_encode($update));
         $this->clearCache($targetUser);
         fire_event("user_enabled", $targetUser);
+        $this->setEnableLatelyCache($targetUser->id);
         return true;
+    }
+
+    private function setEnableLatelyCache(int $userId): void
+    {
+        NexusDB::cache_put(User::getUserEnableLatelyCacheKey($userId), now()->toDateTimeString());
     }
 
     public function getInviteInfo($id)

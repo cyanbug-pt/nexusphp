@@ -738,7 +738,7 @@ if (isset($searchstr))
 				{
 					$searchstr_element = trim($searchstr_element);	// furthur trim to ensure that multi space seperated words still work
 					$searchstr_exploded_count++;
-					if ($searchstr_exploded_count > 10)	// maximum 10 keywords
+					if ($searchstr_exploded_count > 3)	// maximum 3 keywords
 					break;
 					$like_expression_array[] = " LIKE '%" . $searchstr_element. "%'";
 				}

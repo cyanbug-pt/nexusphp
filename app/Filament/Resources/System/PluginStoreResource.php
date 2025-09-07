@@ -137,7 +137,7 @@ class PluginStoreResource extends Resource
     {
         $result = [];
         $result[] = nexus_trans("plugin.labels.config_plugin_address");
-        $result[] = sprintf("<code>composer config repositories.%s git %s</code>", $record->plugin_id, $record->remote_url);
+        $result[] = sprintf("<code>composer config repositories.%s vcs %s</code>", $record->plugin_id, $record->remote_url);
         $result[] = "<br/>" . nexus_trans("plugin.labels.download_specific_version");
         $result[] = sprintf("<code>composer require %s:%s</code>", $record->package_name, $record->version);
         $result[] = "<br/>" . nexus_trans("plugin.labels.execute_install");

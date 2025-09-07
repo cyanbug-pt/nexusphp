@@ -106,4 +106,9 @@ return [
     'msg_here' => "[b]这里[/b]",
     'msg_offer' => "候选 ",
     'msg_blank' => "刪除。",
+    'require_seed_section_menu_title' => '急需保种',
+    'imdb_cache_dir_can_not_create' => 'imdb 缓存目录无法创建',
+    'imdb_cache_dir_is_not_writeable' => 'imdb 缓存目录不可写',
+    'imdb_photo_dir_can_not_create' => 'imdb 图片目录无法创建',
+    'imdb_photo_dir_is_not_writeable' => 'imdb 图片目录不可写',
 ];

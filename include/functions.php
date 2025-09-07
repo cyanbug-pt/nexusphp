@@ -2810,7 +2810,7 @@ if ($msgalert)
             $Cache->cache_value($cacheKey, $toApprovalCounts, 60);
         }
         if ($toApprovalCounts) {
-            msgalert('torrents.php?approval_status=0', sprintf($lang_functions['text_torrent_to_approval'], is_or_are($toApprovalCounts), $toApprovalCounts, add_s($toApprovalCounts)), 'darkred');
+            msgalert('torrents.php?approval_status=0&incldead=0', sprintf($lang_functions['text_torrent_to_approval'], is_or_are($toApprovalCounts), $toApprovalCounts, add_s($toApprovalCounts)), 'darkred');
         }
     }
 
@@ -3007,17 +3007,7 @@ function get_protocol_prefix()
 	if (isHttps()) {
         return "https://";
     }
-	if ($securelogin == "yes") {
-		return "https://";
-	} elseif ($securelogin == "no") {
-		return "http://";
-	} else {
-		if (!isset($_COOKIE["c_secure_ssl"])) {
-			return "http://";
-		} else {
-			return base64_decode($_COOKIE["c_secure_ssl"]) == "yeah" ? "https://" : "http://";
-		}
-	}
+	return 'http://';
 }
 
 function get_langid_from_langcookie($lang = '')
@@ -5818,7 +5808,7 @@ function can_access_torrent($torrent, $uid)
 
 function get_ip_location_from_geoip($ip): bool|array
 {
-    $locationInfo = \Nexus\Database\NexusDB::remember("locations_{$ip}", 3600, function () use ($ip) {
+    $locationInfo = \Nexus\Database\NexusDB::remember("locations_{$ip}", 864000, function () use ($ip) {
         $lang = get_langfolder_cookie();
         $langMap = [
             'chs' => 'zh-CN',
@@ -5861,7 +5851,7 @@ function get_ip_location_from_geoip($ip): bool|array
             $info['continent'] = $continentName;
             $info['continent_en'] = $record->continent->names['en'] ?? '';
         } catch (\Exception $exception) {
-            do_log($exception->getMessage() . $exception->getTraceAsString(), 'error');
+            do_log($exception->getMessage());
         }
         return $info;
     });
@@ -5898,7 +5888,7 @@ function msgalert($url, $text, $bgcolor = "red")
 function build_medal_image(\Illuminate\Support\Collection $medals, $maxHeight = 200, $withActions = false): string
 {
     $medalImages = [];
-    $wrapBefore = '<form><div style="display: flex;justify-content: center;margin-top: 10px;">';
+    $wrapBefore = '<form><div style="display: flex;flex-wrap: wrap;justify-content: center;margin-top: 10px;">';
     $wrapAfter = '</div></form>';
     foreach ($medals as $medal) {
         $html = sprintf('<div style="display: flex;flex-direction: column;justify-content: space-between;margin-right: 10px"><div><img src="%s" title="%s" class="preview" style="max-height: %spx;max-width: %spx"/></div>', $medal->image_large, $medal->name, $maxHeight, $maxHeight);
@@ -6003,6 +5993,7 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
     $nzero_bonus = $settingBonus['nzero'];
     $bzero_bonus = $settingBonus['bzero'];
     $l_bonus = $settingBonus['l'];
+    $minSize = $settingBonus['min_size'] ?? 0;
 
     $sqrtof2 = sqrt(2);
     $logofpointone = log(0.1);
@@ -6022,9 +6013,9 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
             $torrentIdArr = [-1];
         }
         $idStr = implode(',', \Illuminate\Support\Arr::wrap($torrentIdArr));
-        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, 'NO_PEER_ID' as peerID, '' as last_action from torrents  WHERE id in ($idStr)";
+        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, 'NO_PEER_ID' as peerID, '' as last_action from torrents  WHERE id in ($idStr) and size >= $minSize";
     } else {
-        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' group by peers.torrent, peers.peer_id";
+        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' and torrents.size > $minSize group by peers.torrent, peers.peer_id";
     }
     $tagGrouped = [];
     $torrentResult = \Nexus\Database\NexusDB::select($sql);

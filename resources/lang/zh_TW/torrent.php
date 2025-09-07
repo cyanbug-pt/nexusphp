@@ -105,4 +105,9 @@ return [
     'msg_you_can_download' => "上傳。\n下載請到",
     'msg_here' => "[b]這裏[/b]",
     'msg_offer' => "候選 ",
+    'require_seed_section_menu_title' => '急需保種',
+    'imdb_cache_dir_can_not_create' => 'imdb 緩存目錄無法創建',
+    'imdb_cache_dir_is_not_writeable' => 'imdb 緩存目錄不可寫',
+    'imdb_photo_dir_can_not_create' => 'imdb 圖片目錄無法創建',
+    'imdb_photo_dir_is_not_writeable' => 'imdb 圖片目錄不可寫',
 ];

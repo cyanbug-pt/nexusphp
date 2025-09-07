@@ -93,8 +93,10 @@ $torrent = unesc($_POST["name"]);
 if ($f['size'] > $max_torrent_size)
 bark($lang_takeupload['std_torrent_file_too_big'].number_format($max_torrent_size).$lang_takeupload['std_remake_torrent_note']);
 $tmpname = $f["tmp_name"];
-if (!is_uploaded_file($tmpname))
-bark("eek");
+if (!is_uploaded_file($tmpname)) {
+    do_log("eek, FILE: " . nexus_json_encode($f), 'error');
+    bark("eek");
+}
 if (!filesize($tmpname))
 bark($lang_takeupload['std_empty_file']);
 

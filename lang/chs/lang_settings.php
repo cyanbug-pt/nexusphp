@@ -818,6 +818,9 @@ $lang_settings = array
     'row_complain_enabled_note' => '默认: "yes"',
     'row_record_announce_logs' => '记录汇报日志',
     'text_record_announce_logs_note' => '要启用，请先安装并启动 ClickHouse，并在 .env 文件中添加配置',
+    'row_min_size' => '起步体积',
+    'text_bonus_mini_size' => '要求种子的体积最小为',
+    'text_bonus_mini_size_help' => '。小于此体积的种子不参与魔力计算。单位：字节(Byte)，如 1 Byte = 1024 KiB。',
 );
 
 ?>

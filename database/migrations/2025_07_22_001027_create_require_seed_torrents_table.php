@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('hit_and_runs', function (Blueprint $table) {
-            $table->bigInteger('leech_time_no_seeder')->default(0);
+        Schema::create('require_seed_torrents', function (Blueprint $table) {
+            $table->id();
+            $table->integer('torrent_id')->unique();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('hit_and_runs', function (Blueprint $table) {
-            $table->dropColumn('leech_time_no_seeder');
-        });
+        Schema::dropIfExists('require_seed_torrents');
     }
 };

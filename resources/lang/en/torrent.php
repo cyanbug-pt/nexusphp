@@ -107,4 +107,9 @@ return [
     'msg_here' => " [b]here[/b]",
     'msg_offer' => "Offer ",
     'msg_blank' => ".",
+    'require_seed_section_menu_title' => 'Require Seed',
+    'imdb_cache_dir_can_not_create' => 'imdb cache dir can not create',
+    'imdb_cache_dir_is_not_writeable' => 'imdb cache dir is not writeable',
+    'imdb_photo_dir_can_not_create' => 'imdb photo dir can not create',
+    'imdb_photo_dir_is_not_writeable' => 'imdb photo dir is not writeable',
 ];

@@ -169,6 +169,7 @@ class UploadRepository extends BaseRepository
             throw new NexusException(nexus_trans('upload.missing_torrent_file'));
         }
         if (!$file->isValid()) {
+            do_log("torrent file is invalid: " . nexus_json_encode($_FILES), 'error');
             throw new NexusException("upload torrent file error");
         }
         $size = $file->getSize();

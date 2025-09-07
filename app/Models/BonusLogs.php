@@ -47,6 +47,12 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
     const BUSINESS_TYPE_UPLOAD_TORRENT = 1004;
 
+    const BUSINESS_TYPE_SEEDING_BASIC = 10000;
+    const BUSINESS_TYPE_SEEDING_DONOR_ADDITION = 10001;
+    const BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION = 10002;
+    const BUSINESS_TYPE_SEEDING_HAREM_ADDITION = 10003;
+    const BUSINESS_TYPE_SEEDING_MEDAL_ADDITION = 10004;
+
     public static array $businessTypes = [
         self::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => ['text' => 'Cancel H&R'],
         self::BUSINESS_TYPE_BUY_MEDAL => ['text' => 'Buy medal'],
@@ -75,6 +81,11 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_RECEIVE_REWARD => ['text' => 'Receive reward'],
         self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
         self::BUSINESS_TYPE_UPLOAD_TORRENT => ['text' => 'Upload torrent'],
+        self::BUSINESS_TYPE_SEEDING_BASIC => ['text' => 'Seeding basic'],
+        self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => ['text' => 'Seeding donor addition'],
+        self::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => ['text' => 'Seeding official addition'],
+        self::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => ['text' => 'Seeding harem addition'],
+        self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => ['text' => 'Seeding medal addition'],
     ];
 
     public function getBusinessTypeTextAttribute()

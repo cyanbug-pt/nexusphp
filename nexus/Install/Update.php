@@ -376,6 +376,7 @@ class Update extends Install
                 "enabled" => 1,
                 "is_default" => 1,
             ]);
+            TrackerUrl::saveUrlCache();
             NexusDB::cache_del("nexus_plugin_store_all");
         }
         /**

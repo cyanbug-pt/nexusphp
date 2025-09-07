@@ -99,7 +99,7 @@ elseif ($action == 'savesettings_bonus') 	// save bonus
         'tengbupload', 'ratiolimit','dlamountlimit','oneinvite','customtitle','vipstatus','bonusgift', 'basictax', 'taxpercentage',
         'prolinkpoint', 'prolinktime', 'attendance_initial', 'attendance_step', 'attendance_max', 'cancel_hr', 'attendance_card',
         'harem_addition', 'hundredgbupload', 'tengbdownload', 'hundredgbdownload', 'official_addition', 'official_tag', 'zero_bonus_tag', 'zero_bonus_factor',
-        'one_tmp_invite', 'rainbow_id', 'change_username_card',
+        'one_tmp_invite', 'rainbow_id', 'change_username_card', 'min_size'
     );
 	GetVar($validConfig);
 	$BONUS = [];
@@ -576,6 +576,7 @@ elseif ($action == 'bonussettings'){
 	print ($notice);
 	print ("<form method='post' action='".$_SERVER["SCRIPT_NAME"]."'><input type='hidden' name='action' value='savesettings_bonus'>");
 	print("<tr><td colspan=2 align=center><b>".$lang_settings['text_bonus_by_seeding']."</b></td></tr>");
+	tr($lang_settings['row_min_size'], $lang_settings['text_bonus_mini_size']."<input type='text' style=\"width: 100px\" name=min_size value='".(isset($BONUS["min_size"]) ? $BONUS["min_size"] : 0 )."'>".$lang_settings['text_bonus_mini_size_help'],1);
 	tr($lang_settings['row_donor_gets_double'], $lang_settings['text_donor_gets']."<input type='text' style=\"width: 50px\" name=donortimes value='".(isset($BONUS["donortimes"]) ? $BONUS["donortimes"] : 2 )."'>".$lang_settings['text_times_as_many'],1);
 	tr($lang_settings['row_basic_seeding_bonus'], $lang_settings['text_user_would_get']."<input type='text' style=\"width: 50px\" name=perseeding value='".(isset($BONUS["perseeding"]) ? $BONUS["perseeding"] : 1 )."'>".$lang_settings['text_bonus_points']."<input type='text' style=\"width: 50px\" name=maxseeding value='".(isset($BONUS["maxseeding"]) ? $BONUS["maxseeding"] : 7 )."'>".$lang_settings['text_torrents_default'], 1);
 

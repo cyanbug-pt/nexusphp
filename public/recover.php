@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	$title = $SITENAME.$lang_recover['mail_title'];
     $mailOne = sprintf($lang_recover['mail_one'], $siteName);
     $mailFour = sprintf($lang_recover['mail_four'], $siteName);
+    \Nexus\Database\NexusDB::cache_put("recover:$hash", now()->toDateTimeString());
 
 	$body = <<<EOD
 {$mailOne}($email){$lang_recover['mail_two']}$ip{$lang_recover['mail_three']}
@@ -69,7 +70,10 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET" && $take_recover && isset($_GET["id"]
 	$md5 = $_GET["secret"];
 	if (!$id)
 	httperr();
-
+    if (!\Nexus\Database\NexusDB::cache_get("recover:$md5")) {
+        do_log("secret: $md5 is expired", "error");
+        httperr();
+    }
 	$res = sql_query("SELECT username, email, passhash, editsecret FROM users WHERE id = " . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 	$arr = mysql_fetch_array($res) or httperr();
 

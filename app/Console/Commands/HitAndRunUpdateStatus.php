@@ -42,10 +42,10 @@ class HitAndRunUpdateStatus extends Command
         $torrentId = $this->option('torrent_id');
         $ignoreTime = $this->option('ignore_time');
         $rep = new HitAndRunRepository();
-        $result = $rep->cronjobUpdateStatus($uid, $torrentId, $ignoreTime);
+        $rep->cronjobUpdateStatus($uid, $torrentId, $ignoreTime);
         $log = sprintf(
-            '[%s], %s, uid: %s, torrentId: %s, ignoreTime: %s, result: %s',
-            nexus()->getRequestId(), __METHOD__, $uid, $torrentId, $ignoreTime, var_export($result, true)
+            '[%s], %s, uid: %s, torrentId: %s, ignoreTime: %s',
+            nexus()->getRequestId(), __METHOD__, $uid, $torrentId, $ignoreTime
         );
         $this->info($log);
         do_log($log);

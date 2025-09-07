@@ -216,8 +216,8 @@ class HitAndRunRepository extends BaseRepository
 
                 //check leech time
                 if (isset($setting['leech_time_minimum']) && $setting['leech_time_minimum'] > 0) {
-//                    $targetLeechTime = $row->snatch->leechtime;
-                    $targetLeechTime = $row->leech_time_no_seeder;//使用自身记录的值
+                    //use diff, other index should do also, update later @todo
+                    $targetLeechTime = $row->snatch->leech_time_no_seeder - $row->leech_time_no_seeder_begin;
                     $requireLeechTime = bcmul($setting['leech_time_minimum'], 3600);
                     do_log("$currentLog, targetLeechTime: $targetLeechTime, requireLeechTime: $requireLeechTime");
                     if ($targetLeechTime >= $requireLeechTime) {
@@ -258,12 +258,13 @@ class HitAndRunRepository extends BaseRepository
 
     private function geReachedMessage(HitAndRun $hitAndRun): array
     {
+        $snatched = $hitAndRun->snatch;
         return [
             'receiver' => $hitAndRun->uid,
             'added' => Carbon::now()->toDateTimeString(),
             'subject' => nexus_trans('hr.reached_message_subject', ['hit_and_run_id' => $hitAndRun->id], $hitAndRun->user->locale),
             'msg' => nexus_trans('hr.reached_message_content', [
-                'completed_at' => format_datetime($hitAndRun->snatch->completedat),
+                'completed_at' => format_datetime($snatched->completedat ?: $snatched->startdat),
                 'torrent_id' => $hitAndRun->torrent_id,
                 'torrent_name' => $hitAndRun->torrent->name,
             ], $hitAndRun->user->locale),
@@ -305,7 +306,7 @@ class HitAndRunRepository extends BaseRepository
         do_log(__METHOD__);
         $comment = nexus_trans('hr.reached_by_leech_time_comment', [
             'now' => Carbon::now()->toDateTimeString(),
-            'leech_time' => bcdiv($hitAndRun->snatch->leechtime, 3600, 1),
+            'leech_time' => bcdiv($hitAndRun->snatch->leech_time_no_seeder - $hitAndRun->leech_time_no_seeder_begin, 3600, 1),
             'leech_time_minimum' => $setting['leech_time_minimum'],
         ], $hitAndRun->user->locale);
         $update = [

@@ -263,5 +263,50 @@ class Setting extends NexusModel
         return self::get('security.record_announce_logs') == 'yes';
     }
 
+    public static function getIsRequireSeedSectionEnabled(): bool
+    {
+        return self::get("require_seed_section.enabled") == "yes";
+    }
+
+    public static function getRequireSeedSectionSeederGte(): int
+    {
+        return (int)self::get("require_seed_section.seeder_gte");
+    }
+
+    public static function getRequireSeedSectionSeederLte(): int
+    {
+        return (int)self::get("require_seed_section.seeder_lte");
+    }
+
+    public static function getRequireSeedSectionMenuTitle(): string
+    {
+        return self::get("require_seed_section.menu_title", nexus_trans("torrent.require_seed_section_menu_title"));
+    }
+
+    public static function getRequireSeedSectionPromotionState(): int
+    {
+        return self::get("require_seed_section.promotion_state", Torrent::REQUIRE_SEED_SECTION_DEFAULT_PROMOTION_STATE);
+    }
+
+    public static function getRequireSeedSectionBonusAdditionFactor(): float
+    {
+        return self::get("require_seed_section.bonus_addition_factor", Torrent::REQUIRE_SEED_SECTION_DEFAULT_BONUS_ADDITION_FACTOR);
+    }
+
+    public static function getRequireSeedSectionTags(): array
+    {
+        return self::get("require_seed_section.require_tags", []);
+    }
+
+    public static function getRequireSeedSectionTorrentCountMax(): int
+    {
+        return self::get("require_seed_section.torrent_count_max", Torrent::REQUIRE_SEED_SECTION_DEFAULT_TORRENT_COUNT_MAX);
+    }
+
+    public static function getBonusMinSize(): int
+    {
+        return (int)self::get("bonus.min_size");
+    }
+
 
 }

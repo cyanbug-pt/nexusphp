@@ -123,9 +123,17 @@ class SeedBoxRepository extends BaseRepository
 
     public function delete($id, $uid)
     {
+        $baseQuery =  SeedBoxRecord::query()->whereIn('id', Arr::wrap($id))->where('uid', $uid);
+        $list = $baseQuery->clone()->get();
+        if ($list->isEmpty()) {
+            return false;
+        }
+        $baseQuery->delete();
         $this->clearApprovalCountCache();
-        publish_model_event("seed_box_record_deleted", $id);
-        return SeedBoxRecord::query()->whereIn('id', Arr::wrap($id))->where('uid', $uid)->delete();
+        foreach ($list as $record) {
+            publish_model_event("seed_box_record_deleted", $record->id, $record->toJson());
+        }
+        return true;
     }
 
     public function updateStatus(SeedBoxRecord $seedBoxRecord, $status, $reason = '')
@@ -321,8 +329,13 @@ class SeedBoxRepository extends BaseRepository
             if (is_null($reader)) {
                 return 0;
             }
-            $asnObj = $reader->asn($ip);
-            return $asnObj->autonomousSystemNumber ?? 0;
+            try {
+                $asnObj = $reader->asn($ip);
+                return $asnObj->autonomousSystemNumber ?? 0;
+            } catch (\Exception $e) {
+                do_log("ip: $ip, error: " . $e->getMessage(), 'error');
+                return 0;
+            }
         });
     }
 

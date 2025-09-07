@@ -66,7 +66,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         self::CLASS_EXTREME_USER => ['text' => 'Extreme User', 'min_seed_points' => 600000],
         self::CLASS_ULTIMATE_USER => ['text' => 'Ultimate User', 'min_seed_points' => 800000],
         self::CLASS_NEXUS_MASTER => ['text' => 'Nexus Master', 'min_seed_points' => 1000000],
-        self::CLASS_VIP => ['text' => 'Vip'],
+        self::CLASS_VIP => ['text' => 'VIP'],
         self::CLASS_RETIREE => ['text' => 'Retiree'],
         self::CLASS_UPLOADER => ['text' => 'Uploader'],
         self::CLASS_MODERATOR => ['text' => 'Moderator'],
@@ -105,6 +105,13 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     public static array $notificationOptions = ['topic_reply', 'hr_reached'];
 
+    private const USER_ENABLE_LATELY = "user_enable_lately:%s";
+
+    public static function getUserEnableLatelyCacheKey(int $userId): string
+    {
+        return sprintf(self::USER_ENABLE_LATELY, $userId);
+    }
+
     public function getClassTextAttribute(): string
     {
         return self::getClassText($this->class);
@@ -115,12 +122,12 @@ class User extends Authenticatable implements FilamentUser, HasName
         if (!is_numeric($class)|| !isset(self::$classes[$class])) {
             return '';
         }
+        $classText = self::$classes[$class]['text'];
         if ($class >= self::CLASS_VIP) {
-            $classText = nexus_trans('user.class_names.' . $class);
+            $alias = nexus_trans('user.class_names.' . $class);
         } else {
-            $classText = self::$classes[$class]['text'];
+            $alias = Setting::get("account.{$class}_alias");
         }
-        $alias = Setting::get("account.{$class}_alias");
         if (!empty($alias)) {
             $classText .= "({$alias})";
         }

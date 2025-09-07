@@ -87,6 +87,10 @@ class UpdateUserSeedingLeechingTime implements ShouldQueue
             ->whereRaw("userid in ($idStr)")
             ->groupBy("userid")
             ->get();
+        if ($res->isEmpty()) {
+            do_log("$logPrefix, no data from idStr: $idStr", "error");
+            return;
+        }
         $seedtimeUpdates = $leechTimeUpdates = [];
         $nowStr = now()->toDateTimeString();
         $count = 0;

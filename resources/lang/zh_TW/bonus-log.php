@@ -27,6 +27,11 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => '收到獎勵',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => '收到禮物',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => '發布種子',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => '做種基礎魔力',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => '做種捐贈加成',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => '做種官種加成',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => '做種後宮加成',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => '做種勳章加成',
     ],
     'fields' => [
         'business_type' => '業務類型',

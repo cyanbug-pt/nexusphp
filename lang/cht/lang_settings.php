@@ -816,6 +816,9 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => '如果啟用，登錄時將不傳輸明文密碼，建議啟用。未來版本會刪除此配置且啟用此功能。',
     'row_complain_enabled' => '啟用申訴',
     'row_complain_enabled_note' => '默認: "yes"',
+    'row_min_size' => '起步體積',
+    'text_bonus_mini_size' => '要求種子的體積最小爲',
+    'text_bonus_mini_size_help' => '。小於此體積的種子不參與魔力計算。單位：字節(Byte)，如 1 Byte = 1024 KiB。',
 );
 
 ?>

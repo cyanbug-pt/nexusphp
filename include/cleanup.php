@@ -237,6 +237,11 @@ function disable_user(\Illuminate\Database\Eloquent\Builder $query, $reasonKey)
     $userModifyLogs = [];
     foreach ($results as $user) {
         $uid = $user->id;
+        $enableCacheResult = \Nexus\Database\NexusDB::cache_get(\App\Models\User::getUserEnableLatelyCacheKey($uid));
+        if ($enableCacheResult) {
+            do_log(sprintf("user: %s just enable at: %s, skip", $uid, $enableCacheResult));
+            continue;
+        }
         $uidArr[] = $uid;
         $reason = nexus_trans($reasonKey, [], $user->locale);
         $userBanLogData[] = [
@@ -250,6 +255,9 @@ function disable_user(\Illuminate\Database\Eloquent\Builder $query, $reasonKey)
             'created_at' => date("Y-m-d H:i:s"),
             'updated_at' => date("Y-m-d H:i:s"),
         ];
+    }
+    if (empty($uidArr)) {
+        return [];
     }
     $sql = sprintf(
         "update users set enabled = '%s' where id in (%s)",
@@ -275,9 +283,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 	global $Cache;
 	global $rootpath;
     $requestId = nexus()->getRequestId();
-
 //	require_once($rootpath . '/lang/_target/lang_cleanup.php');
-
 	set_time_limit(0);
 	ignore_user_abort(1);
 	$now = time();

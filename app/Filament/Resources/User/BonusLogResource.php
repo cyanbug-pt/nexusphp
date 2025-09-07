@@ -55,7 +55,7 @@ class BonusLogResource extends Resource
                 ,
                 Tables\Columns\TextColumn::make('old_total_value')
                     ->label(__('bonus-log.fields.old_total_value'))
-                    ->formatStateUsing(fn ($state) => number_format($state))
+                    ->formatStateUsing(fn ($state) => $state >= 0 ? number_format($state) : '-')
                 ,
                 Tables\Columns\TextColumn::make('value')
                     ->formatStateUsing(fn ($record) => $record->old_total_value > $record->new_total_value ? "-" . number_format($record->value) : "+" . number_format($record->value))
@@ -63,7 +63,7 @@ class BonusLogResource extends Resource
                 ,
                 Tables\Columns\TextColumn::make('new_total_value')
                     ->label(__('bonus-log.fields.new_total_value'))
-                    ->formatStateUsing(fn ($state) => number_format($state))
+                    ->formatStateUsing(fn ($state) => $state >= 0 ? number_format($state) : '-')
                 ,
                 Tables\Columns\TextColumn::make('comment')
                     ->label(__('label.comment'))

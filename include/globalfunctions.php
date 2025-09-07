@@ -763,7 +763,13 @@ function get_user_row($id)
     if (isset($userRows[$id])) return $userRows[$id];
     $cacheKey = 'user_'.$id.'_content';
     $row = \Nexus\Database\NexusDB::remember($cacheKey, 3600, function () use ($id, $neededColumns) {
-        $user = \App\Models\User::query()->with(['wearing_medals'])->find($id, $neededColumns);
+        $user = \App\Models\User::query()->with([
+            'wearing_medals' => function ($query) {
+                $query->orderBy('user_medals.priority', 'desc')
+                    ->orderBy('user_medals.id', 'desc')
+                    ->limit(get_setting('system.maximum_number_of_medals_can_be_worn', 3));
+            }
+        ])->find($id, $neededColumns);
         if (!$user) {
             return null;
         }
@@ -1392,7 +1398,7 @@ function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, ?\
             }
         }
         call_user_func_array([$eventClass, "dispatch"], $params);
-        publish_model_event($name, $model->id);
+        publish_model_event($name, $model->id, $model->toJson());
         do_log("success fire_event in laravel, name: $name, id: $model->id, oldId: " . ($oldModel ? $oldModel->id : ""));
     }
 }
@@ -1400,11 +1406,11 @@ function fire_event(string $name, \Illuminate\Database\Eloquent\Model $model, ?\
 /**
  * 仅仅是往 redis 发布事件, php 端无监听者仅在其他平台有需要的触发这个即可, 较轻量
  */
-function publish_model_event(string $event, int $id): void
+function publish_model_event(string $event, int $id, string $json = ""): void
 {
     $channel = nexus_env("CHANNEL_NAME_MODEL_EVENT");
     if (!empty($channel)) {
-        \Nexus\Database\NexusDB::redis()->publish($channel, json_encode(["event" => $event, "id" => $id]));
+        \Nexus\Database\NexusDB::redis()->publish($channel, json_encode(["event" => $event, "id" => $id, "json" => $json]));
     } else {
         do_log("event: $event, id: $id, channel: $channel, channel is empty!", "error");
     }

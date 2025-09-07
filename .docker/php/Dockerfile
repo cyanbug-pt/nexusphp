@@ -71,6 +71,9 @@ RUN sed -i \
 
 # 配置 PHP 错误日志输出到 stderr
 RUN echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error-logging.ini
+# 上传配置
+RUN echo "upload_max_filesize = 10M" >> /usr/local/etc/php/conf.d/upload.ini
+RUN echo "post_max_size = 10M" >> /usr/local/etc/php/conf.d/upload.ini
 
 # 安装 Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
