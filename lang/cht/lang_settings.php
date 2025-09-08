@@ -819,6 +819,8 @@ $lang_settings = array
     'row_min_size' => '起步體積',
     'text_bonus_mini_size' => '要求種子的體積最小爲',
     'text_bonus_mini_size_help' => '。小於此體積的種子不參與魔力計算。單位：字節(Byte)，如 1 Byte = 1024 KiB。',
+    'row_reward_bonus_options' => '魔力值獎勵選項',
+    'text_reward_bonus_options_note' => '種子詳情頁的魔力值獎勵選項，多個用英文逗號分割',
 );
 
 ?>

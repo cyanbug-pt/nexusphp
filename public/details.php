@@ -546,11 +546,7 @@ echo "</script>";
 		}
 
         //Add 魔力值奖励功能
-        if(isset($magic_value_bonus)){
-            $bonus_array = $magic_value_bonus;
-        }else{
-            $bonus_array = implode(',', \App\Models\Torrent::BONUS_REWARD_VALUES);
-        }
+        $bonus_array = \App\Models\Setting::getBonusRewardOptions();
         echo '<style type="text/css">
 					ul.magic
 					{
@@ -573,7 +569,7 @@ echo "</script>";
         $magic_value_button = '';
 
         if ($CURUSER['id'] <> $row['owner']) {
-            $arr_temp = explode(',',$bonus_array);
+            $arr_temp = $bonus_array;
             $bonus_has = $CURUSER['seedbonus'];
             if(intval($bonus_has) < intval($arr_temp[0])){
                 $error_bonus_message = $lang_details['magic_have_no_enough_bonus_value'];

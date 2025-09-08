@@ -308,5 +308,14 @@ class Setting extends NexusModel
         return (int)self::get("bonus.min_size");
     }
 
+    public static function getBonusRewardOptions(): array
+    {
+        $result = self::get("torrent.reward_bonus_options");
+        if (!empty($result)) {
+            return preg_split('/[,，\s]+/', trim($result));
+        }
+        return Torrent::BONUS_REWARD_VALUES;
+    }
+
 
 }
