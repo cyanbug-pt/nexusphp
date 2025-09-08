@@ -19,6 +19,7 @@ class BonusLogs extends NexusModel
     const DEFAULT_BONUS_BUY_RAINBOW_ID = 5000;
     const DEFAULT_BONUS_BUY_CHANGE_USERNAME_CARD = 100000;
 
+    //扣除类，1开始
     const BUSINESS_TYPE_CANCEL_HIT_AND_RUN = 1;
     const BUSINESS_TYPE_BUY_MEDAL = 2;
     const BUSINESS_TYPE_BUY_ATTENDANCE_CARD = 3;
@@ -40,13 +41,17 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_BUY_TORRENT = 19;
     const BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT = 20;
     const BUSINESS_TYPE_TASK_PASS_REWARD = 21;
+    const BUSINESS_TYPE_REWARD_TORRENT = 22;
 
+    //获得类，普通获得，1000 起步
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
     const BUSINESS_TYPE_TORRENT_BE_DOWNLOADED = 1001;
     const BUSINESS_TYPE_RECEIVE_REWARD = 1002;
     const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
     const BUSINESS_TYPE_UPLOAD_TORRENT = 1004;
+    const BUSINESS_TYPE_TORRENT_BE_REWARD = 1005;
 
+    //获得类，做种获得，10000 起
     const BUSINESS_TYPE_SEEDING_BASIC = 10000;
     const BUSINESS_TYPE_SEEDING_DONOR_ADDITION = 10001;
     const BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION = 10002;
@@ -75,12 +80,15 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_BUY_TORRENT => ['text' => 'Buy torrent'],
         self::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => ['text' => 'Task failure penalty'],
         self::BUSINESS_TYPE_TASK_PASS_REWARD => ['text' => 'Task success reward'],
+        self::BUSINESS_TYPE_REWARD_TORRENT => ['text' => 'Reward torrent'],
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
         self::BUSINESS_TYPE_RECEIVE_REWARD => ['text' => 'Receive reward'],
         self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
         self::BUSINESS_TYPE_UPLOAD_TORRENT => ['text' => 'Upload torrent'],
+        self::BUSINESS_TYPE_TORRENT_BE_REWARD => ['text' => 'Torrent be reward'],
+
         self::BUSINESS_TYPE_SEEDING_BASIC => ['text' => 'Seeding basic'],
         self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => ['text' => 'Seeding donor addition'],
         self::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => ['text' => 'Seeding official addition'],
@@ -135,7 +143,7 @@ class BonusLogs extends NexusModel
             'old_total_value' => $old,
             'value' => $delta,
             'new_total_value' => $new,
-            'comment' => sprintf("[%s] %s", self::$businessTypes[$businessType]['text'], $comment),
+            'comment' => sprintf("[%s]%s", self::$businessTypes[$businessType]['text'], $comment ? " $comment" : ""),
             'created_at' => $nowStr,
             'updated_at' => $nowStr,
         ]);
