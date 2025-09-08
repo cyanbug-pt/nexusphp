@@ -317,5 +317,10 @@ class Setting extends NexusModel
         return Torrent::BONUS_REWARD_VALUES;
     }
 
+    public static function getBonusRewardTimesLimit(): int
+    {
+        return (int)self::get("torrent.reward_times_limit", 0);
+    }
+
 
 }

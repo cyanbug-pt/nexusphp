@@ -93,22 +93,22 @@ function unpreview(obj){
 
 function saveMagicValue(torrentid,value)
 {
-    var list=ajax.posts('magic.php','value='+value +'&id='+torrentid);
-//	document.getElementById("thanksbutton").innerHTML = document.getElementById("thanksadded").innerHTML;
-    document.getElementById("magic_add").value += value;
-    document.getElementById("magic_add").style.display = '';
-    document.getElementById("listNumber").style.display = 'none';
-    document.getElementById("current_user_magic").style.display = '';
-    var sumAll = document.getElementById("spanSumAll").innerHTML;
-    document.getElementById("spanSumAll").innerHTML = sumAll*1 + value;
-    if(document.getElementById("count_user_spa")){
-        var userAll = document.getElementById("count_user_spa").innerHTML;
-        document.getElementById("count_user_spa").innerHTML = userAll*1 + 1;
-    }
-
-    //document.getElementById("listNumber").innerHTML = "<input class=\"btn\" type=\"button\" id="magic_add" value=\""+value+"\" disabled=\"disabled\" />";
-
-//	document.getElementById("addcuruser").innerHTML = document.getElementById("curuser").innerHTML;
+    jQuery.post("magic.php", {"value": value, "id": torrentid}, function(res) {
+        if (res.ret !== 0) {
+            alert(res.msg)
+            return
+        }
+        document.getElementById("magic_add").value += value;
+        document.getElementById("magic_add").style.display = '';
+        document.getElementById("listNumber").style.display = 'none';
+        document.getElementById("current_user_magic").style.display = '';
+        var sumAll = document.getElementById("spanSumAll").innerHTML;
+        document.getElementById("spanSumAll").innerHTML = sumAll*1 + value;
+        if(document.getElementById("count_user_spa")){
+            var userAll = document.getElementById("count_user_spa").innerHTML;
+            document.getElementById("count_user_spa").innerHTML = userAll*1 + 1;
+        }
+    }, "json")
 }
 
 // java_klappe.js

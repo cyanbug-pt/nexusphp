@@ -821,6 +821,8 @@ $lang_settings = array
     'text_bonus_mini_size_help' => '。小於此體積的種子不參與魔力計算。單位：字節(Byte)，如 1 Byte = 1024 KiB。',
     'row_reward_bonus_options' => '魔力值獎勵選項',
     'text_reward_bonus_options_note' => '種子詳情頁的魔力值獎勵選項，多個用英文逗號分割',
+    'row_reward_times_limit' => '魔力獎勵次數限制',
+    'text_reward_times_limit_note' => '種子詳情頁的魔力獎勵每人每天次數限制，設置爲 0 不限制。默認：0',
 );
 
 ?>

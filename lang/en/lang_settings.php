@@ -821,6 +821,8 @@ $lang_settings = array
     'text_bonus_mini_size_help' => '. Torrent size smaller than this volume are not included in the bonus calculation. Unit: bytes (Byte), e.g., 1 Byte = 1024 KiB.',
     'row_reward_bonus_options' => 'Reward Bonus Options',
     'text_reward_bonus_options_note' => 'Reward bonus options on the torrent details page, multiple options separated by commas',
+    'row_reward_times_limit' => 'Reward Frequency Limit',
+    'text_reward_times_limit_note' => 'Daily limit per user for bonus rewards on seed detail pages. Set to 0 for no limit. Default: 0',
 );
 
 ?>
