@@ -63,7 +63,7 @@ class TorrentController extends Controller
         $resource = new TorrentResource($torrent);
         $additional = [];
         if ($this->hasExtraField('bonus_reward_values')) {
-            $additional['bonus_reward_values'] = Torrent::BONUS_REWARD_VALUES;
+            $additional['bonus_reward_values'] = Setting::getBonusRewardOptions();
         }
         $extraSettingsNames = ['torrent.claim_torrent_user_counts_up_limit'];
         $this->appendExtraSettings($additional, $extraSettingsNames);

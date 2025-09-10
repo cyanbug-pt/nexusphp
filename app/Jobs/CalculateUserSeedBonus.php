@@ -107,10 +107,15 @@ class CalculateUserSeedBonus implements ShouldQueue
             $bonusLog = "[CLEANUP_CLI_CALCULATE_SEED_BONUS_HANDLE_USER], user: $uid, seedBonusResult: " . nexus_json_encode($seedBonusResult);
             $all_bonus = $basicBonus = $seedBonusResult['seed_bonus'];
             $bonusLog .= ", all_bonus: $all_bonus";
-            if ($all_bonus == 0) {
-                do_log("$bonusLog, all_bonus is zero, skip");
-                continue;
-            }
+            /**
+             * BUG: can't add this, case when not include info in where condition $idStr will be reset to 0
+             * // BUG: 不能添加这部分，case when 不包含某些 uid 的数据，而 $idStr 里面又有，会被重置为 0
+             * // 而且 seed_points_per_hour, seeding count/size  这些也是要实时更新为0的，不能添加这个跳过。
+             */
+//            if ($all_bonus == 0) {
+//                do_log("$bonusLog, all_bonus is zero, skip");
+//                continue;
+//            }
             if ($isDonor && $donortimes_bonus != 0) {
                 $donorAddition = $basicBonus * $donortimes_bonus;
                 $all_bonus += $donorAddition;
@@ -146,7 +151,7 @@ class CalculateUserSeedBonus implements ShouldQueue
             $seedingTorrentSizeUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['size']);
             $seedBonusUpdates[] = sprintf("when %d then seedbonus + %f", $uid, $all_bonus);
             //here before/after not correct, don't record it, fill with -1
-            $this->appendBonusLogInsert($bonusLogInsert, $uid, [
+            $this->appendBonusLogInsert($bonusLogInsert, $userInfo, [
                 BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => $basicBonus,
                 BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => $donorAddition,
                 BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => $officialAddition,
@@ -198,13 +203,13 @@ class CalculateUserSeedBonus implements ShouldQueue
         do_log("failed: " . $exception->getMessage() . $exception->getTraceAsString(), 'error');
     }
 
-    private function appendBonusLogInsert(array &$bonusLogInsert, int $userId, array $typeValues): void
+    private function appendBonusLogInsert(array &$bonusLogInsert, array $userInfo, array $typeValues): void
     {
         foreach ($typeValues as $type => $value) {
             if ($value > 0) {
                 $bonusLogInsert[] = [
                     'business_type' => $type,
-                    'uid' => $userId,
+                    'uid' => $userInfo['id'],
                     'old_total_value' => -1,
                     'value' => $value,
                     'new_total_value' => -1,
