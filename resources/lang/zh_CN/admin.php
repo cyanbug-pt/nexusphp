@@ -121,6 +121,7 @@ return [
             'bulk_action_recommend' => '推荐',
             'bulk_action_sp_state' => '优惠',
             'bulk_action_hr' => 'H&R',
+            'bulk_action_change_category' => '修改分类',
         ],
         'seed_box_record' => [
             'toggle_status' => '更改状态',

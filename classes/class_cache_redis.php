@@ -37,7 +37,7 @@ class class_cache_redis {
         if (!empty($config['port'])) {
             $params[] = $config['port'];
         }
-        if (!empty($config['timeout'])) {
+        if (isset($config['timeout']) && is_numeric($config['timeout'])) {
             $params[] = $config['timeout'];
         }
         $connectResult = $redis->connect(...$params);

@@ -12,6 +12,7 @@ use App\Models\Tag;
 use App\Models\Torrent;
 use App\Models\TorrentTag;
 use App\Models\User;
+use App\Repositories\SearchBoxRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TorrentRepository;
 use Filament\Facades\Filament;
@@ -301,13 +302,13 @@ class TorrentResource extends Resource
                 })
                 ->deselectRecordsAfterCompletion();
         }
+//        $actions[] = self::getBulkActionChangeCategory();
 
         if (user_can('torrent-delete')) {
             $actions[] = Tables\Actions\DeleteBulkAction::make('bulk-delete')->using(function (Collection $records) {
                 deletetorrent($records->pluck('id')->toArray());
             });
         }
-
         return $actions;
     }
 
@@ -341,15 +342,53 @@ class TorrentResource extends Resource
             $actions[] = Tables\Actions\DeleteAction::make('delete')->using(function ($record) {
                 deletetorrent($record->id);
             });
-//            $actions[] = Tables\Actions\Action::make('view')
-//                ->action(function (Torrent $record) {
-//                    return [
-//                        'modelContent' => new HtmlString("ssss")
-//                    ];
-//                })
-//            ;
         }
         return $actions;
+    }
+
+    private static function getBulkActionChangeCategory(): Tables\Actions\BulkAction
+    {
+        return Tables\Actions\BulkAction::make('changeCategory')
+            ->label(__('admin.resources.torrent.bulk_action_change_category'))
+            ->form([
+                Forms\Components\Select::make('section_id')
+                    ->label(__('searchbox.section'))
+                    ->options(function() {
+                        $rep = new SearchBoxRepository();
+                        $list = $rep->listSections(false);
+                        $result = [];
+                        foreach ($list as $section) {
+                            $result[$section->id] = $section->displaySectionName;
+                        }
+                        return $result;
+                    })
+                    ->reactive()
+                    ->afterStateUpdated(fn (callable $set) => $set('section_id', null))
+                    ->required()
+                ,
+                Forms\Components\Select::make('category')
+                    ->label(__('searchbox.category_label'))
+                    ->options(function (callable $get) {
+                        $sectionId = $get('section_id');
+                        if (!$sectionId) {
+                            return [];
+                        }
+                        return Category::query()->where('mode', $sectionId)->pluck('name', 'id');
+                    })
+                    ->reactive()
+                    ->required()
+                ,
+
+            ])
+            ->action(function (Collection $records, array $data) {
+//                $torrentRep = new TorrentRepository();
+//                try {
+//                    $data['torrent_id'] = $record->id;
+//                    $torrentRep->approval(Auth::user(), $data);
+//                } catch (\Exception $exception) {
+//                    do_log($exception->getMessage(), 'error');
+//                }
+            });
     }
 
     private static function shouldShowApproval(): bool

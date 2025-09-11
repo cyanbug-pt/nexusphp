@@ -243,18 +243,20 @@ class SearchBoxRepository extends BaseRepository
         return Category::query()->whereIn('id', $idArr)->delete();
     }
 
-    public function listSections()
+    public function listSections($withCategoryAndTags = true)
     {
         $modeIds = [SearchBox::getBrowseMode()];
         if (SearchBox::isSpecialEnabled() && Permission::canUploadToSpecialSection()) {
             $modeIds[] = SearchBox::getSpecialMode();
         }
-        $searchBoxList = SearchBox::query()->with("categories")->find($modeIds);
-        foreach ($searchBoxList as $searchBox) {
-            if ($searchBox->showsubcat) {
-                $searchBox->loadSubCategories();
+        $searchBoxList = SearchBox::query()->with($withCategoryAndTags ? ['categories'] : [])->find($modeIds);
+        if ($withCategoryAndTags) {
+            foreach ($searchBoxList as $searchBox) {
+                if ($searchBox->showsubcat) {
+                    $searchBox->loadSubCategories();
+                }
+                $searchBox->loadTags();
             }
-            $searchBox->loadTags();
         }
         return $searchBoxList;
     }
