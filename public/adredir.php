@@ -2,6 +2,9 @@
 require "../include/bittorrent.php";
 dbconn();
 require_once(get_langfile_path());
+loggedinorreturn();
+parked();
+
 if ($enablead_advertisement != 'yes')
 	stderr($lang_adredir['std_error'], $lang_adredir['std_ad_system_disabled']);
 $id=$_GET['id'] ?? 0;
