@@ -2331,7 +2331,7 @@ function get_css_row() {
 		}
 		$Cache->cache_value('stylesheet_content', $rows, 95400);
 	}
-	return $rows[$cssid];
+	return $rows[$cssid] ?? $rows[$defcss];
 }
 function get_css_uri($file = "")
 {
@@ -6300,13 +6300,11 @@ function build_bonus_table(array $user, array $bonusResult = [], array $options 
         $baseBonusFactor = $donortimes_bonus;
     }
     $baseBonus = $bonusResult['seed_bonus'] * $baseBonusFactor;
-    $totalBonus = number_format(
-        $baseBonus
+    $totalBonus = $baseBonus
         + $haremAddition * $haremFactor
         + $bonusResult['official_bonus'] * $officialAdditionalFactor
         + $bonusResult['medal_bonus'] * $bonusResult['medal_additional_factor']
-        , 3
-    );
+    ;
 
     $rowSpan = 1;
     $hasHaremAddition = $hasOfficialAddition = $hasMedalAddition = false;

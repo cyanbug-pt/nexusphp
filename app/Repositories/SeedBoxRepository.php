@@ -333,7 +333,7 @@ class SeedBoxRepository extends BaseRepository
                 $asnObj = $reader->asn($ip);
                 return $asnObj->autonomousSystemNumber ?? 0;
             } catch (\Exception $e) {
-                do_log("ip: $ip, error: " . $e->getMessage(), 'error');
+                do_log("ip: $ip, error: " . $e->getMessage());
                 return 0;
             }
         });

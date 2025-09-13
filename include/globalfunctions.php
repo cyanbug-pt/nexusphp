@@ -1280,6 +1280,13 @@ function user_can($permission, $fail = false, $uid = 0): bool
     throw new \App\Exceptions\InsufficientPermissionException();
 }
 
+function assert_has_permission(bool $permissionCheckResult): void
+{
+    if (!$permissionCheckResult) {
+        throw new \App\Exceptions\InsufficientPermissionException();
+    }
+}
+
 
 
 function is_donor(array $userInfo): bool

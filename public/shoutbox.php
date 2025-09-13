@@ -13,7 +13,7 @@ if (isset($_GET['del']))
 	}
 }
 $where=$_GET["type"] ?? '';
-$refresh = ($CURUSER['sbrefresh'] ? $CURUSER['sbrefresh'] : 120)
+$refresh = ($CURUSER['sbrefresh'] ?? 120)
 ?>
 <html><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

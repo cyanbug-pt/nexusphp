@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Auth\Permission;
 use App\Enums\ModelEventEnum;
+use App\Events\TorrentUpdated;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\TorrentResource;
@@ -18,6 +19,7 @@ use App\Models\Peer;
 use App\Models\Processing;
 use App\Models\SearchBox;
 use App\Models\Setting;
+use App\Models\SiteLog;
 use App\Models\Snatch;
 use App\Models\Source;
 use App\Models\StaffMessage;
@@ -36,6 +38,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -1093,6 +1096,35 @@ HTML;
             $log .= ", error: " . $e->getMessage() . ", trace: " . $e->getTraceAsString();
             do_log($log, 'error');
         }
+    }
+
+    public function changeCategory(Collection $torrents, int $sectionId, int $categoryId): void
+    {
+        assert_has_permission(Permission::canManageTorrent());
+        $searchBox = SearchBox::query()->findOrFail($sectionId);
+        $category = $searchBox->categories()->findOrFail($categoryId);
+        $torrentIdArr = $torrents->pluck('id')->toArray();
+        if (empty($torrentIdArr)) {
+            do_log("torrents is empty", 'warn');
+            return;
+        }
+        $operatorId = get_user_id();
+        $siteLogArr = [];
+        foreach ($torrents as $torrent) {
+            $siteLogArr[] = [
+                'added' => now(),
+                'txt' => sprintf("torrent: %s category was set to: %s(%s)", $torrent->id, $category->name, $category->id),
+                'uid' => $operatorId,
+            ];
+        }
+        NexusDB::transaction(function () use ($torrentIdArr, $categoryId, $siteLogArr) {
+            SiteLog::query()->insert($siteLogArr);
+            Torrent::query()->whereIn('id', $torrentIdArr)->update(['category' => $categoryId]);
+        });
+        foreach ($torrents as $torrent) {
+            fire_event(ModelEventEnum::TORRENT_UPDATED, $torrent);
+        }
+        do_log("success change torrent category to $categoryId, torrent count:" . $torrents->count());
     }
 
 }

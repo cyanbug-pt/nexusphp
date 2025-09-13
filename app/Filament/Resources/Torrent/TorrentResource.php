@@ -363,10 +363,9 @@ class TorrentResource extends Resource
                         return $result;
                     })
                     ->reactive()
-                    ->afterStateUpdated(fn (callable $set) => $set('section_id', null))
                     ->required()
                 ,
-                Forms\Components\Select::make('category')
+                Forms\Components\Select::make('category_id')
                     ->label(__('searchbox.category_label'))
                     ->options(function (callable $get) {
                         $sectionId = $get('section_id');
@@ -375,19 +374,17 @@ class TorrentResource extends Resource
                         }
                         return Category::query()->where('mode', $sectionId)->pluck('name', 'id');
                     })
-                    ->reactive()
                     ->required()
                 ,
 
             ])
             ->action(function (Collection $records, array $data) {
-//                $torrentRep = new TorrentRepository();
-//                try {
-//                    $data['torrent_id'] = $record->id;
-//                    $torrentRep->approval(Auth::user(), $data);
-//                } catch (\Exception $exception) {
-//                    do_log($exception->getMessage(), 'error');
-//                }
+                $torrentRep = new TorrentRepository();
+                try {
+                    $torrentRep->changeCategory($records, $data['section_id'], $data['category_id']);
+                } catch (\Exception $exception) {
+                    do_log($exception->getMessage(), 'error');
+                }
             });
     }
 
