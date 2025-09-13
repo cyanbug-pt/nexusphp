@@ -11,6 +11,8 @@ class TokenRepository extends BaseRepository
         RoutePermissionEnum::TORRENT_VIEW->value,
         RoutePermissionEnum::TORRENT_UPLOAD->value,
         RoutePermissionEnum::USER_VIEW->value,
+        RoutePermissionEnum::BOOKMARK_STORE->value,
+        RoutePermissionEnum::BOOKMARK_DELETE->value,
     ];
 
     public static function listUserTokenPermissions(bool $format = true): array

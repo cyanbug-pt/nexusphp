@@ -17,4 +17,12 @@ return [
         'text' => '查看用戶基本信息',
         'desc' => '查看用戶基本信息',
     ],
+    'bookmark:store' => [
+        'text' => '添加收藏種子',
+        'desc' => '添加收藏的種子',
+    ],
+    'bookmark:delete' => [
+        'text' => '刪除收藏的種子',
+        'desc' => '刪除收藏的種子',
+    ],
 ];

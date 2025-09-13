@@ -9,6 +9,7 @@ use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\TorrentResource;
 use App\Models\AudioCodec;
+use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Claim;
 use App\Models\Codec;
@@ -36,6 +37,7 @@ use Carbon\Carbon;
 use Elasticsearch\Endpoints\Search;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -96,7 +98,8 @@ class TorrentRepository extends BaseRepository
         ];
         $allowFilters = [
             'title', 'category', 'source', 'medium', 'codec', 'audiocodec', 'standard', 'processing', 'team',
-            'owner', 'visible', 'added', 'size', 'sp_state', 'leechers', 'seeders', 'times_completed'
+            'owner', 'visible', 'added', 'size', 'sp_state', 'leechers', 'seeders', 'times_completed',
+            'bookmark'
         ];
         $allowSorts = ['id', 'comments', 'size', 'seeders', 'leechers', 'times_completed'];
         $apiQueryBuilder = ApiQueryBuilder::for(TorrentResource::NAME, $query, $request)
@@ -111,6 +114,18 @@ class TorrentRepository extends BaseRepository
                     $query->where(function (Builder $query) use ($title) {
                         $query->where('name', 'like', '%' . $title . '%')
                             ->orWhere('small_descr', 'like', '%' . $title . '%');
+                    });
+                }
+            })
+            ->registerCustomFilter('bookmark', function (Builder $query, Request $request) use ($user) {
+                $filterBookmark = $request->input(ApiQueryBuilder::PARAM_NAME_FILTER.".bookmark");
+                if ($filterBookmark === Bookmark::FILTER_INCLUDE) {
+                    $query->whereHas("bookmarks", function (Builder $query) use ($user) {
+                        $query->where("userid", $user->id);
+                    });
+                } elseif ($filterBookmark === Bookmark::FILTER_EXCLUDE) {
+                    $query->whereDoesntHave("bookmarks", function (Builder $query) use ($user) {
+                        $query->where("userid", $user->id);
                     });
                 }
             })

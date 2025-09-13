@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\NexusException;
+use App\Models\Bookmark;
 use App\Models\Torrent;
 use App\Models\User;
 
@@ -10,11 +11,14 @@ class BookmarkRepository extends BaseRepository
 {
     public function add(User $user, $torrentId)
     {
-        $torrent = Torrent::query()->findOrFail($torrentId);
+        $torrent = Torrent::query()->find($torrentId);
+        if (!$torrent) {
+            throw new NexusException(nexus_trans('bookmark.torrent_not_exists', ['torrent_id' => $torrentId]));
+        }
         $torrent->checkIsNormal();
         $exists = $user->bookmarks()->where('torrentid', $torrentId)->exists();
         if ($exists) {
-            throw new NexusException("torrent: $torrentId already bookmarked.");
+            throw new NexusException(nexus_trans('bookmark.torrent_already_bookmarked', ['torrent_id' => $torrentId]));
         }
         $result = $user->bookmarks()->create(['torrentid' => $torrentId]);
         return $result;
@@ -22,12 +26,15 @@ class BookmarkRepository extends BaseRepository
 
     public function remove(User $user, $torrentId)
     {
-        $torrent = Torrent::query()->findOrFail($torrentId);
-        $exists = $user->bookmarks()->where('torrentid', $torrentId)->exists();
-        if (!$exists) {
-            throw new NexusException("torrent: $torrentId has not been bookmarked.");
+        /**
+         * @var Bookmark $record
+         */
+        $record = $user->bookmarks()->where('torrentid', $torrentId)->first();
+        if (!$record) {
+            throw new NexusException(nexus_trans('bookmark.torrent_has_not_been_bookmarked', ['torrent_id' => $torrentId]));
         }
-        $result = $user->bookmarks()->where('torrentid', $torrentId)->delete();
-        return $result;
+        do_log("going to remove bookmark of torrent: $torrentId");
+        $record->delete();
+        return true;
     }
 }

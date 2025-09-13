@@ -34,7 +34,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 //        Route::resource('files', \App\Http\Controllers\FileController::class);
 //        Route::resource('thanks', \App\Http\Controllers\ThankController::class);
 //        Route::resource('snatches', \App\Http\Controllers\SnatchController::class);
-//        Route::resource('bookmarks', \App\Http\Controllers\BookmarkController::class);
 //        Route::get('search-box', [\App\Http\Controllers\TorrentController::class, 'searchBox']);
 //        Route::resource('news', \App\Http\Controllers\NewsController::class);
 //        Route::get('attend', [\App\Http\Controllers\AttendanceController::class, 'attend']);
@@ -54,6 +53,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('detail/{id}', [\App\Http\Controllers\TorrentController::class, 'show'])->middleware(ability(RoutePermissionEnum::TORRENT_VIEW));
 
         Route::get('/profile/{id?}', [\App\Http\Controllers\UserController::class, 'show'])->middleware(ability(RoutePermissionEnum::USER_VIEW));
+
+        Route::post('bookmarks', [\App\Http\Controllers\BookmarkController::class, 'store'])->middleware(ability(RoutePermissionEnum::BOOKMARK_STORE));
+        Route::post('bookmarks/delete', [\App\Http\Controllers\BookmarkController::class, 'destroy'])->middleware(ability(RoutePermissionEnum::BOOKMARK_DELETE));
 
 
     });

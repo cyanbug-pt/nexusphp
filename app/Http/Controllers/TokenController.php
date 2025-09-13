@@ -37,7 +37,7 @@ class TokenController extends Controller
             $newAccessToken = $user->createToken($request->name, $request->permissions);
             $tokenText = $newAccessToken->plainTextToken;
             $msg = nexus_trans("token.create_success_tip", ['token' => $tokenText]);
-            return $this->successJsonResource(['token' => $tokenText], $msg);
+            return $this->success(['token' => $tokenText], $msg);
         } catch (\Exception $exception) {
             return $this->fail(false, $exception->getMessage());
         }

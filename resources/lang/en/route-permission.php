@@ -17,4 +17,12 @@ return [
         'text' => 'View user basic info',
         'desc' => 'View user basic info',
     ],
+    'bookmark:store' => [
+        'text' => 'Add bookmark',
+        'desc' => 'Add bookmark',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Delete bookmark',
+        'desc' => 'Delete bookmark',
+    ],
 ];

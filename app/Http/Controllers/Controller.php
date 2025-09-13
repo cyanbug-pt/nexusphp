@@ -24,8 +24,7 @@ class Controller extends BaseController
     protected ?array $extraSettingNames = null;
 
     /**
-     * 返回成功信息，这里是旧方法，大部分情况下 $data 已经是 JsonResource
-     * 但很多地方有使用，历史原因保留不动，尽量使用 successJsonResource
+     * 返回成功信息
      *
      * @param $data
      * @param $msg
@@ -44,6 +43,7 @@ class Controller extends BaseController
     /**
      * 返回成功信息，对于不是 JsonResource 的数据，进行包装。返回的数据在 data.data 中
      *
+     * @deprecated 没有必要，已经在 api() 中添加 data 包裹，使用 success() 即可
      * @param $data
      * @param $msg
      * @return array
