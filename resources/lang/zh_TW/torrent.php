@@ -97,7 +97,7 @@ return [
     'technicalinfo_profile' => '檔次',
     'technicalinfo_format' => '格式',
     'technicalinfo_extras' => '附加內容',
-    'technicalinfo_ref_frames' => '關鍵幀',
+    'technicalinfo_ref_frames' => '參考幀',
     'technicalinfo_audio' => '音軌 #',
     'technicalinfo_subtitles' => '字幕 #',
     'promotion_time_types' => [
