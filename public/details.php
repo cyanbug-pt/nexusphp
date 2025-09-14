@@ -308,7 +308,28 @@ JS;
 
         //technical info
         if ($settingMain['enable_technical_info'] == 'yes') {
-            $technicalInfo = new \Nexus\Torrent\TechnicalInformation($row['technical_info'] ?? '');
+            $technicalData = $row['technical_info'] ?? '';
+            
+            // 判断是否为BDINFO格式
+            $isBdInfo = false;
+            if (!empty($technicalData)) {
+                $firstLine = strtok($technicalData, "\n");
+                if (strpos($firstLine, 'DISC INFO') !== false 
+				|| strpos($firstLine, 'Disc Title') !== false
+				|| strpos($firstLine, 'Disc Label') !== false
+				) {
+                    $isBdInfo = true;
+                }
+            }
+            
+            if ($isBdInfo) {
+                // 使用BdInfoExtra处理BDINFO格式
+                $technicalInfo = new \Nexus\Torrent\BdInfoExtra($technicalData);
+            } else {
+                // 使用TechnicalInformation处理MediaInfo格式
+                $technicalInfo = new \Nexus\Torrent\TechnicalInformation($technicalData);
+            }
+            
             $technicalInfoResult = $technicalInfo->renderOnDetailsPage();
             if (!empty($technicalInfoResult)) {
                 tr($lang_functions['text_technical_info'], $technicalInfoResult, 1);
