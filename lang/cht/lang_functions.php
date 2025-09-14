@@ -319,8 +319,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => '不能為空',
 	'text_invalid' => '非法',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo 來自軟件 <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>，用該軟件打開文件，語言選擇英語，點擊菜單視圖(View)->文件(Text)，在框中右鍵->全選，再右鍵->復制，粘貼到這裏來。',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo 来自軟體 <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>，用該軟體打開文件，語言選擇英語，點擊菜單視圖(View)->文件(Text)，在框中右鍵->全選，再右鍵->複製，粘貼到這裡來。
+	<br>
+	<b>&middot;</b> BDInfo 来自軟體 <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>，用該軟體打開，點擊掃描比特率(Scan Bitrates) 查看報告(View Report...)，在框中右鍵->全選，再右鍵->複製，粘貼到這裡來。
+	',
     'text_management_system' => '管理系統',
     'text_seed_points' => '做種積分',
     'spoiler_expand_collapse' => '點擊展開/收縮',

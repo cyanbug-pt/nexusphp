@@ -707,8 +707,11 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => '分鐘',
 	'row_login_secret_lifetime' => '登錄密鑰有效期',
 	'text_login_secret_lifetime_deadline' => '當前密鑰有效期至',
-	'row_enable_technical_info' => '啟用 MediaInfo',
-	'text_enable_technical_info' => "默認'否'。MediaInfo 來自軟件 <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Text 視圖的結果",
+	'row_enable_technical_info' => '啓用 MediaInfo/BDInfo',
+	'text_enable_technical_info' => '默认\'否\'。<br>
+	MediaInfo 来自軟體 <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> Text 視圖的結果	<br>
+	BDInfo 来自軟體 <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> View Reports的結果
+	',
     'row_sticky_first_level_background_color' => '一級置頂背景顏色',
     'text_sticky_first_level_background_color_note' => '一級置頂背景顏色，不設置則無背景色。',
     'row_sticky_second_level_background_color' => '二級置頂背景顏色',

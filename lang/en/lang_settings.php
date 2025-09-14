@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minute',
 	'row_login_secret_lifetime' => 'Login secret lifetime',
 	'text_login_secret_lifetime_deadline' => 'Current login secret deadline',
-	'row_enable_technical_info' => 'Enable MediaInfo',
-	'text_enable_technical_info' => "Default 'No'. MediaInfo comes from software <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Text view",
-    'row_sticky_first_level_background_color' => 'Sticky first level bg color',
+	'row_enable_technical_info' => 'Enable MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Default \'No\'. <br>
+	MediaInfo comes from software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> the result of "Text view"	<br>
+	BDInfo comes from software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> the result of "View Reports"
+	',
+	'row_sticky_first_level_background_color' => 'Sticky first level bg color',
     'text_sticky_first_level_background_color_note' => 'Sticky first level bg color, it will be none if not set.',
     'row_sticky_second_level_background_color' => 'Sticky second level bg color',
     'text_sticky_second_level_background_color_note' => 'Sticky second level bg color, it will be none if not set.',
