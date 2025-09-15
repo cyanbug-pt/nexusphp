@@ -4,8 +4,7 @@ $passkey = $_GET['passkey'] ?? $CURUSER['passkey'] ?? '';
 if (!$passkey) {
     die("require passkey");
 }
-unset($_GET['passkey']);
-$cacheKey = "nexus_rss:" . md5(http_build_query($_GET));
+$cacheKey = "nexus_rss:$passkey:" . md5(http_build_query($_GET));
 $cacheData = \Nexus\Database\NexusDB::cache_get($cacheKey);
 if ($cacheData && nexus_env('APP_ENV') != 'local') {
     do_log("rss get from cache");
