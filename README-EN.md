@@ -59,4 +59,4 @@ docker run --name my-nexusphp -e DOMAIN=xxx.com -p 80:80 xiaomlove/nexusphp:late
 ## More information
 Blog：[https://nexusphp.org](https://nexusphp.org/)  
 Documentation：[https://doc.nexusphp.org](https://doc.nexusphp.org/en/)  
-Telegram: [https://t.me/nexusphp](https://t.me/nexusphp)  
+Telegram: [https://t.me/nexusphp_dev](https://t.me/nexusphp_dev)  

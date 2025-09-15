@@ -121,7 +121,8 @@ return [
             'bulk_action_recommend' => '推荐',
             'bulk_action_sp_state' => '优惠',
             'bulk_action_hr' => 'H&R',
-            'bulk_action_change_category' => '修改分类',
+            'bulk_action_change_category' => '修改分区',
+            'bulk_action_change_category_section_help' => '注意：选择目标分区后，勾选下面的分类和子分类会将种子对应属性修改为选择的值，勾选标签则会将其附加到种子上。<br/>并且原种子身上不属于新分区的分类、子分类和标签会被移除。',
         ],
         'seed_box_record' => [
             'toggle_status' => '更改状态',

@@ -302,7 +302,7 @@ class TorrentResource extends Resource
                 })
                 ->deselectRecordsAfterCompletion();
         }
-//        $actions[] = self::getBulkActionChangeCategory();
+        $actions[] = self::getBulkActionChangeCategory();
 
         if (user_can('torrent-delete')) {
             $actions[] = Tables\Actions\DeleteBulkAction::make('bulk-delete')->using(function (Collection $records) {
@@ -348,11 +348,13 @@ class TorrentResource extends Resource
 
     private static function getBulkActionChangeCategory(): Tables\Actions\BulkAction
     {
+        $searchBoxRep = new SearchBoxRepository();
         return Tables\Actions\BulkAction::make('changeCategory')
             ->label(__('admin.resources.torrent.bulk_action_change_category'))
             ->form([
                 Forms\Components\Select::make('section_id')
                     ->label(__('searchbox.section'))
+                    ->helperText(new HtmlString(__('admin.resources.torrent.bulk_action_change_category_section_help')))
                     ->options(function() {
                         $rep = new SearchBoxRepository();
                         $list = $rep->listSections(false);
@@ -365,16 +367,15 @@ class TorrentResource extends Resource
                     ->reactive()
                     ->required()
                 ,
-                Forms\Components\Select::make('category_id')
-                    ->label(__('searchbox.category_label'))
-                    ->options(function (callable $get) {
-                        $sectionId = $get('section_id');
-                        if (!$sectionId) {
-                            return [];
-                        }
-                        return Category::query()->where('mode', $sectionId)->pluck('name', 'id');
+                $searchBoxRep->buildSearchBoxFormSchema(SearchBox::getBrowseSearchBox())
+                    ->hidden(function (Forms\Get $get) {
+                        return $get('section_id') != SearchBox::getBrowseMode();
                     })
-                    ->required()
+                ,
+                $searchBoxRep->buildSearchBoxFormSchema(SearchBox::getSpecialSearchBox())
+                    ->hidden(function (Forms\Get $get) {
+                        return $get('section_id') != SearchBox::getSpecialMode();
+                    })
                 ,
 
             ])

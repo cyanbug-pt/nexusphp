@@ -225,9 +225,19 @@ class SearchBox extends NexusModel
         return Setting::get('main.browsecat');
     }
 
+    public static function getBrowseSearchBox()
+    {
+        return self::query()->find(self::getBrowseMode());
+    }
+
     public static function getSpecialMode()
     {
         return Setting::get('main.specialcat');
+    }
+
+    public static function getSpecialSearchBox()
+    {
+        return self::query()->find(self::getSpecialMode());
     }
 
     public function isSectionBrowse(): bool
