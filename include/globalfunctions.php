@@ -542,8 +542,6 @@ function api(...$args)
     }
     if ($data instanceof \Illuminate\Http\Resources\Json\JsonResource) {
         $data = $data->response()->getData(true);
-    } else {
-        $data = ['data' => $data];
     }
 //    dd($data);
     $time = (float)number_format(microtime(true) - nexus()->getStartTimestamp(), 3);
