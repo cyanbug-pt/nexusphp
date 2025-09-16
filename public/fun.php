@@ -187,9 +187,14 @@ if ($action == 'ban')
         $subject = nexus_trans("fun.msg_fun_item_banned", [], $locale);
         $msg = nexus_trans("fun.msg_your_fun_item", [], $locale).$title.nexus_trans("fun.msg_is_ban_by", [], $locale).$CURUSER['username'].nexus_trans("fun.msg_reason", [], $locale).$banreason;
 
-        sql_query("INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).", ".$arr['userid'].", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
-		$Cache->delete_value('user_'.$arr['userid'].'_unread_message_count');
-		$Cache->delete_value('user_'.$arr['userid'].'_inbox_count');
+		\App\Models\Message::add([
+			'sender' => 0,
+			'receiver' => $arr['userid'],
+			'subject' => $subject,
+			'added' => now(),
+			'msg' => $msg,
+		]);
+
 		write_log("Fun item $id ($title) was banned by {$CURUSER['username']}. Reason: $banreason", 'normal');
 		stderr($lang_fun['std_success'], $lang_fun['std_fun_item_banned']);
 	}
@@ -204,7 +209,15 @@ function funreward($funvote, $totalvote, $title, $posterid, $bonus)
 	$locale = get_user_lang($posterid);
     $subject = nexus_trans("fun.msg_fun_item_reward", [], $locale);
     $msg = $funvote.nexus_trans("fun.msg_out_of", [], $locale).$totalvote.nexus_trans("fun.msg_people_think", [], $locale).$title.nexus_trans("fun.msg_is_fun", [], $locale).$bonus.nexus_trans("fun.msg_bonus_as_reward", [], $locale);
-    $sql = "INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).",". $posterid. ",'" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")";
+
+	\App\Models\Message::add([
+			'sender' => 0,
+			'receiver' => $posterid,
+			'subject' => $subject,
+			'added' => now(),
+			'msg' => $msg,
+	]);
+
 	sql_query($sql) or sqlerr(__FILE__, __LINE__);
 	$Cache->delete_value('user_'.$posterid.'_unread_message_count');
 	$Cache->delete_value('user_'.$posterid.'_inbox_count');
@@ -276,10 +289,13 @@ if ($action == 'vote')
                     $locale = get_user_locale($arr['userid']);
                     $subject = nexus_trans("fun.msg_fun_item_dull", [], $locale);
                     $msg = ($totalvote - $funvote).nexus_trans("fun.msg_out_of", [], $locale).$totalvote.nexus_trans("fun.msg_people_think", [], $locale).$arr['title'].nexus_trans("fun.msg_is_dull", [], $locale);
-                    $sql = "INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).",". $arr['userid'].", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")";
-					sql_query($sql) or sqlerr(__FILE__, __LINE__);
-					$Cache->delete_value('user_'.$arr['userid'].'_unread_message_count');
-					$Cache->delete_value('user_'.$arr['userid'].'_inbox_count');
+                    \App\Models\Message::add([
+                        'sender' => 0,
+                        'receiver' => $arr['userid'],
+                        'subject' => $subject,
+                        'added' => now(),
+                        'msg' => $msg,
+                    ]);
 				}
 			}
 		}

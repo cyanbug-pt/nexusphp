@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "请在",
     'msg_hours_otherwise' => "小时内上传通过候选的内容。否则该候选将被删除。",
     'msg_reason_is' => "原因：",
+    'msg_new_offer_subject' => "有新的候选被添加",
+    'msg_new_offer_msg' => "用户 :username 添加了新的候选 :offername",
 ];
