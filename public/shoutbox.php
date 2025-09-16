@@ -100,14 +100,14 @@ else
 }
 }
 
-$limit = ($CURUSER['sbnum'] ? $CURUSER['sbnum'] : 70);
+$limit = ($CURUSER['sbnum'] ?? 70);
 if ($where == "helpbox" && $showhelpbox_main == 'yes') {
     //request helpbox, not require login
     $sql = "SELECT * FROM shoutbox WHERE type='hb' ORDER BY date DESC LIMIT ".$limit;
-} elseif ($where == "shoutbox" && $CURUSER && ($CURUSER['hidehb'] == 'yes' || $showhelpbox_main != 'yes')) {
+} elseif ($where == "shoutbox" && isset($CURUSER) && ($CURUSER['hidehb'] == 'yes' || $showhelpbox_main != 'yes')) {
     //request shoutbox, exclude helpbox content, require login
     $sql = "SELECT * FROM shoutbox WHERE type='sb' ORDER BY date DESC LIMIT ".$limit;
-} elseif ($CURUSER) {
+} elseif (isset($CURUSER)) {
     $sql = "SELECT * FROM shoutbox ORDER BY date DESC LIMIT ".$limit;
 } else {
     die("<h1>".$lang_shoutbox['std_access_denied']."</h1>"."<p>".$lang_shoutbox['std_access_denied_note']."</p></body></html>");
