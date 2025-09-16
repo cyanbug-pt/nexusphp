@@ -226,7 +226,13 @@ if (user_can('delownsub'))
 						$msg = $CURUSER['username'].nexus_trans("subtitle.msg_deleted_your_sub", [], $locale). $a['title'].($reason != "" ? nexus_trans("subtitle.msg_reason_is", [], $locale).$reason : "");
 						$subject = nexus_trans("subtitle.msg_your_sub_deleted", [], $locale);
 						$time = date("Y-m-d H:i:s");
-						sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, $a[uppedby], '" . $time . "', " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
+						\App\Models\Message::add([
+							'sender' => 0,
+							'receiver' => $a['uppedby'],
+							'added' => now(),
+							'msg' => $msg,
+							'subject' => $subject,
+						]);
 					}
 					$res = sql_query("SELECT lang_name from language WHERE sub_lang=1 AND id = " . sqlesc($a["lang_id"])) or sqlerr(__FILE__, __LINE__);
 					$arr = mysql_fetch_assoc($res);

@@ -194,7 +194,15 @@ if ($action == "takeanswer") {
 
     can_access_staff_message($answeringto);
 
-sql_query("INSERT INTO messages (sender, receiver, added, msg) VALUES($userid, $receiver, $added, $message)") or sqlerr(__FILE__, __LINE__);
+$subject = \App\Models\StaffMessage::query()->findOrFail($answeringto)->toArray()['subject'];
+    
+\App\Models\Message::add([
+    'sender' => $userid,
+    'receiver' => $receiver,
+    'subject' => $subject,
+    'added' => now(),
+    'msg' => $msg,
+]);
 
 sql_query("UPDATE staffmessages SET answer=$message, answered='1', answeredby='$userid' WHERE id=$answeringto") or sqlerr(__FILE__, __LINE__);
 $Cache->delete_value('staff_new_message_count');

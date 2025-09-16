@@ -87,9 +87,17 @@ if ($_SERVER["REQUEST_METHOD"] != "POST")
 	}
 
 	$subject = trim($_POST['subject']);
-	sql_query("INSERT INTO messages (sender, receiver, added, msg, subject, saved, location) VALUES(" . sqlesc($CURUSER["id"]) . ", ".sqlesc($receiver).", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ", " . sqlesc($subject) . ", " . sqlesc($save) . ", 1)") or sqlerr(__FILE__, __LINE__);
-	$Cache->delete_value('user_'.$receiver.'_unread_message_count');
-	$Cache->delete_value('user_'.$receiver.'_inbox_count');
+
+	\App\Models\Message::add([
+		'sender' => $CURUSER["id"],
+		'receiver' => $receiver,
+		'msg' => $msg,
+		'subject' => $subject,
+		'added' => now(),
+		'saved' => $save,
+		'location' => 1,
+	]);
+
 	$Cache->delete_value('user_'.$CURUSER["id"].'_outbox_count');
 
 	$msgid=mysql_insert_id();

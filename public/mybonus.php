@@ -770,13 +770,20 @@ if ($action == "exchange") {
 
 				//===send message
                 $locale = get_user_locale($useridgift);
-				$subject = sqlesc(nexus_trans("bonus.msg_someone_loves_you", [], $locale));
+				$subject = nexus_trans("bonus.msg_someone_loves_you", [], $locale);
 				$added = sqlesc(date("Y-m-d H:i:s"));
 				$msg = nexus_trans("bonus.msg_you_have_been_given", [], $locale).$points2.nexus_trans("bonus.msg_after_tax", [], $locale).$points2receiver.nexus_trans("bonus.msg_karma_points_by", [], $locale).$CURUSER['username'];
 				if ($message)
+				{
 					$msg .= "\n".nexus_trans("bonus.msg_personal_message_from", [], $locale).$CURUSER['username'].nexus_trans("bonus.msg_colon", [], $locale).$message;
-				$msg = sqlesc($msg);
-				sql_query("INSERT INTO messages (sender, subject, receiver, msg, added) VALUES(0, $subject, $useridgift, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+				}
+				\App\Models\Message::add([
+					'sender' => 0,
+					'subject' => $subject,
+					'added' => now(),
+					'msg' => $msg,
+					'receiver' => $useridgift,
+				]);
 				$usernamegift = unesc($_POST["username"]);
                 nexus_redirect("" . get_protocol_prefix() . "$BASEURL/mybonus.php?do=transfer");
 			}

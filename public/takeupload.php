@@ -481,7 +481,13 @@ if ($is_offer)
 		//$some_variable .= "(0, $row[userid], '" . date("Y-m-d H:i:s") . "', " . sqlesc($pn_msg) . ")";
 
 		//=== use this if you DO have subject in your PMs
-		sql_query("INSERT INTO messages (sender, subject, receiver, added, msg) VALUES (0, ".sqlesc($subject).", {$row['userid']}, ".sqlesc(date("Y-m-d H:i:s")).", " . sqlesc($pn_msg) . ")") or sqlerr(__FILE__, __LINE__);
+		\App\Models\Message::add([
+			'sender' => 0,
+			'subject' => $subject,
+			'receiver' => $row['userid'],
+			'added' => now(),
+			'msg' => $pn_msg,
+		]);
 		//=== use this if you do NOT have subject in your PMs
 		//sql_query("INSERT INTO messages (sender, receiver, added, msg) VALUES ".$some_variable."") or sqlerr(__FILE__, __LINE__);
 		//===end

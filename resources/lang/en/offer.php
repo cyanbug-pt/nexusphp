@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Please upload the offer within ",
     'msg_hours_otherwise' => " hours. Otherwise the offer would be deleted.",
     'msg_reason_is' => "The reason: ",
+    'msg_new_offer_subject' => "A new offer has been added",
+    'msg_new_offer_msg' => "User :username has added a new offer :offername",
 ];
