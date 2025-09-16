@@ -42,4 +42,5 @@ return [
         'value' => 'Trade value',
         'new_total_value' => 'Post-trade value',
     ],
+    'exclude_seeding_bonus' => 'Exclude seeding bonus',
 ];

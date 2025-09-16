@@ -88,6 +88,16 @@ class BonusLogResource extends Resource
                     ->options(BonusLogs::listStaticProps(BonusLogs::$businessTypes, 'bonus-log.business_types', true))
                     ->label(__('bonus-log.fields.business_type'))
                 ,
+                Tables\Filters\Filter::make('exclude_seeding_bonus')
+                    ->toggle()
+                    ->label(__('bonus-log.exclude_seeding_bonus'))
+                    ->query(function (Builder $query, array $data) {
+                        if ($data['isActive']) {
+                            $query->whereNotIn("business_type", BonusLogs::$businessTypeBonus);
+                        }
+                    })
+                    ->default()
+                ,
             ])
             ->actions([
 //                Tables\Actions\EditAction::make(),

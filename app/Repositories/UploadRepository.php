@@ -440,7 +440,7 @@ class UploadRepository extends BaseRepository
     private function getSubCategoriesAndTags(Request $request, Category $category): array
     {
         $searchBoxRep = new SearchBoxRepository();
-        $sections = $searchBoxRep->listSections()->keyBy('id');
+        $sections = $searchBoxRep->listSections(SearchBox::listAllSectionId())->keyBy('id');
         if (!$sections->has($category->mode)) {
             throw new NexusException(nexus_trans('upload.invalid_section'));
         }

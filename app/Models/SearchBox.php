@@ -158,8 +158,8 @@ class SearchBox extends NexusModel
         }
         $table = self::$taxonomies[$torrentField]['table'];
         return NexusDB::table($table)->where(function (Builder $query) use ($searchBox) {
-            return $query->where('mode', $searchBox->id)->orWhere('mode', 0);
-        })->orderBy('sort_index')->orderBy('id')->get();
+            return $query->whereIn('mode', [$searchBox->id, 0]);
+        })->orderBy('sort_index', 'desc')->orderBy('id', 'desc')->get();
     }
 
     public static function listModeOptions(): array
@@ -301,8 +301,8 @@ class SearchBox extends NexusModel
                 $this->setRelation(
                     $relationName,
                     $modelName::query()->whereIn('mode', [$this->getKey(), 0])
-                        ->orderBy('sort_index')
-                        ->orderBy('id')
+                        ->orderBy('sort_index', 'desc')
+                        ->orderBy('id', 'desc')
                         ->get()
                 );
             }
@@ -365,6 +365,24 @@ class SearchBox extends NexusModel
             $results = implode($glue, $results);
         }
         return $results;
+    }
+
+    public static function listAuthorizedSectionId(): array
+    {
+        $modeIds = [self::getBrowseMode()];
+        if (self::isSpecialEnabled() && Permission::canViewSpecialSection()) {
+            $modeIds[] = self::getSpecialMode();
+        }
+        return $modeIds;
+    }
+
+    public static function listAllSectionId(): array
+    {
+        $modeIds = [self::getBrowseMode()];
+        if (self::isSpecialEnabled()) {
+            $modeIds[] = self::getSpecialMode();
+        }
+        return $modeIds;
     }
 
 }

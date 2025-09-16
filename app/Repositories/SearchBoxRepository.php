@@ -242,13 +242,9 @@ class SearchBoxRepository extends BaseRepository
         return Category::query()->whereIn('id', $idArr)->delete();
     }
 
-    public function listSections($withCategoryAndTags = true)
+    public function listSections($id, $withCategoryAndTags = true)
     {
-        $modeIds = [SearchBox::getBrowseMode()];
-        if (SearchBox::isSpecialEnabled() && Permission::canUploadToSpecialSection()) {
-            $modeIds[] = SearchBox::getSpecialMode();
-        }
-        $searchBoxList = SearchBox::query()->with($withCategoryAndTags ? ['categories'] : [])->find($modeIds);
+        $searchBoxList = SearchBox::query()->with($withCategoryAndTags ? ['categories'] : [])->find($id);
         if ($withCategoryAndTags) {
             foreach ($searchBoxList as $searchBox) {
                 if ($searchBox->showsubcat) {
@@ -260,7 +256,7 @@ class SearchBoxRepository extends BaseRepository
         return $searchBoxList;
     }
 
-    public function buildSearchBoxFormSchema(SearchBox $searchBox, string $namePrefix = ""): Forms\Components\Section
+    public function buildSearchBoxFormSchema(SearchBox $searchBox, string $namePrefix): Forms\Components\Section
     {
         $lang = get_langfolder_cookie();
         $heading = $searchBox->section_name[$lang] ?? nexus_trans('searchbox.sections.browse');

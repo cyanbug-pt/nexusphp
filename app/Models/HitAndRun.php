@@ -113,6 +113,10 @@ class HitAndRun extends NexusModel
             do_log(sprintf('[INVALID_CATEGORY], Torrent: %s', $this->torrent_id), 'error');
             return '---';
         }
+        if (!$this->snatch) {
+            do_log("hit and run: {$this->id} no snatch", 'warning');
+            return '---';
+        }
         $seedTimeMinimum = HitAndRun::getConfig('seed_time_minimum', $searchBoxId);
         $diffInSeconds = 3600 * $seedTimeMinimum - $this->snatch->seedtime;
         return mkprettytime($diffInSeconds);

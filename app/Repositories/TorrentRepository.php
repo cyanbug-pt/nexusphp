@@ -1113,15 +1113,54 @@ HTML;
         }
     }
 
-    public function changeCategory(Collection $torrents, int $sectionId, int $categoryId): void
+    public function changeCategory(Collection $torrents, int $sectionId, array $specificSubCategoryAndTags): void
     {
         assert_has_permission(Permission::canManageTorrent());
-        $searchBox = SearchBox::query()->findOrFail($sectionId);
-        $category = $searchBox->categories()->findOrFail($categoryId);
         $torrentIdArr = $torrents->pluck('id')->toArray();
         if (empty($torrentIdArr)) {
             do_log("torrents is empty", 'warn');
             return;
+        }
+        $torrentIdStr = implode(',', $torrentIdArr);
+        do_log("torrentIdStr: $torrentIdStr, sectionId: $sectionId");
+        $searchBoxRep = new SearchBoxRepository();
+        $sections = $searchBoxRep->listSections(SearchBox::listAllSectionId(), true)->keyBy('id');
+        if (!$sections->has($sectionId)) {
+            throw new NexusException(nexus_trans('upload.invalid_section'));
+        }
+        /**
+         * @var $section SearchBox
+         */
+        $section = $sections->get($sectionId);
+        $validCategoryIdArr = $section->categories->pluck('id')->toArray();
+        if (!empty($specificSubCategoryAndTags['category']) && !in_array($specificSubCategoryAndTags['category'], $validCategoryIdArr)) {
+            throw new NexusException(nexus_trans('upload.invalid_category'));
+        }
+        $baseUpdateQuery = Torrent::query()->whereIn('id', $torrentIdArr);
+        $updateCategoryQuery = $baseUpdateQuery->clone();
+        if (!empty($validCategoryId)) {
+            $updateCategoryQuery->whereNotIn('category', $validCategoryIdArr);
+        }
+        $updateCategoryResult = $updateCategoryQuery->update(['category' => 0]);
+        do_log(sprintf("update category = 0 when category not in: %s, result: %s", implode(', ', $validCategoryIdArr), $updateCategoryResult));
+
+        foreach (SearchBox::$taxonomies as $name => $info) {
+            $relationName = "taxonomy_{$name}";
+            $relation = $section->{$relationName};
+            if (empty($specificSubCategoryAndTags[$name])) {
+                continue;
+            }
+            //有指定，看是否有效
+            if (!$relation) {
+                do_log("searchBox: {$section->id} no relation of $name");
+                throw new NexusException(nexus_trans('upload.not_supported_sub_category_field', ['field' => $name]));
+            }
+            $validIdArr = $relation->pluck('id')->toArray();
+            if (!in_array($specificSubCategoryAndTags[$name], $validIdArr)) {
+                do_log("taxonomy {$name}, specific: {$specificSubCategoryAndTags[$name]} not in validIdArr: " . implode(', ', $validIdArr));
+                throw new NexusException(nexus_trans('upload.not_supported_sub_category_field', ['field' => $name]));
+            }
+
         }
         $operatorId = get_user_id();
         $siteLogArr = [];
@@ -1139,7 +1178,7 @@ HTML;
         foreach ($torrents as $torrent) {
             fire_event(ModelEventEnum::TORRENT_UPDATED, $torrent);
         }
-        do_log("success change torrent category to $categoryId, torrent count:" . $torrents->count());
+        do_log("success change to section $sectionId, torrent count:" . $torrents->count());
     }
 
 }

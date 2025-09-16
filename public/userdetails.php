@@ -501,16 +501,17 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
             ->orderBy("id", "desc")
             ->limit(20)
             ->get()
-            ->map(fn ($item) => sprintf("%s - %s", $item->created_at->format("Y-m-d"), $item->content))
-            ->implode("content", "\n")
+            ->map(fn ($item) => sprintf("[%s] %s", $item->created_at->format("Y-m-d"), $item->content))
+            ->implode("\n")
         ;
 		tr($lang_userdetails['row_comment'], "<textarea cols=\"60\" rows=\"6\" name=\"modcomment\">".$modcomment."</textarea>", 1);
         $bonuscomment = \App\Models\BonusLogs::query()
             ->where("uid", $user["id"])
+            ->whereNotIn("business_type", \App\Models\BonusLogs::$businessTypeBonus)
             ->orderBy("id", "desc")
             ->limit(20)
             ->get()
-            ->map(fn ($item) => sprintf("%s - %s", $item->created_at->format("Y-m-d"), $item->comment))
+            ->map(fn ($item) => sprintf("[%s] %s", $item->created_at->format("Y-m-d"), $item->comment))
             ->implode("\n")
         ;
 		tr($lang_userdetails['row_seeding_karma'], "<textarea cols=\"60\" rows=\"6\" name=\"bonuscomment\" readonly=\"readonly\">".$bonuscomment."</textarea>", 1);

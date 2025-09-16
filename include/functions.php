@@ -6300,25 +6300,24 @@ function build_bonus_table(array $user, array $bonusResult = [], array $options 
         $baseBonusFactor = $donortimes_bonus;
     }
     $baseBonus = $bonusResult['seed_bonus'] * $baseBonusFactor;
-    $totalBonus = $baseBonus
-        + $haremAddition * $haremFactor
-        + $bonusResult['official_bonus'] * $officialAdditionalFactor
-        + $bonusResult['medal_bonus'] * $bonusResult['medal_additional_factor']
-    ;
+    $totalBonus = $baseBonus;
 
     $rowSpan = 1;
     $hasHaremAddition = $hasOfficialAddition = $hasMedalAddition = false;
     if ($haremFactor > 0) {
         $rowSpan++;
         $hasHaremAddition = true;
+        $totalBonus +=  $haremAddition * $haremFactor;
     }
     if ($officialAdditionalFactor > 0 && $officialTag) {
         $rowSpan++;
         $hasOfficialAddition = true;
+        $totalBonus += $bonusResult['official_bonus'] * $officialAdditionalFactor;
     }
     if ($bonusResult['medal_additional_factor'] > 0) {
         $rowSpan++;
         $hasMedalAddition = true;
+        $totalBonus += $bonusResult['medal_bonus'] * $bonusResult['medal_additional_factor'];
     }
 
     $table = sprintf('<table cellpadding="5" style="%s">', $options['table_style'] ?? '');

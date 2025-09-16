@@ -44,4 +44,5 @@ return [
         'value' => '交易值',
         'new_total_value' => '交易后值',
     ],
+    'exclude_seeding_bonus' => '不包含做种魔力',
 ];

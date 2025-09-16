@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Repositories\SearchBoxRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TorrentRepository;
+use Elasticsearch\Endpoints\Search;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Pages\Actions\Action;
@@ -302,7 +303,7 @@ class TorrentResource extends Resource
                 })
                 ->deselectRecordsAfterCompletion();
         }
-        $actions[] = self::getBulkActionChangeCategory();
+//        $actions[] = self::getBulkActionChangeCategory();
 
         if (user_can('torrent-delete')) {
             $actions[] = Tables\Actions\DeleteBulkAction::make('bulk-delete')->using(function (Collection $records) {
@@ -357,7 +358,7 @@ class TorrentResource extends Resource
                     ->helperText(new HtmlString(__('admin.resources.torrent.bulk_action_change_category_section_help')))
                     ->options(function() {
                         $rep = new SearchBoxRepository();
-                        $list = $rep->listSections(false);
+                        $list = $rep->listSections(SearchBox::listAllSectionId(), false);
                         $result = [];
                         foreach ($list as $section) {
                             $result[$section->id] = $section->displaySectionName;
@@ -367,12 +368,12 @@ class TorrentResource extends Resource
                     ->reactive()
                     ->required()
                 ,
-                $searchBoxRep->buildSearchBoxFormSchema(SearchBox::getBrowseSearchBox())
+                $searchBoxRep->buildSearchBoxFormSchema(SearchBox::getBrowseSearchBox(), 'section_info')
                     ->hidden(function (Forms\Get $get) {
                         return $get('section_id') != SearchBox::getBrowseMode();
                     })
                 ,
-                $searchBoxRep->buildSearchBoxFormSchema(SearchBox::getSpecialSearchBox())
+                $searchBoxRep->buildSearchBoxFormSchema(SearchBox::getSpecialSearchBox(), 'section_info')
                     ->hidden(function (Forms\Get $get) {
                         return $get('section_id') != SearchBox::getSpecialMode();
                     })
@@ -381,8 +382,9 @@ class TorrentResource extends Resource
             ])
             ->action(function (Collection $records, array $data) {
                 $torrentRep = new TorrentRepository();
+                $newSectionId = $data['section_id'];
                 try {
-                    $torrentRep->changeCategory($records, $data['section_id'], $data['category_id']);
+                    $torrentRep->changeCategory($records, $newSectionId, $data['section_info']['section'][$newSectionId]);
                 } catch (\Exception $exception) {
                     do_log($exception->getMessage(), 'error');
                 }

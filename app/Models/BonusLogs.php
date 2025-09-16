@@ -96,6 +96,14 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => ['text' => 'Seeding medal addition'],
     ];
 
+    public static array $businessTypeBonus = [
+        self::BUSINESS_TYPE_SEEDING_BASIC,
+        self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION,
+        self::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION,
+        self::BUSINESS_TYPE_SEEDING_HAREM_ADDITION,
+        self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION
+    ];
+
     public function getBusinessTypeTextAttribute()
     {
         return nexus_trans('bonus-log.business_types.' . $this->business_type);
