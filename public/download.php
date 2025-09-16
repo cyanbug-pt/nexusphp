@@ -91,7 +91,7 @@ if ($CURUSER['downloadpos']=="no") {
 $res = sql_query("SELECT torrents.name, torrents.filename, torrents.save_as, torrents.size, torrents.owner, torrents.banned, torrents.approval_status, torrents.price, categories.mode as search_box_id FROM torrents left join categories on torrents.category = categories.id WHERE torrents.id = ".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 $row = mysql_fetch_assoc($res);
 if (!$row) {
-    do_log("[TORRENT_NOT_EXISTS_IN_DATABASE] $id", 'error');
+    do_log("[TORRENT_NOT_EXISTS_IN_DATABASE] $id");
     httperr();
 }
 $fn = getFullDirectory("$torrent_dir/$id.torrent");

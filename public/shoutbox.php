@@ -25,7 +25,7 @@ $refresh = ($CURUSER['sbrefresh'] ?? 120)
 <script src="js/curtain_imageresizer.js" type="text/javascript"></script><style type="text/css">body {overflow-y:scroll; overflow-x: hidden}</style>
 <?php
 print(get_style_addicode());
-$startcountdown = "startcountdown(".$CURUSER['sbrefresh'].")";
+$startcountdown = "startcountdown(".$refresh.")";
 ?>
 <script type="text/javascript">
 //<![CDATA[
