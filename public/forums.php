@@ -421,8 +421,8 @@ if ($action == "post")
 		sql_query("UPDATE posts SET body=".sqlesc($body).", editdate=".sqlesc($date).", editedby=".sqlesc($CURUSER['id'])." WHERE id=".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 		$Cache->delete_value('post_'.$postid.'_content');
         //send pm
-        $postUrl = sprintf('[url=forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $id, $id, $topicInfo->subject);
-        if ($postInfo->userid != $CURUSER['id']) {
+        $postUrl = sprintf('[url=[siteurl]forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $id, $id, $topicInfo->subject);
+        if (!empty($postInfo->userid) && $postInfo->userid != $CURUSER['id']) {
             $receiver = $postInfo->user;
             $locale = $receiver->locale;
             $notify = [
@@ -432,9 +432,7 @@ if ($action == "post")
                 'msg' => nexus_trans('forum.post.edited_notify_body', ['topic_subject' => $postUrl, 'editor' => $CURUSER['username']], $locale),
                 'added' => now(),
             ];
-            \App\Models\Message::query()->insert($notify);
-            \Nexus\Database\NexusDB::cache_del("user_{$postInfo->userid}_unread_message_count");
-            \Nexus\Database\NexusDB::cache_del("user_{$postInfo->userid}_inbox_count");
+            \App\Models\Message::add($notify);
         }
 	}
 	else
@@ -470,7 +468,7 @@ if ($action == "post")
 		//send pm
         $topicInfo = \App\Models\Topic::query()->findOrFail($topicid);
 		$postInfo = \App\Models\Post::query()->findOrFail($quotepostid);
-        $postUrl = sprintf('[url=forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $postid, $postid, $topicInfo->subject);
+        $postUrl = sprintf('[url=[siteurl]forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $postid, $postid, $topicInfo->subject);
 
 		if ($type == 'reply') {
 			/** @var \App\Models\User $receiver */
@@ -486,9 +484,7 @@ if ($action == "post")
 						'msg' => nexus_trans('forum.topic.replied_notify_body', ['topic_subject' => $postUrl], $locale),
 						'added' => now(),
 					];
-					\App\Models\Message::query()->insert($notify);
-					\Nexus\Database\NexusDB::cache_del("user_{$topicInfo->userid}_unread_message_count");
-					\Nexus\Database\NexusDB::cache_del("user_{$topicInfo->userid}_inbox_count");
+                    \App\Models\Message::add($notify);
 				}
 			}
 
@@ -504,9 +500,7 @@ if ($action == "post")
 						'msg' => nexus_trans('forum.reply.replied_notify_body', ['topic_subject' => $postUrl, 'replyer' => $CURUSER['username']], $locale),
 						'added' => now(),
 					];
-					\App\Models\Message::query()->insert($notify);
-					\Nexus\Database\NexusDB::cache_del("user_{$postInfo->userid}_unread_message_count");
-					\Nexus\Database\NexusDB::cache_del("user_{$postInfo->userid}_inbox_count");
+					\App\Models\Message::add($notify);
 				}				
 			}
         }
