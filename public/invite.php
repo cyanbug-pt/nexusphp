@@ -164,7 +164,7 @@ JS;
         } else {
             list($pagertop, $pagerbottom, $limit) = pager($pageSize, $number, "?id=$id&menu=$menuSelected&");
             $haremAdditionFactor = (float)get_setting('bonus.harem_addition');
-            $ret = sql_query("SELECT id, username, email, uploaded, downloaded, status, warned, enabled, donor, email, seed_points_per_hour, seeding_torrent_count, seeding_torrent_size, seed_points_per_hour, last_announce_at FROM users WHERE $whereStr $limit") or sqlerr();
+            $ret = sql_query("SELECT id, username, email, uploaded, downloaded, status, warned, enabled, donor, email, seed_points_per_hour, seeding_torrent_count, seeding_torrent_size, last_announce_at FROM users WHERE $whereStr $limit") or sqlerr();
             $num = mysql_num_rows($ret);
 
             print("<tr>
