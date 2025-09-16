@@ -115,18 +115,33 @@ if ($action == "edituser")
             do_log($modifyLog, "alert");
             $userModifyLogs[] = $modifyLog;
             $locale = get_user_locale($userid);
-			$subject = sqlesc(nexus_trans("user.msg_email_change", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_email_changed_from", [], $locale).$arr['email'].nexus_trans("user.msg_to_new", [], $locale) . $email .nexus_trans("user.msg_by", [], $locale).$CURUSER['username']);
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+			$subject = nexus_trans("user.msg_email_change", [], $locale);
+			$msg = nexus_trans("user.msg_your_email_changed_from", [], $locale).$arr['email'].nexus_trans("user.msg_to_new", [], $locale) . $email .nexus_trans("user.msg_by", [], $locale).$CURUSER['username'];
+
+			\App\Models\Message::add([
+			    'sender' => 0,
+			    'receiver' => $userid,
+			    'subject' => $subject,
+			    'msg' => $msg,
+			    'added' => now(),
+			]);
 		}
 		if ($arr['username'] != $username){
 			$updateset[] = "username = " . sqlesc($username);
 //			$modcomment = date("Y-m-d") . " - Username changed from {$arr['username']} to $username by {$CURUSER['username']}.\n". $modcomment;
 			$userModifyLogs[] = "Username changed from {$arr['username']} to $username by {$CURUSER['username']}";
 
-            $subject = sqlesc(nexus_trans("user.msg_username_change", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_username_changed_from", [], $locale).$arr['username'].nexus_trans("user.msg_to_new", [], $locale) . $username .nexus_trans("user.msg_by", [], $locale).$CURUSER['username']);
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+            $subject = nexus_trans("user.msg_username_change", [], $locale);
+			$msg = nexus_trans("user.msg_your_username_changed_from", [], $locale).$arr['username'].nexus_trans("user.msg_to_new", [], $locale) . $username .nexus_trans("user.msg_by", [], $locale).$CURUSER['username'];
+
+			\App\Models\Message::add([
+			    'sender' => 0,
+			    'receiver' => $userid,
+			    'subject' => $subject,
+			    'msg' => $msg,
+			    'added' => now(),
+			]);
+
 			$changeLog = [
 			    'uid' => $arr['id'],
 			    'operator' => $CURUSER['username'],
@@ -187,10 +202,18 @@ if ($action == "edituser")
 		$updateset[] = "donoruntil = " . sqlesc($donoruntil);
 
 		if (($donor != $arr['donor']) && (($donor == 'yes' && $donoruntil && $donoruntil >= date('Y-m-d H:i:s')) || ($donor == 'no'))) {
-            $subject = sqlesc(nexus_trans("user.msg_your_donor_status_changed", [], $locale));
-            $msg = sqlesc(nexus_trans("user.msg_donor_status_changed_by", [], $locale).$CURUSER['username']);
+            $subject = nexus_trans("user.msg_your_donor_status_changed", [], $locale);
+            $msg = nexus_trans("user.msg_donor_status_changed_by", [], $locale).$CURUSER['username'];
             $added = sqlesc(date("Y-m-d H:i:s"));
-            sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+
+			\App\Models\Message::add([
+			    'sender' => 0,
+			    'receiver' => $userid,
+			    'subject' => $subject,
+			    'msg' => $msg,
+			    'added' => now(),
+			]);
+
 //            $modcomment = date("Y-m-d") . " - donor status changed by {$CURUSER['username']}. Current donor status: $donor \n". $modcomment;
             $userModifyLogs[] = "donor status changed by {$CURUSER['username']}. Current donor status: $donor";
         }
@@ -233,10 +256,18 @@ if ($action == "edituser")
 		$updateset[] = "vip_added = ".sqlesc($vip_added);
 		if ($vip_added == 'yes')
 			$updateset[] = "vip_until = ".sqlesc($vip_until);
-		$subject = sqlesc(nexus_trans("user.msg_your_vip_status_changed", [], $locale));
-		$msg = sqlesc(nexus_trans("user.msg_vip_status_changed_by", [], $locale).$CURUSER['username']);
+		$subject = nexus_trans("user.msg_your_vip_status_changed", [], $locale);
+		$msg = nexus_trans("user.msg_vip_status_changed_by", [], $locale).$CURUSER['username'];
 		$added = sqlesc(date("Y-m-d H:i:s"));
-		sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+
+		\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+		]);
+
 //		$modcomment = date("Y-m-d") . " - VIP status changed by {$CURUSER['username']}. VIP added: ".$vip_added.($vip_added == 'yes' ? "; VIP until: ".$vip_until : "").".\n". $modcomment;
         $userModifyLogs[] = "VIP status changed by {$CURUSER['username']}. VIP added: ".$vip_added.($vip_added == 'yes' ? "; VIP until: ".$vip_until : "");
 	}
@@ -250,12 +281,19 @@ if ($action == "edituser")
 		{
 //			$modcomment = date("Y-m-d") . " - Warning removed by {$CURUSER['username']}.\n". $modcomment;
             $userModifyLogs[] = "Warning removed by {$CURUSER['username']}";
-			$subject = sqlesc(nexus_trans("user.msg_warn_removed", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_warning_removed_by", [], $locale) . $CURUSER['username'] . ".");
+			$subject = nexus_trans("user.msg_warn_removed", [], $locale);
+			$msg = nexus_trans("user.msg_your_warning_removed_by", [], $locale) . $CURUSER['username'] . ".";
 		}
 
 		$added = sqlesc(date("Y-m-d H:i:s"));
-		sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+		//sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+		\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+		]);
 	}
 	elseif ($warnlength)
 	{
@@ -264,19 +302,27 @@ if ($action == "edituser")
 //			$modcomment = date("Y-m-d") . " - Warned by " . $CURUSER['username'] . ".\nReason: $warnpm.\n". $modcomment;
             $userModifyLogs[] = "Warned by " . $CURUSER['username'] . ".\nReason: $warnpm.";
 
-			$msg = sqlesc(nexus_trans("user.msg_you_are_warned_by", [], $locale).$CURUSER['username']."." . ($warnpm ? nexus_trans("user.msg_reason", [], $locale).$warnpm : ""));
+			$msg = nexus_trans("user.msg_you_are_warned_by", [], $locale).$CURUSER['username']."." . ($warnpm ? nexus_trans("user.msg_reason", [], $locale).$warnpm : "");
 			$updateset[] = "warneduntil = null";
 		}else{
 			$warneduntil = date("Y-m-d H:i:s",(strtotime(date("Y-m-d H:i:s")) + $warnlength * 604800));
 			$dur = $warnlength . nexus_trans("user.msg_week", [], $locale) . ($warnlength > 1 ? nexus_trans("user.msg_s", [], $locale) : "");
-			$msg = sqlesc(nexus_trans("user.msg_you_are_warned_for", [], $locale).$dur.nexus_trans("user.msg_by", [], $locale)  . $CURUSER['username'] . "." . ($warnpm ? nexus_trans("user.msg_reason", [], $locale).$warnpm : ""));
+			$msg = nexus_trans("user.msg_you_are_warned_for", [], $locale).$dur.nexus_trans("user.msg_by", [], $locale)  . $CURUSER['username'] . "." . ($warnpm ? nexus_trans("user.msg_reason", [], $locale).$warnpm : "");
 //			$modcomment = date("Y-m-d") . " - Warned for $dur by " . $CURUSER['username'] .  ".\nReason: $warnpm.\n". $modcomment;
             $userModifyLogs[] = "Warned for $dur by " . $CURUSER['username'] .  ".Reason: $warnpm";
 			$updateset[] = "warneduntil = '$warneduntil'";
 		}
-		$subject = sqlesc(nexus_trans("user.msg_you_are_warned", [], $locale));
+		$subject = nexus_trans("user.msg_you_are_warned", [], $locale);
 		$added = sqlesc(date("Y-m-d H:i:s"));
-		sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+
+		\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+		]);
+
 		$updateset[] = "warned = 'yes', timeswarned = timeswarned+1, lastwarned=$added, warnedby={$CURUSER['id']}";
 	}
 	//migrate to management
@@ -326,19 +372,31 @@ if ($action == "edituser")
 		{
 //			$modcomment = date("Y-m-d") . " - Posting enabled by " . $CURUSER['username'] . ".\n" . $modcomment;
             $userModifyLogs[] = "Posting enabled by " . $CURUSER['username'];
-			$subject = sqlesc(nexus_trans("user.msg_posting_rights_restored", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_posting_rights_restored", [], $locale). $CURUSER['username'] . nexus_trans("user.msg_you_can_post", [], $locale));
+			$subject = nexus_trans("user.msg_posting_rights_restored", [], $locale);
+			$msg = nexus_trans("user.msg_your_posting_rights_restored", [], $locale). $CURUSER['username'] . nexus_trans("user.msg_you_can_post", [], $locale);
 			$added = sqlesc(date("Y-m-d H:i:s"));
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+			\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+			]);
 		}
 		else
 		{
 //			$modcomment = date("Y-m-d") . " - Posting disabled by " . $CURUSER['username'] . ".\n" . $modcomment;
             $userModifyLogs[] = "Posting disabled by " . $CURUSER['username'];
-			$subject = sqlesc(nexus_trans("user.msg_posting_rights_removed", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_posting_rights_removed", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_probable_reason", [], $locale));
+			$subject = nexus_trans("user.msg_posting_rights_removed", [], $locale);
+			$msg = nexus_trans("user.msg_your_posting_rights_removed", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_probable_reason", [], $locale);
 			$added = sqlesc(date("Y-m-d H:i:s"));
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+			\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+			]);
 		}
 	}
 	if ($uploadpos != $curuploadpos)
@@ -347,19 +405,31 @@ if ($action == "edituser")
 		{
 //			$modcomment = date("Y-m-d") . " - Upload enabled by " . $CURUSER['username'] . ".\n" . $modcomment;
             $userModifyLogs[] = "Upload enabled by " . $CURUSER['username'];
-			$subject = sqlesc(nexus_trans("user.msg_upload_rights_restored", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_upload_rights_restored", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_you_upload_can_upload", [], $locale));
+			$subject = nexus_trans("user.msg_upload_rights_restored", [], $locale);
+			$msg = nexus_trans("user.msg_your_upload_rights_restored", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_you_upload_can_upload", [], $locale);
 			$added = sqlesc(date("Y-m-d H:i:s"));
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+			\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+			]);
 		}
 		else
 		{
 //			$modcomment = date("Y-m-d") . " - Upload disabled by " . $CURUSER['username'] . ".\n" . $modcomment;
             $userModifyLogs[] = "Upload disabled by " . $CURUSER['username'];
-			$subject = sqlesc(nexus_trans("user.msg_upload_rights_removed", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_upload_rights_removed", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_probably_reason_two", [], $locale));
+			$subject = nexus_trans("user.msg_upload_rights_removed", [], $locale);
+			$msg = nexus_trans("user.msg_your_upload_rights_removed", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_probably_reason_two", [], $locale);
 			$added = sqlesc(date("Y-m-d H:i:s"));
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+			\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+			]);
 		}
 	}
 	if ($downloadpos != $curdownloadpos)
@@ -368,19 +438,33 @@ if ($action == "edituser")
 		{
 //			$modcomment = date("Y-m-d") . " - Download enabled by " . $CURUSER['username'] . ".\n" . $modcomment;
             $userModifyLogs[] = "Download enabled by " . $CURUSER['username'];
-			$subject = sqlesc(nexus_trans("user.msg_download_rights_restored", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_download_rights_restored", [], $locale). $CURUSER['username'] . nexus_trans("user.msg_you_can_download", [], $locale));
+			$subject = nexus_trans("user.msg_download_rights_restored", [], $locale);
+			$msg = nexus_trans("user.msg_your_download_rights_restored", [], $locale). $CURUSER['username'] . nexus_trans("user.msg_you_can_download", [], $locale);
 			$added = sqlesc(date("Y-m-d H:i:s"));
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+
+			\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+			]);
 		}
 		else
 		{
 //			$modcomment = date("Y-m-d") . " - Download disabled by " . $CURUSER['username'] . ".\n" . $modcomment;
             $userModifyLogs[] = "Download disabled by " . $CURUSER['username'];
-			$subject = sqlesc(nexus_trans("user.msg_download_rights_removed", [], $locale));
-			$msg = sqlesc(nexus_trans("user.msg_your_download_rights_removed", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_probably_reason_three", [], $locale));
+			$subject = nexus_trans("user.msg_download_rights_removed", [], $locale);
+			$msg = nexus_trans("user.msg_your_download_rights_removed", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_probably_reason_three", [], $locale);
 			$added = sqlesc(date("Y-m-d H:i:s"));
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES (0, $userid, $subject, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+			
+			\App\Models\Message::add([
+		    'sender' => 0,
+		    'receiver' => $userid,
+		    'subject' => $subject,
+		    'msg' => $msg,
+		    'added' => now(),
+			]);
 		}
 	}
 
