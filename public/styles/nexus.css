@@ -96,3 +96,11 @@ img.hitandrun {
 .form-control-row input[type=checkbox] {
     vertical-align: sub;
 }
+
+.hidden-text {
+    filter: blur(.5em);
+    transition: filter .15s ease-in-out;
+}
+.hidden-text:hover {
+    filter: blur(0);
+}
