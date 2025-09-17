@@ -44,11 +44,11 @@ class BdInfoExtra
     {
         foreach ($lines as $line) {
             $line = $this->trim($line);
-            if (strpos($line, 'DISC INFO:') !== false || 
-                strpos($line, 'PLAYLIST REPORT:') !== false ||
-                strpos($line, 'VIDEO:') !== false ||
-                strpos($line, 'AUDIO:') !== false ||
-                strpos($line, 'SUBTITLES:') !== false) {
+            if (strpos($line, 'DISC INFO') !== false || 
+                strpos($line, 'PLAYLIST REPORT') !== false ||
+                strpos($line, 'VIDEO') !== false ||
+                strpos($line, 'AUDIO') !== false ||
+                strpos($line, 'SUBTITLES') !== false) {
                 return false;
             }
         }
@@ -73,7 +73,7 @@ class BdInfoExtra
             }
 
             // 检测新的DISC
-            if (strpos($line, 'DISC INFO:') !== false) {
+            if (strpos($line, 'DISC INFO') !== false) {
                 // 保存之前的DISC（如果存在）
                 if ($currentDisc !== null) {
                     $discs[] = $currentDisc;
@@ -91,19 +91,19 @@ class BdInfoExtra
                 $audioIndex = 0;
                 $subtitleIndex = 0;
                 continue;
-            } elseif (strpos($line, 'PLAYLIST REPORT:') !== false) {
+            } elseif (strpos($line, 'PLAYLIST REPORT') !== false) {
                 $currentSection = 'playlist_report';
                 continue;
-            } elseif (strpos($line, 'VIDEO:') !== false) {
+            } elseif (strpos($line, 'VIDEO') !== false) {
                 $currentSection = 'video';
                 continue;
-            } elseif (strpos($line, 'AUDIO:') !== false) {
+            } elseif (strpos($line, 'AUDIO') !== false) {
                 $currentSection = 'audio';
                 continue;
-            } elseif (strpos($line, 'SUBTITLES:') !== false) {
+            } elseif (strpos($line, 'SUBTITLES') !== false) {
                 $currentSection = 'subtitles';
                 continue;
-            } elseif (strpos($line, 'CHAPTERS:') !== false || strpos($line, 'STREAM DIAGNOSTICS:') !== false) {
+            } elseif (strpos($line, 'CHAPTERS') !== false || strpos($line, 'STREAM DIAGNOSTICS') !== false) {
                 $currentSection = '';
                 continue;
             }
@@ -292,7 +292,7 @@ class BdInfoExtra
         }
 
         // 解析视频行 - 包括隐藏视频流（带*号的）
-        if (preg_match('/^(\*?\s*)(.+?)\s+(\d+)\s+kbps\s+(.+)$/', $line, $matches)) {
+        if (preg_match('/^(\*?\s*)(.+?)\s+([\d,]+)\s+kbps\s+(.+)$/', $line, $matches)) {
             $isHidden = strpos($matches[1], '*') !== false;
             
             if (!$isHidden) {
@@ -327,36 +327,23 @@ class BdInfoExtra
     }
 
     /**
-     * 提取括号内容（全角括号和半角括号）
+     * 提取非英文内容
      */
-    private function extractChineseBrackets(string $text): array
+    private function extractNonEnglishContent(string $text): array
     {
-        $result = ['text' => $text, 'chinese_brackets' => []];
+        $result = ['text' => $text, 'non_english_content' => []];
         
-        // 匹配全角括号内容（提取非英文内容）
-        if (preg_match_all('/（([^）]+)）/u', $text, $matches)) {
-            foreach ($matches[1] as $match) {
-                // 检查是否包含非英文字符
-                if (preg_match('/[^\x{0000}-\x{007F}]/u', $match)) {
-                    $result['chinese_brackets'][] = $match;
+        // 提取所有非英文字符的内容
+        if (preg_match_all('/[^\x{0000}-\x{007F}]+/u', $text, $matches)) {
+            foreach ($matches[0] as $match) {
+                $match = trim($match);
+                if (!empty($match)) {
+                    $result['non_english_content'][] = $match;
                 }
             }
             
-            // 从原文本中移除包含非英文的全角括号内容
-            $result['text'] = preg_replace('/（[^）]*[^\x{0000}-\x{007F}][^）]*）/u', '', $text);
-        }
-        
-        // 匹配半角括号内容（提取非英文内容）
-        if (preg_match_all('/\(([^)]+)\)/', $text, $matches)) {
-            foreach ($matches[1] as $match) {
-                // 检查是否包含非英文字符
-                if (preg_match('/[^\x{0000}-\x{007F}]/u', $match)) {
-                    $result['chinese_brackets'][] = $match;
-                }
-            }
-            
-            // 从原文本中移除包含非英文的半角括号内容
-            $result['text'] = preg_replace('/\([^)]*[^\x{0000}-\x{007F}][^)]*\)/u', '', $result['text']);
+            // 从原文本中移除非英文字符内容
+            $result['text'] = preg_replace('/[^\x{0000}-\x{007F}]+/u', '', $text);
         }
         
         $result['text'] = trim($result['text']);
@@ -375,12 +362,12 @@ class BdInfoExtra
 
         // 解析音频行 - 格式：DTS-HD Master Audio             English         1564 kbps       2.0 / 48 kHz / 1564 kbps / 24-bit
         // 也包含隐藏音频流（带*号的）
-        if (preg_match('/^(\*?\s*)(.+?)\s+([A-Za-z]+)\s+(\d+)\s+kbps\s+(.+)$/', $line, $matches)) {
+        if (preg_match('/^(\*?\s*)(.+?)\s+([A-Za-z]+)\s+([\d,]+)\s+kbps\s+(.+)$/', $line, $matches)) {
             $description = trim($matches[5]);
             
             // 提取括号内容
-            $extracted = $this->extractChineseBrackets($description);
-            $chineseBrackets = $extracted['chinese_brackets'];
+            $extracted = $this->extractNonEnglishContent($description);
+            $nonEnglishContent = $extracted['non_english_content'];
             $cleanDescription = $extracted['text'];
             
             $audio[$audioIndex] = [
@@ -388,7 +375,7 @@ class BdInfoExtra
                 'language' => trim($matches[3]),
                 'bitrate' => trim($matches[4]) . ' kbps',
                 'description' => $cleanDescription,
-                'chinese_brackets' => $chineseBrackets
+                'non_english_content' => $nonEnglishContent
             ];
             $audioIndex++;
         }
@@ -425,8 +412,8 @@ class BdInfoExtra
             // 只有当语言不为空时才添加
             if (!empty($language)) {
                 // 提取括号内容
-                $extracted = $this->extractChineseBrackets($description);
-                $chineseBrackets = $extracted['chinese_brackets'];
+                $extracted = $this->extractNonEnglishContent($description);
+                $nonEnglishContent = $extracted['non_english_content'];
                 $cleanDescription = $extracted['text'];
                 
                 $subtitles[$subtitleIndex] = [
@@ -434,7 +421,7 @@ class BdInfoExtra
                     'language' => $language,
                     'bitrate' => $bitrate,
                     'description' => $cleanDescription,
-                    'chinese_brackets' => $chineseBrackets
+                    'non_english_content' => $nonEnglishContent
                 ];
                 $subtitleIndex++;
             }
@@ -684,9 +671,9 @@ class BdInfoExtra
             }
             
             // 括号内容（添加到最后面）
-            if (!empty($audio['chinese_brackets'])) {
-                foreach ($audio['chinese_brackets'] as $chineseBracket) {
-                    $audioInfo[] = $chineseBracket;
+            if (!empty($audio['non_english_content'])) {
+                foreach ($audio['non_english_content'] as $nonEnglishItem) {
+                    $audioInfo[] = $nonEnglishItem;
                 }
             }
             
@@ -710,9 +697,9 @@ class BdInfoExtra
                 $subtitleInfo = [$subtitle['language']];
                 
                 // 括号内容（添加到最后面）
-                if (!empty($subtitle['chinese_brackets'])) {
-                    foreach ($subtitle['chinese_brackets'] as $chineseBracket) {
-                        $subtitleInfo[] = $chineseBracket;
+                if (!empty($subtitle['non_english_content'])) {
+                    foreach ($subtitle['non_english_content'] as $nonEnglishItem) {
+                        $subtitleInfo[] = $nonEnglishItem;
                     }
                 }
                 
@@ -723,88 +710,6 @@ class BdInfoExtra
         return $result;
     }
 
-    /**
-     * 生成extra格式的输出
-     */
-    public function generateExtraFormat(): string
-    {
-        $output = [];
-        
-        // 时长
-        $duration = $this->getDuration();
-        if (!empty($duration)) {
-            $output[] = 'Runtime: ' . $duration;
-        }
-        
-        // 分辨率
-        $resolution = $this->getResolution();
-        if (!empty($resolution)) {
-            $output[] = 'Resolution: ' . $resolution;
-        }
-        
-        // 码率
-        $bitrate = $this->getTotalBitrate();
-        if (!empty($bitrate)) {
-            $output[] = 'Bitrate: ' . $bitrate;
-        }
-        
-        // HDR格式
-        $hdrFormat = $this->getHDRFormat();
-        if (!empty($hdrFormat)) {
-            $output[] = 'HDR: ' . $hdrFormat;
-        }
-        
-        // 位深度
-        $bitDepth = $this->getBitDepth();
-        if (!empty($bitDepth)) {
-            $output[] = 'Bit depth: ' . $bitDepth;
-        }
-        
-        // 帧率
-        $frameRate = $this->getFrameRate();
-        if (!empty($frameRate)) {
-            $output[] = 'Frame rate: ' . $frameRate;
-        }
-        
-        // 配置文件
-        $profile = $this->getProfile();
-        if (!empty($profile)) {
-            $output[] = 'Profile: ' . $profile;
-        }
-        
-        // 视频格式
-        $videoFormat = $this->getVideoFormat();
-        if (!empty($videoFormat)) {
-            $output[] = 'Format: ' . $videoFormat;
-        }
-        
-        // Extras信息
-        $extras = $this->getExtras();
-        if (!empty($extras)) {
-            $output[] = 'Extras: ' . $extras;
-        }
-        
-        // 音频
-        $audios = $this->getAudios();
-        if (!empty($audios)) {
-            $output[] = 'Audio:';
-            foreach ($audios as $key => $audio) {
-                $output[] = $key . ': ' . $audio;
-            }
-        }
-        
-        // 字幕
-        $subtitles = $this->getSubtitles();
-        if (!empty($subtitles)) {
-            $output[] = '';
-            $output[] = 'Subtitles:';
-            foreach ($subtitles as $key => $subtitle) {
-                $output[] = $key . ': ' . $subtitle;
-            }
-        }
-        
-        return implode("\n", $output);
-    }
 
     /**
      * 获取所有DISC的数据
@@ -825,7 +730,7 @@ class BdInfoExtra
             }
 
             // 检测新的DISC
-            if (strpos($line, 'DISC INFO:') !== false) {
+            if (strpos($line, 'DISC INFO') !== false) {
                 // 保存之前的DISC（如果存在）
                 if ($currentDisc !== null) {
                     $discs[] = $currentDisc;
@@ -843,19 +748,19 @@ class BdInfoExtra
                 $audioIndex = 0;
                 $subtitleIndex = 0;
                 continue;
-            } elseif (strpos($line, 'PLAYLIST REPORT:') !== false) {
+            } elseif (strpos($line, 'PLAYLIST REPORT') !== false) {
                 $currentSection = 'playlist_report';
                 continue;
-            } elseif (strpos($line, 'VIDEO:') !== false) {
+            } elseif (strpos($line, 'VIDEO') !== false) {
                 $currentSection = 'video';
                 continue;
-            } elseif (strpos($line, 'AUDIO:') !== false) {
+            } elseif (strpos($line, 'AUDIO') !== false) {
                 $currentSection = 'audio';
                 continue;
-            } elseif (strpos($line, 'SUBTITLES:') !== false) {
+            } elseif (strpos($line, 'SUBTITLES') !== false) {
                 $currentSection = 'subtitles';
                 continue;
-            } elseif (strpos($line, 'CHAPTERS:') !== false || strpos($line, 'STREAM DIAGNOSTICS:') !== false) {
+            } elseif (strpos($line, 'CHAPTERS') !== false || strpos($line, 'STREAM DIAGNOSTICS') !== false) {
                 $currentSection = '';
                 continue;
             }
