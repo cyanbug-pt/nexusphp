@@ -290,13 +290,13 @@ function formatSpoiler($content, $title = '', $defaultCollapsed = true): string
         $title = $lang_functions['spoiler_default_title'];
     }
 //    $content = str_replace(['<br>', '<br />'], '', $content);
-    $contentClass = "spoiler-content";
+    $contentClass = "";
     if ($defaultCollapsed) {
-        $contentClass .= " collapse";
+        $contentClass .= " open";
     }
     $HTML = sprintf(
-        '<div><div class="spoiler-title-box"><div class="spoiler-title" title="%s">%s</div></div><div class="%s">%s</div></div>',
-        $lang_functions['spoiler_expand_collapse'], $title, $contentClass, $content
+        '<details%s><summary>%s</summary>%s</details>',
+        $contentClass, $title, $content
     );
     return addTempCode($HTML);
 }
