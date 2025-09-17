@@ -235,8 +235,9 @@ if (user_can('userprofile') ||  $user["id"] == $CURUSER["id"])
 		$locationinfo = "<span title=\"" . $loc_mod . "\">[" . $loc_pub . "]</span>";
 	}
 	else $locationinfo = "";
-    $ip = $user["id"] == $CURUSER["id"] ? hide_text($user['ip']) : $user['ip'];
-	tr_small($lang_userdetails['row_ip_address'], $ip.$locationinfo.$seedBoxIcon, 1);
+//    $ip = $user["id"] == $CURUSER["id"] ? hide_text($user['ip']) : $user['ip'];
+    $ip = $user["ip"];
+	tr_small($lang_userdetails['row_ip_address'], hide_text($ip.$locationinfo.$seedBoxIcon), 1);
 }
 $clientselect = '';
 $res = sql_query("SELECT peer_id, agent, ipv4, ipv6, port FROM peers WHERE userid = {$user['id']} GROUP BY agent, ipv4, ipv6, port") or sqlerr();

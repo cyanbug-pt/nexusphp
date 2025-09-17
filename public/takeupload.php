@@ -103,7 +103,7 @@ bark($lang_takeupload['std_empty_file']);
 //check max price
 $maxPrice = get_setting("torrent.max_price");
 $paidTorrentEnabled = get_setting("torrent.paid_torrent_enabled") == "yes";
-if ($maxPrice > 0 && $_POST['price'] > $maxPrice && $paidTorrentEnabled) {
+if ($maxPrice > 0 && isset($_POST['price']) && $_POST['price'] > $maxPrice && $paidTorrentEnabled) {
     bark('price too much');
 }
 
@@ -141,7 +141,7 @@ if (strlen($pieces) % 20 != 0)
 bark($lang_takeupload['std_invalid_pieces']);
 
 $filelist = array();
-$totallen = $info['length'];
+$totallen = $info['length'] ?? null;
 if (isset($totallen)) {
 	$filelist[] = array($dname, $totallen);
 	$type = "single";
