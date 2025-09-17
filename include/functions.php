@@ -370,7 +370,7 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
 	$s = str_replace($originalBbTagArray, $replaceXhtmlTagArray, $s);
 
 	$originalBbTagArray = array("/\[font=([^\[\(&\\;]+?)\]/is", "/\[color=([#0-9a-z]{1,15})\]/is", "/\[color=([a-z]+)\]/is", "/\[size=([1-7])\]/is");
-	$replaceXhtmlTagArray = array("<font face=\"\\1\">", "<span style=\"color: \\1;\">", "<span style=\"color: \\1;\">", "<font size=\"\\1\">");
+	$replaceXhtmlTagArray = array("<font face=\"\\1\">", "<span style=\"color: \\1;word-break: break-word\">", "<span style=\"color: \\1;word-break: break-word\">", "<font size=\"\\1\">");
 	$s = preg_replace($originalBbTagArray, $replaceXhtmlTagArray, $s);
 
 

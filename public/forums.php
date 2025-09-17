@@ -204,7 +204,7 @@ function insert_compose_frame($id, $type = 'new')
 				stderr($lang_forums['std_error'], $lang_forums['std_no_post_id']);
 			$arr = mysql_fetch_assoc($res);
 			$body = "[quote=".htmlspecialchars($arr["username"])."]".htmlspecialchars(unesc($arr["body"]))."[/quote]";
-			$postid = $id;	
+			$postid = $id;
 			$id = $topicid;
 			$type = 'reply';
 			print("<input type=\"hidden\" name=\"postid\" value=\"".$postid."\" />");
@@ -467,7 +467,6 @@ if ($action == "post")
 		$postid = mysql_insert_id() or die($lang_forums['std_post_id_not_available']);
 		//send pm
         $topicInfo = \App\Models\Topic::query()->findOrFail($topicid);
-		$postInfo = \App\Models\Post::query()->findOrFail($quotepostid);
         $postUrl = sprintf('[url=[siteurl]forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $postid, $postid, $topicInfo->subject);
 
 		if ($type == 'reply') {
@@ -488,21 +487,23 @@ if ($action == "post")
 				}
 			}
 
-			if (!empty($postInfo->userid) && $postInfo->userid != $CURUSER['id']) 
-			{
-				$receiver = $postInfo->user;
-				if($receiver->acceptNotification('topic_reply')) {
-					$locale = $receiver->locale;
-					$notify = [
-						'sender' => 0,
-						'receiver' => $receiver->id,
-						'subject' => nexus_trans('forum.reply.replied_notify_subject', [], $locale),
-						'msg' => nexus_trans('forum.reply.replied_notify_body', ['topic_subject' => $postUrl, 'replyer' => $CURUSER['username']], $locale),
-						'added' => now(),
-					];
-					\App\Models\Message::add($notify);
-				}				
-			}
+            if (!empty($quotepostid)) {
+                $quotePostInfo = \App\Models\Post::query()->find($quotepostid);
+                if ($quotePostInfo && $quotePostInfo->userid != $CURUSER['id']) {
+                    $receiver = $quotePostInfo->user;
+                    if($receiver->acceptNotification('topic_reply')) {
+                        $locale = $receiver->locale;
+                        $notify = [
+                            'sender' => 0,
+                            'receiver' => $receiver->id,
+                            'subject' => nexus_trans('forum.reply.replied_notify_subject', [], $locale),
+                            'msg' => nexus_trans('forum.reply.replied_notify_body', ['topic_subject' => $postUrl, 'replyer' => $CURUSER['username']], $locale),
+                            'added' => now(),
+                        ];
+                        \App\Models\Message::add($notify);
+                    }
+                }
+            }
         }
 
 		$Cache->delete_value('forum_'.$forumid.'_post_'.$today_date.'_count');
