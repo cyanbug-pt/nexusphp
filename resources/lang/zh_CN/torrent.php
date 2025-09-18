@@ -96,7 +96,7 @@ return [
     'technicalinfo_frame_rate' => '帧率',
     'technicalinfo_profile' => '档次',
     'technicalinfo_format' => '格式',
-    'technicalinfo_extras' => '附加内容',
+    'technicalinfo_extras' => '附加信息',
     'technicalinfo_ref_frames' => '参考帧',
     'technicalinfo_audio' => '音轨 #',
     'technicalinfo_subtitles' => '字幕 #',

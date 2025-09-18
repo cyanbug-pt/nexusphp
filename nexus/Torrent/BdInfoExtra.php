@@ -315,19 +315,19 @@ class BdInfoExtra
                     $video['aspect_ratio'] = $ratioMatches[1];
                 }
             } else {
-                // 隐藏视频流，检查是否包含Dolby Vision信息
-                if (strpos($matches[4], 'Dolby Vision') !== false) {
-                    // 将Dolby Vision信息添加到第一个视频流描述中
-                    if (isset($video[0]['description'])) {
-                        $video[0]['description'] .= ' / ' . trim($matches[4]);
-                    }
-                }
+                // 隐藏视频流 - 也作为独立的视频流处理，但标记为隐藏
+                $video[] = [
+                    'codec' => trim($matches[2]),
+                    'bitrate' => trim($matches[3]) . ' kbps',
+                    'description' => trim($matches[4]),
+                    'hidden' => true
+                ];
             }
         }
     }
 
     /**
-     * 提取非英文内容
+     * 提取字幕和音轨描述中的非英文内容
      */
     private function extractNonEnglishContent(string $text): array
     {
@@ -336,6 +336,8 @@ class BdInfoExtra
         // 提取所有非英文字符的内容
         if (preg_match_all('/[^\x{0000}-\x{007F}]+/u', $text, $matches)) {
             foreach ($matches[0] as $match) {
+                // 去除制表符和括号
+                $match = preg_replace('/[\s\t\n\r（）()【】\[\]]+/u', '', $match);
                 $match = trim($match);
                 if (!empty($match)) {
                     $result['non_english_content'][] = $match;
@@ -478,9 +480,9 @@ class BdInfoExtra
     {
         $profiles = [];
         
-        // 检查所有视频流
+        // 检查所有视频流，跳过隐藏视频流
         foreach ($this->bdInfoArr['video'] as $key => $video) {
-            if (is_array($video) && isset($video['description'])) {
+            if (is_array($video) && isset($video['description']) && !isset($video['hidden'])) {
                 $description = $video['description'];
                 if (preg_match('/([^\/]*?(?:profile|high|level|main)[^\/]*?)(?:\s*\/|$)/i', $description, $matches)) {
                     $profiles[] = trim($matches[1]);
@@ -612,27 +614,52 @@ class BdInfoExtra
      */
     public function getHDRFormat(): string
     {
-        // 从第一个视频流获取HDR信息
-        $firstVideo = $this->bdInfoArr['video'][0] ?? null;
-        $description = $firstVideo['description'] ?? '';
-        $hdrFormats = [];
+        // 从所有视频流获取HDR信息
+        $hdrTypes = [];
+        $bitDepths = [];
+        $nits = [];
         
-        // 从VIDEO描述中提取HDR格式
-        if (preg_match('/\b(HDR10|HLG|Dolby Vision)\b/i', $description, $matches)) {
-            $hdrFormats[] = $matches[1];
+        foreach ($this->bdInfoArr['video'] as $video) {
+            $description = $video['description'] ?? '';
+            
+            // 从VIDEO描述中提取HDR格式
+            if (preg_match('/\b(HDR10\+|HDR10|HDR|HLG|Dolby Vision)(?:\s|\/|$)/i', $description, $matches)) {
+                $hdrTypes[] = $matches[1];
+            }
+            
+            // 检查比特深度
+            if (preg_match('/(\d+)\s+bits/', $description, $matches)) {
+                $bitDepths[] = $matches[1] . ' bits';
+            }
+            
+            // 检查亮度
+            if (preg_match('/(\d+)nits/', $description, $matches)) {
+                $nits[] = $matches[1] . 'nits';
+            }
         }
         
-        // 检查比特深度
-        if (preg_match('/(\d+)\s+bits/', $description, $matches)) {
-            $hdrFormats[] = $matches[1] . ' bits';
+        // 去重并构建结果
+        $result = [];
+        
+        // HDR格式
+        $hdrTypes = array_unique($hdrTypes);
+        if (!empty($hdrTypes)) {
+            $result[] = implode(' / ', $hdrTypes);
         }
         
-        // 检查亮度
-        if (preg_match('/(\d+)nits/', $description, $matches)) {
-            $hdrFormats[] = $matches[1] . 'nits';
+        // 比特深度
+        $bitDepths = array_unique($bitDepths);
+        if (!empty($bitDepths)) {
+            $result[] = implode(' / ', $bitDepths);
+        }
+        
+        // 亮度
+        $nits = array_unique($nits);
+        if (!empty($nits)) {
+            $result[] = implode(' / ', $nits);
         }
 
-        return implode(' / ', $hdrFormats);
+        return implode(' / ', $result);
     }
 
     /**
