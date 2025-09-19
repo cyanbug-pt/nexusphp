@@ -126,6 +126,10 @@ return [
             'access_admin_class_min_help' => '默認：管理員，用戶等級大於等於設定值的用戶可以登錄管理後臺',
             'alarm_email_receiver' => '告警郵件接收者',
             'alarm_email_receiver_help' => '填寫用戶 UID，多個空格隔開，系統異常告警郵件將會發到對應用戶的郵箱。如果不填會寫到運行日誌中，日誌級別為 error',
+            'is_record_announce_log' => '是否記錄匯報日志',
+            'is_record_announce_log_help' => '若要記錄，先根據文檔安裝 ClickHouse, 並啓用此配置。默認：no',
+            'is_record_seeding_bonus_log' => '是否記錄做種魔力日志',
+            'is_record_seeding_bonus_log_help' => '若要記錄，先根據文檔安裝 ClickHouse, 並啓用此配置。默認：no',
         ],
         'image_hosting' => [
             'driver' => '存儲位置',

@@ -12,6 +12,8 @@ use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Arr;
+use function Filament\Support\get_model_label;
 
 class BonusLogResource extends Resource
 {
@@ -28,9 +30,9 @@ class BonusLogResource extends Resource
         return __('admin.sidebar.bonus_log');
     }
 
-    public static function getBreadcrumb(): string
+    public static function getModelLabel(): string
     {
-        return self::getNavigationLabel();
+        return sprintf('%s(%s)', get_model_label(static::getModel()), __('bonus-log.exclude_seeding_bonus'));
     }
 
     public static function form(Form $form): Form
@@ -85,19 +87,19 @@ class BonusLogResource extends Resource
                     })
                 ,
                 Tables\Filters\SelectFilter::make('business_type')
-                    ->options(BonusLogs::listStaticProps(BonusLogs::$businessTypes, 'bonus-log.business_types', true))
+                    ->options(BonusLogs::listStaticProps(Arr::except(BonusLogs::$businessTypes, BonusLogs::$businessTypeBonus), 'bonus-log.business_types', true))
                     ->label(__('bonus-log.fields.business_type'))
                 ,
-                Tables\Filters\Filter::make('exclude_seeding_bonus')
-                    ->toggle()
-                    ->label(__('bonus-log.exclude_seeding_bonus'))
-                    ->query(function (Builder $query, array $data) {
-                        if ($data['isActive']) {
-                            $query->whereNotIn("business_type", BonusLogs::$businessTypeBonus);
-                        }
-                    })
-                    ->default()
-                ,
+//                Tables\Filters\Filter::make('exclude_seeding_bonus')
+//                    ->toggle()
+//                    ->label(__('bonus-log.exclude_seeding_bonus'))
+//                    ->query(function (Builder $query, array $data) {
+//                        if ($data['isActive']) {
+//                            $query->whereNotIn("business_type", BonusLogs::$businessTypeBonus);
+//                        }
+//                    })
+//                    ->default()
+//                ,
             ])
             ->actions([
 //                Tables\Actions\EditAction::make(),

@@ -167,6 +167,10 @@ return [
             'access_admin_class_min_help' => '默认：管理员，用户等级大于等于设定值的用户可以登录管理后台',
             'alarm_email_receiver' => '告警邮件接收者',
             'alarm_email_receiver_help' => '填写用户 UID，多个空格隔开，系统异常告警邮件将会发到对应用户的邮箱。如果不填会写到运行日志中，日志级别为 error',
+            'is_record_announce_log' => '是否记录汇报日志',
+            'is_record_announce_log_help' => '若要记录，先根据文档安装 ClickHouse, 并启用此配置。默认：no',
+            'is_record_seeding_bonus_log' => '是否记录做种魔力日志',
+            'is_record_seeding_bonus_log_help' => '若要记录，先根据文档安装 ClickHouse, 并启用此配置。默认：no',
         ],
         'image_hosting' => [
             'driver' => '存储位置',

@@ -101,12 +101,14 @@ class CalculateUserSeedBonus implements ShouldQueue
         foreach ($results as $userInfo)
         {
             $uid = $userInfo['id'];
-            $donorAddition = $officialAddition = $haremAddition = $medalAddition = 0;
             $isDonor = is_donor($userInfo);
             $seedBonusResult = calculate_seed_bonus($uid);
             $bonusLog = "[CLEANUP_CLI_CALCULATE_SEED_BONUS_HANDLE_USER], user: $uid, seedBonusResult: " . nexus_json_encode($seedBonusResult);
             $all_bonus = $basicBonus = $seedBonusResult['seed_bonus'];
+            $oldValue = $userInfo['seedbonus'];
             $bonusLog .= ", all_bonus: $all_bonus";
+            $this->appendBonusLogInsert($bonusLogInsert, $uid, BonusLogs::BUSINESS_TYPE_SEEDING_BASIC, $oldValue, $basicBonus);
+            $oldValue += $basicBonus;
             /**
              * BUG: can't add this, case when not include info in where condition $idStr will be reset to 0
              * // BUG: 不能添加这部分，case when 不包含某些 uid 的数据，而 $idStr 里面又有，会被重置为 0
@@ -120,22 +122,30 @@ class CalculateUserSeedBonus implements ShouldQueue
                 $donorAddition = $basicBonus * $donortimes_bonus;
                 $all_bonus += $donorAddition;
                 $bonusLog .= ", isDonor, donortimes_bonus: $donortimes_bonus, all_bonus: $all_bonus";
+                $this->appendBonusLogInsert($bonusLogInsert, $uid, BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION, $oldValue, $donorAddition);
+                $oldValue += $donorAddition;
             }
             if ($officialAdditionFactor > 0) {
                 $officialAddition = $seedBonusResult['official_bonus'] * $officialAdditionFactor;
                 $all_bonus += $officialAddition;
                 $bonusLog .= ", officialAdditionFactor: $officialAdditionFactor, official_bonus: {$seedBonusResult['official_bonus']}, officialAddition: $officialAddition, all_bonus: $all_bonus";
+                $this->appendBonusLogInsert($bonusLogInsert, $uid, BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION, $oldValue, $officialAddition);
+                $oldValue += $officialAddition;
             }
             if ($haremAdditionFactor > 0) {
                 $haremBonus = calculate_harem_addition($uid);
                 $haremAddition =  $haremBonus * $haremAdditionFactor;
                 $all_bonus += $haremAddition;
                 $bonusLog .= ", haremAdditionFactor: $haremAdditionFactor, haremBonus: $haremBonus, haremAddition: $haremAddition, all_bonus: $all_bonus";
+                $this->appendBonusLogInsert($bonusLogInsert, $uid, BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION, $oldValue, $haremAddition);
+                $oldValue += $haremAddition;
             }
             if ($seedBonusResult['medal_additional_factor'] > 0) {
                 $medalAddition = $seedBonusResult['medal_bonus'] * $seedBonusResult['medal_additional_factor'];
                 $all_bonus += $medalAddition;
                 $bonusLog .= ", medalAdditionFactor: {$seedBonusResult['medal_additional_factor']}, medalBonus: {$seedBonusResult['medal_bonus']}, medalAddition: $medalAddition, all_bonus: $all_bonus";
+                $this->appendBonusLogInsert($bonusLogInsert, $uid, BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION, $oldValue, $medalAddition);
+                $oldValue += $medalAddition;
             }
             do_log($bonusLog);
             $dividend = 3600 / $autoclean_interval_one;
@@ -150,14 +160,6 @@ class CalculateUserSeedBonus implements ShouldQueue
             $seedingTorrentCountUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['count']);
             $seedingTorrentSizeUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['size']);
             $seedBonusUpdates[] = sprintf("when %d then seedbonus + %f", $uid, $all_bonus);
-            //here before/after not correct, don't record it, fill with -1
-            $this->appendBonusLogInsert($bonusLogInsert, $userInfo, [
-                BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => $basicBonus,
-                BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => $donorAddition,
-                BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => $officialAddition,
-                BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => $haremAddition,
-                BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => $medalAddition,
-            ]);
             if ($fd) {
                 $log = sprintf(
                     '%s|%s|%s|%s|%s|%s|%s|%s',
@@ -180,10 +182,13 @@ class CalculateUserSeedBonus implements ShouldQueue
         if ($delIdRedisKey) {
             NexusDB::cache_del($this->idRedisKey);
         }
-        if (!empty($bonusLogInsert)) {
-            BonusLogs::query()->insert($bonusLogInsert);
+        if ($fd) {
+            fwrite($fd, $logStr);
         }
-        fwrite($fd, $logStr);
+        if (!empty($bonusLogInsert)) {
+//            BonusLogs::query()->insert($bonusLogInsert);
+            $this->insertIntoClickHouseBulk($bonusLogInsert);
+        }
         $costTime = time() - $beginTimestamp;
         do_log(sprintf(
             "$logPrefix, [DONE], update user count: %s, result: %s, cost time: %s seconds",
@@ -203,21 +208,35 @@ class CalculateUserSeedBonus implements ShouldQueue
         do_log("failed: " . $exception->getMessage() . $exception->getTraceAsString(), 'error');
     }
 
-    private function appendBonusLogInsert(array &$bonusLogInsert, array $userInfo, array $typeValues): void
+    private function appendBonusLogInsert(array &$bonusLogInsert, int $uid, int $businessType, $oldValue, $delta): void
     {
-        foreach ($typeValues as $type => $value) {
-            if ($value > 0) {
-                $bonusLogInsert[] = [
-                    'business_type' => $type,
-                    'uid' => $userInfo['id'],
-                    'old_total_value' => -1,
-                    'value' => $value,
-                    'new_total_value' => -1,
-                    'comment' => BonusLogs::$businessTypes[$type]['text'],
-                    'created_at' => now()->toDateTimeString(),
-                    'updated_at' => now()->toDateTimeString(),
-                ];
-            }
+        if ($delta > 0) {
+            $bonusLogInsert[] = [
+                'business_type' => $businessType,
+                'uid' => $uid,
+                'old_total_value' => $oldValue,
+                'value' => $delta,
+                'new_total_value' => $oldValue + $delta,
+                'comment' => BonusLogs::$businessTypes[$businessType]['text'] ?? '',
+                'created_at' => getDtMicro(),
+            ];
         }
+    }
+
+    private function insertIntoClickHouseBulk(array $bonusLogInsert): void
+    {
+        if (!Setting::getIsRecordSeedingBonusLog()) {
+            do_log("not enabled");
+            return;
+        }
+        $host = config('clickhouse.connection.host');
+        if (!$host) {
+            do_log("clickhouse no host");
+            return;
+        }
+        $client = app(\ClickHouseDB\Client::class);
+        $fields = ['business_type', 'uid', 'old_total_value', 'value', 'new_total_value', 'comment', 'created_at'];
+        $client->insert("bonus_logs", $bonusLogInsert, $fields);
+        do_log("insertIntoClickHouseBulk done, created_at: {$bonusLogInsert[0]['created_at']}");
     }
 }

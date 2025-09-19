@@ -258,11 +258,6 @@ class Setting extends NexusModel
         return (int)self::get("backup.retention_count");
     }
 
-    public static function getIsRecordAnnounceLog(): bool
-    {
-        return self::get('security.record_announce_logs') == 'yes';
-    }
-
     public static function getIsRequireSeedSectionEnabled(): bool
     {
         return self::get("require_seed_section.enabled") == "yes";
@@ -322,5 +317,13 @@ class Setting extends NexusModel
         return (int)self::get("torrent.reward_times_limit", 0);
     }
 
+    public static function getIsRecordAnnounceLog(): bool
+    {
+        return self::get('system.is_record_announce_log') == 'yes';
+    }
 
+    public static function getIsRecordSeedingBonusLog(): bool
+    {
+        return self::get('system.is_record_seeding_bonus_log') == 'yes';
+    }
 }

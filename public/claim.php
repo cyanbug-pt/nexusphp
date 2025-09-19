@@ -113,7 +113,7 @@ if ($sort == 'seed_time') {
 } else {
     $query->orderBy($sort, $order);
 }
-$list = $query->get();
+$list = $query->selectRaw("claims.*")->get();
 print($filterForm);
 print("<table id='claim-table' width='100%'>");
 print("<tr>

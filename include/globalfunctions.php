@@ -209,11 +209,9 @@ function do_log($log, $level = 'info', $echo = false)
         }
     }
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-    $dt = DateTime::createFromFormat('U.u', sprintf('%.6f', microtime(true)));
-    $dt->setTimezone(new DateTimeZone(nexus_env('TIMEZONE', 'UTC')));
     $content = sprintf(
         "[%s] [%s] [%s] [%s] [%s] [%s] %s.%s %s:%s %s%s%s %s%s",
-        $dt->format("Y-m-d\TH:i:s.vP"),
+        getDtMillis(true),
         nexus() ? nexus()->getRequestId() : 'NO_REQUEST_ID',
         nexus() ? nexus()->getLogSequence() : 0,
         sprintf('%.3f', microtime(true) - (nexus() ? nexus()->getStartTimestamp() : 0)),
@@ -236,6 +234,20 @@ function do_log($log, $level = 'info', $echo = false)
     if (nexus()) {
         nexus()->incrementLogSequence();
     }
+}
+
+function getDtMillis($withTimeZone = false): string {
+    $dt = DateTime::createFromFormat('U.u', sprintf('%.6f', microtime(true)));
+    $dt->setTimezone(new DateTimeZone(nexus_env('TIMEZONE', 'UTC')));
+    $format = $withTimeZone ? 'Y-m-d\TH:i:s.vP' : 'Y-m-d H:i:s.v';
+    return $dt->format($format);
+}
+
+function getDtMicro($withTimeZone = false): string {
+    $dt = DateTime::createFromFormat('U.u', sprintf('%.6f', microtime(true)));
+    $dt->setTimezone(new DateTimeZone(nexus_env('TIMEZONE', 'UTC')));
+    $format = $withTimeZone ? 'Y-m-d\TH:i:s.uP' : 'Y-m-d H:i:s.u';
+    return $dt->format($format);
 }
 
 function getLogFile($append = '')

@@ -305,7 +305,7 @@ function formatSpoiler($content, $title = '', $defaultCollapsed = true): string
     }
 //    $content = str_replace(['<br>', '<br />'], '', $content);
     $contentClass = "";
-    if ($defaultCollapsed) {
+    if (!$defaultCollapsed) {
         $contentClass .= " open";
     }
     $HTML = sprintf(

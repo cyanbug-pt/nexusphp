@@ -199,7 +199,7 @@ elseif ($action == 'savesettings_security') 	// save security
 	$validConfig = array(
 		'securelogin', 'securetracker', 'https_announce_url','iv','maxip','maxloginattempts','changeemail','cheaterdet','nodetect',
 		'guest_visit_type', 'guest_visit_value_static_page', 'guest_visit_value_custom_content', 'guest_visit_value_redirect',
-		'login_type', 'login_secret_lifetime', 'use_challenge_response_authentication', 'record_announce_logs'
+		'login_type', 'login_secret_lifetime', 'use_challenge_response_authentication',
 	);
 	GetVar($validConfig);
 	$SECURITY = [];
@@ -369,7 +369,6 @@ elseif ($action == 'securitysettings')	//security settings
 	print ("<form method='post' action='".$_SERVER["SCRIPT_NAME"]."' name='securitysettings_form'><input type='hidden' name='action' value='savesettings_security'>");
 	tr($lang_settings['row_enable_ssl'],"<input type='radio' name='securelogin'" . ($SECURITY["securelogin"] == "yes" ? " checked" : "") . " value='yes'> ".$lang_settings['text_yes']. " <input type='radio' name='securelogin'" . ($SECURITY["securelogin"] == "no" ? " checked" : "") . " value='no'> ".$lang_settings['text_no']. " <input type='radio' name='securelogin'" . ($SECURITY["securelogin"] == "op" ? " checked" : "") . " value='op'> ".$lang_settings['text_optional']."<br />".$lang_settings['text_ssl_note'], 1);
 //	tr($lang_settings['row_enable_ssl_tracker'],"<input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "yes" ? " checked" : "") . " value='yes'> ".$lang_settings['text_yes']. " <input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "no" ? " checked" : "") . " value='no'> ".$lang_settings['text_no']. " <input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "op" ? " checked" : "") . " value='op'> ".$lang_settings['text_optional']."<br />".$lang_settings['text_ssl_note'], 1);
-	tr($lang_settings['row_record_announce_logs'],"<input type='radio' name='record_announce_logs'" . ($SECURITY["record_announce_logs"] == "yes" ? " checked" : "") . " value='yes'> ".$lang_settings['text_yes']. " <input type='radio' name='record_announce_logs'" . ($SECURITY["record_announce_logs"] == "no" ? " checked" : "") . " value='no'> ".$lang_settings['text_no']."<br />".$lang_settings['text_record_announce_logs_note'], 1);
 //	tr($lang_settings['row_https_announce_url'],"<input type='text' style=\"width: 300px\" name=https_announce_url value='".($SECURITY["https_announce_url"] ? $SECURITY["https_announce_url"] : "")."'> ".$lang_settings['text_https_announce_url_note'] . $_SERVER["HTTP_HOST"]."/announce.php", 1);
 	yesorno($lang_settings['row_enable_image_verification'], 'iv', $SECURITY["iv"], $lang_settings['text_image_verification_note']);
 	yesorno($lang_settings['row_allow_email_change'], 'changeemail', $SECURITY["changeemail"], $lang_settings['text_email_change_note']);
