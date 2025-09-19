@@ -943,7 +943,9 @@ if ($shouldUseMeili) {
     $resultFromSearchRep = $searchRep->search($searchParams, $CURUSER['id']);
     $count = $resultFromSearchRep['total'];
 } else {
+    do_log("[BEFORE_TORRENT_COUNT_SQL]", 'debug');
     $res = sql_query($sql);
+    do_log("[AFTER_TORRENT_COUNT_SQL] $sql", 'debug');
     $count = 0;
     while($row = mysql_fetch_array($res)) {
         $count += $row[0];
@@ -955,8 +957,6 @@ $torrentsperpage = (int)$CURUSER["torrentsperpage"];
 elseif ($torrentsperpage_main)
 	$torrentsperpage = $torrentsperpage_main;
 else $torrentsperpage = 100;
-
-do_log("[TORRENT_COUNT_SQL] $sql", 'debug');
 
 if ($count)
 {

@@ -2,8 +2,10 @@
 
 namespace Nexus\Imdb;
 
+use App\Models\Setting;
 use Imdb\Config;
 use Imdb\Title;
+use Nexus\Database\NexusDB;
 use Nexus\PTGen\PTGen;
 
 class Imdb
@@ -299,5 +301,28 @@ class Imdb
             $this->ptGen = new PTGen();
         }
         return $this->ptGen;
+    }
+
+    public function getMovieCover($imdbId): string
+    {
+        static $enabled;
+        if (is_null($enabled)) {
+            $enabled = Setting::getIsImdbEnabled();
+        }
+        if (!$enabled) {
+            return '';
+        }
+        return NexusDB::remember("imdb:cover:$imdbId", 3600, function() use($imdbId) {
+            if ($this->getCacheStatus($imdbId) != 1) {
+                return '';
+            }
+            try {
+                return $this->getMovie($imdbId)->photo(false);
+            } catch (\Exception $exception) {
+                do_log($exception->getMessage() . $exception->getTraceAsString(), 'error');
+                return '';
+            }
+        });
+
     }
 }

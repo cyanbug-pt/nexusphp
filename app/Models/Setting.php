@@ -326,4 +326,9 @@ class Setting extends NexusModel
     {
         return self::get('system.is_record_seeding_bonus_log') == 'yes';
     }
+
+    public static function getIsImdbEnabled(): bool
+    {
+        return self::get('main.showimdbinfo') == 'yes';
+    }
 }

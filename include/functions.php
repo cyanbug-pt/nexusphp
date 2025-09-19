@@ -3620,18 +3620,16 @@ foreach ($rows as $row)
 
 	//cover
     $coverSrc = $tdCover = '';
+
     if ($showCover) {
-        if ($imdb_id = parse_imdb_id($row["url"])) {
-            try {
-                if ($imdb->getCacheStatus($imdb_id) == 1) {
-                    $coverSrc = $imdb->getMovie($imdb_id)->photo(false);
-                }
-            } catch (\Exception $exception) {
-                do_log("torrent: {$row['id']} get cover from imdb error: ".$exception->getMessage() . "\n[stacktrace]\n" . $exception->getTraceAsString(), 'error');
-            }
-        }
-        if (empty($coverSrc) && !empty($row['cover'])) {
+        if (!empty($row['cover'])) {
             $coverSrc = $row['cover'];
+        }
+        if (empty($coverSrc) && !empty($row['url'])) {
+            $imdb_id = parse_imdb_id($row["url"]);
+            if ($imdb_id) {
+                $coverSrc = $imdb->getMovieCover($imdb_id);
+            }
         }
         $tdCover = sprintf('<td class="embedded" style="text-align: center;width: 46px;height: 46px"><img src="pic/misc/spinner.svg" data-src="%s" class="nexus-lazy-load" style="max-height: 46px;max-width: 46px" /></td>', $coverSrc);
     }
@@ -4812,13 +4810,11 @@ function get_torrent_promotion_append_sub($promotion = 1,$forcemode = "",$showti
 
 function get_hr_img(array $torrent, $searchBoxId)
 {
-//    $mode = get_setting('hr.mode');
     $mode = \App\Models\HitAndRun::getConfig('mode', $searchBoxId);
     $result = '';
     if ($mode == \App\Models\HitAndRun::MODE_GLOBAL || ($mode == \App\Models\HitAndRun::MODE_MANUAL && isset($torrent['hr']) && $torrent['hr'] == \App\Models\Torrent::HR_YES)) {
         $result = '<img class="hitandrun" src="pic/trans.gif" alt="H&R" title="H&R" />';
     }
-    do_log("searchBoxId: $searchBoxId, mode: $mode, result: $result");
     return $result;
 }
 

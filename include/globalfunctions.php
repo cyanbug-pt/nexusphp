@@ -4,7 +4,7 @@ function get_global_sp_state()
 {
 	static $global_promotion_state;
 	$cacheKey = \App\Models\Setting::TORRENT_GLOBAL_STATE_CACHE_KEY;
-	if (!$global_promotion_state) {
+	if (is_null($global_promotion_state)) {
         $row = \Nexus\Database\NexusDB::remember($cacheKey, 600, function () use ($cacheKey) {
             return \Nexus\Database\NexusDB::getOne('torrents_state', 1);
         });
