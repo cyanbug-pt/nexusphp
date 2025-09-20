@@ -312,7 +312,7 @@ class Imdb
         if (!$enabled) {
             return '';
         }
-        return NexusDB::remember("imdb:cover:$imdbId", 3600, function() use($imdbId) {
+        return NexusDB::remember("imdb:cover:$imdbId", 3600, function() use ($imdbId) {
             if ($this->getCacheStatus($imdbId) != 1) {
                 return '';
             }

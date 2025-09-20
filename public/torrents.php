@@ -116,6 +116,7 @@ $wherestandardina = array();
 $whereprocessingina = array();
 $whereteamina = array();
 $whereaudiocodecina = array();
+$whereothera = [];
 //----------------- start whether show torrents from all sections---------------------//
 if ($_GET)
 	$allsec = intval($_GET["allsec"] ?? 0);
@@ -161,11 +162,6 @@ elseif ($inclbookmarked == 2)		//not bookmarked
 }
 // ----------------- end bookmarked ---------------------//
 
-if (!isset($CURUSER) || !user_can('seebanned')) {
-    $wherea[] = "banned = 'no'";
-    $searchParams["banned"] = 'no';
-}
-
 // ----------------- start include dead ---------------------//
 if (isset($_GET["incldead"]))
 	$include_dead = intval($_GET["incldead"] ?? 0);
@@ -192,14 +188,23 @@ if ($include_dead == 0)  //all(active,dead)
 elseif ($include_dead == 1)		//active
 {
 	$addparam .= "incldead=1&";
-	$wherea[] = "visible = 'yes'";
+//	$wherea[] = "visible = 'yes'";
+    $whereothera[] = "visible = 'yes'";
 }
 elseif ($include_dead == 2)		//dead
 {
 	$addparam .= "incldead=2&";
-	$wherea[] = "visible = 'no'";
+//	$wherea[] = "visible = 'no'";
+    $whereothera[] = "visible = 'no'";
 }
 // ----------------- end include dead ---------------------//
+
+if (!isset($CURUSER) || !user_can('seebanned')) {
+//    $wherea[] = "banned = 'no'";
+    $whereothera[] = "banned = 'no'";
+    $searchParams["banned"] = 'no';
+}
+
 $special_state = 0;
 if ($_GET)
 	$special_state = intval($_GET["spstate"] ?? 0);
@@ -906,6 +911,10 @@ if ($whereteamin)
 $where .= ($where ? " AND " : "") . "team IN(" . $whereteamin . ")";
 if ($whereaudiocodecin)
 $where .= ($where ? " AND " : "") . "audiocodec IN(" . $whereaudiocodecin . ")";
+}
+//last
+if (!empty($whereothera)) {
+    $where .= ($where ? " AND " : "") . implode(" AND ", $whereothera);
 }
 
 $tagFilter = "";

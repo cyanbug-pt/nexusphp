@@ -91,7 +91,7 @@ class UserResource extends Resource
                 Tables\Columns\BadgeColumn::make('downloadpos')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.downloadpos")),
                 Tables\Columns\BadgeColumn::make('parked')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.parked")),
                 Tables\Columns\TextColumn::make('added')->sortable()->dateTime('Y-m-d H:i')->label(__("label.added")),
-                Tables\Columns\TextColumn::make('last_access')->dateTime()->label(__("label.last_access")),
+                Tables\Columns\TextColumn::make('last_access')->dateTime('Y-m-d H:i')->label(__("label.last_access")),
             ])
             ->defaultSort('added', 'desc')
             ->filters([

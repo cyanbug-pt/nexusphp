@@ -21,6 +21,10 @@ class Torrent extends NexusModel
     const VISIBLE_YES = 'yes';
     const VISIBLE_NO = 'no';
 
+    const FILTER_VISIBLE_ALL = '0';
+    const FILTER_VISIBLE_YES = '1';
+    const FILTER_VISIBLE_NO = '2';
+
     const BANNED_YES = 'yes';
     const BANNED_NO = 'no';
 

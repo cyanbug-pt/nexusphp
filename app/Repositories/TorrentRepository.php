@@ -99,7 +99,7 @@ class TorrentRepository extends BaseRepository
         $allowFilters = [
             'title', 'category', 'source', 'medium', 'codec', 'audiocodec', 'standard', 'processing', 'team',
             'owner', 'visible', 'added', 'size', 'sp_state', 'leechers', 'seeders', 'times_completed',
-            'bookmark'
+            'bookmark',
         ];
         $allowSorts = ['id', 'comments', 'size', 'seeders', 'leechers', 'times_completed'];
         $apiQueryBuilder = ApiQueryBuilder::for(TorrentResource::NAME, $query, $request)
@@ -110,11 +110,21 @@ class TorrentRepository extends BaseRepository
             ->allowSorts($allowSorts)
             ->registerCustomFilter('title', function (Builder $query, Request $request) {
                 $title = $request->input(ApiQueryBuilder::PARAM_NAME_FILTER.".title");
+                $title = trim(str_replace('.', '', $title));
                 if ($title) {
-                    $query->where(function (Builder $query) use ($title) {
-                        $query->where('name', 'like', '%' . $title . '%')
-                            ->orWhere('small_descr', 'like', '%' . $title . '%');
-                    });
+                    $titleParts = explode(" ", $title);
+                    $keywordCount = 1;
+                    foreach ($titleParts as $titlePart) {
+                        if ($keywordCount > 3) {
+                            break;
+                        }
+                        $titlePart = trim($titlePart);
+                        $query->where(function (Builder $query) use ($titlePart) {
+                            $query->where('name', 'like', '%' . $titlePart . '%')
+                                ->orWhere('small_descr', 'like', '%' . $titlePart . '%');
+                        });
+                        $keywordCount++;
+                    }
                 }
             })
             ->registerCustomFilter('bookmark', function (Builder $query, Request $request) use ($user) {
@@ -129,9 +139,17 @@ class TorrentRepository extends BaseRepository
                     });
                 }
             })
+            ->registerCustomFilter('visible', function (Builder $query, Request $request) use ($user) {
+                $filterVisible = $request->input(ApiQueryBuilder::PARAM_NAME_FILTER.".visible", Torrent::FILTER_VISIBLE_YES);
+                if ($filterVisible === Torrent::FILTER_VISIBLE_YES) {
+                    $query->where('visible', Torrent::VISIBLE_YES);
+                } elseif ($filterVisible === Torrent::FILTER_VISIBLE_NO) {
+                    $query->where('visible', Torrent::VISIBLE_NO);
+                }
+            })
         ;
         $query = $apiQueryBuilder->build();
-        if (!$apiQueryBuilder->hasSort()) {
+        if (!$apiQueryBuilder->hasSort() || !$apiQueryBuilder->hasSort('id')) {
             $query->orderBy("id", "DESC");
         }
         $torrents = $query->paginate($this->getPerPageFromRequest($request));

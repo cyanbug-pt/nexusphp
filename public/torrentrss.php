@@ -17,7 +17,7 @@ function hex_esc($matches) {
 }
 $dllink = false;
 
-$where = "torrents.visible = 'yes'";
+$where = "";
 if ($passkey){
 	$res = sql_query("SELECT id, enabled, parked, passkey FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
 	$user = mysql_fetch_array($res);
@@ -96,8 +96,11 @@ if ($approvalStatusNoneVisible == 'no' && !user_can('staffmem', false, $user['id
 $browseMode = get_setting('main.browsecat');
 $onlyBrowseSection = get_setting('main.spsct') != 'yes' || !user_can('view_special_torrent', false, $user['id']);
 if ($onlyBrowseSection) {
-    $where .= ($where ? " AND " : "") . "categories.mode = $browseMode";
+    $allBrowseCategoryId = \App\Models\SearchBox::listCategoryId($browseMode);
+    $where .= ($where ? " AND " : "") . sprintf("torrents.category in (%s)", implode(",", $allBrowseCategoryId));
 }
+//visible
+$where .= ($where ? " AND " : "") . "torrents.visible = 'yes'";
 //check price
 if (isset($_GET['paid']) && in_array($_GET['paid'], ['0', '1', '2'], true)) {
     $paidFilter = $_GET['paid'];
@@ -174,12 +177,12 @@ if ($where) {
 $sort = "id desc";
 $fieldStr = "torrents.id, torrents.category, torrents.name, torrents.small_descr, torrent_extras.descr, torrents.info_hash, torrents.size, torrents.added, torrents.anonymous, torrents.owner, categories.name AS category_name";
 if (!$noNormalResults) {
-    $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id $normalWhere ORDER BY $sort LIMIT $limit";
+    $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON torrents.category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id $normalWhere ORDER BY $sort LIMIT $limit";
     $normalRows = \Nexus\Database\NexusDB::select($query);
 }
 if (!empty($prependIdArr) && $startindex == 0) {
     $prependIdStr = implode(',', $prependIdArr);
-    $prependRows = \Nexus\Database\NexusDB::select("SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id where torrents.id in ($prependIdStr) and $where ORDER BY field(torrents.id, $prependIdStr)");
+    $prependRows = \Nexus\Database\NexusDB::select("SELECT $fieldStr FROM torrents LEFT JOIN categories ON torrents.category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id where torrents.id in ($prependIdStr) and $where ORDER BY field(torrents.id, $prependIdStr)");
 }
 $list = [];
 foreach ($prependRows as $row) {
