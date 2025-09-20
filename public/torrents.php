@@ -1002,9 +1002,11 @@ if ($count)
 //        $query = "SELECT $fieldsStr, categories.mode as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")." LEFT JOIN categories ON torrents.category=categories.id $tagFilter $where $orderby $limit";
         $query = "SELECT $fieldsStr, $sectiontype as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")."$tagFilter $torrentExtraFilter $where $orderby $limit";
 //    }
-    do_log("[TORRENT_LIST_SQL] $query", 'debug');
+
     if (!$shouldUseMeili) {
+        do_log("[BEFORE_TORRENT_LIST_SQL]", 'debug');
         $res = sql_query($query);
+        do_log("[AFTER_TORRENT_LIST_SQL] $query", 'debug');
     }
 } else {
     unset($res);
