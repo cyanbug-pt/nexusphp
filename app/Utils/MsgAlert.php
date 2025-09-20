@@ -73,7 +73,7 @@ final class MsgAlert {
     public function remove($name): void
     {
         foreach (self::$alerts as $item) {
-            if ($item['name'] = $name) {
+            if ($item['name'] == $name) {
                 unset(self::$alerts[$name]);
                 NexusDB::redis()->lRem($this->getListKey(), json_encode($item));
             }
