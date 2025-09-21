@@ -131,18 +131,17 @@ function format_quotes($s)
 
 function print_attachment($dlkey, $enableimage = true, $imageresizer = true)
 {
-	global $Cache, $httpdirectory_attachment;
-	global $lang_functions;
+	$httpdirectory_attachment = get_setting('attachment.httpdirectory');
 	if (strlen($dlkey) == 32){
-	if (!$row = $Cache->get_value('attachment_'.$dlkey.'_content')){
+	if (!$row = \Nexus\Database\NexusDB::cache_get('attachment_'.$dlkey.'_content')){
 		$res = sql_query("SELECT * FROM attachments WHERE dlkey=".sqlesc($dlkey)." LIMIT 1") or sqlerr(__FILE__,__LINE__);
 		$row = mysql_fetch_array($res);
-		$Cache->cache_value('attachment_'.$dlkey.'_content', $row, 86400);
+        \Nexus\Database\NexusDB::cache_put('attachment_'.$dlkey.'_content', $row, 86400);
 	}
 	}
 	if (!$row)
 	{
-		return "<div style=\"text-decoration: line-through; font-size: 7pt\">".$lang_functions['text_attachment_key'].$dlkey.$lang_functions['text_not_found']."</div>";
+		return "<div style=\"text-decoration: line-through; font-size: 7pt\">".nexus_trans('attachment.text_key').$dlkey.nexus_trans('attachment.not_found')."</div>";
 	}
 	else{
 	$id = $row['id'];
@@ -163,7 +162,7 @@ function print_attachment($dlkey, $enableimage = true, $imageresizer = true)
 			if($imageresizer == true)
 				$onclick = " onclick=\"Previewurl('".$url."')\"";
 			else $onclick = "";
-			$return = "<img id=\"attach".$id."\" style=\"max-width: 700px\" alt=\"".htmlspecialchars($row['filename'])."\" src=\"".$url."\"". $onclick .  " onmouseover=\"domTT_activate(this, event, 'content', '".htmlspecialchars("<strong>".$lang_functions['text_size']."</strong>: ".mksize($row['filesize'])."<br />".gettime($row['added']))."', 'styleClass', 'attach', 'x', findPosition(this)[0], 'y', findPosition(this)[1]-58);\" />";
+			$return = "<img id=\"attach".$id."\" style=\"max-width: 700px\" alt=\"".htmlspecialchars($row['filename'])."\" src=\"".$url."\"". $onclick .  " onmouseover=\"domTT_activate(this, event, 'content', '".htmlspecialchars("<strong>".nexus_trans('attachment.size')."</strong>: ".mksize($row['filesize'])."<br />".gettime($row['added']))."', 'styleClass', 'attach', 'x', findPosition(this)[0], 'y', findPosition(this)[1]-58);\" />";
 		}
 		else $return = "";
 	}
@@ -205,7 +204,7 @@ function print_attachment($dlkey, $enableimage = true, $imageresizer = true)
 				$icon = "<img alt=\"other\" src=\"pic/attachicons/common.gif\" />";
 			}
 		}
-		$return = "<div class=\"attach\">".$icon."&nbsp;&nbsp;<a href=\"".htmlspecialchars("getattachment.php?id=".$id."&dlkey=".$dlkey)."\" target=\"_blank\" id=\"attach".$id."\" onmouseover=\"domTT_activate(this, event, 'content', '".htmlspecialchars("<strong>".$lang_functions['text_downloads']."</strong>: ".number_format($row['downloads'])."<br />".gettime($row['added']))."', 'styleClass', 'attach', 'x', findPosition(this)[0], 'y', findPosition(this)[1]-58);\">".htmlspecialchars($row['filename'])."</a>&nbsp;&nbsp;<font class=\"size\">(".mksize($row['filesize']).")</font></div>";
+		$return = "<div class=\"attach\">".$icon."&nbsp;&nbsp;<a href=\"".htmlspecialchars("getattachment.php?id=".$id."&dlkey=".$dlkey)."\" target=\"_blank\" id=\"attach".$id."\" onmouseover=\"domTT_activate(this, event, 'content', '".htmlspecialchars("<strong>".nexus_trans('attachment.downloads')."</strong>: ".number_format($row['downloads'])."<br />".gettime($row['added']))."', 'styleClass', 'attach', 'x', findPosition(this)[0], 'y', findPosition(this)[1]-58);\">".htmlspecialchars($row['filename'])."</a>&nbsp;&nbsp;<font class=\"size\">(".mksize($row['filesize']).")</font></div>";
 	}
 	return $return;
 	}
