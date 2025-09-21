@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(無此帳戶)',
     'time_units' => [
         'week' => '周',
+        'hour' => '小時',
     ],
     'select_all' => '全選',
     'unselect_all' => '全不選',
