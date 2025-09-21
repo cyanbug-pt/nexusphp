@@ -82,7 +82,7 @@ function sql_query($query)
 	$end = microtime(true);
 	$query_name[] = [
 		'query' => $query,
-		'time' => sprintf('%.3f ms', ($end - $begin) * 1000),
+		'time' => sprintf('%.2f ms', ($end - $begin) * 1000),
 	];
 	return $result;
 }
@@ -626,26 +626,15 @@ function last_query($all = false)
         } else {
             $connection = \Illuminate\Support\Facades\DB::connection(config('database.default'));
         }
-        $pdo = $connection->getPdo();
     }
-    $queries = $connection->getQueryLog();
-    if (!$all) {
-        $queries = [last($queries)];
+    if ($all === 'COUNT') {
+        return count($connection->getQueryLog());
     }
-    $queryFormatted = [];
-    foreach ($queries as $query) {
-        $sqlWithPlaceholders = str_replace(['%', '?'], ['%%', '%s'], $query['query']);
-        $bindings = $query['bindings'];
-        $realSql = $sqlWithPlaceholders;
-        if (count($bindings) > 0) {
-            $realSql = vsprintf($sqlWithPlaceholders, array_map([$pdo, 'quote'], $bindings));
-        }
-        $queryFormatted[] = $realSql;
-    }
+    $queries = $connection->getRawQueryLog();
     if ($all) {
-        return nexus_json_encode($queryFormatted);
+        return $queries;
     }
-    return $queryFormatted[0];
+    return isset($queries[0]) ? last($queries) : '';
 }
 
 function format_datetime($datetime, $format = 'Y-m-d H:i')

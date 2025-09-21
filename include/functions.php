@@ -2008,8 +2008,8 @@ function userlogin() {
 	$nip = ip2long($ip);
 	if ($nip) //$nip would be false for IPv6 address
 	{
-		$res = sql_query("SELECT * FROM bans WHERE $nip >= first AND $nip <= last") or sqlerr(__FILE__, __LINE__);
-		if (mysql_num_rows($res) > 0)
+		$res = sql_query("SELECT * FROM bans WHERE first <= $nip AND last >= $nip") or sqlerr(__FILE__, __LINE__);
+        if (mysql_num_rows($res) > 0)
 		{
 			header("HTTP/1.1 403 Forbidden");
 			print("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head><body>".$lang_functions['text_unauthorized_ip']."</body></html>\n");
@@ -2042,7 +2042,6 @@ function userlogin() {
 //		error_reporting(E_ALL & ~E_NOTICE);
 //		error_reporting(-1);
 //	}
-
     return $loginResult = true;
 }
 
@@ -2932,13 +2931,24 @@ function stdfoot() {
 	$yearfounded = ($year ? $year : 2007);
 	print(" (c) "." <a href=\"" . get_protocol_prefix() . $BASEURL."\" target=\"_self\">".$SITENAME."</a> ".($icplicense_main ? " ".$icplicense_main." " : "").(date("Y") != $yearfounded ? $yearfounded."-" : "").date("Y")." ".VERSION."<br /><br />");
 	printf ("[page created in <b> %s </b> sec", sprintf("%.3f", $totaltime));
-    print (" with <b>".count($query_name)."</b> db queries, <b>".$Cache->getCacheReadTimes()."</b> reads and <b>".$Cache->getCacheWriteTimes()."</b> writes of Redis and <b>".mksize(memory_get_usage())."</b> ram]");
+    $debugQuery = $enablesqldebug_tweak == 'yes' && get_user_class() >= $sqldebug_tweak;
+    if ($debugQuery) {
+        $query_name_laravel = last_query(true);
+        $dbQueryCount = count($query_name) + count($query_name_laravel);
+    } else {
+        $query_name_laravel = [];
+        $dbQueryCount = count($query_name) + last_query('COUNT');
+    }
+    print (" with <b>".$dbQueryCount."</b> db queries, <b>".$Cache->getCacheReadTimes()."</b> reads and <b>".$Cache->getCacheWriteTimes()."</b> writes of Redis and <b>".mksize(memory_get_usage())."</b> ram]");
 	print ("</div>\n");
-	if ($enablesqldebug_tweak == 'yes' && get_user_class() >= $sqldebug_tweak) {
+	if ($debugQuery) {
 		print("<div id=\"sql_debug\" style='text-align: left;'>SQL query list: <ul>");
 		foreach($query_name as $query) {
 			print(sprintf('<li>%s [%s]</li>', htmlspecialchars($query['query']), $query['time']));
 		}
+        foreach($query_name_laravel as $query) {
+            print(sprintf('<li>%s [%s ms]</li>', htmlspecialchars($query['raw_query']), $query['time']));
+        }
 		print("</ul>");
 		print("Redis key read: <ul>");
 		foreach($Cache->getKeyHits('read') as $keyName => $hits) {

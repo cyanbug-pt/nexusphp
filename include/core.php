@@ -3,6 +3,8 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 0);
 require_once __DIR__ . '/constants.php';
 require_once $rootpath . 'vendor/autoload.php';
+$USERUPDATESET = array();
+$query_name=array();
 \Nexus\Nexus::boot();
 if (!file_exists($rootpath . '.env')) {
     $installScriptRelativePath = 'install/install.php';
@@ -27,8 +29,6 @@ if (!isRunningInConsole() && !in_array($script, ['announce', 'scrape', 'torrentr
 }
 
 define('TIMENOW', time());
-$USERUPDATESET = array();
-$query_name=array();
 
 define ("UC_PEASANT", 0);
 define ("UC_USER", 1);
