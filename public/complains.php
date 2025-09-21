@@ -19,10 +19,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         case 'new':
             cur_user_check();
             check_code ($_POST['imagehash'], $_POST['imagestring'],'complains.php');
+            \Nexus\Database\NexusLock::lockOrFail("complains:lock:" . getip(), 10);
             $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+            \Nexus\Database\NexusLock::lockOrFail("complains:lock:" . $email, 600);
             $body = filter_input(INPUT_POST, 'body', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if(empty($email) || empty($body)) stderr($lang_functions['std_error'], $lang_complains['text_new_failure']);
-            $user = \App\Models\User::query()->where('email', $email)->first();
+            $user = \App\Models\User::query()->where('email', $email)->where('enabled', 'no')->first();
             if (!$user) {
                 stderr($lang_functions['std_error'], $lang_complains['text_new_failure']);
             }

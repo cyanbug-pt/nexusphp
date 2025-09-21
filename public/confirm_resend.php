@@ -1,5 +1,6 @@
 <?php
 require "../include/bittorrent.php";
+\Nexus\Database\NexusLock::lockOrFail("confirm_resend:lock:" . getip(), 10);
 dbconn();
 failedloginscheck ("Re-send",true);
 
