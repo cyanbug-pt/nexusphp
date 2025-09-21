@@ -117,10 +117,10 @@ if ($action == "add")
 		$commentid = intval($_GET["cid"] ?? 0);
 		int_check($commentid,true);
 
-		$res2 = sql_query("SELECT comments.text, users.username FROM comments JOIN users ON comments.user = users.id WHERE comments.id=$commentid") or sqlerr(__FILE__, __LINE__);
+		$res2 = sql_query("SELECT comments.text, users.username FROM comments LEFT JOIN users ON comments.user = users.id WHERE comments.id=$commentid") or sqlerr(__FILE__, __LINE__);
 
 		if (mysql_num_rows($res2) != 1)
-			stderr($lang_forums['std_error'], $lang_forums['std_no_comment_id']);
+			stderr($lang_comment['std_error'], $lang_comment['std_no_comment_id']);
 
 		$arr2 = mysql_fetch_assoc($res2);
 	}
