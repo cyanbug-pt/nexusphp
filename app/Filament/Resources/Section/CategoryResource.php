@@ -2,6 +2,18 @@
 
 namespace App\Filament\Resources\Section;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Exception;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Section\CategoryResource\Pages\ListCategories;
+use App\Filament\Resources\Section\CategoryResource\Pages\CreateCategory;
+use App\Filament\Resources\Section\CategoryResource\Pages\EditCategory;
 use App\Filament\Resources\Section\CategoryResource\Pages;
 use App\Filament\Resources\Section\CategoryResource\RelationManagers;
 use App\Models\Category;
@@ -12,7 +24,6 @@ use App\Models\Torrent;
 use App\Repositories\SearchBoxRepository;
 use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -24,9 +35,9 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Section';
+    protected static string | \UnitEnum | null $navigationGroup = 'Section';
 
     protected static ?int $navigationSort = 2;
 
@@ -40,11 +51,11 @@ class CategoryResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('mode')
+        return $schema
+            ->components([
+                Select::make('mode')
                     ->options(SearchBox::listModeOptions())
                     ->label(__('label.search_box.label'))
                     ->rules([
@@ -61,22 +72,22 @@ class CategoryResource extends Resource
                         }
                     ])
                 ,
-                Forms\Components\TextInput::make('name')->required()->label(__('label.search_box.taxonomy.name'))->required(),
-                Forms\Components\TextInput::make('image')
+                TextInput::make('name')->required()->label(__('label.search_box.taxonomy.name'))->required(),
+                TextInput::make('image')
                     ->label(__('label.search_box.taxonomy.image'))
                     ->helperText(__('label.search_box.taxonomy.image_help'))
                     ->required()
                 ,
-                Forms\Components\Select::make('icon_id')
+                Select::make('icon_id')
                     ->options(Icon::query()->pluck('name', 'id')->toArray())
                     ->label(__('label.search_box.taxonomy.icon_id'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('class_name')
+                TextInput::make('class_name')
                     ->label(__('label.search_box.taxonomy.class_name'))
                     ->helperText(__('label.search_box.taxonomy.class_name_help'))
                 ,
-                Forms\Components\TextInput::make('sort_index')
+                TextInput::make('sort_index')
                     ->default(0)
                     ->label(__('label.priority'))
                     ->helperText(__('label.priority_help'))
@@ -89,38 +100,38 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('search_box.name')->label(__('label.search_box.label')),
-                Tables\Columns\TextColumn::make('name')->label(__('label.search_box.taxonomy.name'))->searchable(),
-                Tables\Columns\TextColumn::make('icon.name')->label(__('label.search_box.taxonomy.icon_id')),
-                Tables\Columns\TextColumn::make('image')->label(__('label.search_box.taxonomy.image')),
-                Tables\Columns\TextColumn::make('class_name')->label(__('label.search_box.taxonomy.class_name')),
-                Tables\Columns\TextColumn::make('sort_index')->label(__('label.priority'))->sortable(),
+                TextColumn::make('id'),
+                TextColumn::make('search_box.name')->label(__('label.search_box.label')),
+                TextColumn::make('name')->label(__('label.search_box.taxonomy.name'))->searchable(),
+                TextColumn::make('icon.name')->label(__('label.search_box.taxonomy.icon_id')),
+                TextColumn::make('image')->label(__('label.search_box.taxonomy.image')),
+                TextColumn::make('class_name')->label(__('label.search_box.taxonomy.class_name')),
+                TextColumn::make('sort_index')->label(__('label.priority'))->sortable(),
             ])
             ->defaultSort('sort_index', 'desc')
             ->filters([
-                Tables\Filters\SelectFilter::make('mode')
+                SelectFilter::make('mode')
                     ->options(SearchBox::query()->pluck('name', 'id')->toArray())
                     ->label(__('label.search_box.label'))
                 ,
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->using(function (NexusModel $record) {
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make()->using(function (NexusModel $record) {
                     try {
                         $rep = new SearchBoxRepository();
                         $rep->deleteCategory($record->id);
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         Filament::notify('danger', $exception->getMessage() ?: class_basename($exception));
                     }
                 }),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make()->using(function (Collection $records) {
+            ->toolbarActions([
+                DeleteBulkAction::make()->using(function (Collection $records) {
                     try {
                         $rep = new SearchBoxRepository();
                         $rep->deleteCategory($records->pluck('id')->toArray());
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         Filament::notify('danger', $exception->getMessage() ?: class_basename($exception));
                     }
                 }),
@@ -137,9 +148,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => ListCategories::route('/'),
+            'create' => CreateCategory::route('/create'),
+            'edit' => EditCategory::route('/{record}/edit'),
         ];
     }
 }

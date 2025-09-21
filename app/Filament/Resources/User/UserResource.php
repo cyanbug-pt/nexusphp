@@ -2,6 +2,26 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use App\Filament\Resources\User\UserResource\Pages\CreateUser;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\Column;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\ViewAction;
+use Filament\Schemas\Components\Group;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Forms\Components\Radio;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\DateTimePicker;
+use Exception;
+use Filament\Forms\Components\Hidden;
+use App\Filament\Resources\User\UserResource\Pages\ListUsers;
+use App\Filament\Resources\User\UserResource\Pages\UserProfile;
+use Filament\Actions\BulkAction;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\User\UserResource\Pages;
 use App\Filament\Resources\User\UserResource\RelationManagers;
@@ -10,12 +30,10 @@ use App\Repositories\UserRepository;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
 use Filament\Infolists\Components;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -30,9 +48,9 @@ class UserResource extends Resource
 
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 1;
 
@@ -56,16 +74,16 @@ class UserResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('username')->required(),
-                Forms\Components\TextInput::make('email')->required(),
-                Forms\Components\TextInput::make('password')->password()->required()->visibleOn(Pages\CreateUser::class),
-                Forms\Components\TextInput::make('password_confirmation')->password()->required()->same('password')->visibleOn(Pages\CreateUser::class),
-                Forms\Components\TextInput::make('id')->integer(),
-                Forms\Components\Select::make('class')->options(User::listClass(User::CLASS_PEASANT, Auth::user()->class - 1)),
+        return $schema
+            ->components([
+                TextInput::make('username')->required(),
+                TextInput::make('email')->required(),
+                TextInput::make('password')->password()->required()->visibleOn(CreateUser::class),
+                TextInput::make('password_confirmation')->password()->required()->same('password')->visibleOn(CreateUser::class),
+                TextInput::make('id')->integer(),
+                Select::make('class')->options(User::listClass(User::CLASS_PEASANT, Auth::user()->class - 1)),
             ]);
     }
 
@@ -73,108 +91,108 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('username')->searchable()->label(__("label.user.username"))
+                TextColumn::make('id')->sortable()->searchable(),
+                TextColumn::make('username')->searchable()->label(__("label.user.username"))
                     ->formatStateUsing(fn ($record) => new HtmlString(get_username($record->id, false, true, true, true))),
-                Tables\Columns\TextColumn::make('email')->searchable()->label(__("label.email")),
-                Tables\Columns\TextColumn::make('class')->label('Class')
-                    ->formatStateUsing(fn(Tables\Columns\Column $column) => $column->getRecord()->classText)
+                TextColumn::make('email')->searchable()->label(__("label.email")),
+                TextColumn::make('class')->label('Class')
+                    ->formatStateUsing(fn(Column $column) => $column->getRecord()->classText)
                     ->sortable()->label(__("label.user.class")),
-                Tables\Columns\TextColumn::make('uploaded')->label('Uploaded')
-                    ->formatStateUsing(fn(Tables\Columns\Column $column) => $column->getRecord()->uploadedText)
+                TextColumn::make('uploaded')->label('Uploaded')
+                    ->formatStateUsing(fn(Column $column) => $column->getRecord()->uploadedText)
                     ->sortable()->label(__("label.uploaded")),
-                Tables\Columns\TextColumn::make('downloaded')->label('Downloaded')
-                    ->formatStateUsing(fn(Tables\Columns\Column $column) => $column->getRecord()->downloadedText)
+                TextColumn::make('downloaded')->label('Downloaded')
+                    ->formatStateUsing(fn(Column $column) => $column->getRecord()->downloadedText)
                     ->sortable()->label(__("label.downloaded")),
-                Tables\Columns\BadgeColumn::make('status')->colors(['success' => 'confirmed', 'warning' => 'pending'])->label(__("label.user.status")),
-                Tables\Columns\BadgeColumn::make('enabled')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.enabled")),
-                Tables\Columns\BadgeColumn::make('downloadpos')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.downloadpos")),
-                Tables\Columns\BadgeColumn::make('parked')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.parked")),
-                Tables\Columns\TextColumn::make('added')->sortable()->dateTime('Y-m-d H:i')->label(__("label.added")),
-                Tables\Columns\TextColumn::make('last_access')->dateTime('Y-m-d H:i')->label(__("label.last_access")),
+                BadgeColumn::make('status')->colors(['success' => 'confirmed', 'warning' => 'pending'])->label(__("label.user.status")),
+                BadgeColumn::make('enabled')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.enabled")),
+                BadgeColumn::make('downloadpos')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.downloadpos")),
+                BadgeColumn::make('parked')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.parked")),
+                TextColumn::make('added')->sortable()->dateTime('Y-m-d H:i')->label(__("label.added")),
+                TextColumn::make('last_access')->dateTime('Y-m-d H:i')->label(__("label.last_access")),
             ])
             ->defaultSort('added', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('id')
-                    ->form([
-                        Forms\Components\TextInput::make('id')
+                Filter::make('id')
+                    ->schema([
+                        TextInput::make('id')
                             ->placeholder('UID')
                         ,
                     ])->query(function (Builder $query, array $data) {
                         return $query->when($data['id'], fn (Builder $query, $id) => $query->where("id", $id));
                     })
                 ,
-                Tables\Filters\SelectFilter::make('class')->options(array_column(User::$classes, 'text'))->label(__('label.user.class')),
-                Tables\Filters\SelectFilter::make('status')->options(['confirmed' => 'confirmed', 'pending' => 'pending'])->label(__('label.user.status')),
-                Tables\Filters\SelectFilter::make('enabled')->options(self::$yesOrNo)->label(__('label.user.enabled')),
-                Tables\Filters\SelectFilter::make('downloadpos')->options(self::$yesOrNo)->label(__('label.user.downloadpos')),
-                Tables\Filters\SelectFilter::make('parked')->options(self::$yesOrNo)->label(__('label.user.parked')),
+                SelectFilter::make('class')->options(array_column(User::$classes, 'text'))->label(__('label.user.class')),
+                SelectFilter::make('status')->options(['confirmed' => 'confirmed', 'pending' => 'pending'])->label(__('label.user.status')),
+                SelectFilter::make('enabled')->options(self::$yesOrNo)->label(__('label.user.enabled')),
+                SelectFilter::make('downloadpos')->options(self::$yesOrNo)->label(__('label.user.downloadpos')),
+                SelectFilter::make('parked')->options(self::$yesOrNo)->label(__('label.user.parked')),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
-            ->bulkActions(self::getBulkActions());
+            ->toolbarActions(self::getBulkActions());
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
-                Components\Grid::make(2)->schema([
-                    Components\Group::make([
-                        Infolists\Components\TextEntry::make('id')->label("UID"),
-                        Infolists\Components\TextEntry::make('username')
+        return $schema
+            ->components([
+                \Filament\Schemas\Components\Grid::make(2)->schema([
+                    Group::make([
+                        TextEntry::make('id')->label("UID"),
+                        TextEntry::make('username')
                             ->label(__("label.user.username"))
                             ->formatStateUsing(fn ($record) => get_username($record->id, false, true, true, true))
                             ->html()
                         ,
-                        Infolists\Components\TextEntry::make('email')
+                        TextEntry::make('email')
                             ->label(__("label.email"))
                             ->copyable()
                             ->placeholder("点击复制")
                         ,
-                        Infolists\Components\TextEntry::make('passkey')->limit(10)->copyable(),
-                        Infolists\Components\TextEntry::make('added')->label(__("label.added")),
-                        Infolists\Components\TextEntry::make('last_access')->label(__("label.last_access")),
-                        Infolists\Components\TextEntry::make('inviter.username')->label(__("label.user.invite_by")),
-                        Infolists\Components\TextEntry::make('parked')->label(__("label.user.parked")),
-                        Infolists\Components\TextEntry::make('offer_allowed_count')->label(__("label.user.offer_allowed_count")),
-                        Infolists\Components\TextEntry::make('seed_points')->label(__("label.user.seed_points")),
-                        Infolists\Components\TextEntry::make('uploadedText')->label(__("label.uploaded")),
-                        Infolists\Components\TextEntry::make('downloadedText')->label(__("label.downloaded")),
-                        Infolists\Components\TextEntry::make('seedbonus')->label(__("label.user.seedbonus")),
-                        Infolists\Components\TextEntry::make('seed_points')->label(__("label.user.seed_points")),
+                        TextEntry::make('passkey')->limit(10)->copyable(),
+                        TextEntry::make('added')->label(__("label.added")),
+                        TextEntry::make('last_access')->label(__("label.last_access")),
+                        TextEntry::make('inviter.username')->label(__("label.user.invite_by")),
+                        TextEntry::make('parked')->label(__("label.user.parked")),
+                        TextEntry::make('offer_allowed_count')->label(__("label.user.offer_allowed_count")),
+                        TextEntry::make('seed_points')->label(__("label.user.seed_points")),
+                        TextEntry::make('uploadedText')->label(__("label.uploaded")),
+                        TextEntry::make('downloadedText')->label(__("label.downloaded")),
+                        TextEntry::make('seedbonus')->label(__("label.user.seedbonus")),
+                        TextEntry::make('seed_points')->label(__("label.user.seed_points")),
                     ])
                         ->columns(6)
                         ->columnSpan(4)
                     ,
 
-                    Components\Group::make([
-                        Infolists\Components\TextEntry::make('status')
+                    Group::make([
+                        TextEntry::make('status')
                             ->label(__('label.user.status'))
                             ->badge()
                             ->colors(['success' => User::STATUS_CONFIRMED, 'warning' => User::STATUS_PENDING])
                             ->hintAction(self::buildActionConfirm())
                         ,
 
-                        Infolists\Components\TextEntry::make('classText')
+                        TextEntry::make('classText')
                             ->label(__("label.user.class"))
                             ->hintAction(self::buildActionChangeClass())
                         ,
 
-                        Infolists\Components\TextEntry::make('enabled')
+                        TextEntry::make('enabled')
                             ->label(__("label.user.enabled"))
                             ->badge()
                             ->colors(['success' => 'yes', 'warning' => 'no'])
                             ->hintAction(self::buildActionEnableDisable())
                         ,
-                        Infolists\Components\TextEntry::make('downloadpos')
+                        TextEntry::make('downloadpos')
                             ->label(__("label.user.downloadpos"))
                             ->badge()
                             ->colors(['success' => 'yes', 'warning' => 'no'])
                             ->hintAction(self::buildActionChangeDownloadPos())
                         ,
-                        Infolists\Components\TextEntry::make('twoFactorAuthenticationStatus')
+                        TextEntry::make('twoFactorAuthenticationStatus')
                             ->label(__("label.user.two_step_authentication"))
                             ->badge()
                             ->colors(['success' => 'yes', 'warning' => 'no'])
@@ -186,34 +204,34 @@ class UserResource extends Resource
             ]);
     }
 
-    private static function buildActionChangeClass(): Infolists\Components\Actions\Action
+    private static function buildActionChangeClass(): Action
     {
-        return Infolists\Components\Actions\Action::make("changeClass")
+        return Action::make("changeClass")
             ->label(__('label.change'))
             ->button()
             ->visible(fn (User $record): bool => (Auth::user()->class > $record->class))
-            ->form([
-                Forms\Components\Select::make('class')
+            ->schema([
+                Select::make('class')
                     ->options(User::listClass(User::CLASS_PEASANT, Auth::user()->class - 1))
                     ->default(fn (User $record) => $record->class)
                     ->label(__('user.labels.class'))
                     ->required()
                     ->reactive()
                 ,
-                Forms\Components\Radio::make('vip_added')
+                Radio::make('vip_added')
                     ->options(self::getYesNoOptions('yes', 'no'))
                     ->default(fn (User $record) => $record->vip_added)
                     ->label(__('user.labels.vip_added'))
                     ->helperText(__('user.labels.vip_added_help'))
-                    ->hidden(fn (\Filament\Forms\Get $get) => $get('class') != User::CLASS_VIP)
+                    ->hidden(fn (Get $get) => $get('class') != User::CLASS_VIP)
                 ,
-                Forms\Components\DateTimePicker::make('vip_until')
+                DateTimePicker::make('vip_until')
                     ->default(fn (User $record) => $record->vip_until)
                     ->label(__('user.labels.vip_until'))
                     ->helperText(__('user.labels.vip_until_help'))
-                    ->hidden(fn (\Filament\Forms\Get $get) => $get('class') != User::CLASS_VIP)
+                    ->hidden(fn (Get $get) => $get('class') != User::CLASS_VIP)
                 ,
-                Forms\Components\TextInput::make('reason')
+                TextInput::make('reason')
                     ->label(__('admin.resources.user.actions.enable_disable_reason'))
                     ->placeholder(__('admin.resources.user.actions.enable_disable_reason_placeholder'))
                 ,
@@ -223,15 +241,15 @@ class UserResource extends Resource
                 try {
                     $userRep->changeClass(Auth::user(), $record, $data['class'], $data['reason'], $data);
                     send_admin_success_notification();
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     send_admin_fail_notification($exception->getMessage());
                 }
             });
     }
 
-    private static function buildActionConfirm(): Infolists\Components\Actions\Action
+    private static function buildActionConfirm(): Action
     {
-        return Infolists\Components\Actions\Action::make(__('admin.resources.user.actions.confirm_btn'))
+        return Action::make(__('admin.resources.user.actions.confirm_btn'))
             ->modalHeading(__('admin.resources.user.actions.confirm_btn'))
             ->requiresConfirmation()
             ->visible(fn (User $record): bool => (Auth::user()->class > $record->class))
@@ -250,17 +268,17 @@ class UserResource extends Resource
             });
     }
 
-    private static function buildActionEnableDisable(): Infolists\Components\Actions\Action
+    private static function buildActionEnableDisable(): Action
     {
-        return Infolists\Components\Actions\Action::make("changeClass")
+        return Action::make("changeClass")
             ->label(fn (User $record) => $record->enabled == 'yes' ? __('admin.resources.user.actions.disable_modal_btn') : __('admin.resources.user.actions.enable_modal_btn'))
             ->modalHeading(fn (User $record) => $record->enabled == 'yes' ? __('admin.resources.user.actions.disable_modal_title') : __('admin.resources.user.actions.enable_modal_title'))
             ->button()
             ->visible(fn (User $record): bool => (Auth::user()->class > $record->class))
-            ->form([
-                Forms\Components\TextInput::make('reason')->label(__('admin.resources.user.actions.enable_disable_reason'))->placeholder(__('admin.resources.user.actions.enable_disable_reason_placeholder')),
-                Forms\Components\Hidden::make('action')->default(fn (User $record) => $record->enabled == 'yes' ? 'disable' : 'enable'),
-                Forms\Components\Hidden::make('uid')->default(fn (User $record) => $record->id),
+            ->schema([
+                TextInput::make('reason')->label(__('admin.resources.user.actions.enable_disable_reason'))->placeholder(__('admin.resources.user.actions.enable_disable_reason_placeholder')),
+                Hidden::make('action')->default(fn (User $record) => $record->enabled == 'yes' ? 'disable' : 'enable'),
+                Hidden::make('uid')->default(fn (User $record) => $record->id),
             ])
             ->action(function (User $record, array $data) {
                 $userRep = self::getRep();
@@ -271,15 +289,15 @@ class UserResource extends Resource
                         $userRep->disableUser(Auth::user(), $data['uid'], $data['reason']);
                     }
                     send_admin_success_notification();
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     send_admin_fail_notification($exception->getMessage());
                 }
             });
     }
 
-    private static function buildActionChangeDownloadPos(): Infolists\Components\Actions\Action
+    private static function buildActionChangeDownloadPos(): Action
     {
-        return Infolists\Components\Actions\Action::make("changeDownloadPos")
+        return Action::make("changeDownloadPos")
             ->label(fn (User $record) => $record->downloadpos == 'yes' ? __('admin.resources.user.actions.disable_download_privileges_btn') : __('admin.resources.user.actions.enable_download_privileges_btn'))
             ->button()
             ->requiresConfirmation()
@@ -289,16 +307,16 @@ class UserResource extends Resource
                 try {
                     $userRep->updateDownloadPrivileges(Auth::user(), $record->id, $record->downloadpos == 'yes' ? 'no' : 'yes');
                     send_admin_success_notification();
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     send_admin_fail_notification($exception->getMessage());
                 }
             });
 
     }
 
-    private static function buildActionCancelTwoStepAuthentication(): Infolists\Components\Actions\Action
+    private static function buildActionCancelTwoStepAuthentication(): Action
     {
-        return Infolists\Components\Actions\Action::make("twoStepAuthentication")
+        return Action::make("twoStepAuthentication")
             ->label(__('admin.resources.user.actions.disable_two_step_authentication'))
             ->button()
             ->visible(fn (User $record) => $record->two_step_secret != "")
@@ -309,7 +327,7 @@ class UserResource extends Resource
                 try {
                     $userRep->removeTwoStepAuthentication(Auth::user(), $record->id);
                     send_admin_success_notification();
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     send_admin_fail_notification($exception->getMessage());
                 }
             });
@@ -326,11 +344,11 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
 //            'edit' => Pages\EditUser::route('/{record}/edit'),
 //            'view' => Pages\ViewUser::route('/{record}'),
-            'view' => Pages\UserProfile::route('/{record}'),
+            'view' => UserProfile::route('/{record}'),
         ];
     }
 
@@ -338,7 +356,7 @@ class UserResource extends Resource
     {
         $actions = [];
         if (filament()->auth()->user()->class >= User::CLASS_SYSOP) {
-            $actions[] = Tables\Actions\BulkAction::make('confirm')
+            $actions[] = BulkAction::make('confirm')
                 ->label(__('admin.resources.user.actions.confirm_bulk'))
                 ->requiresConfirmation()
                 ->deselectRecordsAfterCompletion()

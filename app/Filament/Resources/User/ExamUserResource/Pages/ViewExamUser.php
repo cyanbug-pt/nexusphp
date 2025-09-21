@@ -2,6 +2,12 @@
 
 namespace App\Filament\Resources\User\ExamUserResource\Pages;
 
+use Filament\Actions\Action;
+use Exception;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\User\ExamUserResource;
 use App\Models\Exam;
 use App\Repositories\ExamRepository;
@@ -75,7 +81,7 @@ class ViewExamUser extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('Avoid')
+            Action::make('Avoid')
                 ->requiresConfirmation()
                 ->action(function () {
                     $examRep = new ExamRepository();
@@ -83,22 +89,22 @@ class ViewExamUser extends ViewRecord
                         $examRep->avoidExamUser($this->record->id);
                         send_admin_success_notification();
                         $this->record = $this->resolveRecord($this->record->id);
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         send_admin_fail_notification($exception->getMessage());
                     }
                 })
                 ->label(__('admin.resources.exam_user.action_avoid')),
 
-            Actions\Action::make('UpdateEnd')
-                ->mountUsing(fn (Forms\ComponentContainer $form) => $form->fill([
+            Action::make('UpdateEnd')
+                ->mountUsing(fn (Schema $schema) => $schema->fill([
                     'end' => $this->record->end,
                 ]))
-                ->form([
-                    Forms\Components\DateTimePicker::make('end')
+                ->schema([
+                    DateTimePicker::make('end')
                         ->required()
                         ->label(__('label.end'))
                     ,
-                    Forms\Components\Textarea::make('reason')
+                    Textarea::make('reason')
                         ->label(__('label.reason'))
                     ,
                 ])
@@ -108,13 +114,13 @@ class ViewExamUser extends ViewRecord
                         $examRep->updateExamUserEnd($this->record, Carbon::parse($data['end']), $data['reason'] ?? "");
                         send_admin_success_notification();
                         $this->record = $this->resolveRecord($this->record->id);
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         send_admin_fail_notification($exception->getMessage());
                     }
                 })
                 ->label(__('admin.resources.exam_user.action_update_end')),
 
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

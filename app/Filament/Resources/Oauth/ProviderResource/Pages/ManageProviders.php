@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Oauth\ProviderResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageListSingle;
 use App\Filament\Resources\Oauth\ProviderResource;
 use Filament\Actions;
@@ -14,7 +15,7 @@ class ManageProviders extends PageListSingle
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

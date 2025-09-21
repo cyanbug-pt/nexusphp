@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\DownloadSpeedResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\System\DownloadSpeedResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ManageRecords;
@@ -13,7 +14,7 @@ class ManageDownloadSpeeds extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

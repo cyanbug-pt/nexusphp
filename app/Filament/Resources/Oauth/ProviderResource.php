@@ -2,12 +2,21 @@
 
 namespace App\Filament\Resources\Oauth;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Oauth\ProviderResource\Pages\ManageProviders;
 use App\Filament\Resources\Oauth\ProviderResource\Pages;
 use App\Filament\Resources\Oauth\ProviderResource\RelationManagers;
 use App\Models\OauthProvider;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,9 +29,9 @@ class ProviderResource extends Resource
 {
     protected static ?string $model = OauthProvider::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Oauth';
+    protected static string | \UnitEnum | null $navigationGroup = 'Oauth';
 
     protected static ?int $navigationSort = 5;
 
@@ -36,64 +45,64 @@ class ProviderResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->label(__('label.name'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('client_id')
+                TextInput::make('client_id')
                     ->label(__('oauth.client_id'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('client_secret')
+                TextInput::make('client_secret')
                     ->label(__('oauth.secret'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('authorization_endpoint_url')
+                TextInput::make('authorization_endpoint_url')
                     ->label(__('oauth.authorization_endpoint_url'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('token_endpoint_url')
+                TextInput::make('token_endpoint_url')
                     ->label(__('oauth.token_endpoint_url'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('user_info_endpoint_url')
+                TextInput::make('user_info_endpoint_url')
                     ->label(__('oauth.user_info_endpoint_url'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('id_claim')
+                TextInput::make('id_claim')
                     ->label(__('oauth.id_claim'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('email_claim')
+                TextInput::make('email_claim')
                     ->label(__('oauth.email_claim'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('username_claim')
+                TextInput::make('username_claim')
                     ->label(__('oauth.username_claim'))
                 ,
 
-                Forms\Components\TextInput::make('level_claim')
+                TextInput::make('level_claim')
                     ->label(__('oauth.level_claim'))
                 ,
-                Forms\Components\TextInput::make('level_limit')
+                TextInput::make('level_limit')
                     ->numeric()
                     ->label(__('oauth.level_limit'))
                     ->helperText(__('oauth.level_limit_help'))
                 ,
-                Forms\Components\TextInput::make('priority')
+                TextInput::make('priority')
                     ->label(__('label.priority'))
                     ->default(0)
                     ->numeric()
                     ->helperText(__('label.priority_help'))
                 ,
-                Forms\Components\Toggle::make('enabled')
+                Toggle::make('enabled')
                     ->label(__('label.enabled'))
                 ,
-                Forms\Components\TextInput::make('redirect')
+                TextInput::make('redirect')
                     ->default(fn ($record) => OauthProvider::getCallbackUrl($record->uuid ?? self::getNewUuid()))
                     ->disabled()
                     ->label(__('oauth.redirect'))
@@ -113,31 +122,31 @@ class ProviderResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->label(__('label.name')),
-                Tables\Columns\TextColumn::make('client_id')->label(__('oauth.client_id')),
-                Tables\Columns\TextColumn::make('client_secret')->label(__('oauth.secret')),
-                Tables\Columns\TextColumn::make('authorization_endpoint_url')->label(__('oauth.authorization_endpoint_url')),
-                Tables\Columns\TextColumn::make('uuid')
+                TextColumn::make('id'),
+                TextColumn::make('name')->label(__('label.name')),
+                TextColumn::make('client_id')->label(__('oauth.client_id')),
+                TextColumn::make('client_secret')->label(__('oauth.secret')),
+                TextColumn::make('authorization_endpoint_url')->label(__('oauth.authorization_endpoint_url')),
+                TextColumn::make('uuid')
                     ->label(__('oauth.redirect'))
                     ->formatStateUsing(fn ($state) => url("/oauth/callback/$state"))
                 ,
-                Tables\Columns\TextColumn::make('priority')->label(__('label.priority')),
-                Tables\Columns\TextColumn::make('updated_at')->label(__('label.updated_at')),
-                Tables\Columns\TextColumn::make('level_limit')->label(__('oauth.level_limit')),
-                Tables\Columns\IconColumn::make('enabled')->boolean()->label(__('label.enabled')),
+                TextColumn::make('priority')->label(__('label.priority')),
+                TextColumn::make('updated_at')->label(__('label.updated_at')),
+                TextColumn::make('level_limit')->label(__('oauth.level_limit')),
+                IconColumn::make('enabled')->boolean()->label(__('label.enabled')),
             ])
             ->defaultSort('priority', 'desc')
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -145,7 +154,7 @@ class ProviderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageProviders::route('/'),
+            'index' => ManageProviders::route('/'),
         ];
     }
 }

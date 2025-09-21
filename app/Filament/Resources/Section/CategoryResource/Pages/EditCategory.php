@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\CategoryResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\EditRedirectIndexTrait;
 use App\Filament\Resources\Section\CategoryResource;
 use Filament\Pages\Actions;
@@ -17,7 +18,7 @@ class EditCategory extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 

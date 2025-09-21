@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User\HitAndRunResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\User\HitAndRunResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -13,7 +14,7 @@ class EditHitAndRun extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

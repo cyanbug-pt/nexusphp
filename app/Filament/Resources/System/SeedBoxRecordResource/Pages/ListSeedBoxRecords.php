@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\System\SeedBoxRecordResource\Pages;
 
+use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
 use App\Filament\PageList;
 use App\Filament\Resources\System\SeedBoxRecordResource;
 use App\Repositories\SeedBoxRepository;
@@ -18,12 +21,12 @@ class ListSeedBoxRecords extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
-            Actions\Action::make('check')
+            CreateAction::make(),
+            Action::make('check')
                 ->label(__('admin.resources.seed_box_record.check_modal_btn'))
-                ->form([
-                    Forms\Components\TextInput::make('ip')->required()->label('IP'),
-                    Forms\Components\TextInput::make('uid')->required()->label('UID'),
+                ->schema([
+                    TextInput::make('ip')->required()->label('IP'),
+                    TextInput::make('uid')->required()->label('UID'),
                 ])
                 ->modalHeading(__('admin.resources.seed_box_record.check_modal_header'))
                 ->action(function (array $data) {
@@ -38,7 +41,7 @@ class ListSeedBoxRecords extends PageList
 //                    }
                 })
                 ->registerModalActions([
-                    Actions\Action::make('checkResult')
+                    Action::make('checkResult')
                         ->modalHeading(function () {
                             if (self::$checkResult !== null) {
                                 if (self::$checkResult['result']) {

@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\Section;
 
+use Filament\Schemas\Schema;
+use App\Filament\Resources\Section\StandardResource\Pages\ListStandards;
+use App\Filament\Resources\Section\StandardResource\Pages\CreateStandard;
+use App\Filament\Resources\Section\StandardResource\Pages\EditStandard;
 use App\Filament\Resources\Section\StandardResource\Pages;
 use App\Filament\Resources\Section\StandardResource\RelationManagers;
 use App\Models\Standard;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -19,9 +22,9 @@ class StandardResource extends CodecResource
 
     protected static ?int $navigationSort = 5;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return parent::form($form);
+        return parent::form($schema);
     }
 
     public static function table(Table $table): Table
@@ -39,9 +42,9 @@ class StandardResource extends CodecResource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListStandards::route('/'),
-            'create' => Pages\CreateStandard::route('/create'),
-            'edit' => Pages\EditStandard::route('/{record}/edit'),
+            'index' => ListStandards::route('/'),
+            'create' => CreateStandard::route('/create'),
+            'edit' => EditStandard::route('/{record}/edit'),
         ];
     }
 }

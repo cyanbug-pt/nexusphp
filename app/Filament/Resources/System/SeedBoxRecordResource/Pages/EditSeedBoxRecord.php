@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\System\SeedBoxRecordResource\Pages;
 
+use Filament\Actions\DeleteAction;
+use Exception;
 use App\Filament\Resources\System\SeedBoxRecordResource;
 use App\Repositories\SeedBoxRepository;
 use Filament\Pages\Actions;
@@ -14,7 +16,7 @@ class EditSeedBoxRecord extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 
@@ -26,7 +28,7 @@ class EditSeedBoxRecord extends EditRecord
             $this->record = $rep->update($data, $this->record->id);
             send_admin_success_notification();
             $this->redirect($this->getResource()::getUrl('index'));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             send_admin_fail_notification($exception->getMessage());
         }
     }

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets\AnnounceMonitor;
 
+use Filament\Actions\Contracts\HasActions;
+use Filament\Tables\Columns\TextColumn;
 use App\Models\AnnounceLog;
 use App\Repositories\AnnounceLogRepository;
 use Filament\Tables;
@@ -12,7 +14,7 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\HtmlString;
 
-class MaxUploadedUser extends BaseWidget
+class MaxUploadedUser extends BaseWidget implements HasActions
 {
     public function table(Table $table): Table
     {
@@ -22,11 +24,11 @@ class MaxUploadedUser extends BaseWidget
             ->query(AnnounceLog::query())
             ->defaultPaginationPageOption(null)
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                TextColumn::make('user_id')
                     ->label(__('announce-log.user_id'))
                     ->formatStateUsing(fn ($state) => username_for_admin($state))
                 ,
-                Tables\Columns\TextColumn::make('uploaded_total')
+                TextColumn::make('uploaded_total')
                     ->label(__('announce-log.uploaded_total'))
                     ->formatStateUsing(fn ($state) => mksize($state))
                 ,

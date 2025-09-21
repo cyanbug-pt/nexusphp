@@ -2,14 +2,18 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Infolists\Components\TextEntry;
+use App\Filament\Resources\System\PluginStoreResource\Pages\ListPluginStores;
 use App\Filament\Resources\System\PluginStoreResource\Pages;
 use App\Filament\Resources\System\PluginStoreResource\RelationManagers;
 use App\Livewire\InstallPluginModal;
 use App\Models\Plugin;
 use App\Models\PluginStore;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
@@ -26,9 +30,9 @@ use Livewire\Livewire;
 class PluginStoreResource extends Resource
 {
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 99;
 
@@ -37,10 +41,10 @@ class PluginStoreResource extends Resource
         return PluginStore::getHasNewVersionCount() ?: '';
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -49,15 +53,15 @@ class PluginStoreResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\Layout\Stack::make([
-                    Tables\Columns\Layout\Stack::make([
-                        Tables\Columns\TextColumn::make(self::getColumnLabelKey("title"))
+                Stack::make([
+                    Stack::make([
+                        TextColumn::make(self::getColumnLabelKey("title"))
                             ->weight(FontWeight::Bold)
                         ,
-                        Tables\Columns\TextColumn::make(self::getColumnLabelKey("description")),
+                        TextColumn::make(self::getColumnLabelKey("description")),
                     ]),
-                    Tables\Columns\Layout\Stack::make([
-                        Tables\Columns\TextColumn::make('version')
+                    Stack::make([
+                        TextColumn::make('version')
                             ->formatStateUsing(function (PluginStore $record) {
                                 $installedVersion = $record->installed_version;
                                 $latestVersion = $record->version;
@@ -82,8 +86,8 @@ class PluginStoreResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make()
+            ->recordActions([
+                ViewAction::make()
                     ->modalHeading(nexus_trans("plugin.labels.introduce"))
                     ->modalContent(fn (PluginStore $record) => $record->getFullDescription())
                     ->extraModalFooterActions([
@@ -93,7 +97,7 @@ class PluginStoreResource extends Resource
                         ,
                     ])
                 ,
-                Tables\Actions\Action::make("install")
+                Action::make("install")
                     ->label(function(PluginStore $record) {
                         if ($record->hasNewVersion()) {
                             return sprintf('%s(new: %s)', nexus_trans("plugin.actions.update"), $record->version);
@@ -102,10 +106,10 @@ class PluginStoreResource extends Resource
                     })
                     ->modalHeading(fn (PluginStore $record) => sprintf("%s: %s", nexus_trans("plugin.actions.install_or_update"), data_get($record, self::getColumnLabelKey("title"))))
                     ->modalContent(function (PluginStore $record) {
-                        $infolist = new Infolist();
+                        $infolist = new Schema();
                         $infolist->record = $record;
-                        $infolist->schema([
-                            Infolists\Components\TextEntry::make('plugin_id')
+                        $infolist->components([
+                            TextEntry::make('plugin_id')
                                 ->label(fn () => nexus_trans("plugin.labels.install_title", ['web_root' => base_path()]))
                                 ->html(true)
                                 ->formatStateUsing(function (PluginStore $record) {
@@ -155,7 +159,7 @@ class PluginStoreResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPluginStores::route('/'),
+            'index' => ListPluginStores::route('/'),
 //            'create' => Pages\CreatePluginStore::route('/create'),
 //            'edit' => Pages\EditPluginStore::route('/{record}/edit'),
         ];

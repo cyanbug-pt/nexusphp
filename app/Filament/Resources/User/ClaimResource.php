@@ -2,11 +2,18 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BooleanColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use App\Filament\Resources\User\ClaimResource\Pages\ListClaims;
+use App\Filament\Resources\User\ClaimResource\Pages\CreateClaim;
+use App\Filament\Resources\User\ClaimResource\Pages\EditClaim;
 use App\Filament\Resources\User\ClaimResource\Pages;
 use App\Filament\Resources\User\ClaimResource\RelationManagers;
 use App\Models\Claim;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -19,9 +26,9 @@ class ClaimResource extends Resource
 {
     protected static ?string $model = Claim::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 4;
 
@@ -35,10 +42,10 @@ class ClaimResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -47,27 +54,27 @@ class ClaimResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uid')->searchable(),
-                Tables\Columns\TextColumn::make('user.username')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('uid')->searchable(),
+                TextColumn::make('user.username')
                     ->label(__('label.user.label'))
                     ->searchable()
                     ->formatStateUsing(fn ($record) => new HtmlString(get_username($record->uid, false, true, true, true)))
                 ,
-                Tables\Columns\TextColumn::make('torrent.name')->limit(40)->label(__('label.torrent.label'))->searchable(),
-                Tables\Columns\TextColumn::make('torrent.size')->label(__('label.torrent.size'))->formatStateUsing(fn (Model $record) => mksize($record->torrent->size)),
-                Tables\Columns\TextColumn::make('torrent.added')->label(__('label.torrent.ttl'))->formatStateUsing(fn (Model $record) => mkprettytime(abs($record->torrent->added->diffInSeconds()))),
-                Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at'))->dateTime(),
-                Tables\Columns\TextColumn::make('last_settle_at')->label(__('label.claim.last_settle_at'))->dateTime(),
-                Tables\Columns\TextColumn::make('seedTimeThisMonth')->label(__('label.claim.seed_time_this_month')),
-                Tables\Columns\TextColumn::make('uploadedThisMonth')->label(__('label.claim.uploaded_this_month')),
-                Tables\Columns\BooleanColumn::make('isReachedThisMonth')->label(__('label.claim.is_reached_this_month')),
+                TextColumn::make('torrent.name')->limit(40)->label(__('label.torrent.label'))->searchable(),
+                TextColumn::make('torrent.size')->label(__('label.torrent.size'))->formatStateUsing(fn (Model $record) => mksize($record->torrent->size)),
+                TextColumn::make('torrent.added')->label(__('label.torrent.ttl'))->formatStateUsing(fn (Model $record) => mkprettytime(abs($record->torrent->added->diffInSeconds()))),
+                TextColumn::make('created_at')->label(__('label.created_at'))->dateTime(),
+                TextColumn::make('last_settle_at')->label(__('label.claim.last_settle_at'))->dateTime(),
+                TextColumn::make('seedTimeThisMonth')->label(__('label.claim.seed_time_this_month')),
+                TextColumn::make('uploadedThisMonth')->label(__('label.claim.uploaded_this_month')),
+                BooleanColumn::make('isReachedThisMonth')->label(__('label.claim.is_reached_this_month')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label('UID')
                             ->placeholder('UID')
                         ,
@@ -75,9 +82,9 @@ class ClaimResource extends Resource
                         return $query->when($data['uid'], fn (Builder $query, $uid) => $query->where("uid", $uid));
                     })
                 ,
-                Tables\Filters\Filter::make('torrent_id')
-                    ->form([
-                        Forms\Components\TextInput::make('torrent_id')
+                Filter::make('torrent_id')
+                    ->schema([
+                        TextInput::make('torrent_id')
                             ->label(__('claim.fields.torrent_id'))
                             ->placeholder(__('claim.fields.torrent_id'))
                         ,
@@ -86,10 +93,10 @@ class ClaimResource extends Resource
                     })
                 ,
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -109,9 +116,9 @@ class ClaimResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClaims::route('/'),
-            'create' => Pages\CreateClaim::route('/create'),
-            'edit' => Pages\EditClaim::route('/{record}/edit'),
+            'index' => ListClaims::route('/'),
+            'create' => CreateClaim::route('/create'),
+            'edit' => EditClaim::route('/{record}/edit'),
         ];
     }
 }

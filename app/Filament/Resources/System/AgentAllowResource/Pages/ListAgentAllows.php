@@ -2,6 +2,10 @@
 
 namespace App\Filament\Resources\System\AgentAllowResource\Pages;
 
+use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
+use Exception;
 use App\Filament\PageList;
 use App\Filament\Resources\System\AgentAllowResource;
 use App\Repositories\AgentAllowRepository;
@@ -16,12 +20,12 @@ class ListAgentAllows extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
-            Actions\Action::make('check')
+            CreateAction::make(),
+            Action::make('check')
                 ->label(__('admin.resources.agent_allow.check_modal_btn'))
-                ->form([
-                    Forms\Components\TextInput::make('peer_id')->required(),
-                    Forms\Components\TextInput::make('agent')->required(),
+                ->schema([
+                    TextInput::make('peer_id')->required(),
+                    TextInput::make('agent')->required(),
                 ])
                 ->modalHeading(__('admin.resources.agent_allow.check_modal_header'))
                 ->action(function ($data) {
@@ -29,7 +33,7 @@ class ListAgentAllows extends PageList
                     try {
                         $result = $agentAllowRep->checkClient($data['peer_id'], $data['agent']);
                         send_admin_success_notification(__('admin.resources.agent_allow.check_pass_msg', ['id' => $result->id]));
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         send_admin_fail_notification($exception->getMessage());
                     }
                 })

@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use App\Filament\Resources\User\LoginLogResource\Pages\ManageLoginLogs;
 use App\Filament\Resources\User\LoginLogResource\Pages;
 use App\Filament\Resources\User\LoginLogResource\RelationManagers;
 use App\Models\LoginLog;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -17,9 +21,9 @@ class LoginLogResource extends Resource
 {
     protected static ?string $model = LoginLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 9;
 
@@ -33,10 +37,10 @@ class LoginLogResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -45,22 +49,22 @@ class LoginLogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uid')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('uid')
                     ->formatStateUsing(fn ($state) => username_for_admin($state))
                     ->label(__('label.username'))
                 ,
-                Tables\Columns\TextColumn::make('ip')->searchable(),
-                Tables\Columns\TextColumn::make('country')->label(__('label.country'))->searchable(),
-                Tables\Columns\TextColumn::make('city')->label(__('label.city'))->searchable(),
-                Tables\Columns\TextColumn::make('client')->label(__('label.client')),
-                Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at')),
+                TextColumn::make('ip')->searchable(),
+                TextColumn::make('country')->label(__('label.country'))->searchable(),
+                TextColumn::make('city')->label(__('label.city'))->searchable(),
+                TextColumn::make('client')->label(__('label.client')),
+                TextColumn::make('created_at')->label(__('label.created_at')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label(__('label.username'))
                             ->placeholder('UID')
                         ,
@@ -69,11 +73,11 @@ class LoginLogResource extends Resource
                     })
                 ,
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
 //                Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -81,7 +85,7 @@ class LoginLogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageLoginLogs::route('/'),
+            'index' => ManageLoginLogs::route('/'),
         ];
     }
 }

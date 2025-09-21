@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources\Oauth;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Oauth\AuthCodeResource\Pages\ManageAuthCodes;
 use App\Filament\Resources\Oauth\AuthCodeResource\Pages;
 use App\Filament\Resources\Oauth\AuthCodeResource\RelationManagers;
 use Laravel\Passport\AuthCode;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -17,9 +21,9 @@ class AuthCodeResource extends Resource
 {
     protected static ?string $model = AuthCode::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Oauth';
+    protected static string | \UnitEnum | null $navigationGroup = 'Oauth';
 
     protected static ?int $navigationSort = 2;
 
@@ -33,10 +37,10 @@ class AuthCodeResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -45,31 +49,31 @@ class AuthCodeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('user_id')
+                TextColumn::make('id'),
+                TextColumn::make('user_id')
                     ->label(__('label.username'))
                     ->formatStateUsing(fn ($record) => username_for_admin($record->user_id)),
-                Tables\Columns\TextColumn::make('client.name')
+                TextColumn::make('client.name')
                     ->label(__('oauth.client')),
-                Tables\Columns\TextColumn::make('expires_at')
+                TextColumn::make('expires_at')
                     ->label(__('label.expire_at'))
             ])
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageAuthCodes::route('/'),
+            'index' => ManageAuthCodes::route('/'),
         ];
     }
 }

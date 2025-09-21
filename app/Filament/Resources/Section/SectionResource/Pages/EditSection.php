@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\SectionResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Section\SectionResource;
 use App\Models\SearchBox;
 use Filament\Pages\Actions;
@@ -14,7 +15,7 @@ class EditSection extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 

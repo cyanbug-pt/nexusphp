@@ -2,11 +2,16 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\User\TokenResource\Pages\ManageTokens;
 use App\Filament\Resources\User\TokenResource\Pages;
 use App\Filament\Resources\User\TokenResource\RelationManagers;
 use App\Models\PersonalAccessToken;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,9 +23,9 @@ class TokenResource extends Resource
 {
     protected static ?string $model = PersonalAccessToken::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 6;
 
@@ -34,10 +39,10 @@ class TokenResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -46,31 +51,31 @@ class TokenResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->label(__('label.name')),
-                Tables\Columns\TextColumn::make('abilities')
+                TextColumn::make('id'),
+                TextColumn::make('name')->label(__('label.name')),
+                TextColumn::make('abilities')
                     ->label(__('token.permission'))
                     ->formatStateUsing(fn ($record): string => $record->abilitiesText)
                 ,
-                Tables\Columns\TextColumn::make('token')->label(__('token.token')),
-                Tables\Columns\TextColumn::make('tokenable_id')
+                TextColumn::make('token')->label(__('token.token')),
+                TextColumn::make('tokenable_id')
                     ->label(__('label.username'))
                     ->formatStateUsing(fn ($state) => username_for_admin($state))
                 ,
-                Tables\Columns\TextColumn::make('last_used_at')->label(__('token.last_used_at')),
-                Tables\Columns\TextColumn::make('expires_at')->label(__('label.expire_at')),
-                Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at')),
+                TextColumn::make('last_used_at')->label(__('token.last_used_at')),
+                TextColumn::make('expires_at')->label(__('label.expire_at')),
+                TextColumn::make('created_at')->label(__('label.created_at')),
             ])
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -78,7 +83,7 @@ class TokenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTokens::route('/'),
+            'index' => ManageTokens::route('/'),
         ];
     }
 }

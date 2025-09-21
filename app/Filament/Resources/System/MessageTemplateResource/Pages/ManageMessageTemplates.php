@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\MessageTemplateResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageListSingle;
 use App\Filament\Resources\System\MessageTemplateResource;
 use Filament\Actions;
@@ -14,7 +15,7 @@ class ManageMessageTemplates extends PageListSingle
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

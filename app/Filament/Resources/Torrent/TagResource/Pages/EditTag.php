@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Torrent\TagResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Torrent\TagResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -13,7 +14,7 @@ class EditTag extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 

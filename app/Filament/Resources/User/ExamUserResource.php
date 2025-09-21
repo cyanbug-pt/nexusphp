@@ -2,6 +2,21 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BooleanColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\ViewAction;
+use Filament\Actions\BulkAction;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Infolists\Components\TextEntry;
+use App\Filament\Resources\User\ExamUserResource\Pages\ListExamUsers;
+use App\Filament\Resources\User\ExamUserResource\Pages\ViewExamUser;
 use App\Filament\Resources\User\ExamUserResource\Pages;
 use App\Filament\Resources\User\ExamUserResource\RelationManagers;
 use App\Models\Exam;
@@ -10,9 +25,7 @@ use App\Repositories\ExamRepository;
 use App\Repositories\HitAndRunRepository;
 use Carbon\Carbon;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\ViewEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -28,9 +41,9 @@ class ExamUserResource extends Resource
 {
     protected static ?string $model = ExamUser::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shield-check';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 2;
 
@@ -44,10 +57,10 @@ class ExamUserResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
 
             ]);
     }
@@ -56,26 +69,26 @@ class ExamUserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uid')->searchable(),
-                Tables\Columns\TextColumn::make('user.username')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('uid')->searchable(),
+                TextColumn::make('user.username')
                     ->label(__('label.username'))
                     ->searchable()
                     ->formatStateUsing(fn ($record) => new HtmlString(get_username($record->uid, false, true, true, true)))
                 ,
-                Tables\Columns\TextColumn::make('exam.name')->label(__('label.exam.label')),
-                Tables\Columns\TextColumn::make('exam.typeText')->label(__('exam.type')),
-                Tables\Columns\TextColumn::make('begin')->label(__('label.begin'))->dateTime(),
-                Tables\Columns\TextColumn::make('end')->label(__('label.end'))->dateTime(),
-                Tables\Columns\BooleanColumn::make('is_done')->label(__('label.exam_user.is_done')),
-                Tables\Columns\TextColumn::make('statusText')->label(__('label.status')),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->label(__('label.created_at')),
+                TextColumn::make('exam.name')->label(__('label.exam.label')),
+                TextColumn::make('exam.typeText')->label(__('exam.type')),
+                TextColumn::make('begin')->label(__('label.begin'))->dateTime(),
+                TextColumn::make('end')->label(__('label.end'))->dateTime(),
+                BooleanColumn::make('is_done')->label(__('label.exam_user.is_done')),
+                TextColumn::make('statusText')->label(__('label.status')),
+                TextColumn::make('created_at')->dateTime()->label(__('label.created_at')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label('UID')
                             ->placeholder('UID')
                         ,
@@ -83,7 +96,7 @@ class ExamUserResource extends Resource
                         return $query->when($data['uid'], fn (Builder $query, $uid) => $query->where("uid", $uid));
                     })
                 ,
-                Tables\Filters\SelectFilter::make('exam_type')
+                SelectFilter::make('exam_type')
                     ->options(Exam::listTypeOptions())
                     ->label(__('exam.type'))
                     ->query(function (Builder $query, array $data) {
@@ -94,18 +107,18 @@ class ExamUserResource extends Resource
                         });
                     })
                 ,
-                Tables\Filters\SelectFilter::make('exam_id')
+                SelectFilter::make('exam_id')
                     ->options(Exam::query()->pluck('name', 'id')->toArray())
                     ->label(__('label.exam.label'))
                 ,
-                Tables\Filters\SelectFilter::make('status')->options(ExamUser::listStatus(true))->label(__("label.status")),
-                Tables\Filters\SelectFilter::make('is_done')->options(['0' => 'No', '1' => 'yes'])->label(__('label.exam_user.is_done')),
+                SelectFilter::make('status')->options(ExamUser::listStatus(true))->label(__("label.status")),
+                SelectFilter::make('is_done')->options(['0' => 'No', '1' => 'yes'])->label(__('label.exam_user.is_done')),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
             ->groupedBulkActions([
-                Tables\Actions\BulkAction::make('Avoid')->action(function (Collection $records) {
+                BulkAction::make('Avoid')->action(function (Collection $records) {
                     $idArr = $records->pluck('id')->toArray();
                     $rep = new ExamRepository();
                     $rep->avoidExamUserBulk(['id' => $idArr], Auth::user());
@@ -115,13 +128,13 @@ class ExamUserResource extends Resource
                 ->label(__('admin.resources.exam_user.bulk_action_avoid_label'))
                 ->icon('heroicon-o-x-mark'),
 
-                Tables\Actions\BulkAction::make('UpdateEnd')
+                BulkAction::make('UpdateEnd')
                     ->form([
-                        Forms\Components\DateTimePicker::make('end')
+                        DateTimePicker::make('end')
                             ->required()
                             ->label(__('label.end'))
                         ,
-                        Forms\Components\Textarea::make('reason')
+                        Textarea::make('reason')
                             ->label(__('label.reason'))
                         ,
                     ])
@@ -142,44 +155,44 @@ class ExamUserResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
-                Components\Grid::make(2)->schema([
-                    Components\Group::make([
-                        Infolists\Components\TextEntry::make('id'),
-                        Infolists\Components\TextEntry::make('statusText')
+        return $schema
+            ->components([
+                Grid::make(2)->schema([
+                    Group::make([
+                        TextEntry::make('id'),
+                        TextEntry::make('statusText')
                             ->label(__("label.status"))
                         ,
-                        Infolists\Components\TextEntry::make('uid')
+                        TextEntry::make('uid')
                             ->formatStateUsing(fn ($record) => username_for_admin($record->uid))
                             ->label(__("label.username"))
                         ,
-                        Infolists\Components\TextEntry::make('exam.name')
+                        TextEntry::make('exam.name')
 //                    ->formatStateUsing(fn ($record) => $record->torrent->name)
                             ->label(__("label.exam.label"))
                         ,
-                        Infolists\Components\TextEntry::make('begin')
+                        TextEntry::make('begin')
                             ->label(__("label.begin"))
                         ,
-                        Infolists\Components\TextEntry::make('end')
+                        TextEntry::make('end')
                             ->label(__("label.end"))
                         ,
-                        Infolists\Components\TextEntry::make('isDoneText')
+                        TextEntry::make('isDoneText')
                             ->label(__("label.exam_user.is_done"))
                         ,
-                        Infolists\Components\TextEntry::make('created_at')
+                        TextEntry::make('created_at')
                             ->label(__("label.created_at"))
                         ,
-                        Infolists\Components\TextEntry::make('updated_at')
+                        TextEntry::make('updated_at')
                             ->label(__("label.updated_at"))
                         ,
                     ])
                         ->columnSpan(1)
                         ->columns(2)
                     ,
-                    Components\Group::make([
+                    Group::make([
                         ViewEntry::make('progressFormatted')
                             ->label('进度')
                             ->view('filament.resources.user.exam-user-resource.pages.detail-v3')
@@ -231,10 +244,10 @@ class ExamUserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExamUsers::route('/'),
+            'index' => ListExamUsers::route('/'),
 //            'create' => Pages\CreateExamUser::route('/create'),
 //            'edit' => Pages\EditExamUser::route('/{record}/edit'),
-            'view' => Pages\ViewExamUser::route('/{record}'),
+            'view' => ViewExamUser::route('/{record}'),
         ];
     }
 }

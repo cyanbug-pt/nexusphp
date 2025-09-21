@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\SeedBoxRecordResource\Pages;
 
+use Exception;
 use App\Filament\Resources\System\SeedBoxRecordResource;
 use App\Models\SeedBoxRecord;
 use App\Repositories\SeedBoxRepository;
@@ -33,7 +34,7 @@ class CreateSeedBoxRecord extends CreateRecord
                 return;
             }
             $this->redirect($this->getResource()::getUrl('index'));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             send_admin_fail_notification($exception->getMessage());
         }
     }

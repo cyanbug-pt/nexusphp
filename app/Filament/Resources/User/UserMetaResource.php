@@ -2,12 +2,20 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\User\UserMetaResource\Pages\ListUserMetas;
+use App\Filament\Resources\User\UserMetaResource\Pages\CreateUserMeta;
+use App\Filament\Resources\User\UserMetaResource\Pages\EditUserMeta;
 use App\Filament\Resources\User\UserMetaResource\Pages;
 use App\Filament\Resources\User\UserMetaResource\RelationManagers;
 use App\Models\NexusModel;
 use App\Models\UserMeta;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -20,9 +28,9 @@ class UserMetaResource extends Resource
 {
     protected static ?string $model = UserMeta::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 8;
 
@@ -36,10 +44,10 @@ class UserMetaResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -48,28 +56,28 @@ class UserMetaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uid')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('uid')
                     ->searchable()
                     ->label(__('label.username'))
                     ->formatStateUsing(fn ($state) => username_for_admin($state))
                 ,
-                Tables\Columns\TextColumn::make('meta_key_text')
+                TextColumn::make('meta_key_text')
                     ->label(__('label.name'))
                 ,
-                Tables\Columns\TextColumn::make('deadline')
+                TextColumn::make('deadline')
                     ->label(__('label.deadline'))
                 ,
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('label.created_at'))
                     ->formatStateUsing(fn ($state) => format_datetime($state))
                 ,
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label(__('label.username'))
                             ->placeholder('UID')
                         ,
@@ -77,19 +85,19 @@ class UserMetaResource extends Resource
                         return $query->when($data['uid'], fn (Builder $query, $value) => $query->where("uid", $value));
                     })
                 ,
-                Tables\Filters\SelectFilter::make('meta_key')
+                SelectFilter::make('meta_key')
                     ->options(UserMeta::listProps())
                     ->label(__('label.name'))
                 ,
             ])
-            ->actions([
-                Tables\Actions\DeleteAction::make()->using(function (NexusModel $record) {
+            ->recordActions([
+                DeleteAction::make()->using(function (NexusModel $record) {
                     $record->delete();
                     clear_user_cache($record->uid);
                     do_log(sprintf("user: %d meta: %s was del by %s", $record->uid, $record->meta_key, Auth::user()->username));
                 }),
             ])
-            ->bulkActions([
+            ->toolbarActions([
             ]);
     }
 
@@ -103,9 +111,9 @@ class UserMetaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUserMetas::route('/'),
-            'create' => Pages\CreateUserMeta::route('/create'),
-            'edit' => Pages\EditUserMeta::route('/{record}/edit'),
+            'index' => ListUserMetas::route('/'),
+            'create' => CreateUserMeta::route('/create'),
+            'edit' => EditUserMeta::route('/{record}/edit'),
         ];
     }
 }

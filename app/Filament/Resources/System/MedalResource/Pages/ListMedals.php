@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\MedalResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\System\MedalResource;
 use App\Models\Medal;
@@ -16,7 +17,7 @@ class ListMedals extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

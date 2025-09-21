@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User\UserMetaResource\Pages;
 
+use Filament\Actions\Contracts\HasActions;
 use App\Filament\PageList;
 use App\Filament\Resources\User\UserMetaResource;
 use App\Models\UserMeta;
@@ -9,7 +10,7 @@ use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 
-class ListUserMetas extends PageList
+class ListUserMetas extends PageList implements HasActions
 {
     protected static string $resource = UserMetaResource::class;
 

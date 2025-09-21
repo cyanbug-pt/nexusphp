@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\SourceResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\SourceResource;
 use App\Models\Source;
@@ -17,7 +18,7 @@ class ListSources extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

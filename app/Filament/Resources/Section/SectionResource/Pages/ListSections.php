@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\SectionResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\SectionResource;
 use Filament\Pages\Actions;
@@ -14,7 +15,7 @@ class ListSections extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

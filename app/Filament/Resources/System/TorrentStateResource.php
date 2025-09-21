@@ -2,13 +2,18 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use App\Filament\Resources\System\TorrentStateResource\Pages\ManageTorrentStates;
 use App\Filament\Resources\System\TorrentStateResource\Pages;
 use App\Filament\Resources\System\TorrentStateResource\RelationManagers;
 use App\Models\Setting;
 use App\Models\Torrent;
 use App\Models\TorrentState;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -20,9 +25,9 @@ class TorrentStateResource extends Resource
 {
     protected static ?string $model = TorrentState::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-megaphone';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 9;
 
@@ -36,17 +41,17 @@ class TorrentStateResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('global_sp_state')
+        return $schema
+            ->components([
+                Select::make('global_sp_state')
                     ->options(Torrent::listPromotionTypes(true))
                     ->label(__('label.torrent_state.global_sp_state'))
                     ->required(),
-                Forms\Components\DateTimePicker::make('begin')
+                DateTimePicker::make('begin')
                     ->label(__('label.begin')),
-                Forms\Components\DateTimePicker::make('deadline')
+                DateTimePicker::make('deadline')
                     ->label(__('label.deadline')),
             ])->columns(1);
     }
@@ -55,15 +60,15 @@ class TorrentStateResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('global_sp_state_text')->label(__('label.torrent_state.global_sp_state')),
-                Tables\Columns\TextColumn::make('begin')->label(__('label.begin')),
-                Tables\Columns\TextColumn::make('deadline')->label(__('label.deadline')),
+                TextColumn::make('global_sp_state_text')->label(__('label.torrent_state.global_sp_state')),
+                TextColumn::make('begin')->label(__('label.begin')),
+                TextColumn::make('deadline')->label(__('label.deadline')),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()->after(function () {
+            ->recordActions([
+                EditAction::make()->after(function () {
                     do_log("cache_del: global_promotion_state");
                     NexusDB::cache_del(Setting::TORRENT_GLOBAL_STATE_CACHE_KEY);
                     do_log("publish_model_event: global_promotion_state_updated");
@@ -71,7 +76,7 @@ class TorrentStateResource extends Resource
                 }),
 //                Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -79,7 +84,7 @@ class TorrentStateResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTorrentStates::route('/'),
+            'index' => ManageTorrentStates::route('/'),
         ];
     }
 }

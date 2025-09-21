@@ -7,7 +7,7 @@ use Filament\Widgets\Widget;
 
 class StatTable extends Widget
 {
-    protected static string $view = 'filament.widgets.stat-table';
+    protected string $view = 'filament.widgets.stat-table';
 
     protected function getHeader(): string
     {

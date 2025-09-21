@@ -2,6 +2,25 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BooleanColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use App\Filament\Resources\System\ExamResource\Pages\ListExams;
+use App\Filament\Resources\System\ExamResource\Pages\CreateExam;
+use App\Filament\Resources\System\ExamResource\Pages\EditExam;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\System\ExamResource\Pages;
 use App\Filament\Resources\System\ExamResource\RelationManagers;
@@ -9,7 +28,6 @@ use App\Models\Exam;
 use App\Repositories\ExamRepository;
 use App\Repositories\UserRepository;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -23,9 +41,9 @@ class ExamResource extends Resource
 
     protected static ?string $model = Exam::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-exclamation-triangle';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 1;
 
@@ -41,14 +59,14 @@ class ExamResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
         $userRep = new UserRepository();
-        return $form
-            ->schema([
-                Forms\Components\Section::make(__('label.exam.section_base_info'))->schema([
-                    Forms\Components\TextInput::make('name')->required()->columnSpan(['sm' => 2])->label(__('label.name')),
-                    Forms\Components\Select::make('type')
+        return $schema
+            ->components([
+                Section::make(__('label.exam.section_base_info'))->schema([
+                    TextInput::make('name')->required()->columnSpan(['sm' => 2])->label(__('label.name')),
+                    Select::make('type')
                         ->required()
                         ->columnSpanFull()
                         ->label(__('exam.type'))
@@ -56,74 +74,74 @@ class ExamResource extends Resource
                         ->helperText(__('exam.type_help'))
                         ->reactive()
                     ,
-                    Forms\Components\TextInput::make('success_reward_bonus')
+                    TextInput::make('success_reward_bonus')
                         ->columnSpanFull()
                         ->required()
                         ->label(__('exam.success_reward_bonus'))
-                        ->hidden(fn (\Filament\Forms\Get $get) => $get('type') != Exam::TYPE_TASK)
+                        ->hidden(fn (Get $get) => $get('type') != Exam::TYPE_TASK)
                     ,
-                    Forms\Components\TextInput::make('fail_deduct_bonus')
+                    TextInput::make('fail_deduct_bonus')
                         ->columnSpanFull()
                         ->required()
                         ->label(__('exam.fail_deduct_bonus'))
-                        ->hidden(fn (\Filament\Forms\Get $get) => $get('type') != Exam::TYPE_TASK)
+                        ->hidden(fn (Get $get) => $get('type') != Exam::TYPE_TASK)
                     ,
-                    Forms\Components\TextInput::make('max_user_count')
+                    TextInput::make('max_user_count')
                         ->columnSpanFull()
                         ->required()
                         ->numeric()
                         ->label(__('exam.max_user_count'))
-                        ->hidden(fn (\Filament\Forms\Get $get) => $get('type') != Exam::TYPE_TASK)
+                        ->hidden(fn (Get $get) => $get('type') != Exam::TYPE_TASK)
                     ,
 
-                    Forms\Components\Repeater::make('indexes')->schema([
-                        Forms\Components\Select::make('index')
+                    Repeater::make('indexes')->schema([
+                        Select::make('index')
                             ->options(Exam::listIndex(true))
                             ->label(__('label.exam.index_required_label'))
                             ->rules([Rule::in(array_keys(Exam::$indexes))])
                             ->required(),
-                        Forms\Components\TextInput::make('require_value')
+                        TextInput::make('require_value')
                             ->label(__('label.exam.index_required_value'))
                             ->placeholder(__('label.exam.index_placeholder'))
                             ->integer()
                             ->required(),
-                        Forms\Components\Hidden::make('checked')->default(true),
+                        Hidden::make('checked')->default(true),
                     ])
                         ->label(__('label.exam.index_formatted'))
                         ->required(),
 
-                    Forms\Components\Radio::make('status')
+                    Radio::make('status')
                         ->options(self::getEnableDisableOptions())
                         ->inline()
                         ->required()
                         ->label(__('label.status'))
                         ->columnSpan(['sm' => 2]),
-                    Forms\Components\Radio::make('is_discovered')
+                    Radio::make('is_discovered')
                         ->options(self::IS_DISCOVERED_OPTIONS)
                         ->label(__('label.exam.is_discovered'))
                         ->inline()
                         ->required()
                         ->columnSpan(['sm' => 2]),
-                    Forms\Components\TextInput::make('background_color')
+                    TextInput::make('background_color')
                         ->required()
                         ->label(__('exam.background_color'))
                         ->columnSpan(['sm' => 2]),
-                    Forms\Components\TextInput::make('priority')
+                    TextInput::make('priority')
                         ->columnSpan(['sm' => 2])
                         ->integer()
                         ->label(__("label.priority"))
                         ->helperText(__('label.exam.priority_help')),
                 ])->columns(2),
 
-                Forms\Components\Section::make(__('label.exam.section_time'))->schema([
-                    Forms\Components\DateTimePicker::make('begin')->label(__('label.begin')),
-                    Forms\Components\DateTimePicker::make('end')->label(__('label.end')),
-                    Forms\Components\TextInput::make('duration')
+                Section::make(__('label.exam.section_time'))->schema([
+                    DateTimePicker::make('begin')->label(__('label.begin')),
+                    DateTimePicker::make('end')->label(__('label.end')),
+                    TextInput::make('duration')
                         ->integer()
                         ->columnSpan(['sm' => 2])
                         ->label(__('label.duration'))
                         ->helperText(__('label.exam.duration_help')),
-                    Forms\Components\Select::make('recurring')
+                    Select::make('recurring')
                         ->options(Exam::listRecurringOptions())
                         ->label(__('exam.recurring'))
                         ->helperText(__('exam.recurring_help'))
@@ -131,22 +149,22 @@ class ExamResource extends Resource
                     ,
                 ])->columns(2),
 
-                Forms\Components\Section::make(__('label.exam.section_target_user'))->schema([
-                    Forms\Components\CheckboxList::make('filters.classes')
+                Section::make(__('label.exam.section_target_user'))->schema([
+                    CheckboxList::make('filters.classes')
                         ->options($userRep->listClass())->columnSpan(['sm' => 2])
                         ->columns(4)
                         ->label(__('label.user.class')),
-                    Forms\Components\DateTimePicker::make('filters.register_time_range.0')->label(__("label.exam.register_time_range.begin")),
-                    Forms\Components\DateTimePicker::make('filters.register_time_range.1')->label(__("label.exam.register_time_range.end")),
-                    Forms\Components\TextInput::make('filters.register_days_range.0')->numeric()->label(__("label.exam.register_days_range.begin")),
-                    Forms\Components\TextInput::make('filters.register_days_range.1')->numeric()->label(__("label.exam.register_days_range.end")),
-                    Forms\Components\CheckboxList::make('filters.donate_status')
+                    DateTimePicker::make('filters.register_time_range.0')->label(__("label.exam.register_time_range.begin")),
+                    DateTimePicker::make('filters.register_time_range.1')->label(__("label.exam.register_time_range.end")),
+                    TextInput::make('filters.register_days_range.0')->numeric()->label(__("label.exam.register_days_range.begin")),
+                    TextInput::make('filters.register_days_range.1')->numeric()->label(__("label.exam.register_days_range.end")),
+                    CheckboxList::make('filters.donate_status')
                         ->options(self::$yesOrNo)
                         ->label(__('label.exam.donated')),
                 ])->columns(2),
 
 
-                Forms\Components\Textarea::make('description')->columnSpan(['sm' => 2])->label(__('label.description')),
+                Textarea::make('description')->columnSpan(['sm' => 2])->label(__('label.description')),
             ]);
     }
 
@@ -154,33 +172,33 @@ class ExamResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('name')->searchable()->label(__('label.name')),
-                Tables\Columns\TextColumn::make('typeText')->label(__('exam.type')),
-                Tables\Columns\TextColumn::make('indexFormatted')->label(__('label.exam.index_formatted'))->html(),
-                Tables\Columns\TextColumn::make('begin')->label(__('label.begin')),
-                Tables\Columns\TextColumn::make('end')->label(__('label.end')),
-                Tables\Columns\TextColumn::make('durationText')->label(__('label.duration')),
-                Tables\Columns\TextColumn::make('recurringText')->label(__('exam.recurring')),
-                Tables\Columns\TextColumn::make('filterFormatted')->label(__('label.exam.filter_formatted'))->html()->extraAttributes([]),
-                Tables\Columns\BooleanColumn::make('is_discovered')->label(__('label.exam.is_discovered')),
-                Tables\Columns\TextColumn::make('priority')->label(__('label.priority')),
-                Tables\Columns\TextColumn::make('statusText')->label(__('label.status')),
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('name')->searchable()->label(__('label.name')),
+                TextColumn::make('typeText')->label(__('exam.type')),
+                TextColumn::make('indexFormatted')->label(__('label.exam.index_formatted'))->html(),
+                TextColumn::make('begin')->label(__('label.begin')),
+                TextColumn::make('end')->label(__('label.end')),
+                TextColumn::make('durationText')->label(__('label.duration')),
+                TextColumn::make('recurringText')->label(__('exam.recurring')),
+                TextColumn::make('filterFormatted')->label(__('label.exam.filter_formatted'))->html()->extraAttributes([]),
+                BooleanColumn::make('is_discovered')->label(__('label.exam.is_discovered')),
+                TextColumn::make('priority')->label(__('label.priority')),
+                TextColumn::make('statusText')->label(__('label.status')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\SelectFilter::make('type')->options(Exam::listTypeOptions())->label(__("exam.type")),
-                Tables\Filters\SelectFilter::make('is_discovered')->options(self::IS_DISCOVERED_OPTIONS)->label(__("label.exam.is_discovered")),
-                Tables\Filters\SelectFilter::make('status')->options(self::getEnableDisableOptions())->label(__("label.status")),
+                SelectFilter::make('type')->options(Exam::listTypeOptions())->label(__("exam.type")),
+                SelectFilter::make('is_discovered')->options(self::IS_DISCOVERED_OPTIONS)->label(__("label.exam.is_discovered")),
+                SelectFilter::make('status')->options(self::getEnableDisableOptions())->label(__("label.status")),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->using(function ($record) {
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make()->using(function ($record) {
                     $rep = new ExamRepository();
                     $rep->delete($record->id);
                 }),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -195,9 +213,9 @@ class ExamResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExams::route('/'),
-            'create' => Pages\CreateExam::route('/create'),
-            'edit' => Pages\EditExam::route('/{record}/edit'),
+            'index' => ListExams::route('/'),
+            'create' => CreateExam::route('/create'),
+            'edit' => EditExam::route('/{record}/edit'),
         ];
     }
 }
