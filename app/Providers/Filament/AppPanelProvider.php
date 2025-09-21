@@ -12,6 +12,9 @@ use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Columns\Column;
 use Filament\Widgets;
@@ -36,6 +39,7 @@ class AppPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            ->spa()
             ->homeUrl("/")
             ->sidebarWidth("15rem")
             ->topbar(true)
@@ -93,6 +97,15 @@ class AppPanelProvider extends PanelProvider
 
     public function boot()
     {
+        Fieldset::configureUsing(fn (Fieldset $fieldset) => $fieldset
+            ->columnSpanFull()
+        );
+        Grid::configureUsing(fn (Grid $grid) => $grid
+            ->columnSpanFull()
+        );
+        Section::configureUsing(fn (Section $section) => $section
+            ->columnSpanFull()
+        );
         Table::configureUsing(function (Table $table): void {
             $table
                 ->filtersLayout(FiltersLayout::AboveContent)

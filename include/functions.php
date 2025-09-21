@@ -6456,14 +6456,14 @@ function torrent_name_for_admin(\App\Models\Torrent|null $torrent, $withTags = f
         return '';
     }
     $name = sprintf(
-        '<div class="text-primary-600 transition hover:underline hover:text-primary-500 focus:underline focus:text-primary-500"><a href="/details.php?id=%s" target="_blank" title="%s">%s</a></div>',
+        '<div class="fi-color fi-color-primary fi-text-color-600 dark:fi-text-color-300 fi-link fi-size-sm fi-ac-link-action"><a href="/details.php?id=%s" target="_blank" title="%s">%s</a></div>',
         $torrent->id, $torrent->name, Str::limit($torrent->name, $length)
     );
     $tags = '';
     if ($withTags) {
         $tags = sprintf('&nbsp;<div>%s</div>', $torrent->tagsFormatted);
     }
-    return new HtmlString('<div class="flex">' . $name . $tags . '</div>');
+    return new HtmlString('<div style="display:flex">' . $name . $tags . '</div>');
 }
 
 function username_for_admin(int $id)
