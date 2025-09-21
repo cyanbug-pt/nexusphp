@@ -1124,6 +1124,7 @@ HTML;
             NexusDB::cache_del('imdb_id_'.$thenumbers.'_large', true);
             NexusDB::cache_del('imdb_id_'.$thenumbers.'_median', true);
             NexusDB::cache_del('imdb_id_'.$thenumbers.'_minor', true);
+            NexusDB::cache_del(Imdb::getMovieCoverCacheKey($imdb_id));
             do_log("$log, done");
         } catch (\Exception $e) {
             $log .= ", error: " . $e->getMessage() . ", trace: " . $e->getTraceAsString();
