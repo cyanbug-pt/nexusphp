@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(orphaned)',
     'time_units' => [
         'week' => 'weeks',
+        'hour' => 'hours',
     ],
     'select_all' => 'Select all',
     'unselect_all' => 'Unselect all',
