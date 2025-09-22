@@ -2,6 +2,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\AnnounceMonitor\MaxUploadedUser;
+use App\Models\Setting;
 use Illuminate\Contracts\Support\Htmlable;
 
 class AnnounceMonitor extends \Filament\Pages\Dashboard
@@ -24,6 +25,14 @@ class AnnounceMonitor extends \Filament\Pages\Dashboard
     public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.announce_monitor');
+    }
+
+    /**
+     * @return bool
+     */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Setting::getIsRecordAnnounceLog() && config('clickhouse.connection.host') != '';
     }
 
     public function getWidgets(): array

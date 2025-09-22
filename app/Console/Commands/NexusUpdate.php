@@ -127,11 +127,9 @@ class NexusUpdate extends Command
             $this->doLog("Error: Redis version: {$mysqlInfo['version']} is too low, please use {$minVersion} or above.", 'error');
             return 0;
         }
-        if ($includeComposer) {
-            $this->doLog("going to update .env file ...");
-            $this->update->updateEnvFile();
-            $this->doLog("update .env file done!");
-        }
+        $this->doLog("going to update .env file ...");
+        $this->update->updateEnvFile();
+        $this->doLog("update .env file done!");
 
         $this->doLog("going to createSymbolicLinks...");
         $this->update->createSymbolicLinks($symbolicLinks);
