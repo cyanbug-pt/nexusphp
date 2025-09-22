@@ -960,9 +960,10 @@ if ($shouldUseMeili) {
         $count += $row[0];
     }
 }
-
-if ($CURUSER["torrentsperpage"])
-$torrentsperpage = (int)$CURUSER["torrentsperpage"];
+if (isset($_GET['pageSize'])) {
+    $torrentsperpage = $_GET['pageSize'];
+} elseif ($CURUSER["torrentsperpage"])
+    $torrentsperpage = (int)$CURUSER["torrentsperpage"];
 elseif ($torrentsperpage_main)
 	$torrentsperpage = $torrentsperpage_main;
 else $torrentsperpage = 100;
