@@ -234,9 +234,13 @@ class CalculateUserSeedBonus implements ShouldQueue
             do_log("clickhouse no host");
             return;
         }
-        $client = app(\ClickHouseDB\Client::class);
-        $fields = ['business_type', 'uid', 'old_total_value', 'value', 'new_total_value', 'comment', 'created_at'];
-        $client->insert("bonus_logs", $bonusLogInsert, $fields);
-        do_log("insertIntoClickHouseBulk done, created_at: {$bonusLogInsert[0]['created_at']}");
+        try {
+            $client = app(\ClickHouseDB\Client::class);
+            $fields = ['business_type', 'uid', 'old_total_value', 'value', 'new_total_value', 'comment', 'created_at'];
+            $client->insert("bonus_logs", $bonusLogInsert, $fields);
+            do_log("insertIntoClickHouseBulk done, created_at: {$bonusLogInsert[0]['created_at']}");
+        } catch (\Exception $e) {
+            do_log($e->getMessage(), 'error');
+        }
     }
 }

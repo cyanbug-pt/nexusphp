@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Torrent;
 use App\Filament\Resources\Torrent\AnnounceLogResource\Pages;
 use App\Filament\Resources\Torrent\AnnounceLogResource\RelationManagers;
 use App\Models\AnnounceLog;
+use App\Models\Setting;
 use App\Models\Torrent;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -37,6 +38,14 @@ class AnnounceLogResource extends Resource
     public static function getBreadcrumb(): string
     {
         return self::getNavigationLabel();
+    }
+
+    /**
+     * @return bool
+     */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Setting::getIsRecordAnnounceLog() && config('clickhouse.connection.host') != '';
     }
 
     public static function infolist(Infolist $infolist): Infolist
