@@ -617,9 +617,9 @@ function fail(...$args)
     return api($ret, $msg, $data);
 }
 
-function last_query($all = false)
+function last_query($all = false, $format = 'json')
 {
-    static $connection, $pdo;
+    static $connection;
     if (is_null($connection)) {
         if (IN_NEXUS) {
             $connection = \Illuminate\Database\Capsule\Manager::connection(\Nexus\Database\NexusDB::ELOQUENT_CONNECTION_NAME);
@@ -634,7 +634,14 @@ function last_query($all = false)
     if ($all) {
         return $queries;
     }
-    return isset($queries[0]) ? last($queries) : '';
+    if (empty($queries)) {
+        return '';
+    }
+    $last = last($queries);
+    if ($format === 'json') {
+        return nexus_json_encode($last);
+    }
+    return $last;
 }
 
 function format_datetime($datetime, $format = 'Y-m-d H:i')
