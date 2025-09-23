@@ -212,7 +212,7 @@ class Imdb
             $autodata .= rtrim(trim($temp), ",");
         }
         elseif ($creator)
-            $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_creator']."</font></strong>".$creator;
+            $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_creator']."</font></strong>".implode(", ", array_column($creator, 'name'));
 
         $autodata .= "<br />\n<strong><font color=\"DarkRed\">".$lang_details['text_written_by']."</font></strong>";
         $temp = "";

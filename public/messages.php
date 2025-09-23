@@ -289,8 +289,8 @@ stdfoot();
 }
 if ($action == "moveordel")
 {
-$pm_id = (int) $_POST['id'] ?? 0;
-$pm_box = (int) $_POST['box'];
+$pm_id = intval($_POST['id'] ?? 0);
+$pm_box = intval($_POST['box'] ?? 0);
 $pm_messages = $_POST['messages'];
 if ($_POST['markread'])
 {
