@@ -70,7 +70,7 @@ else
 	if($_GET["type"]=="helpbox")
 	{
 		if ($showhelpbox_main != 'yes'){
-			write_log("Someone is hacking shoutbox. - IP : ".getip(),'mod');
+            do_log("Someone is hacking shoutbox. helpbox_disabled - IP : ".getip());
 			die($lang_shoutbox['text_helpbox_disabled']);
 		}
 		$userid=0;
@@ -80,7 +80,7 @@ else
 	{
 		$userid=intval($CURUSER["id"] ?? 0);
 		if (!$userid){
-			write_log("Someone is hacking shoutbox. - IP : ".getip(),'mod');
+            do_log("Someone is hacking shoutbox. no_permission_to_shoutbox - IP : ".getip());
 			die($lang_shoutbox['text_no_permission_to_shoutbox']);
 		}
 		if (!empty($_GET["toguest"]))
@@ -89,11 +89,13 @@ else
 	}
 	$date=sqlesc(time());
 	$text=trim($_GET["shbox_text"]);
-    if ($userid > 0) {
-        $lockRes = \Nexus\Database\NexusDB::redis()->set($userid, 1, ['nx', 'ex'=>60]);
-        if ($lockRes !== true){
-            die($lang_shoutbox['speaking_too_often']);
-        }
+    if (isset($userid) && $userid > 0) {
+        $lock = new \Nexus\Database\NexusLock("shoutbox:$userid", 60);
+    } else {
+        $lock = new \Nexus\Database\NexusLock("shoutbox:" . getip(), 60);
+    }
+    if (!$lock->acquire()) {
+        die($lang_shoutbox['speaking_too_often']);
     }
 	sql_query("INSERT INTO shoutbox (userid, date, text, type) VALUES (" . sqlesc($userid) . ", $date, " . sqlesc($text) . ", ".sqlesc($type).")") or sqlerr(__FILE__, __LINE__);
 	print "<script type=\"text/javascript\">parent.document.forms['shbox'].shbox_text.value='';</script>";
