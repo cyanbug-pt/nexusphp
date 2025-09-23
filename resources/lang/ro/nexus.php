@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(orfană)',
     'time_units' => [
         'week' => 'săptămâni',
+        'hour' => 'ore',
     ],
     'select_all' => 'Selectează tot',
     'unselect_all' => 'Deselectează tot',

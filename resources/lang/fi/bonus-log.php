@@ -21,12 +21,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Osta muutos käyttäjätunnus kortti',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Lahjan mitali',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Osta torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Palkitse torrentti',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Työn palkka',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrentti ladataan',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Vastaanota palkinto',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Vastaanota lahja',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Lataa torrentti',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrentti vastaanota palkkio',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Lähetys perustiedot',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Lähetetään luovuttajan lisäystä',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Lähetetään virallista lisäystä',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Lähetetään lisäystä haremille',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Lähetetään mitalin lisäämistä',
     ],
     'fields' => [
         'business_type' => 'Yrityksen tyyppi',
@@ -34,4 +42,5 @@ return [
         'value' => 'Kaupan arvo',
         'new_total_value' => 'Kaupankäynnin jälkeinen arvo',
     ],
+    'exclude_seeding_bonus' => 'Jätä pois kylvöbonus',
 ];

@@ -21,12 +21,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Cumpără schimbarea cardului de utilizator',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Medalie cadou',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Cumpără torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Torent recompensă',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rol muncă salariu',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torentul trebuie descărcat',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Primire recompensă',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Primește cadou',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Încarcă torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Recompensă de primire torrent',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding de bază',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Adăugarea donatorului de excursii',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Adăugarea oficială a seed-ului',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Suplimentare harem seeding',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Suplimentarea medaliei',
     ],
     'fields' => [
         'business_type' => 'Tip afacere',
@@ -34,4 +42,5 @@ return [
         'value' => 'Valoare tranzacție',
         'new_total_value' => 'Valoare post-tranzacționare',
     ],
+    'exclude_seeding_bonus' => 'Exclude bonusul de seeding',
 ];

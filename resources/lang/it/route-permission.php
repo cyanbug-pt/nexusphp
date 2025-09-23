@@ -17,4 +17,12 @@ return [
         'text' => 'Visualizza informazioni di base dell\'utente',
         'desc' => 'Visualizza informazioni di base dell\'utente',
     ],
+    'bookmark:store' => [
+        'text' => 'Aggiungi segnalibro',
+        'desc' => 'Aggiungi segnalibro',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Elimina segnalibro',
+        'desc' => 'Elimina segnalibro',
+    ],
 ];

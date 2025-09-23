@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(ορφανά)',
     'time_units' => [
         'week' => 'εβδομάδες',
+        'hour' => 'ώρες',
     ],
     'select_all' => 'Επιλογή όλων',
     'unselect_all' => 'Αποεπιλογή όλων',

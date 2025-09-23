@@ -6239,7 +6239,7 @@ TD;
         /** @var \Illuminate\DataBase\Eloquent\Collection $taxonomyCollection */
         $taxonomyCollection = \Nexus\Database\NexusDB::table($tableName)
             ->where(function (\Illuminate\Database\Query\Builder $query) use ($mode) {
-                return $query->where('mode', $mode)->orWhere('mode', 0);
+                return $query->whereIn('mode', [$mode, 0]);
             })
             ->orderBy('sort_index', 'desc')
             ->get()
@@ -6260,7 +6260,7 @@ TD;
                         $afterInput = $item->name;
                     }
                     $checked = '';
-                    do_log("toCheck: $checkedValues, $namePrefix - {$item->id}");
+                    do_log("toCheck: $checkedValues, $namePrefix - {$item->id}", 'debug');
                     if ($checkedValues) {
                         if (
                             str_contains($checkedValues, "[{$namePrefix}{$item->id}]")

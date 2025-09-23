@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(osiřelé)',
     'time_units' => [
         'week' => 'týdny',
+        'hour' => 'hodiny',
     ],
     'select_all' => 'Vybrat vše',
     'unselect_all' => 'Odznačit vše',

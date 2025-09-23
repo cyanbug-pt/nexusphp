@@ -17,4 +17,12 @@ return [
         'text' => 'Visa grundläggande information för användare',
         'desc' => 'Visa grundläggande information för användare',
     ],
+    'bookmark:store' => [
+        'text' => 'Lägg till bokmärke',
+        'desc' => 'Lägg till bokmärke',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Ta bort bokmärke',
+        'desc' => 'Ta bort bokmärke',
+    ],
 ];

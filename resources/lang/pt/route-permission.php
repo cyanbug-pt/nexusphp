@@ -17,4 +17,12 @@ return [
         'text' => 'Ver informações básicas do usuário',
         'desc' => 'Ver informações básicas do usuário',
     ],
+    'bookmark:store' => [
+        'text' => 'Adicionar marcador',
+        'desc' => 'Adicionar marcador',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Apagar marcador',
+        'desc' => 'Apagar marcador',
+    ],
 ];

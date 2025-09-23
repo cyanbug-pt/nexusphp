@@ -17,4 +17,12 @@ return [
         'text' => 'Näytä käyttäjän perustiedot',
         'desc' => 'Näytä käyttäjän perustiedot',
     ],
+    'bookmark:store' => [
+        'text' => 'Lisää kirjanmerkki',
+        'desc' => 'Lisää kirjanmerkki',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Poista kirjanmerkki',
+        'desc' => 'Poista kirjanmerkki',
+    ],
 ];

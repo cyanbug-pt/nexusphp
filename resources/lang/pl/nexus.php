@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(osierocone)',
     'time_units' => [
         'week' => 'tygodnie',
+        'hour' => 'godziny',
     ],
     'select_all' => 'Zaznacz wszystkie',
     'unselect_all' => 'Odznacz wszystkie',

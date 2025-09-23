@@ -21,12 +21,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Αγοράστε αλλαγή κάρτας ονόματος χρήστη',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Μετάλλιο δώρου',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Αγορά torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Αμοιβή torrent',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Μισθός εργασίας ρόλων',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Κατεβάστε το Torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Λήψη ανταμοιβής',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Λήψη δώρου',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Μεταφόρτωση torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Ανταμοιβή λήψης torrent',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Βασική σπορά',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Προστίθεται η προσθήκη δότη',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Επίσημη προσθήκη σπέρματος',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Προστίθεται προσθήκη harem',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Προστίθενται μετάλλια σποράς',
     ],
     'fields' => [
         'business_type' => 'Τύπος επιχείρησης',
@@ -34,4 +42,5 @@ return [
         'value' => 'Εμπορική αξία',
         'new_total_value' => 'Μετασυναλλακτική αξία',
     ],
+    'exclude_seeding_bonus' => 'Εξαίρεση μπόνους σποράς',
 ];

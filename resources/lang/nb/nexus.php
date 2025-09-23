@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(Forsvare)',
     'time_units' => [
         'week' => 'uker',
+        'hour' => 'timer',
     ],
     'select_all' => 'Velg alle',
     'unselect_all' => 'Fjern alle valg',

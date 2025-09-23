@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(verweesd)',
     'time_units' => [
         'week' => 'Weken',
+        'hour' => 'Uren',
     ],
     'select_all' => 'Alles selecteren',
     'unselect_all' => 'Selectie ongedaan maken',

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'failed'   => 'Kirjautuminen epäonnistui.',
-    'password' => 'Salasana on väärä.',
+    'failed'   => 'Nämä tiedot eivät vastaa tietueitamme.',
+    'password' => 'Annettu salasana on virheellinen.',
     'throttle' => 'Liian monta kirjautumisyritystä. Yritä uudelleen :seconds sekunnin kuluttua.',
 ];

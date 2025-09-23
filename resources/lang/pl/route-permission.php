@@ -17,4 +17,12 @@ return [
         'text' => 'Zobacz podstawowe informacje użytkownika',
         'desc' => 'Zobacz podstawowe informacje użytkownika',
     ],
+    'bookmark:store' => [
+        'text' => 'Dodaj zakładkę',
+        'desc' => 'Dodaj zakładkę',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Usuń zakładkę',
+        'desc' => 'Usuń zakładkę',
+    ],
 ];

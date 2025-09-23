@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'failed'   => 'As credenciais indicadas não coincidem com as registadas no sistema.',
-    'password' => 'A palavra-passe está errada.',
-    'throttle' => 'O número limite de tentativas de login foi atingido. Por favor tente novamente dentro de :seconds segundos.',
+    'failed'   => 'Credenciais não correspondem aos nossos registros.',
+    'password' => 'A senha fornecida está incorreta.',
+    'throttle' => 'Muitas tentativas de login. Por favor, tente novamente em :seconds segundos.',
 ];

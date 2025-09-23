@@ -17,4 +17,12 @@ return [
         'text' => 'Grundinformationen des Benutzers anzeigen',
         'desc' => 'Grundinformationen des Benutzers anzeigen',
     ],
+    'bookmark:store' => [
+        'text' => 'Lesezeichen hinzufügen',
+        'desc' => 'Lesezeichen hinzufügen',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Lesezeichen löschen',
+        'desc' => 'Lesezeichen löschen',
+    ],
 ];

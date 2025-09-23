@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(orvot)',
     'time_units' => [
         'week' => 'viikkoa',
+        'hour' => 'tuntia',
     ],
     'select_all' => 'Valitse kaikki',
     'unselect_all' => 'Poista kaikki valinnat',

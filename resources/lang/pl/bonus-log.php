@@ -21,12 +21,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Kup kartę zmiany nazwy użytkownika',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'medal prezentu',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Kup torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Nagroda torrent',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Wynagrodzenie za pracę w roli',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent jest pobierany',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Odbierz nagrodę',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Odbierz prezent',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Prześlij torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Nagroda za otrzymywanie torrentów',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seedowanie podstawowe',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Dodanie dawcy do materiału siewnego',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Seedowanie oficjalnego dodania',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Dodanie harem do siewu',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Dodanie medalu do siewu',
     ],
     'fields' => [
         'business_type' => 'Rodzaj działalności',
@@ -34,4 +42,5 @@ return [
         'value' => 'Wartość transakcyjna',
         'new_total_value' => 'Wartość potransakcyjna',
     ],
+    'exclude_seeding_bonus' => 'Wyklucz bonus do seedowania',
 ];

@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(сирот)',
     'time_units' => [
         'week' => 'недель',
+        'hour' => 'часов',
     ],
     'select_all' => 'Выбрать все',
     'unselect_all' => 'Снять выделение',

@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(forældreløse)',
     'time_units' => [
         'week' => 'uger',
+        'hour' => 'timer',
     ],
     'select_all' => 'Vælg alle',
     'unselect_all' => 'Fravælg alle',

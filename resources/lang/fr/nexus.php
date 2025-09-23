@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(orphelin)',
     'time_units' => [
         'week' => 'semaines',
+        'hour' => 'heures',
     ],
     'select_all' => 'Tout sélectionner',
     'unselect_all' => 'Désélectionner tout',

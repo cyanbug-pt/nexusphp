@@ -17,4 +17,12 @@ return [
         'text' => 'Vezi informațiile de bază ale utilizatorului',
         'desc' => 'Vezi informațiile de bază ale utilizatorului',
     ],
+    'bookmark:store' => [
+        'text' => 'Adaugă marcaj',
+        'desc' => 'Adaugă marcaj',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Ștergere marcaj',
+        'desc' => 'Ștergere marcaj',
+    ],
 ];

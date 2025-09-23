@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(órfãos)',
     'time_units' => [
         'week' => 'Semanas',
+        'hour' => 'horas',
     ],
     'select_all' => 'Selecionar todos',
     'unselect_all' => 'Desmarcar todos',

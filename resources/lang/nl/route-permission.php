@@ -17,4 +17,12 @@ return [
         'text' => 'Bekijk de basisgegevens van gebruiker',
         'desc' => 'Bekijk de basisgegevens van gebruiker',
     ],
+    'bookmark:store' => [
+        'text' => 'Bladwijzer toevoegen',
+        'desc' => 'Bladwijzer toevoegen',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Bladwijzer verwijderen',
+        'desc' => 'Bladwijzer verwijderen',
+    ],
 ];

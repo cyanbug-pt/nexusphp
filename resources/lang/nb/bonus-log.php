@@ -21,12 +21,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Kjøp skifte brukernavn kort',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gave medalje',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Kjøp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Belønning torrent',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rolle arbeidstaker lønn',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent blir lastet ned',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Motta belÃ¸nning',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Motta gave',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Last opp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent motta belønning',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding basic',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Seeding official addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Seeding harem addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Seeding medalje',
     ],
     'fields' => [
         'business_type' => 'Virksomhet type',
@@ -34,4 +42,5 @@ return [
         'value' => 'Handel verdi',
         'new_total_value' => 'Verdi etter handel',
     ],
+    'exclude_seeding_bonus' => 'Utelat seeding bonus',
 ];

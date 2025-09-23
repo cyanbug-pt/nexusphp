@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(verwaist)',
     'time_units' => [
         'week' => 'wochen',
+        'hour' => 'std',
     ],
     'select_all' => 'Alles auswählen',
     'unselect_all' => 'Alles abwählen',

@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(föräldralösa)',
     'time_units' => [
         'week' => 'veckor',
+        'hour' => 'timmar',
     ],
     'select_all' => 'Markera alla',
     'unselect_all' => 'Avmarkera alla',

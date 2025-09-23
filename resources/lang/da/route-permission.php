@@ -17,4 +17,12 @@ return [
         'text' => 'Se brugerens grundlæggende info',
         'desc' => 'Se brugerens grundlæggende info',
     ],
+    'bookmark:store' => [
+        'text' => 'Tilføj bogmærke',
+        'desc' => 'Tilføj bogmærke',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Slet bogmærke',
+        'desc' => 'Slet bogmærke',
+    ],
 ];

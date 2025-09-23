@@ -17,4 +17,12 @@ return [
         'text' => 'Vis brukergrunnleggende informasjon',
         'desc' => 'Vis brukergrunnleggende informasjon',
     ],
+    'bookmark:store' => [
+        'text' => 'Legg til bokmerke',
+        'desc' => 'Legg til bokmerke',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Slett bokmerke',
+        'desc' => 'Slett bokmerke',
+    ],
 ];

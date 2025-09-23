@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'failed'   => 'Deze combinatie van e-mailadres en wachtwoord is niet geldig.',
-    'password' => 'Wachtwoord is onjuist.',
-    'throttle' => 'Te veel mislukte aanmeldpogingen. Probeer het nog eens over :seconds seconden.',
+    'failed'   => 'Deze referenties komen niet overeen met onze administratie.',
+    'password' => 'Het opgegeven wachtwoord is onjuist.',
+    'throttle' => 'Te veel inlogpogingen. Probeer het over :seconds seconden opnieuw.',
 ];

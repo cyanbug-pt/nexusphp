@@ -17,4 +17,12 @@ return [
         'text' => 'Voir les informations de base de l\'utilisateur',
         'desc' => 'Voir les informations de base de l\'utilisateur',
     ],
+    'bookmark:store' => [
+        'text' => 'Ajouter un favori',
+        'desc' => 'Ajouter un favori',
+    ],
+    'bookmark:delete' => [
+        'text' => 'Supprimer le favori',
+        'desc' => 'Supprimer le favori',
+    ],
 ];

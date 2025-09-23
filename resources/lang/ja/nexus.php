@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(孤児)',
     'time_units' => [
         'week' => '週間',
+        'hour' => '時間',
     ],
     'select_all' => 'すべて選択',
     'unselect_all' => 'すべて選択解除',

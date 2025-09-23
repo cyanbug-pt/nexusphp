@@ -21,12 +21,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Koupit změnit kartu uživatelského jména',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Dárková medaile',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Koupit torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Odměna torrent',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Plat do práce',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent být stažen',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Získat odměnu',
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Obdržet dárek',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Nahrát torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent obdrží odměnu',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Distribuce základního',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Přidání dárce osiva',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Přídavek semenného úředníka',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Přidání chřipky',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Přidávání medailí',
     ],
     'fields' => [
         'business_type' => 'Typ podnikání',
@@ -34,4 +42,5 @@ return [
         'value' => 'Obchodní hodnota',
         'new_total_value' => 'Hodnota po uskutečnění obchodu',
     ],
+    'exclude_seeding_bonus' => 'Vyloučit bonus za distribuci',
 ];
