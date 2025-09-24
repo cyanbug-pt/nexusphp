@@ -157,7 +157,7 @@ class CalculateUserSeedBonus implements ShouldQueue
 //            NexusDB::statement($sql);
             $seedPointsUpdates[] = sprintf("when %d then ifnull(seed_points, 0) + %f", $uid, $seed_points);
             $seedPointsPerHourUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['seed_points']);
-            $seedingTorrentCountUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['count']);
+            $seedingTorrentCountUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['torrent_peer_count']);
             $seedingTorrentSizeUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['size']);
             $seedBonusUpdates[] = sprintf("when %d then seedbonus + %f", $uid, $all_bonus);
             if ($fd) {
