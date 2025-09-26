@@ -28,8 +28,11 @@ class TorrentController extends Controller
 
     public function index(Request $request, string $section = null)
     {
+        do_log("controller torrent index entry");
         $result = $this->repository->getList($request, Auth::user(), $section);
+        do_log("controller torrent index getList");
         $resource = TorrentResource::collection($result);
+        do_log("controller torrent index prepare resource");
         return $this->success($resource);
     }
 
@@ -55,11 +58,13 @@ class TorrentController extends Controller
      */
     public function show($id)
     {
+        do_log("controller torrent show entry");
         /**
          * @var User
          */
         $user = Auth::user();
         $torrent = $this->repository->getDetail($id, $user);
+        do_log("controller torrent show getDetail");
         $resource = new TorrentResource($torrent);
         $additional = [];
         if ($this->hasExtraField('bonus_reward_values')) {
@@ -68,6 +73,7 @@ class TorrentController extends Controller
         $extraSettingsNames = ['torrent.claim_torrent_user_counts_up_limit'];
         $this->appendExtraSettings($additional, $extraSettingsNames);
         $resource->additional($additional);
+        do_log("controller torrent show prepare resource");
         return $this->success($resource);
     }
 

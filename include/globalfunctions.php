@@ -542,6 +542,7 @@ function nexus_json_encode($data)
 
 function api(...$args)
 {
+    do_log("api begin");
     if (func_num_args() < 3) {
         //参数少于3个时，默认为错误状态。
         $ret = -1;
@@ -555,6 +556,7 @@ function api(...$args)
     if ($data instanceof \Illuminate\Http\Resources\Json\JsonResource) {
         $data = $data->response()->getData(true);
     }
+    do_log("api after prepare data");
 //    dd($data);
     $time = (float)number_format(microtime(true) - nexus()->getStartTimestamp(), 3);
     $count = null;
@@ -583,7 +585,7 @@ function api(...$args)
         $results['recordsTotal'] = $count;
         $results['recordsFiltered'] = $count;
     }
-
+    do_log("api end");
     return $results;
 }
 
@@ -599,6 +601,7 @@ function success(...$args)
         $msg = $args[0];
         $data = $args[1];
     }
+    do_log("success before api");
     return api($ret, $msg, $data);
 }
 

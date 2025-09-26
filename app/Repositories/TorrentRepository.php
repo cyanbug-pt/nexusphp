@@ -152,7 +152,9 @@ class TorrentRepository extends BaseRepository
         if (!$apiQueryBuilder->hasSort() || !$apiQueryBuilder->hasSort('id')) {
             $query->orderBy("id", "DESC");
         }
+        do_log("before query torrent list");
         $torrents = $query->paginate($this->getPerPageFromRequest($request));
+        do_log("after query torrent list");
         return $this->appendIncludeFields($apiQueryBuilder, $user, $torrents);
     }
 
@@ -175,7 +177,9 @@ class TorrentRepository extends BaseRepository
             ->allowIncludeCounts($allowIncludeCounts)
             ->allowIncludeFields($allowIncludeFields)
         ;
+        do_log("before query torrent detail");
         $torrent = $apiQueryBuilder->build()->findOrFail($id);
+        do_log("before query torrent detail");
         $torrentList = $this->appendIncludeFields($apiQueryBuilder, $user, [$torrent]);
         return $torrentList[0];
     }
@@ -199,6 +203,7 @@ class TorrentRepository extends BaseRepository
         if ($hasFieldHasRewarded = $apiQueryBuilder->hasIncludeField('has_rewarded')) {
             $rewardData = $user->reward_torrent_logs()->whereIn('torrentid', $torrentIdArr)->get()->keyBy('torrentid');
         }
+        do_log("after prepare has data");
 
         foreach ($torrentList as $torrent) {
             $id = $torrent->id;
@@ -216,7 +221,9 @@ class TorrentRepository extends BaseRepository
             }
 
             if ($apiQueryBuilder->hasIncludeField('description') && $apiQueryBuilder->hasInclude('extra')) {
+                do_log("before format_description of torrent: {$torrent->id}");
                 $descriptionArr = format_description($torrent->extra->descr ?? '');
+                do_log("after format_description of torrent: {$torrent->id}");
                 $torrent->description = $descriptionArr;
                 $torrent->images = get_image_from_description($descriptionArr);
             }
@@ -224,6 +231,7 @@ class TorrentRepository extends BaseRepository
                 $torrent->download_url = $this->getDownloadUrl($id, $user);
             }
         }
+        do_log("after fill has data");
         return $torrentList;
     }
 
