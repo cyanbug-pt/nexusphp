@@ -57,7 +57,8 @@ if ($redis->get("$torrentNotExistsKey:$info_hash")) {
     do_log("[ANNOUNCE] $msg");
     err($msg);
 }
-$torrentReAnnounceKey = sprintf('reAnnounceCheckByInfoHash:%s:%s', $userAuthenticateKey, $info_hash);
+$infoHashHex = sha1($info_hash);
+$torrentReAnnounceKey = sprintf('reAnnounceCheckByInfoHash:%s:%s', $userAuthenticateKey, $infoHashHex);
 if (!$isStoppedOrCompleted && !$isReAnnounce && !$redis->set($torrentReAnnounceKey, TIMENOW, ['nx', 'ex' => $frequencyInterval])) {
     $msg = "Request too frequent(h)";
     do_log(sprintf("[ANNOUNCE] %s key: %s already exists, value: %s", $msg, $torrentReAnnounceKey, TIMENOW));
