@@ -821,7 +821,7 @@ $lang_settings = array
     'row_complain_enabled_note' => '默认: "yes"',
     'row_min_size' => '起步体积',
     'text_bonus_mini_size' => '要求种子的体积最小为',
-    'text_bonus_mini_size_help' => '。小于此体积的种子不参与魔力计算。单位：字节(Byte)，如 1 Byte = 1024 KiB。',
+    'text_bonus_mini_size_help' => '。小于此体积的种子不参与魔力计算。单位：字节(Byte)，如 1 KiB = 1024 Byte。',
     'row_reward_bonus_options' => '魔力值奖励选项',
     'text_reward_bonus_options_note' => '种子详情页的魔力值奖励选项，多个用英文逗号分割',
     'row_reward_times_limit' => '魔力奖励次数限制',

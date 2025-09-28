@@ -585,6 +585,9 @@ function api(...$args)
         $results['recordsTotal'] = $count;
         $results['recordsFiltered'] = $count;
     }
+    if (!IN_NEXUS && config('app.debug')) {
+        $results['queries'] = last_query(true);
+    }
     do_log("api end");
     return $results;
 }

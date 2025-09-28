@@ -992,10 +992,10 @@ tr_small($lang_usercp['row_email_address'], $CURUSER['email'], 1);
 $seedBoxIcon = (new \App\Repositories\SeedBoxRepository())->renderIcon($CURUSER['ip'], $CURUSER['id']);
 if ($enablelocation_tweak == 'yes'){
 	list($loc_pub, $loc_mod) = get_ip_location($CURUSER["ip"]);
-	tr_small($lang_usercp['row_ip_location'], hide_text($CURUSER["ip"])." <span title='" . $loc_mod . "'>[" . $loc_pub . "]</span>$seedBoxIcon", 1);
+	tr_small($lang_usercp['row_ip_location'], hide_text($CURUSER["ip"]." <span title='" . $loc_mod . "'>[" . $loc_pub . "]</span>$seedBoxIcon"), 1);
 }
 else{
-	tr_small($lang_usercp['row_ip_location'], hide_text($CURUSER["ip"]) . $seedBoxIcon, 1);
+	tr_small($lang_usercp['row_ip_location'], hide_text($CURUSER["ip"] . $seedBoxIcon), 1);
 }
 if ($CURUSER["avatar"])
 	tr_small($lang_usercp['row_avatar'], "<img src=\"" . $CURUSER["avatar"] . "\" border=0>", 1);

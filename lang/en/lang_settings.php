@@ -821,7 +821,7 @@ $lang_settings = array
     'row_complain_enabled_note' => 'default: "yes"',
     'row_min_size' => 'Minimum volume',
     'text_bonus_mini_size'=> 'The minimum volume required for torrent is',
-    'text_bonus_mini_size_help' => '. Torrent size smaller than this volume are not included in the bonus calculation. Unit: bytes (Byte), e.g., 1 Byte = 1024 KiB.',
+    'text_bonus_mini_size_help' => '. Torrent size smaller than this volume are not included in the bonus calculation. Unit: bytes (Byte), e.g., 1 KiB = 1024 Byte.',
     'row_reward_bonus_options' => 'Reward Bonus Options',
     'text_reward_bonus_options_note' => 'Reward bonus options on the torrent details page, multiple options separated by commas',
     'row_reward_times_limit' => 'Reward Frequency Limit',
