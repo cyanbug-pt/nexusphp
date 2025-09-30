@@ -17,9 +17,7 @@ if (!$arr) exit(json_encode(fail("Invalid torrent id!", $_POST)));
 
 $torrentowner = $arr['owner'];
 if($torrentowner == $userid) exit(json_encode(fail('You are giving magic to yourself.', $_POST)));
-$tsql = sql_query("SELECT COUNT(*) FROM magic WHERE torrentid=$torrentid and userid=$userid") or sqlerr(__FILE__,__LINE__);
-$trows = mysql_fetch_assoc($tsql);
-$t_ab = $trows[0];
+$t_ab = get_row_count("magic", "WHERE torrentid=$torrentid and userid=$userid");
 if ($t_ab != 0) exit(json_encode(fail("You already gave the magic value!", $_POST)));
 $todayStr = now()->startOfDay();
 $todayCount = \App\Models\Reward::query()
@@ -38,4 +36,5 @@ if (isset($userid) && isset($torrentid)&& isset($value)) {
     \App\Models\BonusLogs::add($CURUSER['id'], $CURUSER['seedbonus'], $value, $CURUSER['seedbonus'] - $value, "", \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT);
     KPS("+",$value,$torrentowner);//add to the owner
     \App\Models\BonusLogs::add($torrentOwnerInfo['id'], $torrentOwnerInfo['seedbonus'], $value, $torrentOwnerInfo['seedbonus'] + $value, "", \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD);
+    exit(json_encode(success("OK", $_POST)));
 }

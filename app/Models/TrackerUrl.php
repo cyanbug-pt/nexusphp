@@ -60,13 +60,36 @@ class TrackerUrl extends NexusModel
     public static function getById(int $trackerUrlId)
     {
         $redis = NexusDB::redis();
+        $notFoundFlagKey = "TRACKER_URL_NOT_FOUND:$trackerUrlId";
         if ($trackerUrlId == 0) {
-            return $redis->get(self::TRACKER_URL_DEFAULT_CACHE_KEY);
+            return self::getFromRedisWithRetry($redis, 'get', [self::TRACKER_URL_DEFAULT_CACHE_KEY], $notFoundFlagKey);
         }
-        $result = $redis->hget(self::TRACKER_URL_CACHE_KEY, $trackerUrlId);
-        if (!$result) {
-            $result = $redis->get(self::TRACKER_URL_DEFAULT_CACHE_KEY);
+        $result = self::getFromRedisWithRetry($redis, 'hGet', [self::TRACKER_URL_CACHE_KEY, $trackerUrlId], $notFoundFlagKey);
+        if ($result !== false) {
+            return $result;
         }
-        return $result;
+        do_log("No tracker url found for $trackerUrlId, try default", 'warning');
+        return self::getFromRedisWithRetry($redis, 'get', [self::TRACKER_URL_DEFAULT_CACHE_KEY], $notFoundFlagKey);
+    }
+
+    private static function getFromRedisWithRetry(\Redis $redis, string $command, array $params, string $notFoundFlagKey)
+    {
+        $result = call_user_func_array([$redis, $command], $params);
+        if ($result !== false) {
+            return $result;
+        }
+        //有不存在标记，不要再尝试，直接返回 false
+        if ($redis->exists($notFoundFlagKey)) {
+            return false;
+        }
+        self::saveUrlCache();
+        $result = call_user_func_array([$redis, $command], $params);
+        if ($result !== false) {
+            return $result;
+        }
+        //只从 db 拉取一次，仍然没有即标记不存在, 有效期 15 分钟
+        $redis->setex($notFoundFlagKey, 900, date("Y-m-d H:i:s"));
+        do_log(sprintf("redis command %s with args %s no result", $command, json_encode($params)), 'error');
+        return false;
     }
 }
