@@ -136,6 +136,9 @@ $az['__is_donor'] = $isDonor;
 $log = "user: $userid, isDonor: $isDonor, seeder: $seeder, ip: $ip, ipv4: $ipv4, ipv6: $ipv6";
 //check tracker url
 $trackerUrl = \App\Models\TrackerUrl::getById($az['tracker_url_id']);
+if ($trackerUrl === false) {
+    warn("please select tracker url at user control panel");
+}
 $currentUrl = getSchemeAndHttpHost();
 if (!str_contains($trackerUrl, $currentUrl)) {
     do_log("announce check tracker url, trackerUrl: $trackerUrl does not contains: $currentUrl");
