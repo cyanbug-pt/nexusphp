@@ -171,6 +171,7 @@ $lang_mybonus = array
     'text_get_by_medal' => '勛章加成每小時將額外得到如下的魔力值',
     'medal_additional_desc' => '勛章獎勵計算公式同上，不考慮低保',
     'medal_additional_factor' => '最終獎勵為計算所得勛章獎勵乘以勛章加成系數，當前勛章加成系數為: ',
+    'text_bonus_mini_size' => '種子體積要求至少爲 %s，小於此體積的種子不參與魔力計算',
 );
 
 ?>
