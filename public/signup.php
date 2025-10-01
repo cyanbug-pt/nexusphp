@@ -122,7 +122,7 @@ tr($lang_signup['row_school'], "<select name=school>$schools</select>", 1);
 <tr><td class=rowhead><?php echo $lang_signup['row_verification'] ?></td><td class=rowfollow align=left><input type=checkbox name=rulesverify value=yes><?php echo $lang_signup['checkbox_read_rules'] ?><br />
 <input type=checkbox name=faqverify value=yes><?php echo $lang_signup['checkbox_read_faq'] ?> <br />
 <input type=checkbox name=ageverify value=yes><?php echo $lang_signup['checkbox_age'] ?></td></tr>
-<input type=hidden name=hash value=<?php echo $code?>>
+<input type=hidden name=hash value=<?php echo $code ?? '' ?>>
     <input type="hidden" name="wantpassword" />
 <tr><td class=toolbox colspan="2" align="center"><font color=red><b><?php echo $lang_signup['text_all_fields_required'] ?></b><p></font><input id="submit-btn" type=button value=<?php echo $lang_signup['submit_sign_up'] ?> style='height: 25px'></td></tr>
 </table>

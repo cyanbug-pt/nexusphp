@@ -16,7 +16,7 @@ function bark($msg) {
 	exit;
 }
 
-$type = $_POST['type'];
+$type = $_POST['type'] ?? '';
 if ($type == 'invite'){
 registration_check();
 failedloginscheck ("Invite Signup");

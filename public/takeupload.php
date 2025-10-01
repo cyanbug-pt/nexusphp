@@ -43,8 +43,8 @@ $url = parse_imdb_id($_POST['url'] ?? '');
 
 $nfo = '';
 if ($enablenfo_main=='yes'){
-$nfofile = $_FILES['nfo'];
-if ($nfofile['name'] != '') {
+$nfofile = $_FILES['nfo'] ?? [];
+if (!empty($nfofile['name'])) {
 
 	if ($nfofile['size'] == 0)
 	bark($lang_takeupload['std_zero_byte_nfo']);
