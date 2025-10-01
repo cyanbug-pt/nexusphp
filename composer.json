@@ -38,7 +38,7 @@
         "calebporzio/sushi": "^2.5",
         "cybercog/laravel-clickhouse": "dev-master",
         "elasticsearch/elasticsearch": "^7.16",
-        "filament/filament": "^3.3",
+        "filament/filament": "~4.0",
         "flowframe/laravel-trend": "^0.4",
         "geoip2/geoip2": "~2.0",
         "google/auth": "1.44.0",

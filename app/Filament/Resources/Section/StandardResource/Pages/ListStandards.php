@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\StandardResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\StandardResource;
 use App\Models\Codec;
@@ -17,7 +18,7 @@ class ListStandards extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

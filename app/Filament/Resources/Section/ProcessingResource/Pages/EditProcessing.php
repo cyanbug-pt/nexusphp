@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\ProcessingResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Section\ProcessingResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -14,7 +15,7 @@ class EditProcessing extends EditCodec
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

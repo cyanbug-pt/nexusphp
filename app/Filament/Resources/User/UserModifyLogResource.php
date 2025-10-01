@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use App\Filament\Resources\User\UserModifyLogResource\Pages\ManageUserModifyLogs;
 use App\Filament\Resources\User\UserModifyLogResource\Pages;
 use App\Filament\Resources\User\UserModifyLogResource\RelationManagers;
 use App\Models\UserModifyLog;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,9 +21,9 @@ class UserModifyLogResource extends Resource
 {
     protected static ?string $model = UserModifyLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 100;
 
@@ -33,10 +37,10 @@ class UserModifyLogResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -45,28 +49,28 @@ class UserModifyLogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('user_id')->label('UID'),
-                Tables\Columns\TextColumn::make('user.username')
+                TextColumn::make('id'),
+                TextColumn::make('user_id')->label('UID'),
+                TextColumn::make('user.username')
                     ->label(nexus_trans("label.username"))
                     ->formatStateUsing(fn ($record) => username_for_admin($record->user_id))
                 ,
-                Tables\Columns\TextColumn::make('content')->label(nexus_trans("user-modify-log.content")),
-                Tables\Columns\TextColumn::make('created_at')->label(nexus_trans("label.created_at")),
+                TextColumn::make('content')->label(nexus_trans("user-modify-log.content")),
+                TextColumn::make('created_at')->label(nexus_trans("label.created_at")),
             ])
             ->filters([
-                Tables\Filters\Filter::make('user_id')
-                    ->form([
-                        Forms\Components\TextInput::make('user_id')
+                Filter::make('user_id')
+                    ->schema([
+                        TextInput::make('user_id')
                             ->label(__('UID'))
                         ,
                     ])->query(function (Builder $query, array $data) {
                         return $query->when($data['user_id'], fn (Builder $query, $value) => $query->where("user_id", $value));
                     })
                 ,
-                Tables\Filters\Filter::make('user')
-                    ->form([
-                        Forms\Components\TextInput::make('username')
+                Filter::make('user')
+                    ->schema([
+                        TextInput::make('username')
                             ->label(__('label.username'))
                         ,
                     ])->query(function (Builder $query, array $data) {
@@ -75,9 +79,9 @@ class UserModifyLogResource extends Resource
                         }));
                     })
                 ,
-                Tables\Filters\Filter::make('content')
-                    ->form([
-                        Forms\Components\TextInput::make('content')
+                Filter::make('content')
+                    ->schema([
+                        TextInput::make('content')
                             ->label(__('user-modify-log.content'))
                         ,
                     ])->query(function (Builder $query, array $data) {
@@ -86,11 +90,11 @@ class UserModifyLogResource extends Resource
                 ,
             ])
             ->defaultSort('id', 'desc')
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
 //                Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\BulkActionGroup::make([
 //                    Tables\Actions\DeleteBulkAction::make(),
 //                ]),
@@ -100,7 +104,7 @@ class UserModifyLogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageUserModifyLogs::route('/'),
+            'index' => ManageUserModifyLogs::route('/'),
         ];
     }
 }

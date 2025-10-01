@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\IconResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\EditRedirectIndexTrait;
 use App\Filament\Resources\Section\IconResource;
 use Filament\Pages\Actions;
@@ -18,7 +19,7 @@ class EditIcon extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 

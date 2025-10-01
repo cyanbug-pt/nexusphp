@@ -2,11 +2,17 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\System\IspResource\Pages\ManageIsps;
 use App\Filament\Resources\System\IspResource\Pages;
 use App\Filament\Resources\System\IspResource\RelationManagers;
 use App\Models\Isp;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -17,9 +23,9 @@ class IspResource extends Resource
 {
     protected static ?string $model = Isp::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-globe-alt';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 7;
 
@@ -33,11 +39,11 @@ class IspResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->label(__('label.name'))
+        return $schema
+            ->components([
+                TextInput::make('name')->label(__('label.name'))
             ]);
     }
 
@@ -45,25 +51,25 @@ class IspResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->label(__('label.name')),
+                TextColumn::make('id'),
+                TextColumn::make('name')->label(__('label.name')),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageIsps::route('/'),
+            'index' => ManageIsps::route('/'),
         ];
     }
 }

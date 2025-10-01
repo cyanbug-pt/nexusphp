@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\System\ExamResource\Pages;
 
+use Filament\Actions\DeleteAction;
+use Exception;
 use App\Filament\Resources\System\ExamResource;
 use App\Repositories\ExamRepository;
 use Filament\Pages\Actions;
@@ -14,7 +16,7 @@ class EditExam extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 
@@ -26,7 +28,7 @@ class EditExam extends EditRecord
             $this->record = $examRep->update($data, $this->record->id);
             send_admin_success_notification();
             $this->redirect($this->getResource()::getUrl('index'));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             send_admin_fail_notification($exception->getMessage());
         }
     }

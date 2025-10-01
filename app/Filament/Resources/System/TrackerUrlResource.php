@@ -2,12 +2,21 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Radio;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\System\TrackerUrlResource\Pages\ManageTrackerUrls;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\System\TrackerUrlResource\Pages;
 use App\Filament\Resources\System\TrackerUrlResource\RelationManagers;
 use App\Models\TrackerUrl;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,9 +29,9 @@ class TrackerUrlResource extends Resource
 
     protected static ?string $model = TrackerUrl::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 10;
 
@@ -36,24 +45,24 @@ class TrackerUrlResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('url')->required(),
-                Forms\Components\Radio::make('is_default')
+        return $schema
+            ->components([
+                TextInput::make('url')->required(),
+                Radio::make('is_default')
                     ->label(__('label.is_default'))
                     ->options(self::getYesNoOptions())
                     ->required(true)
                     ->inline()
                 ,
-                Forms\Components\Radio::make('enabled')
+                Radio::make('enabled')
                     ->label(__('label.enabled'))
                     ->options(self::getEnableDisableOptions(1, 0))
                     ->required(true)
                     ->inline()
                 ,
-                Forms\Components\TextInput::make('priority')
+                TextInput::make('priority')
                     ->label(__('label.priority'))->numeric()
                     ->default(0)
                     ->helperText(__('label.priority_help'))
@@ -74,35 +83,35 @@ class TrackerUrlResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                 ,
-                Tables\Columns\TextColumn::make('url')
+                TextColumn::make('url')
                 ,
-                Tables\Columns\IconColumn::make('is_default')
+                IconColumn::make('is_default')
                     ->label(__('label.is_default'))
                     ->boolean()
                 ,
-                Tables\Columns\IconColumn::make('enabled')
+                IconColumn::make('enabled')
                     ->label(__('label.enabled'))
                     ->boolean()
                 ,
-                Tables\Columns\TextColumn::make('priority')
+                TextColumn::make('priority')
                     ->label(__('label.priority'))
                 ,
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('label.updated_at'))
                 ,
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -110,7 +119,7 @@ class TrackerUrlResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTrackerUrls::route('/'),
+            'index' => ManageTrackerUrls::route('/'),
         ];
     }
 }

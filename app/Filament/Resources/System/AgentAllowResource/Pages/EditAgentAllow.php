@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\AgentAllowResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\System\AgentAllowResource;
 use App\Models\NexusModel;
 use Filament\Pages\Actions;
@@ -14,7 +15,7 @@ class EditAgentAllow extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make()->using(function ($record) {
+            DeleteAction::make()->using(function ($record) {
                 $record->delete();
                 clear_agent_allow_deny_cache();
                 return redirect(AgentAllowResource::getUrl());

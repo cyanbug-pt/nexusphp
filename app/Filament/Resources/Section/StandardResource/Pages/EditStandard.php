@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\StandardResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Section\StandardResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -14,7 +15,7 @@ class EditStandard extends EditCodec
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

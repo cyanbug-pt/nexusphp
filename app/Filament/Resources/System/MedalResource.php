@@ -2,11 +2,24 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\System\MedalResource\Pages\ListMedals;
+use App\Filament\Resources\System\MedalResource\Pages\CreateMedal;
+use App\Filament\Resources\System\MedalResource\Pages\EditMedal;
 use App\Filament\Resources\System\MedalResource\Pages;
 use App\Filament\Resources\System\MedalResource\RelationManagers;
 use App\Models\Medal;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -18,9 +31,9 @@ class MedalResource extends Resource
 {
     protected static ?string $model = Medal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-check-badge';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-check-badge';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 2;
 
@@ -35,69 +48,69 @@ class MedalResource extends Resource
     }
 
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->required()->label(__('label.name')),
-                Forms\Components\TextInput::make('price')->required()->integer()->label(__('label.price')),
-                Forms\Components\TextInput::make('image_large')->required()->label(__('label.medal.image_large')),
-                Forms\Components\TextInput::make('image_small')->required()->label(__('label.medal.image_small')),
-                Forms\Components\Radio::make('get_type')
+        return $schema
+            ->components([
+                TextInput::make('name')->required()->label(__('label.name')),
+                TextInput::make('price')->required()->integer()->label(__('label.price')),
+                TextInput::make('image_large')->required()->label(__('label.medal.image_large')),
+                TextInput::make('image_small')->required()->label(__('label.medal.image_small')),
+                Radio::make('get_type')
                     ->options(Medal::listGetTypes(true))
                     ->inline()
                     ->label(__('label.medal.get_type'))
                     ->required()
                 ,
-                Forms\Components\Toggle::make('display_on_medal_page')
+                Toggle::make('display_on_medal_page')
                     ->label(__('label.medal.display_on_medal_page'))
                     ->required()
                 ,
-                Forms\Components\TextInput::make('duration')
+                TextInput::make('duration')
                     ->integer()
                     ->label(__('label.medal.duration'))
                     ->helperText(__('label.medal.duration_help'))
                 ,
-                Forms\Components\TextInput::make('inventory')
+                TextInput::make('inventory')
                     ->integer()
                     ->label(__('medal.fields.inventory'))
                     ->helperText(__('medal.fields.inventory_help'))
                 ,
-                Forms\Components\DateTimePicker::make('sale_begin_time')
+                DateTimePicker::make('sale_begin_time')
                     ->label(__('medal.fields.sale_begin_time'))
                     ->helperText(__('medal.fields.sale_begin_time_help'))
                 ,
-                Forms\Components\DateTimePicker::make('sale_end_time')
+                DateTimePicker::make('sale_end_time')
                     ->label(__('medal.fields.sale_end_time'))
                     ->helperText(__('medal.fields.sale_end_time_help'))
                 ,
-                Forms\Components\TextInput::make('bonus_addition_factor')
+                TextInput::make('bonus_addition_factor')
                     ->label(__('medal.fields.bonus_addition_factor'))
                     ->helperText(__('medal.fields.bonus_addition_factor_help'))
                     ->numeric()
                     ->minValue(0)
                     ->default(0)
                 ,
-                Forms\Components\TextInput::make('bonus_addition_duration')
+                TextInput::make('bonus_addition_duration')
                     ->label(__('medal.fields.bonus_addition_duration'))
                     ->helperText(__('medal.fields.bonus_addition_duration_help'))
                     ->numeric()
                     ->minValue(0)
                     ->default(0)
                 ,
-                Forms\Components\TextInput::make('gift_fee_factor')
+                TextInput::make('gift_fee_factor')
                     ->label(__('medal.fields.gift_fee_factor'))
                     ->helperText(__('medal.fields.gift_fee_factor_help'))
                     ->numeric()
                     ->default(0)
                 ,
-                Forms\Components\TextInput::make('priority')
+                TextInput::make('priority')
                     ->label(__('label.priority'))
                     ->helperText(__('label.priority_help'))
                     ->numeric()
                     ->default(0)
                 ,
-                Forms\Components\Textarea::make('description')
+                Textarea::make('description')
                     ->label(__('label.description'))
                 ,
             ]);
@@ -107,36 +120,36 @@ class MedalResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('name')->label(__('label.name'))->searchable(),
-                Tables\Columns\ImageColumn::make('image_large')->height(60)->label(__('label.medal.image_large')),
-                Tables\Columns\TextColumn::make('getTypeText')->label('Get type')->label(__('label.medal.get_type')),
-                Tables\Columns\IconColumn::make('display_on_medal_page')->label(__('label.medal.display_on_medal_page'))->boolean(),
-                Tables\Columns\TextColumn::make('sale_begin_end_time')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('name')->label(__('label.name'))->searchable(),
+                ImageColumn::make('image_large')->height(60)->label(__('label.medal.image_large')),
+                TextColumn::make('getTypeText')->label('Get type')->label(__('label.medal.get_type')),
+                IconColumn::make('display_on_medal_page')->label(__('label.medal.display_on_medal_page'))->boolean(),
+                TextColumn::make('sale_begin_end_time')
                     ->label(__('medal.fields.sale_begin_end_time'))
                     ->formatStateUsing(fn ($record) => new HtmlString(sprintf('%s ~<br/>%s', $record->sale_begin_time ?? nexus_trans('nexus.no_limit'), $record->sale_end_time ?? nexus_trans('nexus.no_limit'))))
                 ,
-                Tables\Columns\TextColumn::make('bonus_addition_factor')->label(__('medal.fields.bonus_addition_factor')),
-                Tables\Columns\TextColumn::make('bonus_addition_duration')->label(__('medal.fields.bonus_addition_duration')),
-                Tables\Columns\TextColumn::make('gift_fee_factor')->label(__('medal.fields.gift_fee_factor')),
-                Tables\Columns\TextColumn::make('price')->label(__('label.price'))->formatStateUsing(fn ($state) => number_format($state)),
+                TextColumn::make('bonus_addition_factor')->label(__('medal.fields.bonus_addition_factor')),
+                TextColumn::make('bonus_addition_duration')->label(__('medal.fields.bonus_addition_duration')),
+                TextColumn::make('gift_fee_factor')->label(__('medal.fields.gift_fee_factor')),
+                TextColumn::make('price')->label(__('label.price'))->formatStateUsing(fn ($state) => number_format($state)),
 
-                Tables\Columns\TextColumn::make('duration')->label(__('label.medal.duration')),
+                TextColumn::make('duration')->label(__('label.medal.duration')),
 
-                Tables\Columns\TextColumn::make('inventoryText')
+                TextColumn::make('inventoryText')
                     ->label(__('medal.fields.inventory'))
                 ,
-                Tables\Columns\TextColumn::make('users_count')->label(__('medal.fields.users_count')),
-                Tables\Columns\TextColumn::make('priority')->label(__('label.priority')),
+                TextColumn::make('users_count')->label(__('medal.fields.users_count')),
+                TextColumn::make('priority')->label(__('label.priority')),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->orderBy("priority", 'desc')->orderBy('id', 'desc'))
             ;
@@ -152,9 +165,9 @@ class MedalResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMedals::route('/'),
-            'create' => Pages\CreateMedal::route('/create'),
-            'edit' => Pages\EditMedal::route('/{record}/edit'),
+            'index' => ListMedals::route('/'),
+            'create' => CreateMedal::route('/create'),
+            'edit' => EditMedal::route('/{record}/edit'),
         ];
     }
 }

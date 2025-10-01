@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\Section;
 
+use Filament\Schemas\Schema;
+use App\Filament\Resources\Section\AudioCodecResource\Pages\ListAudioCodecs;
+use App\Filament\Resources\Section\AudioCodecResource\Pages\CreateAudioCodec;
+use App\Filament\Resources\Section\AudioCodecResource\Pages\EditAudioCodec;
 use App\Filament\Resources\Section\AudioCodecResource\Pages;
 use App\Filament\Resources\Section\AudioCodecResource\RelationManagers;
 use App\Models\AudioCodec;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -19,9 +22,9 @@ class AudioCodecResource extends CodecResource
 
     protected static ?int $navigationSort = 4;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return parent::form($form);
+        return parent::form($schema);
     }
 
     public static function table(Table $table): Table
@@ -39,9 +42,9 @@ class AudioCodecResource extends CodecResource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAudioCodecs::route('/'),
-            'create' => Pages\CreateAudioCodec::route('/create'),
-            'edit' => Pages\EditAudioCodec::route('/{record}/edit'),
+            'index' => ListAudioCodecs::route('/'),
+            'create' => CreateAudioCodec::route('/create'),
+            'edit' => EditAudioCodec::route('/{record}/edit'),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\CategoryResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\CategoryResource;
 use App\Models\Category;
@@ -16,7 +17,7 @@ class ListCategories extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

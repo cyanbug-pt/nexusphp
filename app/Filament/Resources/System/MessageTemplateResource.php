@@ -2,6 +2,16 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\System\MessageTemplateResource\Pages\ManageMessageTemplates;
 use App\Enums\MessageTemplateNameEnum;
 use App\Filament\Resources\System\MessageTemplateResource\Pages;
 use App\Filament\Resources\System\MessageTemplateResource\RelationManagers;
@@ -9,7 +19,6 @@ use App\Models\Language;
 use App\Models\MessageTemplate;
 use App\Models\Setting;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,9 +30,9 @@ class MessageTemplateResource extends Resource
 {
     protected static ?string $model = MessageTemplate::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 2;
 
@@ -37,24 +46,24 @@ class MessageTemplateResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
         $languages = Language::all();
         $default = $languages->first(fn ($item) => $item->site_lang_folder == Setting::getDefaultLang());
-        return $form
-            ->schema([
-                Forms\Components\Select::make('name')
+        return $schema
+            ->components([
+                Select::make('name')
                     ->label(__('label.name'))
                     ->options(MessageTemplate::listAllNames())
                     ->columnSpanFull()
                     ->required(),
-                Forms\Components\Select::make('language_id')
+                Select::make('language_id')
                     ->label(__('label.language'))
                     ->options($languages->pluck('lang_name', 'id'))
                     ->default($default ? $default->id : null)
                     ->columnSpanFull()
                     ->required(),
-                Forms\Components\Textarea::make('content')
+                Textarea::make('content')
                     ->label(__('label.content'))
                     ->helperText(new HtmlString(__('message-template.content_help')."<br/>".__('message-template.register_welcome_content_help')))
                     ->columnSpanFull()
@@ -68,35 +77,35 @@ class MessageTemplateResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('id'),
+                TextColumn::make('name')
                     ->label(__('label.name'))
                     ->formatStateUsing(fn ($state) => $state->label())
                 ,
-                Tables\Columns\TextColumn::make('language.lang_name')
+                TextColumn::make('language.lang_name')
                     ->label(__('label.language'))
                 ,
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('label.updated_at'))
                 ,
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('name')
+                SelectFilter::make('name')
                     ->label(__('label.name'))
                     ->options(MessageTemplate::listAllNames())
                 ,
-                Tables\Filters\SelectFilter::make('language_id')
+                SelectFilter::make('language_id')
                     ->label(__('label.language'))
                     ->options(Language::all()->pluck('lang_name', 'id'))
                 ,
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -104,7 +113,7 @@ class MessageTemplateResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageMessageTemplates::route('/'),
+            'index' => ManageMessageTemplates::route('/'),
         ];
     }
 }

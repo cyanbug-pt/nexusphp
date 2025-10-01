@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\ExamResource\Pages;
 
+use Exception;
 use App\Filament\Resources\System\ExamResource;
 use App\Repositories\ExamRepository;
 use Filament\Pages\Actions;
@@ -28,7 +29,7 @@ class CreateExam extends CreateRecord
                 return;
             }
             $this->redirect($this->getResource()::getUrl('index'));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             do_log($exception->getMessage() . "\n" . $exception->getTraceAsString(), "error");
             send_admin_fail_notification($exception->getMessage());
         }

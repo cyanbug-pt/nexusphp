@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\MediaResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\MediaResource;
 use App\Models\Media;
@@ -17,7 +18,7 @@ class ListMedia extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

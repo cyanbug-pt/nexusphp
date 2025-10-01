@@ -1,19 +1,21 @@
 <?php
 namespace App\Filament\Pages;
 
+use Filament\Pages\Dashboard;
+use Filament\Support\Enums\Width;
 use App\Filament\Widgets\AnnounceMonitor\MaxUploadedUser;
 use App\Models\Setting;
 use Illuminate\Contracts\Support\Htmlable;
 
-class AnnounceMonitor extends \Filament\Pages\Dashboard
+class AnnounceMonitor extends Dashboard
 {
-    protected ?string $maxContentWidth = 'full';
+    protected Width|string|null $maxContentWidth = 'full';
 
-    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-archive-box';
 
     protected static string $routePath = 'announce-monitor';
 
-    protected static ?string $navigationGroup = 'Torrent';
+    protected static string | \UnitEnum | null $navigationGroup = 'Torrent';
 
     protected static ?int $navigationSort = 15;
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\PluginResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageListSingle;
 use App\Filament\Resources\System\PluginResource;
 use Filament\Pages\Actions;
@@ -14,7 +15,7 @@ class ManagePlugins extends PageListSingle
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\AgentDenyResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\System\AgentDenyResource;
 use Filament\Pages\Actions;
@@ -14,7 +15,7 @@ class ListAgentDenies extends PageList
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

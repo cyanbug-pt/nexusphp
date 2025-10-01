@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\SecondIconResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\EditRedirectIndexTrait;
 use App\Filament\Resources\Section\SecondIconResource;
 use App\Models\SearchBox;
@@ -18,7 +19,7 @@ class EditSecondIcon extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 
