@@ -42,7 +42,7 @@ class AppPanelProvider extends PanelProvider
             ->spa()
             ->homeUrl("/")
             ->sidebarWidth("15rem")
-            ->topbar(true)
+            ->topbar(false)
             ->sidebarCollapsibleOnDesktop(true)
             ->authGuard("nexus-web")
             ->path('nexusphp')
