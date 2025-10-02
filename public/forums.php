@@ -421,18 +421,20 @@ if ($action == "post")
 		sql_query("UPDATE posts SET body=".sqlesc($body).", editdate=".sqlesc($date).", editedby=".sqlesc($CURUSER['id'])." WHERE id=".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 		$Cache->delete_value('post_'.$postid.'_content');
         //send pm
-        $postUrl = sprintf('[url=[siteurl]/forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $id, $id, $topicInfo->subject);
+        $postUrl = sprintf('[url=forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $id, $id, $topicInfo->subject);
         if (!empty($postInfo->userid) && $postInfo->userid != $CURUSER['id']) {
             $receiver = $postInfo->user;
-            $locale = $receiver->locale;
-            $notify = [
-                'sender' => 0,
-                'receiver' => $receiver->id,
-                'subject' => nexus_trans('forum.post.edited_notify_subject', [], $locale),
-                'msg' => nexus_trans('forum.post.edited_notify_body', ['topic_subject' => $postUrl, 'editor' => $CURUSER['username']], $locale),
-                'added' => now(),
-            ];
-            \App\Models\Message::add($notify);
+            if ($receiver) {
+                $locale = $receiver->locale;
+                $notify = [
+                    'sender' => 0,
+                    'receiver' => $receiver->id,
+                    'subject' => nexus_trans('forum.post.edited_notify_subject', [], $locale),
+                    'msg' => nexus_trans('forum.post.edited_notify_body', ['topic_subject' => $postUrl, 'editor' => $CURUSER['username']], $locale),
+                    'added' => now(),
+                ];
+                \App\Models\Message::add($notify);
+            }
         }
 	}
 	else
@@ -467,14 +469,14 @@ if ($action == "post")
 		$postid = mysql_insert_id() or die($lang_forums['std_post_id_not_available']);
 		//send pm
         $topicInfo = \App\Models\Topic::query()->findOrFail($topicid);
-        $postUrl = sprintf('[url=[siteurl]/forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $postid, $postid, $topicInfo->subject);
+        $postUrl = sprintf('[url=forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $postid, $postid, $topicInfo->subject);
 
 		if ($type == 'reply') {
 			/** @var \App\Models\User $receiver */
 			if (!empty($topicInfo->userid) && $topicInfo->userid != $CURUSER['id'])
 			{
 				$receiver = $topicInfo->user;
-				if ($receiver->acceptNotification('topic_reply')) {
+				if ($receiver && $receiver->acceptNotification('topic_reply')) {
 					$locale = $receiver->locale;
 					$notify = [
 						'sender' => 0,
