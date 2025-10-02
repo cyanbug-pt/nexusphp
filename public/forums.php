@@ -493,7 +493,7 @@ if ($action == "post")
                 $quotePostInfo = \App\Models\Post::query()->find($quotepostid);
                 if ($quotePostInfo && $quotePostInfo->userid != $CURUSER['id']) {
                     $receiver = $quotePostInfo->user;
-                    if($receiver->acceptNotification('topic_reply')) {
+                    if($receiver && $receiver->acceptNotification('topic_reply')) {
                         $locale = $receiver->locale;
                         $notify = [
                             'sender' => 0,
