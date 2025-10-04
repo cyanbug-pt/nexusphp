@@ -15,7 +15,7 @@ class AnnounceMonitor extends Dashboard
 
     protected static string $routePath = 'announce-monitor';
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Torrent';
+    protected static string | \UnitEnum | null $navigationGroup = 'Tracker';
 
     protected static ?int $navigationSort = 15;
 
