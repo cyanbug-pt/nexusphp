@@ -29,7 +29,7 @@ bark($lang_confirm_resend['std_need_admin_verification']);
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring'],"confirm_resend.php",true);
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,"confirm_resend.php",true);
 	$email = unesc(htmlspecialchars(trim($_POST["email"] ?? '')));
 	$wantpassword = unesc(htmlspecialchars(trim($_POST["wantpassword"])));
 	$passagain = unesc(htmlspecialchars(trim($_POST["passagain"])));

@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     switch($action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS)){
         case 'new':
             cur_user_check();
-            check_code ($_POST['imagehash'], $_POST['imagestring'],'complains.php');
+            check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,'complains.php');
             \Nexus\Database\NexusLock::lockOrFail("complains:lock:" . getip(), 10);
             $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
             \Nexus\Database\NexusLock::lockOrFail("complains:lock:" . $email, 600);

@@ -21,13 +21,13 @@ if ($type == 'invite'){
 registration_check();
 failedloginscheck ("Invite Signup");
 if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring'],'signup.php?type=invite&invitenumber='.htmlspecialchars($_POST['hash']));
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,'signup.php?type=invite&invitenumber='.htmlspecialchars($_POST['hash']));
 }
 else{
 registration_check("normal");
 failedloginscheck ("Signup");
 if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring']);
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null);
 }
 function isportopen($port)
 {

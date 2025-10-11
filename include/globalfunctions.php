@@ -307,6 +307,7 @@ function nexus_config($key, $default = null)
         $files = [
             ROOT_PATH . 'config/nexus.php',
             ROOT_PATH . 'config/emoji.php',
+            ROOT_PATH . 'config/captcha.php',
         ];
         foreach ($files as $file) {
             $basename = basename($file);
