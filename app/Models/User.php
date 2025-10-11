@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Exceptions\NexusException;
 use App\Http\Middleware\Locale;
+use App\Models\Traits\NexusActivityLogTrait;
 use App\Repositories\ExamRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,7 +24,7 @@ use NexusPlugin\Permission\Models\UserPermission;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, NexusActivityLogTrait;
 
     public $timestamps = false;
 
@@ -632,8 +633,5 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $redis->sismember(Setting::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY, $ability)
             && $this->accessToken && $this->accessToken->can($ability);
     }
-
-
-
 
 }

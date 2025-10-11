@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class Tag extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     public $timestamps = true;
 
     protected $fillable = [

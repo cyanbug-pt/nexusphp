@@ -48,6 +48,7 @@ return [
         'tracker_url' => 'Tracker URL',
         'announce_logs' => '汇报记录',
         'announce_monitor' => '汇报监控',
+        'activity_logs' => '操作日志',
     ],
     'resources' => [
         'agent_allow' => [

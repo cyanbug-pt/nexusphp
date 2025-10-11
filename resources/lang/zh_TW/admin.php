@@ -50,6 +50,7 @@ return [
         'tracker_url' => 'Tracker URL',
         'announce_logs' => '匯報記錄',
         'announce_monitor' => '匯報監控',
+        'activity_logs' => '操作日志',
     ],
     'resources' => [
         'agent_allow' => [

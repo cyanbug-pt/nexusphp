@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
 use Nexus\Database\NexusDB;
 
 class TrackerUrl extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['url', 'enabled', 'is_default', 'priority'];
 
     public $timestamps = true;

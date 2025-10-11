@@ -6,14 +6,13 @@ use Filament\Support\Enums\Width;
 use Filament\Tables\Enums\FiltersLayout;
 use Closure;
 use Filament\Resources\Pages\ManageRecords;
-use Filament\Tables\Filters\Layout;
 use Illuminate\Database\Eloquent\Model;
 
 class PageListSingle extends ManageRecords
 {
     protected Width|string|null $maxContentWidth = 'full';
 
-    protected function getTableFiltersLayout(): ?string
+    protected function getTableFiltersLayout(): FiltersLayout
     {
         return FiltersLayout::AboveContent;
     }

@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Enums\MessageTemplateNameEnum;
+use App\Models\Traits\NexusActivityLogTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MessageTemplate extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['name', 'content', 'language_id'];
 
     public $timestamps = true;

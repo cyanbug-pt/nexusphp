@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
 use Carbon\Carbon;
 
 class Medal extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     const GET_TYPE_EXCHANGE = 1;
 
     const GET_TYPE_GRANT = 2;

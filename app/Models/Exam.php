@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
 use Carbon\Carbon;
-use Google\Service\Dataproc\RegexValidation;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Exam extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = [
         'name', 'description', 'begin', 'end', 'duration', 'status', 'is_discovered', 'filters', 'indexes', 'priority',
         'recurring', 'type', 'success_reward_bonus', 'fail_deduct_bonus', 'max_user_count', 'background_color',

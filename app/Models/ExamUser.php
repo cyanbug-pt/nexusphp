@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
 use App\Repositories\ExamRepository;
 
 class ExamUser extends NexusModel

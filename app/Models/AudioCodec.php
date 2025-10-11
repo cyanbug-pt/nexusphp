@@ -3,8 +3,12 @@
 namespace App\Models;
 
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class AudioCodec extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $table = 'audiocodecs';
 
     protected $fillable = ['name', 'sort_index', 'mode',];

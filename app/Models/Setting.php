@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
 use Illuminate\Support\Arr;
 use Nexus\Database\NexusDB;
 
 class Setting extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['name', 'value', 'autoload'];
 
     public $timestamps = true;

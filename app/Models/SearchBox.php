@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Auth\Permission;
 use App\Http\Middleware\Locale;
+use App\Models\Traits\NexusActivityLogTrait;
 use App\Repositories\TagRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Query\Builder;
@@ -12,6 +13,8 @@ use Nexus\Database\NexusDB;
 
 class SearchBox extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     private static array $instances = [];
 
     private static array $modeOptions = [];

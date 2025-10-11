@@ -3,8 +3,12 @@
 namespace App\Models;
 
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class Processing extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $table = 'processings';
 
     protected $fillable = ['name', 'sort_index', 'mode',];

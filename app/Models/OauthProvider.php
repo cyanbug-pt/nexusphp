@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
 use Laravel\Passport\Client;
 use Nexus\Database\NexusDB;
 use Ramsey\Uuid;
 
 class OauthProvider extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = [
         'uuid', 'name', 'client_id', 'client_secret', 'authorization_endpoint_url', 'token_endpoint_url',
         'user_info_endpoint_url', 'id_claim', 'username_claim', 'email_claim', 'enabled', 'priority',

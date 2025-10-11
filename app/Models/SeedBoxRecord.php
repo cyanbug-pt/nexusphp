@@ -5,12 +5,15 @@ namespace App\Models;
 use App\Enums\SeedBoxRecord\IpAsnEnum;
 use App\Enums\SeedBoxRecord\IsAllowedEnum;
 use App\Enums\SeedBoxRecord\TypeEnum;
+use App\Models\Traits\NexusActivityLogTrait;
 use App\Repositories\SeedBoxRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Nexus\Database\NexusDB;
 
 class SeedBoxRecord extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['type', 'uid', 'status', 'operator', 'bandwidth', 'ip', 'ip_begin', 'ip_end', 'ip_begin_numeric', 'ip_end_numeric',
         'comment', 'version', 'is_allowed', 'asn'
     ];

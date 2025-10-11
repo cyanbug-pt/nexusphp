@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Enums\ModelEventEnum;
+use App\Models\Traits\NexusActivityLogTrait;
 
 class AgentAllow extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $table = 'agent_allowed_family';
 
     protected $fillable = [
