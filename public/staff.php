@@ -187,7 +187,7 @@ while ($arr = mysql_fetch_assoc($res))
 
 begin_frame($lang_staff['text_vip']);
 ?>
-<?php echo $lang_staff['text_vip_note'] ?>（只显示永久VIP）
+<?php echo $lang_staff['text_vip_note'] ?>
 <br /><br />
 <table width=100% cellspacing=0 align=center>
 	<tr>
