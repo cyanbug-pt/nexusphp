@@ -28,7 +28,7 @@ $mailTwoFour = sprintf($lang_recover['mail_two_four'], $siteName);
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring'],"recover.php",true);
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,"recover.php",true);
 	$email = unesc(htmlspecialchars(trim($_POST["email"] ?? '')));
 	$email = safe_email($email);
 	if (!$email)

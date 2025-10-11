@@ -1767,56 +1767,102 @@ function random_str($length="6")
 	}
 	return $str;
 }
-function image_code () {
-	$randomstr = random_str();
-	$imagehash = md5($randomstr);
-	$dateline = time();
-	$sql = 'INSERT INTO `regimages` (`imagehash`, `imagestring`, `dateline`) VALUES (\''.$imagehash.'\', \''.$randomstr.'\', \''.$dateline.'\');';
-	sql_query($sql);
-	return $imagehash;
+function captcha_manager(): \App\Services\Captcha\CaptchaManager
+{
+    static $manager;
+
+    if (!$manager) {
+        $manager = new \App\Services\Captcha\CaptchaManager();
+    }
+
+    return $manager;
 }
 
-function check_code ($imagehash, $imagestring, $where = 'signup.php',$maxattemptlog=false,$head=true) {
-	global $lang_functions;
+function image_code () {
+    $driver = captcha_manager()->driver('image');
+
+    if (!method_exists($driver, 'issue')) {
+        throw new \RuntimeException('Image captcha driver is unavailable.');
+    }
+
+    return $driver->issue();
+}
+
+function check_code ($imagehash, $imagestring, $where = 'signup.php', $maxattemptlog = false, $head = true) {
+    global $lang_functions;
     global $iv;
+
     if ($iv !== 'yes') {
         return true;
     }
-	$query = sprintf("SELECT * FROM regimages WHERE imagehash='%s' AND imagestring='%s'",
-        mysql_real_escape_string((string)$imagehash),
-        mysql_real_escape_string((string)$imagestring)
-    );
-	$sql = sql_query($query);
-	$imgcheck = mysql_fetch_array($sql);
-	if(!$imgcheck['dateline']) {
-		$delete = sprintf("DELETE FROM regimages WHERE imagehash='%s'",
-		    mysql_real_escape_string((string)$imagehash)
-        );
-		sql_query($delete);
-		if (!$maxattemptlog)
-		stderr('Error',$lang_functions['std_invalid_image_code']."<a href=\"".htmlspecialchars($where)."\">".$lang_functions['std_here_to_request_new'], false);
-		else
-		failedlogins($lang_functions['std_invalid_image_code']."<a href=\"".htmlspecialchars($where)."\">".$lang_functions['std_here_to_request_new'],true,$head);
-	}else{
-		$delete = sprintf("DELETE FROM regimages WHERE imagehash='%s'",
-		    mysql_real_escape_string((string)$imagehash)
-        );
-		sql_query($delete);
-		return true;
-	}
+
+    $manager = captcha_manager();
+
+    if (!$manager->isEnabled()) {
+        return true;
+    }
+
+    $payload = [
+        'imagehash' => $imagehash,
+        'imagestring' => $imagestring,
+        'request' => array_merge($_POST ?? [], $_GET ?? []),
+    ];
+
+    $context = [
+        'where' => $where,
+        'maxattemptlog' => $maxattemptlog,
+        'head' => $head,
+        'ip' => getip(),
+    ];
+
+    try {
+        if ($manager->verify($payload, $context)) {
+            return true;
+        }
+    } catch (\App\Services\Captcha\Exceptions\CaptchaValidationException $exception) {
+        $message = $exception->getMessage();
+
+        $defaultMessage = $lang_functions['std_invalid_image_code'] . "<a href=\"" . htmlspecialchars($where) . "\">" . $lang_functions['std_here_to_request_new'];
+
+        if ($message === '' || $message === 'Invalid captcha response.' || $message === 'Missing captcha parameters.') {
+            $message = $defaultMessage;
+        }
+
+        if (!$maxattemptlog) {
+            stderr('Error', $message, false);
+        } else {
+            failedlogins($message, true, $head);
+        }
+    }
+
+    return false;
 }
+
 function show_image_code () {
-	global $lang_functions;
-	global $iv;
-	if ($iv == "yes") {
-		unset($imagehash);
-		$imagehash = image_code () ;
-		print ("<tr><td class=\"rowhead\">".$lang_functions['row_security_image']."</td>");
-		print ("<td align=\"left\"><img src=\"".htmlspecialchars("image.php?action=regimage&imagehash=".$imagehash."&secret=".($_GET['secret'] ?? ''))."\" border=\"0\" alt=\"CAPTCHA\" /></td></tr>");
-		print ("<tr><td class=\"rowhead\">".$lang_functions['row_security_code']."</td><td align=\"left\">");
-		print("<input type=\"text\" autocomplete=\"off\" style=\"width: 180px; border: 1px solid gray\" name=\"imagestring\" value=\"\" />");
-		print("<input type=\"hidden\" name=\"imagehash\" value=\"$imagehash\" /></td></tr>");
-	}
+    global $lang_functions;
+    global $iv;
+
+    if ($iv !== 'yes') {
+        return;
+    }
+
+    $manager = captcha_manager();
+
+    if (!$manager->isEnabled()) {
+        return;
+    }
+
+    $markup = $manager->render([
+        'labels' => [
+            'image' => $lang_functions['row_security_image'],
+            'code' => $lang_functions['row_security_code'],
+        ],
+        'secret' => $_GET['secret'] ?? '',
+    ]);
+
+    if ($markup !== '') {
+        echo $markup;
+    }
 }
 
 function get_ip_location($ip)

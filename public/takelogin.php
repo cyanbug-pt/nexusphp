@@ -15,7 +15,7 @@ function bark($text = "")
   stderr($lang_takelogin['std_login_fail'], $text,false);
 }
 if ($iv == "yes") {
-    check_code ($_POST['imagehash'], $_POST['imagestring'],'login.php',true);
+    check_code($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null, 'login.php', true);
 }
 //同时支持新旧两种登录方式
 $useChallengeResponse = \App\Models\Setting::getIsUseChallengeResponseAuthentication();
