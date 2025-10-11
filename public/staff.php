@@ -175,7 +175,7 @@ end_frame();
 //--------------------- VIP section ---------------------------//
 
 $ppl = '';
-$res = sql_query("SELECT * FROM users WHERE class=".UC_VIP." AND status='confirmed' ORDER BY username") or sqlerr();
+$res = sql_query("SELECT * FROM users WHERE class=".UC_VIP." AND vip_until is null AND status='confirmed' ORDER BY username") or sqlerr();
 while ($arr = mysql_fetch_assoc($res))
 {
 	$countryrow = get_country_row($arr['country']);
@@ -187,7 +187,7 @@ while ($arr = mysql_fetch_assoc($res))
 
 begin_frame($lang_staff['text_vip']);
 ?>
-<?php echo $lang_staff['text_vip_note'] ?>
+<?php echo $lang_staff['text_vip_note'] ?>（只显示永久VIP）
 <br /><br />
 <table width=100% cellspacing=0 align=center>
 	<tr>
