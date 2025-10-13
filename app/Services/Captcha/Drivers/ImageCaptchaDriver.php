@@ -31,7 +31,7 @@ class ImageCaptchaDriver implements CaptchaDriverInterface
 
         return implode("\n", [
             sprintf('<tr><td class="rowhead">%s</td><td align="left"><img src="%s" border="0" alt="CAPTCHA" /></td></tr>', htmlspecialchars($imageLabel, ENT_QUOTES, 'UTF-8'), $imageUrl),
-            sprintf('<tr><td class="rowhead">%s</td><td align="left"><input type="text" autocomplete="off" style="width: 180px; border: 1px solid gray" name="imagestring" value="" /><input type="hidden" name="imagehash" value="%s" /></td></tr>', htmlspecialchars($codeLabel, ENT_QUOTES, 'UTF-8'), htmlspecialchars($imagehash, ENT_QUOTES, 'UTF-8')),
+            sprintf('<tr><td class="rowhead">%s</td><td align="left"><input type="text" autocomplete="off" style="width: 100%%; min-width: 180px; border: 1px solid gray; box-sizing: border-box" name="imagestring" value="" /><input type="hidden" name="imagehash" value="%s" /></td></tr>', htmlspecialchars($codeLabel, ENT_QUOTES, 'UTF-8'), htmlspecialchars($imagehash, ENT_QUOTES, 'UTF-8')),
         ]);
     }
 

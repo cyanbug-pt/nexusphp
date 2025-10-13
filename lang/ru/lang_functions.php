@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'You will get',
 	'std_by' => 'By',
 	'row_security_image' => "Security Image:",
+	'row_security_challenge' => "Security Challenge:",
 	'row_security_code' => "Security Code:",
 	'text_slots' => "Slots:",
 	'text_unlimited' => "Неограниченный",
