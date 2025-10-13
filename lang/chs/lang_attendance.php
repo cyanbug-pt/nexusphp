@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => '补',
     'retroactive_confirm_tip' => '确定要补签: ',
     'retroactive_description' => '点击白色背景的圆点进行补签。你目前拥有补签卡 <b>%d</b> 张。',
+    'attend_button' => '立即签到',
 );
