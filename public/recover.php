@@ -139,7 +139,8 @@ else
 	<form method="post" action="recover.php">
 	<table border="1" cellspacing="0" cellpadding="10">
 	<tr><td class="rowhead"><?php echo $lang_recover['row_registered_email'] ?></td>
-	<td class="rowfollow"><input type="text" style="width: 150px" name="email" /></td></tr>
+<?php $formInputStyle = 'style="width: min(100%, 320px); min-width: 180px; border: 1px solid gray; box-sizing: border-box"'; ?>
+<td class="rowfollow"><input type="email" <?php echo $formInputStyle; ?> name="email" autocomplete="email" /></td></tr>
 	<?php
 	show_image_code ();
 	?>

@@ -59,9 +59,10 @@ if (!$useChallengeResponseAuthentication) {
 <p><?php echo $lang_login['p_need_cookies_enables']?><br /> [<b><?php echo $maxloginattempts;?></b>] <?php echo $lang_login['p_fail_ban']?></p>
 <p><?php echo $lang_login['p_you_have']?> <b><?php echo remaining ();?></b> <?php echo $lang_login['p_remaining_tries']?></p>
 <table border="0" cellpadding="5">
-<tr><td class="rowhead"><?php echo $lang_login['rowhead_username']?></td><td class="rowfollow" align="left"><input type="text" class="username" name="username" style="width: 180px; border: 1px solid gray" /></td></tr>
-<tr><td class="rowhead"><?php echo $lang_login['rowhead_password']?></td><td class="rowfollow" align="left"><input type="password" <?php echo $passwordName ?> style="width: 180px; border: 1px solid gray"/></td></tr>
-<tr><td class="rowhead"><?php echo $lang_login['rowhead_two_step_code']?></td><td class="rowfollow" align="left"><input type="text" name="two_step_code"  placeholder="<?php echo $lang_login['two_step_code_tooltip'] ?>" style="width: 180px; border: 1px solid gray"/></td></tr>
+<?php $formInputStyle = 'style="width: min(100%, 320px); min-width: 180px; border: 1px solid gray; box-sizing: border-box"'; ?>
+<tr><td class="rowhead"><?php echo $lang_login['rowhead_username']?></td><td class="rowfollow" align="left"><input type="text" class="username" name="username" autocomplete="username" <?php echo $formInputStyle; ?> /></td></tr>
+<tr><td class="rowhead"><?php echo $lang_login['rowhead_password']?></td><td class="rowfollow" align="left"><input type="password" <?php echo $passwordName ?> autocomplete="current-password" <?php echo $formInputStyle; ?> /></td></tr>
+<tr><td class="rowhead"><?php echo $lang_login['rowhead_two_step_code']?></td><td class="rowfollow" align="left"><input type="text" name="two_step_code" inputmode="numeric" pattern="[0-9]*" placeholder="<?php echo $lang_login['two_step_code_tooltip'] ?>" <?php echo $formInputStyle; ?> /></td></tr>
 <?php
 show_image_code ();
 if ($securelogin == "yes")
