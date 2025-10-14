@@ -40,7 +40,20 @@ class class_cache_redis {
         if (isset($config['timeout']) && is_numeric($config['timeout'])) {
             $params[] = $config['timeout'];
         }
-        $connectResult = $redis->connect(...$params);
+        if ($this->isFpmMode()) {
+            try {
+                $connectResult = $redis->pconnect(...$params);
+            } catch (\Exception $e) {
+                do_log("redis pconnect failed: {$e->getMessage()}, retry one time", 'error');
+                $redis->close();
+                $redis = new Redis();
+                $connectResult = $redis->pconnect(...$params);
+            }
+            do_log("redis pconnect: $connectResult", 'debug');
+        } else {
+            $connectResult = $redis->connect(...$params);
+            do_log("redis connect: $connectResult", 'debug');
+        }
         if (!empty($config['password'])) {
             $connectResult = $connectResult && $redis->auth($config['password']);
         }
@@ -53,6 +66,11 @@ class class_cache_redis {
             throw new \RuntimeException("Redis connect fail.");
         }
         return true;
+    }
+
+    private function isFpmMode(): bool
+    {
+        return php_sapi_name() === 'fpm-fcgi';
     }
 
     function getIsEnabled() {
