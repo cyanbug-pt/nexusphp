@@ -3,8 +3,10 @@
 namespace App\Jobs;
 
 use App\Models\BonusLogs;
+use App\Models\IpLog;
 use App\Models\Setting;
 use App\Models\User;
+use App\Repositories\IpLogRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -238,7 +240,7 @@ class CalculateUserSeedBonus implements ShouldQueue
             $client = app(\ClickHouseDB\Client::class);
             $fields = ['business_type', 'uid', 'old_total_value', 'value', 'new_total_value', 'comment', 'created_at'];
             $client->insert("bonus_logs", $bonusLogInsert, $fields);
-            do_log("insertIntoClickHouseBulk done, created_at: {$bonusLogInsert[0]['created_at']}");
+            do_log("insertIntoClickHouseBulk done, created_at: {$bonusLogInsert[0]['created_at']}, count: " . count($bonusLogInsert));
         } catch (\Exception $e) {
             do_log($e->getMessage(), 'error');
         }

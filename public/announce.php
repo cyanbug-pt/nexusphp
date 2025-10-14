@@ -657,6 +657,7 @@ if(count($USERUPDATESET) && $userid)
 $lockKey = sprintf("record_batch_lock:%s:%s", $userid, $torrentid);
 if ($redis->set($lockKey, TIMENOW, ['nx', 'ex' => $autoclean_interval_one])) {
     \App\Repositories\CleanupRepository::recordBatch($redis, $userid, $torrentid);
+    \App\Repositories\IpLogRepository::saveToCache($userid, null, [$ip]);
 }
 if (\App\Repositories\RequireSeedTorrentRepository::shouldRecordUser($redis, $userid, $torrentid)) {
     if (!isset($snatchInfo)) {

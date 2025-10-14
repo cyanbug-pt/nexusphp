@@ -2498,10 +2498,12 @@ function stdhead($title = "", $msgalert = true, $script = "", $place = "")
 	$tstart = getmicrotime(); // Start time
 	//Insert old ip into iplog
 	if ($CURUSER){
-		if ($iplog1 == "yes") {
-			if (($oldip != $CURUSER["ip"]) && $CURUSER["ip"])
-			sql_query("INSERT INTO iplog (ip, userid, access) VALUES (" . sqlesc($CURUSER['ip']) . ", " . $CURUSER['id'] . ", '" . $CURUSER['last_access'] . "')");
-		}
+//		if ($iplog1 == "yes") {
+//			if (($oldip != $CURUSER["ip"]) && $CURUSER["ip"])
+//			sql_query("INSERT INTO iplog (ip, userid, access) VALUES (" . sqlesc($CURUSER['ip']) . ", " . $CURUSER['id'] . ", '" . $CURUSER['last_access'] . "')");
+//		}
+        //record always
+        \App\Repositories\IpLogRepository::saveToCache($CURUSER['id']);
 		$USERUPDATESET[] = "last_access = ".sqlesc(date("Y-m-d H:i:s"));
 		$USERUPDATESET[] = "ip = ".sqlesc($CURUSER['ip']);
 	}
@@ -2966,8 +2968,10 @@ function stdfoot() {
 			echo "<div align=\"center\" style=\"margin-top: 10px\" id=\"\">".$footerad[0]."</div>";
 	}
 	print("<div style=\"margin-top: 10px; margin-bottom: 30px;\" align=\"center\">");
-	if ($CURUSER && count($USERUPDATESET)){
-		sql_query("UPDATE users SET " . join(",", $USERUPDATESET) . " WHERE id = ".$CURUSER['id']);
+	if ($CURUSER) {
+        if (count($USERUPDATESET)) {
+            sql_query("UPDATE users SET " . join(",", $USERUPDATESET) . " WHERE id = ".$CURUSER['id']);
+        }
 	}
 	// Variables for End Time
 	$tend = microtime(true);
@@ -6099,9 +6103,9 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
             $torrentIdArr = [-1];
         }
         $idStr = implode(',', \Illuminate\Support\Arr::wrap($torrentIdArr));
-        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, 'NO_PEER_ID' as peerID, '' as last_action from torrents  WHERE id in ($idStr) and size >= $minSize";
+        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, 'NO_PEER_ID' as peerID, '' as last_action, '' as ip from torrents  WHERE id in ($idStr) and size >= $minSize";
     } else {
-        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' and torrents.size > $minSize group by peers.torrent, peers.peer_id";
+        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action, peers.ip from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' and torrents.size > $minSize group by peers.torrent, peers.peer_id";
     }
     $tagGrouped = [];
     $torrentResult = \Nexus\Database\NexusDB::select($sql);
@@ -6120,10 +6124,14 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
     $medalAdditionalFactor = floatval($userMedalResult[0]['factor'] ?? 0);
     do_log("$logPrefix, sql: $sql, count: " . count($torrentResult) . ", officialTag: $officialTag, officialAdditionalFactor: $officialAdditionalFactor, zeroBonusTag: $zeroBonusTag, zeroBonusFactor: $zeroBonusFactor, medalAdditionalFactor: $medalAdditionalFactor");
     $last_action = "";
+    $ip_arr = [];
     foreach ($torrentResult as $torrent)
     {
         if ($torrent['last_action'] > $last_action) {
             $last_action = $torrent['last_action'];
+        }
+        if (!empty($torrent['ip']) && !isset($ip_arr[$torrent['ip']])) {
+            $ip_arr[$torrent['ip']] = $torrent['ip'];
         }
         $size = bcadd($size, $torrent['size']);
         $weeks_alive = ($timenow - strtotime($torrent['added'])) / $sectoweek;
@@ -6155,11 +6163,12 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
     $medal_bonus = $valuetwo * atan($A / $l_bonus);
     $result = compact(
         'seed_points','seed_bonus', 'A', 'count', 'torrent_peer_count', 'size', 'last_action',
-        'official_bonus', 'official_a', 'official_torrent_peer_count', 'official_size', 'medal_bonus'
+        'official_bonus', 'official_a', 'official_torrent_peer_count', 'official_size', 'medal_bonus',
     );
     $result['donor_times'] = $donortimes_bonus;
     $result['official_additional_factor'] = $officialAdditionalFactor;
     $result['medal_additional_factor'] = $medalAdditionalFactor;
+    $result['ip_arr'] = array_keys($ip_arr);
     do_log("$logPrefix, result: " . json_encode($result));
     return $result;
 }
@@ -6514,6 +6523,9 @@ function torrent_name_for_admin(\App\Models\Torrent|null $torrent, $withTags = f
 
 function username_for_admin(int $id)
 {
+    if (empty($id)) {
+        return '';
+    }
     return new HtmlString(get_username($id, false, true, true, true));
 }
 

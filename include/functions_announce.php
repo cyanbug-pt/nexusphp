@@ -53,13 +53,7 @@ function benc_resp($d)
 function benc_resp_raw($x) {
 	header("Content-Type: text/plain; charset=utf-8");
 	header("Pragma: no-cache");
-
-	if (isset($_SERVER["HTTP_ACCEPT_ENCODING"]) && $_SERVER["HTTP_ACCEPT_ENCODING"] == "gzip" && function_exists('gzencode')) {
-		header("Content-Encoding: gzip");
-		echo gzencode($x, 9, FORCE_GZIP);
-	}
-	else
-		echo $x;
+    echo $x;
 }
 
 /**

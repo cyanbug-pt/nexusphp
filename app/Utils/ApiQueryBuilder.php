@@ -101,10 +101,10 @@ class ApiQueryBuilder
     {
         $includeCounts = explode(',', $this->request->query(self::PARAM_NAME_INCLUDE_COUNTS, ''));
         $valid = array_intersect($this->allowedIncludeCounts, $includeCounts);
-        do_log(sprintf(
-            "includeCounts: %s, allow: %s, valid: %s",
-            json_encode($includeCounts), json_encode($this->allowedIncludeCounts), json_encode($valid)
-        ));
+//        do_log(sprintf(
+//            "includeCounts: %s, allow: %s, valid: %s",
+//            json_encode($includeCounts), json_encode($this->allowedIncludeCounts), json_encode($valid)
+//        ));
         $this->query->withCount($valid);
     }
 

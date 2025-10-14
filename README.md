@@ -42,7 +42,7 @@
 ## 系统要求
 - PHP: 8.2|8.3|8.4，必须扩展：bcmath, ctype, curl, fileinfo, json, mbstring, openssl, pdo_mysql, tokenizer, xml, mysqli, gd, redis, pcntl, sockets, posix, gmp, zend opcache, zip, intl, pdo_sqlite, sqlite3
 - Mysql: 5.7 最新版或以上版本
-- Redis：2.6.12 或以上版本
+- Redis：4.0.0 或以上版本
 - 其他：supervisor, rsync
 
 ## 快速开始

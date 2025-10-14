@@ -221,9 +221,7 @@ class TorrentRepository extends BaseRepository
             }
 
             if ($apiQueryBuilder->hasIncludeField('description') && $apiQueryBuilder->hasInclude('extra')) {
-                do_log("before format_description of torrent: {$torrent->id}");
                 $descriptionArr = format_description($torrent->extra->descr ?? '');
-                do_log("after format_description of torrent: {$torrent->id}");
                 $torrent->description = $descriptionArr;
                 $torrent->images = get_image_from_description($descriptionArr);
             }

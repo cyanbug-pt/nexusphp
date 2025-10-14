@@ -108,7 +108,7 @@ class Setting extends NexusModel
     {
         $redis = NexusDB::redis();
         $key = self::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY;
-        $redis->del($key);
+        $redis->unlink($key);
         //must not use cache
         if (empty($allowed)) {
             $allowed = self::getFromDb("permission.user_token_allowed");

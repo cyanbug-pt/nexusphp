@@ -132,7 +132,7 @@ class CleanupRepository extends BaseRepository
 
         //remove this batch
         if ($batchKey != self::USER_SEED_BONUS_BATCH_KEY) {
-            $redis->del($batch);
+            $redis->unlink($batch);
         }
         $endTimestamp = time();
         do_log(sprintf("$logPrefix, [DONE], batch: $batch, count: $count, cost time: %d seconds", $endTimestamp - $beginTimestamp));

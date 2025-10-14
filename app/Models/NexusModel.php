@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Nexus\Database\NexusDB;
@@ -15,6 +16,13 @@ class NexusModel extends Model
     protected $perPage = 50;
 
     protected $connection = NexusDB::ELOQUENT_CONNECTION_NAME;
+
+    protected function usernameForAdmin(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => username_for_admin($attributes['uid'] ?? $attributes['userid'] ?? $attributes['user_id'])
+        );
+    }
 
     /**
      *

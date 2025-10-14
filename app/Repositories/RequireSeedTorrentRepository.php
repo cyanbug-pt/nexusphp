@@ -104,7 +104,7 @@ class RequireSeedTorrentRepository extends BaseRepository
             //remove torrent from list
             $redis->hDel(self::getTorrentCacheKey(), $torrent->id);
             //remove all users under torrent
-            $redis->del(self::getTorrentUserCacheKey($torrent->id));
+            $redis->unlink(self::getTorrentUserCacheKey($torrent->id));
         }
         RequireSeedTorrent::query()->whereIn('torrent_id', $idArr)->delete();
         UserRequireSeedTorrent::query()->whereIn('torrent_id', $idArr)->delete();

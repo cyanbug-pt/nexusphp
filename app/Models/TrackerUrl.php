@@ -35,7 +35,7 @@ class TrackerUrl extends NexusModel
     {
         //添加 id 与 URL 映射
         $redis = NexusDB::redis();
-        $redis->del(self::TRACKER_URL_CACHE_KEY);
+        $redis->unlink(self::TRACKER_URL_CACHE_KEY);
         $list = self::listAll();
         $first = $list->first();
         $hasDefault = false;
