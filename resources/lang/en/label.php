@@ -144,6 +144,10 @@ return [
                 'size_normal' => 'Normal',
                 'size_compact' => 'Compact',
             ],
+            'attendance' => [
+                'enabled' => 'Require captcha for attendance check-in',
+                'enabled_help' => 'When enabled, members must solve the captcha before signing in.',
+            ],
         ],
         'meilisearch' => [
             'tab_header' => 'Meilisearch',

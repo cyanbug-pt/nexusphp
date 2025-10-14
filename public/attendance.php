@@ -1,9 +1,14 @@
 <?php
+
 require '../include/bittorrent.php';
 dbconn();
 require get_langfile_path();
 loggedinorreturn();
 parked();
+
+\Nexus\Nexus::css('vendor/fullcalendar-5.10.2/main.min.css', 'header', true);
+\Nexus\Nexus::js('vendor/fullcalendar-5.10.2/main.min.js', 'footer', true);
+
 $lang = get_langfolder_cookie();
 $localesMap = [
     'en' => 'en-us',
@@ -11,40 +16,52 @@ $localesMap = [
     'cht' => 'zh-tw',
 ];
 $localeJs = $localesMap[$lang] ?? 'en-us';
-
-\Nexus\Nexus::css('vendor/fullcalendar-5.10.2/main.min.css', 'header', true);
-\Nexus\Nexus::js('vendor/fullcalendar-5.10.2/main.min.js', 'footer', true);
 \Nexus\Nexus::js("vendor/fullcalendar-5.10.2/locales/{$localeJs}.js", 'footer', true);
-
-$rep = new \App\Repositories\AttendanceRepository();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($iv == "yes") {
-        check_code($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null, 'attendance.php');
-    }
-    $attendance = $rep->attend($CURUSER['id']);
-    if (!$attendance->is_updated) {
-        stderr($lang_attendance['sorry'], $lang_attendance['already_attended']);
-    }
-} else {
-    $attendance = $rep->getAttendance($CURUSER['id']);
-    if (!$attendance) {
-        $attendance = new \App\Models\Attendance([
-            'uid' => $CURUSER['id'],
-            'points' => 0,
-            'days' => 0,
-            'total_days' => 0,
-        ]);
-        $attendance->added = null;
-    }
-}
 
 $today = \Carbon\Carbon::today();
 $tomorrow = \Carbon\Carbon::tomorrow();
 $end = $today->clone()->endOfMonth();
 $start = $today->clone()->subMonth(2);
 
-$hasAttendedToday = $attendance->added && $attendance->added->isSameDay($today);
+$attendanceRepository = new \App\Repositories\AttendanceRepository();
+
+$attendanceCaptchaSetting = \App\Models\Setting::get('captcha.attendance.enabled', config('captcha.attendance.enabled', true));
+if (is_string($attendanceCaptchaSetting)) {
+    $attendanceCaptchaEnabled = in_array(strtolower($attendanceCaptchaSetting), ['1', 'true', 'yes'], true);
+} else {
+    $attendanceCaptchaEnabled = (bool) $attendanceCaptchaSetting;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($attendanceCaptchaEnabled && $iv == 'yes') {
+        check_code($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null, 'attendance.php');
+    }
+    $attendance = $attendanceRepository->attend($CURUSER['id']);
+    if (!$attendance->is_updated) {
+        stderr($lang_attendance['sorry'], $lang_attendance['already_attended']);
+    }
+} else {
+    $attendance = $attendanceRepository->getAttendance($CURUSER['id']);
+}
+
+$hasAttendedToday = $attendance && $attendance->added && $attendance->added->isSameDay($today);
+
+if (!$attendanceCaptchaEnabled && !$hasAttendedToday) {
+    $attendance = $attendanceRepository->attend($CURUSER['id']);
+    $hasAttendedToday = $attendance && $attendance->added && $attendance->added->isSameDay($today);
+}
+
+if (!$attendance) {
+    $attendance = new \App\Models\Attendance([
+        'uid' => $CURUSER['id'],
+        'points' => 0,
+        'days' => 0,
+        'total_days' => 0,
+    ]);
+    $attendance->added = null;
+    $hasAttendedToday = false;
+}
+
 stdhead($lang_attendance['title']);
 begin_main_frame();
 
@@ -74,6 +91,7 @@ if ($hasAttendedToday) {
         ->where('date', '>=', $start->format('Y-m-d'))
         ->get()
         ->keyBy('date');
+
     $interval = new \DateInterval('P1D');
     $period = new \DatePeriod($start, $interval, $end);
 
@@ -103,7 +121,7 @@ if ($hasAttendedToday) {
     $eventStr = json_encode($events);
     $validRangeStr = json_encode(['start' => $start->format('Y-m-d'), 'end' => $end->clone()->addDays(1)->format('Y-m-d')]);
 
-    $js = <<<EOP
+    $calendarScript = <<<EOP
 let events = JSON.parse('$eventStr')
 let validRange = JSON.parse('$validRangeStr')
 let confirmText = "{$lang_attendance['retroactive_confirm_tip']}"
@@ -115,7 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
       events: events,
       validRange: validRange,
       eventClick: function(info) {
-        console.log(info.event);
         if (info.event.groupId == 'to_do') {
             retroactive(info.event.startStr)
         }
@@ -126,11 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function retroactive(dateStr) {
     if (!window.confirm(confirmText + dateStr + ' ?')) {
-        console.log("cancel")
         return
     }
     jQuery.post('ajax.php', {params: {date: dateStr}, action: 'attendanceRetroactive'}, function (response) {
-        console.log(response);
         if (response.ret != 0) {
             alert(response.msg)
         } else {
@@ -140,14 +155,14 @@ function retroactive(dateStr) {
 }
 EOP;
 
-    \Nexus\Nexus::js($js, 'footer', false);
+    \Nexus\Nexus::js($calendarScript, 'footer', false);
 
     echo '<div style="display: flex;justify-content: center;padding: 20px 0"><div id="calendar" style="width: 60%"></div></div>';
     echo '<ul>';
     printf('<li>'.$lang_attendance['initial'].'</li>', $attendance_initial_bonus);
     printf('<li>'.$lang_attendance['steps'].'</li>', $attendance_step_bonus, $attendance_max_bonus);
     echo '<li><ol>';
-    foreach($attendance_continuous_bonus as $day => $value){
+    foreach ($attendance_continuous_bonus as $day => $value) {
         printf('<li>'.$lang_attendance['continuous'].'</li>', $day, $value);
     }
     echo '</ol></li>';
@@ -160,7 +175,9 @@ EOP;
     echo '<div style="margin-top: 20px; text-align: center;">';
     echo '<form method="post" action="attendance.php" style="display: inline-block;">';
     echo '<table border="0" cellpadding="5">';
-    show_image_code();
+    if ($attendanceCaptchaEnabled && $iv == 'yes') {
+        show_image_code();
+    }
     echo '<tr><td class="toolbox" colspan="2" align="center"><input type="submit" value="' . htmlspecialchars($buttonLabel, ENT_QUOTES, 'UTF-8') . '" class="btn" /></td></tr>';
     echo '</table>';
     echo '</form>';
@@ -169,5 +186,6 @@ EOP;
     echo '</tbody></table>';
     end_frame();
 }
+
 end_main_frame();
 stdfoot();

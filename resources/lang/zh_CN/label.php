@@ -185,6 +185,10 @@ return [
                 'size_normal' => '普通',
                 'size_compact' => '紧凑',
             ],
+            'attendance' => [
+                'enabled' => '启用签到验证码',
+                'enabled_help' => '开启后，用户每天签到前必须完成验证码验证。',
+            ],
         ],
         'meilisearch' => [
             'tab_header' => 'Meilisearch',

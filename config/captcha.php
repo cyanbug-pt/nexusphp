@@ -24,4 +24,8 @@ return [
             'size' => nexus_env('RECAPTCHA_SIZE', 'normal'),
         ],
     ],
+
+    'attendance' => [
+        'enabled' => nexus_env('CAPTCHA_ATTENDANCE_ENABLED', true),
+    ],
 ];
