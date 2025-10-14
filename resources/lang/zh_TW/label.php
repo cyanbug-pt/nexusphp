@@ -144,6 +144,10 @@ return [
                 'size_normal' => '一般',
                 'size_compact' => '緊湊',
             ],
+            'attendance' => [
+                'enabled' => '啟用簽到驗證碼',
+                'enabled_help' => '啟用後，使用者簽到前必須完成驗證碼驗證。',
+            ],
         ],
         'meilisearch' => [
             'tab_header' => 'Meilisearch',

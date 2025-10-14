@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Section;
 use App\Auth\Permission;
@@ -30,6 +31,7 @@ use Filament\Facades\Filament;
 use Filament\Resources\Pages\Page;
 use Filament\Forms;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Arr;
 use Meilisearch\Contracts\Index\Settings;
 use Nexus\Database\NexusDB;
 
@@ -64,6 +66,16 @@ class EditSetting extends Page implements HasForms
     private function fillForm()
     {
         $settings = Setting::getFromDb();
+
+        $fallbackEnabled = (bool) config('captcha.attendance.enabled', true);
+        $rawSetting = Arr::get($settings, 'captcha.attendance.enabled', $fallbackEnabled);
+        if (is_string($rawSetting)) {
+            $normalized = in_array(strtolower($rawSetting), ['1', 'true', 'yes'], true);
+        } else {
+            $normalized = (bool) $rawSetting;
+        }
+        Arr::set($settings, 'captcha.attendance.enabled', $normalized);
+
         $this->form->fill($settings);
     }
 
@@ -298,7 +310,20 @@ class EditSetting extends Page implements HasForms
             Setting::get('captcha.recaptcha.size', nexus_env('RECAPTCHA_SIZE', 'normal'))
         );
 
+        $attendanceCaptchaSetting = Setting::get('captcha.attendance.enabled', true);
+        if (is_string($attendanceCaptchaSetting)) {
+            $attendanceCaptchaEnabled = in_array(strtolower($attendanceCaptchaSetting), ['1', 'true', 'yes'], true);
+        } else {
+            $attendanceCaptchaEnabled = (bool) $attendanceCaptchaSetting;
+        }
+
         $schema = [
+            Toggle::make("$captchaPrefix.attendance.enabled")
+                ->label(__('label.setting.captcha.attendance.enabled'))
+                ->helperText(__('label.setting.captcha.attendance.enabled_help'))
+                ->default($attendanceCaptchaEnabled)
+                ->columnSpanFull()
+            ,
             Select::make("$captchaPrefix.default")
                 ->options($driverOptions)
                 ->label(__('label.setting.captcha.driver'))
