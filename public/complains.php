@@ -164,9 +164,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <h2><?= $lang_complains['text_new_complain'] ?></h2>
             <form action="" method="post">
                 <input type="hidden" name="action" value="new" />
+                <?php
+                $inputStyle = 'style="width: min(100%, 420px); min-width: 180px; border: 1px solid gray; box-sizing: border-box"';
+                $textareaStyle = 'style="width: min(100%, 420px); min-width: 180px; border: 1px solid gray; box-sizing: border-box; height: 250px; resize: vertical;"';
+                ?>
                 <table border="0" cellpadding="5">
-                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_email']?></td><td class="rowfollow" align="left"><input type="email" name="email" style="width: 180px; border: 1px solid gray" /></td></tr>
-                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_body']?></td><td class="rowfollow" align="left"><textarea name="body" style="width: 200px; height: 250px" placeholder="<?= $lang_complains['text_new_body_placeholder'] ?>"></textarea></td></tr>
+                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_email']?></td><td class="rowfollow" align="left"><input type="email" name="email" <?php echo $inputStyle; ?> autocomplete="email" /></td></tr>
+                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_body']?></td><td class="rowfollow" align="left"><textarea name="body" <?php echo $textareaStyle; ?> placeholder="<?= $lang_complains['text_new_body_placeholder'] ?>"></textarea></td></tr>
                     <?php show_image_code (); ?>
                     <tr><td class="toolbox" colspan="2" align="center"><input type="submit" value="<?= $lang_complains['text_new_submit']?>" class="btn" /></td></tr>
                 </table>

@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => '你将获得',
 	'std_by' => '由',
 	'row_security_image' => "验证图片：",
+	'row_security_challenge' => "安全验证：",
 	'row_security_code' => "验证码：",
 	'text_slots' => "连接数：",
 	'text_unlimited' => "无限制",

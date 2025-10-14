@@ -1847,16 +1847,23 @@ function show_image_code () {
     }
 
     $manager = captcha_manager();
+    $driver = $manager->driver();
 
-    if (!$manager->isEnabled()) {
+    if (!$driver->isEnabled()) {
         return;
     }
 
-    $markup = $manager->render([
-        'labels' => [
-            'image' => $lang_functions['row_security_image'],
-            'code' => $lang_functions['row_security_code'],
-        ],
+    $labelKey = $driver instanceof \App\Services\Captcha\Drivers\ImageCaptchaDriver
+        ? 'row_security_image'
+        : 'row_security_challenge';
+
+    $labels = [
+        'image' => $lang_functions[$labelKey] ?? $lang_functions['row_security_image'],
+        'code' => $lang_functions['row_security_code'],
+    ];
+
+    $markup = $driver->render([
+        'labels' => $labels,
         'secret' => $_GET['secret'] ?? '',
     ]);
 
