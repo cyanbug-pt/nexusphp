@@ -315,7 +315,7 @@ $categories = build_search_box_category_table($browsecatmode, 'yes', 'torrents.p
 print($categories);
 if (get_setting('main.spsct') == 'yes') {
     print '<div style="height: 1px;background-color: #eee;margin: 10px 0"></div>';
-    $categoriesSpecial = build_search_box_category_table($specialcatmode, 'yes', 'torrents.php?allsec=1&', false, 3, '', ['section_name' => true]);
+    $categoriesSpecial = build_search_box_category_table($specialcatmode, 'yes', 'special.php?allsec=1&', false, 3, '', ['section_name' => true]);
     print($categoriesSpecial);
 }
 ?>
