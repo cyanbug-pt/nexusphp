@@ -223,6 +223,10 @@ function formatAdUrl($adid, $url, $content, $newWindow=true)
 	return formatUrl("adredir.php?id=".$adid."&amp;url=".rawurlencode($url), $newWindow, $content);
 }
 function formatUrl($url, $newWindow = false, $text = '', $linkClass = '') {
+    $src = filter_src($url);
+    if (empty($src)) {
+        return "";
+    }
 	if (!$text) {
 		$text = $url;
 	}
@@ -234,16 +238,18 @@ function formatCode($text) {
 }
 
 function formatImg($src, $enableImageResizer, $image_max_width, $image_max_height, $imgId = "") {
-    if (is_danger_url($src)) {
-        $msg = "[DANGER_URL]: $src";
-        do_log($msg, "alert");
-        write_log($msg, "mod");
+    $src = filter_src($src);
+    if (empty($src)) {
         return "";
     }
 	return addTempCode("<img style=\"max-width: 100%\" id=\"$imgId\" alt=\"image\" src=\"$src\"" .($enableImageResizer ?  " onload=\"Scale(this,$image_max_width,$image_max_height);\" onclick=\"Preview(this);\"" : "") .  " />");
 }
 
 function formatFlash($src, $width, $height) {
+    $src = filter_src($src);
+    if (empty($src)) {
+        return "";
+    }
 	if (!$width) {
 		$width = 500;
 	}
@@ -253,6 +259,10 @@ function formatFlash($src, $width, $height) {
 	return addTempCode("<object width=\"$width\" height=\"$height\"><param name=\"movie\" value=\"$src\" /><embed src=\"$src\" width=\"$width\" height=\"$height\" type=\"application/x-shockwave-flash\"></embed></object>");
 }
 function formatFlv($src, $width, $height) {
+    $src = filter_src($src);
+    if (empty($src)) {
+        return "";
+    }
 	if (!$width) {
 		$width = 320;
 	}
@@ -263,6 +273,10 @@ function formatFlv($src, $width, $height) {
 }
 function formatYoutube($src, $width = '', $height = ''): string
 {
+    $src = filter_src($src);
+    if (empty($src)) {
+        return "";
+    }
     if (!$width) {
         $width = 560;
     }
@@ -283,6 +297,10 @@ function formatYoutube($src, $width = '', $height = ''): string
 }
 
 function formatVideo($src, $width, $height) {
+    $src = filter_src($src);
+    if (empty($src)) {
+        return "";
+    }
     if (!$width) {
         $width = 560;
     }
@@ -293,6 +311,10 @@ function formatVideo($src, $width, $height) {
 }
 
 function formatAudio($src) {
+    $src = filter_src($src);
+    if (empty($src)) {
+        return "";
+    }
     return addTempCode("<audio controls><source src=\"$src\" /><a href=\"$src\">$src</a></audio>");
 }
 

@@ -1368,9 +1368,36 @@ function has_role_work_seeding($uid)
     return $result;
 }
 
+function filter_src($src)
+{
+    $path = parse_url($src, PHP_URL_PATH);
+    if (empty($path)) {
+        return $src;
+    }
+    $guessScriptFilename = sprintf("%s/%s", $_SERVER['DOCUMENT_ROOT'], trim($path, '/'));
+    if (!file_exists($guessScriptFilename)) {
+        return $src;
+    }
+    //log danger, deny directly
+    if (is_danger_url($src)) {
+        $msg = "[DANGER_URL]: $src";
+        do_log($msg, "alert");
+        write_log($msg, "mod");
+        return "";
+    }
+    //only allow these
+    $allowScriptPattern = "/(forums|details|offers)\.php/i";
+    $match = preg_match($allowScriptPattern, $src);
+    if ($match <= 0) {
+        do_log("[NOT_ALLOW_SRC]: $src");
+        return "";
+    }
+    return $src;
+}
+
 function is_danger_url($url): bool
 {
-    $dangerScriptsPattern = "/(logout|login|ajax|announce|scrape|adduser|modtask|take.*)\.php/i";
+    $dangerScriptsPattern = "/(logout|login|ajax|announce|scrape|adduser|modtask|docleanup|freeleech|take.*)\.php/i";
     $match = preg_match($dangerScriptsPattern, $url);
     if ($match > 0) {
         return true;
