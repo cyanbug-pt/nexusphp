@@ -45,7 +45,7 @@ class RecaptchaV2CaptchaDriver implements CaptchaDriverInterface
             '<tr><td class="rowhead">%s</td><td align="left"><div %s></div>%s</td></tr>',
             htmlspecialchars($label, ENT_QUOTES, 'UTF-8'),
             $attributes,
-            '<script src="https://www.google.com/recaptcha/api.js" async defer></script>'
+            '<script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>'
         );
     }
 
@@ -74,7 +74,7 @@ class RecaptchaV2CaptchaDriver implements CaptchaDriverInterface
             $data['remoteip'] = $remoteIp;
         }
 
-        $result = $this->sendVerificationRequest('https://www.google.com/recaptcha/api/siteverify', $data);
+        $result = $this->sendVerificationRequest('https://www.recaptcha.net/recaptcha/api/siteverify', $data);
 
         if (!($result['success'] ?? false)) {
             throw new CaptchaValidationException('Captcha verification failed.');
