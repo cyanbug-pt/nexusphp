@@ -126,10 +126,10 @@ services:
     image: mysql:9
     container_name: nexusphp-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${NP_MYSQL_ROOT_PWD:-root}
-      MYSQL_DATABASE: ${NP_MYSQL_DB:-nexusphp}
-      MYSQL_USER: ${NP_MYSQL_USER:-nexusphp}
-      MYSQL_PASSWORD: ${NP_MYSQL_PWD:-nexusphp}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_DATABASE:-nexusphp}
+      MYSQL_USER: ${DB_USERNAME:-nexusphp}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-nexusphp}
     volumes:
       - mysql-data:/var/lib/mysql
     logging:
