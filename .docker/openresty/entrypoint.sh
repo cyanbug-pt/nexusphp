@@ -76,12 +76,17 @@ if [ "$USE_HTTPS" = "0" ]; then
     echo_info "remove https related configuration ..."
     sed -i '/ssl_certificate/d' "$APP_CONF"
     sed -i '/http2/d' "$APP_CONF"
-    sed -i 's/listen.*/listen 80;/g' "$APP_CONF"
+    sed -i "s/listen.*/listen $NP_PORT;/g" "$APP_CONF"
 
     sed -i '/ssl_certificate/d' "$PMA_CONF"
     sed -i '/http2/d' "$PMA_CONF"
-    sed -i 's/listen.*/listen 80;/g' "$PMA_CONF"
+    sed -i "s/listen.*/listen $NP_PORT;/g" "$PMA_CONF"
+else
+    sed -i "s/listen.*/listen $NP_PORT ssl;/g" "$APP_CONF"
+    sed -i "s/listen.*/listen $NP_PORT ssl;/g" "$PMA_CONF"
 fi
+cat $APP_CONF
+cat $PMA_CONF
 
 openresty -T
 

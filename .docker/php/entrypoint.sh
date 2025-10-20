@@ -57,26 +57,29 @@ ROOT_PATH="/var/www/html"
 SOURCE_DIR="${ROOT_PATH}/nexus/Install/install"
 TARGET_DIR="${ROOT_PATH}/public"
 ENV_FILE="${ROOT_PATH}/.env"
-VENDOR_DIR="${ROOT_PATH}/vendor"
+VENDOR_AUTOLOAD_FILE="${ROOT_PATH}/vendor/autoload.php"
 
 chown -R www-data:www-data $ROOT_PATH
 
 if [ "$SERVICE_NAME" = "php" ]; then
-    if [ ! -f "$ENV_FILE" ]; then
-      echo_info ".env file: $ENV_FILE not exists, copy $SOURCE_DIR to $TARGET_DIR ..."
+    if [ ! -f "$ENV_FILE" ] || [ ! -f "$VENDOR_AUTOLOAD_FILE" ]; then
+      echo_info ".env file: $ENV_FILE or vendor autoload file: $VENDOR_AUTOLOAD_FILE not exists, copy $SOURCE_DIR to $TARGET_DIR ..."
       cp -r "$SOURCE_DIR" "$TARGET_DIR"
       sed -i 's|LOG_FILE.*|LOG_FILE=php://stdout|g' "$ROOT_PATH/.env.example"
+      if [ -f "$ENV_FILE" ]; then
+        sed -i 's|LOG_FILE.*|LOG_FILE=php://stdout|g' "$ENV_FILE"
+      fi
     else
-      echo_success ".env file: $ENV_FILE already exists, skip copy install file ..."
+      echo_success ".env file: $ENV_FILE and vendor autoload file: $VENDOR_AUTOLOAD_FILE already exists, skip copy install file ..."
     fi
 
     # composer install
-    if [ ! -d "$VENDOR_DIR" ]; then
-      echo_info "vendor dir: $VENDOR_DIR not exists, run composer install ..."
+    if [ ! -f "$VENDOR_AUTOLOAD_FILE" ]; then
+      echo_info "vendor autoload file: $VENDOR_AUTOLOAD_FILE not exists, run composer install ..."
       git config --global --add safe.directory ${ROOT_PATH}
       composer install --working-dir=${ROOT_PATH}
     else
-      echo_success "vendor dir: $VENDOR_DIR already exists, skip run composer install ..."
+      echo_success "vendor autoload file: $VENDOR_AUTOLOAD_FILE already exists, skip run composer install ..."
     fi
 
     # 最后启动 PHP-FPM
@@ -84,8 +87,8 @@ if [ "$SERVICE_NAME" = "php" ]; then
 elif [ "$SERVICE_NAME" = "queue" ]; then
     echo_info "Start Queue Worker...";
     while true; do
-      if [ -f "$ENV_FILE" ] && [ -d "$VENDOR_DIR" ]; then
-        echo_success "[Queue] Run queue:work at $(date '+%Y-%m-%d %H:%M:%S')";
+      if [ -f "$ENV_FILE" ] && [ -f "$VENDOR_AUTOLOAD_FILE" ]; then
+        echo_success "[Queue] env: $ENV_FILE and vendor autoload file: $VENDOR_AUTOLOAD_FILE exists, Run horizon at $(date '+%Y-%m-%d %H:%M:%S')";
         php artisan horizon;
       else
         echo_info "[Queue] .env or vendor not exists，wait 5 seconds ...";
@@ -95,8 +98,8 @@ elif [ "$SERVICE_NAME" = "queue" ]; then
 elif [ "$SERVICE_NAME" = "scheduler" ]; then
     echo_info "Start Scheduler ...";
     while true; do
-      if [ -f "$ENV_FILE" ] && [ -d "$VENDOR_DIR" ]; then
-        echo_success "[Scheduler] Run schedule:run at $(date '+%Y-%m-%d %H:%M:%S')";
+      if [ -f "$ENV_FILE" ] && [ -f "$VENDOR_AUTOLOAD_FILE" ]; then
+        echo_success "[Scheduler] env: $ENV_FILE and vendor autoload file: $VENDOR_AUTOLOAD_FILE exists, Run schedule:run at $(date '+%Y-%m-%d %H:%M:%S')";
         php artisan schedule:run --verbose --no-interaction;
         sleep 60;
       else
@@ -107,8 +110,8 @@ elif [ "$SERVICE_NAME" = "scheduler" ]; then
 elif [ "$SERVICE_NAME" = "cleanup" ]; then
     echo_info "Start Cleanup ...";
     while true; do
-      if [ -f "$ENV_FILE" ] && [ -d "$VENDOR_DIR" ]; then
-        echo_success "[Cleanup] Run cleanup:run at $(date '+%Y-%m-%d %H:%M:%S')";
+      if [ -f "$ENV_FILE" ] && [ -f "$VENDOR_AUTOLOAD_FILE" ]; then
+        echo_success "[Cleanup] env: $ENV_FILE and vendor autoload file: $VENDOR_AUTOLOAD_FILE exists, Run cleanup at $(date '+%Y-%m-%d %H:%M:%S')";
         php include/cleanup_cli.php;
         sleep 60;
       else

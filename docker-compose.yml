@@ -87,6 +87,7 @@ services:
     container_name: nexusphp-openresty
     environment:
       NP_DOMAIN: ${NP_DOMAIN:-localhost}
+      NP_PORT: ${NP_PORT:-80}
     volumes:
       - ./.docker/openresty/sites:/etc/nginx/conf.d/sites
       - ./.docker/openresty/certs:/certs
