@@ -250,6 +250,7 @@ return [
         'parked' => '挂起',
         'offer_allowed_count' => '候选通过数',
         'tmp_invites' => '临时邀请',
+        'is_donating' => '捐赠',
     ],
     'medal' => [
         'label' => '勋章',

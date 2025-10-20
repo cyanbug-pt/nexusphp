@@ -6,9 +6,10 @@ use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\User\UserResource\Pages\CreateUser;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\Column;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Actions\ViewAction;
@@ -29,7 +30,6 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Filament\Actions\Action;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -89,6 +89,7 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $yesNoOptions = ['success' => 'yes', 'danger' => 'no'];
         return $table
             ->columns([
                 TextColumn::make('id')->sortable()->searchable(),
@@ -104,10 +105,16 @@ class UserResource extends Resource
                 TextColumn::make('downloaded')->label('Downloaded')
                     ->formatStateUsing(fn(Column $column) => $column->getRecord()->downloadedText)
                     ->sortable()->label(__("label.downloaded")),
-                BadgeColumn::make('status')->colors(['success' => 'confirmed', 'warning' => 'pending'])->label(__("label.user.status")),
-                BadgeColumn::make('enabled')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.enabled")),
-                BadgeColumn::make('downloadpos')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.downloadpos")),
-                BadgeColumn::make('parked')->colors(['success' => 'yes', 'danger' => 'no'])->label(__("label.user.parked")),
+                TextColumn::make('status')->badge()->colors(['success' => 'confirmed', 'warning' => 'pending'])->label(__("label.user.status")),
+                TextColumn::make('enabled')->badge()->colors($yesNoOptions)->label(__("label.user.enabled")),
+                TextColumn::make('downloadpos')->badge()->colors($yesNoOptions)->label(__("label.user.downloadpos")),
+                TextColumn::make('parked')->badge()->colors($yesNoOptions)->label(__("label.user.parked")),
+                TextColumn::make('isDonating')
+                    ->state(fn ($record): string => $record->isDonating() ? 'yes' : 'no')
+                    ->badge()
+                    ->colors($yesNoOptions)
+                    ->label(__("label.user.is_donating"))
+                ,
                 TextColumn::make('added')->sortable()->dateTime('Y-m-d H:i')->label(__("label.added")),
                 TextColumn::make('last_access')->dateTime('Y-m-d H:i')->label(__("label.last_access")),
             ])
@@ -122,11 +129,23 @@ class UserResource extends Resource
                         return $query->when($data['id'], fn (Builder $query, $id) => $query->where("id", $id));
                     })
                 ,
-                SelectFilter::make('class')->options(array_column(User::$classes, 'text'))->label(__('label.user.class')),
+                SelectFilter::make('class')->options(User::listClass())->label(__('label.user.class')),
                 SelectFilter::make('status')->options(['confirmed' => 'confirmed', 'pending' => 'pending'])->label(__('label.user.status')),
                 SelectFilter::make('enabled')->options(self::$yesOrNo)->label(__('label.user.enabled')),
                 SelectFilter::make('downloadpos')->options(self::$yesOrNo)->label(__('label.user.downloadpos')),
                 SelectFilter::make('parked')->options(self::$yesOrNo)->label(__('label.user.parked')),
+                SelectFilter::make('is_donating')
+                    ->options(self::$yesOrNo)
+                    ->label(__('label.user.is_donating'))
+                    ->query(function (Builder $query, array $data) {
+                        if ($data['value'] === 'yes') {
+                            return $query->donating();
+                        } else if ($data['value'] === 'no') {
+                            return $query->where('donor', 'no');
+                        }
+                        return $query;
+                    })
+                ,
             ])
             ->recordActions([
                 ViewAction::make(),

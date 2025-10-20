@@ -210,6 +210,7 @@ return [
         'parked' => 'Parked',
         'offer_allowed_count' => 'Offer allowed count',
         'tmp_invites' => 'Temporary invite',
+        'is_donating' => 'Donor',
     ],
     'medal' => [
         'label' => 'Medal',

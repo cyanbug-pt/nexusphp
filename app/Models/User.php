@@ -364,6 +364,14 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $query->where('status', self::STATUS_CONFIRMED)->where('enabled', self::ENABLED_YES);
     }
 
+    public function scopeDonating(Builder $query): Builder
+    {
+        return $query->where('donor', 'yes')->where(function (Builder $query) {
+            return $query->whereNull('donoruntil')
+                ->orWhere('donoruntil', '0000-00-00 00:00:00')
+                ->orWhere('donoruntil', '>=', now());
+        });
+    }
 
     public function exams()
     {
