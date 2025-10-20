@@ -126,13 +126,12 @@ class IpSearch extends Page implements HasTable
                 ->whereRaw("iplog.ip = '{$filters['ip']['ip']}'")
             ;
             $total = $query->clone()->distinct()->count('iplog.userid');
-            $records = $query->groupBy('iplog.userid')
-                ->orderByDesc('ip_last_access')
-                ->forPage($page, $recordsPerPage)
-                ->get()
-            ;
-
-            if ($records->isNotEmpty()) {
+            if ($total > 0) {
+                $records = $query->groupBy('iplog.userid')
+                    ->orderByDesc('ip_last_access')
+                    ->forPage($page, $recordsPerPage)
+                    ->get()
+                ;
                 $userIdArr = $records->pluck('userid')->toArray();
                 $ipCountResult = IpLog::query()
                     ->whereIn('userid', $userIdArr)
