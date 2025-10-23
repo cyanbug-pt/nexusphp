@@ -6,11 +6,15 @@ require_once $rootpath . 'vendor/autoload.php';
 $USERUPDATESET = array();
 $query_name=array();
 \Nexus\Nexus::boot();
-if (!file_exists($rootpath . '.env')) {
-    $installScriptRelativePath = 'install/install.php';
-    $installScriptFile = $rootpath . "public/$installScriptRelativePath";
-    if (file_exists($installScriptFile)) {
-        nexus_redirect($installScriptRelativePath);
+if (nexus()->isFpmMode()) {
+    if (!file_exists($rootpath . '.env')
+        || (getenv('RUNNING_IN_DOCKER') && !file_exists($rootpath . \Nexus\Install\Install::INSTALL_LOCK_FILE))
+    ) {
+        $installScriptRelativePath = 'install/install.php';
+        $installScriptFile = $rootpath . "public/$installScriptRelativePath";
+        if (file_exists($installScriptFile)) {
+            nexus_redirect($installScriptRelativePath);
+        }
     }
 }
 require $rootpath . 'nexus/Database/helpers.php';

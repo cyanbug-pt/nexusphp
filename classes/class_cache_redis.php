@@ -40,7 +40,7 @@ class class_cache_redis {
         if (isset($config['timeout']) && is_numeric($config['timeout'])) {
             $params[] = $config['timeout'];
         }
-        if ($this->isFpmMode()) {
+        if (nexus()->isFpmMode()) {
             try {
                 $connectResult = $redis->pconnect(...$params);
             } catch (\Exception $e) {
@@ -66,11 +66,6 @@ class class_cache_redis {
             throw new \RuntimeException("Redis connect fail.");
         }
         return true;
-    }
-
-    private function isFpmMode(): bool
-    {
-        return php_sapi_name() === 'fpm-fcgi';
     }
 
     function getIsEnabled() {

@@ -49,7 +49,9 @@ class Install
         'pcntl_signal', 'pcntl_alarm', 'pcntl_async_signals'
     ];
 
-    protected string $lockFile = 'install.lock';
+    const INSTALL_LOCK_FILE = 'dont_delete_install.lock';
+
+    protected string $lockFile = self::INSTALL_LOCK_FILE;
 
     public function __construct()
     {
