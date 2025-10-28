@@ -6006,7 +6006,9 @@ function insert_torrent_tags($torrentId, $tagIdArr, $sync = false)
             do_log("special tag: $tagId, and user no permission");
             continue;
         }
-        $values[] = sprintf("(%s, %s, '%s', '%s')", $torrentId, $tagId, $dateTimeStringNow, $dateTimeStringNow);
+        if (!isset($values[$tagId])) {
+            $values[$tagId] = sprintf("(%s, %s, '%s', '%s')", $torrentId, $tagId, $dateTimeStringNow, $dateTimeStringNow);
+        }
     }
     $insertTagsSql .= implode(', ', $values);
     do_log("[INSERT_TAGS], torrent: $torrentId with tags: " . nexus_json_encode($tagIdArr));
