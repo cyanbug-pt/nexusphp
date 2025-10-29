@@ -62,7 +62,28 @@ class TorrentRepository extends BaseRepository
     const BUY_STATUS_NOT_YET = -1;
     const BUY_STATUS_UNKNOWN = -2;
 
+    private static array $defaultLoadRelationships = [
+        'basic_category', 'basic_category.search_box',
+        'basic_audiocodec', 'basic_codec', 'basic_medium',
+        'basic_source', 'basic_processing', 'basic_standard', 'basic_team',
+    ];
 
+    private static array $allowIncludes = ['user', 'extra', 'tags'];
+
+    private static array $allowIncludeCounts = ['thank_users', 'reward_logs', 'claims'];
+
+    private static array $allowIncludeFields = [
+        'has_bookmarked', 'has_claimed', 'has_thanked', 'has_rewarded',
+        'description', 'download_url', 'active_status'
+    ];
+
+    private static array  $allowFilters = [
+        'title', 'category', 'source', 'medium', 'codec', 'audiocodec', 'standard', 'processing', 'team',
+        'owner', 'visible', 'added', 'size', 'sp_state', 'leechers', 'seeders', 'times_completed',
+        'bookmark',
+    ];
+
+    private static array $allowSorts = ['id', 'comments', 'size', 'seeders', 'leechers', 'times_completed'];
 
     /**
      *  fetch torrent list
@@ -83,31 +104,15 @@ class TorrentRepository extends BaseRepository
         }
         $categoryIdList = $searchBox->categories()->pluck('id')->toArray();
         //query this info default
-        $query = Torrent::query()->with([
-            'basic_category', 'basic_category.search_box',
-            'basic_audiocodec', 'basic_codec', 'basic_medium',
-            'basic_source', 'basic_processing', 'basic_standard', 'basic_team',
-        ])
+        $query = Torrent::query()->with(self::$defaultLoadRelationships)
             ->whereIn('category', $categoryIdList)
             ->orderBy("pos_state", "DESC");
-        $allowIncludes = ['user', 'extra', 'tags'];
-        $allowIncludeCounts = ['thank_users', 'reward_logs', 'claims'];
-        $allowIncludeFields = [
-            'has_bookmarked', 'has_claimed', 'has_thanked', 'has_rewarded',
-            'description', 'download_url'
-        ];
-        $allowFilters = [
-            'title', 'category', 'source', 'medium', 'codec', 'audiocodec', 'standard', 'processing', 'team',
-            'owner', 'visible', 'added', 'size', 'sp_state', 'leechers', 'seeders', 'times_completed',
-            'bookmark',
-        ];
-        $allowSorts = ['id', 'comments', 'size', 'seeders', 'leechers', 'times_completed'];
         $apiQueryBuilder = ApiQueryBuilder::for(TorrentResource::NAME, $query, $request)
-            ->allowIncludes($allowIncludes)
-            ->allowIncludeCounts($allowIncludeCounts)
-            ->allowIncludeFields($allowIncludeFields)
-            ->allowFilters($allowFilters)
-            ->allowSorts($allowSorts)
+            ->allowIncludes(self::$allowIncludes)
+            ->allowIncludeCounts(self::$allowIncludeCounts)
+            ->allowIncludeFields(self::$allowIncludeFields)
+            ->allowFilters(self::$allowFilters)
+            ->allowSorts(self::$allowSorts)
             ->registerCustomFilter('title', function (Builder $query, Request $request) {
                 $title = $request->input(ApiQueryBuilder::PARAM_NAME_FILTER.".title");
                 $title = trim(str_replace('.', '', $title));
@@ -161,21 +166,11 @@ class TorrentRepository extends BaseRepository
     public function getDetail($id, Authenticatable $user)
     {
         //query this info default
-        $query = Torrent::query()->with([
-            'basic_category', 'basic_category.search_box',
-            'basic_audiocodec', 'basic_codec', 'basic_medium',
-            'basic_source', 'basic_processing', 'basic_standard', 'basic_team',
-        ]);
-        $allowIncludes = ['user', 'extra', 'tags'];
-        $allowIncludeCounts = ['thank_users', 'reward_logs', 'claims'];
-        $allowIncludeFields = [
-            'has_bookmarked', 'has_claimed', 'has_thanked', 'has_rewarded',
-            'description', 'download_url'
-        ];
+        $query = Torrent::query()->with(self::$defaultLoadRelationships);
         $apiQueryBuilder = ApiQueryBuilder::for(TorrentResource::NAME, $query)
-            ->allowIncludes($allowIncludes)
-            ->allowIncludeCounts($allowIncludeCounts)
-            ->allowIncludeFields($allowIncludeFields)
+            ->allowIncludes(self::$allowIncludes)
+            ->allowIncludeCounts(self::$allowIncludeCounts)
+            ->allowIncludeFields(self::$allowIncludeFields)
         ;
         do_log("before query torrent detail");
         $torrent = $apiQueryBuilder->build()->findOrFail($id);
@@ -186,7 +181,7 @@ class TorrentRepository extends BaseRepository
 
     private function appendIncludeFields(ApiQueryBuilder $apiQueryBuilder, Authenticatable $user, $torrentList)
     {
-        $torrentIdArr = $bookmarkData = $claimData = $thankData = $rewardData =[];
+        $torrentIdArr = $bookmarkData = $claimData = $thankData = $rewardData = $activeData = [];
         foreach ($torrentList as $torrent) {
             $torrentIdArr[] = $torrent->id;
         }
@@ -203,6 +198,10 @@ class TorrentRepository extends BaseRepository
         if ($hasFieldHasRewarded = $apiQueryBuilder->hasIncludeField('has_rewarded')) {
             $rewardData = $user->reward_torrent_logs()->whereIn('torrentid', $torrentIdArr)->get()->keyBy('torrentid');
         }
+        if ($hasFieldActiveStatus = $apiQueryBuilder->hasIncludeField('active_status')) {
+            $torrentModule = new \Nexus\Torrent\Torrent();
+            $activeData = $torrentModule->listLeechingSeedingStatus($user->id, $torrentIdArr);
+        }
         do_log("after prepare has data");
 
         foreach ($torrentList as $torrent) {
@@ -218,6 +217,9 @@ class TorrentRepository extends BaseRepository
             }
             if ($hasFieldHasRewarded) {
                 $torrent->has_rewarded = $rewardData->has($id);
+            }
+            if ($hasFieldActiveStatus) {
+                $torrent->active_status = $activeData[$id] ?? null;
             }
 
             if ($apiQueryBuilder->hasIncludeField('description') && $apiQueryBuilder->hasInclude('extra')) {

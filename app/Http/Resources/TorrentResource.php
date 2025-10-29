@@ -70,6 +70,7 @@ class TorrentResource extends BaseResource
             'description' => $this->whenHas('description'),
             'images' => $this->whenHas('images'),
             'download_url' => $this->whenHas('download_url'),
+            'active_status' => $this->whenHas('active_status'),
             'user' => new UserResource($this->whenLoaded('user')),
             'extra' => new TorrentExtraResource($this->whenLoaded('extra')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
@@ -95,14 +96,6 @@ class TorrentResource extends BaseResource
     protected function getResourceName(): string
     {
         return self::NAME;
-    }
-
-    private function getTorrentRep(): TorrentRepository
-    {
-       if (!isset(self::$torrentRep)) {
-           self::$torrentRep = new TorrentRepository();
-       }
-       return self::$torrentRep;
     }
 
     protected function hex_esc($matches) {
