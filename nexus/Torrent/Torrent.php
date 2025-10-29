@@ -25,17 +25,17 @@ class Torrent
         }
         $torrentIdStr = implode(',', $torrentIdArr);
         //seeding or leeching, from peers
-        $whereStr = sprintf("userid = %s and torrent in (%s)", sqlesc($uid), $torrentIdStr);
+        $whereStr = sprintf("userid = %s and torrent in (%s)", $uid, $torrentIdStr);
         $peerList = NexusDB::getAll('peers', $whereStr, 'torrent, to_go');
         $peerList = array_column($peerList,'to_go', 'torrent');
         //download progress, from snatched
         $sql = sprintf(
             "select snatched.to_go, snatched.torrentid, torrents.size from snatched inner join torrents on snatched.torrentid = torrents.id where snatched.userid = %s and snatched.torrentid in (%s)",
-            sqlesc($uid), $torrentIdStr
+            $uid, $torrentIdStr
         );
         $snatchedList = [];
-        $res = sql_query($sql);
-        while ($row = mysql_fetch_assoc($res)) {
+        $res = NexusDB::select($sql);
+        foreach ($res as $row) {
             $id = $row['torrentid'];
             $activeStatus = 'inactivity';
             if (isset($peerList[$id])) {
@@ -49,7 +49,7 @@ class Torrent
             $progress = sprintf('%.4f', $realDownloaded / $row['size']);
             $snatchedList[$id] = [
                 'finished' => $row['to_go'] == 0 ? 'yes' : 'no',
-                'progress' => $progress,
+                'progress' => floatval($progress),
                 'active_status' => $activeStatus,
             ];
         }

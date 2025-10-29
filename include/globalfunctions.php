@@ -725,7 +725,10 @@ function get_tracker_schema_and_host($trackerUrlId, $combine = false): array|str
     $url = \App\Models\TrackerUrl::getById($trackerUrlId);
     if (empty($url)) {
         $ssl_torrent = isHttps() ? 'https://' : 'http://';
-        $base_announce_url = sprintf("%s/%s", \App\Models\Setting::getBaseUrl(), DEFAULT_TRACKER_URI);
+        $base_announce_url = sprintf(
+            "%s/%s",
+            trim(\App\Models\Setting::getBaseUrl(), '/'), trim(DEFAULT_TRACKER_URI, '/')
+        );
         $log .= ", ById no value";
     } else {
         $ssl_torrent = parse_url($url, PHP_URL_SCHEME) . "://" ;

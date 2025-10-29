@@ -153,6 +153,8 @@ class ToolRepository extends BaseRepository
             $result_code = 0;
             do_log("No tar command, use zip.");
         }
+        File::delete($backupWeb['filename']);
+        File::delete($backupDatabase['filename']);
         if (!$transfer) {
             return compact('result_code', 'filename');
         }
@@ -216,7 +218,7 @@ class ToolRepository extends BaseRepository
         $transferResult = $this->transfer($backupResult['filename'], $backupResult['result_code'], $setting);
         $backupResult['transfer_result'] = $transferResult;
         do_log("[BACKUP_ALL_DONE]: " . json_encode($backupResult));
-        $this->cleanupBackupFiles();
+        $this->cleanupBackupFiles(basename($backupResult['filename']));
         return $backupResult;
     }
 
@@ -336,20 +338,26 @@ class ToolRepository extends BaseRepository
         }
     }
 
-    private function cleanupBackupFiles(): void
+    private function cleanupBackupFiles($basename): void
     {
+        $nameParts = explode('.', $basename);
+        $firstPart = $nameParts[0];
+        $lastPart = $nameParts[count($nameParts) - 1];
         $retentionCount = Setting::getBackupRetentionCount();
         if ($retentionCount <= 0) {
             $retentionCount = self::BACKUP_RETENTION_COUNT_DEFAULT;
         }
         $path = self::getBackupExportPath();
-        $allFiles = collect(File::allFiles($path));
+        $allFiles = collect(File::allFiles($path))->filter(function (\Symfony\Component\Finder\SplFileInfo $file) use ($firstPart, $lastPart) {
+             $name = basename($file->getRealPath());
+             return str_starts_with($name, $firstPart) && str_ends_with($name, $lastPart);
+        });
         // 按创建时间降序排序
         $allFiles = $allFiles->sortByDesc(fn (\Symfony\Component\Finder\SplFileInfo $file) => $file->getCTime());
         $filesToDelete = $allFiles->slice($retentionCount);
         do_log(sprintf(
-            "retentionCount: %s, path: %s, fileCount: %s, toDeleteCount: %s",
-            $retentionCount, $path, $allFiles->count(), $filesToDelete->count()
+            "retentionCount: %s, path: %s, fileCount: %s",
+            $retentionCount, $path, $allFiles->count()
         ));
         foreach ($filesToDelete as $file) {
             $realPath = $file->getRealPath();
