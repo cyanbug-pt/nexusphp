@@ -177,7 +177,7 @@ class UserRepository extends BaseRepository
             throw new \InvalidArgumentException("password confirmation != password");
         }
         $user = User::query()->findOrFail($id, ['id', 'username', 'class']);
-        $operator = Auth::user();
+        $operator = get_user_id();
         if ($operator) {
             $this->checkPermission($operator, $user);
         }

@@ -218,23 +218,23 @@ if ($action == "edituser")
             $userModifyLogs[] = "donor status changed by {$CURUSER['username']}. Current donor status: $donor";
         }
 	}
-
-	if ($chpassword != "" AND $passagain != "") {
-		unset($passupdate);
-		$passupdate=false;
-
-		if ($chpassword ==  $username OR strlen($chpassword) > 40 OR strlen($chpassword) < 6 OR $chpassword != $passagain)
-			$passupdate=false;
-		else
-			$passupdate=true;
-	}
-
-	if (isset($passupdate) && $passupdate) {
-		$sec = mksecret();
-		$passhash = md5($sec . $chpassword . $sec);
-		$updateset[] = "secret = " . sqlesc($sec);
-		$updateset[] = "passhash = " . sqlesc($passhash);
-	}
+//migrate to management
+//	if ($chpassword != "" AND $passagain != "") {
+//		unset($passupdate);
+//		$passupdate=false;
+//
+//		if ($chpassword ==  $username OR strlen($chpassword) > 40 OR strlen($chpassword) < 6 OR $chpassword != $passagain)
+//			$passupdate=false;
+//		else
+//			$passupdate=true;
+//	}
+//
+//	if (isset($passupdate) && $passupdate) {
+//		$sec = mksecret();
+//		$passhash = md5($sec . $chpassword . $sec);
+//		$updateset[] = "secret = " . sqlesc($sec);
+//		$updateset[] = "passhash = " . sqlesc($passhash);
+//	}
 
 	if ($curclass >= get_user_class())
 		puke();
@@ -457,7 +457,7 @@ if ($action == "edituser")
 			$subject = nexus_trans("user.msg_download_rights_removed", [], $locale);
 			$msg = nexus_trans("user.msg_your_download_rights_removed", [], $locale) . $CURUSER['username'] . nexus_trans("user.msg_probably_reason_three", [], $locale);
 			$added = sqlesc(date("Y-m-d H:i:s"));
-			
+
 			\App\Models\Message::add([
 		    'sender' => 0,
 		    'receiver' => $userid,

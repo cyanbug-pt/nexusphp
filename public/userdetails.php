@@ -619,8 +619,8 @@ JS;
 		tr($lang_userdetails['row_change_email'], "<input type=\"text\" size=\"80\" name=\"email\" value=\"" . htmlspecialchars($user['email']) . "\" />", 1);
 	}
 
-	tr($lang_userdetails['row_change_password'], "<input type=\"password\" name=\"chpassword\" size=\"50\" />", 1);
-	tr($lang_userdetails['row_repeat_password'], "<input type=\"password\" name=\"passagain\" size=\"50\" />", 1);
+	tr($lang_userdetails['row_change_password'], "<input disabled type=\"password\" name=\"chpassword\" size=\"50\" />".$migratedHelp, 1);
+	tr($lang_userdetails['row_repeat_password'], "<input disabled type=\"password\" name=\"passagain\" size=\"50\" />".$migratedHelp, 1);
 
 	if (user_can('cruprfmanage'))
 	{
