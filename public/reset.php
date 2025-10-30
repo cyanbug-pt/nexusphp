@@ -23,6 +23,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
    $res = sql_query("SELECT * FROM users WHERE username=" . sqlesc($username) . " ") or sqlerr();
 $arr = mysql_fetch_assoc($res);
+if (empty($arr)) {
+    stderr("Error","Sorry, that username doesn't exist.");
+}
 if (get_user_class() <= $arr['class']) {
     $log = "Password Reset For $username by {$CURUSER['username']} denied: operator class => " . get_user_class() . " is not greater than target user => {$arr['class']}";
     write_log($log);
@@ -31,10 +34,16 @@ if (get_user_class() <= $arr['class']) {
 }
 
 $id = $arr['id'];
-$wantpassword=$newpassword;
-$secret = mksecret();
-$wantpasshash = md5($secret . $wantpassword . $secret);
-sql_query("UPDATE users SET passhash=".sqlesc($wantpasshash).", secret= ".sqlesc($secret)." where id=$id");
+//$wantpassword=$newpassword;
+//$secret = mksecret();
+//$wantpasshash = md5($secret . $wantpassword . $secret);
+//sql_query("UPDATE users SET passhash=".sqlesc($wantpasshash).", secret= ".sqlesc($secret)." where id=$id");
+    $userRep = new \App\Repositories\UserRepository();
+    try {
+        $userRep->resetPassword($id, $newpassword, $newpasswordagain);
+    } catch (\Exception $e) {
+        stderr('Error', $e->getMessage());
+    }
 write_log("Password Reset For $username by {$CURUSER['username']}");
  if (mysql_affected_rows() != 1)
    stderr("Error", "Unable to RESET PASSWORD on this account.");

@@ -790,8 +790,10 @@ tr_small($lang_usercp['row_funbox'],"<input type=checkbox name=showfb".($CURUSER
 					$passhash = hash('sha256', $sec . $chpassword);
 					$updateset[] = "secret = " . sqlesc($sec);
 					$updateset[] = "passhash = " . sqlesc($passhash);
+                    $authKey = mksecret();
+					$updateset[] = "auth_key = " . sqlesc($authKey);
 
-					logincookie($CURUSER["id"],  $userInfo->auth_key);
+					logincookie($CURUSER["id"], $authKey);
 					$passupdated = 1;
 				}
 
