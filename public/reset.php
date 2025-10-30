@@ -39,7 +39,11 @@ $id = $arr['id'];
 //$wantpasshash = md5($secret . $wantpassword . $secret);
 //sql_query("UPDATE users SET passhash=".sqlesc($wantpasshash).", secret= ".sqlesc($secret)." where id=$id");
     $userRep = new \App\Repositories\UserRepository();
-    $userRep->resetPassword($id, $newpassword, $newpasswordagain);
+    try {
+        $userRep->resetPassword($id, $newpassword, $newpasswordagain);
+    } catch (\Exception $e) {
+        stderr('Error', $e->getMessage());
+    }
 write_log("Password Reset For $username by {$CURUSER['username']}");
  if (mysql_affected_rows() != 1)
    stderr("Error", "Unable to RESET PASSWORD on this account.");
