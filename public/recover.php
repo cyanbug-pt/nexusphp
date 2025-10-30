@@ -47,7 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	stderr($lang_recover['std_error'], $lang_recover['std_database_error']);
 
 	$hash = md5($sec . $email . $arr["passhash"] . $sec);
-	$ip = getip() ;
+    do_log("hash: $hash = md5(sec: $sec . email: $email . passhash: {$arr['passhash']} . sec: $sec)");
+	$ip = getip();
 	$title = $SITENAME.$lang_recover['mail_title'];
     $mailOne = sprintf($lang_recover['mail_one'], $siteName);
     $mailFour = sprintf($lang_recover['mail_four'], $siteName);
@@ -79,10 +80,10 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET" && $take_recover && isset($_GET["id"]
 
 	$email = $arr["email"];
 	$sec = hash_pad($arr["editsecret"]);
-	if (preg_match('/^ *$/s', $sec))
-	httperr();
-	if ($md5 != md5($sec . $email . $arr["passhash"] . $sec))
-	httperr();
+	if ($md5 != md5($sec . $email . $arr["passhash"] . $sec)) {
+        do_log("secret: $md5 != md5(sec: $sec . email: $email . passhash: {$arr['passhash']} . sec: $sec)","error");
+        httperr();
+    }
 
 	// generate new password;
 	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
