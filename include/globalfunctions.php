@@ -1378,35 +1378,33 @@ function filter_src($src)
     if (empty($path)) {
         return $src;
     }
+    $host = parse_url($src, PHP_URL_HOST);
+    if (!empty($host) && $host != $_SERVER['HTTP_HOST']) {
+        return $src;
+    }
     $guessScriptFilename = sprintf("%s/%s", $_SERVER['DOCUMENT_ROOT'], trim($path, '/'));
     if (!file_exists($guessScriptFilename)) {
         return $src;
     }
+    //only allow these
+    $imgExtensions = implode("|", \App\Models\Attachment::IMG_EXTENSIONS);
+    $allowSuffixPattern = "/\.($imgExtensions)/i";
+    if (preg_match($allowSuffixPattern, $path)) {
+        return $src;
+    }
+    $allowScriptPattern = "/(forums|details|offers)\.php/i";
+    if (preg_match($allowScriptPattern, $path)) {
+        return $src;
+    }
     //log danger, deny directly
-    if (is_danger_url($src)) {
-        $msg = "[DANGER_URL]: $src";
+    $dangerScriptsPattern = "/(logout|login|ajax|announce|scrape|adduser|modtask|docleanup|freeleech|take.*)\.php/i";
+    if (preg_match($dangerScriptsPattern, $path)) {
+        $msg = sprintf( "[DANGER_URL]: $src [%s]", nexus()->getRequestId());
         do_log($msg, "alert");
         write_log($msg, "mod");
-        return "";
     }
-    //only allow these
-    $allowScriptPattern = "/(forums|details|offers)\.php/i";
-    $match = preg_match($allowScriptPattern, $src);
-    if ($match <= 0) {
-        do_log("[NOT_ALLOW_SRC]: $src");
-        return "";
-    }
-    return $src;
-}
-
-function is_danger_url($url): bool
-{
-    $dangerScriptsPattern = "/(logout|login|ajax|announce|scrape|adduser|modtask|docleanup|freeleech|take.*)\.php/i";
-    $match = preg_match($dangerScriptsPattern, $url);
-    if ($match > 0) {
-        return true;
-    }
-    return false;
+    do_log("[NOT_ALLOW_SRC]: $src with path: $path");
+    return "";
 }
 
 //here must retrieve the real time info, no cache!!!
