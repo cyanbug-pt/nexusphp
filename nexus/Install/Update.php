@@ -364,19 +364,7 @@ class Update extends Install
         }
         if (!Schema::hasTable("tracker_urls")) {
             $this->runMigrate("database/migrations/2025_06_19_194137_create_tracker_urls_table.php");
-            $announceUrl = get_setting("security.https_announce_url");
-            if (empty($announceUrl)) {
-                $announceUrl = get_setting("basic.announce_url");
-            }
-            if (!str_starts_with($announceUrl, "http")) {
-                $announceUrl = (isHttps() ? "https://" : "http://"). $announceUrl;
-            }
-            TrackerUrl::query()->create([
-                "url" => $announceUrl,
-                "enabled" => 1,
-                "is_default" => 1,
-            ]);
-            TrackerUrl::saveUrlCache();
+            $this->initTrackerUrl();
             NexusDB::cache_del("nexus_plugin_store_all");
         }
     }
