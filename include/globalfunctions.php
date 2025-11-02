@@ -1671,3 +1671,8 @@ JS;
     \Nexus\Nexus::js("js/crypto-js.js", 'footer', true);
     \Nexus\Nexus::js($js, 'footer', false);
 }
+
+function is_fpm_mode(): bool
+{
+    return php_sapi_name() === 'fpm-fcgi';
+}

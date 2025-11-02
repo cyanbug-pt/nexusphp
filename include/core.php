@@ -6,7 +6,7 @@ require_once $rootpath . 'vendor/autoload.php';
 $USERUPDATESET = array();
 $query_name=array();
 \Nexus\Nexus::boot();
-if (nexus()->isFpmMode()) {
+if (is_fpm_mode()) {
     if (!file_exists($rootpath . '.env')
         || (getenv('RUNNING_IN_DOCKER') && !file_exists($rootpath . \Nexus\Install\Install::INSTALL_LOCK_FILE))
     ) {

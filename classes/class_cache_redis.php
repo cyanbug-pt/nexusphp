@@ -40,7 +40,7 @@ class class_cache_redis {
         if (isset($config['timeout']) && is_numeric($config['timeout'])) {
             $params[] = $config['timeout'];
         }
-        if (nexus()->isFpmMode()) {
+        if (is_fpm_mode()) {
             try {
                 $connectResult = $redis->pconnect(...$params);
             } catch (\Exception $e) {

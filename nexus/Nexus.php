@@ -176,11 +176,6 @@ final class Nexus
         return false;
     }
 
-    public function isFpmMode(): bool
-    {
-        return php_sapi_name() === 'fpm-fcgi';
-    }
-
     private function generateRequestId(): string
     {
         $prefix = ($_SERVER['SCRIPT_FILENAME'] ?? '') . implode('', $_SERVER['argv'] ?? []);
