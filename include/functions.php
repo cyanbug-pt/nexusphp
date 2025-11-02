@@ -223,10 +223,6 @@ function formatAdUrl($adid, $url, $content, $newWindow=true)
 	return formatUrl("adredir.php?id=".$adid."&amp;url=".rawurlencode($url), $newWindow, $content);
 }
 function formatUrl($url, $newWindow = false, $text = '', $linkClass = '') {
-    $src = filter_src($url);
-    if (empty($src)) {
-        return "";
-    }
 	if (!$text) {
 		$text = $url;
 	}

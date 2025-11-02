@@ -112,6 +112,7 @@ if ($currentStep == 4) {
             $install->runDatabaseSeeder();
             $install->saveSettings($settings);
             $install->migrateSearchBoxModeRelated();
+            $install->initTrackerUrl('install');
             $install->nextStep();
         } catch (\Exception $e) {
             $error = $e->getMessage();

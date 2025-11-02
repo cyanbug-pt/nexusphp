@@ -3,6 +3,7 @@
 namespace Nexus\Install;
 
 use App\Models\Setting;
+use App\Models\TrackerUrl;
 use App\Models\User;
 use App\Repositories\SearchBoxRepository;
 use App\Repositories\UserRepository;
@@ -763,6 +764,38 @@ class Install
         $this->doLog("[migrateSearchBoxModeRelated]");
         $searchBoxRep = new SearchBoxRepository();
         $searchBoxRep->migrateToModeRelated();
+    }
+
+    /**
+     * 初始化，注意这里不能使用 get_tracker_schema_and_host()。里面会调用 TrackerUrl， 这本来就是要往里面插入数据
+     *
+     * @param string $scene install or update
+     * @return void
+     */
+    public function initTrackerUrl(string $scene): void
+    {
+        if ($scene == "update") {
+            $announceUrl = get_setting("security.https_announce_url");
+            if (empty($announceUrl)) {
+                $announceUrl = get_setting("basic.announce_url");
+            }
+        }
+        if (empty($announceUrl)) {
+            $announceUrl = sprintf(
+                "%s/%s",
+                trim($_SERVER['HTTP_HOST'], '/'), trim(DEFAULT_TRACKER_URI, '/')
+            );
+        }
+        if (!str_starts_with($announceUrl, "http")) {
+            $announceUrl = (isHttps() ? "https://" : "http://"). $announceUrl;
+        }
+        TrackerUrl::query()->create([
+            "url" => $announceUrl,
+            "enabled" => 1,
+            "is_default" => 1,
+        ]);
+        TrackerUrl::saveUrlCache();
+        $this->doLog("[initTrackerUrl] $announceUrl success.");
     }
 
 }
