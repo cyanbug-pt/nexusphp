@@ -508,7 +508,7 @@ function isHttps(): bool
 }
 
 
-function getSchemeAndHttpHost(bool $fromConfig = false)
+function getSchemeAndHttpHost(bool $fromConfig = false): string
 {
     if (isRunningInConsole() || $fromConfig) {
         $host = get_setting("basic.BASEURL");
@@ -1379,12 +1379,15 @@ function filter_src($src)
         return $src;
     }
     $host = parse_url($src, PHP_URL_HOST);
-    if (!empty($host) && $host != $_SERVER['HTTP_HOST']) {
+    $currentHost = parse_url(getSchemeAndHttpHost(), PHP_URL_HOST);
+    if (!empty($host) && $host != $currentHost) {
         return $src;
     }
-    $guessScriptFilename = sprintf("%s/%s", $_SERVER['DOCUMENT_ROOT'], trim($path, '/'));
-    if (!file_exists($guessScriptFilename)) {
-        return $src;
+    if (isset($_SERVER['DOCUMENT_ROOT'])) {
+        $guessScriptFilename = sprintf("%s/%s", $_SERVER['DOCUMENT_ROOT'], trim($path, '/'));
+        if (!file_exists($guessScriptFilename)) {
+            return $src;
+        }
     }
     //only allow these
     $imgExtensions = implode("|", \App\Models\Attachment::IMG_EXTENSIONS);
