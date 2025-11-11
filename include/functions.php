@@ -238,7 +238,10 @@ function formatImg($src, $enableImageResizer, $image_max_width, $image_max_heigh
     if (empty($src)) {
         return "";
     }
-	return addTempCode("<img style=\"max-width: 100%\" id=\"$imgId\" alt=\"image\" src=\"$src\"" .($enableImageResizer ?  " onload=\"Scale(this,$image_max_width,$image_max_height);\" onclick=\"Preview(this);\"" : "") .  " />");
+    return addTempCode("<img style=\"max-width: 100%\" id=\"$imgId\" alt=\"image\" src=\"$src\"" .
+        ($enableImageResizer ?
+            " onload=\"Scale(this, $image_max_width, $image_max_height);\" onclick=\"Preview(this);\" " : "") .
+        " onerror=\"handleImageError(this, '$src');\" />");
 }
 
 function formatFlash($src, $width, $height) {

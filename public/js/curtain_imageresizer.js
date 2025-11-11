@@ -84,3 +84,22 @@ function Return() {
 	$('curtain').style.display = "none";
 	$('lightbox').innerHTML = "";
 }
+// 处理图片加载失败的函数
+function handleImageError(img, currentSrc) {
+    if (!currentSrc.includes('doubanio.com')) {
+        return;
+    }
+    const domainList = ['img1.doubanio.com', 'img2.doubanio.com', 'img3.doubanio.com', 'img9.doubanio.com']; // 备用域名列表
+    let index = 0;
+    function tryNextDomain() {
+        if (index >= domainList.length) {
+            return;
+        }
+        img.src = currentSrc.replace(/https:\/\/[a-zA-Z0-9.-]+\.doubanio\.com/, `https://${domainList[index]}`);
+        img.onload = () => {
+            img.onload = img.onerror = null;
+        };
+        img.onerror = tryNextDomain;
+    }
+    tryNextDomain();
+}
