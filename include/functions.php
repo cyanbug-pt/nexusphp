@@ -2823,15 +2823,34 @@ print '<br/>';
 	}
 if ($msgalert)
 {
-    $spStateGlobal = get_global_sp_state();
-    if ($spStateGlobal != \App\Models\Torrent::PROMOTION_NORMAL) {
-        $torrentGlobalStateRow = \Nexus\Database\NexusDB::cache_get(\App\Models\Setting::TORRENT_GLOBAL_STATE_CACHE_KEY);
-        $msg = sprintf($lang_functions['full_site_promotion_in_effect'], \App\Models\Torrent::$promotionTypes[$spStateGlobal]['text']);
-        if (!empty($torrentGlobalStateRow['begin']) || !empty($torrentGlobalStateRow['deadline'])) {
-            $timeRange = sprintf($lang_functions['full_site_promotion_time_range'], $torrentGlobalStateRow['begin'] ?? '-∞', $torrentGlobalStateRow['deadline'] ?? '∞');
-            $msg .= $timeRange;
+    $timeline = \App\Models\TorrentState::resolveTimeline();
+    $currentPromotion = $timeline['current'] ?? null;
+    $upcomingPromotion = $timeline['upcoming'] ?? null;
+    $remarkTpl = $lang_functions['full_site_promotion_remark'] ?? 'Remark: %s';
+
+    if ($currentPromotion) {
+        $promotionText = \App\Models\Torrent::$promotionTypes[$currentPromotion['global_sp_state']]['text'] ?? '';
+        $msg = sprintf($lang_functions['full_site_promotion_in_effect'], $promotionText);
+        if (!empty($currentPromotion['begin']) || !empty($currentPromotion['deadline'])) {
+            $timeRange = sprintf($lang_functions['full_site_promotion_time_range'], $currentPromotion['begin'] ?? '-∞', $currentPromotion['deadline'] ?? '∞');
+            $msg .= '<br/>' . $timeRange;
+        }
+        if (!empty($currentPromotion['remark'])) {
+            $msg .= '<br/>' . sprintf($remarkTpl, $currentPromotion['remark']);
         }
         msgalert("torrents.php", $msg, "green");
+    }
+    if ($upcomingPromotion) {
+        $promotionText = \App\Models\Torrent::$promotionTypes[$upcomingPromotion['global_sp_state']]['text'] ?? '';
+        $msg = sprintf($lang_functions['full_site_promotion_upcoming'] ?? 'Upcoming full site [%s]', $promotionText);
+        if (!empty($upcomingPromotion['begin']) || !empty($upcomingPromotion['deadline'])) {
+            $timeRange = sprintf($lang_functions['full_site_promotion_time_range'], $upcomingPromotion['begin'] ?? '-∞', $upcomingPromotion['deadline'] ?? '∞');
+            $msg .= '<br/>' . $timeRange;
+        }
+        if (!empty($upcomingPromotion['remark'])) {
+            $msg .= '<br/>' . sprintf($remarkTpl, $upcomingPromotion['remark']);
+        }
+        msgalert("torrents.php", $msg, "blue");
     }
 	if($CURUSER['leechwarn'] == 'yes')
 	{
@@ -5994,7 +6013,7 @@ function get_ip_location_from_geoip($ip): bool|array
 
 function msgalert($url, $text, $bgcolor = "red")
 {
-    print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"10\"><tr><td style='border: none; padding: 10px; background: ".$bgcolor."'>\n");
+    print("<table border=\"0\" cellspacing=\"0\" cellpadding=\"10\" style=\"margin: 0 auto;\"><tr><td style='border: none; padding: 10px; background: ".$bgcolor."; text-align: center;'>\n");
     if (!empty($url)) {
         print("<b><a href=\"".$url."\" target='_blank'><font color=\"white\">".$text."</font></a></b>");
     } else {
