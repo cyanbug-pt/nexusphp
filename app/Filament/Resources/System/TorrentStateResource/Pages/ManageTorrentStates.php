@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\System\TorrentStateResource\Pages;
 
 use App\Filament\Resources\System\TorrentStateResource;
-use Filament\Pages\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRecords;
-use Nexus\Database\NexusDB;
 
 class ManageTorrentStates extends ManageRecords
 {
@@ -14,7 +13,7 @@ class ManageTorrentStates extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-//            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

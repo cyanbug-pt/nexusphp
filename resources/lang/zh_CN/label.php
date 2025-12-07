@@ -370,6 +370,13 @@ return [
     'torrent_state' => [
         'label' => '全站优惠',
         'global_sp_state' => '全站优惠',
+        'deadline_after_begin' => '结束时间必须晚于开始时间。',
+        'status' => '状态',
+        'status_expired' => '已过期',
+        'status_ongoing' => '进行中',
+        'status_upcoming' => '未开始',
+        'time_overlaps' => '时间与已有活动重叠，请调整时间段。',
+        'time_overlaps_with' => '与活动 ID :id （时间：:begin ~ :end）重叠，请调整时间段。',
     ],
     'role' => [
         'class' => '关联用户等级',

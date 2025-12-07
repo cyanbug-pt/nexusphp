@@ -328,6 +328,13 @@ return [
     'torrent_state' => [
         'label' => 'Global promotion',
         'global_sp_state' => 'Global promotion state',
+        'deadline_after_begin' => 'End time must be later than start time.',
+        'status' => 'Status',
+        'status_expired' => 'Expired',
+        'status_ongoing' => 'In progress',
+        'status_upcoming' => 'Upcoming',
+        'time_overlaps' => 'Time overlaps with another promotion. Please adjust the window.',
+        'time_overlaps_with' => 'Overlaps with promotion ID :id (time: :begin ~ :end).',
     ],
     'role' => [
         'class' => 'Relate user class',

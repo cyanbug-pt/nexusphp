@@ -327,6 +327,13 @@ return [
     'torrent_state' => [
         'label' => '全站優惠',
         'global_sp_state' => '全站優惠',
+        'deadline_after_begin' => '結束時間必須晚於開始時間。',
+        'status' => '狀態',
+        'status_expired' => '已過期',
+        'status_ongoing' => '進行中',
+        'status_upcoming' => '未開始',
+        'time_overlaps' => '時間與已有活動重疊，請調整時間段。',
+        'time_overlaps_with' => '與活動 ID :id （時間：:begin ~ :end）重疊，請調整時間段。',
     ],
     'role' => [
         'class' => '關聯用户等級',
