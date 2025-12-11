@@ -377,6 +377,10 @@ return [
         'status_upcoming' => '未开始',
         'time_overlaps' => '时间与已有活动重叠，请调整时间段。',
         'time_overlaps_with' => '与活动 ID :id （时间：:begin ~ :end）重叠，请调整时间段。',
+        'notice_days' => '提前预告',
+        'notice_day' => '提前 :days 天',
+        'notice_none' => '不预告',
+        'notice_unlimited' => '不限时预告',
     ],
     'role' => [
         'class' => '关联用户等级',
