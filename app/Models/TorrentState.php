@@ -16,13 +16,17 @@ class TorrentState extends NexusModel
 {
     use NexusActivityLogTrait;
 
-    protected $fillable = ['global_sp_state', 'deadline', 'begin', 'remark'];
+    public const NOTICE_NONE = 0;
+    public const NOTICE_UNLIMITED = -1;
+
+    protected $fillable = ['global_sp_state', 'deadline', 'begin', 'remark', 'notice_days'];
 
     protected $table = 'torrents_state';
 
     protected $casts = [
         'begin' => 'datetime',
         'deadline' => 'datetime',
+        'notice_days' => 'integer',
     ];
 
     protected static function booted()
@@ -46,6 +50,11 @@ class TorrentState extends NexusModel
     public function getGlobalSpStateTextAttribute()
     {
         return Torrent::$promotionTypes[$this->global_sp_state]['text'] ?? '';
+    }
+
+    public function getNoticeDaysTextAttribute(): string
+    {
+        return self::noticeOptions()[$this->notice_days] ?? '';
     }
 
     public function scopeActive(Builder $query, ?Carbon $moment = null): Builder
@@ -117,6 +126,7 @@ class TorrentState extends NexusModel
         foreach ($states as $state) {
             $begin = self::parseDateTimeValue($state['begin'] ?? null);
             $deadline = self::parseDateTimeValue($state['deadline'] ?? null);
+            $noticeDays = (int)($state['notice_days'] ?? self::NOTICE_NONE);
 
             $hasBegun = !$begin || $begin->lessThanOrEqualTo($moment);
             $notExpired = !$deadline || $deadline->greaterThanOrEqualTo($moment);
@@ -129,6 +139,9 @@ class TorrentState extends NexusModel
             }
 
             if ($begin && $begin->greaterThan($moment)) {
+                if (!self::isWithinNoticeWindow($begin, $noticeDays, $moment)) {
+                    continue;
+                }
                 if (!$upcoming) {
                     $upcoming = $state;
                     continue;
@@ -281,5 +294,32 @@ class TorrentState extends NexusModel
             'begin' => $beginText,
             'end' => $deadlineText,
         ]);
+    }
+
+    public static function noticeOptions(): array
+    {
+        return [
+            self::NOTICE_NONE => __('label.torrent_state.notice_none'),
+            1 => __('label.torrent_state.notice_day', ['days' => 1]),
+            3 => __('label.torrent_state.notice_day', ['days' => 3]),
+            7 => __('label.torrent_state.notice_day', ['days' => 7]),
+            15 => __('label.torrent_state.notice_day', ['days' => 15]),
+            30 => __('label.torrent_state.notice_day', ['days' => 30]),
+            self::NOTICE_UNLIMITED => __('label.torrent_state.notice_unlimited'),
+        ];
+    }
+
+    protected static function isWithinNoticeWindow(?Carbon $begin, int $noticeDays, Carbon $now): bool
+    {
+        if (!$begin) {
+            return true;
+        }
+        if ($noticeDays === self::NOTICE_NONE) {
+            return false;
+        }
+        if ($noticeDays === self::NOTICE_UNLIMITED) {
+            return true;
+        }
+        return $begin->copy()->subDays($noticeDays)->lessThanOrEqualTo($now);
     }
 }

@@ -335,6 +335,10 @@ return [
         'status_upcoming' => 'Upcoming',
         'time_overlaps' => 'Time overlaps with another promotion. Please adjust the window.',
         'time_overlaps_with' => 'Overlaps with promotion ID :id (time: :begin ~ :end).',
+        'notice_days' => 'Pre-announcement',
+        'notice_day' => ':days day before',
+        'notice_none' => 'No pre-announcement',
+        'notice_unlimited' => 'Always announce',
     ],
     'role' => [
         'class' => 'Relate user class',

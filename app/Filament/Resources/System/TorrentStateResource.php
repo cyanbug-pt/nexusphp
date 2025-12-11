@@ -60,6 +60,13 @@ class TorrentStateResource extends Resource
                     ->validationMessages([
                         'after' => __('label.torrent_state.deadline_after_begin'),
                     ]),
+                Select::make('notice_days')
+                    ->label(__('label.torrent_state.notice_days'))
+                    ->options(TorrentState::noticeOptions())
+                    ->required()
+                    ->default(TorrentState::NOTICE_NONE)
+                    ->dehydrated(true)
+                    ->native(false),
                 Textarea::make('remark')
                     ->label(__('label.comment'))
                     ->rows(2)
@@ -121,6 +128,8 @@ class TorrentStateResource extends Resource
                         default => 'heroicon-o-check-circle',
                     })
                     ->iconPosition('before'),
+                TextColumn::make('notice_days_text')
+                    ->label(__('label.torrent_state.notice_days')),
                 TextColumn::make('remark')->label(__('label.comment'))->limit(50),
             ])
             ->filters([

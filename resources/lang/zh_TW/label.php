@@ -334,6 +334,10 @@ return [
         'status_upcoming' => '未開始',
         'time_overlaps' => '時間與已有活動重疊，請調整時間段。',
         'time_overlaps_with' => '與活動 ID :id （時間：:begin ~ :end）重疊，請調整時間段。',
+        'notice_days' => '提前預告',
+        'notice_day' => '提前 :days 天',
+        'notice_none' => '不預告',
+        'notice_unlimited' => '不限時預告',
     ],
     'role' => [
         'class' => '關聯用户等級',
