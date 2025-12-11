@@ -268,7 +268,7 @@ class UserRepository extends BaseRepository
 
     private function setEnableLatelyCache(int $userId): void
     {
-        NexusDB::cache_put(User::getUserEnableLatelyCacheKey($userId), now()->toDateTimeString());
+        NexusDB::cache_put(User::getUserEnableLatelyCacheKey($userId), now()->toDateTimeString(), 86400);
     }
 
     public function getInviteInfo($id)
