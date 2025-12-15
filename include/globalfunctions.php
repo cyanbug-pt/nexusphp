@@ -1673,3 +1673,11 @@ JS;
     \Nexus\Nexus::js("js/crypto-js.js", 'footer', true);
     \Nexus\Nexus::js($js, 'footer', false);
 }
+
+function nexus_escape($data): array|string
+{
+    if (is_array($data)) {
+        return array_map('nexus_escape', $data);
+    }
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
