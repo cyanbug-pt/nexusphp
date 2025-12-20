@@ -350,9 +350,17 @@ HTML;
 
     public function isIyuu(array $bodyArr): bool
     {
-        return false;
-        //Not support, due to change frequently
-//        return isset($bodyArr['ret']) && $bodyArr['ret'] == 200;
+        $version = (string)($bodyArr['version'] ?? '');
+        switch ($version) {
+            case '2.0.0':
+                return isset($bodyArr['ret'])
+                    && intval($bodyArr['ret']) === 200
+                    && isset($bodyArr['data']['format'])
+                    && is_string($bodyArr['data']['format'])
+                    && $bodyArr['data']['format'] !== '';
+            default:
+                return false;
+        }
     }
 
     public function listRatings(array $ptGenData, string $imdbLink, string $desc = ''): array
@@ -573,6 +581,10 @@ HTML;
             } catch (\Exception $exception) {
                 do_log("$log, site: $site can not be updated: " . $exception->getMessage(), 'error');
             }
+        }
+        if (empty($ptGenInfo)) {
+            do_log("$log, no pt gen info updated");
+            return false;
         }
         $siteIdAndRating = $this->listRatings($ptGenInfo, $torrent->url, $extra->descr);
         foreach ($siteIdAndRating as $key => $value) {

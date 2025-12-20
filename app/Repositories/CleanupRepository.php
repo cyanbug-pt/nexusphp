@@ -37,7 +37,7 @@ class CleanupRepository extends BaseRepository
 
     private static int $oneTaskSeconds = 0;
 
-    private static int $scanSize = 1000;
+    private static int $scanSize = 500;
 
     public static function recordBatch(\Redis $redis, $uid, $torrentId)
     {
