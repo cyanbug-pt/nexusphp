@@ -65,7 +65,7 @@ jQuery(document).ready(function () {
         let position = getPosition(e, imgPosition)
         let src = imgEle.attr("src")
         if (src) {
-            previewEle.attr("src", src).css(position).fadeIn("fast");
+            previewEle.stop(true, true).attr("src", src).css(position).fadeIn("fast");
         }
     }).on("mouseout", selector, function (e) {
         // previewEle.remove()
