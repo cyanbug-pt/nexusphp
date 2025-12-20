@@ -2316,7 +2316,7 @@ function validfilename($name) {
 }
 
 function validemail($email) {
-	return preg_match('/^[\w.-]+@([\w.-]+\.)+[a-z]{2,6}$/is', $email);
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
 function validlang($langid) {
