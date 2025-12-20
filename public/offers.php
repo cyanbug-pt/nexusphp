@@ -113,7 +113,7 @@ if (isset($_GET['new_offer']) && $_GET["new_offer"]){
             'sender' => $CURUSER['id'],
             'subject' => nexus_trans('offer.msg_new_offer_subject'),
             'msg' => nexus_trans('offer.msg_new_offer_msg', [
-				'username' => "[url=userdetails.php?id={$CURUSER['id']}]{$CURUSER['username']}[/url]", 
+				'username' => "[url=userdetails.php?id={$CURUSER['id']}]{$CURUSER['username']}[/url]",
 				'offername' => "[url=offers.php?id={$id}&off_details=1]{$name}[/url]"]),
             'added' => now(),
         ]);
@@ -147,6 +147,9 @@ if (isset($_GET['off_details']) && $_GET["off_details"]){
 
 	$res = sql_query("SELECT * FROM offers WHERE id = $id") or sqlerr(__FILE__,__LINE__);
 	$num = mysql_fetch_array($res);
+    if (!$num) {
+        bark($lang_offers['text_nothing_found']);
+    }
 
 	$s = $num["name"];
 
@@ -270,7 +273,7 @@ if (isset($_GET["allow_offer"]) && $_GET["allow_offer"]) {
 	$subject = nexus_trans("offer.msg_your_offer_allowed", [], $locale);
 	$allowedtime = date("Y-m-d H:i:s");
 	//sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['userid']}, '" . $allowedtime . "', " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
-	
+
 	\App\Models\Message::add([
 		'sender' => 0,
 		'receiver' => $arr['userid'],
@@ -278,7 +281,7 @@ if (isset($_GET["allow_offer"]) && $_GET["allow_offer"]) {
 		'subject' => $subject,
 		'added' => $allowedtime,
 	]);
-	
+
 	sql_query ("UPDATE offers SET allowed = 'allowed', allowedtime = '".$allowedtime."' WHERE id = $offid") or sqlerr(__FILE__,__LINE__);
 
 	write_log("{$CURUSER['username']} allowed offer {$arr['name']}",'normal');
@@ -329,7 +332,7 @@ if (isset($_GET["finish_offer"]) && $_GET["finish_offer"]) {
 	}
 			//===use this line if you DO HAVE subject in your PM system
 	$subject = nexus_trans("offer.msg_your_offer", [], $locale).$arr['name'].nexus_trans("offer.msg_voted_on", [], $locale);
-	
+
 	\App\Models\Message::add([
 		'sender' => 0,
 		'subject' => $subject,
@@ -337,7 +340,7 @@ if (isset($_GET["finish_offer"]) && $_GET["finish_offer"]) {
 		'added' => $finishvotetime,
 		'msg' => $msg,
 	]);
-	
+
 	//===use this line if you DO NOT subject in your PM system
 	//sql_query("INSERT INTO messages (sender, receiver, added, msg) VALUES(0, $arr['userid'], '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
 	write_log("{$CURUSER['username']} closed poll {$arr['name']}",'normal');
@@ -508,10 +511,12 @@ if (isset($_GET["vote"]) && $_GET["vote"]){
 		}
 		else
 		{
-			sql_query("UPDATE offers SET $vote = $vote + 1 WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
-
 			$res = sql_query("SELECT users.username, offers.userid, offers.name FROM offers LEFT JOIN users ON offers.userid = users.id WHERE offers.id = ".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
 			$arr = mysql_fetch_assoc($res);
+            if (!$arr) {
+                bark($lang_offers['text_nothing_found']);
+            }
+            sql_query("UPDATE offers SET $vote = $vote + 1 WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
             $locale = get_user_locale($arr['userid']);
 
 			$rs = sql_query("SELECT yeah, against, allowed FROM offers WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
@@ -530,7 +535,7 @@ if (isset($_GET["vote"]) && $_GET["vote"]){
 				sql_query("UPDATE offers SET allowed='allowed', allowedtime=".sqlesc($finishtime)." WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
 				$msg = nexus_trans("offer.msg_offer_voted_on", [], $locale)."[b][url=". get_protocol_prefix() . $BASEURL."/offers.php?id=$offerid&off_details=1]" . $arr['name'] . "[/url][/b].". nexus_trans("offer.msg_find_offer_option", [], $locale).$timeoutnote;
 				$subject =  nexus_trans("offer.msg_your_offer_allowed", [], $locale);
-				
+
 				\App\Models\Message::add([
 					'sender' => 0,
 					'receiver' => $arr['userid'],
@@ -556,7 +561,7 @@ if (isset($_GET["vote"]) && $_GET["vote"]){
 					'added' => now(),
 				]);
 
-				
+
 
 				write_log("System denied offer {$arr['name']}",'normal');
 			}
