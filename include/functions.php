@@ -409,28 +409,6 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
 		$s = preg_replace("/\[img=([^\<\r\n\"']+?)\]/i", '', $s, -1);
 	}
 
-	// [flash,500,400]http://www/image.swf[/flash]
-	if (strpos($s,"[flash") !== false) { //flash is not often used. Better check if it exist before hand
-		if ($enableflash) {
-//			$s = preg_replace("/\[flash(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(swf)))\[\/flash\]/ei", "formatFlash('\\4', '\\2', '\\3')", $s);
-			$s = preg_replace_callback("/\[flash(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(swf)))\[\/flash\]/i", function ($matches) {
-			    return formatFlash($matches[4], $matches[2], $matches[3]);
-            }, $s);
-		} else {
-			$s = preg_replace("/\[flash(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(swf)))\[\/flash\]/i", '', $s);
-		}
-	}
-	//[flv,320,240]http://www/a.flv[/flv]
-	if (strpos($s,"[flv") !== false) { //flv is not often used. Better check if it exist before hand
-		if ($enableflash) {
-//			$s = preg_replace("/\[flv(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(flv)))\[\/flv\]/ei", "formatFlv('\\4', '\\2', '\\3')", $s);
-			$s = preg_replace_callback("/\[flv(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(flv)))\[\/flv\]/i", function ($matches) {
-			    return formatFlv($matches[4], $matches[2], $matches[3]);
-            }, $s);
-		} else {
-			$s = preg_replace("/\[flv(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(flv)))\[\/flv\]/i", '', $s);
-		}
-	}
     //[youtube,560,315]https://www.youtube.com/watch?v=DWDL3VTCcCg&ab_channel=ESPNMMA[/youtube]
 	if (str_contains($s, '[youtube') && str_contains($s, 'v=')) {
         $s = preg_replace_callback("/\[youtube(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|https):\/\/[^\s'\"<>]+)\[\/youtube\]/i", function ($matches) {
