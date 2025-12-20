@@ -19,7 +19,7 @@
         "files": []
     },
     "require": {
-        "php": ">=8.2 <8.5",
+        "php": ">=8.2 <8.6",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-gd": "*",
@@ -49,6 +49,7 @@
         "laravel/passport": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.5",
+        "lbuchs/webauthn": "^2.2",
         "league/flysystem-sftp-v3": "^3.0",
         "meilisearch/meilisearch-php": "^1.0",
         "orangehill/iseed": "^3.0",
