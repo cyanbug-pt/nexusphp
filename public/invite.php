@@ -100,14 +100,14 @@ if ($type == 'new'){
 } else {
     inviteMenu($menuSelected);
     if ($menuSelected == 'invitee') {
-        $whereStr = "invited_by = " . sqlesc($id);
+        $whereStr = "u.invited_by = " . sqlesc($id);
         if (!empty($_GET['status'])) {
-            $whereStr .= " and status = " . sqlesc($_GET['status']);
+            $whereStr .= " and u.status = " . sqlesc($_GET['status']);
         }
         if (!empty($_GET['enabled'])) {
-            $whereStr .= " and enabled = " . sqlesc($_GET['enabled']);
+            $whereStr .= " and u.enabled = " . sqlesc($_GET['enabled']);
         }
-        $rel = sql_query("SELECT COUNT(*) FROM users WHERE $whereStr") or sqlerr(__FILE__, __LINE__);
+        $rel = sql_query("SELECT COUNT(*) FROM users u WHERE $whereStr") or sqlerr(__FILE__, __LINE__);
         $arro = mysql_fetch_row($rel);
         $number = $arro[0];
         $textSelectOnePlease = nexus_trans('nexus.select_one_please');
@@ -164,13 +164,14 @@ JS;
         } else {
             list($pagertop, $pagerbottom, $limit) = pager($pageSize, $number, "?id=$id&menu=$menuSelected&");
             $haremAdditionFactor = (float)get_setting('bonus.harem_addition');
-            $ret = sql_query("SELECT id, username, email, uploaded, downloaded, status, warned, enabled, donor, email, seed_points_per_hour, seeding_torrent_count, seeding_torrent_size, last_announce_at FROM users WHERE $whereStr $limit") or sqlerr();
+            $ret = sql_query("SELECT u.id, u.username, u.email, u.uploaded, u.downloaded, u.status, u.warned, u.enabled, u.donor, u.email, u.seed_points_per_hour, u.seeding_torrent_count, u.seeding_torrent_size, u.last_announce_at, COUNT(t.id) AS torrent_count FROM users u LEFT JOIN torrents t ON t.owner = u.id WHERE $whereStr GROUP BY u.id $limit") or sqlerr();
             $num = mysql_num_rows($ret);
 
             print("<tr>
 <td class=colhead><b>".$lang_invite['text_username']."</b></td>
 <td class=colhead><b>".$lang_invite['text_email']."</b></td>
 <td class=colhead><b>".$lang_invite['text_enabled']."</b></td>
+<td class=colhead><b>".$lang_invite['text_uploaded_count']."</b></td>
 <td class=colhead><b>".$lang_invite['text_uploaded']."</b></td>
 <td class=colhead><b>".$lang_invite['text_downloaded']."</b></td>
 <td class=colhead><b>".$lang_invite['text_ratio']."</b></td>
@@ -212,6 +213,7 @@ JS;
                     <td class=rowfollow>".get_username($arr['id'])."</td>
                     <td class=rowfollow>".$arr['email']."</td>
                     <td class=rowfollow>".$arr['enabled']."</td>
+                    <td class=rowfollow>" . $arr['torrent_count'] . "</td>
                     <td class=rowfollow>" . mksize($arr['uploaded']) . "</td>
                     <td class=rowfollow>" . mksize($arr['downloaded']) . "</td>
                     <td class=rowfollow>".$ratio."</td>
