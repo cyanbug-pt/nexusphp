@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Aucun rapport.",
+	'head_reports' => "Rapports",
+	'text_reports' => "Rapports",
+	'col_added' => "Ajouté",
+	'col_reporter' => "Rapporteur",
+	'col_reporting' => "Rapports",
+	'col_type' => "Type de texte",
+	'col_reason' => "Raison",
+	'col_dealt_with' => "Traiter avec",
+	'col_action' => "Acte.",
+	'text_yes' => "Oui",
+	'text_no' => "Non",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Le torrent n'existe pas ou est supprimé.",
+	'text_user' => "Utilisateur",
+	'text_user_does_not_exist' => "L'utilisateur n'existe pas ou est supprimé.",
+	'text_offer' => "Offre",
+	'text_offer_does_not_exist' => "L'offre n'existe pas ou est supprimée.",
+	'text_forum_post' => "Message du forum",
+	'text_post_does_not_exist' => "Le message du forum n'existe pas ou est supprimé.",
+	'text_post_id' => "ID de la publication ",
+	'text_of_topic' => " du sujet ",
+	'text_by' => " par ",
+	'text_comment' => "Commenter",
+	'text_comment_does_not_exist' => "Le commentaire n'existe pas ou est supprimé.",
+	'text_of_torrent' => " de torrent ",
+	'text_of_offer' => " d'offre ",
+	'text_comment_id' => "ID du commentaire ",
+	'text_subtitle' => "Sous-titre",
+	'text_subtitle_does_not_exist' => "Le sous-titre n'existe pas ou est supprimé.",
+	'text_for_torrent_id' => " pour l'ID du torrent ",
+	'submit_set_dealt' => "Définir la transaction",
+	'submit_delete' => "Supprimez",
+);
+
+?>

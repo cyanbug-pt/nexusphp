@@ -37,7 +37,7 @@ class CleanupRepository extends BaseRepository
 
     private static int $oneTaskSeconds = 0;
 
-    private static int $scanSize = 1000;
+    private static int $scanSize = 500;
 
     public static function recordBatch(\Redis $redis, $uid, $torrentId)
     {
@@ -132,7 +132,7 @@ class CleanupRepository extends BaseRepository
 
         //remove this batch
         if ($batchKey != self::USER_SEED_BONUS_BATCH_KEY) {
-            $redis->del($batch);
+            $redis->unlink($batch);
         }
         $endTimestamp = time();
         do_log(sprintf("$logPrefix, [DONE], batch: $batch, count: $count, cost time: %d seconds", $endTimestamp - $beginTimestamp));
@@ -257,6 +257,9 @@ LUA;
             "lastcleantime5" => "five",
         ];
         $avps = Avp::query()->get()->keyBy("arg");
+        if ($avps->isEmpty()) {
+            return;
+        }
         foreach ($arvToLevel as $arg => $level) {
             /** @var NexusModel $value */
             $value = $avps->get($arg);

@@ -2,13 +2,19 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\System\DownloadSpeedResource\Pages\ManageDownloadSpeeds;
 use App\Filament\Resources\System\DownloadSpeedResource\Pages;
 use App\Filament\Resources\System\DownloadSpeedResource\RelationManagers;
 use App\Models\DownloadSpeed;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +23,13 @@ class DownloadSpeedResource extends Resource
 {
     protected static ?string $model = DownloadSpeed::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-download';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-arrow-down-tray';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 6;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.download_speed');
     }
@@ -33,11 +39,11 @@ class DownloadSpeedResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->label(__('label.name'))
+        return $schema
+            ->components([
+                TextInput::make('name')->label(__('label.name'))
             ]);
     }
 
@@ -45,25 +51,25 @@ class DownloadSpeedResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->label(__('label.name')),
+                TextColumn::make('id'),
+                TextColumn::make('name')->label(__('label.name')),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageDownloadSpeeds::route('/'),
+            'index' => ManageDownloadSpeeds::route('/'),
         ];
     }
 }

@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Ei raporttia.",
+	'head_reports' => "Raportit",
+	'text_reports' => "Raportit",
+	'col_added' => "Lisätty",
+	'col_reporter' => "Raportoija",
+	'col_reporting' => "Raportointi",
+	'col_type' => "Tyyppi",
+	'col_reason' => "Syy",
+	'col_dealt_with' => "Dealt Kanssa",
+	'col_action' => "Laki",
+	'text_yes' => "Kyllä",
+	'text_no' => "Ei",
+	'text_torrent' => "Torrentti",
+	'text_torrent_does_not_exist' => "Torrenttia ei ole olemassa tai se on poistettu.",
+	'text_user' => "Käyttäjä",
+	'text_user_does_not_exist' => "Käyttäjää ei ole olemassa tai se on poistettu.",
+	'text_offer' => "Tarjous",
+	'text_offer_does_not_exist' => "Tarjousta ei ole olemassa tai se on poistettu.",
+	'text_forum_post' => "Foorumin Viesti",
+	'text_post_does_not_exist' => "Foorumiviestiä ei ole olemassa tai se on poistettu.",
+	'text_post_id' => "Viestin Tunnus ",
+	'text_of_topic' => " aiheeseen ",
+	'text_by' => " mennessä ",
+	'text_comment' => "Kommentti",
+	'text_comment_does_not_exist' => "Kommenttia ei ole olemassa tai se on poistettu.",
+	'text_of_torrent' => " torrentti ",
+	'text_of_offer' => " tarjous ",
+	'text_comment_id' => "Kommentin Tunniste ",
+	'text_subtitle' => "Tekstitys",
+	'text_subtitle_does_not_exist' => "Tekstitystä ei ole olemassa tai se on poistettu.",
+	'text_for_torrent_id' => " torrent ID ",
+	'submit_set_dealt' => "Aseta Dealtti",
+	'submit_delete' => "Poista",
+);
+
+?>

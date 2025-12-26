@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Fel",
+	'std_missing_reason' => "Orsak saknas",
+	'std_message' => "Meddelande",
+	'std_successfully_reported' => "Rapporterat framgångsrikt!",
+	'std_already_reported_this' => "Du har redan rapporterat detta!",
+	'std_sorry' => "Ledsen",
+	'std_cannot_report_oneself' => "Du kan inte anmäla dig själv!",
+	'std_invalid_user_id' => "Ogiltigt användar-id!",
+	'std_cannot_report' => "Du kan inte rapportera ",
+	'std_are_you_sure' => "Är du säker?",
+	'text_are_you_sure_user' => "Är du säker på att du vill rapportera den här användaren ",
+	'text_to_staff' => " till personalen för brott mot reglerna?",
+	'text_not_for_leechers' => "Observera, detta är <b>inte</b> för att användas för att rapportera leechers, vi har skript på plats för att hantera dem!",
+	'text_reason_is' => "Anledning <font class=striking>(obligatoriskt)</font>: ",
+	'submit_confirm' => "Bekräfta",
+	'text_reason_note' => "<b><font class=striking> VÄNLIGEN Obs! </font></b>&nbsp;Om ingen anledning ges får du en varning själv.",
+	'std_invalid_torrent_id' => "Ogiltig Torrent Id!",
+	'text_are_you_sure_torrent' => "Är du säker på att du vill rapportera denna torrent ",
+	'std_invalid_post_id' => "Ogiltigt post-id!",
+	'text_are_you_sure_post' => "Är du säker på att du vill rapportera foruminlägget (ID ",
+	'text_of_topic' => " av ämne ",
+	'text_of_torrent' => " av torrent ",
+	'text_of_offer' => " av erbjudande ",
+	'text_of_request' => " av begäran ",
+	'text_by' => ") av ",
+	'std_invalid_comment_id' => "Ogiltigt Kommentar Id!",
+	'std_orphaned_comment' => "Övergiven kommentar. Vänligen rapportera detta till admin.",
+	'text_are_you_sure_comment' => "Är du säker på att du vill rapportera kommentaren (ID ",
+	'std_invalid_offer_id' => "Ogiltigt erbjudande!",
+	'text_are_you_sure_offer' => "Är du säker på att du vill rapportera följande erbjudande ",
+	'std_invalid_request_id' => "Ogiltigt förfrågnings-id!",
+	'std_are_you_sure_request' => "Är du säker på att du vill rapportera följande begäran ",
+	'std_invalid_action' => "Ogiltig åtgärd.",
+	'std_invalid_subtitle_id' => "Ogiltig undertext-id!",
+	'text_are_you_sure_subtitle' => "Är du säker på att du vill rapportera undertiteln ",
+);
+
+?>

@@ -3,8 +3,12 @@
 namespace App\Models;
 
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class Category extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $table = 'categories';
 
     protected $fillable = ['mode', 'name', 'class_name', 'image', 'sort_index', 'icon_id'];

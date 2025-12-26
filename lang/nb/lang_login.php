@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Ikke innlogget!",
+	'p_error' => "Feil:",
+	'p_after_logged_in' => "Siden du prøvde å se kan bare brukes når du er pålogget.",
+	'p_need_cookies_enables' => "<b>Notat</b>: Du trenger informasjonskapsler aktivert for å logge inn eller bytte språk.",
+	'p_fail_ban' => "Mislykkede innlogginger på en rad vil resultere i å utestenge din ip!",
+	'p_you_have' => "Du har",
+	'p_remaining_tries' => "gjenstående prøvinger.",
+	'p_no_account_signup' => "Har du ikke en konto? <a href=\"signup.php\"><b>registrer deg med</b></a> nå!",
+	'p_forget_pass_recover' => "Glemt passordet? Gjenopprette passordet <a href=\"recover.php\"><b>via e-post</b></a>",
+    'p_account_banned' => "Konto utestengt? Vis årsaken til<a href=\"user-ban-log.php\"><b>brukerforbud mot å logge</b></a>",
+	'p_resend_confirm' => "Fikk ikke bekreftelsen e-post eller bekreftelseslenke en ødelagt? <a href=\"confirm_resend.php\"><b>Send bekreftelse på nytt</b></a>",
+	'rowhead_username' => "Brukernavn:",
+	'rowhead_password' => "Passord:",
+	'button_login' => "Logg inn!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Auto utlogging:",
+	'text_restrict_ip' => "Begrens IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Logg meg ut etter 15 minutter",
+	'checkbox_restrict_ip' => " Begrens økt til min IP",
+	'checkbox_ssl' => " Bla gjennom nettstedet med SSL kryptering (Nettleser)",
+	'checkbox_ssl_tracker' => " Koble til tracker med SSL kryptering (BitTorrent klient)",
+	'text_advanced_options' => "Avanserte alternativer:",
+	'text_helpbox' => "Hjelpespiller",
+	'text_helpbox_note' => "Har du problemer med registrering eller innlogging? Legg igjen en melding her",
+	'text_message' => "Melding: ",
+	'sumbit_shout' => "rop",
+	'submit_clear' => "tøm",
+	'text_select_lang' => "Velg nettstedsspråk: ",
+	'head_login' => "Innlogging",
+    'rowhead_two_step_code' => 'To-faktor autentisering',
+    'two_step_code_tooltip' => 'Hvis aktivert, må dette fylles ut',
+    'text_complain' => 'Klage Kanal',
+);
+
+?>

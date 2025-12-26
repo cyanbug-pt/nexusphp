@@ -48,7 +48,7 @@ class CommentRepository extends BaseRepository
             $target->save();
 
             $userUpdate = [
-                'seedbonus' => DB::raw('seedbonus + ' . Setting::get('bonus.addcomment')),
+                'seedbonus' => NexusDB::raw('seedbonus + ' . Setting::get('bonus.addcomment')),
                 'last_comment' => Carbon::now(),
             ];
             $user->update($userUpdate);

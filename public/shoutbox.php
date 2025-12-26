@@ -13,7 +13,7 @@ if (isset($_GET['del']))
 	}
 }
 $where=$_GET["type"] ?? '';
-$refresh = ($CURUSER['sbrefresh'] ? $CURUSER['sbrefresh'] : 120)
+$refresh = ($CURUSER['sbrefresh'] ?? 120)
 ?>
 <html><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -25,7 +25,7 @@ $refresh = ($CURUSER['sbrefresh'] ? $CURUSER['sbrefresh'] : 120)
 <script src="js/curtain_imageresizer.js" type="text/javascript"></script><style type="text/css">body {overflow-y:scroll; overflow-x: hidden}</style>
 <?php
 print(get_style_addicode());
-$startcountdown = "startcountdown(".$CURUSER['sbrefresh'].")";
+$startcountdown = "startcountdown(".$refresh.")";
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -70,7 +70,7 @@ else
 	if($_GET["type"]=="helpbox")
 	{
 		if ($showhelpbox_main != 'yes'){
-			write_log("Someone is hacking shoutbox. - IP : ".getip(),'mod');
+            do_log("Someone is hacking shoutbox. helpbox_disabled - IP : ".getip());
 			die($lang_shoutbox['text_helpbox_disabled']);
 		}
 		$userid=0;
@@ -80,7 +80,7 @@ else
 	{
 		$userid=intval($CURUSER["id"] ?? 0);
 		if (!$userid){
-			write_log("Someone is hacking shoutbox. - IP : ".getip(),'mod');
+            do_log("Someone is hacking shoutbox. no_permission_to_shoutbox - IP : ".getip());
 			die($lang_shoutbox['text_no_permission_to_shoutbox']);
 		}
 		if (!empty($_GET["toguest"]))
@@ -89,7 +89,14 @@ else
 	}
 	$date=sqlesc(time());
 	$text=trim($_GET["shbox_text"]);
-
+    if (isset($userid) && $userid > 0) {
+        $lock = new \Nexus\Database\NexusLock("shoutbox:$userid", 60);
+    } else {
+        $lock = new \Nexus\Database\NexusLock("shoutbox:" . getip(), 60);
+    }
+    if (!$lock->acquire()) {
+        die($lang_shoutbox['speaking_too_often']);
+    }
 	sql_query("INSERT INTO shoutbox (userid, date, text, type) VALUES (" . sqlesc($userid) . ", $date, " . sqlesc($text) . ", ".sqlesc($type).")") or sqlerr(__FILE__, __LINE__);
 
 	if(mb_substr($text,0,3)==='青虫娘'){
@@ -216,14 +223,14 @@ else
 }
 }
 
-$limit = ($CURUSER['sbnum'] ? $CURUSER['sbnum'] : 70);
+$limit = ($CURUSER['sbnum'] ?? 70);
 if ($where == "helpbox" && $showhelpbox_main == 'yes') {
     //request helpbox, not require login
     $sql = "SELECT * FROM shoutbox WHERE type='hb' ORDER BY date DESC, id DESC LIMIT ".$limit;
-} elseif ($where == "shoutbox" && $CURUSER && ($CURUSER['hidehb'] == 'yes' || $showhelpbox_main != 'yes')) {
+} elseif ($where == "shoutbox" && isset($CURUSER) && ($CURUSER['hidehb'] == 'yes' || $showhelpbox_main != 'yes')) {
     //request shoutbox, exclude helpbox content, require login
     $sql = "SELECT * FROM shoutbox WHERE type='sb' ORDER BY date DESC, id DESC LIMIT ".$limit;
-} elseif ($CURUSER) {
+} elseif (isset($CURUSER)) {
     $sql = "SELECT * FROM shoutbox ORDER BY date DESC, id DESC LIMIT ".$limit;
 } else {
     die("<h1>".$lang_shoutbox['std_access_denied']."</h1>"."<p>".$lang_shoutbox['std_access_denied_note']."</p></body></html>");

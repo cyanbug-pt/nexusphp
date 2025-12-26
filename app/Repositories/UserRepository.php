@@ -1,25 +1,36 @@
 <?php
 namespace App\Repositories;
 
+use App\Enums\ModelEventEnum;
+use App\Enums\RedisKeysEnum;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\ExamUserResource;
+use App\Http\Resources\TorrentResource;
 use App\Http\Resources\UserResource;
 use App\Models\ExamUser;
 use App\Models\Invite;
 use App\Models\LoginLog;
 use App\Models\Message;
+use App\Models\OauthProvider;
 use App\Models\Setting;
+use App\Models\SiteLog;
+use App\Models\Snatch;
+use App\Models\Torrent;
 use App\Models\User;
 use App\Models\UserBanLog;
 use App\Models\UserMeta;
+use App\Models\UserModifyLog;
 use App\Models\UsernameChangeLog;
+use App\Utils\ApiQueryBuilder;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
 
@@ -51,34 +62,38 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
-    public function getDetail($id)
+    public function getDetail($id, Authenticatable $currentUser)
     {
-        $with = [
-            'inviter' => function ($query) {return $query->select(User::$commonFields);},
-            'valid_medals'
-        ];
-        $user = User::query()->with($with)->findOrFail($id);
-        $userResource = new UserResource($user);
-        $baseInfo = $userResource->response()->getData(true)['data'];
+        //query this info default
+        $query = User::query()->with([]);
+        $allowIncludes = ['inviter', 'valid_medals'];
+        $allowIncludeCounts = [];
+        $allowIncludeFields = [];
+        $apiQueryBuilder = ApiQueryBuilder::for(UserResource::NAME, $query)
+            ->allowIncludes($allowIncludes)
+            ->allowIncludeCounts($allowIncludeCounts)
+            ->allowIncludeFields($allowIncludeFields)
+        ;
+        $query = $apiQueryBuilder->build();
+        $user = $query->findOrFail($id);
+        Gate::authorize('view', $user);
+        return $this->appendIncludeFields($apiQueryBuilder, $currentUser, $user);
+    }
 
-        $examRep = new ExamRepository();
-        $examProgress = $examRep->getUserExamProgress($id, ExamUser::STATUS_NORMAL);
-        if ($examProgress) {
-            $examResource = new ExamUserResource($examProgress);
-            $examInfo = $examResource->response()->getData(true)['data'];
-        } else {
-            $examInfo = null;
-        }
-        return [
-            'base_info' => $baseInfo,
-            'exam_info' => $examInfo,
-        ];
+    private function appendIncludeFields(ApiQueryBuilder $apiQueryBuilder, Authenticatable $currentUser, User $user): User
+    {
+//        $id = $torrent->id;
+//        if ($apiQueryBuilder->hasIncludeField('has_bookmarked')) {
+//            $torrent->has_bookmarked = (int)$user->bookmarks()->where('torrentid', $id)->exists();;
+//        }
+
+        return $user;
     }
 
     /**
      * create user
      *
-     * @param array $params must: username, email, password, password_confirmation. optional: id, class
+     * @param array $params must: username, email, password, password_confirmation. optional: id, class, provider_id
      * @return User
      */
     public function store(array $params)
@@ -122,17 +137,19 @@ class UserRepository extends BaseRepository
         }
         $setting = Setting::get('main');
         $secret = mksecret();
-        $passhash = md5($secret . $password . $secret);
+        $passhash = hash('sha256', $secret . hash('sha256', $password));
         $data = [
             'username' => $username,
             'email' => $email,
             'secret' => $secret,
+            'auth_key' => mksecret(),
             'editsecret' => '',
             'passhash' => $passhash,
             'stylesheet' => $setting['defstylesheet'],
             'added' => now()->toDateTimeString(),
             'status' => User::STATUS_CONFIRMED,
-            'class' => $class
+            'class' => $class,
+            'passkey' => md5($username.date("Y-m-d H:i:s").$passhash)
         ];
         $user = new User($data);
         if (!empty($params['id'])) {
@@ -142,8 +159,15 @@ class UserRepository extends BaseRepository
             do_log("[CREATE_USER], specific id: " . $params['id']);
             $user->id = $params['id'];
         }
+        if (!empty($params['provider_id'])) {
+            if (!OauthProvider::query()->find($params['provider_id'])) {
+                throw new \InvalidArgumentException("provider_id: {$params['provider_id']} not exists.");
+            }
+            do_log("[CREATE_USER], specific provider_id: " . $params['provider_id']);
+            $user->provider_id = $params['provider_id'];
+        }
         $user->save();
-
+        fire_event("user_created", $user);
         return $user;
     }
 
@@ -153,15 +177,16 @@ class UserRepository extends BaseRepository
             throw new \InvalidArgumentException("password confirmation != password");
         }
         $user = User::query()->findOrFail($id, ['id', 'username', 'class']);
-        $operator = Auth::user();
+        $operator = get_user_id();
         if ($operator) {
             $this->checkPermission($operator, $user);
         }
         $secret = mksecret();
-        $passhash = md5($secret . $password . $secret);
+        $passhash = hash('sha256', $secret . hash('sha256', $password));
         $update = [
             'secret' => $secret,
             'passhash' => $passhash,
+            'auth_key' => mksecret(),
         ];
         $user->update($update);
         return true;
@@ -228,7 +253,13 @@ class UserRepository extends BaseRepository
         do_log("user: $uid, $modCommentText, update: " . nexus_json_encode($update));
         $this->clearCache($targetUser);
         fire_event("user_enabled", $targetUser);
+        $this->setEnableLatelyCache($targetUser->id);
         return true;
+    }
+
+    private function setEnableLatelyCache(int $userId): void
+    {
+        NexusDB::cache_put(User::getUserEnableLatelyCacheKey($userId), now()->toDateTimeString());
     }
 
     public function getInviteInfo($id)
@@ -284,13 +315,11 @@ class UserRepository extends BaseRepository
             'new' => $formatSize ?  mksize($new) : $new,
             'reason' => $reason,
         ], 'en');
-        $modCommentText = date('Y-m-d') . " - $modCommentText";
         do_log("user: $uid, $modCommentText", 'alert');
         $update = [
             $sourceField => $new,
-            'modcomment' => NexusDB::raw("if(modcomment = '', '$modCommentText', concat_ws('\n', '$modCommentText', modcomment))"),
+//            'modcomment' => NexusDB::raw("if(modcomment = '', '$modCommentText', concat_ws('\n', '$modCommentText', modcomment))"),
         ];
-
         $locale = $targetUser->locale;
         $fieldLabel = nexus_trans("user.labels.$sourceField", [], $locale);
         $msg = nexus_trans('message.field_value_change_message_body', [
@@ -307,7 +336,7 @@ class UserRepository extends BaseRepository
             'msg' => $msg,
             'added' => Carbon::now(),
         ];
-        NexusDB::transaction(function () use ($uid, $sourceField, $old, $new, $update, $message) {
+        NexusDB::transaction(function () use ($uid, $sourceField, $old, $new, $update, $message, $modCommentText) {
             $affectedRows = User::query()
                 ->where('id', $uid)
                 ->where($sourceField, $old)
@@ -317,6 +346,12 @@ class UserRepository extends BaseRepository
                 throw new \RuntimeException("Change fail, affected rows != 1($affectedRows)");
             }
             Message::query()->insert($message);
+            UserModifyLog::query()->insert([
+                'user_id' => $uid,
+                'content' => $modCommentText,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
         });
         $this->clearCache($targetUser);
         return true;
@@ -377,11 +412,12 @@ class UserRepository extends BaseRepository
             $message['subject'] = nexus_trans('message.download_enable.subject', [], $targetUser->locale);
             $message['msg'] = nexus_trans('message.download_enable.body', ['operator' => $operatorUsername], $targetUser->locale);
         }
-        return NexusDB::transaction(function () use ($targetUser, $update, $modComment, $message) {
+        $result = NexusDB::transaction(function () use ($targetUser, $update, $modComment, $message) {
             Message::add($message);
-            $this->clearCache($targetUser);
             return $targetUser->updateWithModComment($update, $modComment);
         });
+        $this->clearCache($targetUser);
+        return $result;
     }
 
 
@@ -430,7 +466,7 @@ class UserRepository extends BaseRepository
             $changeLog = $user->usernameChangeLogs()->orderBy('id', 'desc')->first();
             if ($changeLog) {
                 $miniDays = Setting::get('system.change_username_min_interval_in_days', 365);
-                if ($changeLog->created_at->diffInDays() <= $miniDays) {
+                if (abs($changeLog->created_at->diffInDays()) <= $miniDays) {
                     $msg = nexus_trans('user.change_username_lte_min_interval', ['last_change_time' => $changeLog->created_at, 'interval' => $miniDays]);
                     throw new \RuntimeException($msg);
                 }
@@ -478,8 +514,8 @@ class UserRepository extends BaseRepository
             $targetUser->usernameChangeLogs()->create($changeLog);
             $targetUser->username = $changeLog['username_new'];
             $targetUser->save();
-            $this->clearCache($targetUser);
         });
+        $this->clearCache($targetUser);
         return true;
     }
 
@@ -538,8 +574,8 @@ class UserRepository extends BaseRepository
             } else {
                 $targetUser->update($userUpdates);
             }
-            $this->clearCache($targetUser);
         });
+        $this->clearCache($targetUser);
 
         return true;
     }
@@ -566,7 +602,7 @@ class UserRepository extends BaseRepository
         $operatorInfo = get_user_row($operatorId);
         $message['msg'] = nexus_trans('user.grant_props_notification.body', ['name' => $metaName, 'operator' => $operatorInfo['username'], 'duration' => $durationText], $locale);
         if (!empty($metaData['duration'])) {
-            $metaData['deadline'] = now()->addDays($metaData['duration']);
+            $metaData['deadline'] = now()->addDays((int)$metaData['duration']);
         }
         if ($allowMultiple) {
             //Allow multiple, just insert
@@ -588,10 +624,10 @@ class UserRepository extends BaseRepository
                     $log .= ", has duration: {$keyExistsUpdates['duration']}";
                     if ($metaExists->deadline && $metaExists->deadline->gte(now())) {
                         $log .= ", not expire";
-                        $keyExistsUpdates['deadline'] = $metaExists->deadline->addDays($keyExistsUpdates['duration']);
+                        $keyExistsUpdates['deadline'] = $metaExists->deadline->addDays((int)$keyExistsUpdates['duration']);
                     } else {
                         $log .= ", expired or not set";
-                        $keyExistsUpdates['deadline'] = now()->addDays($keyExistsUpdates['duration']);
+                        $keyExistsUpdates['deadline'] = now()->addDays((int)$keyExistsUpdates['duration']);
                     }
                     unset($keyExistsUpdates['duration']);
                 } else {
@@ -635,9 +671,10 @@ class UserRepository extends BaseRepository
         } else {
             $uidArr = $id->pluck('id')->toArray();
         }
+        $uidStr = implode(',', $uidArr);
         $users = User::query()->with('language')->whereIn('id', $uidArr)->get();
-        if (empty($uidArr)) {
-            return;
+        if ($users->isEmpty()) {
+            return true;
         }
         $tables = [
             'users' => 'id',
@@ -652,9 +689,12 @@ class UserRepository extends BaseRepository
             'login_logs' => 'uid',
             'oauth_access_tokens' => 'user_id',
             'oauth_auth_codes' => 'user_id',
+            'seed_box_records' => 'uid',
+            'user_modify_logs' => 'user_id',
+            'messages' => 'receiver',
         ];
         foreach ($tables as $table => $key) {
-            \Nexus\Database\NexusDB::table($table)->whereIn($key, $uidArr)->delete();
+            NexusDB::statement(sprintf("delete from `%s` where `%s` in (%s)", $table, $key, $uidStr));
         }
         do_log("[DESTROY_USER]: " . json_encode($uidArr), 'error');
         $userBanLogs = [];
@@ -666,9 +706,11 @@ class UserRepository extends BaseRepository
             ];
         }
         UserBanLog::query()->insert($userBanLogs);
+        //delete by user, make sure torrent is deleted
+        NexusDB::statement(sprintf('DELETE FROM snatched WHERE userid IN (%s) and not exists (select 1 from torrents where id = snatched.torrentid)', $uidStr));
         if (is_int($id)) {
             do_action("user_delete", $id);
-            fire_event("user_destroyed", $users->first());
+            fire_event(ModelEventEnum::USER_DELETED, $users->first());
         }
         return true;
     }
@@ -711,7 +753,7 @@ class UserRepository extends BaseRepository
                     'invitee' => '',
                     'hash' => $hash,
                     'valid' => 0,
-                    'expired_at' => Carbon::now()->addDays($days),
+                    'expired_at' => Carbon::now()->addDays((int)$days),
                     'created_at' => Carbon::now(),
                 ];
             }

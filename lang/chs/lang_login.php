@@ -35,5 +35,6 @@ $lang_login = array
     'rowhead_two_step_code' => '两步验证',
     'two_step_code_tooltip' => '如有设置必须填写',
     'text_complain' => '申诉通道',
+    'other_methods' => "其他登录方式",
 );
 ?>

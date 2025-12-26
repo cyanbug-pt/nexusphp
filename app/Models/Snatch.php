@@ -13,7 +13,7 @@ class Snatch extends NexusModel
 
     protected $fillable = [
         'torrentid', 'userid', 'ip', 'port', 'uploaded', 'downloaded', 'to_go', 'seedtime', 'leechtime',
-        'last_action', 'startdat', 'completedat', 'finished'
+        'last_action', 'startdat', 'completedat', 'finished', 'hit_and_run_id', 'buy_log_id',
     ];
 
     protected $casts = [

@@ -1,0 +1,14 @@
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${PHPMYADMIN_SERVER_NAME};
+
+    ssl_certificate     /certs/fullchain.pem;
+    ssl_certificate_key /certs/private.key;
+
+    location / {
+        proxy_pass http://phpmyadmin:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}

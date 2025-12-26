@@ -399,10 +399,10 @@ $SUBSPATH = "subs";
 //Whether clean-up is triggered by cron, instead of the default browser clicks.
 //Set this to true ONLY if you have setup other method to schedule the clean-up process.
 //e.g. cron on *nix, add the following line (without "") in your crontab file
-//"*/5 * * * * wget -O - -q -t 1 http://www.nexusphp.com/cron.php"
+//"*/5 * * * * wget -O - -q -t 1 https://nexusphp.org/cron.php"
 //NOTE:
 //Make sure you have wget installed on your OS
-//replace "http://www.nexusphp.com/" with your own site address
+//replace "https://nexusphp.org/" with your own site address
 
 $useCronTriggerCleanUp = true;
 //some promotion rules

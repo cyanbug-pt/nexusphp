@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "レポートはありません。",
+	'head_reports' => "レポート",
+	'text_reports' => "レポート",
+	'col_added' => "追加しました",
+	'col_reporter' => "Reporter",
+	'col_reporting' => "レポート",
+	'col_type' => "タイプ",
+	'col_reason' => "理由：",
+	'col_dealt_with' => "送金する",
+	'col_action' => "Act.",
+	'text_yes' => "はい",
+	'text_no' => "いいえ",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Torrent が存在しないか削除されます。",
+	'text_user' => "ユーザー",
+	'text_user_does_not_exist' => "ユーザーが存在しないか、削除されます。",
+	'text_offer' => "オファー",
+	'text_offer_does_not_exist' => "オファーは存在しないか削除されました。",
+	'text_forum_post' => "フォーラム投稿",
+	'text_post_does_not_exist' => "フォーラム投稿が存在しないか、削除されました。",
+	'text_post_id' => "投稿ID ",
+	'text_of_topic' => " トピックの ",
+	'text_by' => " 作成者: ",
+	'text_comment' => "コメント",
+	'text_comment_does_not_exist' => "コメントが存在しないか、削除されています。",
+	'text_of_torrent' => " トレントの ",
+	'text_of_offer' => " 提案の|提案の ",
+	'text_comment_id' => "コメント ID ",
+	'text_subtitle' => "サブタイトル",
+	'text_subtitle_does_not_exist' => "字幕が存在しないか、削除されます。",
+	'text_for_torrent_id' => " Torrent ID ",
+	'submit_set_dealt' => "送信済みを設定",
+	'submit_delete' => "削除",
+);
+
+?>

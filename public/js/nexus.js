@@ -1,13 +1,4 @@
 jQuery(document).ready(function () {
-    jQuery('.spoiler-title').on('click', function () {
-        let content = jQuery(this).parent().next();
-        if (content.hasClass('collapse')) {
-            content.height(content[0].scrollHeight).removeClass('collapse')
-        } else {
-            content.height(0).addClass('collapse')
-        }
-    })
-
     function getImgPosition(e, imgEle) {
         // console.log(e, imgEle)
         let imgWidth = imgEle.prop('naturalWidth')
@@ -55,6 +46,9 @@ jQuery(document).ready(function () {
 
     // preview
     function getPosition(e, position) {
+        if (!position) {
+            return {};
+        }
         return {
             left: e.pageX + position.offsetX,
             top: e.pageY + position.offsetY,
@@ -71,7 +65,7 @@ jQuery(document).ready(function () {
         let position = getPosition(e, imgPosition)
         let src = imgEle.attr("src")
         if (src) {
-            previewEle.attr("src", src).css(position).fadeIn("fast");
+            previewEle.stop(true, true).attr("src", src).css(position).fadeIn("fast");
         }
     }).on("mouseout", selector, function (e) {
         // previewEle.remove()
@@ -84,23 +78,44 @@ jQuery(document).ready(function () {
 
     // lazy load
     if ("IntersectionObserver" in window) {
-        const imgList = [...document.querySelectorAll('.nexus-lazy-load')]
-        var io = new IntersectionObserver((entries) =>{
-            entries.forEach(entry  => {
-                const el = entry.target
-                const intersectionRatio = entry.intersectionRatio
-                // console.log(`el, ${el.getAttribute('data-src')}, intersectionRatio: ${intersectionRatio}`)
+        const fallbackImage = 'pic/misc/spinner.svg';
+        const domainList = ['img1.doubanio.com', 'img2.doubanio.com', 'img3.doubanio.com', 'img9.doubanio.com'];
+        const imgList = [...document.querySelectorAll('.nexus-lazy-load')];
+        const loadedImages = {};
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const el = entry.target;
+                const intersectionRatio = entry.intersectionRatio;
                 if (intersectionRatio > 0 && intersectionRatio <= 1 && !el.classList.contains('preview')) {
-                    // console.log(`el, ${el.getAttribute('data-src')}, loadImg`)
-                    const source = el.dataset.src
-                    el.src = source
-                    el.classList.add('preview')
+                    let src = el.dataset.src;
+                    if (src && src.includes('doubanio.com') && src.includes('l_ratio_poster')) {
+                        src = src.replace('l_ratio_poster', 's_ratio_poster');
+                        el.dataset.src = src;
+                    }
+                    el.src = src;
+                    el.classList.add('preview');
+                    loadedImages[src] = true;
+                    el.onload = el.onerror = () => io.unobserve(el);
+                    el.onerror = () => handleImageError(el, src);
                 }
-                el.onload = el.onerror = () => io.unobserve(el)
-            })
-        })
-
-        imgList.forEach(img => io.observe(img))
+            });
+        });
+        imgList.forEach(img => io.observe(img));
+        function handleImageError(img, currentSrc) {
+            if (!currentSrc.includes('doubanio.com')) {
+                img.src = fallbackImage;
+            } else {
+                tryNextDomain(img, currentSrc, 0);
+            }
+        }
+        function tryNextDomain(img, currentSrc, index = 0) {
+            if (index >= domainList.length) {
+                img.src = fallbackImage;
+                return;
+            }
+            img.src = currentSrc.replace(/https:\/\/[a-zA-Z0-9.-]+\.doubanio\.com/, `https://${domainList[index]}`);
+            img.onerror = () => tryNextDomain(img, currentSrc, index + 1);
+        }
     }
 
     //claim

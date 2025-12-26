@@ -2,14 +2,23 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use App\Filament\Resources\User\InviteResource\Pages\ListInvites;
+use App\Filament\Resources\User\InviteResource\Pages\CreateInvite;
+use App\Filament\Resources\User\InviteResource\Pages\EditInvite;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Components\DatePicker;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\User\InviteResource\Pages;
 use App\Filament\Resources\User\InviteResource\RelationManagers;
 use App\Models\Invite;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -20,13 +29,13 @@ class InviteResource extends Resource
 
     protected static ?string $model = Invite::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-add';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-plus';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 7;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.invite');
     }
@@ -36,10 +45,10 @@ class InviteResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -48,51 +57,51 @@ class InviteResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('inviter')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('inviter')
                     ->label(__('invite.fields.inviter'))
                     ->formatStateUsing(fn ($state) => username_for_admin($state))
                 ,
-                Tables\Columns\TextColumn::make('invitee')
+                TextColumn::make('invitee')
                     ->label(__('invite.fields.invitee'))
                     ->searchable()
                 ,
-                Tables\Columns\TextColumn::make('hash')
+                TextColumn::make('hash')
                 ,
-                Tables\Columns\TextColumn::make('time_invited')
+                TextColumn::make('time_invited')
                     ->label(__('invite.fields.time_invited'))
                 ,
-                Tables\Columns\IconColumn::make('valid')
+                IconColumn::make('valid')
                     ->label(__('invite.fields.valid'))
                     ->boolean()
                 ,
-                Tables\Columns\TextColumn::make('invitee_register_uid')
+                TextColumn::make('invitee_register_uid')
                     ->label(__('invite.fields.invitee_register_uid'))
                     ->searchable()
                 ,
-                Tables\Columns\TextColumn::make('invitee_register_email')
+                TextColumn::make('invitee_register_email')
                     ->label(__('invite.fields.invitee_register_email'))
                     ->searchable()
                 ,
-                Tables\Columns\TextColumn::make('invitee_register_username')
+                TextColumn::make('invitee_register_username')
                     ->label(__('invite.fields.invitee_register_username'))
                     ->searchable()
                 ,
-                Tables\Columns\TextColumn::make('expired_at')
+                TextColumn::make('expired_at')
                     ->label(__('invite.fields.expired_at'))
                     ->formatStateUsing(fn ($state) => format_datetime($state))
                 ,
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('label.created_at'))
                     ->formatStateUsing(fn ($state) => format_datetime($state))
                 ,
             ])
             ->defaultSort('id', 'desc')
             ->filters(self::getFilters())
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -107,18 +116,18 @@ class InviteResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInvites::route('/'),
-            'create' => Pages\CreateInvite::route('/create'),
-            'edit' => Pages\EditInvite::route('/{record}/edit'),
+            'index' => ListInvites::route('/'),
+            'create' => CreateInvite::route('/create'),
+            'edit' => EditInvite::route('/{record}/edit'),
         ];
     }
 
     private static function getFilters()
     {
         $filters = [];
-        $filters[] = Tables\Filters\Filter::make('inviter')
-            ->form([
-                Forms\Components\TextInput::make('inviter')
+        $filters[] = Filter::make('inviter')
+            ->schema([
+                TextInput::make('inviter')
                     ->label(__('invite.fields.inviter'))
                     ->placeholder('UID')
                 ,
@@ -126,13 +135,13 @@ class InviteResource extends Resource
                 return $query->when($data['inviter'], fn (Builder $query, $value) => $query->where("inviter", $value));
             })
         ;
-        $filters[] = Tables\Filters\SelectFilter::make('valid')
+        $filters[] = SelectFilter::make('valid')
             ->options(self::getYesNoOptions())
             ->label(__('invite.fields.valid'))
         ;
-        $filters[] = Tables\Filters\Filter::make('time_invited_begin')
-            ->form([
-                Forms\Components\DatePicker::make('time_invited_begin')
+        $filters[] = Filter::make('time_invited_begin')
+            ->schema([
+                DatePicker::make('time_invited_begin')
                     ->maxDate(now())
                     ->label(__('invite.fields.time_invited_begin'))
                 ,
@@ -140,9 +149,9 @@ class InviteResource extends Resource
                 return $query->when($data['time_invited_begin'], fn (Builder $query, $value) => $query->where("time_invited", '>=', $value));
             })
         ;
-        $filters[] = Tables\Filters\Filter::make('time_invited_end')
-            ->form([
-                Forms\Components\DatePicker::make('time_invited_end')
+        $filters[] = Filter::make('time_invited_end')
+            ->schema([
+                DatePicker::make('time_invited_end')
                     ->maxDate(now())
                     ->label(__('invite.fields.time_invited_end'))
                 ,

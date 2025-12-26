@@ -2,7 +2,7 @@
 require_once("../include/bittorrent.php");
 dbconn();
 require_once(get_langfile_path());
-require_once(get_langfile_path("",true));
+//require_once(get_langfile_path("",true));
 loggedinorreturn();
 parked();
 if ($enableoffer == 'no')
@@ -108,9 +108,20 @@ if (isset($_GET['new_offer']) && $_GET["new_offer"]){
 		}
 		$id = mysql_insert_id();
 
+		// add new offer message to staffmessage
+		\App\Models\StaffMessage::query()->insert([
+            'sender' => $CURUSER['id'],
+            'subject' => nexus_trans('offer.msg_new_offer_subject'),
+            'msg' => nexus_trans('offer.msg_new_offer_msg', [
+				'username' => "[url=userdetails.php?id={$CURUSER['id']}]{$CURUSER['username']}[/url]",
+				'offername' => "[url=offers.php?id={$id}&off_details=1]{$name}[/url]"]),
+            'added' => now(),
+        ]);
+        clear_staff_message_cache();
+
 		write_log("offer $name was added by ".$CURUSER['username'],'normal');
 
-		header("Refresh: 0; url=offers.php?id=$id&off_details=1");
+		header("Location: offers.php?id=$id&off_details=1");
 
 		stdhead($lang_offers['head_success']);
 	}
@@ -136,6 +147,9 @@ if (isset($_GET['off_details']) && $_GET["off_details"]){
 
 	$res = sql_query("SELECT * FROM offers WHERE id = $id") or sqlerr(__FILE__,__LINE__);
 	$num = mysql_fetch_array($res);
+    if (!$num) {
+        bark($lang_offers['text_nothing_found']);
+    }
 
 	$s = $num["name"];
 
@@ -248,20 +262,30 @@ if (isset($_GET["allow_offer"]) && $_GET["allow_offer"]) {
 
 	$res = sql_query("SELECT users.username, offers.userid, offers.name FROM offers inner join users on offers.userid = users.id where offers.id = $offid") or sqlerr(__FILE__,__LINE__);
 	$arr = mysql_fetch_assoc($res);
+    $locale = get_user_locale($arr["userid"]);
 	if ($offeruptimeout_main){
 		$timeouthour = floor($offeruptimeout_main/3600);
-		$timeoutnote = $lang_offers_target[get_user_lang($arr["userid"])]['msg_you_must_upload_in'].$timeouthour.$lang_offers_target[get_user_lang($arr["userid"])]['msg_hours_otherwise'];
+		$timeoutnote = nexus_trans("offer.msg_you_must_upload_in", [], $locale).$timeouthour.nexus_trans("offer.msg_hours_otherwise", [], $locale);
 	}
 	else $timeoutnote = "";
-	$msg = $CURUSER['username'].$lang_offers_target[get_user_lang($arr["userid"])]['msg_has_allowed']."[b][url=". get_protocol_prefix() . $BASEURL ."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b]. ".$lang_offers_target[get_user_lang($arr["userid"])]['msg_find_offer_option'].$timeoutnote;
+	$msg = $CURUSER['username'].nexus_trans("offer.msg_has_allowed", [], $locale)."[b][url=". get_protocol_prefix() . $BASEURL ."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b]. ".nexus_trans("offer.msg_find_offer_option", [], $locale).$timeoutnote;
 
-	$subject = $lang_offers_target[get_user_lang($arr["userid"])]['msg_your_offer_allowed'];
+	$subject = nexus_trans("offer.msg_your_offer_allowed", [], $locale);
 	$allowedtime = date("Y-m-d H:i:s");
-	sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['userid']}, '" . $allowedtime . "', " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
+	//sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['userid']}, '" . $allowedtime . "', " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
+
+	\App\Models\Message::add([
+		'sender' => 0,
+		'receiver' => $arr['userid'],
+		'msg' => $msg,
+		'subject' => $subject,
+		'added' => $allowedtime,
+	]);
+
 	sql_query ("UPDATE offers SET allowed = 'allowed', allowedtime = '".$allowedtime."' WHERE id = $offid") or sqlerr(__FILE__,__LINE__);
 
 	write_log("{$CURUSER['username']} allowed offer {$arr['name']}",'normal');
-	header("Refresh: 0; url=" . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
+	header("Location: " . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
 }
 //=== end allow the offer
 
@@ -281,6 +305,7 @@ if (isset($_GET["finish_offer"]) && $_GET["finish_offer"]) {
 
 	$res = sql_query("SELECT users.username, offers.userid, offers.name FROM offers inner join users on offers.userid = users.id where offers.id = $offid") or sqlerr(__FILE__,__LINE__);
 	$arr = mysql_fetch_assoc($res);
+    $locale = get_user_locale($arr["userid"]);
 
 	$voteresyes = sql_query("SELECT COUNT(*) from offervotes where vote='yeah' and offerid=$offid");
 	$arryes = mysql_fetch_row($voteresyes);
@@ -295,24 +320,32 @@ if (isset($_GET["finish_offer"]) && $_GET["finish_offer"]) {
 	if (($yes - $no)>=$minoffervotes){
 		if ($offeruptimeout_main){
 			$timeouthour = floor($offeruptimeout_main/3600);
-			$timeoutnote = $lang_offers_target[get_user_lang($arr["userid"])]['msg_you_must_upload_in'].$timeouthour.$lang_offers_target[get_user_lang($arr["userid"])]['msg_hours_otherwise'];
+			$timeoutnote = nexus_trans("offer.msg_you_must_upload_in", [], $locale).$timeouthour.nexus_trans("offer.msg_hours_otherwise", [], $locale);
 		}
 		else $timeoutnote = "";
-		$msg = $lang_offers_target[get_user_lang($arr["userid"])]['msg_offer_voted_on']."[b][url=" . get_protocol_prefix() . $BASEURL."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b].". $lang_offers_target[get_user_lang($arr["userid"])]['msg_find_offer_option'].$timeoutnote;
+		$msg = nexus_trans("offer.msg_offer_voted_on", [], $locale)."[b][url=" . get_protocol_prefix() . $BASEURL."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b].". nexus_trans("offer.msg_find_offer_option", [], $locale).$timeoutnote;
 		sql_query ("UPDATE offers SET allowed = 'allowed',allowedtime ='".$finishvotetime."' WHERE id = $offid") or sqlerr(__FILE__,__LINE__);
 	}
 	else if(($no - $yes)>=$minoffervotes){
-		$msg = $lang_offers_target[get_user_lang($arr["userid"])]['msg_offer_voted_off']."[b][url=". get_protocol_prefix() . $BASEURL."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b].".$lang_offers_target[get_user_lang($arr["userid"])]['msg_offer_deleted'] ;
+		$msg = nexus_trans("offer.msg_offer_voted_off", [], $locale)."[b][url=". get_protocol_prefix() . $BASEURL."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b].".nexus_trans("offer.msg_offer_deleted", [], $locale) ;
 		sql_query ("UPDATE offers SET allowed = 'denied' WHERE id = $offid") or sqlerr(__FILE__,__LINE__);
 	}
 			//===use this line if you DO HAVE subject in your PM system
-	$subject = $lang_offers_target[get_user_lang($arr['userid'])]['msg_your_offer'].$arr['name'].$lang_offers_target[get_user_lang($arr['userid'])]['msg_voted_on'];
-	sql_query("INSERT INTO messages (sender, subject, receiver, added, msg) VALUES(0, ".sqlesc($subject).", {$arr['userid']}, '" . $finishvotetime . "', " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
+	$subject = nexus_trans("offer.msg_your_offer", [], $locale).$arr['name'].nexus_trans("offer.msg_voted_on", [], $locale);
+
+	\App\Models\Message::add([
+		'sender' => 0,
+		'subject' => $subject,
+		'receiver' => $arr['userid'],
+		'added' => $finishvotetime,
+		'msg' => $msg,
+	]);
+
 	//===use this line if you DO NOT subject in your PM system
 	//sql_query("INSERT INTO messages (sender, receiver, added, msg) VALUES(0, $arr['userid'], '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ")") or sqlerr(__FILE__, __LINE__);
 	write_log("{$CURUSER['username']} closed poll {$arr['name']}",'normal');
 
-	header("Refresh: 0; url=" . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
+	header("Location: " . get_protocol_prefix() . "$BASEURL/offers.php?id=$offid&off_details=1");
 	die;
 }
 //===end allow offer by vote
@@ -403,7 +436,7 @@ if (isset($_GET["take_off_edit"]) && $_GET["take_off_edit"]){
 
 	sql_query("UPDATE offers SET category=$cat, name=$name, descr=$descr where id=".sqlesc($id));
 
-	//header("Refresh: 0; url=offers.php?id=$id&off_details=1");
+	//header("Location: offers.php?id=$id&off_details=1");
 }
 //======end take offer edit
 
@@ -478,10 +511,13 @@ if (isset($_GET["vote"]) && $_GET["vote"]){
 		}
 		else
 		{
-			sql_query("UPDATE offers SET $vote = $vote + 1 WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
-
 			$res = sql_query("SELECT users.username, offers.userid, offers.name FROM offers LEFT JOIN users ON offers.userid = users.id WHERE offers.id = ".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
 			$arr = mysql_fetch_assoc($res);
+            if (!$arr) {
+                bark($lang_offers['text_nothing_found']);
+            }
+            sql_query("UPDATE offers SET $vote = $vote + 1 WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
+            $locale = get_user_locale($arr['userid']);
 
 			$rs = sql_query("SELECT yeah, against, allowed FROM offers WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
 			$ya_arr = mysql_fetch_assoc($rs);
@@ -493,22 +529,40 @@ if (isset($_GET["vote"]) && $_GET["vote"]){
 			{
 				if ($offeruptimeout_main){
 					$timeouthour = floor($offeruptimeout_main/3600);
-					$timeoutnote = $lang_offers_target[get_user_lang($arr["userid"])]['msg_you_must_upload_in'].$timeouthour.$lang_offers_target[get_user_lang($arr["userid"])]['msg_hours_otherwise'];
+					$timeoutnote = nexus_trans("offer.msg_you_must_upload_in", [], $locale).$timeouthour.nexus_trans("offer.msg_hours_otherwise", [], $locale);
 				}
 				else $timeoutnote = "";
 				sql_query("UPDATE offers SET allowed='allowed', allowedtime=".sqlesc($finishtime)." WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
-				$msg = $lang_offers_target[get_user_lang($arr['userid'])]['msg_offer_voted_on']."[b][url=". get_protocol_prefix() . $BASEURL."/offers.php?id=$offerid&off_details=1]" . $arr['name'] . "[/url][/b].". $lang_offers_target[get_user_lang($arr['userid'])]['msg_find_offer_option'].$timeoutnote;
-				$subject = $lang_offers_target[get_user_lang($arr['userid'])]['msg_your_offer_allowed'];
-				sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['userid']}, " . sqlesc(date("Y-m-d H:i:s")) . ", " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
+				$msg = nexus_trans("offer.msg_offer_voted_on", [], $locale)."[b][url=". get_protocol_prefix() . $BASEURL."/offers.php?id=$offerid&off_details=1]" . $arr['name'] . "[/url][/b].". nexus_trans("offer.msg_find_offer_option", [], $locale).$timeoutnote;
+				$subject =  nexus_trans("offer.msg_your_offer_allowed", [], $locale);
+
+				\App\Models\Message::add([
+					'sender' => 0,
+					'receiver' => $arr['userid'],
+					'msg' => $msg,
+					'subject' => $subject,
+					'added' => now(),
+				]);
+
 				write_log("System allowed offer {$arr['name']}",'normal');
 			}
 			//denied and send offer voted off message
 			if(($against-$yeah)>=$minoffervotes && $ya_arr['allowed'] != "denied")
 			{
 				sql_query("UPDATE offers SET allowed='denied' WHERE id=".sqlesc($offerid)) or sqlerr(__FILE__,__LINE__);
-				$msg = $lang_offers_target[get_user_lang($arr['userid'])]['msg_offer_voted_off']."[b][url=" . get_protocol_prefix() . $BASEURL."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b].".$lang_offers_target[get_user_lang($arr['userid'])]['msg_offer_deleted'] ;
-				$subject = $lang_offers_target[get_user_lang($arr['userid'])]['msg_offer_deleted'];
-				sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['userid']}, " . sqlesc(date("Y-m-d H:i:s")) . ", " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
+				$msg = nexus_trans("offer.msg_offer_voted_off", [], $locale)."[b][url=" . get_protocol_prefix() . $BASEURL."/offers.php?id=$offid&off_details=1]" . $arr['name'] . "[/url][/b].".nexus_trans("offer.msg_offer_deleted", [], $locale) ;
+				$subject = nexus_trans("offer.msg_offer_deleted", [], $locale);
+
+				\App\Models\Message::add([
+					'sender' => 0,
+					'receiver' => $arr['userid'],
+					'msg' => $msg,
+					'subject' => $subject,
+					'added' => now(),
+				]);
+
+
+
 				write_log("System denied offer {$arr['name']}",'normal');
 			}
 
@@ -573,13 +627,21 @@ if (isset($_GET["del_offer"]) && $_GET["del_offer"]){
 
 		if ($CURUSER["id"] != $num["userid"])
 		{
-			$added = sqlesc(date("Y-m-d H:i:s"));
-			$subject = sqlesc($lang_offers_target[get_user_lang($num["userid"])]['msg_offer_deleted']);
-			$msg = sqlesc($lang_offers_target[get_user_lang($num["userid"])]['msg_your_offer'].$num['name'].$lang_offers_target[get_user_lang($num["userid"])]['msg_was_deleted_by']. "[url=userdetails.php?id=".$CURUSER['id']."]".$CURUSER['username']."[/url]".$lang_offers_target[get_user_lang($num["userid"])]['msg_blank'].($reason != "" ? $lang_offers_target[get_user_lang($num["userid"])]['msg_reason_is'].$reason : ""));
-			sql_query("INSERT INTO messages (sender, receiver, msg, added, subject) VALUES(0, {$num['userid']}, $msg, $added, $subject)") or sqlerr(__FILE__, __LINE__);
+			$added = date("Y-m-d H:i:s");
+            $locale = get_user_locale($num["userid"]);
+			$subject = nexus_trans("offer.msg_offer_deleted", [], $locale);
+			$msg = nexus_trans("offer.msg_your_offer", [], $locale).$num['name'].nexus_trans("offer.msg_was_deleted_by", [], $locale). "[url=userdetails.php?id=".$CURUSER['id']."]".$CURUSER['username']."[/url]".nexus_trans("offer.msg_blank", [], $locale).($reason != "" ? nexus_trans("offer.msg_reason_is", [], $locale).$reason : "");
+
+			\App\Models\Message::add([
+				'sender' => 0,
+				'receiver' => $num['userid'],
+				'msg' => $msg,
+				'subject' => $subject,
+				'added' => now(),
+			]);
 		}
 		write_log("Offer: $offer ({$num['name']}) was deleted by {$CURUSER['username']}".($reason != "" ? " (".$reason.")" : ""),'normal');
-		header("Refresh: 0; url=offers.php");
+		header("Location: offers.php");
 		die;
 	}
 	else
@@ -710,7 +772,7 @@ if ($offeruptimeout_main)
 	print("<li>".$lang_offers['text_rule_four_one']."<b>".($offeruptimeout_main / 3600)."</b>".$lang_offers['text_rule_four_two']."</li>\n");
 print("</ul></div>");
 if (user_can('addoffer'))
-print("<div align=\"right\" style=\"margin-bottom: 8px;\"><a href=\"?add_offer=1\">".
+print("<div align=\"center\" style=\"margin-bottom: 8px;\"><a href=\"?add_offer=1\">".
 "<b>".$lang_offers['text_add_offer']."</b></a></div>");
 print("<div align=\"center\"><form method=\"get\" action=\"?\">".$lang_offers['text_search_offers']."&nbsp;&nbsp;<input type=\"text\" id=\"specialboxg\" name=\"search\" />&nbsp;&nbsp;");
 $cats = genrelist($browsecatmode);

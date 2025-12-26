@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\ProcessingResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Section\ProcessingResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -11,10 +12,10 @@ class EditProcessing extends EditCodec
 {
     protected static string $resource = ProcessingResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "エラー",
+	'std_missing_reason' => "不明な理由！",
+	'std_message' => "メッセージ",
+	'std_successfully_reported' => "正常に報告されました！",
+	'std_already_reported_this' => "既に報告済みです！",
+	'std_sorry' => "申し訳ありません",
+	'std_cannot_report_oneself' => "自分自身を報告することはできません！",
+	'std_invalid_user_id' => "無効なユーザーIDです！",
+	'std_cannot_report' => "報告できません ",
+	'std_are_you_sure' => "よろしいですか？",
+	'text_are_you_sure_user' => "この利用者を報告してもよろしいですか？ ",
+	'text_to_staff' => " 規則違反のためにスタッフに?",
+	'text_not_for_leechers' => "Please note, this is <b>not</b> to be used to report leechers, we have scripts in place to deal with them!",
+	'text_reason_is' => "理由 <font class=striking>(必須)</font>: ",
+	'submit_confirm' => "確認する",
+	'text_reason_note' => "<b><font class=striking> ご注意ください! </font></b>&nbsp;理由がない場合は、ご自身で警告が表示されます。",
+	'std_invalid_torrent_id' => "無効な Torrent ID です！",
+	'text_are_you_sure_torrent' => "このトレントを報告してもよろしいですか？ ",
+	'std_invalid_post_id' => "無効な投稿ID！",
+	'text_are_you_sure_post' => "フォーラムの記事を報告してもよろしいですか（ID） ",
+	'text_of_topic' => " トピックの ",
+	'text_of_torrent' => " トレントの ",
+	'text_of_offer' => " 提案の|提案の ",
+	'text_of_request' => " のリクエスト ",
+	'text_by' => ") ",
+	'std_invalid_comment_id' => "無効なコメント ID！",
+	'std_orphaned_comment' => "孤立したコメント。管理者に報告してください。",
+	'text_are_you_sure_comment' => "このコメントを報告してもよろしいですか（ID） ",
+	'std_invalid_offer_id' => "無効なオファーID！",
+	'text_are_you_sure_offer' => "次のオファーを報告してもよろしいですか？ ",
+	'std_invalid_request_id' => "無効なリクエストID！",
+	'std_are_you_sure_request' => "次のリクエストを報告してもよろしいですか？ ",
+	'std_invalid_action' => "無効なアクションです。",
+	'std_invalid_subtitle_id' => "無効な字幕ID！",
+	'text_are_you_sure_subtitle' => "字幕を報告してもよろしいですか？ ",
+);
+
+?>

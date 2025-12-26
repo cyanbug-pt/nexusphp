@@ -1,9 +1,13 @@
 <?php
 namespace Nexus;
 
+use App\Http\Middleware\Locale;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\Capsule\Manager;
+use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Nexus\Plugin\Hook;
+use Nexus\Translation\NexusTranslator;
 
 final class Nexus
 {
@@ -28,6 +32,12 @@ final class Nexus
     private static array $translationNamespaces = [];
 
     private static array $translations = [];
+
+    private static ?NexusTranslator $translator = null;
+
+    private static ?Manager $queueManager = null;
+
+    const QUEUE_CONNECTION_NAME = 'my_queue_connection';
 
     const PLATFORM_USER = 'user';
     const PLATFORM_ADMIN = 'admin';
@@ -279,29 +289,38 @@ final class Nexus
         return self::$appendFooters;
     }
 
-    public static function addTranslationNamespace($path, $namespace)
+    public static function addTranslationNamespace($path, $namespace): void
     {
         if (empty($namespace)) {
             throw new \InvalidArgumentException("namespace can not be empty");
         }
         self::$translationNamespaces[$namespace] = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if (IN_NEXUS) {
+            //只有 Nexus 下需要，Laravel 下是通过 configurePackage 中 hasTranslations() 加载的
+            self::getTranslator()->addNamespace($namespace, $path);
+        }
     }
 
     public static function trans($key, $replace = [], $locale = null)
     {
-        if (!IN_NEXUS) {
+        if (is_null($locale)) {
+            $locale = get_langfolder_cookie(true);
+        }
+        if (IN_NEXUS) {
+            return self::getTranslator()->trans($key, $replace, $locale);
+        } else {
             return trans($key, $replace, $locale);
         }
-        if (empty(self::$translations)) {
-            //load from default lang dir
-            $langDir = ROOT_PATH . 'resources/lang/';
-            self::loadTranslations($langDir);
-            //load from namespace
-            foreach (self::$translationNamespaces as $namespace => $path) {
-                self::loadTranslations($path, $namespace);
-            }
-        }
-        return self::getTranslation($key, $replace, $locale);
+//        if (empty(self::$translations)) {
+//            //load from default lang dir
+//            $langDir = ROOT_PATH . 'resources/lang/';
+//            self::loadTranslations($langDir);
+//            //load from namespace
+//            foreach (self::$translationNamespaces as $namespace => $path) {
+//                self::loadTranslations($path, $namespace);
+//            }
+//        }
+//        return self::getTranslation($key, $replace, $locale ?? get_langfolder_cookie(true));
     }
 
     private static function loadTranslations($path, $namespace = null)
@@ -361,6 +380,49 @@ final class Nexus
         }
 //        do_log("key: $key, locale: $locale, namespace: $namespace, getKey: $getKey", 'debug');
         return $getKey;
+    }
+
+    private static function getTranslator(): NexusTranslator
+    {
+        if (is_null(self::$translator)) {
+            self::$translator = new NexusTranslator(Locale::getDefault());
+        }
+        return self::$translator;
+    }
+
+    private static function getQueueManager(): Manager
+    {
+        if (is_null(self::$queueManager)) {
+            $container = Container::getInstance();
+            $redisConfig = nexus_config('nexus.redis');
+            $redisConnectionName = "my_redis_connection";
+            $container->singleton('redis', function ($app) use ($redisConfig, $redisConnectionName)  {
+                $redisDriver = "phpredis";
+                // 这里的配置应该匹配 redis.php 配置文件中的 default 连接
+                $connectionConfig = [
+                    'client' => $redisDriver,
+                    $redisConnectionName => $redisConfig
+                ];
+                return new RedisManager($app, $redisDriver, $connectionConfig);
+            });
+            $queueManager = new Manager($container);
+            $queueManager->addConnection([
+                'driver' => 'redis',
+                'host' => $redisConfig['host'],
+                'password' => $redisConfig['password'],
+                'queue' => 'nexus_queue', // 队列名称
+                'connection' => $redisConnectionName, // Redis 连接名称，类似注册的 'redis' 服务中的 'default'
+            ], self::QUEUE_CONNECTION_NAME); // 将这个 queue 连接起个不一样的名字
+            $queueManager->setAsGlobal();
+            self::$queueManager = $queueManager;
+        }
+        return self::$queueManager;
+    }
+
+    public static function dispatchQueueJob(ShouldQueue $job): void
+    {
+        self::getQueueManager()->connection(self::QUEUE_CONNECTION_NAME)->push($job);
+        do_log("dispatchQueueJob: " . nexus_json_encode($job));
     }
 
 

@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'daily'),
+    'default' => env('LOG_CHANNEL', 'single'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,21 +37,22 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
 
         'single' => [
             'driver' => 'single',
             'tap' => [\App\Logging\NexusFormatter::class],
-            'path' => env('LOG_FILE', '/tmp/nexus.log'),
+            'path' => getLogFile(),
             'level' => env('LOG_LEVEL', 'debug'),
             'ignore_exceptions' => false,
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => env('LOG_FILE', '/tmp/nexus.log'),
+//            'path' => env('LOG_FILE', '/tmp/nexus.log'),
+            'path' => getLogFile(),
             'level' => env('LOG_LEVEL', 'debug'),
             'tap' => [\App\Logging\NexusFormatter::class],
             'days' => 14,
@@ -104,7 +105,8 @@ return [
         ],
 
         'emergency' => [
-            'path' => env('LOG_FILE', '/tmp/nexus.log'),
+//            'path' => env('LOG_FILE', '/tmp/nexus.log'),
+            'path' => getLogFile(),
         ],
     ],
 

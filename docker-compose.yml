@@ -1,0 +1,164 @@
+services:
+  php:
+    build:
+      context: ./.docker/php
+    image: nexusphp_php
+    container_name: nexusphp-php
+    environment:
+      SERVICE_NAME: php
+    volumes:
+      - .:/var/www/html
+      - ${NP_BACKUP_EXPORT_PATH:-/tmp/nexusphp_backup}:${NP_BACKUP_EXPORT_PATH:-/tmp/nexusphp_backup}
+    depends_on:
+      - mysql
+      - redis
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  queue:
+    image: nexusphp_php
+    container_name: nexusphp-queue
+    environment:
+      SERVICE_NAME: queue
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - php
+      - redis
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+    restart: always
+
+  scheduler:
+    image: nexusphp_php
+    container_name: nexusphp-scheduler
+    environment:
+      SERVICE_NAME: scheduler
+    volumes:
+      - .:/var/www/html
+      - ${NP_BACKUP_EXPORT_PATH:-/tmp/nexusphp_backup}:${NP_BACKUP_EXPORT_PATH:-/tmp/nexusphp_backup}
+    depends_on:
+      - php
+      - redis
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+    restart: always
+
+  cleanup:
+    image: nexusphp_php
+    container_name: nexusphp-cleanup
+    environment:
+      SERVICE_NAME: cleanup
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - php
+      - redis
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+    restart: always
+
+  openresty:
+    build:
+      context: ./.docker/openresty
+    container_name: nexusphp-openresty
+    environment:
+      NP_DOMAIN: ${NP_DOMAIN:-localhost}
+      NP_PORT: ${NP_PORT:-80}
+    volumes:
+      - ./.docker/openresty/sites:/etc/nginx/conf.d/sites
+      - ./.docker/openresty/certs:/certs
+      - ./.docker/openresty/entrypoint.sh:/usr/local/bin/entrypoint.sh
+      - ./.docker/openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./.docker/openresty/lua:/usr/local/openresty/lua
+      - .:/var/www/html
+    depends_on:
+      - php
+      - phpmyadmin
+    command: ["/bin/sh", "/usr/local/bin/entrypoint.sh"]
+    ports:
+      - "${NP_PORT:-80}:${NP_PORT:-80}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  redis:
+    image: redis:alpine
+    container_name: nexusphp-redis
+    command: redis-server
+    volumes:
+      - redis-data:/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  mysql:
+    image: mysql:9
+    container_name: nexusphp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_DATABASE:-nexusphp}
+      MYSQL_USER: ${DB_USERNAME:-nexusphp}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-nexusphp}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: nexusphp-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    networks:
+      - appnet
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  appnet:

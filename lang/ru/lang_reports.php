@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Нет отчета.",
+	'head_reports' => "Отчёты",
+	'text_reports' => "Отчёты",
+	'col_added' => "Добавлено",
+	'col_reporter' => "Жалоба",
+	'col_reporting' => "Представление докладов",
+	'col_type' => "Тип",
+	'col_reason' => "Причина",
+	'col_dealt_with' => "Сделка с",
+	'col_action' => "Акт.",
+	'text_yes' => "Да",
+	'text_no' => "Нет",
+	'text_torrent' => "Торрент",
+	'text_torrent_does_not_exist' => "Торрент не существует или удалён.",
+	'text_user' => "Пользователь",
+	'text_user_does_not_exist' => "Пользователь не существует или удалён.",
+	'text_offer' => "Предложение",
+	'text_offer_does_not_exist' => "Предложение не существует или удалено.",
+	'text_forum_post' => "Сообщение на форуме",
+	'text_post_does_not_exist' => "Сообщение не существует или удалено.",
+	'text_post_id' => "ID поста ",
+	'text_of_topic' => " темы ",
+	'text_by' => " от ",
+	'text_comment' => "Комментарий",
+	'text_comment_does_not_exist' => "Комментарий не существует или удалён.",
+	'text_of_torrent' => " торрент ",
+	'text_of_offer' => " оферты ",
+	'text_comment_id' => "ID комментария ",
+	'text_subtitle' => "Субтитры",
+	'text_subtitle_does_not_exist' => "Субтитры не существуют или удалены.",
+	'text_for_torrent_id' => " для торрента ID ",
+	'submit_set_dealt' => "Установить сделку",
+	'submit_delete' => "Удалить",
+);
+
+?>

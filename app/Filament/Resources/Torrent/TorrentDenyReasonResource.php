@@ -2,13 +2,19 @@
 
 namespace App\Filament\Resources\Torrent;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Torrent\TorrentDenyReasonResource\Pages\ManageTorrentDenyReasons;
 use App\Filament\Resources\Torrent\TorrentDenyReasonResource\Pages;
 use App\Filament\Resources\Torrent\TorrentDenyReasonResource\RelationManagers;
 use App\Models\TorrentDenyReason;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +23,13 @@ class TorrentDenyReasonResource extends Resource
 {
     protected static ?string $model = TorrentDenyReason::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-ban';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-no-symbol';
 
-    protected static ?string $navigationGroup = 'Torrent';
+    protected static string | \UnitEnum | null $navigationGroup = 'Torrent';
 
     protected static ?int $navigationSort = 3;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.torrent_deny_reason');
     }
@@ -33,12 +39,12 @@ class TorrentDenyReasonResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->required()->label(__('label.name')),
-                Forms\Components\TextInput::make('priority')->integer()->label(__('label.priority'))->default(0),
+        return $schema
+            ->components([
+                TextInput::make('name')->required()->label(__('label.name')),
+                TextInput::make('priority')->integer()->label(__('label.priority'))->default(0),
             ])->columns(1);
     }
 
@@ -46,28 +52,28 @@ class TorrentDenyReasonResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->label(__('label.name')),
-                Tables\Columns\TextColumn::make('priority')->label(__('label.priority'))->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at')),
+                TextColumn::make('id'),
+                TextColumn::make('name')->label(__('label.name')),
+                TextColumn::make('priority')->label(__('label.priority'))->sortable(),
+                TextColumn::make('created_at')->label(__('label.created_at')),
             ])
             ->defaultSort('priority', 'desc')
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTorrentDenyReasons::route('/'),
+            'index' => ManageTorrentDenyReasons::route('/'),
         ];
     }
 }

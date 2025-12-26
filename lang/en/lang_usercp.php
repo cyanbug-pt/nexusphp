@@ -117,7 +117,7 @@ $lang_usercp = array
 	'text_ago' => " ago",
 	'mail_here' => "HERE",
 	'mail_change_email_one' => "You have requested that your user profile (username ",
-	'mail_change_email_two' => ") on ".$SITENAME." should be updated with this email address ",
+	'mail_change_email_two' => ") on %s should be updated with this email address ",
 	'mail_change_email_three' => " as user contact.",
 	'mail_change_email_four' => "If you did not do this, please ignore this email. The person who entered your email address had the IP address ",
 	'mail_change_email_five' => ". Please do not reply.",
@@ -125,7 +125,7 @@ $lang_usercp = array
 	'mail_change_email_six_1' => "&nbsp;to confirm",
 	'mail_change_email_seven' => "Your new email address will appear in your profile after you do this. Otherwise your profile will remain unchanged.",
 	'mail_change_email_eight' => "<br />Yours,",
-	'mail_change_email_nine' => "The ".$SITENAME." Team.",
+	'mail_change_email_nine' => "The %s Team.",
 	'mail_profile_change_confirmation' => " profile change confirmation",
 	'text_go_back' => "go back",
 	'text_category'	=> "Category",
@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Register',
     'checkbox_pm_on_topic_reply' => 'Notify me when there are new replies to forum posts',
     'checkbox_pm_on_hr_reached' => 'Notify me when H&R reaches target',
+    'row_tracker_url' => 'Tracker URL',
+    'row_tracker_url_help' => '<b>Note:</b> Once selected, announce can only be sent to the selected link. By default, announce can only be sent to the first default link in the list.',
 );
 
 ?>

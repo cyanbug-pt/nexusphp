@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Nexus\Database\NexusDB;
 
@@ -41,19 +42,19 @@ class UpdateUserSeedingLeechingTime implements ShouldQueue
         $this->requestId = $requestId;
     }
 
-    /**
-     * Determine the time at which the job should timeout.
-     *
-     * @return \DateTime
-     */
-    public function retryUntil()
-    {
-        return now()->addSeconds(Setting::get('main.autoclean_interval_four'));
-    }
-
     public $tries = 1;
 
     public $timeout = 3600;
+
+    /**
+     * 获取任务时，应该通过的中间件。
+     *
+     * @return array
+     */
+    public function middleware()
+    {
+        return [new WithoutOverlapping($this->idRedisKey)];
+    }
 
     /**
      * Execute the job.
@@ -63,9 +64,12 @@ class UpdateUserSeedingLeechingTime implements ShouldQueue
     public function handle()
     {
         $beginTimestamp = time();
-        $logPrefix = sprintf("[CLEANUP_CLI_UPDATE_SEEDING_LEECHING_TIME_HANDLE_JOB], commonRequestId: %s, beginUid: %s, endUid: %s", $this->requestId, $this->beginUid, $this->endUid);
+        $logPrefix = sprintf(
+            "[CLEANUP_CLI_UPDATE_SEEDING_LEECHING_TIME_HANDLE_JOB], commonRequestId: %s, beginUid: %s, endUid: %s, idStr: %s, idRedisKey: %s",
+            $this->requestId, $this->beginUid, $this->endUid, $this->idStr, $this->idRedisKey,
+        );
+        do_log("$logPrefix, job start ...");
 
-        $count = 0;
         $idStr = $this->idStr;
         $delIdRedisKey = false;
         if (empty($idStr) && !empty($this->idRedisKey)) {
@@ -76,33 +80,39 @@ class UpdateUserSeedingLeechingTime implements ShouldQueue
             do_log("$logPrefix, no idStr or idRedisKey", "error");
             return;
         }
-        $uidArr = explode(",", $idStr);
-        foreach ($uidArr as $uid) {
-            if ($uid <= 0) {
-                continue;
-            }
-            $sumInfo = NexusDB::table('snatched')
-                ->selectRaw('sum(seedtime) as seedtime_sum, sum(leechtime) as leechtime_sum')
-                ->where('userid', $uid)
-                ->first();
-            if ($sumInfo && $sumInfo->seedtime_sum !== null) {
-                $update = [
-                    'seedtime' => $sumInfo->seedtime_sum ?? 0,
-                    'leechtime' => $sumInfo->leechtime_sum ?? 0,
-                    'seed_time_updated_at' => Carbon::now()->toDateTimeString(),
-                ];
-                NexusDB::table('users')
-                    ->where('id', $uid)
-                    ->update($update);
-                do_log("[CLEANUP_CLI_UPDATE_SEEDING_LEECHING_TIME_HANDLE_USER], [SUCCESS]: $uid => " . json_encode($update));
-                $count++;
-            }
+        //批量取，简单化
+//        $res = sql_query("select userid, sum(seedtime) as seedtime_sum, sum(leechtime) as leechtime_sum from snatched group by userid where userid in ($idStr)");
+        $res = NexusDB::table("snatched")
+            ->selectRaw("userid, sum(seedtime) as seedtime_sum, sum(leechtime) as leechtime_sum")
+            ->whereRaw("userid in ($idStr)")
+            ->groupBy("userid")
+            ->get();
+        if ($res->isEmpty()) {
+            do_log("$logPrefix, no data from idStr: $idStr", "error");
+            return;
         }
+        $seedtimeUpdates = $leechTimeUpdates = [];
+        $nowStr = now()->toDateTimeString();
+        $count = 0;
+        foreach ($res as $row) {
+            $count++;
+            $seedtimeUpdates[] = sprintf("when %d then %d", $row->userid, $row->seedtime_sum ?? 0);
+            $leechTimeUpdates[] = sprintf("when %d then %d", $row->userid, $row->leechtime_sum ?? 0);
+        }
+        $sql = sprintf(
+            "update users set seedtime = case id %s end, leechtime = case id %s end, seed_time_updated_at = '%s' where id in (%s)",
+            implode(" ", $seedtimeUpdates), implode(" ", $leechTimeUpdates), $nowStr, $idStr
+        );
+        $result = NexusDB::statement($sql);
         if ($delIdRedisKey) {
             NexusDB::cache_del($this->idRedisKey);
         }
         $costTime = time() - $beginTimestamp;
-        do_log("$logPrefix, [DONE], user total count: " . count($uidArr) . ", success update count: $count, cost time: $costTime seconds");
+        do_log(sprintf(
+            "$logPrefix, [DONE], update user count: %s, result: %s, cost time: %s seconds",
+            $count, var_export($result, true), $costTime
+        ));
+        do_log("$logPrefix, sql: $sql", "debug");
     }
 
     /**

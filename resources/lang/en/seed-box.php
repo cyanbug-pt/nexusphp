@@ -14,4 +14,6 @@ return [
         'subject' => 'SeedBox record status changed',
         'body' => 'The status of your SeedBox record with ID :id was changed by :operator from :old_status to :new_status. Reason: :reason',
     ],
+    'is_seed_box_yes' => 'This IP is SeedBox',
+    'is_seed_box_no' => 'This IP is not SeedBox',
 ];

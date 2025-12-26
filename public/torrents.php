@@ -2,7 +2,7 @@
 require_once("../include/bittorrent.php");
 dbconn(true);
 require_once(get_langfile_path('torrents.php'));
-require_once(get_langfile_path('speical.php'));
+require_once(get_langfile_path('special.php'));
 loggedinorreturn();
 parked();
 
@@ -16,7 +16,7 @@ switch (nexus()->getScript()) {
             httperr();
         }
         if (!user_can('view_special_torrent')) {
-            stderr($lang_special['std_sorry'],$lang_special['std_permission_denied_only'].get_user_class_name(get_setting('authority.view_special_torrent'),false,true,true).$lang_special['std_or_above_can_view'],false);
+            stderr($lang_special['std_sorry'],$lang_special['std_permission_denied_only'].get_user_class_name(get_setting('authority.view_special_torrent'),false,true,true).sprintf($lang_special['std_or_above_can_view'], \App\Models\Setting::getSiteName()),false);
         }
         $sectiontype = $specialcatmode;
         break;
@@ -116,6 +116,7 @@ $wherestandardina = array();
 $whereprocessingina = array();
 $whereteamina = array();
 $whereaudiocodecina = array();
+$whereothera = [];
 //----------------- start whether show torrents from all sections---------------------//
 if ($_GET)
 	$allsec = intval($_GET["allsec"] ?? 0);
@@ -161,11 +162,6 @@ elseif ($inclbookmarked == 2)		//not bookmarked
 }
 // ----------------- end bookmarked ---------------------//
 
-if (!isset($CURUSER) || !user_can('seebanned')) {
-    $wherea[] = "banned = 'no'";
-    $searchParams["banned"] = 'no';
-}
-
 // ----------------- start include dead ---------------------//
 if (isset($_GET["incldead"]))
 	$include_dead = intval($_GET["incldead"] ?? 0);
@@ -192,14 +188,23 @@ if ($include_dead == 0)  //all(active,dead)
 elseif ($include_dead == 1)		//active
 {
 	$addparam .= "incldead=1&";
-	$wherea[] = "visible = 'yes'";
+//	$wherea[] = "visible = 'yes'";
+    $whereothera[] = "visible = 'yes'";
 }
 elseif ($include_dead == 2)		//dead
 {
 	$addparam .= "incldead=2&";
-	$wherea[] = "visible = 'no'";
+//	$wherea[] = "visible = 'no'";
+    $whereothera[] = "visible = 'no'";
 }
 // ----------------- end include dead ---------------------//
+
+if (!isset($CURUSER) || !user_can('seebanned')) {
+//    $wherea[] = "banned = 'no'";
+    $whereothera[] = "banned = 'no'";
+    $searchParams["banned"] = 'no';
+}
+
 $special_state = 0;
 if ($_GET)
 	$special_state = intval($_GET["spstate"] ?? 0);
@@ -738,7 +743,7 @@ if (isset($searchstr))
 				{
 					$searchstr_element = trim($searchstr_element);	// furthur trim to ensure that multi space seperated words still work
 					$searchstr_exploded_count++;
-					if ($searchstr_exploded_count > 10)	// maximum 10 keywords
+					if ($searchstr_exploded_count > 3)	// maximum 3 keywords
 					break;
 					$like_expression_array[] = " LIKE '%" . $searchstr_element. "%'";
 				}
@@ -769,7 +774,8 @@ if (isset($searchstr))
 		case 1	:	// torrent description
 		{
 			foreach ($like_expression_array as &$like_expression_array_element)
-			$like_expression_array_element = "torrents.descr". $like_expression_array_element;
+//			$like_expression_array_element = "torrents.descr". $like_expression_array_element;
+			$like_expression_array_element = "torrent_extras.descr". $like_expression_array_element;
 			$wherea[] =  implode($ANDOR,  $like_expression_array);
 			break;
 		}
@@ -906,6 +912,10 @@ $where .= ($where ? " AND " : "") . "team IN(" . $whereteamin . ")";
 if ($whereaudiocodecin)
 $where .= ($where ? " AND " : "") . "audiocodec IN(" . $whereaudiocodecin . ")";
 }
+//last
+if (!empty($whereothera)) {
+    $where .= ($where ? " AND " : "") . implode(" AND ", $whereothera);
+}
 
 $tagFilter = "";
 $tagId = intval($_REQUEST['tag_id'] ?? 0);
@@ -913,12 +923,16 @@ if ($tagId > 0) {
     $tagFilter = " inner join torrent_tags on torrents.id = torrent_tags.torrent_id and torrent_tags.tag_id = $tagId ";
     $addparam .= "tag_id={$tagId}&";
 }
+$torrentExtraFilter = "";
+if ($search_area == 1) {
+    $torrentExtraFilter = " inner join torrent_extras on torrents.id = torrent_extras.torrent_id ";
+}
 if ($allsec == 1 || $enablespecial != 'yes')
 {
 	if ($where != "")
 		$where = "WHERE $where ";
 	else $where = "";
-	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where;
+	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
 }
 else
 {
@@ -930,7 +944,7 @@ else
         $where = "WHERE $where";
     else $where = "";
 //	$sql = "SELECT COUNT(*), categories.mode FROM torrents LEFT JOIN categories ON category = categories.id " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where . " GROUP BY categories.mode";
-	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $where;
+	$sql = "SELECT COUNT(*) FROM torrents " . ($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "") . $tagFilter . $torrentExtraFilter . $where;
 }
 
 if ($shouldUseMeili) {
@@ -938,20 +952,25 @@ if ($shouldUseMeili) {
     $resultFromSearchRep = $searchRep->search($searchParams, $CURUSER['id']);
     $count = $resultFromSearchRep['total'];
 } else {
+    do_log("[BEFORE_TORRENT_COUNT_SQL]", 'debug');
     $res = sql_query($sql);
+    do_log("[AFTER_TORRENT_COUNT_SQL] $sql", 'debug');
     $count = 0;
     while($row = mysql_fetch_array($res)) {
         $count += $row[0];
     }
 }
-
-if ($CURUSER["torrentsperpage"])
-$torrentsperpage = (int)$CURUSER["torrentsperpage"];
-elseif ($torrentsperpage_main)
-	$torrentsperpage = $torrentsperpage_main;
-else $torrentsperpage = 100;
-
-do_log("[TORRENT_COUNT_SQL] $sql", 'debug');
+$maxPageSize = 100;
+if (!empty($_GET['pageSize'])) {
+    $torrentsperpage = $_GET['pageSize'];
+} elseif ($CURUSER["torrentsperpage"]) {
+    $torrentsperpage = (int)$CURUSER["torrentsperpage"];
+} elseif ($torrentsperpage_main) {
+    $torrentsperpage = $torrentsperpage_main;
+} else {
+    $torrentsperpage = $maxPageSize;
+}
+$torrentsperpage = min($maxPageSize, $torrentsperpage);
 
 if ($count)
 {
@@ -986,11 +1005,13 @@ if ($count)
 //        $query = "SELECT $fieldsStr FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")." $tagFilter $where $orderby $limit";
 //    } else {
 //        $query = "SELECT $fieldsStr, categories.mode as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")." LEFT JOIN categories ON torrents.category=categories.id $tagFilter $where $orderby $limit";
-        $query = "SELECT $fieldsStr, $sectiontype as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")."$tagFilter $where $orderby $limit";
+        $query = "SELECT $fieldsStr, $sectiontype as search_box_id FROM torrents ".($search_area == 3 || $column == "owner" ? "LEFT JOIN users ON torrents.owner = users.id " : "")."$tagFilter $torrentExtraFilter $where $orderby $limit";
 //    }
-    do_log("[TORRENT_LIST_SQL] $query", 'debug');
+
     if (!$shouldUseMeili) {
+        do_log("[BEFORE_TORRENT_LIST_SQL]", 'debug');
         $res = sql_query($query);
+        do_log("[AFTER_TORRENT_LIST_SQL] $query", 'debug');
     }
 } else {
     unset($res);

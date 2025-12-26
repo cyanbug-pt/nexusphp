@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'business_types' => [
+        \App\Models\BonusLogs::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => 'Anuluj H&R',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_MEDAL => 'Kup medal',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_ATTENDANCE_CARD => 'Kup kartę obecności',
+        \App\Models\BonusLogs::BUSINESS_TYPE_STICKY_PROMOTION => 'Przyklejona promocja',
+        \App\Models\BonusLogs::BUSINESS_TYPE_POST_REWARD => 'Opublikuj nagrodę',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD => 'Wymiana przesłana',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE => 'Kup zaproszenie',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CUSTOM_TITLE => 'Własny tytuł',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_VIP => 'Kup VIP',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE => 'Prezent dla kogoś',
+        \App\Models\BonusLogs::BUSINESS_TYPE_NO_AD => 'Anuluj reklamę',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_LOW_SHARE_RATIO => 'Wskaźnik akcji prezentu do niskiego',
+        \App\Models\BonusLogs::BUSINESS_TYPE_LUCKY_DRAW => 'Szczęśliwy rysunek',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD => 'Wymiana pobrana',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TEMPORARY_INVITE => 'Kup tymczasowe zaproszenie',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_RAINBOW_ID => 'Kup ID tęczy',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Kup kartę zmiany nazwy użytkownika',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'medal prezentu',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Kup torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Nagroda torrent',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Wynagrodzenie za pracę w roli',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent jest pobierany',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Odbierz nagrodę',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Odbierz prezent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Prześlij torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Nagroda za otrzymywanie torrentów',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seedowanie podstawowe',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Dodanie dawcy do materiału siewnego',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Seedowanie oficjalnego dodania',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Dodanie harem do siewu',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Dodanie medalu do siewu',
+    ],
+    'fields' => [
+        'business_type' => 'Rodzaj działalności',
+        'old_total_value' => 'Wartość przedtransakcyjna',
+        'value' => 'Wartość transakcyjna',
+        'new_total_value' => 'Wartość potransakcyjna',
+    ],
+    'exclude_seeding_bonus' => 'Wyklucz bonus do seedowania',
+];

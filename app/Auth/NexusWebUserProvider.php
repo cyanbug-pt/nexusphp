@@ -61,10 +61,11 @@ class NexusWebUserProvider implements UserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        if (!empty($credentials['c_secure_uid'])) {
-            $b_id = base64($credentials["c_secure_uid"],false);
-            return $this->query->find($b_id);
+        $result = get_user_id_and_signature_from_cookie($credentials);
+        if (empty($result)) {
+            return null;
         }
+        return $this->retrieveById($result['user_id']);
     }
 
     /**
@@ -76,20 +77,13 @@ class NexusWebUserProvider implements UserProvider
      */
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
-        if ($credentials["c_secure_login"] == base64("yeah")) {
-            /**
-             * Not IP related
-             * @since 1.8.0
-             */
-            if ($credentials["c_secure_pass"] != md5($user->passhash)) {
-                return false;
-            }
-        } else {
-            if ($credentials["c_secure_pass"] !== md5($user->passhash)) {
-                return false;
-            }
-        }
-        return true;
+        list($tokenJson, $signature) = explode('.', base64_decode($credentials["c_secure_pass"]));
+        $expectedSignature = hash_hmac('sha256', $tokenJson, $user->auth_key);
+        return  hash_equals($expectedSignature, $signature);
     }
 
+    public function rehashPasswordIfRequired(Authenticatable $user, #[\SensitiveParameter] array $credentials, bool $force = false)
+    {
+        // TODO: Implement rehashPasswordIfRequired() method.
+    }
 }

@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'カスタムフィールド管理',
+    'text_manage' => '管理',
+    'text_add' => '追加',
+    'text_field' => 'フィールド',
+    'text_delete' => '削除',
+    'text_edit' => '編集',
+    'col_id' => 'ID',
+    'col_name' => '名前',
+    'col_name_help' => '数字、アルファベット、下線のみを許可する',
+    'col_label' => '表示ラベル',
+    'col_type' => 'タイプ',
+    'col_required' => '必須',
+    'col_help' => 'ヘルプテキスト',
+    'col_options' => 'オプション',
+    'col_options_help' => 'タイプがラジオ、チェックボックス、選択時に必要です。1行、1オプション、書式: 値|テキストを表示',
+    'col_action' => 'アクション',
+    'col_is_single_row' => '1行に表示',
+    'js_sure_to_delete_this' => '削除しますか？',
+    'submit_submit' => '送信',
+    'field_type_text' => '短いテキスト',
+    'field_type_textarea' => '長いテキスト',
+    'field_type_radio' => '水平単一選択',
+    'field_type_checkbox' => '水平方向の複数選択',
+    'field_type_select' => '垂直方向の単一選択',
+    'field_type_image' => '画像',
+    'col_display' => 'カスタム表示',
+
+];

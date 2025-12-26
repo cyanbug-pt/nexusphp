@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\IconResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\EditRedirectIndexTrait;
 use App\Filament\Resources\Section\IconResource;
 use Filament\Pages\Actions;
@@ -13,13 +14,19 @@ class EditIcon extends EditRecord
 
     protected static string $resource = IconResource::class;
 
-    protected static string $view = 'filament.resources.system.category-icon-resource.pages.edit-record';
+//    protected static string $view = 'filament.resources.system.category-icon-resource.pages.edit-record';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['tip'] = nexus_trans('label.icon.desc');
+        return $data;
     }
 
     protected function getViewData(): array

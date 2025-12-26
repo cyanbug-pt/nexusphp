@@ -2,7 +2,7 @@
 require_once("../include/bittorrent.php");
 dbconn();
 require_once(get_langfile_path());
-require_once(get_langfile_path("",true));
+//require_once(get_langfile_path("",true));
 loggedinorreturn();
 user_can('torrent-delete', true);
 function bark($msg) {
@@ -70,11 +70,18 @@ if ($row['anonymous'] == 'yes' && $CURUSER["id"] == $row["owner"]) {
 KPS("-",$uploadtorrent_bonus,$row["owner"]);
 
 //Send pm to torrent uploader
-if ($CURUSER["id"] != $row["owner"]){
-	$dt = sqlesc(date("Y-m-d H:i:s"));
-	$subject = sqlesc($lang_delete_target[get_user_lang($row["owner"])]['msg_torrent_deleted']);
-	$msg = sqlesc($lang_delete_target[get_user_lang($row["owner"])]['msg_the_torrent_you_uploaded'].$row['name'].$lang_delete_target[get_user_lang($row["owner"])]['msg_was_deleted_by']."[url=userdetails.php?id=".$CURUSER['id']."]".$CURUSER['username']."[/url]".$lang_delete_target[get_user_lang($row["owner"])]['msg_reason_is'].$reasonstr);
-	sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, {$row['owner']}, $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
+if ($CURUSER["id"] != $row["owner"] && \App\Models\User::exists($row["owner"])){
+	$dt = date("Y-m-d H:i:s");
+    $locale = get_user_locale($row["owner"]);
+    $subject = nexus_trans("torrent.msg_torrent_deleted", [], $locale);
+    $msg = nexus_trans("torrent.msg_the_torrent_you_uploaded", [], $locale).$row['name'].nexus_trans("torrent.msg_was_deleted_by", [], $locale)."[url=userdetails.php?id=".$CURUSER['id']."]".$CURUSER['username']."[/url]".nexus_trans("torrent.msg_reason_is", [], $locale).$reasonstr;
+    \App\Models\Message::add([
+        'sender' => 0,
+        'receiver' => $row['owner'],
+        'subject' => $subject,
+        'msg' => $msg,
+        'added' => $dt,
+    ]);
 }
 stdhead($lang_delete['head_torrent_deleted']);
 

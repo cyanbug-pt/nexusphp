@@ -11,7 +11,7 @@ class ListSettings extends PageList
 {
     protected static string $resource = SettingResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

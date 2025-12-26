@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Tilpasset feltbehandling',
+    'text_manage' => 'Administrer',
+    'text_add' => 'Legg til',
+    'text_field' => 'Felt',
+    'text_delete' => 'Slett',
+    'text_edit' => 'Rediger',
+    'col_id' => 'ID',
+    'col_name' => 'Navn',
+    'col_name_help' => 'Kun tillat siffer, inneholde bokstaver, understreking',
+    'col_label' => 'Vis etikett',
+    'col_type' => 'Type:',
+    'col_required' => 'Påkrevd',
+    'col_help' => 'Hjelp tekst',
+    'col_options' => 'Alternativer',
+    'col_options_help' => 'Kreves når typen er radio, sjekkboks, valg. En linje, et alternativ, format: verdi° vist tekst',
+    'col_action' => 'Handling',
+    'col_is_single_row' => 'Vise på en enkelt rad',
+    'js_sure_to_delete_this' => 'Sikker på at du vil slette?',
+    'submit_submit' => 'Send',
+    'field_type_text' => 'Kort tekst',
+    'field_type_textarea' => 'Lang tekst',
+    'field_type_radio' => 'Horisontalt enkelt valg',
+    'field_type_checkbox' => 'Horisontal flere valg',
+    'field_type_select' => 'Vertikalt enkeltvalg',
+    'field_type_image' => 'Bilde',
+    'col_display' => 'Tilpasset skjerm',
+
+];

@@ -254,6 +254,8 @@ $lang_usercp = array
     'add_seed_box_btn' => '登記',
     'checkbox_pm_on_topic_reply' => '論壇帖子有新回復時通知我',
     'checkbox_pm_on_hr_reached' => 'H&R 達標時通知我',
+    'row_tracker_url' => 'Tracker URL',
+    'row_tracker_url_help' => '<b>注意：</b>選擇後只能向選中的鏈接匯報。默認只能向列表中的第 1 個默認鏈接匯報。',
 );
 
 ?>

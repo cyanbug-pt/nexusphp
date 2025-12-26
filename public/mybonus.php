@@ -2,7 +2,7 @@
 require_once('../include/bittorrent.php');
 dbconn();
 require_once(get_langfile_path());
-require(get_langfile_path("",true));
+//require(get_langfile_path("",true));
 loggedinorreturn();
 parked();
 
@@ -340,7 +340,7 @@ if (isset($do)) {
 	elseif ($do == "vipfalse")
 	$msg =  $lang_mybonus['text_no_permission'];
 	elseif ($do == "title")
-	$msg = $lang_mybonus['text_success_custom_title'];
+	$msg = sprintf($lang_mybonus['text_success_custom_title'], $CURUSER['title']);
 	elseif ($do == "transfer")
 	$msg =  $lang_mybonus['text_success_gift'];
 	elseif ($do == "noad")
@@ -392,6 +392,7 @@ for ($i=0; $i < count($allBonus); $i++)
     ) {
         continue;
     }
+    $bonusarrray['points'] = floatval($bonusarray['points']);
 
 	print("<tr>");
 	print("<form action=\"?action=exchange\" method=\"post\">");
@@ -509,6 +510,10 @@ print("<ul>");
 if ($perseeding_bonus > 0)
 	print("<li>".$perseeding_bonus.$lang_mybonus['text_point'].add_s($perseeding_bonus).$lang_mybonus['text_for_seeding_torrent'].$maxseeding_bonus.$lang_mybonus['text_torrent'].add_s($maxseeding_bonus).")</li>");
 print("<li>".$lang_mybonus['text_bonus_formula_one'].$tzero_bonus.$lang_mybonus['text_bonus_formula_two'].$nzero_bonus.$lang_mybonus['text_bonus_formula_wi'].get_setting('bonus.zero_bonus_factor').$lang_mybonus['text_bonus_formula_three'].$bzero_bonus.$lang_mybonus['text_bonus_formula_four'].$l_bonus.$lang_mybonus['text_bonus_formula_five']."</li>");
+$minSize = get_setting('bonus.min_size');
+if ($minSize > 0) {
+    print("<li>".sprintf($lang_mybonus['text_bonus_mini_size'], mksize($minSize))."</li>");
+}
 if ($donortimes_bonus)
 	print("<li>".$lang_mybonus['text_donors_always_get'].$donortimes_bonus.$lang_mybonus['text_times_of_bonus']."</li>");
 
@@ -604,7 +609,7 @@ if ($action == "exchange") {
 	$userid = $CURUSER['id'];
 	$art = $bonusarray['art'];
 
-	$bonuscomment = $CURUSER['bonuscomment'];
+//	$bonuscomment = $CURUSER['bonuscomment'];
 	$seedbonus=$CURUSER['seedbonus']-$points;
 
 	if($CURUSER['seedbonus'] >= $points) {
@@ -632,6 +637,10 @@ if ($action == "exchange") {
 			else {
 			$upload = $CURUSER['uploaded'];
 			$up = $upload + $bonusarray['menge'];
+            do_log(sprintf(
+                "user: %s going to use %s bonus to exchange uploaded from %s to %s",
+                $CURUSER['id'], $points, $CURUSER['uploaded'], $up
+            ));
 //			$bonuscomment = date("Y-m-d") . " - " .$points. " Points for upload bonus.\n " .$bonuscomment;
 //			sql_query("UPDATE users SET uploaded = ".sqlesc($up).", seedbonus = seedbonus - $points, bonuscomment = ".sqlesc($bonuscomment)." WHERE id = ".sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
             $bonusRep->consumeUserBonus($CURUSER['id'], $points, \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD, $points. " Points for uploaded.", ['uploaded' => $up]);
@@ -641,6 +650,10 @@ if ($action == "exchange") {
         if($art == "traffic_downloaded") {
             $downloaded = $CURUSER['downloaded'];
             $down = $downloaded + $bonusarray['menge'];
+            do_log(sprintf(
+                "user: %s going to use %s bonus to exchange downloaded from %s to %s",
+                $CURUSER['id'], $points, $CURUSER['downloaded'], $down
+            ));
             $bonusRep->consumeUserBonus($CURUSER['id'], $points, \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD, $points. " Points for downloaded.", ['downloaded' => $down]);
             nexus_redirect("" . get_protocol_prefix() . "$BASEURL/mybonus.php?do=download");
         }
@@ -743,7 +756,7 @@ if ($action == "exchange") {
 			$message = $_POST["message"];
 			//==gift for peeps with no more options
 			$usernamegift = sqlesc(trim($_POST["username"]));
-			$res = sql_query("SELECT id, bonuscomment FROM users WHERE username=" . $usernamegift);
+			$res = sql_query("SELECT id, seedbonus FROM users WHERE username=" . $usernamegift);
 			$arr = mysql_fetch_assoc($res);
             if (empty($arr)) {
                 stdmsg($lang_mybonus['text_error'], $lang_mybonus['text_receiver_not_exists'], 0);
@@ -752,7 +765,7 @@ if ($action == "exchange") {
             }
 			$useridgift = $arr['id'];
 			$userseedbonus = $arr['seedbonus'];
-			$receiverbonuscomment = $arr['bonuscomment'];
+//			$receiverbonuscomment = $arr['bonuscomment'];
 			if (!is_numeric($points) || $points < $bonusarray['points']) {
 				//write_log("User " . $CURUSER["username"] . "," . $CURUSER["ip"] . " is hacking bonus system",'mod');
 				stdmsg($lang_mybonus['text_error'], $lang_mybonus['bonus_amount_not_allowed']);
@@ -770,7 +783,7 @@ if ($action == "exchange") {
 					$aftertaxpoint -= $basictax_bonus;
 
 				$points2receiver = number_format($aftertaxpoint,1);
-				$newreceiverbonuscomment = date("Y-m-d") . " + " .$points2receiver. " Points (after tax) as a gift from ".($CURUSER["username"]).".\n " .htmlspecialchars($receiverbonuscomment);
+//				$newreceiverbonuscomment = date("Y-m-d") . " + " .$points2receiver. " Points (after tax) as a gift from ".($CURUSER["username"]).".\n " .htmlspecialchars($receiverbonuscomment);
 				if ($userid==$useridgift){
 					stdmsg($lang_mybonus['text_huh'], $lang_mybonus['text_karma_self_giving_warning'], 0);
 					stdfoot();
@@ -779,16 +792,25 @@ if ($action == "exchange") {
 
 //				sql_query("UPDATE users SET seedbonus = seedbonus - $points, bonuscomment = ".sqlesc($bonuscomment)." WHERE id = ".sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
                 $bonusRep->consumeUserBonus($CURUSER['id'], $points, \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE, $points2 . " Points as gift to ".htmlspecialchars(trim($_POST["username"])));
-				sql_query("UPDATE users SET seedbonus = seedbonus + $aftertaxpoint, bonuscomment = ".sqlesc($newreceiverbonuscomment)." WHERE id = ".sqlesc($useridgift));
+				sql_query("UPDATE users SET seedbonus = seedbonus + $aftertaxpoint WHERE id = ".sqlesc($useridgift));
+                \App\Models\BonusLogs::add($useridgift, $userseedbonus, $aftertaxpoint, $userseedbonus + $aftertaxpoint, " + " .$points2receiver. " Points (after tax) as a gift from ".($CURUSER["username"]), \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT);
 
 				//===send message
-				$subject = sqlesc($lang_mybonus_target[get_user_lang($useridgift)]['msg_someone_loves_you']);
+                $locale = get_user_locale($useridgift);
+				$subject = nexus_trans("bonus.msg_someone_loves_you", [], $locale);
 				$added = sqlesc(date("Y-m-d H:i:s"));
-				$msg = $lang_mybonus_target[get_user_lang($useridgift)]['msg_you_have_been_given'].$points2.$lang_mybonus_target[get_user_lang($useridgift)]['msg_after_tax'].$points2receiver.$lang_mybonus_target[get_user_lang($useridgift)]['msg_karma_points_by'].$CURUSER['username'];
+				$msg = nexus_trans("bonus.msg_you_have_been_given", [], $locale).$points2.nexus_trans("bonus.msg_after_tax", [], $locale).$points2receiver.nexus_trans("bonus.msg_karma_points_by", [], $locale).$CURUSER['username'];
 				if ($message)
-					$msg .= "\n".$lang_mybonus_target[get_user_lang($useridgift)]['msg_personal_message_from'].$CURUSER['username'].$lang_mybonus_target[get_user_lang($useridgift)]['msg_colon'].$message;
-				$msg = sqlesc($msg);
-				sql_query("INSERT INTO messages (sender, subject, receiver, msg, added) VALUES(0, $subject, $useridgift, $msg, $added)") or sqlerr(__FILE__, __LINE__);
+				{
+					$msg .= "\n".nexus_trans("bonus.msg_personal_message_from", [], $locale).$CURUSER['username'].nexus_trans("bonus.msg_colon", [], $locale).$message;
+				}
+				\App\Models\Message::add([
+					'sender' => 0,
+					'subject' => $subject,
+					'added' => now(),
+					'msg' => $msg,
+					'receiver' => $useridgift,
+				]);
 				$usernamegift = unesc($_POST["username"]);
                 nexus_redirect("" . get_protocol_prefix() . "$BASEURL/mybonus.php?do=transfer");
 			}

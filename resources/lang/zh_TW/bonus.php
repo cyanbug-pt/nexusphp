@@ -26,4 +26,10 @@ return [
         'medal_addition' => '勛章加成',
     ],
     'not_enough' => '魔力不足! 需要 :require_bonus，你當前僅有：:now_bonus',
+    'msg_someone_loves_you' => "收到禮物",
+    'msg_you_have_been_given' => "你收到",
+    'msg_after_tax' => "（扣取手續費為",
+    'msg_karma_points_by' => "）個魔力值的禮物。祝福來自",
+    'msg_personal_message_from' => "Personal message from ",
+    'msg_colon' => "說：",
 ];

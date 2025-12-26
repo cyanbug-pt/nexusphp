@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Http\Middleware\Locale;
 use App\Models\Invite;
 use App\Models\Message;
 use App\Models\News;
@@ -11,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
@@ -26,12 +28,14 @@ class ToolRepository extends BaseRepository
 {
     const BACKUP_EXCLUDES = ['vendor', 'node_modules', '.git', '.idea', '.settings', '.DS_Store', '.github'];
 
+    const BACKUP_RETENTION_COUNT_DEFAULT = 10;
+
     public function backupWeb($method = null, $transfer = false): array
     {
         $webRoot = base_path();
         $dirName = basename($webRoot);
         $excludes = self::BACKUP_EXCLUDES;
-        $baseFilename = sprintf('%s/%s.web.%s', sys_get_temp_dir(), $dirName, date('Ymd.His'));
+        $baseFilename = sprintf('%s/%s.web.%s', $this->getBackupExportPath(), $dirName, date('Ymd.His'));
         if (command_exists('tar') && ($method === 'tar' || $method === null)) {
             $filename = $baseFilename . ".tar.gz";
             $command = "tar";
@@ -88,11 +92,18 @@ class ToolRepository extends BaseRepository
     {
         $connectionName = config('database.default');
         $config = config("database.connections.$connectionName");
-        $filename = sprintf('%s/%s.database.%s.sql', sys_get_temp_dir(), basename(base_path()), date('Ymd.His'));
-        $command = sprintf(
-            'mysqldump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db %s >> %s 2>&1',
-            $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
-        );
+        $filename = sprintf('%s/%s.database.%s.sql', $this->getBackupExportPath(), basename(base_path()), date('Ymd.His'));
+        if (command_exists("mariadb-dump")) {
+            $command = sprintf(
+                'mariadb-dump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db --no-tablespaces --ssl=0 %s >> %s 2>&1',
+                $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
+            );
+        } else {
+            $command = sprintf(
+                'mysqldump --user=%s --password=%s --host=%s --port=%s --single-transaction --no-create-db --no-tablespaces --ssl-mode=DISABLED %s >> %s 2>&1',
+                $config['username'], $config['password'], $config['host'], $config['port'], $config['database'], $filename,
+            );
+        }
         $result = exec($command, $output, $result_code);
         do_log(sprintf(
             "command: %s, output: %s, result_code: %s, result: %s, filename: %s",
@@ -114,7 +125,7 @@ class ToolRepository extends BaseRepository
         if ($backupDatabase['result_code'] != 0) {
             throw new \RuntimeException("backup database fail: " . json_encode($backupDatabase));
         }
-        $baseFilename = sprintf('%s/%s.%s', sys_get_temp_dir(), basename(base_path()), date('Ymd.His'));
+        $baseFilename = sprintf('%s/%s.%s', $this->getBackupExportPath(), basename(base_path()), date('Ymd.His'));
         if (command_exists('tar') && ($method === 'tar' || $method === null)) {
             $filename = $baseFilename . ".tar.gz";
             $command = sprintf(
@@ -142,10 +153,26 @@ class ToolRepository extends BaseRepository
             $result_code = 0;
             do_log("No tar command, use zip.");
         }
+        File::delete($backupWeb['filename']);
+        File::delete($backupDatabase['filename']);
         if (!$transfer) {
             return compact('result_code', 'filename');
         }
         return $this->transfer($filename, $result_code);
+    }
+
+    private function getBackupExportPath(): string
+    {
+        $path = Setting::getBackupExportPath();
+        if (empty($path)) {
+            $path = self::getBackupExportPathDefault();
+        }
+        return $path;
+    }
+
+    public static function getBackupExportPathDefault(): string
+    {
+        return sys_get_temp_dir() . "/nexusphp_backup";
     }
 
     /**
@@ -191,6 +218,7 @@ class ToolRepository extends BaseRepository
         $transferResult = $this->transfer($backupResult['filename'], $backupResult['result_code'], $setting);
         $backupResult['transfer_result'] = $transferResult;
         do_log("[BACKUP_ALL_DONE]: " . json_encode($backupResult));
+        $this->cleanupBackupFiles(basename($backupResult['filename']));
         return $backupResult;
     }
 
@@ -299,7 +327,7 @@ class ToolRepository extends BaseRepository
         $start = Carbon::now();
         try {
             $remoteFilesystem->writeStream(basename($filename), $localFilesystem->readStream($filename));
-            $speed = !(float)$start->diffInSeconds() ? 0 :filesize($filename) / (float)$start->diffInSeconds();
+            $speed = !(float)abs($start->diffInSeconds()) ? 0 :filesize($filename) / (float)abs($start->diffInSeconds());
             $log =  'Elapsed time: '.$start->diffForHumans(null, true);
             $log .= ', Speed: '. number_format($speed/1024,2) . ' KB/s';
             do_log($log);
@@ -307,6 +335,34 @@ class ToolRepository extends BaseRepository
         } catch (\Throwable $exception) {
             do_log("Transfer error: " . $exception->getMessage(), 'error');
             return $exception->getMessage();
+        }
+    }
+
+    private function cleanupBackupFiles($basename): void
+    {
+        $nameParts = explode('.', $basename);
+        $firstPart = $nameParts[0];
+        $lastPart = $nameParts[count($nameParts) - 1];
+        $retentionCount = Setting::getBackupRetentionCount();
+        if ($retentionCount <= 0) {
+            $retentionCount = self::BACKUP_RETENTION_COUNT_DEFAULT;
+        }
+        $path = self::getBackupExportPath();
+        $allFiles = collect(File::allFiles($path))->filter(function (\Symfony\Component\Finder\SplFileInfo $file) use ($firstPart, $lastPart) {
+             $name = basename($file->getRealPath());
+             return str_starts_with($name, $firstPart) && str_ends_with($name, $lastPart);
+        });
+        // 按创建时间降序排序
+        $allFiles = $allFiles->sortByDesc(fn (\Symfony\Component\Finder\SplFileInfo $file) => $file->getCTime());
+        $filesToDelete = $allFiles->slice($retentionCount);
+        do_log(sprintf(
+            "retentionCount: %s, path: %s, fileCount: %s",
+            $retentionCount, $path, $allFiles->count()
+        ));
+        foreach ($filesToDelete as $file) {
+            $realPath = $file->getRealPath();
+            File::delete($realPath);
+            do_log(sprintf("delete backup file: %s", $realPath));
         }
     }
 
@@ -328,7 +384,8 @@ class ToolRepository extends BaseRepository
         }
         // Create the Transport
         $transport = $factory->create(new Dsn(
-            $encryption === 'tls' ? (($smtp['smtpport'] == 465) ? 'smtps' : 'smtp') : '',
+//            $encryption === 'tls' ? (($smtp['smtpport'] == 465) ? 'smtps' : 'smtp') : '',
+            $smtp['smtpport'] == 465 && in_array($encryption, ['ssl', 'tls']) ? 'smtps' : 'smtp',
             $smtp['smtpaddress'],
             $smtp['accountname'] ?? null,
             $smtp['accountpassword'] ?? null,
@@ -344,7 +401,8 @@ class ToolRepository extends BaseRepository
             ->from(new Address(Setting::get('main.SITEEMAIL'), Setting::get('basic.SITENAME')))
             ->to($to)
             ->subject($subject)
-            ->html($body)
+            ->text($body)
+            ->html(nl2br($body))
         ;
 
         // Send the message
@@ -500,6 +558,27 @@ class ToolRepository extends BaseRepository
                 $delIdStr = implode(',', $idArr);
                 do_log("[DELETE_DUPLICATED_PEERS], torrent: $torrentId, user: $userId, snatchIdStr: $delIdStr");
                 NexusDB::statement("delete from peers where id in ($delIdStr)");
+            }
+        }
+    }
+
+    public function sendAlarmEmail(string $subjectTransKey, array $subjectTransContext, string $msgTransKey, array $msgTransContext): void
+    {
+        $receiverUid = get_setting("system.alarm_email_receiver");
+        if (empty($receiverUid)) {
+            $locale = Locale::getDefault();
+            $subject = nexus_trans($subjectTransKey, $subjectTransContext, $locale);
+            $msg = nexus_trans($msgTransKey, $msgTransContext, $locale);
+            do_log(sprintf("%s - %s", $subject, $msg), "error");
+        } else {
+            $receiverUidArr = preg_split("/[\r\n\s,，]+/", $receiverUid);
+            $users = User::query()->whereIn("id", $receiverUidArr)->get(User::$commonFields);
+            foreach ($users as $user) {
+                $locale = $user->locale;
+                $subject = nexus_trans($subjectTransKey, $subjectTransContext, $locale);
+                $msg = nexus_trans($msgTransKey, $msgTransContext, $locale);
+                $result = $this->sendMail($user->email, $subject, $msg);
+                do_log(sprintf("send msg: %s result: %s", $msg, var_export($result, true)), $result ? "info" : "error");
             }
         }
     }

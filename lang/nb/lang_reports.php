@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Ingen rapport.",
+	'head_reports' => "Rapporter",
+	'text_reports' => "Rapporter",
+	'col_added' => "Lagt",
+	'col_reporter' => "Rapportør",
+	'col_reporting' => "Rapportering",
+	'col_type' => "Type:",
+	'col_reason' => "Grunn",
+	'col_dealt_with' => "alt med",
+	'col_action' => "Loven.",
+	'text_yes' => "Ja",
+	'text_no' => "Nei",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Torrent finnes ikke eller den er slettet.",
+	'text_user' => "Bruker",
+	'text_user_does_not_exist' => "Brukeren finnes ikke eller den er slettet.",
+	'text_offer' => "Tilbud",
+	'text_offer_does_not_exist' => "Tilbudet finnes ikke eller det er slettet.",
+	'text_forum_post' => "Forum innlegg",
+	'text_post_does_not_exist' => "Foruminnlegget finnes ikke eller det er slettet.",
+	'text_post_id' => "Innlegg id ",
+	'text_of_topic' => " av emne ",
+	'text_by' => " av ",
+	'text_comment' => "Kommentar",
+	'text_comment_does_not_exist' => "Kommentaren finnes ikke eller den er slettet.",
+	'text_of_torrent' => " av torrent ",
+	'text_of_offer' => " med tilbud ",
+	'text_comment_id' => "Kommentar identifikator ",
+	'text_subtitle' => "Undertittel",
+	'text_subtitle_does_not_exist' => "Underteksten finnes ikke eller den er slettet.",
+	'text_for_torrent_id' => " for torrent-ID ",
+	'submit_set_dealt' => "Sett falt",
+	'submit_delete' => "Slett",
+);
+
+?>

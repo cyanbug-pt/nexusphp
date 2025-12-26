@@ -11,7 +11,7 @@ class ManageBonusLogs extends PageListSingle
 {
     protected static string $resource = BonusLogResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

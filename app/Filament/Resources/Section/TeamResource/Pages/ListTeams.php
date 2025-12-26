@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\TeamResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\TeamResource;
 use App\Models\Standard;
@@ -14,10 +15,10 @@ class ListTeams extends PageList
 {
     protected static string $resource = TeamResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

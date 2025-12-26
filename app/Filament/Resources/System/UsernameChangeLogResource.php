@@ -2,13 +2,18 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use App\Filament\Resources\System\UsernameChangeLogResource\Pages\ManageUsernameChangeLogs;
 use App\Filament\Resources\System\UsernameChangeLogResource\Pages;
 use App\Filament\Resources\System\UsernameChangeLogResource\RelationManagers;
 use App\Models\UsernameChangeLog;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -18,13 +23,13 @@ class UsernameChangeLogResource extends Resource
 {
     protected static ?string $model = UsernameChangeLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-pencil-alt';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-pencil-square';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 100;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.username_change_log');
     }
@@ -34,10 +39,10 @@ class UsernameChangeLogResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -46,28 +51,28 @@ class UsernameChangeLogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('changeTypeText')->label(__('username-change-log.labels.change_type')),
-                Tables\Columns\TextColumn::make('uid')->searchable(),
-                Tables\Columns\TextColumn::make('user.username')->searchable()->label(__('label.username')),
-                Tables\Columns\TextColumn::make('username_old')->searchable()->label(__('username-change-log.labels.username_old')),
-                Tables\Columns\TextColumn::make('username_new')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('changeTypeText')->label(__('username-change-log.labels.change_type')),
+                TextColumn::make('uid')->searchable(),
+                TextColumn::make('user.username')->searchable()->label(__('label.username')),
+                TextColumn::make('username_old')->searchable()->label(__('username-change-log.labels.username_old')),
+                TextColumn::make('username_new')
                     ->searchable()
                     ->label(__('username-change-log.labels.username_new'))
                     ->formatStateUsing(fn ($record) => new HtmlString(get_username($record->uid, false, true, true, true)))
                 ,
-                Tables\Columns\TextColumn::make('operator')
+                TextColumn::make('operator')
                     ->searchable()
                     ->label(__('label.operator'))
                 ,
-                Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at'))->formatStateUsing(fn ($state) => format_datetime($state)),
+                TextColumn::make('created_at')->label(__('label.created_at'))->formatStateUsing(fn ($state) => format_datetime($state)),
 
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label('UID')
                             ->placeholder('UID')
                         ,
@@ -75,13 +80,13 @@ class UsernameChangeLogResource extends Resource
                         return $query->when($data['uid'], fn (Builder $query, $uid) => $query->where("uid", $uid));
                     })
                 ,
-                Tables\Filters\SelectFilter::make('change_type')->options(UsernameChangeLog::listChangeType())->label(__('username-change-log.labels.change_type')),
+                SelectFilter::make('change_type')->options(UsernameChangeLog::listChangeType())->label(__('username-change-log.labels.change_type')),
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
 //                Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -89,7 +94,7 @@ class UsernameChangeLogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageUsernameChangeLogs::route('/'),
+            'index' => ManageUsernameChangeLogs::route('/'),
         ];
     }
 }

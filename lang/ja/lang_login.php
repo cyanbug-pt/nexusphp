@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "ログインしていません！",
+	'p_error' => "エラー:",
+	'p_after_logged_in' => "表示しようとしているページは、ログイン時にのみ使用できます。",
+	'p_need_cookies_enables' => "<b>メモ</b>: ログインまたは言語を切り替えるにはクッキーを有効にする必要があります。",
+	'p_fail_ban' => "失敗したログインはあなたのIPを禁止する結果になります!",
+	'p_you_have' => "持っている",
+	'p_remaining_tries' => "残りの試行だ",
+	'p_no_account_signup' => "アカウントをお持ちではありませんか？ <a href=\"signup.php\"><b></b></a> 今すぐサインアップ！",
+	'p_forget_pass_recover' => "パスワードを忘れましたか？ <a href=\"recover.php\"><b>メールでパスワード</b></a> を復元する",
+    'p_account_banned' => "アカウントが禁止されていますか?<a href=\"user-ban-log.php\"><b>ユーザー禁止のログ</b></a> の理由を確認する",
+	'p_resend_confirm' => "Did not receive confirmation mail or confirmation link is broken? <a href=\"confirm_resend.php\"><b>Send confirmation mail again</b></a>",
+	'rowhead_username' => "ユーザー名:",
+	'rowhead_password' => "パスワード:",
+	'button_login' => "ログイン！",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "自動ログアウト:",
+	'text_restrict_ip' => "制限IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " 15分後にログアウトする",
+	'checkbox_restrict_ip' => " セッションを IP に制限する",
+	'checkbox_ssl' => " SSL 暗号化を使用してウェブサイトを閲覧する (ウェブブラウザ)",
+	'checkbox_ssl_tracker' => " トラッカーとSSL暗号化接続(BitTorrentクライアント)",
+	'text_advanced_options' => "高度なオプション:",
+	'text_helpbox' => "ヘルプボックス",
+	'text_helpbox_note' => "サインアップまたはログインに問題がありますか？ここにメッセージを残してください",
+	'text_message' => "メッセージ: ",
+	'sumbit_shout' => "叫んでください",
+	'submit_clear' => "クリア",
+	'text_select_lang' => "サイト言語を選択: ",
+	'head_login' => "ログイン",
+    'rowhead_two_step_code' => '2要素認証',
+    'two_step_code_tooltip' => '有効にする必要がある場合',
+    'text_complain' => '苦情チャンネル',
+);
+
+?>

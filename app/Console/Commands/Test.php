@@ -2,70 +2,38 @@
 
 namespace App\Console\Commands;
 
-use App\Events\TorrentUpdated;
-use App\Filament\Resources\System\AgentAllowResource;
-use App\Http\Resources\TagResource;
-use App\Models\AgentAllow;
-use App\Models\Attendance;
-use App\Models\Category;
-use App\Models\Exam;
-use App\Models\ExamProgress;
+use App\Jobs\CheckQueueFailedJobs;
+use App\Jobs\SettleClaim;
+use App\Jobs\UpdateUserDownloadPrivilege;
 use App\Models\ExamUser;
-use App\Models\HitAndRun;
-use App\Models\Invite;
-use App\Models\LoginLog;
-use App\Models\Medal;
-use App\Models\Peer;
-use App\Models\SearchBox;
-use App\Models\Setting;
-use App\Models\Snatch;
-use App\Models\Tag;
+use App\Models\Language;
+use App\Models\Message;
+use App\Models\PersonalAccessToken;
 use App\Models\Torrent;
-use App\Models\TorrentOperationLog;
+use App\Models\TorrentExtra;
 use App\Models\User;
-use App\Models\UserBanLog;
-use App\Repositories\AgentAllowRepository;
-use App\Repositories\AttendanceRepository;
-use App\Repositories\CleanupRepository;
+use App\Repositories\ClaimRepository;
 use App\Repositories\ExamRepository;
-use App\Repositories\HitAndRunRepository;
-use App\Repositories\MeiliSearchRepository;
-use App\Repositories\PluginRepository;
-use App\Repositories\SearchBoxRepository;
-use App\Repositories\SearchRepository;
-use App\Repositories\TagRepository;
-use App\Repositories\ToolRepository;
-use App\Repositories\TorrentRepository;
-use App\Repositories\UserRepository;
-use Carbon\Carbon;
-use Filament\Notifications\Notification;
-use GeoIp2\Database\Reader;
-use GuzzleHttp\Client;
+use App\Repositories\RequireSeedTorrentRepository;
+use App\Repositories\SeedBoxRepository;
+use App\Repositories\TokenRepository;
+use App\Repositories\UploadRepository;
 use Illuminate\Console\Command;
-use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Imdb\Cache;
-use League\Flysystem\StorageAttributes;
 use Nexus\Database\NexusDB;
-use Nexus\Imdb\Imdb;
+use Nexus\PTGen\PTGen;
 use NexusPlugin\Menu\Filament\MenuItemResource\Pages\ManageMenuItems;
 use NexusPlugin\Menu\MenuRepository;
 use NexusPlugin\Menu\Models\MenuItem;
-use NexusPlugin\Permission\Models\Permission;
 use NexusPlugin\Permission\Models\Role;
 use NexusPlugin\PostLike\PostLikeRepository;
 use NexusPlugin\StickyPromotion\Models\StickyPromotion;
 use NexusPlugin\StickyPromotion\Models\StickyPromotionParticipator;
 use NexusPlugin\Work\Models\RoleWork;
 use NexusPlugin\Work\WorkRepository;
-use PhpIP\IP;
-use PhpIP\IPBlock;
 use Rhilip\Bencode\Bencode;
+use Rhilip\Bencode\TorrentFile;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class Test extends Command
 {
@@ -100,17 +68,9 @@ class Test extends Command
      */
     public function handle()
     {
-        $url = "http://127.0.0.1:7777/list-seeder-leecher-count";
-        $idArr = [8, 12];
-        $client = new Client();
-        $response = $client->post($url, ['json' => ['torrent_ids' => $idArr]]);
-        $result = json_decode((string)$response->getBody(), true);
-        dump($result);
-        if (!isset($result['ret']) || $result['ret'] != 0) {
-            echo "Bad";
-        } else {
-            echo "OK";
-        }
+        $rep = new RequireSeedTorrentRepository();
+//        $rep->doRemove(Torrent::query()->whereIn('id', [58])->get());
+        $rep->autoAddToListCronjob();
     }
 
 }

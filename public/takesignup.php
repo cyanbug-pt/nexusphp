@@ -3,7 +3,7 @@
 require_once("../include/bittorrent.php");
 dbconn();
 cur_user_check ();
-require_once(get_langfile_path("",true));
+//require_once(get_langfile_path("",true));
 require_once(get_langfile_path("", false, get_langfolder_cookie()));
 
 $isPreRegisterEmailAndUsername = get_setting("system.is_invite_pre_email_and_username") == "yes";
@@ -16,18 +16,18 @@ function bark($msg) {
 	exit;
 }
 
-$type = $_POST['type'];
+$type = $_POST['type'] ?? '';
 if ($type == 'invite'){
 registration_check();
 failedloginscheck ("Invite Signup");
 if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring'],'signup.php?type=invite&invitenumber='.htmlspecialchars($_POST['hash']));
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,'signup.php?type=invite&invitenumber='.htmlspecialchars($_POST['hash']));
 }
 else{
 registration_check("normal");
 failedloginscheck ("Signup");
 if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring']);
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null);
 }
 function isportopen($port)
 {
@@ -73,7 +73,7 @@ $res = sql_query("SELECT username FROM users WHERE id = $inviter") or sqlerr(__F
 $arr = mysql_fetch_assoc($res);
 $invusername = $arr['username'];
 }
-if (!mkglobal("wantusername:wantpassword:passagain:email")) {
+if (!mkglobal("wantusername:wantpassword:email")) {
     die();
 }
 if ($isPreRegisterEmailAndUsername && $type == 'invite' && !empty($inv["pre_register_username"]) && !empty($inv["pre_register_email"])) {
@@ -111,17 +111,17 @@ if (empty($wantusername) || empty($wantpassword) || empty($email) || empty($coun
 if (strlen($wantusername) > 12)
 	bark($lang_takesignup['std_username_too_long']);
 
-if ($wantpassword != $passagain)
-	bark($lang_takesignup['std_passwords_unmatched']);
+//if ($wantpassword != $passagain)
+//	bark($lang_takesignup['std_passwords_unmatched']);
 
-if (strlen($wantpassword) < 6)
-	bark($lang_takesignup['std_password_too_short']);
-
-if (strlen($wantpassword) > 40)
-	bark($lang_takesignup['std_password_too_long']);
-
-if ($wantpassword == $wantusername)
-	bark($lang_takesignup['std_password_equals_username']);
+//if (strlen($wantpassword) < 6)
+//	bark($lang_takesignup['std_password_too_short']);
+//
+//if (strlen($wantpassword) > 40)
+//	bark($lang_takesignup['std_password_too_long']);
+//
+//if ($wantpassword == $wantusername)
+//	bark($lang_takesignup['std_password_equals_username']);
 
 if (!validemail($email))
 	bark($lang_takesignup['std_wrong_email_address_format']);
@@ -134,7 +134,7 @@ if ($_POST["rulesverify"] != "yes" || $_POST["faqverify"] != "yes" || $_POST["ag
 	stderr($lang_takesignup['std_signup_failed'], $lang_takesignup['std_unqualified']);
 
 // check if email addy is already in use
-$a = (@mysql_fetch_row(@sql_query("select count(*) from users where email='".mysql_real_escape_string($email)."'"))) or sqlerr(__FILE__, __LINE__);
+$a = (@mysql_fetch_row(@sql_query("select count(*) from users where BINARY email='".mysql_real_escape_string($email)."'"))) or sqlerr(__FILE__, __LINE__);
 if ($a[0] != 0)
   bark($lang_takesignup['std_email_address'].$email.$lang_takesignup['std_in_use']);
 
@@ -148,9 +148,11 @@ $arr = mysql_fetch_row($res);
 */
 
 $secret = mksecret();
-$wantpasshash = md5($secret . $wantpassword . $secret);
+//$wantpasshash = md5($secret . $wantpassword . $secret);
+$wantpasshash = hash('sha256', $secret . $wantpassword);
 $editsecret = ($verification == 'admin' ? '' : $secret);
 $invite_count = (int) $invite_count;
+$passkey = md5($wantusername.date("Y-m-d H:i:s").$wantpasshash);
 
 $wantusername = sqlesc($wantusername);
 $wantpasshash = sqlesc($wantpasshash);
@@ -161,24 +163,36 @@ $email = sqlesc($email);
 $country = sqlesc($country);
 $gender = sqlesc($gender);
 $sitelangid = sqlesc(get_langid_from_langcookie());
-
+$authKey = sqlesc(mksecret());
 $res_check_user = sql_query("SELECT * FROM users WHERE username = " . $wantusername);
 
 if(mysql_num_rows($res_check_user) == 1)
   bark($lang_takesignup['std_username_exists']);
 
-$ret = sql_query("INSERT INTO users (username, passhash, secret, editsecret, email, country, gender, status, class, invites, ".($type == 'invite' ? "invited_by," : "")." added, last_access, lang, stylesheet".($showschool == 'yes' ? ", school" : "").", uploaded) VALUES (" . $wantusername . "," . $wantpasshash . "," . $secret . "," . $editsecret . "," . $email . "," . $country . "," . $gender . ", 'pending', ".$defaultclass_class.",". $invite_count .", ".($type == 'invite' ? "'$inviter'," : "") ." '". date("Y-m-d H:i:s") ."' , " . " '". date("Y-m-d H:i:s") ."' , ".$sitelangid . ",".$defcss.($showschool == 'yes' ? ",".$school : "").",".($iniupload_main > 0 ? $iniupload_main : 0).")") or sqlerr(__FILE__, __LINE__);
+$ret = sql_query("INSERT INTO users (username, passhash, passkey, secret, auth_key, editsecret, email, country, gender, status, class, invites, ".($type == 'invite' ? "invited_by," : "")." added, last_access, lang, stylesheet".($showschool == 'yes' ? ", school" : "").", uploaded) VALUES (" . $wantusername . "," . $wantpasshash . "," . sqlesc($passkey) . "," . $secret . "," . $authKey. "," . $editsecret . "," . $email . "," . $country . "," . $gender . ", 'pending', ".$defaultclass_class.",". $invite_count .", ".($type == 'invite' ? "'$inviter'," : "") ." '". date("Y-m-d H:i:s") ."' , " . " '". date("Y-m-d H:i:s") ."' , ".$sitelangid . ",".$defcss.($showschool == 'yes' ? ",".$school : "").",".($iniupload_main > 0 ? $iniupload_main : 0).")") or sqlerr(__FILE__, __LINE__);
 $id = mysql_insert_id();
+$userInfo = \App\Models\User::query()->find($id, \App\Models\User::$commonFields);
+fire_event("user_created", $userInfo);
 $tmpInviteCount = get_setting('main.tmp_invite_count');
 if ($tmpInviteCount > 0) {
     $userRep = new \App\Repositories\UserRepository();
     $userRep->addTemporaryInvite(null, $id, 'increment', $tmpInviteCount, 7);
 }
 
-$dt = sqlesc(date("Y-m-d H:i:s"));
-$subject = sqlesc($lang_takesignup['msg_subject'].$SITENAME."!");
-$msg = sqlesc($lang_takesignup['msg_congratulations'].htmlspecialchars($wantusername).$lang_takesignup['msg_you_are_a_member']);
-sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, $id, $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
+$dt = date("Y-m-d H:i:s");
+$subject = $lang_takesignup['msg_subject'].$SITENAME."!";
+$siteName = \App\Models\Setting::getSiteName();
+$msg = \App\Models\MessageTemplate::forRegisterWelcome($userInfo->lang, ['username' => $userInfo->username]);
+if (empty($msg)) {
+    $msg = $lang_takesignup['msg_congratulations'].$wantusername.sprintf($lang_takesignup['msg_you_are_a_member'],$siteName, $siteName);
+}
+\App\Models\Message::add([
+    'sender' => 0,
+    'receiver' => $id,
+    'subject' => $subject,
+    'added' => $dt,
+    'msg' => $msg,
+]);
 
 //write_log("User account $id ($wantusername) was created");
 $res = sql_query("SELECT passhash, secret, editsecret, status FROM users WHERE id = ".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
@@ -189,8 +203,10 @@ $usern = htmlspecialchars($wantusername);
 $title = $SITENAME.$lang_takesignup['mail_title'];
 $confirmUrl = getSchemeAndHttpHost() . "/confirm.php?id=$id&secret=$psecret";
 $confirmResendUrl = getSchemeAndHttpHost() . "/confirm_resend.php";
+$mailTwo = sprintf($lang_takeinvite['mail_two'], $siteName);
+$mailFive = sprintf($lang_takeinvite['mail_five'], $siteName, $siteName, $REPORTMAIL, $siteName);
 $body = <<<EOD
-{$lang_takesignup['mail_one']}$usern{$lang_takesignup['mail_two']}($email){$lang_takesignup['mail_three']}$ip{$lang_takesignup['mail_four']}
+{$lang_takesignup['mail_one']}$usern{$mailTwo}($email){$lang_takesignup['mail_three']}$ip{$lang_takesignup['mail_four']}
 <b><a href="javascript:void(null)" onclick="window.open($confirmUrl)">
 {$lang_takesignup['mail_this_link']} </a></b><br />
 $confirmUrl
@@ -198,7 +214,7 @@ $confirmUrl
 <b><a href="javascript:void(null)" onclick="window.open($confirmResendUrl)">{$lang_takesignup['mail_here']}</a></b><br />
 $confirmResendUrl
 <br />
-{$lang_takesignup['mail_five']}
+{$mailFive}
 EOD;
 
 if ($type == 'invite')
@@ -214,11 +230,18 @@ if ($type == 'invite')
     ];
     \App\Models\Invite::query()->where('id', $inv['id'])->update($update);
 
-    $dt = sqlesc(date("Y-m-d H:i:s"));
-    $subject = sqlesc($lang_takesignup_target[get_user_lang($inviter)]['msg_invited_user_has_registered']);
-    $msg = sqlesc($lang_takesignup_target[get_user_lang($inviter)]['msg_user_you_invited'].$usern.$lang_takesignup_target[get_user_lang($inviter)]['msg_has_registered']);
+    $dt = date("Y-m-d H:i:s");
+    $locale = get_user_locale($inviter);
+    $subject = nexus_trans("user.msg_invited_user_has_registered", [], $locale);
+    $msg = nexus_trans("user.msg_user_you_invited", [],$locale).$wantusername.nexus_trans("user.msg_has_registered", [], $locale);
     //sql_query("UPDATE users SET uploaded = uploaded + 10737418240 WHERE id = $inviter"); //add 10GB to invitor's uploading credit
-    sql_query("INSERT INTO messages (sender, receiver, subject, added, msg) VALUES(0, $inviter, $subject, $dt, $msg)") or sqlerr(__FILE__, __LINE__);
+    \App\Models\Message::add([
+        'sender' => 0,
+        'receiver' => $inviter,
+        'subject' => $subject,
+        'added' => $dt,
+        'msg' => $msg,
+    ]);
     $Cache->delete_value('user_'.$inviter.'_unread_message_count');
     $Cache->delete_value('user_'.$inviter.'_inbox_count');
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookmarkResource;
 use App\Http\Resources\TorrentResource;
 use App\Models\Torrent;
 use App\Repositories\BookmarkRepository;
@@ -25,7 +26,7 @@ class BookmarkController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function store(Request $request)
     {
@@ -33,7 +34,8 @@ class BookmarkController extends Controller
             'torrent_id' => 'required|integer',
         ]);
         $result = $this->repository->add(Auth::user(), $request->torrent_id);
-        return $this->success($result->toArray(), nexus_trans('bookmark.actions.store_success'));
+        $resource = new BookmarkResource($result);
+        return $this->success($resource, nexus_trans('bookmark.actions.store_success'));
     }
 
     /**
@@ -62,12 +64,15 @@ class BookmarkController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $result = $this->repository->remove(Auth::user(), $id);
-        return $this->success($result, nexus_trans('bookmark.actions.delete_success'));
+        $request->validate([
+            'torrent_id' => 'required|integer',
+        ]);
+        $result = $this->repository->remove(Auth::user(), $request->torrent_id);
+        return $this->success(true, nexus_trans('bookmark.actions.delete_success'));
     }
 
 }

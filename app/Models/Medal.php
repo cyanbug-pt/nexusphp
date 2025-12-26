@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
 use Carbon\Carbon;
 
 class Medal extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     const GET_TYPE_EXCHANGE = 1;
 
     const GET_TYPE_GRANT = 2;
@@ -18,7 +21,7 @@ class Medal extends NexusModel
     protected $fillable = [
         'name', 'description', 'image_large', 'image_small', 'price', 'duration', 'get_type',
         'display_on_medal_page', 'sale_begin_time', 'sale_end_time', 'inventory', 'bonus_addition_factor',
-        'gift_fee_factor',
+        'gift_fee_factor', 'priority', 'bonus_addition_duration'
     ];
 
     public $timestamps = true;
@@ -46,6 +49,11 @@ class Medal extends NexusModel
     public function getGetTypeTextAttribute($value): string
     {
         return nexus_trans("medal.get_types." . $this->get_type);
+    }
+
+    public function getInventoryTextAttribute(): string
+    {
+        return $this->inventory ?? nexus_trans("label.infinite");
     }
 
     public function getDurationTextAttribute($value): string

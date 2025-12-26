@@ -11,7 +11,7 @@ class ManageRefreshTokens extends PageListSingle
 {
     protected static string $resource = RefreshTokenResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

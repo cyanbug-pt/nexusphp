@@ -1,16 +1,23 @@
-<x-filament::widget>
-    <x-filament::card>
-        @php
-            $user = \Filament\Facades\Filament::auth()->user();
-        @endphp
+@php
+    $user = filament()->auth()->user();
+@endphp
 
-        <div class="h-12 flex items-center space-x-4 rtl:space-x-reverse">
-            <div>
-                <h2 class="text-lg sm:text-xl font-bold tracking-tight">
-                    {{ __('filament::widgets/account-widget.welcome', ['user' => \Filament\Facades\Filament::getUserName($user) . '(' . $user->classText . ')']) }}
-                </h2>
+<x-filament-widgets::widget class="fi-account-widget">
+    <x-filament::section>
+        <x-filament-panels::avatar.user
+            size="lg"
+            :user="$user"
+            loading="lazy"
+        />
 
-            </div>
+        <div class="fi-account-widget-main">
+            <h2 class="fi-account-widget-heading">
+                {{ __('filament-panels::widgets/account-widget.welcome', ['app' => config('app.name')]) }}
+            </h2>
+
+            <p class="fi-account-widget-user-name">
+                {{ filament()->getUserName($user) . ' (' . $user->classText . ')' }}
+            </p>
         </div>
-    </x-filament::card>
-</x-filament::widget>
+    </x-filament::section>
+</x-filament-widgets::widget>

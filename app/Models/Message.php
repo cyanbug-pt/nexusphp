@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ModelEventEnum;
 use Nexus\Database\NexusDB;
 
 class Message extends NexusModel
@@ -26,10 +27,12 @@ class Message extends NexusModel
         return $this->belongsTo(User::class, 'receiver');
     }
 
-    public static function add(array $data): bool
+    public static function add(array $data): self
     {
         clear_inbox_count_cache($data["receiver"]);
-        return self::query()->insert($data);
+        $message =  self::query()->create($data);
+        fire_event(ModelEventEnum::MESSAGE_CREATED, $message);
+        return $message;
     }
 
 }

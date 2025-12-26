@@ -40,9 +40,9 @@ Welcome to participate in internationalization work, click [here](https://github
 - Section H&R
 - TGBot
 ## System Requirements
-- PHP: 8.0|8.1|8.2, must have extensions: bcmath, ctype, curl, fileinfo, json, mbstring, openssl, pdo_mysql, tokenizer, xml, mysqli, gd, redis, pcntl, sockets, posix, gmp, zend opcache
+- PHP: 8.2|8.3|8.4|8.5, must have extensions: bcmath, ctype, curl, fileinfo, json, mbstring, openssl, pdo_mysql, tokenizer, xml, mysqli, gd, redis, pcntl, sockets, posix, gmp, zend opcache, zip, intl, pdo_sqlite, sqlite3
 - Mysql: 5.7 latest version or above
-- Redis：2.6.12 or above
+- Redis：4.0.0 or above
 - Others: supervisor, rsync
 
 ## Quick Start
@@ -59,8 +59,4 @@ docker run --name my-nexusphp -e DOMAIN=xxx.com -p 80:80 xiaomlove/nexusphp:late
 ## More information
 Blog：[https://nexusphp.org](https://nexusphp.org/)  
 Documentation：[https://doc.nexusphp.org](https://doc.nexusphp.org/en/)  
-Telegram: [https://t.me/nexusphp](https://t.me/nexusphp)  
-
-## Project supported by JetBrains
-Many thanks to Jetbrains for kindly providing a license for me to work on this and other open-source projects.  
-[![](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/xiaomlove/nexusphp)
+Telegram: [https://t.me/nexusphp_dev](https://t.me/nexusphp_dev)  

@@ -22,7 +22,7 @@ $lang_staff = array
 	'title_offline' => "Offline",
 	'title_send_pm' => "Send&nbsp;PM",
 	'text_vip' => "VIP",
-	'text_vip_note' => "VIP status is only granted to those who have made special contribution to ".$SITENAME.", e.g. former staff members(Only display permanent VIP). ",
+	'text_vip_note' => "VIP status is only granted to those who have made special contribution to %s, e.g. former staff members.",
 	'text_reason' => "Reason",
 	'text_apply_for_it' => "Apply to join",
 	'text_forum_moderators' => "Forum Moderators",
@@ -30,7 +30,7 @@ $lang_staff = array
 	'text_forums' => "Forums",
     'std_sorry' => "Sorry...",
     'std_permission_denied_only' => "Permission denied. Only ",
-    'std_or_above_can_view' => " or above could view Staff. <br /><br /> Please see the <a class=faqlink href=faq.php#id22><b>FAQ</b></a> for more information on different user classes and what they can do.<br /><br /><b></p>The " .$SITENAME." Staff</b>",
+    'std_or_above_can_view' => " or above could view Staff. <br /><br /> Please see the <a class=faqlink href=faq.php#id22><b>FAQ</b></a> for more information on different user classes and what they can do.<br /><br /><b></p>The %s Staff</b>",
 );
 
 ?>

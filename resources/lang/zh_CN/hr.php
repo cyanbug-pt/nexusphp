@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => '全局',
 
     'reached_by_seed_time_comment' => '截止：:now，做种时间: :seed_time Hour(s) 已达标 :seed_time_minimum Hour(s)',
+    'reached_by_leech_time_comment' => '截止：:now，下载时间: :leech_time Hour(s) 已达标 :leech_time_minimum Hour(s)',
     'reached_by_share_ratio_comment' => "截止：:now \n做种时间: :seed_time Hour(s) 未达标 :seed_time_minimum Hour(s) \n分享率: :share_ratio 达忽略标准：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "你是：:user_class_text 或捐赠用户，无视此 H&R",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) 已达标！',

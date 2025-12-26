@@ -11,7 +11,7 @@ $lang_mybonus = array
 	'text_success_vip' => "Congratulations! You have got yourself ",
 	'text_success_vip_two' => " status for one month!",
 	'text_no_permission' => "<b>ERROR!</b> You have no permission.",
-	'text_success_custom_title' => "Congradulations! You are now known as <b>".$CURUSER['title']."</b>!",
+	'text_success_custom_title' => "Congradulations! You are now known as <b>%s</b>!",
 	'text_success_gift' => " You have spread the <b>Karma</b> well.",
 	'head_karma_page' => "'s Karma Bonus Page",
 	'text_karma_system' => " Karma Bonus Point System",
@@ -168,6 +168,10 @@ where<ul><li><b>A</b> is an intermediate variable</li><li><b>Ti</b> is the <b>i<
     'text_success_buy_change_username_card' => "Congratulations on your successful purchase of a <b>change username card</b>!",
     'text_change_username_card_already_has' => 'Already have a change username card',
     'text_rainbow_id_already_valid_forever' => 'Already have a permanent Rainbow ID',
+    'text_get_by_medal' => 'Medal bonus will get the following additional bonus value per hour',
+    'medal_additional_desc' => 'Medal bonus calculation formula is the same as above, regardless of minimum guarantee',
+    'medal_additional_factor' => 'The final bonus is the calculated medal bonus multiplied by the medal_additional_factor',
+    'text_bonus_mini_size' => 'Torrent size must be at least %s. Torrent size smaller than this volume are excluded from bonus calculations'
 );
 
 ?>

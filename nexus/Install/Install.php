@@ -3,6 +3,7 @@
 namespace Nexus\Install;
 
 use App\Models\Setting;
+use App\Models\TrackerUrl;
 use App\Models\User;
 use App\Repositories\SearchBoxRepository;
 use App\Repositories\UserRepository;
@@ -13,7 +14,7 @@ class Install
 {
     protected $currentStep;
 
-    protected $minimumPhpVersion = '8.0.3';
+    protected $minimumPhpVersion = '8.2.0';
 
     protected $progressKeyPrefix = '__step';
 
@@ -32,7 +33,15 @@ class Install
         'UID_STARTS',
     ];
 
-    protected array $requiredExtensions = ['ctype', 'curl', 'fileinfo', 'json', 'mbstring', 'openssl', 'pdo_mysql', 'tokenizer', 'xml', 'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets'];
+    protected array $requiredExtensions = [
+        'ctype', 'curl', 'fileinfo', 'json', 'mbstring', 'openssl', 'pdo_mysql', 'tokenizer', 'xml',
+        'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets', 'zip', 'intl',
+        'sqlite3', 'pdo_sqlite'
+    ];
+
+    protected array $conflictExtensions = [
+        'mysql',
+    ];
     protected array $optionalExtensions = [
 //        ['name' => 'swoole', 'desc' => "If use swoole for Octane, make sure 'current' shows 1"],
     ];
@@ -41,7 +50,9 @@ class Install
         'pcntl_signal', 'pcntl_alarm', 'pcntl_async_signals'
     ];
 
-    protected string $lockFile = 'install.lock';
+    const INSTALL_LOCK_FILE = 'dont_delete_install.lock';
+
+    protected string $lockFile = self::INSTALL_LOCK_FILE;
 
     public function __construct()
     {
@@ -188,6 +199,16 @@ class Install
             'current' => empty($disabledFunctions) ? '1' : "These functions are Disabled: " . implode(',', $disabledFunctions),
             'result' => $this->yesOrNo(empty($disabledFunctions)),
         ];
+
+        foreach ($this->conflictExtensions as $extension) {
+            $loaded = extension_loaded($extension);
+            $tableRows[] = [
+                'label' => "PHP extension $extension",
+                'required' => 'disabled',
+                'current' => (int)$loaded,
+                'result' => $loaded ? 'NO' : 'YES',
+            ];
+        }
 
         foreach ($this->requiredExtensions as $extension) {
             if ($extension == 'pcntl' && function_exists('exec')) {
@@ -529,7 +550,7 @@ class Install
         }
         $this->doLog("[CREATE ENV] final newData: " . json_encode($newData));
         unset($key, $value);
-        mysql_connect($newData['DB_HOST'], $newData['DB_USERNAME'], $newData['DB_PASSWORD'], $newData['DB_DATABASE'], $newData['DB_PORT']);
+        mysql_connect($newData['DB_HOST'], $newData['DB_USERNAME'], $newData['DB_PASSWORD'], $newData['DB_DATABASE'], (int)$newData['DB_PORT']);
         $redis = new \Redis();
         $redis->connect($newData['REDIS_HOST'], $newData['REDIS_PORT'] ?: 6379);
         if (!empty($data['REDIS_PASSWORD'])) {
@@ -703,8 +724,9 @@ class Install
         $sql = 'select version() as v';
         $result = NexusDB::select($sql);
         $version = $result[0]['v'];
-        $match = version_compare($version, '5.7.8', '>=');
-        return compact('version', 'match');
+        $minVersion = '5.7.8';
+        $match = version_compare($version, $minVersion, '>=');
+        return compact('version', 'match', 'minVersion');
     }
 
     public function getRedisVersionInfo(): array
@@ -712,8 +734,9 @@ class Install
         $redis = NexusDB::redis();
         $result = $redis->info();
         $version = $result['redis_version'];
-        $match = version_compare($version, '2.6.12', '>=');
-        return compact('version', 'match');
+        $minVersion = '4.0.0';
+        $match = version_compare($version, $minVersion, '>=');
+        return compact('version', 'match', 'minVersion');
     }
 
     public function checkLock()
@@ -741,6 +764,38 @@ class Install
         $this->doLog("[migrateSearchBoxModeRelated]");
         $searchBoxRep = new SearchBoxRepository();
         $searchBoxRep->migrateToModeRelated();
+    }
+
+    /**
+     * 初始化，注意这里不能使用 get_tracker_schema_and_host()。里面会调用 TrackerUrl， 这本来就是要往里面插入数据
+     *
+     * @param string $scene install or update
+     * @return void
+     */
+    public function initTrackerUrl(string $scene): void
+    {
+        if ($scene == "update") {
+            $announceUrl = get_setting("security.https_announce_url");
+            if (empty($announceUrl)) {
+                $announceUrl = get_setting("basic.announce_url");
+            }
+        }
+        if (empty($announceUrl)) {
+            $announceUrl = sprintf(
+                "%s/%s",
+                trim($_SERVER['HTTP_HOST'], '/'), trim(DEFAULT_TRACKER_URI, '/')
+            );
+        }
+        if (!str_starts_with($announceUrl, "http")) {
+            $announceUrl = (isHttps() ? "https://" : "http://"). $announceUrl;
+        }
+        TrackerUrl::query()->create([
+            "url" => $announceUrl,
+            "enabled" => 1,
+            "is_default" => 1,
+        ]);
+        TrackerUrl::saveUrlCache();
+        $this->doLog("[initTrackerUrl] $announceUrl success.");
     }
 
 }

@@ -73,29 +73,30 @@ print("<div align=right valign=top>".$lang_signup['text_select_lang']. $s . "</d
 ?>
 </form>
 <p>
-<form method="post" action="takesignup.php">
+<form method="post" action="takesignup.php" id="signup-form">
 <?php if ($type == 'invite') print("<input type=\"hidden\" name=\"inviter\" value=\"".$inviter."\"><input type=hidden name=type value='invite'>");?>
 <table border="1" cellspacing="0" cellpadding="10">
 <?php
 print("<tr><td class=text align=center colspan=2>".$lang_signup['text_cookies_note']."</td></tr>");
+$formInputStyle = 'style="width: min(100%, 320px); min-width: 180px; border: 1px solid gray; box-sizing: border-box"';
 if ($isPreRegisterEmailAndUsername && !empty($inv["pre_register_username"])) {
-    $usernameInput = sprintf('<input type="text" style="width: 200px" name="wantusername" value="%s" readonly />', $inv["pre_register_username"]);
+    $usernameInput = sprintf('<input type="text" %s name="wantusername" value="%s" readonly autocomplete="username" />', $formInputStyle, htmlspecialchars($inv["pre_register_username"], ENT_QUOTES));
 } else {
-    $usernameInput = '<input type="text" style="width: 200px" name="wantusername" />';
+    $usernameInput = '<input type="text" ' . $formInputStyle . ' name="wantusername" autocomplete="username" />';
 }
 
 if ($isPreRegisterEmailAndUsername && !empty($inv["pre_register_email"])) {
-    $emailInput = sprintf('<input type="text" style="width: 200px" name="email" value="%s" readonly />', $inv["pre_register_email"]);
+    $emailInput = sprintf('<input type="email" %s name="email" value="%s" readonly autocomplete="email" />', $formInputStyle, htmlspecialchars($inv["pre_register_email"], ENT_QUOTES));
 } else {
-    $emailInput = '<input type="text" style="width: 200px" name="email" />';
+    $emailInput = '<input type="email" ' . $formInputStyle . ' name="email" autocomplete="email" />';
 }
 
 ?>
 <tr><td class=rowhead><?php echo $lang_signup['row_desired_username'] ?></td><td class=rowfollow align=left><?php echo $usernameInput?><br />
 <font class=small><?php echo $lang_signup['text_allowed_characters'] ?></font></td></tr>
-<tr><td class=rowhead><?php echo $lang_signup['row_pick_a_password'] ?></td><td class=rowfollow align=left><input type="password" style="width: 200px" name="wantpassword" /><br />
+<tr><td class=rowhead><?php echo $lang_signup['row_pick_a_password'] ?></td><td class=rowfollow align=left><input type="password" <?php echo $formInputStyle; ?> class="wantpassword" autocomplete="new-password" /><br />
 	<font class=small><?php echo $lang_signup['text_minimum_six_characters'] ?></font></td></tr>
-<tr><td class=rowhead><?php echo $lang_signup['row_enter_password_again'] ?></td><td class=rowfollow align=left><input type="password" style="width: 200px" name="passagain" /></td></tr>
+<tr><td class=rowhead><?php echo $lang_signup['row_enter_password_again'] ?></td><td class=rowfollow align=left><input type="password" <?php echo $formInputStyle; ?> class="passagain" autocomplete="new-password" /></td></tr>
 <?php
 show_image_code ();
 ?>
@@ -122,9 +123,12 @@ tr($lang_signup['row_school'], "<select name=school>$schools</select>", 1);
 <tr><td class=rowhead><?php echo $lang_signup['row_verification'] ?></td><td class=rowfollow align=left><input type=checkbox name=rulesverify value=yes><?php echo $lang_signup['checkbox_read_rules'] ?><br />
 <input type=checkbox name=faqverify value=yes><?php echo $lang_signup['checkbox_read_faq'] ?> <br />
 <input type=checkbox name=ageverify value=yes><?php echo $lang_signup['checkbox_age'] ?></td></tr>
-<input type=hidden name=hash value=<?php echo $code?>>
-<tr><td class=toolbox colspan="2" align="center"><font color=red><b><?php echo $lang_signup['text_all_fields_required'] ?></b><p></font><input type=submit value=<?php echo $lang_signup['submit_sign_up'] ?> style='height: 25px'></td></tr>
+<input type=hidden name=hash value=<?php echo $code ?? '' ?>>
+    <input type="hidden" name="wantpassword" />
+<tr><td class=toolbox colspan="2" align="center"><font color=red><b><?php echo $lang_signup['text_all_fields_required'] ?></b><p></font><input id="submit-btn" type=button value=<?php echo $lang_signup['submit_sign_up'] ?> style='height: 25px'></td></tr>
 </table>
 </form>
+
 <?php
+render_password_hash_js("signup-form", "wantpassword", "wantpassword", true,"passagain", "wantusername");
 stdfoot();

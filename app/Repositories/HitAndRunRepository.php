@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Enums\ModelEventEnum;
 use App\Models\HitAndRun;
 use App\Models\Message;
 use App\Models\SearchBox;
@@ -60,16 +61,27 @@ class HitAndRunRepository extends BaseRepository
     {
         $model = HitAndRun::query()->findOrFail($id);
         $result = $model->delete();
+        HitAndRun::clearCache($model, ModelEventEnum::HIT_AND_RUN_DELETED);
         return $result;
     }
 
     public function bulkDelete(array $params, User $user)
     {
-        $result = $this->getBulkQuery($params)->delete();
+        $baseQuery = $this->getBulkQuery($params);
+        $list = $baseQuery->clone()->get();
+        if ($list->isEmpty()) {
+            return 0;
+        }
+        $result = $baseQuery->delete();
         do_log(sprintf(
             'user: %s bulk delete by filter: %s, result: %s',
             $user->id, json_encode($params), json_encode($result)
         ), 'alert');
+        if ($result) {
+            foreach ($list as $record) {
+                HitAndRun::clearCache($record, ModelEventEnum::HIT_AND_RUN_DELETED);
+            }
+        }
         return $result;
     }
 
@@ -202,6 +214,21 @@ class HitAndRunRepository extends BaseRepository
                     continue;
                 }
 
+                //check leech time
+                if (isset($setting['leech_time_minimum']) && $setting['leech_time_minimum'] > 0) {
+                    //use diff, other index should do also, update later @todo
+                    $targetLeechTime = $row->snatch->leech_time_no_seeder - $row->leech_time_no_seeder_begin;
+                    $requireLeechTime = bcmul($setting['leech_time_minimum'], 3600);
+                    do_log("$currentLog, targetLeechTime: $targetLeechTime, requireLeechTime: $requireLeechTime");
+                    if ($targetLeechTime >= $requireLeechTime) {
+                        $result = $this->reachedByLeechTime($row, $setting);
+                        if ($result) {
+                            $successCounts++;
+                        }
+                        continue;
+                    }
+                }
+
                 //check share ratio
                 $targetShareRatio = bcdiv($row->snatch->uploaded, $row->torrent->size, 4);
                 $requireShareRatio = $setting['ignore_when_ratio_reach'];
@@ -215,7 +242,7 @@ class HitAndRunRepository extends BaseRepository
                 }
 
                 //unreached
-                if ($row->created_at->addHours($setting['inspect_time'])->lte(Carbon::now())) {
+                if ($row->created_at->addHours((int)$setting['inspect_time'])->lte(Carbon::now())) {
                     $result = $this->unreached($row, $setting, !isset($disabledUsers[$row->uid]));
                     if ($result) {
                         $successCounts++;
@@ -231,12 +258,13 @@ class HitAndRunRepository extends BaseRepository
 
     private function geReachedMessage(HitAndRun $hitAndRun): array
     {
+        $snatched = $hitAndRun->snatch;
         return [
             'receiver' => $hitAndRun->uid,
             'added' => Carbon::now()->toDateTimeString(),
             'subject' => nexus_trans('hr.reached_message_subject', ['hit_and_run_id' => $hitAndRun->id], $hitAndRun->user->locale),
             'msg' => nexus_trans('hr.reached_message_content', [
-                'completed_at' => format_datetime($hitAndRun->snatch->completedat),
+                'completed_at' => format_datetime($snatched->completedat ?: $snatched->startdat),
                 'torrent_id' => $hitAndRun->torrent_id,
                 'torrent_name' => $hitAndRun->torrent->name,
             ], $hitAndRun->user->locale),
@@ -266,6 +294,20 @@ class HitAndRunRepository extends BaseRepository
             'now' => Carbon::now()->toDateTimeString(),
             'seed_time' => bcdiv($hitAndRun->snatch->seedtime, 3600, 1),
             'seed_time_minimum' => $setting['seed_time_minimum'],
+        ], $hitAndRun->user->locale);
+        $update = [
+            'comment' => $comment
+        ];
+        return $this->inspectingToReached($hitAndRun, $update, __FUNCTION__);
+    }
+
+    private function reachedByLeechTime(HitAndRun $hitAndRun, array $setting): bool
+    {
+        do_log(__METHOD__);
+        $comment = nexus_trans('hr.reached_by_leech_time_comment', [
+            'now' => Carbon::now()->toDateTimeString(),
+            'leech_time' => bcdiv($hitAndRun->snatch->leech_time_no_seeder - $hitAndRun->leech_time_no_seeder_begin, 3600, 1),
+            'leech_time_minimum' => $setting['leech_time_minimum'],
         ], $hitAndRun->user->locale);
         $update = [
             'comment' => $comment
@@ -303,6 +345,7 @@ class HitAndRunRepository extends BaseRepository
         } else {
             do_log($hitAndRun->toJson() . ", [$logPrefix], user do not accept hr_reached notification", 'notice');
         }
+        HitAndRun::clearCache($hitAndRun);
         return true;
     }
 
@@ -341,7 +384,7 @@ class HitAndRunRepository extends BaseRepository
             ], $hitAndRun->user->locale),
         ];
         Message::query()->insert($message);
-
+        HitAndRun::clearCache($hitAndRun);
         return true;
     }
 
@@ -395,6 +438,7 @@ class HitAndRunRepository extends BaseRepository
                 'reason' => $comment
             ];
             UserBanLog::query()->insert($userBanLog);
+            fire_event(ModelEventEnum::USER_UPDATED, $user);
             do_log("Disable user: " . nexus_json_encode($userBanLog));
         }
     }
@@ -471,22 +515,31 @@ class HitAndRunRepository extends BaseRepository
 
     public function bulkPardon(array $params, User $user): int
     {
-        $query = $this->getBulkQuery($params)->whereIn('status', $this->getCanPardonStatus());
+        $baseQuery = $this->getBulkQuery($params)->whereIn('status', $this->getCanPardonStatus());
+        $list = $baseQuery->clone()->get();
+        if ($list->isEmpty()) {
+            return 0;
+        }
         $update = [
             'status' => HitAndRun::STATUS_PARDONED,
             'comment' => $this->getCommentUpdateRaw(addslashes('Pardon by ' . $user->username)),
         ];
-        $affected =  $query->update($update);
+        $affected =  $baseQuery->update($update);
         do_log(sprintf(
             'user: %s bulk pardon by filter: %s, affected: %s',
             $user->id, json_encode($params), $affected
         ), 'alert');
+        if ($affected) {
+            foreach ($list as $item) {
+                HitAndRun::clearCache($item);
+            }
+        }
         return $affected;
     }
 
     private function getCommentUpdateRaw($comment): \Illuminate\Database\Query\Expression
     {
-        return DB::raw(sprintf("if (comment = '', '%s', concat('\n', '%s', comment))", $comment, $comment));
+        return NexusDB::raw(sprintf("if (comment = '', '%s', concat('\n', '%s', comment))", $comment, $comment));
     }
 
     private function getCanPardonStatus(): array

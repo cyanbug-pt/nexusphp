@@ -2,7 +2,7 @@
 require "../include/bittorrent.php";
 dbconn();
 require_once(get_langfile_path());
-require_once(get_langfile_path("",true));
+//require_once(get_langfile_path("",true));
 loggedinorreturn();
 
 if ($_SERVER["REQUEST_METHOD"] != "POST")
@@ -21,16 +21,17 @@ if ($_SERVER["REQUEST_METHOD"] != "POST")
 		if(!$_POST['to'])
 			stderr($lang_takemessage['std_error'], $lang_takemessage['std_must_enter_username']);
 		$receiver = get_user_id_from_name(trim($_POST['to']));
+        $locale = get_user_locale($receiver);
 		if ($origmsgrow['sender'] == 0)
 		{
-			$origfrom = $lang_takemessage_target[get_user_lang($receiver)]['msg_system'];
+			$origfrom = nexus_trans("message.msg_system", [], $locale);
 		}
 		else
 		{
 			$origmsgsendername = get_plain_username($origmsgrow['sender']);
 			$origfrom = "[url=userdetails.php?id=".$origmsgrow['sender']."]".$origmsgsendername."[/url]";
 		}
-		$msg = "-------- ".$lang_takemessage_target[get_user_lang($receiver)]['msg_original_message_from'] . $origfrom . " --------\n" . $origmsgrow['msg']."\n\n".($msg ? "-------- [url=userdetails.php?id=".$CURUSER["id"]."]".$CURUSER["username"]."[/url][i] Wrote at ".date("Y-m-d H:i:s").":[/i] --------\n".$msg : "");
+		$msg = "-------- ".nexus_trans("message.msg_original_message_from", [], $locale) . $origfrom . " --------\n" . $origmsgrow['msg']."\n\n".($msg ? "-------- [url=userdetails.php?id=".$CURUSER["id"]."]".$CURUSER["username"]."[/url][i] Wrote at ".date("Y-m-d H:i:s").":[/i] --------\n".$msg : "");
 
 	}
 	else
@@ -86,9 +87,17 @@ if ($_SERVER["REQUEST_METHOD"] != "POST")
 	}
 
 	$subject = trim($_POST['subject']);
-	sql_query("INSERT INTO messages (sender, receiver, added, msg, subject, saved, location) VALUES(" . sqlesc($CURUSER["id"]) . ", ".sqlesc($receiver).", '" . date("Y-m-d H:i:s") . "', " . sqlesc($msg) . ", " . sqlesc($subject) . ", " . sqlesc($save) . ", 1)") or sqlerr(__FILE__, __LINE__);
-	$Cache->delete_value('user_'.$receiver.'_unread_message_count');
-	$Cache->delete_value('user_'.$receiver.'_inbox_count');
+
+	\App\Models\Message::add([
+		'sender' => $CURUSER["id"],
+		'receiver' => $receiver,
+		'msg' => $msg,
+		'subject' => $subject,
+		'added' => now(),
+		'saved' => $save,
+		'location' => 1,
+	]);
+
 	$Cache->delete_value('user_'.$CURUSER["id"].'_outbox_count');
 
 	$msgid=mysql_insert_id();
@@ -112,22 +121,33 @@ if ($emailnotify_smtp=='yes' && $smtptype != 'none'){
 		$username = trim($CURUSER["username"]);
 		$msg_receiver = trim($user["username"]);
 		$prefix = get_protocol_prefix();
-
-		$title = "$SITENAME ".$lang_takemessage_target[get_user_lang($user["id"])]['mail_received_pm_from'] . $username . "!";
+        $locale = get_user_locale($user['id']);
+		$title = "$SITENAME ".nexus_trans("message.mail_received_pm_from", [], $locale) . $username . "!";
+        $mailDear = nexus_trans("message.mail_dear", [], $locale);
+        $mailYouReceivedAPm = nexus_trans("message.mail_you_received_a_pm", [], $locale);
+        $mailSender = nexus_trans("message.mail_sender", [], $locale);
+        $mailSubject = nexus_trans("message.mail_subject", [], $locale);
+        $mailDate = nexus_trans("message.mail_date", [], $locale);
+        $mailYouFollowingUrl = nexus_trans("message.mail_use_following_url", [], $locale);
+        $mailHere = nexus_trans("message.mail_here", [], $locale);
+        $mailYouFollowingUrl1 = nexus_trans("message.mail_use_following_url_1", [], $locale);
+        $mailYours = nexus_trans("message.mail_yours", [], $locale);
+        $siteName = \App\Models\Setting::getSiteName();
+        $mailTheSiteTeam = sprintf(nexus_trans("message.mail_the_site_team", [], $locale), $siteName);
 		$body = <<<EOD
-		{$lang_takemessage_target[get_user_lang($user["id"])]['mail_dear']}$msg_receiver,
+		{$mailDear}$msg_receiver,
 
-		{$lang_takemessage_target[get_user_lang($user["id"])]['mail_you_received_a_pm']}
+		{$mailYouReceivedAPm}
 
-		{$lang_takemessage_target[get_user_lang($user["id"])]['mail_sender']}: $username
-		{$lang_takemessage_target[get_user_lang($user["id"])]['mail_subject']}: $subject
-		{$lang_takemessage_target[get_user_lang($user["id"])]['mail_date']}: $date
+		{$mailSender}: $username
+		{$mailSubject}: $subject
+		{$mailDate}: $date
 
-		{$lang_takemessage_target[get_user_lang($user["id"])]['mail_use_following_url']}<b><a href="javascript:void(null)" onclick="window.open('$prefix$BASEURL/messages.php?action=viewmessage&id=$msgid')">{$lang_takemessage_target[get_user_lang($user["id"])]['mail_here']}</a></b>{$lang_takemessage_target[get_user_lang($user["id"])]['mail_use_following_url_1']}<br />
+		{$mailYouFollowingUrl}<b><a href="javascript:void(null)" onclick="window.open('$prefix$BASEURL/messages.php?action=viewmessage&id=$msgid')">{$mailHere}</a></b>{$mailYouFollowingUrl1}<br />
 $prefix$BASEURL/messages.php?action=viewmessage&id=$msgid
 
-		------{$lang_takemessage_target[get_user_lang($user["id"])]['mail_yours']}
-		{$lang_takemessage_target[get_user_lang($user["id"])]['mail_the_site_team']}
+		------{$mailYours}
+		{$mailTheSiteTeam}
 EOD;
 
 		sent_mail($user["email"],$SITENAME,$SITEEMAIL,$title,str_replace("<br />","<br />",nl2br($body)),"sendmessage",false,false,'');

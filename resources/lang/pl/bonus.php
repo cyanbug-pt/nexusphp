@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Wydaj bonus :bonus :medal_name',
+    'comment_buy_attendance_card' => 'Wydaj bonus :bonus kup jedną kartę',
+    'comment_buy_temporary_invite' => 'Wydaj :bonusowy zakup :count tymczasowego zaproszenia',
+    'comment_buy_rainbow_id' => 'Wydaj :bonus :duration days tęczowy ID',
+    'comment_buy_change_username_card' => 'Wydaj bonus :bonus do kupna zmiany nazwy użytkownika',
+    'comment_gift_medal' => 'Wydaj bonus :bonus kupić :medal_name i prezent na :to_username',
+    'comment_buy_torrent' => 'Wydaj bonus :bonus kupić torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Wpływy z torrenta pobrane przez :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Typ nagrody',
+        'count' => 'Liczba',
+        'size' => 'Rozmiar',
+        'a_value' => 'Wartość',
+        'bonus_base' => 'Podstawowy bonus',
+        'factor' => 'Czynnik',
+        'got_bonus' => 'Masz bonus',
+        'total' => 'Łącznie',
+    ],
+    'reward_types' => [
+        'basic' => 'Podstawowa nagroda',
+        'harem_addition' => 'Dodanie Harem',
+        'official_addition' => 'Oficjalne dodanie',
+        'medal_addition' => 'Dodanie Medalu',
+    ],
+    'not_enough' => 'Za mało bonusów! Wymaga :require_bonus, obecnie masz tylko :now_bonus',
+    'msg_someone_loves_you' => "Ktoś cię kocha",
+    'msg_you_have_been_given' => "Otrzymałeś prezent od ",
+    'msg_after_tax' => " (po opodatkowaniu ",
+    'msg_karma_points_by' => ") Punkty Karmy przez ",
+    'msg_personal_message_from' => "Prywatna wiadomość od ",
+    'msg_colon' => ": ",
+];

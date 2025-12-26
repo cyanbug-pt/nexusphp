@@ -30,7 +30,7 @@ $lang_subtitles = array
 	'row_file' => "File",
 	'text_maximum_file_size' => "Maximum file size: ",
 	'row_torrent_id' => "Torrent ID",
-	'text_torrent_id_note' => "(The number in the address bar when you go to the details page of the torrent.<br />e.g. &nbsp<b>http://".$BASEURL."/details.php?id=16</b>&nbsp the number <b>16</b> is the torrent ID)",
+	'text_torrent_id_note' => "(The number in the address bar when you go to the details page of the torrent.<br />e.g. &nbsp<b>http://%s/details.php?id=16</b>&nbsp the number <b>16</b> is the torrent ID)",
 	'row_title' => "Title",
 	'text_title_note' => "(Optional, taken from file name if not specified.)",
 	'row_language' => "Language",

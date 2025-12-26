@@ -70,11 +70,8 @@ class BonusRepository extends BaseRepository
             ], $user->locale);
             do_log("comment: $comment");
             $this->consumeUserBonus($user, $requireBonus, BonusLogs::BUSINESS_TYPE_BUY_MEDAL, "$comment(medal ID: {$medal->id})");
-            $expireAt = null;
-            if ($medal->duration > 0) {
-                $expireAt = Carbon::now()->addDays($medal->duration)->toDateTimeString();
-            }
-            $user->medals()->attach([$medal->id => ['expire_at' => $expireAt, 'status' => UserMedal::STATUS_NOT_WEARING]]);
+            $medalRep = new MedalRepository();
+            $medalRep->userAttachMedal($user, $medal);
             if ($medal->inventory !== null) {
                 $affectedRows = NexusDB::table('medals')
                     ->where('id', $medal->id)
@@ -116,7 +113,7 @@ class BonusRepository extends BaseRepository
 
             $expireAt = null;
             if ($medal->duration > 0) {
-                $expireAt = Carbon::now()->addDays($medal->duration)->toDateTimeString();
+                $expireAt = Carbon::now()->addDays((int)$medal->duration)->toDateTimeString();
             }
             $msg = [
                 'sender' => 0,
@@ -252,11 +249,11 @@ class BonusRepository extends BaseRepository
 
     }
 
-    public function consumeToBuyTorrent($uid, $torrentId, $channel = 'Web'): bool
+    public function consumeToBuyTorrent($uid, $torrentId, $channel = 'Web'): TorrentBuyLog
     {
         $torrent = Torrent::query()->findOrFail($torrentId, Torrent::$commentFields);
         $requireBonus = $torrent->price;
-        NexusDB::transaction(function () use ($requireBonus, $torrent, $channel, $uid) {
+        return NexusDB::transaction(function () use ($requireBonus, $torrent, $channel, $uid) {
             $userQuery = User::query();
             if ($requireBonus > 0) {
                 $userQuery = $userQuery->lockForUpdate();
@@ -269,7 +266,7 @@ class BonusRepository extends BaseRepository
             ], $buyerLocale);
             do_log("comment: $comment");
             $this->consumeUserBonus($user, $requireBonus, BonusLogs::BUSINESS_TYPE_BUY_TORRENT, $comment);
-            TorrentBuyLog::query()->create([
+            $buyLog = TorrentBuyLog::query()->create([
                 'uid' => $user->id,
                 'torrent_id' => $torrent->id,
                 'price' => $requireBonus,
@@ -314,10 +311,8 @@ class BonusRepository extends BaseRepository
                 ], $buyerLocale),
             ];
             Message::add($buyTorrentSuccessMessage);
+            return $buyLog;
         });
-
-        return true;
-
     }
 
     public function consumeUserBonus($user, $requireBonus, $logBusinessType, $logComment = '', array $userUpdates = [])
@@ -325,8 +320,8 @@ class BonusRepository extends BaseRepository
         if (!isset(BonusLogs::$businessTypes[$logBusinessType])) {
             throw new \InvalidArgumentException("Invalid logBusinessType: $logBusinessType");
         }
-        if (isset($userUpdates['seedbonus']) || isset($userUpdates['bonuscomment'])) {
-            throw new \InvalidArgumentException("Not support update seedbonus or bonuscomment");
+        if (isset($userUpdates['seedbonus']) || isset($userUpdates['bonuscomment']) || isset($userUpdates['modcomment'])) {
+            throw new \InvalidArgumentException("Not support update seedbonus or bonuscomment or modcomment");
         }
         if ($requireBonus <= 0) {
             return;
@@ -337,14 +332,11 @@ class BonusRepository extends BaseRepository
             throw new \LogicException("User bonus not enough.");
         }
         NexusDB::transaction(function () use ($user, $requireBonus, $logBusinessType, $logComment, $userUpdates) {
-            $logComment = addslashes($logComment);
-            $bonusComment = date('Y-m-d') . " - $logComment";
             $oldUserBonus = $user->seedbonus;
             $newUserBonus = bcsub($oldUserBonus, $requireBonus);
             $log = "user: {$user->id}, requireBonus: $requireBonus, oldUserBonus: $oldUserBonus, newUserBonus: $newUserBonus, logBusinessType: $logBusinessType, logComment: $logComment";
             do_log($log);
             $userUpdates['seedbonus'] = $newUserBonus;
-            $userUpdates['bonuscomment'] = NexusDB::raw("if(bonuscomment = '', '$bonusComment', concat_ws('\n', '$bonusComment', bonuscomment))");
             $affectedRows = NexusDB::table($user->getTable())
                 ->where('id', $user->id)
                 ->where('seedbonus', $oldUserBonus)

@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Besteed :bonus bonus aankoop :medal_name',
+    'comment_buy_attendance_card' => 'Gebruik :bonus bonus aankoop één presentiekaart',
+    'comment_buy_temporary_invite' => 'Gebruik :bonus bonus aankoop :count tijdelijke uitnodiging',
+    'comment_buy_rainbow_id' => 'Besteed :bonus bonus aankoop :duration dagen regenboog ID',
+    'comment_buy_change_username_card' => 'Besteed :bonus aankoop wijziging gebruikersnaam kaart',
+    'comment_gift_medal' => 'Besteed :bonus bonus aankoop :medal_name en gift aan :to_username',
+    'comment_buy_torrent' => 'Gebruik :bonus bonus aankoop torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'De opbrengst van torrent gedownload door :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Beloning type',
+        'count' => 'Tel',
+        'size' => 'Grootte',
+        'a_value' => 'Een waarde',
+        'bonus_base' => 'Basis bonus',
+        'factor' => 'Factor',
+        'got_bonus' => 'Kreeg bonus',
+        'total' => 'Totaal',
+    ],
+    'reward_types' => [
+        'basic' => 'Basis beloning',
+        'harem_addition' => 'Harem toevoeging',
+        'official_addition' => 'Officiële toevoeging',
+        'medal_addition' => 'Medaille toevoeging',
+    ],
+    'not_enough' => 'Niet genoeg bonus! Vereist :require_bonus, je hebt momenteel alleen :now_bonus',
+    'msg_someone_loves_you' => "Iemand houdt van je",
+    'msg_you_have_been_given' => "Je hebt een cadeau gekregen van ",
+    'msg_after_tax' => " (na BTW is het ",
+    'msg_karma_points_by' => ") Karma punten door ",
+    'msg_personal_message_from' => "Persoonlijk bericht van ",
+    'msg_colon' => ": ",
+];

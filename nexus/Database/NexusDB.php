@@ -2,12 +2,17 @@
 
 namespace Nexus\Database;
 
+use App\Models\OauthClient;
+use App\Models\PersonalAccessToken;
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
+use Laravel\Passport\Passport;
+use Laravel\Sanctum\Sanctum;
 
 class NexusDB
 {
@@ -253,14 +258,14 @@ class NexusDB
 
     public static function bootEloquent(array $config)
     {
-        $capsule = new Capsule;
+        $capsule = new Capsule(Container::getInstance());
         $connectionName = self::ELOQUENT_CONNECTION_NAME;
         $capsule->addConnection($config, $connectionName);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
         $connection = self::$eloquentConnection = $capsule->getConnection($connectionName);
         $connection->enableQueryLog();
-        $connection->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+        self::customModel();
     }
 
     private static function schema(): \Illuminate\Database\Schema\Builder
@@ -438,6 +443,16 @@ class NexusDB
             }
         }
         return false;
+    }
+
+    public static function customModel(): void
+    {
+        if (class_exists(Passport::class)) {
+            Passport::useClientModel(OauthClient::class);
+        }
+        if (class_exists(Sanctum::class)) {
+            Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+        }
     }
 
 

@@ -2,13 +2,17 @@
 
 namespace App\Filament\Resources\Oauth;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Oauth\RefreshTokenResource\Pages\ManageRefreshTokens;
 use App\Filament\Resources\Oauth\RefreshTokenResource\Pages;
 use App\Filament\Resources\Oauth\RefreshTokenResource\RelationManagers;
 use Laravel\Passport\RefreshToken;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +21,13 @@ class RefreshTokenResource extends Resource
 {
     protected static ?string $model = RefreshToken::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Oauth';
+    protected static string | \UnitEnum | null $navigationGroup = 'Oauth';
 
     protected static ?int $navigationSort = 4;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.oauth_refresh_token');
     }
@@ -33,10 +37,10 @@ class RefreshTokenResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -45,33 +49,33 @@ class RefreshTokenResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label(__('oauth.refresh_token'))
                     ->searchable()
                 ,
-                Tables\Columns\TextColumn::make('access_token_id')
+                TextColumn::make('access_token_id')
                     ->label(__('oauth.access_token'))
                     ->searchable()
                 ,
-                Tables\Columns\TextColumn::make('expires_at')
+                TextColumn::make('expires_at')
                     ->label(__('label.expire_at'))
             ])
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageRefreshTokens::route('/'),
+            'index' => ManageRefreshTokens::route('/'),
         ];
     }
 }

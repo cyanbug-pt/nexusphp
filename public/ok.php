@@ -5,19 +5,19 @@ require_once(get_langfile_path());
 if (!mkglobal("type"))
 	die();
 
-if ($type == "adminactivate") 
+if ($type == "adminactivate")
 {
 	stdhead($lang_ok['head_user_signup']);
 	stdmsg($lang_ok['std_account_activated'],
 	$lang_ok['account_activated_note']);
 }
-elseif ($type == "inviter") 
+elseif ($type == "inviter")
 {
 	stdhead($lang_ok['head_user_signup']);
 	stdmsg($lang_ok['std_account_activated'],
 	$lang_ok['account_activated_note_two']);
 }
-elseif ($type == "signup" && mkglobal("email")) 
+elseif ($type == "signup" && mkglobal("email"))
 {
 	stdhead($lang_ok['head_user_signup']);
         stdmsg($lang_ok['std_signup_successful'],
@@ -44,7 +44,7 @@ elseif ($type == "confirm") {
 		stdhead($lang_ok['head_signup_confirmation']);
 		print($lang_ok['std_account_confirmed']);
 		print($lang_ok['std_auto_logged_in_note']);
-		print($lang_ok['std_read_rules_faq']);
+		echo sprintf($lang_ok['std_read_rules_faq'], \App\Models\Setting::getSiteName());
 		stdfoot();
 	}
 	else {

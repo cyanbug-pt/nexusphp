@@ -2,7 +2,7 @@
 
 $lang_rules = array
 (
-	'head_rules' => "Ҏ�t"
+	'head_rules' => "規則"
 );
 
 ?>

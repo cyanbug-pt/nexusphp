@@ -42,20 +42,26 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (InsufficientPermissionException $e) {
-            if (request()->expectsJson()) {
-                return response()->json(fail($e->getMessage(), request()->all()), 403);
+        if (app()->runningInConsole()) {
+            return;
+        }
+        $request = request();
+        $this->reportable(function (InsufficientPermissionException $e) use ($request) {
+            if ($request->expectsJson()) {
+                return response()->json(fail($e->getMessage(), $request->all()), 403);
             } else {
                 return abort(403);
             }
         });
-        $this->renderable(function (PassportAuthenticationException $e) {
-            $request = request();
+        $this->renderable(function (PassportAuthenticationException $e) use ($request) {
             return response()->redirectTo(sprintf("%s/login.php?returnto=%s", $request->getSchemeAndHttpHost(), urlencode($request->fullUrl())));
         });
 
         //Other Only handle in json request
-        if (!request()->expectsJson()) {
+        if (!$request->expectsJson() && !$request->ajax()) {
+            $this->renderable(function (NexusException $e) use ($request) {
+                return redirect(url('/error?error=' . urlencode($e->getMessage())));
+            });
             return;
         }
 
@@ -97,6 +103,10 @@ class Handler extends ExceptionHandler
         $trace = $e->getTraceAsString();
         if (config('app.debug')) {
             $data['trace'] = $trace;
+        }
+//        dd($e);
+        if ($e instanceof \Error || $e instanceof \ErrorException) {
+            do_log(sprintf(get_class($e) . ": %s, trace: %s", $msg, $e->getTraceAsString()), "error");
         }
         return new JsonResponse(
             fail($msg, $data),

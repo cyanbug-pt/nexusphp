@@ -1,8 +1,8 @@
 name: deploy to demo site
-on:
-  push:
-    branches: [ "php8" ]
-    
+#on:
+#  push:
+#    branches: [ "php8" ]
+
 # Environment variables available to all jobs and steps in this workflow
 env:
   SSH_KEY: ${{secrets.DEMO_SSH_KEY}}
@@ -35,6 +35,6 @@ jobs:
       run: ssh demo "cd $DEMO_WEB_ROOT && php artisan nexus:update --tag=dev"
     - name: Update
       run: ssh demo "cd $DEMO_WEB_ROOT && php artisan nexus:update"
-      
-        
-  
+
+
+

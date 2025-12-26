@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use Carbon\Carbon;
+
 class BonusLogs extends NexusModel
 {
     protected $table = 'bonus_logs';
@@ -17,6 +19,7 @@ class BonusLogs extends NexusModel
     const DEFAULT_BONUS_BUY_RAINBOW_ID = 5000;
     const DEFAULT_BONUS_BUY_CHANGE_USERNAME_CARD = 100000;
 
+    //扣除类，1开始
     const BUSINESS_TYPE_CANCEL_HIT_AND_RUN = 1;
     const BUSINESS_TYPE_BUY_MEDAL = 2;
     const BUSINESS_TYPE_BUY_ATTENDANCE_CARD = 3;
@@ -38,9 +41,22 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_BUY_TORRENT = 19;
     const BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT = 20;
     const BUSINESS_TYPE_TASK_PASS_REWARD = 21;
+    const BUSINESS_TYPE_REWARD_TORRENT = 22;
 
+    //获得类，普通获得，1000 起步
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
     const BUSINESS_TYPE_TORRENT_BE_DOWNLOADED = 1001;
+    const BUSINESS_TYPE_RECEIVE_REWARD = 1002;
+    const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
+    const BUSINESS_TYPE_UPLOAD_TORRENT = 1004;
+    const BUSINESS_TYPE_TORRENT_BE_REWARD = 1005;
+
+    //获得类，做种获得，10000 起
+    const BUSINESS_TYPE_SEEDING_BASIC = 10000;
+    const BUSINESS_TYPE_SEEDING_DONOR_ADDITION = 10001;
+    const BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION = 10002;
+    const BUSINESS_TYPE_SEEDING_HAREM_ADDITION = 10003;
+    const BUSINESS_TYPE_SEEDING_MEDAL_ADDITION = 10004;
 
     public static array $businessTypes = [
         self::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => ['text' => 'Cancel H&R'],
@@ -62,9 +78,30 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => ['text' => 'Buy change username card'],
         self::BUSINESS_TYPE_GIFT_MEDAL => ['text' => 'Gift medal to someone'],
         self::BUSINESS_TYPE_BUY_TORRENT => ['text' => 'Buy torrent'],
+        self::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => ['text' => 'Task failure penalty'],
+        self::BUSINESS_TYPE_TASK_PASS_REWARD => ['text' => 'Task success reward'],
+        self::BUSINESS_TYPE_REWARD_TORRENT => ['text' => 'Reward torrent'],
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
+        self::BUSINESS_TYPE_RECEIVE_REWARD => ['text' => 'Receive reward'],
+        self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
+        self::BUSINESS_TYPE_UPLOAD_TORRENT => ['text' => 'Upload torrent'],
+        self::BUSINESS_TYPE_TORRENT_BE_REWARD => ['text' => 'Torrent be reward'],
+
+        self::BUSINESS_TYPE_SEEDING_BASIC => ['text' => 'Seeding basic'],
+        self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => ['text' => 'Seeding donor addition'],
+        self::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => ['text' => 'Seeding official addition'],
+        self::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => ['text' => 'Seeding harem addition'],
+        self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => ['text' => 'Seeding medal addition'],
+    ];
+
+    public static array $businessTypeBonus = [
+        self::BUSINESS_TYPE_SEEDING_BASIC,
+        self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION,
+        self::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION,
+        self::BUSINESS_TYPE_SEEDING_HAREM_ADDITION,
+        self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION
     ];
 
     public function getBusinessTypeTextAttribute()
@@ -100,6 +137,24 @@ class BonusLogs extends NexusModel
     {
         $result = Setting::get('bonus.change_username_card');
         return $result ?? self::DEFAULT_BONUS_BUY_CHANGE_USERNAME_CARD;
+    }
+
+    public static function add(int $userId, float $old, float $delta, float $new, string $comment, int $businessType)
+    {
+        if (!isset(self::$businessTypes[$businessType])) {
+            throw new \InvalidArgumentException("Invalid business type: $businessType");
+        }
+        $nowStr = Carbon::now()->toDateTimeString();
+        return self::query()->create([
+            'business_type' => $businessType,
+            'uid' => $userId,
+            'old_total_value' => $old,
+            'value' => $delta,
+            'new_total_value' => $new,
+            'comment' => sprintf("[%s]%s", self::$businessTypes[$businessType]['text'], $comment ? " $comment" : ""),
+            'created_at' => $nowStr,
+            'updated_at' => $nowStr,
+        ]);
     }
 
 

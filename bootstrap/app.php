@@ -1,14 +1,15 @@
 <?php
 defined('LARAVEL_START') || define('LARAVEL_START', microtime(true));
 defined('IN_NEXUS') || define('IN_NEXUS', false);
-require dirname(__DIR__) . '/include/constants.php';
-require dirname(__DIR__) . '/include/globalfunctions.php';
-require dirname(__DIR__) . '/include/functions.php';
+require_once dirname(__DIR__) . '/include/constants.php';
+require_once dirname(__DIR__) . '/include/globalfunctions.php';
+require_once dirname(__DIR__) . '/include/functions.php';
 if (!RUNNING_IN_OCTANE) {
     \Nexus\Nexus::boot();
 }
 $GLOBALS['hook'] = $hook = new \Nexus\Plugin\Hook();
 $GLOBALS['plugin'] = $plugin = new \Nexus\Plugin\Plugin();
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application

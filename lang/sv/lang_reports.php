@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Ingen rapport.",
+	'head_reports' => "Rapporter",
+	'text_reports' => "Rapporter",
+	'col_added' => "Tillagd",
+	'col_reporter' => "Reporter",
+	'col_reporting' => "Rapportering",
+	'col_type' => "Typ",
+	'col_reason' => "Anledning",
+	'col_dealt_with' => "Avsluta med",
+	'col_action' => "Lag.",
+	'text_yes' => "Ja",
+	'text_no' => "Nej",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Torrent finns inte eller tas bort.",
+	'text_user' => "Användare",
+	'text_user_does_not_exist' => "Användaren finns inte eller tas bort.",
+	'text_offer' => "Erbjudande",
+	'text_offer_does_not_exist' => "Erbjudandet finns inte eller tas bort.",
+	'text_forum_post' => "Forum inlägg",
+	'text_post_does_not_exist' => "Foruminlägg finns inte eller tas bort.",
+	'text_post_id' => "Inlägg ID ",
+	'text_of_topic' => " av ämne ",
+	'text_by' => " av ",
+	'text_comment' => "Kommentar",
+	'text_comment_does_not_exist' => "Kommentaren finns inte eller tas bort.",
+	'text_of_torrent' => " av torrent ",
+	'text_of_offer' => " av erbjudande ",
+	'text_comment_id' => "Kommentar ID ",
+	'text_subtitle' => "Undertext",
+	'text_subtitle_does_not_exist' => "Undertexten finns inte eller tas bort.",
+	'text_for_torrent_id' => " för torrent-ID ",
+	'submit_set_dealt' => "Ställ in dealt",
+	'submit_delete' => "Radera",
+);
+
+?>

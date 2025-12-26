@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\SecondIconResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\SecondIconResource;
 use App\Models\SecondIcon;
@@ -13,10 +14,10 @@ class ListSecondIcons extends PageList
 {
     protected static string $resource = SecondIconResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

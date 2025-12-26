@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class UserMeta extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['uid', 'meta_key', 'meta_value', 'status', 'deadline'];
 
     public $timestamps = true;

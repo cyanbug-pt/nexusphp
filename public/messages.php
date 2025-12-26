@@ -228,8 +228,7 @@ $sender = get_username($message['sender']);
 $reply = " [ <a href=\"sendmessage.php?receiver=" . $message['sender'] . "&replyto=" . $pm_id . "\">".$lang_messages['text_reply']."</a> ]";
 }
 }
-$body = format_comment($message['msg'], false);
-// $body = htmlspecialchars_decode($body);
+$body = format_comment($message['msg'], true);
 $added = $message['added'];
 if ($message['sender'] == $CURUSER['id'])
 {
@@ -290,8 +289,8 @@ stdfoot();
 }
 if ($action == "moveordel")
 {
-$pm_id = (int) $_POST['id'];
-$pm_box = (int) $_POST['box'];
+$pm_id = intval($_POST['id'] ?? 0);
+$pm_box = intval($_POST['box'] ?? 0);
 $pm_messages = $_POST['messages'];
 if ($_POST['markread'])
 {

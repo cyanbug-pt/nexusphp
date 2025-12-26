@@ -32,7 +32,7 @@ class Locale
             $locale = $user->locale;
             do_log("locale from user: {$user->id}, set locale: $locale");
         } else {
-            $locale = self::getLocaleFromCookie() ?? 'en';
+            $locale = self::getLocaleFromCookie() ?? self::getDefault();
             do_log("locale from cookie, set locale: $locale");
         }
         App::setLocale($locale);
@@ -41,7 +41,7 @@ class Locale
         /** @var Response $response */
         $response = $next($request);
         if ($response instanceof Response || $response instanceof JsonResponse) {
-            $response->header('Request-Id', nexus()->getRequestId())->header('Running-In-Octane', RUNNING_IN_OCTANE ? 1 : 0);
+            $response->header('X-Request-Id', nexus()->getRequestId())->header('X-Nexusphp-Version', VERSION_NUMBER);
         }
         return $response;
     }
@@ -56,13 +56,13 @@ class Locale
             $log = "Cookie::get(): $lang";
         }
         do_log($log);
-        return self::$languageMaps[$lang] ?? null;
+        return self::$languageMaps[$lang] ?? $lang;
     }
 
     public static function getDefault()
     {
         $defaultLang = get_setting("main.defaultlang");
-        return self::$languageMaps[$defaultLang] ?? null;
+        return self::$languageMaps[$defaultLang] ?? $defaultLang;
     }
 
 }

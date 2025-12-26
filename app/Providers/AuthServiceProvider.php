@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Models\Codec;
 use App\Models\Icon;
 use App\Models\Media;
-use App\Models\OauthClient;
 use App\Models\Plugin;
 use App\Models\Processing;
 use App\Models\SearchBox;
@@ -22,7 +21,6 @@ use App\Policies\CodecPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -55,13 +53,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-        if (class_exists(Passport::class)) {
-            Passport::useClientModel(OauthClient::class);
-        }
-
+        //some plugin use this guard
         Auth::viaRequest('nexus-cookie', function (Request $request) {
-            return $this->getUserByCookie($request->cookie());
+            return get_user_from_cookie($request->cookie(), false);
         });
 
         Auth::extend('nexus-web', function ($app, $name, array $config) {
@@ -79,33 +73,4 @@ class AuthServiceProvider extends ServiceProvider
 
     }
 
-    private function getUserByCookie($cookie)
-    {
-        if (empty($cookie["c_secure_pass"]) || empty($cookie["c_secure_uid"]) || empty($cookie["c_secure_login"])) {
-            return null;
-        }
-        $b_id = base64($cookie["c_secure_uid"],false);
-        $id = intval($b_id ?? 0);
-        if (!$id || !is_valid_id($id) || strlen($cookie["c_secure_pass"]) != 32) {
-            return null;
-        }
-        $user = User::query()->find($id);
-        if (!$user) {
-            return null;
-        }
-        if ($cookie["c_secure_login"] == base64("yeah")) {
-            /**
-             * Not IP related
-             * @since 1.8.0
-             */
-            if ($cookie["c_secure_pass"] != md5($user->passhash)) {
-                return null;
-            }
-        } else {
-            if ($cookie["c_secure_pass"] !== md5($user->passhash)) {
-                return null;
-            }
-        }
-        return $user;
-    }
 }

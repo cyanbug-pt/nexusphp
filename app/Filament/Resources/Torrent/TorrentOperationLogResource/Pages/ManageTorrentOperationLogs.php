@@ -13,7 +13,7 @@ class ManageTorrentOperationLogs extends PageListSingle
 {
     protected static string $resource = TorrentOperationLogResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

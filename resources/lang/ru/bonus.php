@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Потратьте :bonus bonus buy :medal_name',
+    'comment_buy_attendance_card' => 'Потратьте :bonus bonus buy one attend card',
+    'comment_buy_temporary_invite' => 'Потратить :bonus bonus buy :count временное приглашение',
+    'comment_buy_rainbow_id' => 'Потратить :bonus bonus buy :duration days rainbow ID',
+    'comment_buy_change_username_card' => 'Потратить :bonus buy изменить имя пользователя',
+    'comment_gift_medal' => 'Потратьте :bonus bonus buy :medal_name и подарок :to_username',
+    'comment_buy_torrent' => 'Потратьте :bonus bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Доходы от торрента, загруженного :username: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Тип вознаграждения',
+        'count' => 'Счетчик',
+        'size' => 'Размер',
+        'a_value' => 'Значение',
+        'bonus_base' => 'Базовый бонус',
+        'factor' => 'Фактор',
+        'got_bonus' => 'Получить бонус',
+        'total' => 'Итого',
+    ],
+    'reward_types' => [
+        'basic' => 'Базовая награда',
+        'harem_addition' => 'Добавка харема',
+        'official_addition' => 'Дополнительно',
+        'medal_addition' => 'Добавление медали',
+    ],
+    'not_enough' => 'Не хватает бонусов! Требуется :require_bonus, только для вас: :now_bonus',
+    'msg_someone_loves_you' => "Кто-то любит вас",
+    'msg_you_have_been_given' => "Вам дар ",
+    'msg_after_tax' => " (после налога ",
+    'msg_karma_points_by' => ") Кармы очки от ",
+    'msg_personal_message_from' => "Личное сообщение от ",
+    'msg_colon' => ": ",
+];

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\TeamResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Section\TeamResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -11,10 +12,10 @@ class EditTeam extends EditCodec
 {
     protected static string $resource = TeamResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

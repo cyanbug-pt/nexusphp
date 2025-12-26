@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Brugerdefineret felthåndtering',
+    'text_manage' => 'Administrer',
+    'text_add' => 'Tilføj',
+    'text_field' => 'Felt',
+    'text_delete' => 'Slet',
+    'text_edit' => 'Rediger',
+    'col_id' => 'ID',
+    'col_name' => 'Navn',
+    'col_name_help' => 'Tillad kun ciffer, alfabet, understregning',
+    'col_label' => 'Vis etiket',
+    'col_type' => 'Type',
+    'col_required' => 'Påkrævet',
+    'col_help' => 'Hjælp tekst',
+    'col_options' => 'Indstillinger',
+    'col_options_help' => 'Kræves når typen er radio, afkrydsningsfelt, vælger. Én linje, én indstilling, format: værdi display tekst',
+    'col_action' => 'Handling',
+    'col_is_single_row' => 'Vis på en enkelt række',
+    'js_sure_to_delete_this' => 'Er du sikker på at slette?',
+    'submit_submit' => 'Indsend',
+    'field_type_text' => 'Kort tekst',
+    'field_type_textarea' => 'Lang tekst',
+    'field_type_radio' => 'Vandret enkelt valg',
+    'field_type_checkbox' => 'Vandret flere valg',
+    'field_type_select' => 'Lodret enkelt valg',
+    'field_type_image' => 'Billede',
+    'col_display' => 'Tilpasset skærm',
+
+];

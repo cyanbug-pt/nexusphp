@@ -9,16 +9,22 @@ $isAdmin = user_can('staffmem');
 if($isLogin && !$isAdmin) {
     permissiondenied();
 }
+if (!$isAdmin && !\App\Models\Setting::getIsComplainEnabled()) {
+    stderr($lang_functions['std_error'], $lang_complains['complain_not_enabled']);
+}
+
 $uid = $CURUSER['id'] ?? 0;
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     switch($action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS)){
         case 'new':
             cur_user_check();
-            check_code ($_POST['imagehash'], $_POST['imagestring'],'complains.php');
+            check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,'complains.php');
+            \Nexus\Database\NexusLock::lockOrFail("complains:lock:" . getip(), 10);
             $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+            \Nexus\Database\NexusLock::lockOrFail("complains:lock:" . $email, 600);
             $body = filter_input(INPUT_POST, 'body', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if(empty($email) || empty($body)) stderr($lang_functions['std_error'], $lang_complains['text_new_failure']);
-            $user = \App\Models\User::query()->where('email', $email)->first();
+            $user = \App\Models\User::query()->where('email', $email)->where('enabled', 'no')->first();
             if (!$user) {
                 stderr($lang_functions['std_error'], $lang_complains['text_new_failure']);
             }
@@ -158,9 +164,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <h2><?= $lang_complains['text_new_complain'] ?></h2>
             <form action="" method="post">
                 <input type="hidden" name="action" value="new" />
+                <?php
+                $inputStyle = 'style="width: min(100%, 420px); min-width: 180px; border: 1px solid gray; box-sizing: border-box"';
+                $textareaStyle = 'style="width: min(100%, 420px); min-width: 180px; border: 1px solid gray; box-sizing: border-box; height: 250px; resize: vertical;"';
+                ?>
                 <table border="0" cellpadding="5">
-                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_email']?></td><td class="rowfollow" align="left"><input type="email" name="email" style="width: 180px; border: 1px solid gray" /></td></tr>
-                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_body']?></td><td class="rowfollow" align="left"><textarea name="body" style="width: 200px; height: 250px" placeholder="<?= $lang_complains['text_new_body_placeholder'] ?>"></textarea></td></tr>
+                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_email']?></td><td class="rowfollow" align="left"><input type="email" name="email" <?php echo $inputStyle; ?> autocomplete="email" /></td></tr>
+                    <tr><td class="rowhead"><?php echo $lang_complains['text_new_body']?></td><td class="rowfollow" align="left"><textarea name="body" <?php echo $textareaStyle; ?> placeholder="<?= $lang_complains['text_new_body_placeholder'] ?>"></textarea></td></tr>
                     <?php show_image_code (); ?>
                     <tr><td class="toolbox" colspan="2" align="center"><input type="submit" value="<?= $lang_complains['text_new_submit']?>" class="btn" /></td></tr>
                 </table>

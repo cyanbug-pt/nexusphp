@@ -116,7 +116,7 @@ $lang_usercp = array
 	'select_none_selected' => "未选",
 	'text_ago' => "以前",
 	'mail_here' => "这里",
-	'mail_change_email_one' => "你请求将你在".$SITENAME."站点的帐户（用户名",
+	'mail_change_email_one' => "你请求将你在%s站点的帐户（用户名",
 	'mail_change_email_two' => "）改用此邮箱地址",
 	'mail_change_email_three' => "作为联系地址。",
 	'mail_change_email_four' => "如果你没有发过该请求，请忽视本邮件。输入你邮箱地址的用户的IP地址是",
@@ -125,7 +125,7 @@ $lang_usercp = array
 	'mail_change_email_six_1' => "来确认。",
 	'mail_change_email_seven' => "你的新邮箱地址将显示在你的个人资料页面。注意：你的个人资料只有在点击以上地址后才会改变。",
 	'mail_change_email_eight' => "",
-	'mail_change_email_nine' => $SITENAME."网站",
+	'mail_change_email_nine' => "%s 网站",
 	'mail_profile_change_confirmation' => "修改个人资料验证",
 	'text_go_back' => "返回",
 	'text_category' => "类型",
@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => '登记',
     'checkbox_pm_on_topic_reply' => '论坛帖子有新回复时通知我',
     'checkbox_pm_on_hr_reached' => 'H&R 达标时通知我',
+    'row_tracker_url' => 'Tracker URL',
+    'row_tracker_url_help' => '<b>注意：</b>选择后只能向选中的链接汇报。默认只能向列表中的第 1 个默认链接汇报。',
 );
 
 ?>

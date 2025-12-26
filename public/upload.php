@@ -43,7 +43,7 @@ stdhead($lang_upload['head_upload']);
 			<table border="1" cellspacing="0" cellpadding="5" width="97%">
 				<tr>
 					<td class='colhead' colspan='2' align='center'>
-						<?php echo $lang_upload['text_tracker_url'] ?>: &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo  get_tracker_schema_and_host(true)?></b>
+						<?php echo $lang_upload['text_tracker_url'] ?>: &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo  get_tracker_schema_and_host($CURUSER['tracker_url_id'], true)?></b>
 						<?php
 						if(!is_writable(getFullDirectory($torrent_dir)))
 						print("<br /><br /><b>ATTENTION</b>: Torrent directory isn't writable. Please contact the administrator about this problem!");

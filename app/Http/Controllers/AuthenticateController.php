@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NexusException;
 use App\Http\Resources\ExamResource;
 use App\Http\Resources\UserResource;
 use App\Models\LoginLog;
+use App\Models\PersonalAccessTokenPlain;
 use App\Models\Setting;
 use App\Models\User;
 use App\Repositories\AuthenticateRepository;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
+use Nexus\Database\NexusDB;
 
 class AuthenticateController extends Controller
 {
@@ -72,17 +75,10 @@ class AuthenticateController extends Controller
     {
         $deadline = Setting::get('security.login_secret_deadline');
         if ($deadline && $deadline > now()->toDateTimeString()) {
-            $user = User::query()->where('passkey', $passkey)->first(['id', 'passhash']);
+            $user = User::query()->where('passkey', $passkey)->first(['id', 'passhash', 'secret', 'auth_key']);
             if ($user) {
                 $ip = getip();
-                /**
-                 * Not IP related
-                 * @since 1.8.0
-                 */
-//                $passhash = md5($user->passhash . $ip);
-                $passhash = md5($user->passhash);
-                do_log(sprintf('passhash: %s, ip: %s, md5: %s', $user->passhash, $ip, $passhash));
-                logincookie($user->id, $passhash,false, get_setting('system.cookie_valid_days', 365) * 86400, true, true, true);
+                logincookie($user->id, $user->auth_key);
                 $user->last_login = now();
                 $user->save();
                 $userRep = new UserRepository();
@@ -100,13 +96,22 @@ class AuthenticateController extends Controller
         try {
             $user = $this->repository->nasToolsApprove($request->data);
             $resource = new UserResource($user);
-            return $this->success($resource);
+            //temporarily compatible
+            return $this->success($this->polyfillArray($resource, $request), "Please use data.data");
         } catch (\Exception $exception) {
             $msg = $exception->getMessage();
             $params = $request->all();
             do_log(sprintf("nasToolsApprove fail: %s, params: %s", $msg, nexus_json_encode($params)));
             return $this->fail($params, $msg);
         }
+    }
+
+    private function polyfillArray(JsonResource $resource, Request $request)
+    {
+        $data = $resource->response($request)->getData(true)['data'];
+        $result = $data;
+        $result['data'] = $data;
+        return $result;
     }
 
     public function iyuuApprove(Request $request)
@@ -124,4 +129,52 @@ class AuthenticateController extends Controller
             return response()->json(["success" => false, "msg" => $exception->getMessage()]);
         }
     }
+
+    public function ammdsApprove(Request $request)
+    {
+        try {
+            $request->validate([
+                'uid' => 'required|integer',
+                'timestamp' => 'required|integer',
+                'nonce' => 'required|string',
+                'signature' => 'required|string',
+            ]);
+            $user = $this->repository->ammdsApprove($request);
+            $resource = new UserResource($user);
+            //temporarily compatible
+            return $this->success($this->polyfillArray($resource, $request), "Please use data.data");
+        } catch (\Exception $exception) {
+            $msg = $exception->getMessage();
+            $params = $request->all();
+            do_log(sprintf("ammdsApprove fail: %s, params: %s", $msg, nexus_json_encode($params)));
+            return $this->fail($params, $msg);
+        }
+    }
+
+    public function challenge(Request $request)
+    {
+        try {
+            $request->validate([
+                'username' => 'required|string',
+            ]);
+            $username = $request->username;
+            $challenge = mksecret();
+            NexusDB::cache_put(get_challenge_key($username), $challenge,300);
+            $user = User::query()->where("username", $username)->first(['secret']);
+            return $this->success([
+                "challenge" => $challenge,
+                'secret' => $user->secret ?? mksecret(),
+            ]);
+        } catch (\Exception $exception) {
+            $msg = $exception->getMessage();
+            $params = $request->all();
+            do_log(sprintf("challenge fail: %s, params: %s", $msg, nexus_json_encode($params)));
+            return $this->fail($params, $msg);
+        }
+    }
+
+
+
+
+
 }

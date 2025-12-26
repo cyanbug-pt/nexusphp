@@ -2,15 +2,22 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Components\DatePicker;
+use App\Filament\Resources\User\AttendanceLogResource\Pages\ManageAttendanceLogs;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\User\AttendanceLogResource\Pages;
 use App\Filament\Resources\User\AttendanceLogResource\RelationManagers;
 use App\Models\AttendanceLog;
 use Carbon\Carbon;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,13 +28,13 @@ class AttendanceLogResource extends Resource
 
     protected static ?string $model = AttendanceLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-pencil-alt';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-pencil-square';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 11;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.attendance_log');
     }
@@ -37,10 +44,10 @@ class AttendanceLogResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -49,34 +56,34 @@ class AttendanceLogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uid')->formatStateUsing(fn ($state) => username_for_admin($state)),
-                Tables\Columns\TextColumn::make('date')->label(__('attendance.fields.date'))->sortable(),
-                Tables\Columns\TextColumn::make('points')->label(__('attendance.fields.points')),
-                Tables\Columns\IconColumn::make('is_retroactive')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('uid')->formatStateUsing(fn ($state) => username_for_admin($state)),
+                TextColumn::make('date')->label(__('attendance.fields.date'))->sortable(),
+                TextColumn::make('points')->label(__('attendance.fields.points')),
+                IconColumn::make('is_retroactive')
                     ->label(__('attendance.fields.is_retroactive'))
                     ->boolean(true)
                 ,
-                Tables\Columns\TextColumn::make('created_at')->label(__('label.created_at')),
+                TextColumn::make('created_at')->label(__('label.created_at')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('id')
-                    ->form([
-                        Forms\Components\TextInput::make('id')
+                Filter::make('id')
+                    ->schema([
+                        TextInput::make('id')
                             ->placeholder('UID')
                         ,
                     ])->query(function (Builder $query, array $data) {
                         return $query->when($data['id'], fn (Builder $query, $value) => $query->where("uid", $value));
                     })
                 ,
-                Tables\Filters\SelectFilter::make('is_retroactive')
+                SelectFilter::make('is_retroactive')
                     ->options(self::getYesNoOptions())
                     ->label(__('attendance.fields.is_retroactive'))
                 ,
-                Tables\Filters\Filter::make('date')
-                    ->form([
-                        Forms\Components\DatePicker::make('date')
+                Filter::make('date')
+                    ->schema([
+                        DatePicker::make('date')
                             ->maxDate(now())
                             ->label(__('attendance.fields.date'))
                         ,
@@ -84,9 +91,9 @@ class AttendanceLogResource extends Resource
                         return $query->when($data['date'], fn (Builder $query, $value) => $query->where("date", $value));
                     })
                 ,
-                Tables\Filters\Filter::make('created_at')
-                    ->form([
-                        Forms\Components\DatePicker::make('created_at')
+                Filter::make('created_at')
+                    ->schema([
+                        DatePicker::make('created_at')
                             ->label(__('label.created_at'))
                         ,
                     ])->query(function (Builder $query, array $data) {
@@ -98,16 +105,16 @@ class AttendanceLogResource extends Resource
                     })
                 ,
             ])
-            ->actions([
+            ->recordActions([
             ])
-            ->bulkActions([
+            ->toolbarActions([
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageAttendanceLogs::route('/'),
+            'index' => ManageAttendanceLogs::route('/'),
         ];
     }
 }

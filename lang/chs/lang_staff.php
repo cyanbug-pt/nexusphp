@@ -22,7 +22,7 @@ $lang_staff = array
 	'title_offline' => "不在线",
 	'title_send_pm' => "发送短讯",
 	'text_vip' => "VIP",
-	'text_vip_note' => "VIP资格只授予对".$SITENAME."做出过特殊贡献的用户。如曾经的管理组成员（只显示永久VIP）。",
+	'text_vip_note' => "VIP资格只授予对%s做出过特殊贡献的用户。如曾经的管理组成员。",
 	'text_reason' => "原因",
 	'text_apply_for_it' => "申请加入",
 	'text_forum_moderators' => "论坛版主",
@@ -30,7 +30,7 @@ $lang_staff = array
 	'text_forums' => "版块",
     'std_sorry' => "对不起...",
     'std_permission_denied_only' => "你没有该权限。只有",
-    'std_or_above_can_view' => "及以上等级的用户才能查看管理组。<br /><br />请查看<a class=faqlink href=faq.php#id22><b>常见问题</b></a>了解更多关于用户等级和权限的信息。<br /><br /><b></p>" .$SITENAME."管理组</b>",
+    'std_or_above_can_view' => "及以上等级的用户才能查看管理组。<br /><br />请查看<a class=faqlink href=faq.php#id22><b>常见问题</b></a>了解更多关于用户等级和权限的信息。<br /><br /><b></p>%s管理组</b>",
 );
 
 ?>

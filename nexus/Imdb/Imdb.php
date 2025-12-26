@@ -2,8 +2,10 @@
 
 namespace Nexus\Imdb;
 
+use App\Models\Setting;
 use Imdb\Config;
 use Imdb\Title;
+use Nexus\Database\NexusDB;
 use Nexus\PTGen\PTGen;
 
 class Imdb
@@ -47,17 +49,16 @@ class Imdb
 
     private function checkDir($dir, $langKeyPrefix)
     {
-        global $lang_functions;
         if (!is_dir($dir)) {
             $mkdirResult = mkdir($dir, 0777, true);
             if ($mkdirResult !== true) {
-                $msg = $lang_functions["{$langKeyPrefix}_can_not_create"];
+                $msg = nexus_trans("torrent.{$langKeyPrefix}_can_not_create");
                 do_log("$msg, dir: $dir");
                 throw new ImdbException($msg);
             }
         }
         if (!is_writable($dir)) {
-            $msg = $lang_functions["{$langKeyPrefix}_is_not_writeable"];
+            $msg = nexus_trans("torrent.{$langKeyPrefix}_is_not_writeable");
             do_log("$msg, dir: $dir");
             throw new ImdbException($msg);
         }
@@ -174,10 +175,10 @@ class Imdb
         $temp = "";
         foreach ($movie->alsoknow() as $ak)
         {
-			$temp .= $ak["title"].$ak["year"]. ($ak["country"] != "" ? " (".$ak["country"].")" : "") . ($ak["comment"] != "" ? " (" . $ak["comment"] . ")" : "") . ", ";
+			$temp .= $ak["title"].($ak["country"] != "" ? " (".$ak["country"].")" : "") . ($ak["comment"] != "" ? " (" . $ak["comment"] . ")" : "") . ", ";
         }
         $autodata .= rtrim(trim($temp), ",");
-        $runtimes = str_replace(" min",$lang_details['text_mins'], $movie->runtime());
+        $runtimes = str_replace(" min",$lang_details['text_mins'], $movie->runtime() ?? '');
         $autodata .= "<br />\n<strong><font color=\"DarkRed\">".$lang_details['text_year']."</font></strong>" . "".$movie->year ()."<br />\n";
         $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_runtime']."</font></strong>".$runtimes."<br />\n";
         $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_votes']."</font></strong>" . "".$movie->votes ()."<br />\n";
@@ -211,7 +212,7 @@ class Imdb
             $autodata .= rtrim(trim($temp), ",");
         }
         elseif ($creator)
-            $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_creator']."</font></strong>".$creator;
+            $autodata .= "<strong><font color=\"DarkRed\">".$lang_details['text_creator']."</font></strong>".implode(", ", array_column($creator, 'name'));
 
         $autodata .= "<br />\n<strong><font color=\"DarkRed\">".$lang_details['text_written_by']."</font></strong>";
         $temp = "";
@@ -300,5 +301,32 @@ class Imdb
             $this->ptGen = new PTGen();
         }
         return $this->ptGen;
+    }
+
+    public function getMovieCover($imdbId): string
+    {
+        static $enabled;
+        if (is_null($enabled)) {
+            $enabled = Setting::getIsImdbEnabled();
+        }
+        if (!$enabled) {
+            return '';
+        }
+        return NexusDB::remember(self::getMovieCoverCacheKey($imdbId), 864000, function() use ($imdbId) {
+            if ($this->getCacheStatus($imdbId) != 1) {
+                return '';
+            }
+            try {
+                return $this->getMovie($imdbId)->photo(false);
+            } catch (\Exception $exception) {
+                do_log($exception->getMessage() . $exception->getTraceAsString(), 'error');
+                return '';
+            }
+        });
+    }
+
+    public static function getMovieCoverCacheKey($imdbId): string
+    {
+        return "imdb:cover:$imdbId";
     }
 }

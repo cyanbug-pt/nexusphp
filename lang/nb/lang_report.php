@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Feil",
+	'std_missing_reason' => "Manglende årsak!",
+	'std_message' => "Melding",
+	'std_successfully_reported' => "Vellykket rapportert!",
+	'std_already_reported_this' => "Du har allerede rapportert dette!",
+	'std_sorry' => "Beklager",
+	'std_cannot_report_oneself' => "Du kan ikke rapportere deg selv!",
+	'std_invalid_user_id' => "Ugyldig bruker Id!",
+	'std_cannot_report' => "Du kan ikke rapportere ",
+	'std_are_you_sure' => "Er du sikker?",
+	'text_are_you_sure_user' => "Er du sikker på at du vil rapportere denne brukeren ",
+	'text_to_staff' => " til personalet ved brudd på reglene?",
+	'text_not_for_leechers' => "Vær oppmerksom på at dette er <b>ikke</b> som skal brukes til å rapportere elektrikere, vi har skript på plass for å håndtere dem!",
+	'text_reason_is' => "Grunn <font class=striking>(påkrevd)</font>: ",
+	'submit_confirm' => "Bekreft",
+	'text_reason_note' => "<b><font class=striking> VENNLIGST Merk! </font></b>&nbsp;Hvis ingen grunn er gitt vil du få en advarsel selv.",
+	'std_invalid_torrent_id' => "Ugyldig Torrent Id!",
+	'text_are_you_sure_torrent' => "Er du sikker på at du vil rapportere denne torrenten ",
+	'std_invalid_post_id' => "Ugyldig Post Id!",
+	'text_are_you_sure_post' => "Er du sikker på at du ønsker å rapportere forum innlegg (NKID ",
+	'text_of_topic' => " med emne ",
+	'text_of_torrent' => " av torrent ",
+	'text_of_offer' => " med tilbud ",
+	'text_of_request' => " av anmodning ",
+	'text_by' => ") av ",
+	'std_invalid_comment_id' => "Ugyldig kommentar!",
+	'std_orphaned_comment' => "Foreldreløs kommentar. Rapporter dette til admin.",
+	'text_are_you_sure_comment' => "Er du sikker på at du ønsker å rapportere kommentaren (ID ",
+	'std_invalid_offer_id' => "Ugyldig tilbud Id!",
+	'text_are_you_sure_offer' => "Er du sikker på at du vil rapportere følgende tilbud ",
+	'std_invalid_request_id' => "Ugyldig forespørselsnummer!",
+	'std_are_you_sure_request' => "Er du sikker på at du vil rapportere følgende forespørsel ",
+	'std_invalid_action' => "Ugyldig handling.",
+	'std_invalid_subtitle_id' => "Ugyldig undertekst Id!",
+	'text_are_you_sure_subtitle' => "Er du sikker på at du vil rapportere undertittelen ",
+);
+
+?>

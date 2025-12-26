@@ -1,7 +1,9 @@
 <?php
 
 return [
+    'section' => '分区',
     'category_label' => '分类',
+    'sub_categories_label' => '子分类',
     'sub_category_source_label' => '来源',
     'sub_category_medium_label' => '媒介',
     'sub_category_standard_label' => '分辨率',

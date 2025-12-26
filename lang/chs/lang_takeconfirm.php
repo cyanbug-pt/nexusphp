@@ -8,7 +8,7 @@ $lang_takeconfirm = array
 	'mail_title' => "网站账户验证",
 	'mail_here' => "这里",
 	'mail_content_1' => "你好,<br /><br />你的账号成功通过验证。你可以进入登录页面: ",
-	'mail_content_2' => "<br /><br />使用你的账户登录。登录后请先阅读站点规则，提问前请自行参考常见问题。<br /><br />祝你好运！ ".$SITENAME."!<br /><br />如果你不认识邀请你的人，请将本邮件转发至".$REPORTMAIL."<br />------<br />".$SITENAME." 网站"
+	'mail_content_2' => "<br /><br />使用你的账户登录。登录后请先阅读站点规则，提问前请自行参考常见问题。<br /><br />祝你好运！ %s!<br /><br />如果你不认识邀请你的人，请将本邮件转发至%s<br />------<br />%s 网站"
 );
 
 ?>

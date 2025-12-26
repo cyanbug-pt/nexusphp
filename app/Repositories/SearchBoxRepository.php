@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
+use App\Auth\Permission;
 use App\Exceptions\InsufficientPermissionException;
 use App\Http\Middleware\Locale;
 use App\Models\Category;
 use App\Models\Icon;
 use App\Models\NexusModel;
 use App\Models\SearchBox;
-use App\Models\SearchBoxField;
 use App\Models\SecondIcon;
 use App\Models\Setting;
 use App\Models\Torrent;
@@ -240,6 +240,107 @@ class SearchBoxRepository extends BaseRepository
             throw new \RuntimeException("There are torrents that belong to this category and cannot be deleted!");
         }
         return Category::query()->whereIn('id', $idArr)->delete();
+    }
+
+    public function listSections($id, $withCategoryAndTags = true)
+    {
+        $searchBoxList = SearchBox::query()->with($withCategoryAndTags ? ['categories'] : [])->find($id);
+        if ($withCategoryAndTags) {
+            foreach ($searchBoxList as $searchBox) {
+                if ($searchBox->showsubcat) {
+                    $searchBox->loadSubCategories();
+                }
+                $searchBox->loadTags();
+            }
+        }
+        return $searchBoxList;
+    }
+
+    public function buildSearchBoxFormSchema(SearchBox $searchBox, string $namePrefix): Forms\Components\Section
+    {
+        $lang = get_langfolder_cookie();
+        $heading = $searchBox->section_name[$lang] ?? nexus_trans('searchbox.sections.browse');
+        return Forms\Components\Section::make($heading)
+            ->schema($this->buildCategoryTaxonomyTagSchema($searchBox, false, $namePrefix));
+    }
+
+    public function buildCategoryTaxonomyTagSchema(SearchBox $searchBox, bool $multiple, string $namePrefix): array
+    {
+        $schema = [];
+        $mode = $searchBox->id;
+        $namePrefix .= ".section.$mode";
+        if ($multiple) {
+            $schema[] = Forms\Components\CheckboxList::make("$namePrefix.category")
+                ->options($searchBox->categories()->orderBy('sort_index', 'desc')->orderBy('id')->pluck('name', 'id'))
+                ->label(nexus_trans('label.search_box.category'))
+                ->columns(6);
+        } else {
+            $schema[] = Forms\Components\Radio::make("$namePrefix.category")
+                ->options($searchBox->categories()->orderBy('sort_index', 'desc')->orderBy('id')->pluck('name', 'id'))
+                ->label(nexus_trans('label.search_box.category'))
+                ->columns(6);
+        }
+
+        $fieldset = Forms\Components\Fieldset::make(nexus_trans('searchbox.sub_categories_label'));
+        $fieldsetSchema = [];
+        //Keep the order
+        if (!empty($searchBox->extra[SearchBox::EXTRA_TAXONOMY_LABELS])) {
+            foreach ($searchBox->extra[SearchBox::EXTRA_TAXONOMY_LABELS] as $taxonomy) {
+                $torrentField = $taxonomy['torrent_field'];
+                $showField = "show" . $torrentField;
+                if ($searchBox->showsubcat && $searchBox->{$showField}) {
+                    if ($multiple) {
+                        $fieldsetSchema[] = Forms\Components\CheckboxList::make("$namePrefix.$torrentField")
+                            ->options($this->listTaxonomies($torrentField, $mode))
+                            ->label($searchBox->getTaxonomyLabel($torrentField))
+                            ->columns(6)
+                        ;
+                    } else {
+                        $fieldsetSchema[] = Forms\Components\Radio::make("$namePrefix.$torrentField")
+                            ->options($this->listTaxonomies($torrentField, $mode))
+                            ->label($searchBox->getTaxonomyLabel($torrentField))
+                            ->columns(6)
+                        ;
+                    }
+                }
+            }
+        } else {
+            foreach (SearchBox::$taxonomies as $torrentField => $taxonomyTableModel) {
+                $showField = "show" . $torrentField;
+                if ($searchBox->showsubcat && $searchBox->{$showField}) {
+                    $fieldsetSchema[] = Forms\Components\CheckboxList::make("$namePrefix.$torrentField")
+                        ->options($this->listTaxonomies($torrentField, $mode))
+                        ->label($searchBox->getTaxonomyLabel($torrentField))
+                        ->columns(6)
+                    ;
+                }
+            }
+        }
+        $fieldset->schema($fieldsetSchema)->columns(1);
+        $schema[] = $fieldset;
+
+        $tagRep = new TagRepository();
+        $tags = $tagRep->listAll($searchBox->id);
+        $schema[] = Forms\Components\CheckboxList::make("$namePrefix.tag")
+            ->options($tags->pluck('name', 'id'))
+            ->label(nexus_trans('label.tag.label'))
+            ->columns(6)
+        ;
+
+        return $schema;
+    }
+
+    private function listTaxonomies($torrentField, $mode)
+    {
+        $tableName = SearchBox::$taxonomies[$torrentField]['table'];
+        return NexusDB::table($tableName)
+            ->where(function (\Illuminate\Database\Query\Builder $query) use ($mode) {
+                return $query->where('mode', $mode)->orWhere('mode', 0);
+            })
+            ->orderBy('sort_index', 'desc')
+            ->orderBy('id', 'desc')
+            ->pluck('name', 'id')
+            ;
     }
 
 

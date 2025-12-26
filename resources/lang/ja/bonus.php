@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => '支出:bonus buy :medal_name',
+    'comment_buy_attendance_card' => ':bonus bonus buy one attential card.',
+    'comment_buy_temporary_invite' => ':bonus bonus buy :count temporary invite',
+    'comment_buy_rainbow_id' => ':bonus bonus buy :duration days レインボーID を使う',
+    'comment_buy_change_username_card' => 'USend :bonus bonus buy change username card',
+    'comment_gift_medal' => ':bonus bonus buy :medal_name and gift to :to_username',
+    'comment_buy_torrent' => ':bonus bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => ':username(UID:uid)がダウンロードしたトレントから収益を得ます。',
+    'table_thead' => [
+        'reward_type' => '報酬タイプ',
+        'count' => 'カウント',
+        'size' => 'サイズ',
+        'a_value' => '値',
+        'bonus_base' => '基本ボーナス',
+        'factor' => '係数',
+        'got_bonus' => 'ボーナス獲得',
+        'total' => '合計',
+    ],
+    'reward_types' => [
+        'basic' => '基本報酬',
+        'harem_addition' => 'ハーレムの追加',
+        'official_addition' => '公式追加',
+        'medal_addition' => '勲章追加',
+    ],
+    'not_enough' => 'ボーナスが足りません！:require_bonusが必要です。現在のボーナスは:now_bonです。',
+    'msg_someone_loves_you' => "誰かがあなたを愛しています",
+    'msg_you_have_been_given' => "以下のギフトが与えられました ",
+    'msg_after_tax' => " (税金の後 ",
+    'msg_karma_points_by' => ") カルマポイント ",
+    'msg_personal_message_from' => "個人からのメッセージ ",
+    'msg_colon' => ": ",
+];

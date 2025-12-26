@@ -30,7 +30,7 @@ $lang_subtitles = array
 	'row_file' => "文件",
 	'text_maximum_file_size' => "檔最大限制：",
 	'row_torrent_id' => "種子ID",
-	'text_torrent_id_note' => "(種子詳情頁面網址末尾的數位。<br />如&nbsp<b>http://".$BASEURL."/details.php?id=16</b>&nbsp數字<b>16</b>即種子ID)",
+	'text_torrent_id_note' => "(種子詳情頁面網址末尾的數位。<br />如&nbsp<b>http://%s/details.php?id=16</b>&nbsp數字<b>16</b>即種子ID)",
 	'row_title' => "標題",
 	'text_title_note' => "(可選，不填則使用種子檔案名)",
 	'row_language' => "語言",

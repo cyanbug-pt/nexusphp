@@ -81,13 +81,15 @@ else {
                     print("<tr><td class=colhead align=left>{$lang_viewrequests['thead_name']}</td><td class=colhead align=center>{$lang_viewrequests['thead_price_newest']}</td><td class=colhead align=center>{$lang_viewrequests['thead_price_original']}</td><td class=colhead  align=center>{$lang_viewrequests['thead_comment_count']}</td><td class=colhead  align=center>{$lang_viewrequests['thead_on_request_count']}</td><td class=colhead align=center>{$lang_viewrequests['thead_request_user']}</td><td class=colhead align=center>{$lang_viewrequests['thead_created_at']}</td><td class=colhead align=center>{$lang_viewrequests['thead_status']}</td></tr>\n");
                     while ($row = mysql_fetch_array($rows)) {
                         print("<tr>
-	<td align=left class='rowfollow'><a href='viewrequests.php?action=view&id=" . $row["id"] . "'><b>" . $row["request"] . "</b></a></td>
-	<td align=center class='rowfollow nowrap'><font color=#ff0000><b>" . $row['amount'] . "</b></font></td>
-	<td align=center class='rowfollow nowrap'>" . $row['ori_amount'] . "</td>
-	<td align=center class='rowfollow nowrap'>" . ($row['comments']) . "</td><td align=center>" . ($row['Totalreq']) . "</td>
-	<td align=center class='rowfollow nowrap'>" . get_username($row['userid']) . "</td>
-	<td align=center class='rowfollow nowrap'>" . gettime($row['added'], true, false) . "</td>
-	<td align=center class='rowfollow nowrap'>" . ($row['finish'] == "yes" ? $lang_viewrequests['request_status_resolved'] : ($row['userid'] == $CURUSER['id'] ? $lang_viewrequests['request_status_resolving'] : "<a href='viewrequests.php?action=res&id=" . $row["id"] . "'>{$lang_viewrequests['request_status_resolving']}</a>")) . "</td></tr>\n");
+                                <td align=left class='rowfollow'><a href='viewrequests.php?action=view&id=" . $row["id"] . "'><b>" . $row["request"] . "</b></a></td>
+                                <td align=center class='rowfollow nowrap'><font color=#ff0000><b>" . $row['amount'] . "</b></font></td>
+                                <td align=center class='rowfollow nowrap'>" . $row['ori_amount'] . "</td>
+                                <td align=center class='rowfollow nowrap'>" . ($row['comments']) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . ($row['Totalreq']) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . get_username($row['userid']) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . gettime($row['added'], true, false) . "</td>
+                                <td align=center class='rowfollow nowrap'>" . ($row['finish'] == "yes" ? $lang_viewrequests['request_status_resolved'] : ($row['userid'] == $CURUSER['id'] ? $lang_viewrequests['request_status_resolving'] : "<a href='viewrequests.php?action=res&id=" . $row["id"] . "'>{$lang_viewrequests['request_status_resolving']}</a>")) . "</td>
+                            </tr>\n");
                     }
                 }
                 print("</table>\n");
@@ -356,10 +358,16 @@ else {
 
 
             $added = sqlesc(date("Y-m-d H:i:s"));
-            $subject = sqlesc($lang_viewrequests['message_please_confirm_supply']);
-            $notifs = sqlesc("{$lang_viewrequests['request_name']}:[url=viewrequests.php?id=$arr[id]] " . $arr['request'] . "[/url],{$lang_viewrequests['please_confirm_supply']}.");
-            sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, " . $arr['userid'] . ", $subject, $notifs, $added)") or sqlerr(__FILE__, __LINE__);
+            $subject = $lang_viewrequests['message_please_confirm_supply'];
+            $notifs = "{$lang_viewrequests['request_name']}:[url=viewrequests.php?id=$arr[id]] " . $arr['request'] . "[/url],{$lang_viewrequests['please_confirm_supply']}.";
 
+            App\Models\Message::add([
+                'sender' => 0,
+                'receiver' => $arr['userid'],
+                'subject' => $subject,
+                'msg' => $notifs,
+                'added' => now(),
+            ]);
 
             stderr($lang_functions['std_success'], "{$lang_viewrequests['supply_success']}，<a href='viewrequests.php?action=view&id=" . $_POST["reqid"] . "'>{$lang_functions['std_click_here_to_goback']}</a>", 0);
             die;
@@ -422,11 +430,16 @@ else {
                 while ($row = mysql_fetch_array($res)) {
 
                     $owner[] = $row[0];
-                    $added = sqlesc(date("Y-m-d H:i:s"));
-                    $subject = sqlesc($lang_viewrequests['torrent_is_picked_for_request']);
-                    $notifs = sqlesc("{$lang_viewrequests['request_name']}:[url=viewrequests.php?id=$arr[id]] " . $arr['request'] . "[/url].{$lang_functions['std_you_will_get']}: $amount {$lang_functions['text_bonus']}");
-                    sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, " . $row[0] . ", $subject, $notifs, $added)") or sqlerr(__FILE__, __LINE__);
-
+                    $added = now();
+                    $subject = $lang_viewrequests['torrent_is_picked_for_request'];
+                    $notifs = "{$lang_viewrequests['request_name']}:[url=viewrequests.php?id=$arr[id]] " . $arr['request'] . "[/url].{$lang_functions['std_you_will_get']}: $amount {$lang_functions['text_bonus']}";
+                    \App\Models\Message::add([
+                        'sender' => 0,
+                        'receiver' => $row[0],
+                        'added' => now(),
+                        'msg' => $notifs,
+                        'subject' => $subject,
+                    ]);
                 }
                 sql_query("UPDATE users SET seedbonus = seedbonus + $amount WHERE id = '" . join("' OR id = '", $owner) . "'") or sqlerr(__FILE__, __LINE__);
                 stderr($lang_functions['std_success'], "{$lang_viewrequests['confirm_request_success']}，<a href='viewrequests.php?action=view&id=" . $_POST["id"] . "'>{$lang_functions['std_click_here_to_goback']}</a>", 0);
@@ -450,12 +463,29 @@ else {
 
             //sql_query("INSERT reqcommen (user , added ,text ,reqid) VALUES ( '".$CURUSER["id"]."' , ".sqlesc(date("Y-m-d H:i:s"))." , ".sqlesc($_POST["message"])." , '".$_POST["id"]."'    )");
             sql_query("INSERT INTO comments (user, request, added, text, ori_text) VALUES (" . $CURUSER["id"] . ",{$_POST['id']}, '" . date("Y-m-d H:i:s") . "', " . sqlesc($_POST["message"]) . "," . sqlesc($_POST["message"]) . ")");
-
-            if ($CURUSER["id"] <> $arr['userid']) sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, " . $arr['userid'] . ", '{$lang_viewrequests['request_get_new_reply']}', " . sqlesc(" [url=viewrequests.php?action=view&id={$_POST['id']}] " . $arr['request'] . "[/url].") . ", " . sqlesc(date("Y-m-d H:i:s")) . ")") or sqlerr(__FILE__, __LINE__);
-
+            $id = (int) ($_POST['id'] ?? 0);
+            if ($CURUSER["id"] <> $arr['userid']) 
+            {
+                //sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, " . $arr['userid'] . ", '{$lang_viewrequests['request_get_new_reply']}', " . sqlesc(" [url=viewrequests.php?action=view&id={$_POST['id']}] " . $arr['request'] . "[/url].") . ", " . sqlesc(date("Y-m-d H:i:s")) . ")") or sqlerr(__FILE__, __LINE__);
+                \App\Models\Message::add([
+                    'sender' => 0,
+                    'receiver' => $arr['userid'],
+                    'subject' => $lang_viewrequests['request_get_new_reply'],
+                    'msg' => " [url=viewrequests.php?action=view&id={$id}] " . $arr['request'] . "[/url]",
+                    'added' => now(),
+                ]);
+            }
             $ruserid = 0 + $_POST["ruserid"];
-            if ($ruserid <> $CURUSER["id"] && $ruserid <> $arr['userid']) sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, " . $ruserid . ", '{$lang_viewrequests['request_comment_get_new_reply']}', " . sqlesc(" [url=viewrequests.php?action=view&id={$_POST['id']}] " . $arr['request'] . "[/url].") . ", " . sqlesc(date("Y-m-d H:i:s")) . ")") or sqlerr(__FILE__, __LINE__);
-
+            if ($ruserid <> $CURUSER["id"] && $ruserid <> $arr['userid']) 
+            {
+                \App\Models\Message::add([
+                    'sender' => 0,
+                    'receiver' => $ruserid,
+                    'subject' => $lang_viewrequests['request_comment_get_new_reply'],
+                    'msg' => " [url=viewrequests.php?action=view&id={$id}] " . $arr['request'] . "[/url]",
+                    'added' => now(),
+                ]);
+            }
             header("Location: viewrequests.php?action=view&id=" . $_POST['id']);
         }
     }

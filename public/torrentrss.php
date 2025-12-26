@@ -11,16 +11,18 @@ if ($cacheData && nexus_env('APP_ENV') != 'local') {
     header ("Content-type: text/xml");
     die($cacheData);
 }
-dbconn();
+dbconn(doLogin: false);
 function hex_esc($matches) {
 	return sprintf("%02x", ord($matches[0]));
 }
 $dllink = false;
 
-$where = "torrents.visible = 'yes'";
+$where = "";
 if ($passkey){
-	$res = sql_query("SELECT id, enabled, parked, passkey FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
-	$user = mysql_fetch_array($res);
+    $user = \Nexus\Database\NexusDB::remember('user_passkey_'.$passkey.'_rss', 3600, function () use ($passkey) {
+        $res = sql_query("SELECT id, enabled, parked, passkey FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
+        return mysql_fetch_array($res);
+    });
 	if (!$user)
 		die("invalid passkey");
 	elseif ($user['enabled'] == 'no' || $user['parked'] == 'yes')
@@ -37,7 +39,8 @@ if ($passkey){
 		}
 	}
 }
-$searchstr = mysql_real_escape_string(trim($_GET["search"] ?? ''));
+//$searchstr = mysql_real_escape_string(trim($_GET["search"] ?? ''));
+$searchstr = null;//don't support search, use client self filter instead
 if (empty($searchstr))
 	unset($searchstr);
 if (isset($searchstr)){
@@ -81,8 +84,8 @@ if ($startindex) {
     $limit .= $startindex.", ";
 }
 $showrows = intval($_GET['rows'] ?? 0);
-if($showrows < 1 || $showrows > 200) {
-    $showrows = 10;
+if($showrows < 1 || $showrows > 50) {
+    $showrows = 50;
 }
 $limit .= $showrows;
 
@@ -95,8 +98,11 @@ if ($approvalStatusNoneVisible == 'no' && !user_can('staffmem', false, $user['id
 $browseMode = get_setting('main.browsecat');
 $onlyBrowseSection = get_setting('main.spsct') != 'yes' || !user_can('view_special_torrent', false, $user['id']);
 if ($onlyBrowseSection) {
-    $where .= ($where ? " AND " : "") . "categories.mode = $browseMode";
+    $allBrowseCategoryId = \App\Models\SearchBox::listCategoryId($browseMode);
+    $where .= ($where ? " AND " : "") . sprintf("torrents.category in (%s)", implode(",", $allBrowseCategoryId));
 }
+//visible
+$where .= ($where ? " AND " : "") . "torrents.visible = 'yes'";
 //check price
 if (isset($_GET['paid']) && in_array($_GET['paid'], ['0', '1', '2'], true)) {
     $paidFilter = $_GET['paid'];
@@ -171,15 +177,19 @@ if ($where) {
     }
 }
 $sort = "id desc";
-$fieldStr = "torrents.id, torrents.category, torrents.name, torrents.small_descr, torrents.descr, torrents.info_hash, torrents.size, torrents.added, torrents.anonymous, torrents.owner, categories.name AS category_name";
-//$query = "SELECT torrents.id, torrents.category, torrents.name, torrents.small_descr, torrents.descr, torrents.info_hash, torrents.size, torrents.added, torrents.anonymous, users.username AS username, categories.id AS cat_id, categories.name AS cat_name FROM torrents LEFT JOIN categories ON category = categories.id LEFT JOIN users ON torrents.owner = users.id $where ORDER BY $sort LIMIT $limit";
+$fieldStr = "torrents.id, torrents.category, torrents.name, torrents.small_descr, torrent_extras.descr, torrents.info_hash, torrents.size, torrents.added, torrents.anonymous, torrents.owner, categories.name AS category_name";
 if (!$noNormalResults) {
-    $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id $normalWhere ORDER BY $sort LIMIT $limit";
-    $normalRows = \Nexus\Database\NexusDB::select($query);
+    $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON torrents.category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id $normalWhere ORDER BY $sort LIMIT $limit";
+    $normalRows = \Nexus\Database\NexusDB::remember(sprintf("nexus_rss:normal:%s", md5($query)), 300, function () use ($query) {
+        return \Nexus\Database\NexusDB::select($query);
+    });
 }
 if (!empty($prependIdArr) && $startindex == 0) {
     $prependIdStr = implode(',', $prependIdArr);
-    $prependRows = \Nexus\Database\NexusDB::select("SELECT $fieldStr FROM torrents LEFT JOIN categories ON category = categories.id where torrents.id in ($prependIdStr) and $where ORDER BY field(torrents.id, $prependIdStr)");
+    $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON torrents.category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id where torrents.id in ($prependIdStr) and $where ORDER BY field(torrents.id, $prependIdStr)";
+    $prependRows = \Nexus\Database\NexusDB::remember(sprintf("nexus_rss:prepend:%s", md5($query)), 300, function () use ($query) {
+        return \Nexus\Database\NexusDB::select($query);
+    });
 }
 $list = [];
 foreach ($prependRows as $row) {
@@ -240,7 +250,7 @@ foreach ($list as $row)
     }
 	$itemurl = $url."/details.php?id=".$row['id'];
 	if ($dllink)
-		$itemdlurl = $url."/download.php?id=".$row['id']."&amp;downhash=" . rawurlencode( $user['id'] . '|'. $torrentRep->encryptDownHash($row['id'], $user));
+		$itemdlurl = $torrentRep->getDownloadUrl($row['id'], $user);
 	else $itemdlurl = $url."/download.php?id=".$row['id'];
 	if (!empty($_GET['icat'])) $title .= "[".$row['category_name']."]";
 	$title .= $row['name'];

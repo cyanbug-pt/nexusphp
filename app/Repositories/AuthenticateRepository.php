@@ -5,6 +5,8 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Encryption\Encrypter;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -55,7 +57,7 @@ class AuthenticateRepository extends BaseRepository
 
     public function nasToolsApprove(string $json)
     {
-        $key = env('NAS_TOOLS_KEY');
+        $key = config('nexus.nas_tools_key');
         $encrypter = new Encrypter($key);
         $decrypted = $encrypter->decryptString($json);
         $data = json_decode($decrypted, true);
@@ -76,7 +78,7 @@ class AuthenticateRepository extends BaseRepository
 
     public function iyuuApprove($token, $id, $verity)
     {
-        $secret = env('IYUU_SECRET');
+        $secret = config('nexus.iyuu_secret');
         $user = User::query()->findOrFail($id, User::$commonFields);
         $user->checkIsNormal();
         $encryptedResult = md5($token . $id . sha1($user->passkey) . $secret);
@@ -84,5 +86,32 @@ class AuthenticateRepository extends BaseRepository
             throw new \InvalidArgumentException("Invalid uid or passkey");
         }
         return true;
+    }
+
+    public function ammdsApprove(Request $request)
+    {
+        $now = Carbon::now();
+        if (abs($now->getTimestampMs() - $request->timestamp) > 300 * 1000) {
+            throw new \InvalidArgumentException("expired.");
+        }
+        $cacheKey = sprintf("ammdsApprove:%s", $request->nonce);
+        if (Cache::has($cacheKey)) {
+            throw new \InvalidArgumentException("duplicate.");
+        }
+        Cache::put($cacheKey, 1, 600);
+        $user = User::query()->findOrFail($request->uid, User::$commonFields);
+        $user->checkIsNormal();
+        $passkeyHash = hash('sha256', $user->passkey);
+        $dataToSign = sprintf("%s%s%s%s", $user->id, $passkeyHash, $request->timestamp, $request->nonce);
+        $signatureKey = config('nexus.ammds_secret');
+        $serverSignature = hash_hmac('sha256', $dataToSign, $signatureKey);
+        if (!hash_equals($serverSignature, $request->signature)) {
+            do_log(sprintf(
+                "uid: %s, passkey_hash: %s, timestamp: %s, nonce: %s, dataToSign: %s, signatureKey: %s, serverSignature: %s, requestSignature: %s, !hash_equals",
+                $user->id, $passkeyHash, $request->timestamp, $request->nonce, $dataToSign, $signatureKey, $serverSignature, $request->signature
+            ));
+            throw new \InvalidArgumentException("Invalid signature.");
+        }
+        return $user;
     }
 }

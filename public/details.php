@@ -6,13 +6,14 @@ require_once(get_langfile_path());
 loggedinorreturn();
 $id = intval($_GET["id"] ?? 0);
 $customField = new \Nexus\Field\Field();
-int_check($id);
+int_check($id, true);
 if (!isset($id) || !$id)
 die();
 
 $taxonomyFields = "sources.name AS source_name, media.name AS medium_name, codecs.name AS codec_name, standards.name AS standard_name, processings.name AS processing_name, teams.name AS team_name, audiocodecs.name AS audiocodec_name";
-$res = sql_query("SELECT torrents.cache_stamp, torrents.sp_state, torrents.url, torrents.small_descr, torrents.seeders, torrents.banned, torrents.leechers, torrents.info_hash, torrents.filename, nfo, LENGTH(torrents.nfo) AS nfosz, torrents.last_action, torrents.name, torrents.owner, torrents.save_as, torrents.descr, torrents.visible, torrents.size, torrents.added, torrents.views, torrents.hits, torrents.times_completed, torrents.id, torrents.type, torrents.numfiles, torrents.anonymous, torrents.pt_gen, torrents.technical_info, torrents.hr, torrents.promotion_until, torrents.promotion_time_type, torrents.approval_status, torrents.price,
-       categories.name AS cat_name, categories.mode as search_box_id, $taxonomyFields
+$extraFields = "torrent_extras.descr, torrent_extras.nfo, LENGTH(torrent_extras.nfo) AS nfosz, torrent_extras.media_info as technical_info";
+$res = sql_query("SELECT torrents.cache_stamp, torrents.sp_state, torrents.url, torrents.small_descr, torrents.seeders, torrents.banned, torrents.leechers, torrents.info_hash, torrents.filename, torrents.last_action, torrents.name, torrents.owner, torrents.save_as, torrents.visible, torrents.size, torrents.added, torrents.views, torrents.hits, torrents.times_completed, torrents.id, torrents.type, torrents.numfiles, torrents.anonymous, torrents.hr, torrents.promotion_until, torrents.promotion_time_type, torrents.approval_status, torrents.price,
+       categories.name AS cat_name, categories.mode as search_box_id, $taxonomyFields, $extraFields
 FROM torrents LEFT JOIN categories ON torrents.category = categories.id
     LEFT JOIN sources ON torrents.source = sources.id
     LEFT JOIN media ON torrents.medium = media.id
@@ -21,6 +22,7 @@ FROM torrents LEFT JOIN categories ON torrents.category = categories.id
     LEFT JOIN processings ON torrents.processing = processings.id
     LEFT JOIN teams ON torrents.team = teams.id
     LEFT JOIN audiocodecs ON torrents.audiocodec = audiocodecs.id
+    LEFT JOIN torrent_extras ON torrents.id = torrent_extras.torrent_id
 WHERE torrents.id = $id LIMIT 1")
 or sqlerr();
 $row = mysql_fetch_array($res);
@@ -247,7 +249,7 @@ JS;
         }
         // ------------- end claim block ------------------//
 
-        tr($lang_details['torrent_dl_url'],sprintf('<a title="%s" href="%s/download.php?downhash=%s|%s">%s</a>',$lang_details['torrent_dl_url_notice'], getSchemeAndHttpHost(), $CURUSER['id'], $torrentRep->encryptDownHash($row['id'], $CURUSER), $lang_details['torrent_dl_url_text']),1);
+        tr($lang_details['torrent_dl_url'],sprintf('<a title="%s" href="%s">%s</a>',$lang_details['torrent_dl_url_notice'], $torrentRep->getDownloadUrl($id, $CURUSER), $lang_details['torrent_dl_url_text']),1);
 
 		// ---------------- start subtitle block -------------------//
         $subTorrentIdArr = [$row['id']];
@@ -306,7 +308,28 @@ JS;
 
         //technical info
         if ($settingMain['enable_technical_info'] == 'yes') {
-            $technicalInfo = new \Nexus\Torrent\TechnicalInformation($row['technical_info'] ?? '');
+            $technicalData = $row['technical_info'] ?? '';
+            
+            // 判断是否为BDINFO格式
+            $isBdInfo = false;
+            if (!empty($technicalData)) {
+                $firstLine = strtok($technicalData, "\n");
+                if (strpos($firstLine, 'DISC INFO') !== false 
+				|| strpos($firstLine, 'Disc Title') !== false
+				|| strpos($firstLine, 'Disc Label') !== false
+				) {
+                    $isBdInfo = true;
+                }
+            }
+            
+            if ($isBdInfo) {
+                // 使用BdInfoExtra处理BDINFO格式
+                $technicalInfo = new \Nexus\Torrent\BdInfoExtra($technicalData);
+            } else {
+                // 使用TechnicalInformation处理MediaInfo格式
+                $technicalInfo = new \Nexus\Torrent\TechnicalInformation($technicalData);
+            }
+            
             $technicalInfoResult = $technicalInfo->renderOnDetailsPage();
             if (!empty($technicalInfoResult)) {
                 tr($lang_functions['text_technical_info'], $technicalInfoResult, 1);
@@ -398,11 +421,6 @@ JS;
 				echo $Cache->next_row();
 		}
 	}
-
-	if (get_setting('main.enable_pt_gen_system') == 'yes' && !empty($row['pt_gen'])) {
-	    $ptGen = new \Nexus\PTGen\PTGen();
-	    $ptGen->updateTorrentPtGen($row);
-    }
 		if (!empty($otherCopiesIdArr))
 		{
 //			$where_area = " url = " . sqlesc((int)$imdb_id) ." AND torrents.id != ".sqlesc($id);
@@ -549,11 +567,7 @@ echo "</script>";
 		}
 
         //Add 魔力值奖励功能
-        if(isset($magic_value_bonus)){
-            $bonus_array = $magic_value_bonus;
-        }else{
-            $bonus_array = implode(',', \App\Models\Torrent::BONUS_REWARD_VALUES);
-        }
+        $bonus_array = \App\Models\Setting::getBonusRewardOptions();
         echo '<style type="text/css">
 					ul.magic
 					{
@@ -576,7 +590,7 @@ echo "</script>";
         $magic_value_button = '';
 
         if ($CURUSER['id'] <> $row['owner']) {
-            $arr_temp = explode(',',$bonus_array);
+            $arr_temp = $bonus_array;
             $bonus_has = $CURUSER['seedbonus'];
             if(intval($bonus_has) < intval($arr_temp[0])){
                 $error_bonus_message = $lang_details['magic_have_no_enough_bonus_value'];

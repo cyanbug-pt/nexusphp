@@ -4,7 +4,7 @@ $lang_log = array
 (
 	'std_sorry' => "Sorry...",
 	'std_permission_denied_only' => "Permission denied. Only ",
-	'std_or_above_can_view' => " or above could view LOG. <br /><br /> Please see the <a class=faqlink href=faq.php#id22><b>FAQ</b></a> for more information on different user classes and what they can do.<br /><br /><b></p>The " .$SITENAME." Staff</b>",
+	'std_or_above_can_view' => " or above could view LOG. <br /><br /> Please see the <a class=faqlink href=faq.php#id22><b>FAQ</b></a> for more information on different user classes and what they can do.<br /><br /><b></p>The %s Staff</b>",
 	'head_site_log' => "Daily Log",
 	'head_disabled_log' => "封禁日志",
 	'text_search_log' => "Search Daily Log",
@@ -46,6 +46,7 @@ $lang_log = array
 	'text_news_empty' => "<b>News is empty</b><br />",
 	'col_title' => "Title",
 	'col_body' => "Body",
+    'col_user' => 'User',
 	'std_delete_poll' => "Delete poll",
 	'std_delete_poll_confirmation' => "Do you really want to delete a poll? Click ",
 	'std_here_if_sure' => "<b>here</b></a> if you are sure.",

@@ -38,7 +38,7 @@ $lang_invite = array
 	'text_invitation_body' => "
 你好,
 
-我邀请你加入 $SITENAME, 这是一个拥有丰富资源的非开放社区.
+我邀请你加入 %s, 这是一个拥有丰富资源的非开放社区.
 如果你有兴趣加入我们请阅读规则并确认邀请.最后,确保维持一个良好的分享率
 分享允许的资源.
 
@@ -51,6 +51,7 @@ $lang_invite = array
     'harem_addition' => '后宫加成',
     'signup_link_help' => '右键复制',
     'signup_link' => '注册链接',
+    'text_uploaded_count' => '上传种子数量',
     'text_seed_torrent_count' => '当前做种数',
     'text_seed_torrent_size' => '当前做种体积',
     'text_seed_torrent_bonus_per_hour' => '当前纯做种时魔',

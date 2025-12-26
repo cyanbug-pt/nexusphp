@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Nicht eingeloggt!",
+	'p_error' => "Fehler:",
+	'p_after_logged_in' => "Die Seite, die Sie anzuzeigen versucht haben, kann nur verwendet werden, wenn Sie eingeloggt sind.",
+	'p_need_cookies_enables' => "<b>Hinweis</b>: Sie benötigen Cookies, um sich einzuloggen oder die Sprache zu wechseln.",
+	'p_fail_ban' => "fehlgeschlagene Logins in einer Reihe werden dazu führen, dass Ihre ip gesperrt wird!",
+	'p_you_have' => "Du hast",
+	'p_remaining_tries' => "verbleibende Versuche.",
+	'p_no_account_signup' => "Sie haben noch kein Konto? <a href=\"signup.php\"><b>Jetzt</b></a> anmelden!",
+	'p_forget_pass_recover' => "Passwort vergessen? Wiederherstellen Sie Ihr Passwort <a href=\"recover.php\"><b>per E-Mail</b></a>",
+    'p_account_banned' => "Konto gesperrt? Grund auf<a href=\"user-ban-log.php\"><b>User Bann Log</b></a>",
+	'p_resend_confirm' => "Wurde keine Bestätigungsmail erhalten oder der Bestätigungslink ist beschädigt? <a href=\"confirm_resend.php\"><b>Senden Sie erneut eine Bestätigungsmail</b></a>",
+	'rowhead_username' => "Benutzername:",
+	'rowhead_password' => "Passwort:",
+	'button_login' => "Anmelden!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Auto-Abmeldung:",
+	'text_restrict_ip' => "IP einschränken:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Nach 15 Minuten abmelden",
+	'checkbox_restrict_ip' => " Sitzung auf meine IP beschränken",
+	'checkbox_ssl' => " Website mit SSL-Verschlüsselung durchsuchen (Webbrowser)",
+	'checkbox_ssl_tracker' => " Tracker mit SSL-Verschlüsselung verbinden (BitTorrent-Client)",
+	'text_advanced_options' => "Erweiterte Optionen:",
+	'text_helpbox' => "Helpbox",
+	'text_helpbox_note' => "Haben Sie Probleme bei der Anmeldung oder Anmeldung? Hier eine Nachricht hinterlassen",
+	'text_message' => "Nachricht: ",
+	'sumbit_shout' => "rufen",
+	'submit_clear' => "löschen",
+	'text_select_lang' => "Site-Sprache auswählen: ",
+	'head_login' => "Anmelden",
+    'rowhead_two_step_code' => 'Zwei-Faktor-Authentifizierung',
+    'two_step_code_tooltip' => 'Wenn aktiviert muss ausgefüllt werden',
+    'text_complain' => 'Beschwerdekanal',
+);
+
+?>

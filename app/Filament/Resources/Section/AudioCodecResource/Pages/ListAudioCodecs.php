@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\AudioCodecResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\AudioCodecResource;
 use App\Models\AudioCodec;
@@ -13,10 +14,10 @@ class ListAudioCodecs extends PageList
 {
     protected static string $resource = AudioCodecResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

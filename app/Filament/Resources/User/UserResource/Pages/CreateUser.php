@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\User\UserResource\Pages;
 
+use Filament\Actions\Contracts\HasActions;
+use Exception;
 use App\Filament\Resources\User\UserResource;
 use App\Repositories\UserRepository;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 
-class CreateUser extends CreateRecord
+class CreateUser extends CreateRecord implements HasActions
 {
     protected static string $resource = UserResource::class;
 
@@ -18,16 +20,10 @@ class CreateUser extends CreateRecord
         $data = $this->form->getState();
         try {
             $this->record = $userRep->store($data);
-            $this->notify(
-                'success ',
-                $this->getCreatedNotificationTitle(),
-            );
+            send_admin_success_notification();
             $this->redirect($this->getRedirectUrl());
-        } catch (\Exception $exception) {
-            $this->notify(
-                'danger',
-                $exception->getMessage(),
-            );
+        } catch (Exception $exception) {
+            send_admin_fail_notification($exception->getMessage());
         }
     }
 }

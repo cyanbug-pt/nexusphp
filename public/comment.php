@@ -2,7 +2,7 @@
 require_once("../include/bittorrent.php");
 dbconn();
 require_once(get_langfile_path());
-require(get_langfile_path("",true));
+//require(get_langfile_path("",true));
 
 $action = htmlspecialchars($_GET["action"]);
 $sub = htmlspecialchars($_GET["sub"] ?? '');
@@ -77,18 +77,22 @@ if ($action == "add")
 
 		if($arg["commentpm"] == 'yes' && $CURUSER['id'] != $arr["owner"])
 		{
-			$added = sqlesc(date("Y-m-d H:i:s"));
-			$subject = sqlesc($lang_comment_target[get_user_lang($arr["owner"])]['msg_new_comment']);
+            $locale = get_user_locale($arr['owner']);
+			$subject = nexus_trans("comment.msg_new_comment", [], $locale);
 			if($type == "torrent")
-			$notifs = sqlesc($lang_comment_target[get_user_lang($arr["owner"])]['msg_torrent_receive_comment'] . " [url=" . get_protocol_prefix() . "$BASEURL/details.php?id=$parent_id] " . $arr['name'] . "[/url].");
+			$notifs = nexus_trans("comment.msg_torrent_receive_comment", [], $locale) . " [url=" . get_protocol_prefix() . "$BASEURL/details.php?id=$parent_id] " . $arr['name'] . "[/url].";
 			if($type == "offer")
-			$notifs = sqlesc($lang_comment_target[get_user_lang($arr["owner"])]['msg_torrent_receive_comment'] . " [url=" . get_protocol_prefix() . "$BASEURL/offers.php?id=$parent_id&off_details=1] " . $arr['name'] . "[/url].");
+			$notifs = nexus_trans("comment.msg_torrent_receive_comment", [], $locale) . " [url=" . get_protocol_prefix() . "$BASEURL/offers.php?id=$parent_id&off_details=1] " . $arr['name'] . "[/url].";
 			if($type == "request")
-			$notifs = sqlesc($lang_comment_target[get_user_lang($arr["owner"])]['msg_torrent_receive_comment'] . " [url=" . get_protocol_prefix() . "$BASEURL/viewrequests.php?id=$parent_id&req_details=1] " . $arr['name'] . "[/url].");
+			$notifs = nexus_trans("comment.msg_torrent_receive_comment", [], $locale). " [url=" . get_protocol_prefix() . "$BASEURL/viewrequests.php?id=$parent_id&req_details=1] " . $arr['name'] . "[/url].";
 
-			sql_query("INSERT INTO messages (sender, receiver, subject, msg, added) VALUES(0, " . $arr['owner'] . ", $subject, $notifs, $added)") or sqlerr(__FILE__, __LINE__);
-			$Cache->delete_value('user_'.$arr['owner'].'_unread_message_count');
-			$Cache->delete_value('user_'.$arr['owner'].'_inbox_count');
+			\App\Models\Message::add([
+				'sender' => 0,
+				'receiver' => $arr['owner'],
+				'subject' => $subject,
+				'added' => now(),
+				'msg' => $notifs,
+			]);
 		}
 
 		KPS("+",$addcomment_bonus,$CURUSER["id"]);
@@ -97,11 +101,11 @@ if ($action == "add")
 		sql_query("UPDATE users SET last_comment = NOW() WHERE id = ".sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);
 
 		if($type == "torrent")
-			header("Refresh: 0; url=details.php?id=$parent_id#$newid");
+			header("Location: details.php?id=$parent_id#$newid");
 		else if($type == "offer")
-			header("Refresh: 0; url=offers.php?id=$parent_id&off_details=1#$newid");
+			header("Location: offers.php?id=$parent_id&off_details=1#$newid");
 		else if($type == "request")
-			header("Refresh: 0; url=viewrequests.php?id=$parent_id&req_details=1#$newid");
+			header("Location: viewrequests.php?id=$parent_id&req_details=1#$newid");
 		die;
 	}
 
@@ -113,10 +117,10 @@ if ($action == "add")
 		$commentid = intval($_GET["cid"] ?? 0);
 		int_check($commentid,true);
 
-		$res2 = sql_query("SELECT comments.text, users.username FROM comments JOIN users ON comments.user = users.id WHERE comments.id=$commentid") or sqlerr(__FILE__, __LINE__);
+		$res2 = sql_query("SELECT comments.text, users.username FROM comments LEFT JOIN users ON comments.user = users.id WHERE comments.id=$commentid") or sqlerr(__FILE__, __LINE__);
 
 		if (mysql_num_rows($res2) != 1)
-			stderr($lang_forums['std_error'], $lang_forums['std_no_comment_id']);
+			stderr($lang_comment['std_error'], $lang_comment['std_no_comment_id']);
 
 		$arr2 = mysql_fetch_assoc($res2);
 	}

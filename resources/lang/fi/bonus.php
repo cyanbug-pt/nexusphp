@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Vietä :bonus ostaa :medal_name',
+    'comment_buy_attendance_card' => 'Vietä :bonus ostaa yksi osallistujakortti',
+    'comment_buy_temporary_invite' => 'Vietä :bonus ostaa :count tilapäinen kutsu',
+    'comment_buy_rainbow_id' => 'Vietä :bonus buy :duration days sateenkaari ID',
+    'comment_buy_change_username_card' => 'Kuluta :bonus bonus ostaa muutos käyttäjätunnus kortti',
+    'comment_gift_medal' => 'Vietä :bonus ostaa :medal_name ja lahja :to_username',
+    'comment_buy_torrent' => 'Vietä :bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Proceeds from torrent downloaded by :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Palkinnon tyyppi',
+        'count' => 'Lukumäärä',
+        'size' => 'Koko',
+        'a_value' => 'A Arvo',
+        'bonus_base' => 'Perus bonus',
+        'factor' => 'Kerroin',
+        'got_bonus' => 'Samaa bonusta',
+        'total' => 'Yhteensä',
+    ],
+    'reward_types' => [
+        'basic' => 'Peruspalkkio',
+        'harem_addition' => 'Harem lisäys',
+        'official_addition' => 'Virallinen lisäys',
+        'medal_addition' => 'Mitalin lisäys',
+    ],
+    'not_enough' => 'Ei tarpeeksi bonusta! Vaatii :require_bonuksen, sinulla on tällä hetkellä vain :now_bonus',
+    'msg_someone_loves_you' => "Joku rakastaa sinua",
+    'msg_you_have_been_given' => "Sinulle on annettu lahja ",
+    'msg_after_tax' => " (verojen jälkeen ",
+    'msg_karma_points_by' => ") Karma pistettä ",
+    'msg_personal_message_from' => "Henkilökohtainen viesti lähettäjältä ",
+    'msg_colon' => ": ",
+];

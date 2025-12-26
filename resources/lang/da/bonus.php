@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Tilbring :bonus bonus køb :medal_name',
+    'comment_buy_attendance_card' => 'Tilbring :bonus bonus købe en deltager kort',
+    'comment_buy_temporary_invite' => 'Tilbring :bonus bonus køb :count midlertidig invitation',
+    'comment_buy_rainbow_id' => 'Tilbring :bonus bonus buy :duration days regnbue ID',
+    'comment_buy_change_username_card' => 'Tilbring :bonus bonus køb ændre brugernavn kort',
+    'comment_gift_medal' => 'Tilbring :bonus bonus købe :medal_name og gave til :to_username',
+    'comment_buy_torrent' => 'Tilbring :bonus bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Provenuet fra torrent downloadet af :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Belønnings type',
+        'count' => 'Antal',
+        'size' => 'Størrelse',
+        'a_value' => 'A Værdi',
+        'bonus_base' => 'Grundlæggende bonus',
+        'factor' => 'Faktor',
+        'got_bonus' => 'Fik bonus',
+        'total' => 'I Alt',
+    ],
+    'reward_types' => [
+        'basic' => 'Grundlæggende belønning',
+        'harem_addition' => 'Harem tilføjelse',
+        'official_addition' => 'Officiel tilføjelse',
+        'medal_addition' => 'Medalje tilføjelse',
+    ],
+    'not_enough' => 'Ingen bonus! Kræver :require_bonus, du har i øjeblikket kun: :now_bonus',
+    'msg_someone_loves_you' => "Nogen elsker dig",
+    'msg_you_have_been_given' => "Du har fået en gave af ",
+    'msg_after_tax' => " (efter skat er det ",
+    'msg_karma_points_by' => ") Karma point af ",
+    'msg_personal_message_from' => "Personlig besked fra ",
+    'msg_colon' => ": ",
+];

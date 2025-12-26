@@ -2,15 +2,23 @@
 
 namespace App\Filament\Resources\Oauth;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Radio;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Oauth\ClientResource\Pages\ManageClients;
 use App\Filament\OptionsTrait;
 use App\Filament\PageListSingle;
 use App\Filament\Resources\Oauth\ClientResource\Pages;
 use App\Filament\Resources\Oauth\ClientResource\RelationManagers;
 use App\Models\OauthClient;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,13 +29,13 @@ class ClientResource extends Resource
 
     protected static ?string $model = OauthClient::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Oauth';
+    protected static string | \UnitEnum | null $navigationGroup = 'Oauth';
 
     protected static ?int $navigationSort = 1;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.oauth_client');
     }
@@ -37,13 +45,13 @@ class ClientResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->label(__('label.name')),
-                Forms\Components\TextInput::make('redirect')->label(__('oauth.redirect')),
-                Forms\Components\Radio::make('skips_authorization')
+        return $schema
+            ->components([
+                TextInput::make('name')->label(__('label.name'))->required(),
+                TextInput::make('redirect')->label(__('oauth.redirect'))->required(),
+                Radio::make('skips_authorization')
                     ->options(self::getYesNoOptions())
                     ->inline()
                     ->default(0)
@@ -56,11 +64,11 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->label(__('label.name')),
-                Tables\Columns\TextColumn::make('secret')->label(__('oauth.secret')),
-                Tables\Columns\TextColumn::make('redirect')->label(__('oauth.redirect')),
-                Tables\Columns\IconColumn::make('skips_authorization')
+                TextColumn::make('id'),
+                TextColumn::make('name')->label(__('label.name')),
+                TextColumn::make('secret')->label(__('oauth.secret')),
+                TextColumn::make('redirect')->label(__('oauth.redirect')),
+                IconColumn::make('skips_authorization')
                     ->boolean()
                     ->label(__('oauth.skips_authorization'))
                 ,
@@ -69,19 +77,19 @@ class ClientResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageClients::route('/'),
+            'index' => ManageClients::route('/'),
         ];
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\User\HitAndRunResource\Pages;
 
+use Filament\Actions\Action;
+use Exception;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\User\HitAndRunResource;
 use App\Models\HitAndRun;
 use App\Repositories\HitAndRunRepository;
@@ -14,7 +17,7 @@ class ViewHitAndRun extends ViewRecord
 {
     protected static string $resource = HitAndRunResource::class;
 
-    protected static string $view = 'filament.detail-card';
+//    protected static string $view = 'filament.detail-card';
 
     private function getDetailCardData(): array
     {
@@ -78,26 +81,26 @@ class ViewHitAndRun extends ViewRecord
         ];
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         $actions = [];
         if (in_array($this->record->status, HitAndRun::CAN_PARDON_STATUS)) {
-            $actions[] = Actions\Action::make('Pardon')
+            $actions[] = Action::make('Pardon')
                 ->requiresConfirmation()
                 ->action(function () {
                     $hitAndRunRep = new HitAndRunRepository();
                     try {
                         $hitAndRunRep->pardon($this->record->id, Auth::user());
-                        $this->notify('success', 'Success !');
+                        send_admin_success_notification();
                         $this->record = $this->resolveRecord($this->record->id);
-                    } catch (\Exception $exception) {
-                        $this->notify('danger', $exception->getMessage());
+                    } catch (Exception $exception) {
+                        send_admin_fail_notification($exception->getMessage());
                     }
                 })
                 ->label(__('admin.resources.hit_and_run.action_pardon'))
             ;
         }
-        $actions[] = Actions\DeleteAction::make();
+        $actions[] = DeleteAction::make();
 
         return $actions;
     }

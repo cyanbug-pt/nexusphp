@@ -2,13 +2,16 @@
 
 namespace App\Filament\Resources\Section;
 
+use Filament\Schemas\Schema;
+use App\Filament\Resources\Section\MediaResource\Pages\ListMedia;
+use App\Filament\Resources\Section\MediaResource\Pages\CreateMedia;
+use App\Filament\Resources\Section\MediaResource\Pages\EditMedia;
 use App\Filament\Resources\Section\MediaResource\Pages;
 use App\Filament\Resources\Section\MediaResource\RelationManagers;
 use App\Models\Media;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,9 +22,9 @@ class MediaResource extends CodecResource
 
     protected static ?int $navigationSort = 8;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return parent::form($form);
+        return parent::form($schema);
     }
 
     public static function table(Table $table): Table
@@ -39,9 +42,9 @@ class MediaResource extends CodecResource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMedia::route('/'),
-            'create' => Pages\CreateMedia::route('/create'),
-            'edit' => Pages\EditMedia::route('/{record}/edit'),
+            'index' => ListMedia::route('/'),
+            'create' => CreateMedia::route('/create'),
+            'edit' => EditMedia::route('/{record}/edit'),
         ];
     }
 }

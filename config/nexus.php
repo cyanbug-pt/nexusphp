@@ -56,4 +56,9 @@ return [
         'master_key' => nexus_env('MEILISEARCH_MASTER_KEY', ''),
     ],
 
+    'nas_tools_key' => nexus_env('NAS_TOOLS_KEY', ''),
+    'iyuu_secret' => nexus_env('IYUU_SECRET', ''),
+    'ammds_secret' => nexus_env('AMMDS_SECRET', ''),
+
+
 ];

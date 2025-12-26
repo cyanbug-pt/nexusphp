@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'business_types' => [
+        \App\Models\BonusLogs::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => 'Отменить H&R',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_MEDAL => 'Купить медаль',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_ATTENDANCE_CARD => 'Купить карточку посещаемости',
+        \App\Models\BonusLogs::BUSINESS_TYPE_STICKY_PROMOTION => 'Липкая реклама',
+        \App\Models\BonusLogs::BUSINESS_TYPE_POST_REWARD => 'Награда за пост',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD => 'Обмен загружен',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE => 'Купить приглашение',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CUSTOM_TITLE => 'Пользовательское название',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_VIP => 'Купить VIP',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE => 'Подарить кому-то',
+        \App\Models\BonusLogs::BUSINESS_TYPE_NO_AD => 'Отменить рекламу',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_LOW_SHARE_RATIO => 'Низкое соотношение подарков',
+        \App\Models\BonusLogs::BUSINESS_TYPE_LUCKY_DRAW => 'Счастливая ничья',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD => 'Обменная загружена',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TEMPORARY_INVITE => 'Купить временное приглашение',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_RAINBOW_ID => 'Купить радугу ID',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Купить смену карты имени пользователя',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Подарочная медаль',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Купить торрент',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Торрент наград',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Оплата ролей',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Торрент будет загружен',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Получить награду',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Получить подарок',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Загрузить торрент',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Торрент получает награду',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Основа раздачи',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Добавление донорской раздачи',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Официальная добавка к пищевым продуктам',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Смесь добавки клапана',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Добавление медалей при раздаче',
+    ],
+    'fields' => [
+        'business_type' => 'Тип бизнеса',
+        'old_total_value' => 'Стоимость перед сделкой',
+        'value' => 'Стоимость сделки',
+        'new_total_value' => 'Стоимость после сделки',
+    ],
+    'exclude_seeding_bonus' => 'Исключить бонус размножения',
+];

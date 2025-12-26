@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'business_types' => [
+        \App\Models\BonusLogs::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => 'Peruuta H&R',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_MEDAL => 'Osta mitali',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_ATTENDANCE_CARD => 'Osta läsnäolokortti',
+        \App\Models\BonusLogs::BUSINESS_TYPE_STICKY_PROMOTION => 'Sticky promootio',
+        \App\Models\BonusLogs::BUSINESS_TYPE_POST_REWARD => 'Lähetä palkinto',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD => 'Exchange ladattu',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE => 'Osta kutsu',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CUSTOM_TITLE => 'Oma otsikko',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_VIP => 'Osta VIP',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE => 'Lahja jollekin',
+        \App\Models\BonusLogs::BUSINESS_TYPE_NO_AD => 'Peruuta mainos',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_LOW_SHARE_RATIO => 'Lahja pieniin osuuksiin',
+        \App\Models\BonusLogs::BUSINESS_TYPE_LUCKY_DRAW => 'Onnekas tasapeli',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD => 'Vaihto ladattu',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TEMPORARY_INVITE => 'Osta väliaikainen kutsu',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_RAINBOW_ID => 'Osta sateenkaaren tunnus',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Osta muutos käyttäjätunnus kortti',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Lahjan mitali',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Osta torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Palkitse torrentti',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Työn palkka',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrentti ladataan',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Vastaanota palkinto',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Vastaanota lahja',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Lataa torrentti',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrentti vastaanota palkkio',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Lähetys perustiedot',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Lähetetään luovuttajan lisäystä',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Lähetetään virallista lisäystä',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Lähetetään lisäystä haremille',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Lähetetään mitalin lisäämistä',
+    ],
+    'fields' => [
+        'business_type' => 'Yrityksen tyyppi',
+        'old_total_value' => 'Kaupankäynnin jälkeinen arvo',
+        'value' => 'Kaupan arvo',
+        'new_total_value' => 'Kaupankäynnin jälkeinen arvo',
+    ],
+    'exclude_seeding_bonus' => 'Jätä pois kylvöbonus',
+];

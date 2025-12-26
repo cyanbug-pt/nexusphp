@@ -2,6 +2,23 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Exception;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Radio;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\System\SeedBoxRecordResource\Pages\ListSeedBoxRecords;
+use App\Filament\Resources\System\SeedBoxRecordResource\Pages\CreateSeedBoxRecord;
+use App\Filament\Resources\System\SeedBoxRecordResource\Pages\EditSeedBoxRecord;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\System\SeedBoxRecordResource\Pages;
 use App\Filament\Resources\System\SeedBoxRecordResource\RelationManagers;
@@ -10,9 +27,8 @@ use App\Models\SeedBoxRecord;
 use App\Repositories\SeedBoxRepository;
 use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,13 +41,13 @@ class SeedBoxRecordResource extends Resource
 
     protected static ?string $model = SeedBoxRecord::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-archive';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-archive-box';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
-    protected static ?int $navigationSort = 98;
+    protected static ?int $navigationSort = 8;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.seed_box_records');
     }
@@ -41,20 +57,21 @@ class SeedBoxRecordResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('operator')->label(__('label.seed_box_record.operator')),
-                Forms\Components\TextInput::make('bandwidth')->label(__('label.seed_box_record.bandwidth'))->integer(),
-                Forms\Components\TextInput::make('ip_begin')->label(__('label.seed_box_record.ip_begin')),
-                Forms\Components\TextInput::make('ip_end')->label(__('label.seed_box_record.ip_end')),
-                Forms\Components\TextInput::make('ip')->label(__('label.seed_box_record.ip'))->helperText(__('label.seed_box_record.ip_help')),
-                Forms\Components\Toggle::make('is_allowed')
+        return $schema
+            ->components([
+                TextInput::make('operator')->label(__('label.seed_box_record.operator')),
+                TextInput::make('bandwidth')->label(__('label.seed_box_record.bandwidth'))->integer(),
+                TextInput::make('asn')->label(__('label.seed_box_record.asn'))->integer(),
+//                Forms\Components\TextInput::make('ip_begin')->label(__('label.seed_box_record.ip_begin')),
+//                Forms\Components\TextInput::make('ip_end')->label(__('label.seed_box_record.ip_end')),
+                TextInput::make('ip')->label(__('label.seed_box_record.ip'))->helperText(__('label.seed_box_record.ip_help')),
+                Toggle::make('is_allowed')
                     ->label(__('label.seed_box_record.is_allowed'))
                     ->helperText(__('label.seed_box_record.is_allowed_help'))
                 ,
-                Forms\Components\Textarea::make('comment')->label(__('label.comment')),
+                Textarea::make('comment')->label(__('label.comment')),
             ])->columns(1);
     }
 
@@ -62,17 +79,18 @@ class SeedBoxRecordResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('typeText')->label(__('label.seed_box_record.type')),
-                Tables\Columns\TextColumn::make('uid')->searchable(),
-                Tables\Columns\TextColumn::make('user.username')
+                TextColumn::make('id'),
+                TextColumn::make('typeText')->label(__('label.seed_box_record.type')),
+                TextColumn::make('uid')->searchable(),
+                TextColumn::make('user.username')
                     ->label(__('label.username'))
                     ->searchable()
                     ->formatStateUsing(fn ($record) => username_for_admin($record->uid))
                 ,
-                Tables\Columns\TextColumn::make('operator')->label(__('label.seed_box_record.operator'))->searchable(),
-                Tables\Columns\TextColumn::make('bandwidth')->label(__('label.seed_box_record.bandwidth')),
-                Tables\Columns\TextColumn::make('ip')
+                TextColumn::make('operator')->label(__('label.seed_box_record.operator'))->searchable(),
+                TextColumn::make('bandwidth')->label(__('label.seed_box_record.bandwidth')),
+                TextColumn::make('asn')->label(__('label.seed_box_record.asn')),
+                TextColumn::make('ipRange')
                     ->label(__('label.seed_box_record.ip'))
                     ->searchable(true, function (Builder $query, $search) {
                         try {
@@ -81,14 +99,14 @@ class SeedBoxRecordResource extends Resource
                             return $query->orWhere(function (Builder $query) use ($ipNumeric) {
                                 return $query->where('ip_begin_numeric', '<=', $ipNumeric)->where('ip_end_numeric', '>=', $ipNumeric);
                             });
-                        } catch (\Exception $exception) {
+                        } catch (Exception $exception) {
                             do_log("Invalid IP: $search, error: " . $exception->getMessage());
                         }
                     })
-                    ->formatStateUsing(fn ($record) => $record->ip ?: sprintf('%s ~ %s', $record->ip_begin, $record->ip_end)),
-                Tables\Columns\TextColumn::make('comment')->label(__('label.comment'))->searchable(),
-                Tables\Columns\IconColumn::make('is_allowed')->boolean()->label(__('label.seed_box_record.is_allowed')),
-                Tables\Columns\BadgeColumn::make('status')
+                ,
+                TextColumn::make('comment')->label(__('label.comment'))->searchable(),
+                IconColumn::make('is_allowed')->boolean()->label(__('label.seed_box_record.is_allowed')),
+                BadgeColumn::make('status')
                     ->colors([
                         'success' => SeedBoxRecord::STATUS_ALLOWED,
                         'warning' => SeedBoxRecord::STATUS_UNAUDITED,
@@ -97,10 +115,21 @@ class SeedBoxRecordResource extends Resource
                     ->formatStateUsing(fn ($record) => $record->statusText)
                     ->label(__('label.seed_box_record.status')),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('id')
+                    ->schema([
+                        TextInput::make('id')
+                            ->label('ID')
+                            ->placeholder('ID')
+                        ,
+                    ])->query(function (Builder $query, array $data) {
+                        return $query->when($data['id'], fn (Builder $query, $id) => $query->where("id", $id));
+                    })
+                ,
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label('UID')
                             ->placeholder('UID')
                         ,
@@ -108,26 +137,26 @@ class SeedBoxRecordResource extends Resource
                         return $query->when($data['uid'], fn (Builder $query, $uid) => $query->where("uid", $uid));
                     })
                 ,
-                Tables\Filters\SelectFilter::make('type')->options(SeedBoxRecord::listTypes('text'))->label(__('label.seed_box_record.type')),
-                Tables\Filters\SelectFilter::make('is_allowed')->options(self::getYesNoOptions())->label(__('label.seed_box_record.is_allowed')),
-                Tables\Filters\SelectFilter::make('status')->options(SeedBoxRecord::listStatus('text'))->label(__('label.seed_box_record.status')),
+                SelectFilter::make('type')->options(SeedBoxRecord::listTypes('text'))->label(__('label.seed_box_record.type')),
+                SelectFilter::make('is_allowed')->options(self::getYesNoOptions())->label(__('label.seed_box_record.is_allowed')),
+                SelectFilter::make('status')->options(SeedBoxRecord::listStatus('text'))->label(__('label.seed_box_record.status')),
 
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('audit')
+            ->recordActions([
+                EditAction::make(),
+                Action::make('audit')
                     ->label(__('admin.resources.seed_box_record.toggle_status'))
-                    ->mountUsing(fn (Forms\ComponentContainer $form, NexusModel $record) => $form->fill([
+                    ->mountUsing(fn (Schema $schema, NexusModel $record) => $schema->fill([
                         'status' => $record->status,
                     ]))
-                    ->form([
-                        Forms\Components\Radio::make('status')
+                    ->schema([
+                        Radio::make('status')
                             ->options(SeedBoxRecord::listStatus('text'))
                             ->inline()
                             ->label(__('label.seed_box_record.status'))
                             ->required()
                         ,
-                        Forms\Components\TextInput::make('reason')
+                        TextInput::make('reason')
                             ->label(__('label.reason'))
                         ,
                     ])
@@ -135,14 +164,14 @@ class SeedBoxRecordResource extends Resource
                         $rep = new SeedBoxRepository();
                         try {
                             $rep->updateStatus($record, $data['status'], $data['reason']);
-                        } catch (\Exception $exception) {
-                            Filament::notify('danger', class_basename($exception));
+                        } catch (Exception $exception) {
+                            send_admin_fail_notification(class_basename($exception));
                         }
                     })
                 ,
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
@@ -156,9 +185,9 @@ class SeedBoxRecordResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSeedBoxRecords::route('/'),
-            'create' => Pages\CreateSeedBoxRecord::route('/create'),
-            'edit' => Pages\EditSeedBoxRecord::route('/{record}/edit'),
+            'index' => ListSeedBoxRecords::route('/'),
+            'create' => CreateSeedBoxRecord::route('/create'),
+            'edit' => EditSeedBoxRecord::route('/{record}/edit'),
         ];
     }
 }

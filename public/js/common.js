@@ -93,22 +93,22 @@ function unpreview(obj){
 
 function saveMagicValue(torrentid,value)
 {
-    var list=ajax.posts('magic.php','value='+value +'&id='+torrentid);
-//	document.getElementById("thanksbutton").innerHTML = document.getElementById("thanksadded").innerHTML;
-    document.getElementById("magic_add").value += value;
-    document.getElementById("magic_add").style.display = '';
-    document.getElementById("listNumber").style.display = 'none';
-    document.getElementById("current_user_magic").style.display = '';
-    var sumAll = document.getElementById("spanSumAll").innerHTML;
-    document.getElementById("spanSumAll").innerHTML = sumAll*1 + value;
-    if(document.getElementById("count_user_spa")){
-        var userAll = document.getElementById("count_user_spa").innerHTML;
-        document.getElementById("count_user_spa").innerHTML = userAll*1 + 1;
-    }
-
-    //document.getElementById("listNumber").innerHTML = "<input class=\"btn\" type=\"button\" id="magic_add" value=\""+value+"\" disabled=\"disabled\" />";
-
-//	document.getElementById("addcuruser").innerHTML = document.getElementById("curuser").innerHTML;
+    jQuery.post("magic.php", {"value": value, "id": torrentid}, function(res) {
+        if (res.ret !== 0) {
+            alert(res.msg)
+            return
+        }
+        document.getElementById("magic_add").value += value;
+        document.getElementById("magic_add").style.display = '';
+        document.getElementById("listNumber").style.display = 'none';
+        document.getElementById("current_user_magic").style.display = '';
+        var sumAll = document.getElementById("spanSumAll").innerHTML;
+        document.getElementById("spanSumAll").innerHTML = sumAll*1 + value;
+        if(document.getElementById("count_user_spa")){
+            var userAll = document.getElementById("count_user_spa").innerHTML;
+            document.getElementById("count_user_spa").innerHTML = userAll*1 + 1;
+        }
+    }, "json")
 }
 
 // java_klappe.js
@@ -403,4 +403,30 @@ function NewRow(anchor,up){
 }
 function DelRow(anchor){
 	anchor.parentNode.parentNode.parentNode.parentNode.deleteRow(anchor.parentNode.parentNode.rowIndex);
+}
+
+// 工具函数：SHA-256哈希
+// 因 crypto.subtle 在 http 下不可用，故引入三方库
+function sha256(message) {
+    // const msgBuffer = new TextEncoder().encode(message);
+    // const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    // const hashArray = Array.from(new Uint8Array(hashBuffer));
+    // return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
+}
+
+// 工具函数：HMAC-SHA256
+function hmacSha256(key, message) {
+    // const encoder = new TextEncoder();
+    // const keyData = encoder.encode(key);
+    // const messageData = encoder.encode(message);
+    //
+    // const cryptoKey = await crypto.subtle.importKey(
+    //     'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+    // );
+    //
+    // const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+    // const hashArray = Array.from(new Uint8Array(signature));
+    // return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return CryptoJS.HmacSHA256(message, key).toString(CryptoJS.enc.Hex);
 }

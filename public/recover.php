@@ -23,18 +23,19 @@ function bark($msg) {
 	stdfoot();
 	exit;
 }
-
+$siteName = $SITENAME;
+$mailTwoFour = sprintf($lang_recover['mail_two_four'], $siteName);
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring'],"recover.php",true);
-	$email = unesc(htmlspecialchars(trim($_POST["email"])));
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,"recover.php",true);
+	$email = unesc(htmlspecialchars(trim($_POST["email"] ?? '')));
 	$email = safe_email($email);
 	if (!$email)
 	failedlogins($lang_recover['std_missing_email_address'],true);
 	if (!check_email($email))
 	failedlogins($lang_recover['std_invalid_email_address'],true);
-	$res = sql_query("SELECT * FROM users WHERE email=" . sqlesc($email) . " LIMIT 1") or sqlerr(__FILE__, __LINE__);
+	$res = sql_query("SELECT * FROM users WHERE BINARY email=" . sqlesc($email) . " LIMIT 1") or sqlerr(__FILE__, __LINE__);
 	$arr = mysql_fetch_assoc($res);
 	if (!$arr) failedlogins($lang_recover['std_email_not_in_database'],true);
 	if ($arr['status'] == "pending") failedlogins($lang_recover['std_user_account_unconfirmed'],true);
@@ -46,13 +47,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	stderr($lang_recover['std_error'], $lang_recover['std_database_error']);
 
 	$hash = md5($sec . $email . $arr["passhash"] . $sec);
-	$ip = getip() ;
+    do_log("hash: $hash = md5(sec: $sec . email: $email . passhash: {$arr['passhash']} . sec: $sec)");
+	$ip = getip();
 	$title = $SITENAME.$lang_recover['mail_title'];
+    $mailOne = sprintf($lang_recover['mail_one'], $siteName);
+    $mailFour = sprintf($lang_recover['mail_four'], $siteName);
+    \Nexus\Database\NexusDB::cache_put("recover:$hash", now()->toDateTimeString());
+
 	$body = <<<EOD
-{$lang_recover['mail_one']}($email){$lang_recover['mail_two']}$ip{$lang_recover['mail_three']}
+{$mailOne}($email){$lang_recover['mail_two']}$ip{$lang_recover['mail_three']}
 <b><a href="$baseUrl/recover.php?id={$arr["id"]}&secret=$hash" target="_blank"> {$lang_recover['mail_this_link']} </a></b><br />
 $baseUrl/recover.php?id={$arr["id"]}&secret=$hash
-{$lang_recover['mail_four']}
+{$mailFour}
 EOD;
 
 //	sent_mail($arr["email"],$SITENAME,$SITEEMAIL,change_email_encode(get_langfolder_cookie(), $title),change_email_encode(get_langfolder_cookie(),$body),"confirmation",true,false,'',get_email_encode(get_langfolder_cookie()));
@@ -65,16 +71,19 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET" && $take_recover && isset($_GET["id"]
 	$md5 = $_GET["secret"];
 	if (!$id)
 	httperr();
-
+    if (!\Nexus\Database\NexusDB::cache_get("recover:$md5")) {
+        do_log("secret: $md5 is expired", "error");
+        httperr();
+    }
 	$res = sql_query("SELECT username, email, passhash, editsecret FROM users WHERE id = " . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 	$arr = mysql_fetch_array($res) or httperr();
 
 	$email = $arr["email"];
 	$sec = hash_pad($arr["editsecret"]);
-	if (preg_match('/^ *$/s', $sec))
-	httperr();
-	if ($md5 != md5($sec . $email . $arr["passhash"] . $sec))
-	httperr();
+	if ($md5 != md5($sec . $email . $arr["passhash"] . $sec)) {
+        do_log("secret: $md5 != md5(sec: $sec . email: $email . passhash: {$arr['passhash']} . sec: $sec)","error");
+        httperr();
+    }
 
 	// generate new password;
 	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -85,9 +94,10 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET" && $take_recover && isset($_GET["id"]
 
 	$sec = mksecret();
 
-	$newpasshash = md5($sec . $newpassword . $sec);
+	$newpasshash = hash('sha256', $sec.hash('sha256', $newpassword));
+    $authKey = mksecret();
 
-	sql_query("UPDATE users SET secret=" . sqlesc($sec) . ", editsecret='', passhash=" . sqlesc($newpasshash) . " WHERE id=" . sqlesc($id)." AND editsecret=" . sqlesc($arr["editsecret"])) or sqlerr(__FILE__, __LINE__);
+	sql_query("UPDATE users SET secret=" . sqlesc($sec) . ", editsecret='', passhash=" . sqlesc($newpasshash) . ", auth_key=". sqlesc($authKey) . " WHERE id=" . sqlesc($id)." AND editsecret=" . sqlesc($arr["editsecret"])) or sqlerr(__FILE__, __LINE__);
 
 	if (!mysql_affected_rows())
 	stderr($lang_recover['std_error'], $lang_recover['std_unable_updating_user_data']);
@@ -97,7 +107,7 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET" && $take_recover && isset($_GET["id"]
 {$lang_recover['mail_two_two']}$newpassword
 {$lang_recover['mail_two_three']}
 <b><a href="$baseUrl/login.php">{$lang_recover['mail_here']}</a></b>
-{$lang_recover['mail_two_four']}
+{$mailTwoFour}
 EOD;
 
 	sent_mail($email,$SITENAME,$SITEEMAIL,$title,$body,"details",true,false,'');
@@ -130,7 +140,8 @@ else
 	<form method="post" action="recover.php">
 	<table border="1" cellspacing="0" cellpadding="10">
 	<tr><td class="rowhead"><?php echo $lang_recover['row_registered_email'] ?></td>
-	<td class="rowfollow"><input type="text" style="width: 150px" name="email" /></td></tr>
+<?php $formInputStyle = 'style="width: min(100%, 320px); min-width: 180px; border: 1px solid gray; box-sizing: border-box"'; ?>
+<td class="rowfollow"><input type="email" <?php echo $formInputStyle; ?> name="email" autocomplete="email" /></td></tr>
 	<?php
 	show_image_code ();
 	?>

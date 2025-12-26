@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\IpLogRepository;
 use Closure;
 use Illuminate\Http\Request;
 use Nexus\Nexus;

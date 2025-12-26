@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\CodecResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\EditRedirectIndexTrait;
 use App\Filament\Resources\Section\CodecResource;
 use Filament\Pages\Actions;
@@ -13,10 +14,10 @@ class EditCodec extends EditRecord
 
     protected static string $resource = CodecResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 

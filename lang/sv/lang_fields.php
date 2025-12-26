@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Anpassad fälthantering',
+    'text_manage' => 'Hantera',
+    'text_add' => 'Lägg till',
+    'text_field' => 'Fält',
+    'text_delete' => 'Radera',
+    'text_edit' => 'Redigera',
+    'col_id' => 'ID',
+    'col_name' => 'Namn',
+    'col_name_help' => 'Tillåt endast siffra, alfabet, understrykning',
+    'col_label' => 'Visa etikett',
+    'col_type' => 'Typ',
+    'col_required' => 'Krävs',
+    'col_help' => 'Hjälp text',
+    'col_options' => 'Alternativ',
+    'col_options_help' => 'Krävs när typen är radio, kryssruta, markera. En rad, ett alternativ, format: Värde<unk> visa text',
+    'col_action' => 'Åtgärd',
+    'col_is_single_row' => 'Visa på en rad',
+    'js_sure_to_delete_this' => 'Visst att ta bort?',
+    'submit_submit' => 'Skicka',
+    'field_type_text' => 'Kort text',
+    'field_type_textarea' => 'Lång text',
+    'field_type_radio' => 'Horisontell enkel markering',
+    'field_type_checkbox' => 'Horisontell multipla val',
+    'field_type_select' => 'Vertikal enkel markering',
+    'field_type_image' => 'Bild',
+    'col_display' => 'Anpassad skärm',
+
+];

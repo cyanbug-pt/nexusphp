@@ -1,5 +1,6 @@
 <?php
 require "../include/bittorrent.php";
+\Nexus\Database\NexusLock::lockOrFail("confirm_resend:lock:" . getip(), 10);
 dbconn();
 failedloginscheck ("Re-send",true);
 
@@ -28,8 +29,8 @@ bark($lang_confirm_resend['std_need_admin_verification']);
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	if ($iv == "yes")
-	check_code ($_POST['imagehash'], $_POST['imagestring'],"confirm_resend.php",true);
-	$email = unesc(htmlspecialchars(trim($_POST["email"])));
+	check_code ($_POST['imagehash'] ?? null, $_POST['imagestring'] ?? null,"confirm_resend.php",true);
+	$email = unesc(htmlspecialchars(trim($_POST["email"] ?? '')));
 	$wantpassword = unesc(htmlspecialchars(trim($_POST["wantpassword"])));
 	$passagain = unesc(htmlspecialchars(trim($_POST["passagain"])));
 
@@ -70,8 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	$id = $arr["id"];
 	$title = $SITENAME.$lang_confirm_resend['mail_title'];
     $baseUrl = getSchemeAndHttpHost();
+    $siteName = \App\Models\Setting::getSiteName();
+    $mailTwo = sprintf($lang_confirm_resend['mail_two'], $siteName);
+    $mailFive = sprintf($lang_confirm_resend['mail_five'], $siteName, $siteName, $REPORTMAIL, $siteName);
 $body = <<<EOD
-{$lang_confirm_resend['mail_one']}$usern{$lang_confirm_resend['mail_two']}($email){$lang_confirm_resend['mail_three']}$ip{$lang_confirm_resend['mail_four']}
+{$lang_confirm_resend['mail_one']}$usern{$mailTwo}($email){$lang_confirm_resend['mail_three']}$ip{$lang_confirm_resend['mail_four']}
 <b><a href="javascript:void(null)" onclick="window.open('{$baseUrl}/confirm.php?id=$id&secret=$psecret')">
 {$lang_confirm_resend['mail_this_link']} </a></b><br />
 {$baseUrl}/confirm.php?id=$id&secret=$psecret
@@ -104,15 +108,16 @@ else
 	print("<div align=\"right\">".$lang_confirm_resend['text_select_lang']. $s . "</div>");
 ?>
 	</form>
-	<?php echo $lang_confirm_resend['text_resend_confirmation_mail_note']?>
+	<?php echo sprintf($lang_confirm_resend['text_resend_confirmation_mail_note'], $maxloginattempts)?>
 	<p><?php echo $lang_confirm_resend['text_you_have'] ?><b><?php echo remaining ();?></b><?php echo $lang_confirm_resend['text_remaining_tries'] ?></p>
-	<form method="post" action="confirm_resend.php">
-	<table border="1" cellspacing="0" cellpadding="10">
-	<tr><td class="rowhead nowrap"><?php echo $lang_confirm_resend['row_registered_email'] ?></td>
-	<td class="rowfollow"><input type="text" style="width: 200px" name="email" /></td></tr>
-	<tr><td class="rowhead nowrap"><?php echo $lang_confirm_resend['row_new_password'] ?></td><td align="left"><input type="password" style="width: 200px" name="wantpassword" /><br />
-		<font class="small"><?php echo $lang_confirm_resend['text_password_note'] ?></font></td></tr>
-	<tr><td class="rowhead nowrap"><?php echo $lang_confirm_resend['row_enter_password_again'] ?></td><td align="left"><input type="password" style="width: 200px" name="passagain" /></td></tr>
+    <?php $formInputStyle = 'style="width: min(100%, 320px); min-width: 180px; border: 1px solid gray; box-sizing: border-box"'; ?>
+    <form method="post" action="confirm_resend.php">
+    <table border="1" cellspacing="0" cellpadding="10" style="width: min(100%, 420px);">
+    <tr><td class="rowhead nowrap"><?php echo $lang_confirm_resend['row_registered_email'] ?></td>
+    <td class="rowfollow"><input type="email" name="email" autocomplete="email" <?php echo $formInputStyle; ?> /></td></tr>
+    <tr><td class="rowhead nowrap"><?php echo $lang_confirm_resend['row_new_password'] ?></td><td align="left"><input type="password" name="wantpassword" autocomplete="new-password" <?php echo $formInputStyle; ?> /><br />
+        <font class="small"><?php echo $lang_confirm_resend['text_password_note'] ?></font></td></tr>
+    <tr><td class="rowhead nowrap"><?php echo $lang_confirm_resend['row_enter_password_again'] ?></td><td align="left"><input type="password" name="passagain" autocomplete="new-password" <?php echo $formInputStyle; ?> /></td></tr>
 	<?php
 	show_image_code();
 	?>

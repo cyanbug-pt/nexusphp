@@ -9,6 +9,9 @@ function bark($msg) {
 dbconn();
 loggedinorreturn();
 user_can('staffmem', true);
+if (empty($_POST['delreport'])) {
+    stderr('Error', $lang_functions['select_at_least_one_record']);
+}
 if ($_POST['setdealt']){
 $res = sql_query ("SELECT id FROM reports WHERE dealtwith=0 AND id IN (" . implode(", ", $_POST['delreport']) . ")");
 while ($arr = mysql_fetch_assoc($res))
@@ -23,4 +26,4 @@ while ($arr = mysql_fetch_assoc($res))
 	$Cache->delete_value('staff_report_count');
 }
 
-header("Refresh: 0; url=reports.php");
+header("Location: reports.php");

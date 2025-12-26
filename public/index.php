@@ -620,7 +620,7 @@ if ($showtrackerload == "yes") {
 ?>
 <h2><?php echo $lang_index['text_disclaimer'] ?></h2>
 <table width="100%"><tr><td class="text">
-  <?php echo $lang_index['text_disclaimer_content'] ?></td></tr></table>
+  <?php echo sprintf($lang_index['text_disclaimer_content'], \App\Models\Setting::getSiteName(), \App\Models\Setting::getSiteName()) ?></td></tr></table>
 <?php
 // ------------- end: disclaimer ------------------//
 // ------------- start: links ------------------//

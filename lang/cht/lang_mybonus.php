@@ -11,7 +11,7 @@ $lang_mybonus = array
 	'text_success_vip' => "祝賀你，你獲得了一個月的",
 	'text_success_vip_two' => "資格！",
 	'text_no_permission' => "<b>錯誤！</b>你沒有該許可權。",
-	'text_success_custom_title' => "祝賀你，你獲得了<b>".$CURUSER['title']."</b>頭銜！",
+	'text_success_custom_title' => "祝賀你，你獲得了<b>%s</b>頭銜！",
 	'text_success_gift' => "你成功贈送了<b>魔力值</b>。",
 	'head_karma_page' => "的魔力值",
 	'text_karma_system' => "魔力值系統",
@@ -168,6 +168,10 @@ $lang_mybonus = array
     'text_success_buy_change_username_card' => "祝賀你，成功購買了<b>改名卡</b>！",
     'text_change_username_card_already_has' => '已經擁有改名卡',
     'text_rainbow_id_already_valid_forever' => '已永久擁有彩虹 ID',
+    'text_get_by_medal' => '勛章加成每小時將額外得到如下的魔力值',
+    'medal_additional_desc' => '勛章獎勵計算公式同上，不考慮低保',
+    'medal_additional_factor' => '最終獎勵為計算所得勛章獎勵乘以勛章加成系數，當前勛章加成系數為: ',
+    'text_bonus_mini_size' => '種子體積要求至少爲 %s，小於此體積的種子不參與魔力計算',
 );
 
 ?>

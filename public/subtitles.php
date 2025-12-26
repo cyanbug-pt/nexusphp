@@ -2,7 +2,7 @@
 require "../include/bittorrent.php";
 dbconn();
 require_once(get_langfile_path());
-require_once(get_langfile_path("",true));
+//require_once(get_langfile_path("",true));
 loggedinorreturn();
 
 if (!isset($CURUSER))
@@ -222,10 +222,17 @@ if (user_can('delownsub'))
 					    KPS("-",$uploadsubtitle_bonus,$a["uppedby"]); //subtitle uploader loses bonus for deleted subtitle
 					}
 					if ($CURUSER['id'] != $a['uppedby']){
-						$msg = $CURUSER['username'].$lang_subtitles_target[get_user_lang($a['uppedby'])]['msg_deleted_your_sub']. $a['title'].($reason != "" ? $lang_subtitles_target[get_user_lang($a['uppedby'])]['msg_reason_is'].$reason : "");
-						$subject = $lang_subtitles_target[get_user_lang($a['uppedby'])]['msg_your_sub_deleted'];
+                        $locale = get_user_locale($a['uppedby']);
+						$msg = $CURUSER['username'].nexus_trans("subtitle.msg_deleted_your_sub", [], $locale). $a['title'].($reason != "" ? nexus_trans("subtitle.msg_reason_is", [], $locale).$reason : "");
+						$subject = nexus_trans("subtitle.msg_your_sub_deleted", [], $locale);
 						$time = date("Y-m-d H:i:s");
-						sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, $a[uppedby], '" . $time . "', " . sqlesc($msg) . ", ".sqlesc($subject).")") or sqlerr(__FILE__, __LINE__);
+						\App\Models\Message::add([
+							'sender' => 0,
+							'receiver' => $a['uppedby'],
+							'added' => now(),
+							'msg' => $msg,
+							'subject' => $subject,
+						]);
 					}
 					$res = sql_query("SELECT lang_name from language WHERE sub_lang=1 AND id = " . sqlesc($a["lang_id"])) or sqlerr(__FILE__, __LINE__);
 					$arr = mysql_fetch_assoc($res);
@@ -288,7 +295,7 @@ if (get_user_class() >= UC_PEASANT)
 		print("<br />(".$lang_subtitles['text_maximum_file_size'].mksize($maxsubsize_main).".)");
 	print("</td></tr>\n");
 	if($in_detail == "")
-	print("<tr><td class=rowhead>".$lang_subtitles['row_torrent_id']."<font color=red>*</font></td><td class=rowfollow align=left><input type=text name=torrent_id style=\"width:300px\"><br />".$lang_subtitles['text_torrent_id_note']."</td></tr>\n");
+	print("<tr><td class=rowhead>".$lang_subtitles['row_torrent_id']."<font color=red>*</font></td><td class=rowfollow align=left><input type=text name=torrent_id style=\"width:300px\"><br />".sprintf($lang_subtitles['text_torrent_id_note'], getSchemeAndHttpHost())."</td></tr>\n");
 	else
 	{
 		print("<tr><td class=rowhead>".$lang_subtitles['row_torrent_id']."<font color=red>*</font></td><td class=rowfollow align=left><input type=text name=torrent_id value=$detail_torrent_id style=\"width:300px\"><br />".$lang_subtitles['text_torrent_id_note']."</td></tr>\n");

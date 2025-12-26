@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Niet ingelogd!",
+	'p_error' => "Fout:",
+	'p_after_logged_in' => "De pagina die u probeert te bekijken kan alleen worden gebruikt als u bent ingelogd.",
+	'p_need_cookies_enables' => "<b>Opmerking</b>: U heeft cookies nodig om in te loggen of over te schakelen.",
+	'p_fail_ban' => "mislukte aanmeldingen zullen leiden tot een verbannen ip!",
+	'p_you_have' => "Je hebt",
+	'p_remaining_tries' => "resterende pogingen.",
+	'p_no_account_signup' => "Don't have an account? <a href=\"signup.php\"><b>Sign up</b></a> right now!",
+	'p_forget_pass_recover' => "Wachtwoord vergeten? Uw wachtwoord herstellen <a href=\"recover.php\"><b>via e-mail</b></a>",
+    'p_account_banned' => "Account geblokkeerd? Bekijk de reden op<a href=\"user-ban-log.php\"><b>user ban log</b></a>",
+	'p_resend_confirm' => "Bevestigingsmail of bevestigingslink is niet ontvangen? <a href=\"confirm_resend.php\"><b>Stuur bevestigingsmail opnieuw</b></a>",
+	'rowhead_username' => "Gebruikersnaam:",
+	'rowhead_password' => "Wachtwoord:",
+	'button_login' => "Login!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Automatisch uitloggen:",
+	'text_restrict_ip' => "IP beperken:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Log me uit na 15 minuten",
+	'checkbox_restrict_ip' => " Beperk de sessie tot mijn IP",
+	'checkbox_ssl' => " Blader door de website met SSL-versleuteling (webbrowser)",
+	'checkbox_ssl_tracker' => " Verbind tracker met SSL-versleuteling (BitTorrent client)",
+	'text_advanced_options' => "Geavanceerde opties:",
+	'text_helpbox' => "Helpbox",
+	'text_helpbox_note' => "Problemen met aanmelden of inloggen? Laat hier een bericht achter",
+	'text_message' => "Bericht: ",
+	'sumbit_shout' => "schreeuw",
+	'submit_clear' => "Wis",
+	'text_select_lang' => "Selecteer website taal: ",
+	'head_login' => "Aanmelden",
+    'rowhead_two_step_code' => 'Tweestapsverificatie verificatie',
+    'two_step_code_tooltip' => 'Indien ingeschakeld moet het ingevuld worden',
+    'text_complain' => 'Klacht Kanaal',
+);
+
+?>

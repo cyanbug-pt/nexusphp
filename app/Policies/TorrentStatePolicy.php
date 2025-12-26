@@ -42,7 +42,7 @@ class TorrentStatePolicy extends BasePolicy
      */
     public function create(User $user)
     {
-        return false;
+        return $this->can($user);
     }
 
     /**
@@ -66,7 +66,7 @@ class TorrentStatePolicy extends BasePolicy
      */
     public function delete(User $user, TorrentState $torrentState)
     {
-
+        return $this->can($user);
     }
 
     /**
@@ -78,7 +78,7 @@ class TorrentStatePolicy extends BasePolicy
      */
     public function restore(User $user, TorrentState $torrentState)
     {
-
+        return $this->can($user);
     }
 
     /**
@@ -90,7 +90,7 @@ class TorrentStatePolicy extends BasePolicy
      */
     public function forceDelete(User $user, TorrentState $torrentState)
     {
-        //
+        return $this->can($user);
     }
 
     private function can(User $user)

@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Fejl",
+	'std_missing_reason' => "Mangler Årsager!",
+	'std_message' => "Besked",
+	'std_successfully_reported' => "Rapporteret succesfuldt!",
+	'std_already_reported_this' => "Du har allerede rapporteret dette!",
+	'std_sorry' => "Beklager",
+	'std_cannot_report_oneself' => "Du kan ikke rapportere dig selv!",
+	'std_invalid_user_id' => "Ugyldigt Bruger-Id!",
+	'std_cannot_report' => "Du kan ikke rapportere ",
+	'std_are_you_sure' => "Er du sikker?",
+	'text_are_you_sure_user' => "Er du sikker på, at du vil rapportere denne bruger ",
+	'text_to_staff' => " til personalet for overtrædelse af reglerne?",
+	'text_not_for_leechers' => "Bemærk, at dette er <b>ikke</b> , der skal bruges til at rapportere leechers, vi har scripts på plads til at håndtere dem!",
+	'text_reason_is' => "Årsag <font class=striking>(påkrævet)</font>: ",
+	'submit_confirm' => "Bekræft",
+	'text_reason_note' => "<b><font class=striking> PLEASE Note! </font></b>&nbsp;Hvis der ikke er nogen grund til det, vil du få en advarsel selv.",
+	'std_invalid_torrent_id' => "Ugyldigt Torrent-Id!",
+	'text_are_you_sure_torrent' => "Er du sikker på, at du vil rapportere denne torrent ",
+	'std_invalid_post_id' => "Ugyldigt Indlæg Id!",
+	'text_are_you_sure_post' => "Er du sikker på, at du vil rapportere forumindlægget (ID ",
+	'text_of_topic' => " af emne ",
+	'text_of_torrent' => " af torrent ",
+	'text_of_offer' => " af tilbud ",
+	'text_of_request' => " af anmodning ",
+	'text_by' => ") af ",
+	'std_invalid_comment_id' => "Ugyldigt Kommentar Id!",
+	'std_orphaned_comment' => "Forældreløse kommentarer. Rapportér venligst dette til administrator.",
+	'text_are_you_sure_comment' => "Er du sikker på, at du vil rapportere kommentaren (ID ",
+	'std_invalid_offer_id' => "Ugyldigt tilbud-ID!",
+	'text_are_you_sure_offer' => "Er du sikker på, at du vil rapportere følgende tilbud ",
+	'std_invalid_request_id' => "Ugyldigt Forespørgsels-Id!",
+	'std_are_you_sure_request' => "Er du sikker på, at du vil rapportere følgende anmodning ",
+	'std_invalid_action' => "Ugyldig handling.",
+	'std_invalid_subtitle_id' => "Ugyldigt Undertekst-Id!",
+	'text_are_you_sure_subtitle' => "Er du sikker på, at du vil rapportere undertitlen ",
+);
+
+?>

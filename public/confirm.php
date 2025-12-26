@@ -9,14 +9,14 @@ if (!$id)
 
 dbconn();
 
-$res = sql_query("SELECT passhash, secret, editsecret, status FROM users WHERE id = ".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
+$res = sql_query("SELECT passhash, secret, auth_key, editsecret, status FROM users WHERE id = ".sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 $row = mysql_fetch_assoc($res);
 
 if (!$row)
 	httperr();
 
 if ($row["status"] != "pending") {
-	header("Refresh: 0; url=ok.php?type=confirmed");
+	header("Location: ok.php?type=confirmed");
 	exit();
 }
 
@@ -29,19 +29,20 @@ sql_query("UPDATE users SET status='confirmed', editsecret='' WHERE id=".sqlesc(
 if (!mysql_affected_rows())
 	httperr();
 
-
-if ($securelogin == "yes")
-{
-	$securelogin_indentity_cookie = true;
-	$passh = md5($row["passhash"].$_SERVER["REMOTE_ADDR"]);
-}
-else	// when it's op, default is not use secure login
-{
-	$securelogin_indentity_cookie = false;
-	$passh = md5($row["passhash"]);
-}
-logincookie($id, $passh,1,get_setting('system.cookie_valid_days', 365) * 86400,$securelogin_indentity_cookie);
+publish_model_event(\App\Enums\ModelEventEnum::USER_UPDATED, $id);
+//if ($securelogin == "yes")
+//{
+//	$securelogin_indentity_cookie = true;
+//	$passh = md5($row["passhash"].$_SERVER["REMOTE_ADDR"]);
+//}
+//else	// when it's op, default is not use secure login
+//{
+//	$securelogin_indentity_cookie = false;
+//	$passh = md5($row["passhash"]);
+//}
+//logincookie($id, $passh,1,get_setting('system.cookie_valid_days', 365) * 86400,$securelogin_indentity_cookie);
+logincookie($id, $row["auth_key"]);
 //sessioncookie($row["id"], $passh,false);
 
-header("Refresh: 0; url=ok.php?type=confirm");
+header("Location: ok.php?type=confirm");
 ?>

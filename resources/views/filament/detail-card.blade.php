@@ -1,4 +1,4 @@
-<x-filament::page :widget-data="['record' => $record]" class="filament-resources-view-record-page">
+<x-filament-panels::page :widget-data="['record' => $record]" class="filament-resources-view-record-page">
     <div class="">
         <table class="table table-fixed text-left border-spacing-y-2 border-collapse divide-y w-full">
             <tbody>
@@ -17,4 +17,4 @@
 
     <x-filament::resources.relation-managers :active-manager="$activeRelationManager" :managers="$relationManagers" :owner-record="$record" />
     @endif
-</x-filament::page>
+</x-filament-panels::page>

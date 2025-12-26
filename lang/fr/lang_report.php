@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Erreur",
+	'std_missing_reason' => "Raison manquante!",
+	'std_message' => "Message",
+	'std_successfully_reported' => "Signalé avec succès !",
+	'std_already_reported_this' => "Vous avez déjà signalé cela !",
+	'std_sorry' => "Désolé",
+	'std_cannot_report_oneself' => "Vous ne pouvez pas vous signaler vous-même!",
+	'std_invalid_user_id' => "Identifiant d'utilisateur non valide !",
+	'std_cannot_report' => "Vous ne pouvez pas rapporter ",
+	'std_are_you_sure' => "Êtes-vous sûr(e) ?",
+	'text_are_you_sure_user' => "Êtes-vous sûr de vouloir signaler cet utilisateur ",
+	'text_to_staff' => " au personnel pour violation des règles?",
+	'text_not_for_leechers' => "Veuillez noter que ceci est <b>et non</b> pour être utilisé pour signaler les leechers, nous avons des scripts en place pour les traiter !",
+	'text_reason_is' => "Raison <font class=striking>(obligatoire)</font>: ",
+	'submit_confirm' => "Valider",
+	'text_reason_note' => "<b><font class=striking> VEUILLEZ NOTER ! </font></b>&nbsp;Si aucune raison n'est donnée, vous recevrez un avertissement vous-même.",
+	'std_invalid_torrent_id' => "Identifiant de torrent invalide !",
+	'text_are_you_sure_torrent' => "Êtes-vous sûr de vouloir signaler ce torrent ",
+	'std_invalid_post_id' => "Identifiant de publication invalide !",
+	'text_are_you_sure_post' => "Êtes-vous sûr de vouloir signaler le message du forum (ID ",
+	'text_of_topic' => " du sujet ",
+	'text_of_torrent' => " de torrent ",
+	'text_of_offer' => " d'offre ",
+	'text_of_request' => " de la demande ",
+	'text_by' => ") par ",
+	'std_invalid_comment_id' => "Identifiant de commentaire invalide !",
+	'std_orphaned_comment' => "Commentaire orphelin. Veuillez le signaler à l'administrateur.",
+	'text_are_you_sure_comment' => "Êtes-vous sûr de vouloir signaler le commentaire (ID ",
+	'std_invalid_offer_id' => "ID d'offre invalide !",
+	'text_are_you_sure_offer' => "Êtes-vous sûr de vouloir signaler l'offre suivante ",
+	'std_invalid_request_id' => "ID de requête invalide !",
+	'std_are_you_sure_request' => "Êtes-vous sûr de vouloir signaler la demande suivante ",
+	'std_invalid_action' => "Action invalide.",
+	'std_invalid_subtitle_id' => "ID de sous-titre invalide !",
+	'text_are_you_sure_subtitle' => "Êtes-vous sûr de vouloir signaler le sous-titre ",
+);
+
+?>

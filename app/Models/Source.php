@@ -3,8 +3,12 @@
 namespace App\Models;
 
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class Source extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['name', 'sort_index', 'mode',];
 
     public static function getLabelName()

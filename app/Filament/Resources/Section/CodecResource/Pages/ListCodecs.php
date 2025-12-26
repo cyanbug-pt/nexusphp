@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\CodecResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\CodecResource;
 use App\Models\Codec;
@@ -13,10 +14,10 @@ class ListCodecs extends PageList
 {
     protected static string $resource = CodecResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

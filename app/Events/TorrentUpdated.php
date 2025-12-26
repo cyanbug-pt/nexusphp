@@ -24,7 +24,7 @@ class TorrentUpdated
      *
      * @return void
      */
-    public function __construct(Model $model, Model $modelOld)
+    public function __construct(Model $model, ?Model $modelOld = null)
     {
         $this->model = $model;
         $this->modelOld = $modelOld;

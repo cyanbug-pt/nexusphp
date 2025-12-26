@@ -1,0 +1,48 @@
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${NP_DOMAIN};
+
+    root /var/www/html/public;
+    index index.php index.html;
+
+    ssl_certificate     /certs/fullchain.pem;
+    ssl_certificate_key /certs/private.key;
+
+    client_max_body_size 100M;
+
+    location = /favicon.ico {
+        log_not_found off;
+        access_log off;
+    }
+
+    location / {
+        try_files $uri $uri/ /nexus.php?$query_string;
+    }
+
+    # Filament
+    location ^~ /filament {
+        try_files $uri $uri/ /nexus.php$is_args$args;
+    }
+
+    location = /announce.php {
+        access_by_lua_block {
+            local filter = require("tracker_filter")
+            filter()
+        }
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param REQUEST_ID $request_id;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param REQUEST_ID $request_id;
+    }
+
+}

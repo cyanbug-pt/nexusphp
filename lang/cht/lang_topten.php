@@ -5,7 +5,7 @@ $lang_topten = array
 	'std_error' => "錯誤！",
 	'std_sorry' => "對不起...",
 	'std_permission_denied_only' => "你沒有該許可權。只有",
-	'std_or_above_can_view' => "及以上等級的用戶才能檢視排行榜。<br /><br />請檢視"."<a class=\"faqlink\" href=\"faq.php#id22\"><b>常見問題</b></a>了解更多關于用戶等級和許可權的資訊。<br /><br /><b></p>" .$SITENAME."管理組</b>",
+	'std_or_above_can_view' => "及以上等級的用戶才能檢視排行榜。<br /><br />請檢視"."<a class=\"faqlink\" href=\"faq.php#id22\"><b>常見問題</b></a>了解更多關于用戶等級和許可權的資訊。<br /><br /><b></p>%s管理組</b>",
 	'col_rank' => "排名",
 	'col_user' => "用戶",
 	'col_donated' => "捐贈",
@@ -55,34 +55,34 @@ $lang_topten = array
 	'text_most_donated_CNY' => "人民幣捐贈者",
 	'col_donated_usd' => "捐贈(＄)",
 	'col_donated_cny' => "捐贈(￥)",
-	
+
 	'text_most_supplied' => "最大資源提供者<font class=\"small\">(不包括被移除的種子)</font>",
 	'text_most_snatched' => " 最大資源完成者<font class=\"small\">(不包括被移除的種子)</font>",
 	'col_torrent_uploaded' => "# 上傳",
 	'col_torrent_downloaded' => "# 完成",
-	
+
 	'text_most_topic' => " 論壇主題發起者<font class=\"small\">(不包括被移除的主題)</font>",
 	'text_most_post' => " 論壇發帖者<font class=\"small\">(不包括被移除的帖子)</font>",
 	'col_topics' => "主題",
 	'col_posts' => "帖子",
-	
-	
+
+
 	'text_biggest_topics' => "最熱主題<font class=\"small\">(不計特權論壇內的主題)</font>",
 	'col_subject' => "主題",
-	
+
 	'col_number' => "數量",
 	'text_most_browser' => "瀏覽器",
 	'text_most_client' => "BT用戶端<font class=\"small\">(按最近存取伺服器的用戶端)</font>",
-	
+
 	'col_comments' => "評論",
 	'text_most_commenter' => "種子評論者<font class=\"small\">(不包括被移除的評論)</font>",
-	
+
 	'col_reviews' => "點評",
 	'text_most_reviewer' => "電影點評者<font class=\"small\">(不包括被移除的點評)</font>",
-	
+
 	'col_location' => "位置",
 	'text_most_locations' => "同伴位置",
-	
+
 	'col_keyword' => "關鍵字",
 	'col_times' => "次數",
 	'col_datetime' => "時間",
@@ -90,7 +90,7 @@ $lang_topten = array
 	'text_current_month_search' => "本月搜索",
 	'text_last_month_search' => "上月搜索",
 	'text_current_year_search' => "今年搜索",
-	
+
 	'text_most_bonuses' => "魔力值",
 	'col_bonus' => "魔力值",
 	'text_countries_users' => "用戶數",

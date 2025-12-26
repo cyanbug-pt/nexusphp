@@ -8,7 +8,7 @@ $id = intval($_GET['id'] ?? 0);
 if (!$id)
 	die();
 
-$res = sql_query("SELECT torrents.*, categories.mode as cat_mode FROM torrents LEFT JOIN categories ON category = categories.id WHERE torrents.id = $id");
+$res = sql_query("SELECT torrents.*, categories.mode as cat_mode, torrent_extras.media_info as technical_info, torrent_extras.descr, torrent_extras.pt_gen FROM torrents LEFT JOIN categories ON category = categories.id left join torrent_extras on torrents.id = torrent_extras.torrent_id WHERE torrents.id = $id");
 $row = mysql_fetch_assoc($res);
 if (!$row) die();
 
@@ -50,7 +50,7 @@ stdhead($lang_edit['head_edit_torrent'] . "\"". $row["name"] . "\"");
 
 if (!isset($CURUSER) || ($CURUSER["id"] != $row["owner"] && !user_can('torrentmanage'))) {
 	print("<h1 align=\"center\">".$lang_edit['text_cannot_edit_torrent']."</h1>");
-	print("<p>".$lang_edit['text_cannot_edit_torrent_note']."</p>");
+	echo sprintf("<p>".$lang_edit['text_cannot_edit_torrent_note']."</p>", $_SERVER["REQUEST_URI"] ?? '');
 }
 else {
 	print("<form method=\"post\" id=\"compose\" name=\"edittorrent\" action=\"takeedit.php\" enctype=\"multipart/form-data\">");

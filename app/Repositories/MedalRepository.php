@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserMedal;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Nexus\Database\NexusDB;
 
@@ -68,12 +69,27 @@ class MedalRepository extends BaseRepository
         if ($exists) {
             throw new \LogicException("user: $uid already own this medal: $medalId.");
         }
+        $this->userAttachMedal($user, $medal);
+    }
+
+    public function userAttachMedal(User $user, Medal $medal): void
+    {
         $expireAt = null;
-        if ($duration > 0) {
-            $expireAt = Carbon::now()->addDays($duration)->toDateTimeString();
+        $bonusAdditionExpireAt = null;
+        if ($medal->duration > 0) {
+            $expireAt = Carbon::now()->addDays((int)$medal->duration)->toDateTimeString();
         }
-        clear_user_cache($uid);
-        return $user->medals()->attach([$medal->id => ['expire_at' => $expireAt, 'status' => UserMedal::STATUS_NOT_WEARING]]);
+        if ($medal->bonus_addition_duration > 0) {
+            $bonusAdditionExpireAt = Carbon::now()->addDays((int)$medal->bonus_addition_duration)->toDateTimeString();
+        }
+        $user->medals()->attach([
+            $medal->id => [
+                'expire_at' => $expireAt,
+                'bonus_addition_expire_at' => $bonusAdditionExpireAt,
+                'status' => UserMedal::STATUS_NOT_WEARING,
+            ]
+        ]);
+        clear_user_cache($user->id);
     }
 
     public function toggleUserMedalStatus($id, $userId)
@@ -131,6 +147,53 @@ class MedalRepository extends BaseRepository
         do_log("sql: $sql");
         clear_user_cache($userId);
         return NexusDB::statement($sql);
+    }
+
+    public function increaseExpireAt(Collection $collection, string $field, int $duration): void
+    {
+        $this->checkExpireField($field);
+        $idArr = $collection->pluck('id')->toArray();
+        $result = NexusDB::table("user_medals")
+            ->whereIn('id', $idArr)
+            ->whereNotNull($field)
+            ->update([$field => NexusDB::raw("`$field` + INTERVAL $duration DAY")]);
+        do_log(sprintf(
+            "operator: %s, increase records: %s $field + $duration day, result: %s",
+            get_pure_username(), implode(', ', $idArr), $result
+        ));
+    }
+
+    public function updateExpireAt(Collection $collection, string $field, Carbon $expireAt): void
+    {
+        $this->checkExpireField($field);
+        $idArr = $collection->pluck('id')->toArray();
+        $result = NexusDB::table("user_medals")
+            ->whereIn('id', $idArr)
+            ->update([$field => $expireAt]);
+        do_log(sprintf(
+            "operator: %s, update records: %s $field $expireAt, result: %s",
+            get_pure_username(), implode(', ', $idArr), $result
+        ));
+    }
+
+    public function cancelExpireAt(Collection $collection, string $field): void
+    {
+        $this->checkExpireField($field);
+        $idArr = $collection->pluck('id')->toArray();
+        $result = NexusDB::table("user_medals")
+            ->whereIn('id', $idArr)
+            ->update([$field => NexusDB::raw("null")]);
+        do_log(sprintf(
+            "operator: %s, update records: %s $field null, result: %s",
+            get_pure_username(), implode(', ', $idArr), $result
+        ));
+    }
+
+    private function checkExpireField(string $field): void
+    {
+        if (!in_array($field, ['expire_at', 'bonus_addition_expire_at'])) {
+            throw new \InvalidArgumentException("invalid field: $field");
+        }
     }
 
 }

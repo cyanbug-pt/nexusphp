@@ -30,4 +30,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'crowdin' => [
+        'access_token' => env('CROWDIN_ACCESS_TOKEN'),
+        'project_id' => env('CROWDIN_PROJECT_ID'),
+        'organization' => env('CROWDIN_ORGANIZATION'), // Optional: for Crowdin Enterprise
+    ],
+
 ];
+

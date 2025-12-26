@@ -2,41 +2,48 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use App\Filament\Resources\User\BonusLogResource\Pages\ManageBonusLogs;
 use App\Filament\Resources\User\BonusLogResource\Pages;
 use App\Filament\Resources\User\BonusLogResource\RelationManagers;
 use App\Models\BonusLogs;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Arr;
+use function Filament\Support\get_model_label;
 
 class BonusLogResource extends Resource
 {
     protected static ?string $model = BonusLogs::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 10;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.bonus_log');
     }
 
-    public static function getBreadcrumb(): string
+    public static function getModelLabel(): string
     {
-        return self::getNavigationLabel();
+        return sprintf('%s(%s)', get_model_label(static::getModel()), __('bonus-log.exclude_seeding_bonus'));
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -45,38 +52,38 @@ class BonusLogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uid')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('uid')
                     ->formatStateUsing(fn ($state) => username_for_admin($state))
                     ->label(__('label.username'))
                 ,
-                Tables\Columns\TextColumn::make('business_type_text')
+                TextColumn::make('business_type_text')
                     ->label(__('bonus-log.fields.business_type'))
                 ,
-                Tables\Columns\TextColumn::make('old_total_value')
+                TextColumn::make('old_total_value')
                     ->label(__('bonus-log.fields.old_total_value'))
-                    ->formatStateUsing(fn ($state) => number_format($state))
+                    ->formatStateUsing(fn ($state) => $state >= 0 ? number_format($state) : '-')
                 ,
-                Tables\Columns\TextColumn::make('value')
+                TextColumn::make('value')
                     ->formatStateUsing(fn ($record) => $record->old_total_value > $record->new_total_value ? "-" . number_format($record->value) : "+" . number_format($record->value))
                     ->label(__('bonus-log.fields.value'))
                 ,
-                Tables\Columns\TextColumn::make('new_total_value')
+                TextColumn::make('new_total_value')
                     ->label(__('bonus-log.fields.new_total_value'))
-                    ->formatStateUsing(fn ($state) => number_format($state))
+                    ->formatStateUsing(fn ($state) => $state >= 0 ? number_format($state) : '-')
                 ,
-                Tables\Columns\TextColumn::make('comment')
+                TextColumn::make('comment')
                     ->label(__('label.comment'))
                 ,
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('label.created_at'))
                 ,
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label(__('label.username'))
                             ->placeholder('UID')
                         ,
@@ -84,16 +91,26 @@ class BonusLogResource extends Resource
                         return $query->when($data['uid'], fn (Builder $query, $value) => $query->where("uid", $value));
                     })
                 ,
-                Tables\Filters\SelectFilter::make('business_type')
-                    ->options(BonusLogs::listStaticProps(BonusLogs::$businessTypes, 'bonus-log.business_types', true))
+                SelectFilter::make('business_type')
+                    ->options(BonusLogs::listStaticProps(Arr::except(BonusLogs::$businessTypes, BonusLogs::$businessTypeBonus), 'bonus-log.business_types', true))
                     ->label(__('bonus-log.fields.business_type'))
                 ,
+//                Tables\Filters\Filter::make('exclude_seeding_bonus')
+//                    ->toggle()
+//                    ->label(__('bonus-log.exclude_seeding_bonus'))
+//                    ->query(function (Builder $query, array $data) {
+//                        if ($data['isActive']) {
+//                            $query->whereNotIn("business_type", BonusLogs::$businessTypeBonus);
+//                        }
+//                    })
+//                    ->default()
+//                ,
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
 //                Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -101,7 +118,7 @@ class BonusLogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageBonusLogs::route('/'),
+            'index' => ManageBonusLogs::route('/'),
         ];
     }
 }

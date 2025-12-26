@@ -1,6 +1,6 @@
 <?php
 
-$lang_increment_bulk = array
+$lang_incrementbulk = array
 (
     'page_title' => '批量添加魔力/補簽卡/邀請/上傳量/臨時邀請',
     'sent_success' => ' 已經成功增加並發送了私信',

@@ -11,7 +11,10 @@ use App\Models\TorrentDenyReason;
 use App\Models\TorrentOperationLog;
 use App\Models\User;
 use App\Repositories\TorrentRepository;
+use App\Repositories\UploadRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class TorrentController extends Controller
@@ -23,17 +26,13 @@ class TorrentController extends Controller
         $this->repository = $repository;
     }
 
-    public function index(Request $request)
+    public function index(Request $request, string $section = null)
     {
-        $params = $request->all();
-        $params['visible'] = Torrent::VISIBLE_YES;
-        $params['category_mode'] = Setting::get('main.browsecat');
-        $result = $this->repository->getList($params, Auth::user());
+        do_log("controller torrent index entry");
+        $result = $this->repository->getList($request, Auth::user(), $section);
+        do_log("controller torrent index getList");
         $resource = TorrentResource::collection($result);
-//        $resource->additional([
-//            'page_title' => nexus_trans('torrent.index.page_title'),
-//        ]);
-
+        do_log("controller torrent index prepare resource");
         return $this->success($resource);
     }
 
@@ -41,36 +40,40 @@ class TorrentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function store(Request $request)
     {
-        //
+        $uploadRep = new UploadRepository();
+        $newTorrent = $uploadRep->upload($request);
+        $resource = new JsonResource(["id" => $newTorrent->id]);
+        return $this->success($resource);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function show($id)
     {
+        do_log("controller torrent show entry");
         /**
          * @var User
          */
         $user = Auth::user();
-        $result = $this->repository->getDetail($id, $user);
-        $isBookmarked = $user->bookmarks()->where('torrentid', $id)->exists();
-
-        $resource = new TorrentResource($result);
-        $resource->additional([
-//            'page_title' => nexus_trans('torrent.show.page_title'),
-//            'field_labels' => Torrent::getFieldLabels(),
-            'is_bookmarked' => (int)$isBookmarked,
-            'bonus_reward_values' => Torrent::BONUS_REWARD_VALUES,
-        ]);
-
+        $torrent = $this->repository->getDetail($id, $user);
+        do_log("controller torrent show getDetail");
+        $resource = new TorrentResource($torrent);
+        $additional = [];
+        if ($this->hasExtraField('bonus_reward_values')) {
+            $additional['bonus_reward_values'] = Setting::getBonusRewardOptions();
+        }
+        $extraSettingsNames = ['torrent.claim_torrent_user_counts_up_limit'];
+        $this->appendExtraSettings($additional, $extraSettingsNames);
+        $resource->additional($additional);
+        do_log("controller torrent show prepare resource");
         return $this->success($resource);
     }
 

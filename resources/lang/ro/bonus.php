@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Cheltuiește :bonus cumpără :medal_name',
+    'comment_buy_attendance_card' => 'Cheltuieli :bonus cumpără un card de participare',
+    'comment_buy_temporary_invite' => 'Cheltuiește :bonus cumpără :count invitație temporară',
+    'comment_buy_rainbow_id' => 'Cheltuieli :bonus cumpără :duration zile curcubeu ID',
+    'comment_buy_change_username_card' => 'Cheltuiește :bonus cumpără schimbarea numelui de utilizator',
+    'comment_gift_medal' => 'Cheltuiește :bonus cumpără :medal_name și cadou pentru :to_username',
+    'comment_buy_torrent' => 'Cheltuie :bonus cumpără torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Venituri din torrent descărcate de :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Tip de recompensă',
+        'count' => 'Număr',
+        'size' => 'Dimensiune',
+        'a_value' => 'O valoare',
+        'bonus_base' => 'Bonus de bază',
+        'factor' => 'Factor',
+        'got_bonus' => 'Am primit bonus',
+        'total' => 'Total',
+    ],
+    'reward_types' => [
+        'basic' => 'Recompensă de bază',
+        'harem_addition' => 'Adăugare de harm',
+        'official_addition' => 'Adăugare oficială',
+        'medal_addition' => 'Suplimentare medalie',
+    ],
+    'not_enough' => 'Niciun bonus! Necesită :require_bonus, ai în prezent: :now_bonus',
+    'msg_someone_loves_you' => "Cineva te iubește",
+    'msg_you_have_been_given' => "Vi s-a oferit un cadou de ",
+    'msg_after_tax' => " (după impozitare, este ",
+    'msg_karma_points_by' => ") Puncte Karma de ",
+    'msg_personal_message_from' => "Mesaj personal de la ",
+    'msg_colon' => ": ",
+];

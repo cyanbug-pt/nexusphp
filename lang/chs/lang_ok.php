@@ -18,7 +18,7 @@ $lang_ok = array
 	'std_already_confirmed_note' => "<p>该账号已经通过验证。你可以使用它来<a class=altlink href=\"login.php\">登录</a>。</p>\n",
 	'head_signup_confirmation' => "注册验证",
 	'std_account_confirmed' => "<h1>账号成功通过验证！</h1>\n",
-	'std_read_rules_faq' => "<p>在使用".$SITENAME."前，请务必先阅读并熟悉站点的<a class=altlink href=\"rules.php\"><b>规则</b></a>和<a class=altlink href=\"faq.php\"><b>常见问题</b></a>。</p>\n"
+	'std_read_rules_faq' => "<p>在使用%s前，请务必先阅读并熟悉站点的<a class=altlink href=\"rules.php\"><b>规则</b></a>和<a class=altlink href=\"faq.php\"><b>常见问题</b></a>。</p>\n"
 );
 
 ?>

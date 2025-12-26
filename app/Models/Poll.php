@@ -3,8 +3,12 @@
 namespace App\Models;
 
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class Poll extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['added', 'question', 'option0', 'option1', 'option2', 'option3', 'option4', 'option5'];
 
     protected $casts = [

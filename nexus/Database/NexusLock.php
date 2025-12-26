@@ -2,6 +2,7 @@
 
 namespace Nexus\Database;
 
+use App\Exceptions\LockFailException;
 use Illuminate\Cache\LuaScripts;
 use Illuminate\Cache\RedisLock;
 
@@ -45,6 +46,19 @@ class NexusLock extends RedisLock
     public function release()
     {
         return (bool) $this->redis->eval(LuaScripts::releaseLock(), [$this->name, $this->owner], 1);
+    }
+
+    /**
+     * @throws LockFailException
+     */
+    public static function lockOrFail($name, $seconds, $owner = null): NexusLock
+    {
+        $lock = new self($name, $seconds, $owner);
+        if (!$lock->acquire()) {
+            do_log("$name failed to acquire lock", 'error');
+            throw new LockFailException($name, $lock->owner());
+        }
+        return $lock;
     }
 
 }

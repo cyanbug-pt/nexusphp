@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Ei kirjautunut sisään!",
+	'p_error' => "Virhe:",
+	'p_after_logged_in' => "Sivua, jota yritit tarkastella, voidaan käyttää vain kun olet kirjautunut sisään.",
+	'p_need_cookies_enables' => "<b>Huomautus</b>: Tarvitset evästeet käytössä, jotta voit kirjautua sisään tai vaihtaa kieltä.",
+	'p_fail_ban' => "epäonnistuneet kirjautumiset peräkkäin johtavat siihen, että ip kielletään käytöstä!",
+	'p_you_have' => "Sinulla on",
+	'p_remaining_tries' => "jäljellä olevat yritykset.",
+	'p_no_account_signup' => "Eikö sinulla ole tiliä? <a href=\"signup.php\"><b>Rekisteröidy</b></a> juuri nyt!",
+	'p_forget_pass_recover' => "Unohditko salasanasi? Palauta salasanasi <a href=\"recover.php\"><b>sähköpostitse</b></a>",
+    'p_account_banned' => "Tili estetty? Katso syy<a href=\"user-ban-log.php\"><b>käyttäjäkiellon loki</b></a>",
+	'p_resend_confirm' => "Etkö saanut vahvistusviestiä tai vahvistuslinkki on rikki? <a href=\"confirm_resend.php\"><b>Lähetä vahvistusviesti uudelleen</b></a>",
+	'rowhead_username' => "Käyttäjätunnus:",
+	'rowhead_password' => "Salasana:",
+	'button_login' => "Kirjaudu!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Automaattinen Kirjautuminen:",
+	'text_restrict_ip' => "Rajoita IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Kirjaudu ulos 15 minuutin jälkeen",
+	'checkbox_restrict_ip' => " Rajoita istunto minun IP-osoitteeseeni",
+	'checkbox_ssl' => " Selaa sivustoa SSL-salauksella (Web-selain)",
+	'checkbox_ssl_tracker' => " Yhdistä seurantapalvelin SSL-salaukseen (BitTorrent-asiakas)",
+	'text_advanced_options' => "Lisäasetukset:",
+	'text_helpbox' => "Ohjelaatikko",
+	'text_helpbox_note' => "Onko sinulla ongelmia rekisteröitymisessä tai kirjautumisessa? Jätä viesti tänne",
+	'text_message' => "Viesti: ",
+	'sumbit_shout' => "huutaa",
+	'submit_clear' => "tyhjennä",
+	'text_select_lang' => "Valitse Sivuston Kieli: ",
+	'head_login' => "Kirjaudu",
+    'rowhead_two_step_code' => 'Kaksivaiheinen Todennus',
+    'two_step_code_tooltip' => 'Jos käytössä on täytettävä',
+    'text_complain' => 'Valituskanava',
+);
+
+?>

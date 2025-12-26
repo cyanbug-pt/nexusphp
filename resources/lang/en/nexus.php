@@ -7,6 +7,7 @@ return [
     'user_not_exists' => '(orphaned)',
     'time_units' => [
         'week' => 'weeks',
+        'hour' => 'hours',
     ],
     'select_all' => 'Select all',
     'unselect_all' => 'Unselect all',
@@ -17,4 +18,8 @@ return [
     'sum' => 'Sum',
     'do_not_repeat' => 'Please do not repeat the operation!',
     'no_permission' => 'No permission!',
+    'sort' => 'sort field',
+    'order' => 'sort',
+    'asc' => 'ascending order',
+    'desc' => 'descending order',
 ];

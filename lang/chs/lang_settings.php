@@ -227,7 +227,6 @@ $lang_settings = array
 	'text_bonus_formula_twelve' => "。默认为'300'",
 	'text_misc_ways_get_bonus' => "其他获取方式",
 	'row_uploading_torrent' => "发布新种子",
-	'text_user_would_get' => "用户将获得",
 	'text_uploading_torrent_note' => "个魔力值，如果他发布一个新种子。默认'15'。",
 	'row_uploading_subtitle' => "上传一个字幕",
 	'text_uploading_subtitle_note' => "个魔力值，如果他上传一个字幕。默认'5'。",
@@ -712,8 +711,11 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => '分钟',
 	'row_login_secret_lifetime' => '登录密钥有效期',
 	'text_login_secret_lifetime_deadline' => '当前密钥有效期至',
-	'row_enable_technical_info' => '启用 MediaInfo',
-	'text_enable_technical_info' => "默认'否'。MediaInfo 来自软件 <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Text 视图的结果",
+	'row_enable_technical_info' => '启用 MediaInfo/BDInfo',
+	'text_enable_technical_info' => '默认\'否\'。<br>
+	MediaInfo 来自软件 <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> Text 视图的结果	<br>
+	BDInfo 来自软件 <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> View Reports的结果
+	',
     'row_sticky_first_level_background_color' => '一级置顶背景颜色',
     'text_sticky_first_level_background_color_note' => '一级置顶背景颜色，不设置则无背景色。',
     'row_sticky_second_level_background_color' => '二级置顶背景颜色',
@@ -817,6 +819,17 @@ $lang_settings = array
     'text_max_price_note' => '默认：1,000,000，设置为 0 无限制',
     'row_paid_torrent_enabled' => '是否启用收费种子',
     'text_paid_torrent_enabled_note' => '启用后，有权限的用户可以在发种时设置向下载种子的用户收取一定的魔力，默认：否',
+    'row_use_challenge_response_authentication' => '挑战-响应认证',
+    'text_use_challenge_response_authentication_note' => '如果启用，登录时将不传输明文密码，建议启用。未来版本会删除此配置且启用此功能。',
+    'row_complain_enabled' => '启用申诉',
+    'row_complain_enabled_note' => '默认: "yes"',
+    'row_min_size' => '起步体积',
+    'text_bonus_mini_size' => '要求种子的体积最小为',
+    'text_bonus_mini_size_help' => '。小于此体积的种子不参与魔力计算。单位：字节(Byte)，如 1 KiB = 1024 Byte。',
+    'row_reward_bonus_options' => '魔力值奖励选项',
+    'text_reward_bonus_options_note' => '种子详情页的魔力值奖励选项，多个用英文逗号分割',
+    'row_reward_times_limit' => '魔力奖励次数限制',
+    'text_reward_times_limit_note' => '种子详情页的魔力奖励每人每天次数限制，设置为 0 不限制。默认：0',
 );
 
 ?>

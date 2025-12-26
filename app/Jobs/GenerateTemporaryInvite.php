@@ -36,16 +36,6 @@ class GenerateTemporaryInvite implements ShouldQueue
         $this->count = $count;
     }
 
-    /**
-     * Determine the time at which the job should timeout.
-     *
-     * @return \DateTime
-     */
-    public function retryUntil()
-    {
-        return now()->addHours(1);
-    }
-
     public $tries = 1;
 
     public $timeout = 1800;

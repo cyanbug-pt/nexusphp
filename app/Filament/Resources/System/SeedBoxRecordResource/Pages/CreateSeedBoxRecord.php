@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\SeedBoxRecordResource\Pages;
 
+use Exception;
 use App\Filament\Resources\System\SeedBoxRecordResource;
 use App\Models\SeedBoxRecord;
 use App\Repositories\SeedBoxRepository;
@@ -22,7 +23,7 @@ class CreateSeedBoxRecord extends CreateRecord
         $rep = new SeedBoxRepository();
         try {
             $this->record = $rep->store($data);
-            $this->notify('success', $this->getCreatedNotificationTitle());
+            send_admin_success_notification();
             if ($another) {
                 // Ensure that the form record is anonymized so that relationships aren't loaded.
                 $this->form->model($this->record::class);
@@ -33,8 +34,8 @@ class CreateSeedBoxRecord extends CreateRecord
                 return;
             }
             $this->redirect($this->getResource()::getUrl('index'));
-        } catch (\Exception $exception) {
-            $this->notify('danger', $exception->getMessage());
+        } catch (Exception $exception) {
+            send_admin_fail_notification($exception->getMessage());
         }
     }
 }

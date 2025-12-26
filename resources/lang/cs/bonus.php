@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Utratit :bonus buy :medal_name',
+    'comment_buy_attendance_card' => 'Utratit :bonus koupit jednu doprovodnou kartu',
+    'comment_buy_temporary_invite' => 'Utrácet :bonus nákup :count dočasné pozvání',
+    'comment_buy_rainbow_id' => 'Utratit :bonus koupit :duration dní rainbow ID',
+    'comment_buy_change_username_card' => 'Utratit :bonus buy change username kartu',
+    'comment_gift_medal' => 'Utratit :bonus koupit :medal_name a dárek na :to_username',
+    'comment_buy_torrent' => 'Utratit :bonus buy torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Výnosy z torrentu staženého uživatelem :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'Typ odměny',
+        'count' => 'Počet',
+        'size' => 'Velikost',
+        'a_value' => 'A Hodnota',
+        'bonus_base' => 'Základní bonus',
+        'factor' => 'Faktor',
+        'got_bonus' => 'Bonus',
+        'total' => 'Celkem',
+    ],
+    'reward_types' => [
+        'basic' => 'Základní odměna',
+        'harem_addition' => 'Přidání harem',
+        'official_addition' => 'Oficiální přidání',
+        'medal_addition' => 'Mediální přidání',
+    ],
+    'not_enough' => 'Nedostatek bonusu! Vyžaduje :require_bonus, v současné době máte: :now_bonus',
+    'msg_someone_loves_you' => "Někdo tě miluje",
+    'msg_you_have_been_given' => "Dostali jste dárek ",
+    'msg_after_tax' => " (po zdanění ",
+    'msg_karma_points_by' => ") Karma body od ",
+    'msg_personal_message_from' => "Osobní zpráva od ",
+    'msg_colon' => ": ",
+];

@@ -40,6 +40,15 @@ return [
         'oauth_access_token' => '访问令牌',
         'oauth_auth_code' => '授权码',
         'oauth_refresh_token' => '刷新令牌',
+        'token' => '访问令牌',
+        'oauth_provider' => '身份验证',
+        'queue_monitor' => '队列监控',
+        'user_modify_logs' => '修改记录',
+        'message_templates' => '消息模板',
+        'tracker_url' => 'Tracker URL',
+        'announce_logs' => '汇报记录',
+        'announce_monitor' => '汇报监控',
+        'activity_logs' => '操作日志',
     ],
     'resources' => [
         'agent_allow' => [
@@ -113,9 +122,13 @@ return [
             'bulk_action_recommend' => '推荐',
             'bulk_action_sp_state' => '优惠',
             'bulk_action_hr' => 'H&R',
+            'bulk_action_change_category' => '修改分区',
+            'bulk_action_change_category_section_help' => '注意：选择目标分区后，勾选下面的分类和子分类会将种子对应属性修改为选择的值，勾选标签则会将其附加到种子上。<br/>并且原种子身上不属于新分区的分类、子分类和标签会被移除。',
         ],
         'seed_box_record' => [
             'toggle_status' => '更改状态',
+            'check_modal_btn' => '检测',
+            'check_modal_header' => '检测 IP 是否为 SeedBox',
         ],
         'tag' => [
             'detach_torrents' => '分离所有种子',

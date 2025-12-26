@@ -3,6 +3,7 @@
 namespace Nexus\Torrent;
 
 use App\Models\Setting;
+use App\Models\TorrentExtra;
 use Nexus\Database\NexusDB;
 use Nexus\Imdb\Imdb;
 use Nexus\PTGen\PTGen;
@@ -19,19 +20,22 @@ class Torrent
      */
     public function listLeechingSeedingStatus(int $uid, array $torrentIdArr)
     {
+        if (empty($torrentIdArr)) {
+            return [];
+        }
         $torrentIdStr = implode(',', $torrentIdArr);
         //seeding or leeching, from peers
-        $whereStr = sprintf("userid = %s and torrent in (%s)", sqlesc($uid), $torrentIdStr);
+        $whereStr = sprintf("userid = %s and torrent in (%s)", $uid, $torrentIdStr);
         $peerList = NexusDB::getAll('peers', $whereStr, 'torrent, to_go');
         $peerList = array_column($peerList,'to_go', 'torrent');
         //download progress, from snatched
         $sql = sprintf(
             "select snatched.to_go, snatched.torrentid, torrents.size from snatched inner join torrents on snatched.torrentid = torrents.id where snatched.userid = %s and snatched.torrentid in (%s)",
-            sqlesc($uid), $torrentIdStr
+            $uid, $torrentIdStr
         );
         $snatchedList = [];
-        $res = sql_query($sql);
-        while ($row = mysql_fetch_assoc($res)) {
+        $res = NexusDB::select($sql);
+        foreach ($res as $row) {
             $id = $row['torrentid'];
             $activeStatus = 'inactivity';
             if (isset($peerList[$id])) {
@@ -45,7 +49,7 @@ class Torrent
             $progress = sprintf('%.4f', $realDownloaded / $row['size']);
             $snatchedList[$id] = [
                 'finished' => $row['to_go'] == 0 ? 'yes' : 'no',
-                'progress' => $progress,
+                'progress' => floatval($progress),
                 'active_status' => $activeStatus,
             ];
         }
@@ -68,20 +72,15 @@ class Torrent
         return $result;
     }
 
-    public function renderTorrentsPageAverageRating(array $torrentInfo): string
+    public function renderTorrentsPageAverageRating(array $torrentInfo, array|string $ptGenInfo): string
     {
         static $ptGen;
         if (is_null($ptGen)) {
             $ptGen = new PTGen();
         }
-        $ptGenInfo = $torrentInfo['pt_gen'];
-        if (!is_array($torrentInfo['pt_gen']) && is_string($torrentInfo['pt_gen'])) {
-            $ptGenInfo = json_decode($ptGenInfo, true);
-        }
-
         $log = "torrent: " . $torrentInfo['id'];
-        $siteIdAndRating = $ptGen->listRatings($ptGenInfo ?? [], $torrentInfo['url']);
-        $log .= "siteIdAndRating: " . json_encode($siteIdAndRating);
+        $siteIdAndRating = $ptGen->listRatings(is_array($ptGenInfo) && count($ptGenInfo) ? $ptGenInfo : [], $torrentInfo['url']);
+        $log .= ", siteIdAndRating: " . json_encode($siteIdAndRating);
         do_log($log);
         return $ptGen->buildRatingSpan($siteIdAndRating);
     }

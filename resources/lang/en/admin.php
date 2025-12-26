@@ -42,6 +42,13 @@ return [
         'oauth_access_token' => 'Access tokens',
         'oauth_auth_code' => 'Auth codes',
         'oauth_refresh_token' => 'Refresh tokens',
+        'token' => 'Access tokens',
+        'oauth_provider' => 'Authorization provider',
+        'queue_monitor' => 'Queue monitor',
+        'user_modify_logs' => 'User modify logs',
+        'message_templates' => 'Message templates',
+        'tracker_url' => 'Tracker URL',
+        'activity_logs' => 'Activity Logs',
     ],
     'resources' => [
         'agent_allow' => [
@@ -118,6 +125,8 @@ return [
         ],
         'seed_box_record' => [
             'toggle_status' => 'Change status',
+            'check_modal_btn' => 'Check',
+            'check_modal_header' => 'Detect if IP is SeedBox',
         ],
         'tag' => [
             'detach_torrents' => 'Detach all torrents',

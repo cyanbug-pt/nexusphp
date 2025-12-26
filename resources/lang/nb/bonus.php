@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'comment_buy_medal' => 'Bruke :bonus kjøp :medal_name',
+    'comment_buy_attendance_card' => 'Bruk :bonus kjøp ett øyekort',
+    'comment_buy_temporary_invite' => 'Bruk :bonus kjøp :count midlertidige invitasjon',
+    'comment_buy_rainbow_id' => 'Bruk :bonus bonus kjøp :varighet dager regnbue ID',
+    'comment_buy_change_username_card' => 'Bruke :bonus kjøp brukernavn kort',
+    'comment_gift_medal' => 'Bruk :bonus bonus kjøp :medal_name og gave til :to_username',
+    'comment_buy_torrent' => 'Brukt :bonus kjøp torrent: :torrent_id',
+    'comment_torrent_be_downloaded' => 'Fortsett fra torrent lastet ned med :username(UID: :uid)',
+    'table_thead' => [
+        'reward_type' => 'BelÃ¸nning type',
+        'count' => 'Antall',
+        'size' => 'Størrelse',
+        'a_value' => 'A Verdi',
+        'bonus_base' => 'Grunnleggende bonus',
+        'factor' => 'Faktor',
+        'got_bonus' => 'Har bonus',
+        'total' => 'Totalt',
+    ],
+    'reward_types' => [
+        'basic' => 'Basis belønning',
+        'harem_addition' => 'Varm tillegg',
+        'official_addition' => 'Offisielt tillegg',
+        'medal_addition' => 'Medisinsk tillegg',
+    ],
+    'not_enough' => 'Ikke nok bonus! Krever :require_bonus, du bare har: :now_bonus',
+    'msg_someone_loves_you' => "Noen elsker deg",
+    'msg_you_have_been_given' => "Du har fått en gave på ",
+    'msg_after_tax' => " ( etter skatt ",
+    'msg_karma_points_by' => ") Karma poeng etter ",
+    'msg_personal_message_from' => "Personlig melding fra ",
+    'msg_colon' => ": ",
+];

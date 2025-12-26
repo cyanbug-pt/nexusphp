@@ -30,7 +30,7 @@ $userRep = new \App\Repositories\UserRepository();
 if ($user['added'] == "0000-00-00 00:00:00" || $user['added'] == null) {
     $joindate = $lang_userdetails['text_not_available'];
 } else {
-    $weeks = $userInfo->added->diffInWeeks() . nexus_trans('nexus.time_units.week');
+    $weeks = abs(number_format($userInfo->added->diffInWeeks(), 1)) . nexus_trans('nexus.time_units.week');
     $joindate = $user['added']." (" . gettime($user["added"], true, false, true).", $weeks)";
 }
 $lastseen = $user["last_access"];
@@ -120,7 +120,7 @@ if ($CURUSER['id'] == $user['id'] || user_can('cruprfmanage'))
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
 <?php
 $userIdDisplay = $user['id'];
-$userManageSystemUrl = sprintf('%s/%s/users/%s',getSchemeAndHttpHost(), nexus_env('FILAMENT_PATH', 'nexusphp'), $user['id']);
+$userManageSystemUrl = sprintf('%s/%s/user/users/%s',getSchemeAndHttpHost(), nexus_env('FILAMENT_PATH', 'nexusphp'), $user['id']);
 $userManageSystemText = sprintf('<a href="%s" target="_blank" class="altlink">%s</a>', $userManageSystemUrl, $lang_functions['text_management_system']);
 $migratedHelp = sprintf($lang_userdetails['change_field_value_migrated'], $userManageSystemText);
 if (user_can('prfmanage') && $user["class"] < get_user_class()) {
@@ -235,7 +235,9 @@ if (user_can('userprofile') ||  $user["id"] == $CURUSER["id"])
 		$locationinfo = "<span title=\"" . $loc_mod . "\">[" . $loc_pub . "]</span>";
 	}
 	else $locationinfo = "";
-	tr_small($lang_userdetails['row_ip_address'], $user['ip'].$locationinfo.$seedBoxIcon, 1);
+//    $ip = $user["id"] == $CURUSER["id"] ? hide_text($user['ip']) : $user['ip'];
+    $ip = $user["ip"];
+	tr_small($lang_userdetails['row_ip_address'], hide_text($ip.$locationinfo.$seedBoxIcon), 1);
 }
 $clientselect = '';
 $res = sql_query("SELECT peer_id, agent, ipv4, ipv6, port FROM peers WHERE userid = {$user['id']} GROUP BY agent, ipv4, ipv6, port") or sqlerr();
@@ -247,7 +249,9 @@ if (mysql_num_rows($res) > 0)
 	    $clientselect .= "<tr>";
 		$clientselect .= sprintf('<td>%s</td>', get_agent($arr['peer_id'], $arr['agent']));
 		if (user_can('userprofile') ||  $user["id"] == $CURUSER["id"]) {
-            $clientselect .= sprintf('<td>%s</td><td>%s</td><td>%s</td>', $arr['ipv4'].$seedBoxRep->renderIcon($arr['ipv4'], $user['id']), $arr['ipv6'].$seedBoxRep->renderIcon($arr['ipv6'], $user['id']), $arr['port']);
+            $v4 = $user["id"] == $CURUSER["id"] ? hide_text($arr['ipv4']) : $arr['ipv4'];
+            $v6 = $user["id"] == $CURUSER["id"] ? hide_text($arr['ipv6']) : $arr['ipv6'];
+            $clientselect .= sprintf('<td>%s</td><td>%s</td><td>%s</td>', $v4.$seedBoxRep->renderIcon($arr['ipv4'], $user['id']), $v6.$seedBoxRep->renderIcon($arr['ipv6'], $user['id']), $arr['port']);
         } else {
             $clientselect .= sprintf('<td>%s</td><td>%s</td><td>%s</td>', '---', '---', '---');
         }
@@ -483,7 +487,7 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
         $classselect=classlist('class', $maxclass, $user["class"], 0, false, true);
         tr($lang_userdetails['row_class'], $classselect . $migratedHelp, 1);
     }
-	tr($lang_userdetails['row_vip_by_bonus'], "<input type=\"radio\" name=\"vip_added\" value=\"yes\"" .($user["vip_added"] == "yes" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_yes']." <input type=\"radio\" name=\"vip_added\" value=\"no\"" .($user["vip_added"] == "no" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_no']."<br />".$lang_userdetails['text_vip_by_bonus_note'], 1);
+	tr($lang_userdetails['row_vip_by_bonus'], "<input type=\"radio\" name=\"vip_added\" value=\"yes\"" .($user["vip_added"] == "yes" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_yes']." <input type=\"radio\" name=\"vip_added\" value=\"no\"" .($user["vip_added"] == "no" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_no']."<br />", 1);
 	tr($lang_userdetails['row_vip_until'], "<input type=\"text\" name=\"vip_until\" value=\"".htmlspecialchars($user["vip_until"])."\" /> ".$lang_userdetails['text_vip_until_note'], 1);
 	$supportlang = htmlspecialchars($user["supportlang"]);
 	$supportfor = htmlspecialchars($user["supportfor"]);
@@ -500,9 +504,24 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
 
 	if (user_can('cruprfmanage'))
 	{
-		$modcomment = htmlspecialchars($user["modcomment"]);
+        $modcomment = \App\Models\UserModifyLog::query()
+            ->where("user_id", $user["id"])
+            ->orderBy("id", "desc")
+            ->limit(20)
+            ->get()
+            ->map(fn ($item) => sprintf("[%s] %s", $item->created_at->format("Y-m-d"), $item->content))
+            ->implode("\n")
+        ;
 		tr($lang_userdetails['row_comment'], "<textarea cols=\"60\" rows=\"6\" name=\"modcomment\">".$modcomment."</textarea>", 1);
-		$bonuscomment = htmlspecialchars($user["bonuscomment"]);
+        $bonuscomment = \App\Models\BonusLogs::query()
+            ->where("uid", $user["id"])
+            ->whereNotIn("business_type", \App\Models\BonusLogs::$businessTypeBonus)
+            ->orderBy("id", "desc")
+            ->limit(20)
+            ->get()
+            ->map(fn ($item) => sprintf("[%s] %s", $item->created_at->format("Y-m-d"), $item->comment))
+            ->implode("\n")
+        ;
 		tr($lang_userdetails['row_seeding_karma'], "<textarea cols=\"60\" rows=\"6\" name=\"bonuscomment\" readonly=\"readonly\">".$bonuscomment."</textarea>", 1);
 	}
 	$warned = $user["warned"] == "yes";
@@ -604,8 +623,8 @@ JS;
 		tr($lang_userdetails['row_change_email'], "<input type=\"text\" size=\"80\" name=\"email\" value=\"" . htmlspecialchars($user['email']) . "\" />", 1);
 	}
 
-	tr($lang_userdetails['row_change_password'], "<input type=\"password\" name=\"chpassword\" size=\"50\" />", 1);
-	tr($lang_userdetails['row_repeat_password'], "<input type=\"password\" name=\"passagain\" size=\"50\" />", 1);
+	tr($lang_userdetails['row_change_password'], "<input disabled type=\"password\" name=\"chpassword\" size=\"50\" />".$migratedHelp, 1);
+	tr($lang_userdetails['row_repeat_password'], "<input disabled type=\"password\" name=\"passagain\" size=\"50\" />".$migratedHelp, 1);
 
 	if (user_can('cruprfmanage'))
 	{

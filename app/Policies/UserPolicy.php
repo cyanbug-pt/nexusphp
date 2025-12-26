@@ -2,8 +2,10 @@
 
 namespace App\Policies;
 
+use App\Auth\Permission;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class UserPolicy extends BasePolicy
 {
@@ -29,7 +31,13 @@ class UserPolicy extends BasePolicy
      */
     public function view(User $user, User $model)
     {
-        return true;
+        return $model->privacy != "strong" || $user->id == $model->id || Permission::canManageUserBasicInfo();
+    }
+
+    public function viewEmail(User $user, User $model)
+    {
+        do_log(sprintf("user: %s, model: %s", $user->id, $model->id));
+        return $model->privacy == "low" || $user->id == $model->id || Permission::canViewUserConfidentialInfo();
     }
 
     /**

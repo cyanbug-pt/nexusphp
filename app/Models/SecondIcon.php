@@ -3,8 +3,12 @@
 namespace App\Models;
 
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class SecondIcon extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $table = 'secondicons';
 
     protected $fillable = [

@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Nepřihlášeno!",
+	'p_error' => "Chyba:",
+	'p_after_logged_in' => "Stránka, kterou jste se pokusili zobrazit, může být použita pouze při přihlášení.",
+	'p_need_cookies_enables' => "<b>Poznámka</b>: Potřebujete povolené soubory cookie pro přihlášení nebo přepnutí jazyka.",
+	'p_fail_ban' => "neúspěšná přihlášení v řadě způsobí zabanování tvého ip!",
+	'p_you_have' => "Máte",
+	'p_remaining_tries' => "zbývající pokusy.",
+	'p_no_account_signup' => "Nemáte účet? <a href=\"signup.php\"><b>Zaregistrujte se</b></a> právě teď!",
+	'p_forget_pass_recover' => "Zapomněli jste heslo? Obnovte své heslo <a href=\"recover.php\"><b>e-mailem</b></a>",
+    'p_account_banned' => "Účet zablokován? Zobrazit důvod na<a href=\"user-ban-log.php\"><b>uživatelský log</b></a>",
+	'p_resend_confirm' => "Neobdrželi jste potvrzovací e-mail nebo je nedostupný potvrzovací odkaz? <a href=\"confirm_resend.php\"><b>Pošlete potvrzovací e-mail znovu</b></a>",
+	'rowhead_username' => "Uživatelské jméno:",
+	'rowhead_password' => "Heslo:",
+	'button_login' => "Přihlásit se!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Automatické odhlášení:",
+	'text_restrict_ip' => "Omezit IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Odhlásit se po 15 minutách",
+	'checkbox_restrict_ip' => " Omezit relaci na mou IP adresu",
+	'checkbox_ssl' => " Procházet webové stránky pomocí SSL Encryption (prohlížeč (Web)",
+	'checkbox_ssl_tracker' => " Připojit tracker s SSL Encryption (BitTorrent client)",
+	'text_advanced_options' => "Pokročilé možnosti:",
+	'text_helpbox' => "Nápověda",
+	'text_helpbox_note' => "Máte problémy s registrací nebo přihlášením? Zanechte zprávu zde",
+	'text_message' => "Zpráva: ",
+	'sumbit_shout' => "křičet",
+	'submit_clear' => "vyčistit",
+	'text_select_lang' => "Vyberte jazyk stránky: ",
+	'head_login' => "Přihlásit se",
+    'rowhead_two_step_code' => 'Dvoufaktorové ověření',
+    'two_step_code_tooltip' => 'Pokud je povoleno, musí být vyplněno',
+    'text_complain' => 'Kanál stížnosti',
+);
+
+?>

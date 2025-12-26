@@ -66,27 +66,27 @@ class Claim extends NexusModel
         return Setting::get('torrent.claim_enabled', 'no') == 'yes';
     }
 
-    public static function getConfigTorrentTTL()
+    public static function getConfigTorrentTTL(): int
     {
         return Setting::get('torrent.claim_torrent_ttl', self::TORRENT_TTL);
     }
 
-    public static function getConfigUserUpLimit()
+    public static function getConfigUserUpLimit(): int
     {
         return Setting::get('torrent.claim_torrent_user_counts_up_limit', self::USER_UP_LIMIT);
     }
 
-    public static function getConfigTorrentUpLimit()
+    public static function getConfigTorrentUpLimit(): int
     {
         return Setting::get('torrent.claim_user_torrent_counts_up_limit', self::TORRENT_UP_LIMIT);
     }
 
-    public static function getConfigRemoveDeductBonus()
+    public static function getConfigRemoveDeductBonus(): int
     {
         return Setting::get('torrent.claim_remove_deduct_user_bonus', self::REMOVE_DEDUCT);
     }
 
-    public static function getConfigGiveUpDeductBonus()
+    public static function getConfigGiveUpDeductBonus(): int
     {
         return Setting::get('torrent.claim_give_up_deduct_user_bonus', self::GIVE_UP_DEDUCT);
     }

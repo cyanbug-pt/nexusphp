@@ -2,7 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Filament;
 use App\Http\Middleware\Locale;
+use App\Http\Middleware\LogUserIp;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -17,12 +19,13 @@ class Kernel extends HttpKernel
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
-        \Fruitcake\Cors\HandleCors::class,
+        \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
 //        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\BootNexus::class,
+        LogUserIp::class,
     ];
 
     /**
@@ -39,17 +42,16 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            Locale::class,
         ],
 
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-//            \App\Http\Middleware\Platform::class,
         ],
         'filament' => [
             \Illuminate\Session\Middleware\StartSession::class,
-            \Filament\Http\Middleware\Authenticate::class,
+//            \Filament\Http\Middleware\Authenticate::class,
+            Filament::class,
         ],
     ];
 
@@ -71,9 +73,12 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'permission' => \App\Http\Middleware\Permission::class,
-        'admin' => \App\Http\Middleware\Admin::class,
         'locale' => \App\Http\Middleware\Locale::class,
-        'user' => \App\Http\Middleware\User::class,
+        'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
+    ];
+
+    protected $middlewareAliases = [
+        'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+        'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
     ];
 }

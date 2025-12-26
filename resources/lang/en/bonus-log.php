@@ -21,9 +21,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Buy change username card',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gift medal',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Buy torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Reward torrent',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Role work salary',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent be downloaded',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Receive reward',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Receive gift',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Upload torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent receive reward',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding basic',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Seeding official addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Seeding harem addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Seeding medal addition',
     ],
     'fields' => [
         'business_type' => 'Business type',
@@ -31,4 +42,5 @@ return [
         'value' => 'Trade value',
         'new_total_value' => 'Post-trade value',
     ],
+    'exclude_seeding_bonus' => 'Exclude seeding bonus',
 ];

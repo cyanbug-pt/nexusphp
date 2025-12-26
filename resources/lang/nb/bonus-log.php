@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'business_types' => [
+        \App\Models\BonusLogs::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => 'Avbryt H&R',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_MEDAL => 'Kjøp medalje',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_ATTENDANCE_CARD => 'Kjøp deltakerkort',
+        \App\Models\BonusLogs::BUSINESS_TYPE_STICKY_PROMOTION => 'Klissete kampanje',
+        \App\Models\BonusLogs::BUSINESS_TYPE_POST_REWARD => 'Post belønning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD => 'Børs er lastet opp',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE => 'Kjøp invitasjon',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CUSTOM_TITLE => 'Tilpasset tittel',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_VIP => 'Kjøp VIP',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE => 'Gave til noen',
+        \App\Models\BonusLogs::BUSINESS_TYPE_NO_AD => 'Avbryt annonsen',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_LOW_SHARE_RATIO => 'Gave til lav delingsrate',
+        \App\Models\BonusLogs::BUSINESS_TYPE_LUCKY_DRAW => 'Heldig remis',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD => 'Børs nedlastet',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TEMPORARY_INVITE => 'Kjøp midlertidig invitasjon',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_RAINBOW_ID => 'Kjøp regnbue-ID',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Kjøp skifte brukernavn kort',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gave medalje',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Kjøp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Belønning torrent',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rolle arbeidstaker lønn',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent blir lastet ned',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Motta belÃ¸nning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Motta gave',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Last opp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent motta belønning',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding basic',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Seeding official addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Seeding harem addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Seeding medalje',
+    ],
+    'fields' => [
+        'business_type' => 'Virksomhet type',
+        'old_total_value' => 'Pretrade verdi',
+        'value' => 'Handel verdi',
+        'new_total_value' => 'Verdi etter handel',
+    ],
+    'exclude_seeding_bonus' => 'Utelat seeding bonus',
+];

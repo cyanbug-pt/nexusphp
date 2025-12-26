@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Section\ProcessingResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Section\ProcessingResource;
 use App\Models\Processing;
@@ -14,10 +15,10 @@ class ListProcessings extends PageList
 {
     protected static string $resource = ProcessingResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

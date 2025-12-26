@@ -2,14 +2,21 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\EditAction;
+use App\Filament\Resources\System\SettingResource\Pages\EditSetting;
 use App\Filament\OptionsTrait;
 use App\Filament\Resources\System\SettingResource\Pages;
 use App\Filament\Resources\System\SettingResource\RelationManagers;
 use App\Models\Setting;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -20,13 +27,13 @@ class SettingResource extends Resource
 
     protected static ?string $model = Setting::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
-    protected static ?int $navigationSort = 100;
+    protected static ?int $navigationSort = 1000;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.settings');
     }
@@ -37,13 +44,13 @@ class SettingResource extends Resource
     }
 
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->required()->disabled()->columnSpan(['sm' => 2]),
-                Forms\Components\Textarea::make('value')->required()->columnSpan(['sm' => 2])
-                    ->afterStateHydrated(function (Forms\Components\Textarea $component, $state) {
+        return $schema
+            ->components([
+                TextInput::make('name')->required()->disabled()->columnSpan(['sm' => 2]),
+                Textarea::make('value')->required()->columnSpan(['sm' => 2])
+                    ->afterStateHydrated(function (Textarea $component, $state) {
                         $arr = json_decode($state, true);
                         if (is_array($arr)) {
                             $component->disabled();
@@ -56,19 +63,19 @@ class SettingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name')->searchable(),
-                Tables\Columns\TextColumn::make('value')->limit(),
-                Tables\Columns\BadgeColumn::make('autoload')->colors(['success' => 'yes', 'warning' => 'no']),
-                Tables\Columns\TextColumn::make('updated_at'),
+                TextColumn::make('id'),
+                TextColumn::make('name')->searchable(),
+                TextColumn::make('value')->limit(),
+                BadgeColumn::make('autoload')->colors(['success' => 'yes', 'warning' => 'no']),
+                TextColumn::make('updated_at'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('autoload')->options(self::$yesOrNo),
+                SelectFilter::make('autoload')->options(self::$yesOrNo),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -85,7 +92,7 @@ class SettingResource extends Resource
         return [
 //            'index' => Pages\ListSettings::route('/'),
 //            'create' => Pages\CreateSetting::route('/create'),
-            'index' => Pages\EditSetting::route('/'),
+            'index' => EditSetting::route('/'),
         ];
     }
 }

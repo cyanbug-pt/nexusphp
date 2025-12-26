@@ -9,10 +9,12 @@
 namespace Nexus\PTGen;
 
 use App\Models\Torrent;
+use App\Models\TorrentExtra;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Nexus\Database\NexusDB;
 use Nexus\Imdb\Imdb;
 
 class PTGen
@@ -163,12 +165,11 @@ HTML;
 
     private function request(string $url, bool $withoutCache = false): array
     {
-        global $Cache;
         $begin = microtime(true);
         $logPrefix = "url: $url";
         $cacheKey = $this->getApiPointResultCacheKey($url);
         if (!$withoutCache) {
-            $cache = $Cache->get_value($cacheKey);
+            $cache = NexusDB::cache_get($cacheKey);
             if ($cache) {
                 do_log("$logPrefix, from cache");
                 return $cache;
@@ -196,7 +197,7 @@ HTML;
             throw new PTGenException($msg);
         }
         if ($this->isRawPTGen($bodyArr) || $this->isIyuu($bodyArr)) {
-            $Cache->cache_value($cacheKey, $bodyArr, 24 * 3600);
+            NexusDB::cache_put($cacheKey, $bodyArr, 24 * 3600);
             do_log("$logPrefix, success get from api point, use time: " . (microtime(true) - $begin));
             $bodyArr['__updated_at'] = now()->toDateTimeString();
             return $bodyArr;
@@ -209,8 +210,7 @@ HTML;
 
     public function deleteApiPointResultCache($url)
     {
-        global $Cache;
-        $Cache->delete_value($this->getApiPointResultCacheKey($url));
+        NexusDB::cache_del($this->getApiPointResultCacheKey($url));
     }
 
     private function getApiPointResultCacheKey($url)
@@ -304,15 +304,15 @@ HTML;
             if (!isset($siteIdAndRating[$site])) {
                 continue;
             }
-            $rating = $siteIdAndRating[$site];
-            if (empty($rating)) {
+            [$ratingValue, $externalId] = $this->normalizeRatingInfo($site, $siteIdAndRating[$site]);
+            if ($ratingValue === '' || $ratingValue === null) {
                 continue;
             }
             if ($count > 2) {
                 //only show the first two
                 break;
             }
-            $ratingIcons[] = $this->getRatingIcon($site, $rating);
+            $ratingIcons[] = $this->getRatingIcon($site, $ratingValue, $externalId);
             $count++;
         }
         if (empty($ratingIcons)) {
@@ -323,14 +323,22 @@ HTML;
         return $result;
     }
 
-    public function getRatingIcon($siteId, $rating): string
+    public function getRatingIcon($siteId, $rating, $externalId = null): string
     {
         if (is_numeric($rating)) {
             $rating = number_format($rating, 1);
         }
+        $spanAttr = '';
+        if (!empty($externalId)) {
+            if ($siteId === self::SITE_IMDB) {
+                $spanAttr = sprintf(' data-imdbid="%s"', htmlspecialchars($externalId, ENT_QUOTES));
+            } elseif ($siteId === self::SITE_DOUBAN) {
+                $spanAttr = sprintf(' data-doubanid="%s"', htmlspecialchars($externalId, ENT_QUOTES));
+            }
+        }
         $result = sprintf(
-            '<div style="display: flex;align-content: center;justify-content: space-between;padding: 2px 0"><img src="%s" alt="%s" title="%s" style="max-width: 16px;max-height: 16px"/><span>%s</span></div>',
-            self::$validSites[$siteId]['rating_average_img'], $siteId, $siteId, $rating
+            '<div style="display: flex;align-content: center;justify-content: space-between;padding: 2px 0"><img src="%s" alt="%s" title="%s" style="max-width: 16px;max-height: 16px"/><span%s>%s</span></div>',
+            self::$validSites[$siteId]['rating_average_img'], $siteId, $siteId, $spanAttr, $rating
         );
         return $result;
     }
@@ -342,21 +350,34 @@ HTML;
 
     public function isIyuu(array $bodyArr): bool
     {
-        return false;
-        //Not support, due to change frequently
-//        return isset($bodyArr['ret']) && $bodyArr['ret'] == 200;
+        $version = (string)($bodyArr['version'] ?? '');
+        switch ($version) {
+            case '2.0.0':
+                return isset($bodyArr['ret'])
+                    && intval($bodyArr['ret']) === 200
+                    && isset($bodyArr['data']['format'])
+                    && is_string($bodyArr['data']['format'])
+                    && $bodyArr['data']['format'] !== '';
+            default:
+                return false;
+        }
     }
 
     public function listRatings(array $ptGenData, string $imdbLink, string $desc = ''): array
     {
         $results = [];
         $log = "";
+        $sharedFallbackLinks = [];
+        if (!empty($ptGenData['__link']) && is_string($ptGenData['__link'])) {
+            $sharedFallbackLinks[] = $ptGenData['__link'];
+        }
         //First, get from PTGen
         foreach (self::$validSites as $site => $info) {
-            if (!isset($ptGenData[$site]['data'])) {
+            if (!isset($ptGenData[$site])) {
                 continue;
             }
-            $data = $ptGenData[$site]['data'];
+            $siteEntry = $ptGenData[$site];
+            $data = is_array($siteEntry) && isset($siteEntry['data']) ? $siteEntry['data'] : [];
             $log .= ", handling site: $site";
             $rating = '';
             if (isset($data['__rating'])) {
@@ -376,18 +397,39 @@ HTML;
                     }
                 }
             }
-            if (!empty($rating)) {
-                $results[$site] = $rating;
-                $log .= ", get rating: $rating";
-            } else {
-                $log .= ", can't get rating";
+
+            $fallbackLinks = $sharedFallbackLinks;
+            if ($site === self::SITE_IMDB && !empty($imdbLink)) {
+                $fallbackLinks[] = $imdbLink;
             }
+            $externalId = $this->extractExternalId($site, $siteEntry, $fallbackLinks);
+
+            $allowEmptyRatingWithId = in_array($site, [self::SITE_IMDB, self::SITE_DOUBAN], true);
+            if (($rating === '' || $rating === null) && !($allowEmptyRatingWithId && $externalId)) {
+                $log .= ", can't get rating";
+                continue;
+            }
+            if (($rating === '' || $rating === null) && $allowEmptyRatingWithId && $externalId) {
+                $rating = 'N/A';
+                $log .= ", missing rating but found id: $externalId";
+            } else {
+                $log .= ", get rating: $rating";
+            }
+
+            $results[$site] = [
+                'rating' => $rating,
+                'id' => $externalId,
+            ];
         }
         //Second, imdb can get from imdb api
         if (!isset($results[self::SITE_IMDB]) && !empty($imdbLink)) {
             $imdb = new Imdb();
             $imdbRating = $imdb->getRating($imdbLink);
-            $results[self::SITE_IMDB] = $imdbRating;
+            $externalId = $this->extractExternalId(self::SITE_IMDB, $imdbLink);
+            $results[self::SITE_IMDB] = [
+                'rating' => $imdbRating,
+                'id' => $externalId,
+            ];
             $log .= ", again 'imdb' from: $imdbLink -> $imdbRating";
         }
         //Otherwise, get from desc
@@ -403,7 +445,11 @@ HTML;
                 $log .= ", at last, trying to get '$site' from desc with pattern: $pattern";
                 if (preg_match($pattern, $desc, $matches)) {
                     $log .= ", get " . $matches[1];
-                    $results[$site] = $matches[1];
+                    $externalId = $this->extractExternalId($site, $ptGenData[$site] ?? []);
+                    $results[$site] = [
+                        'rating' => $matches[1],
+                        'id' => $externalId,
+                    ];
                 } else {
                     $log .= ", not match";
                 }
@@ -413,11 +459,98 @@ HTML;
         return $results;
     }
 
-    public function updateTorrentPtGen(array $torrentInfo): bool|array
+    private function normalizeRatingInfo(string $siteId, $value): array
+    {
+        $rating = '';
+        $externalId = null;
+        if (is_array($value)) {
+            $rating = $value['rating'] ?? '';
+            $externalId = $value['id'] ?? null;
+        } else {
+            $rating = $value;
+        }
+        if (($rating === '' || $rating === null) && in_array($siteId, [self::SITE_IMDB, self::SITE_DOUBAN], true) && $externalId) {
+            $rating = 'N/A';
+        }
+        return [$rating, $externalId];
+    }
+
+    private function extractExternalId(string $site, $siteEntry, array $fallbackLinks = []): ?string
+    {
+        if (!isset(self::$validSites[$site])) {
+            return null;
+        }
+        $pattern = self::$validSites[$site]['url_pattern'] ?? null;
+        $candidates = $fallbackLinks;
+        $candidates = array_merge($candidates, $this->collectStringValues($siteEntry));
+        foreach ($candidates as $candidate) {
+            if (!is_string($candidate) || $candidate === '') {
+                continue;
+            }
+            $candidateId = $this->matchExternalId($site, $pattern, $candidate);
+            if ($candidateId) {
+                return $candidateId;
+            }
+        }
+        return null;
+    }
+
+    private function collectStringValues($data): array
+    {
+        $results = [];
+        $this->appendStringValues($data, $results);
+        return $results;
+    }
+
+    private function appendStringValues($value, array &$results): void
+    {
+        if (is_string($value)) {
+            $results[] = $value;
+            return;
+        }
+        if (!is_array($value)) {
+            return;
+        }
+        foreach ($value as $item) {
+            $this->appendStringValues($item, $results);
+        }
+    }
+
+    private function matchExternalId(string $site, ?string $pattern, string $candidate): ?string
+    {
+        $candidate = trim($candidate);
+        if ($candidate === '') {
+            return null;
+        }
+        if ($pattern && preg_match($pattern, $candidate, $matches) && !empty($matches[1])) {
+            return $matches[1];
+        }
+        if ($site === self::SITE_IMDB) {
+            if (preg_match('/^tt\d+$/i', $candidate)) {
+                return strtolower($candidate);
+            }
+            if (preg_match('/^\d+$/', $candidate)) {
+                return 'tt' . str_pad($candidate, 7, '0', STR_PAD_LEFT);
+            }
+        } else {
+            if (preg_match('/^\d+$/', $candidate)) {
+                return $candidate;
+            }
+        }
+        return null;
+    }
+
+    public function updateTorrentPtGen(int $id): bool|array
     {
         $now = Carbon::now();
-        $log = "torrent: " . $torrentInfo['id'];
-        $arr = json_decode($torrentInfo['pt_gen'], true);
+        $log = "updateTorrentPtGen, torrent: " . $id;
+        $torrent = Torrent::query()->find($id);
+        if (empty($torrent)) {
+            do_log("$log, Torrent not found");
+            return false;
+        }
+        $extra = $torrent->extra;
+        $arr = $extra->pt_gen;
         if (is_array($arr)) {
             if (!empty($arr['__updated_at'])) {
                 $log .= ", updated_at: " . $arr['__updated_at'];
@@ -431,7 +564,7 @@ HTML;
             }
             $link = $this->getLink($arr);
         } else {
-            $link = $torrentInfo['pt_gen'];
+            $link = $arr;
         }
         if (empty($link)) {
             do_log("$log, no link...");
@@ -449,13 +582,24 @@ HTML;
                 do_log("$log, site: $site can not be updated: " . $exception->getMessage(), 'error');
             }
         }
-        $siteIdAndRating = $this->listRatings($ptGenInfo, $torrentInfo['url'], $torrentInfo['descr']);
+        if (empty($ptGenInfo)) {
+            do_log("$log, no pt gen info updated");
+            return false;
+        }
+        $siteIdAndRating = $this->listRatings($ptGenInfo, $torrent->url, $extra->descr);
         foreach ($siteIdAndRating as $key => $value) {
-            $ptGenInfo[$key]['data']["__rating"] = $value;
+            if (!isset($ptGenInfo[$key]['data']) || !is_array($ptGenInfo[$key]['data'])) {
+                continue;
+            }
+            $ratingValue = is_array($value) ? ($value['rating'] ?? '') : $value;
+            $ptGenInfo[$key]['data']["__rating"] = $ratingValue;
+            if (is_array($value) && isset($value['id']) && $value['id'] !== '') {
+                $ptGenInfo[$key]['data']["__id"] = $value['id'];
+            }
         }
         $ptGenInfo['__link'] = $link;
         $ptGenInfo['__updated_at'] = $now->toDateTimeString();
-        Torrent::query()->where('id', $torrentInfo['id'])->update(['pt_gen' => $ptGenInfo]);
+        TorrentExtra::query()->where('torrent_id', $id)->update(['pt_gen' => $ptGenInfo]);
         do_log("$log, success update");
         return $ptGenInfo;
     }

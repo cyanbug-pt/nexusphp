@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Torrent\TagResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageList;
 use App\Filament\Resources\Torrent\TagResource;
 use App\Models\Tag;
@@ -13,10 +14,10 @@ class ListTags extends PageList
 {
     protected static string $resource = TagResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

@@ -15,6 +15,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use League\OAuth2\Server\Grant\AuthCodeGrant;
 
 class UserController extends Controller
 {
@@ -64,10 +65,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return array
      */
-    public function show($id)
+    public function show($id = null)
     {
-        $result = $this->repository->getDetail($id);
-        return $this->success($result);
+        $currentUser = Auth::user();
+        if ($id === null) {
+            $id = $currentUser->id;
+        }
+        $result = $this->repository->getDetail($id, $currentUser);
+        $resource = new UserResource($result);
+        return $this->success($resource);
     }
 
     /**

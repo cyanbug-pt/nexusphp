@@ -227,7 +227,6 @@ $lang_settings = array
 	'text_bonus_formula_twelve' => "。預設為'300'",
 	'text_misc_ways_get_bonus' => "其他抓取方式",
 	'row_uploading_torrent' => "發布新種子",
-	'text_user_would_get' => "用戶將獲得",
 	'text_uploading_torrent_note' => "個魔力值，如果他發布一個新種子。預設'15'。",
 	'row_uploading_subtitle' => "上傳一個字幕",
 	'text_uploading_subtitle_note' => "個魔力值，如果他上傳一個字幕。預設'5'。",
@@ -712,8 +711,11 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => '分鐘',
 	'row_login_secret_lifetime' => '登錄密鑰有效期',
 	'text_login_secret_lifetime_deadline' => '當前密鑰有效期至',
-	'row_enable_technical_info' => '啟用 MediaInfo',
-	'text_enable_technical_info' => "默認'否'。MediaInfo 來自軟件 <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Text 視圖的結果",
+	'row_enable_technical_info' => '啓用 MediaInfo/BDInfo',
+	'text_enable_technical_info' => '默认\'否\'。<br>
+	MediaInfo 来自軟體 <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> Text 視圖的結果	<br>
+	BDInfo 来自軟體 <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> View Reports的結果
+	',
     'row_sticky_first_level_background_color' => '一級置頂背景顏色',
     'text_sticky_first_level_background_color_note' => '一級置頂背景顏色，不設置則無背景色。',
     'row_sticky_second_level_background_color' => '二級置頂背景顏色',
@@ -817,6 +819,17 @@ $lang_settings = array
     'text_max_price_note' => '默認：1,000,000，設置為 0 無限製',
     'row_paid_torrent_enabled' => '是否啟用收費種子',
     'text_paid_torrent_enabled_note' => '啟用後，有權限的用戶可以在發種時設置向下載種子的用戶收取一定的魔力，默認：否',
+    'row_use_challenge_response_authentication' => '挑戰-響應認證',
+    'text_use_challenge_response_authentication_note' => '如果啟用，登錄時將不傳輸明文密碼，建議啟用。未來版本會刪除此配置且啟用此功能。',
+    'row_complain_enabled' => '啟用申訴',
+    'row_complain_enabled_note' => '默認: "yes"',
+    'row_min_size' => '起步體積',
+    'text_bonus_mini_size' => '要求種子的體積最小爲',
+    'text_bonus_mini_size_help' => '。小於此體積的種子不參與魔力計算。單位：字節(Byte)，如 1 KiB = 1024 Byte。',
+    'row_reward_bonus_options' => '魔力值獎勵選項',
+    'text_reward_bonus_options_note' => '種子詳情頁的魔力值獎勵選項，多個用英文逗號分割',
+    'row_reward_times_limit' => '魔力獎勵次數限制',
+    'text_reward_times_limit_note' => '種子詳情頁的魔力獎勵每人每天次數限制，設置爲 0 不限制。默認：0',
 );
 
 ?>

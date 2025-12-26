@@ -227,7 +227,6 @@ $lang_settings = array
 	'text_bonus_formula_twelve' => ". Default '300'",
 	'text_misc_ways_get_bonus' => "Miscellaneous ways to get bonus",
 	'row_uploading_torrent' => "Uploading torrent",
-	'text_user_would_get' => "User would get ",
 	'text_uploading_torrent_note' => " bonus points for uploading a new torrent. Default '15'.",
 	'row_uploading_subtitle' => "Uploading subtitle",
 	'text_uploading_subtitle_note' => " bonus points for uploading a new subtitle. Default '5'.",
@@ -712,9 +711,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minute',
 	'row_login_secret_lifetime' => 'Login secret lifetime',
 	'text_login_secret_lifetime_deadline' => 'Current login secret deadline',
-	'row_enable_technical_info' => 'Enable MediaInfo',
-	'text_enable_technical_info' => "Default 'No'. MediaInfo comes from software <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Text view",
-    'row_sticky_first_level_background_color' => 'Sticky first level bg color',
+	'row_enable_technical_info' => 'Enable MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Default \'No\'. <br>
+	MediaInfo comes from software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> the result of "Text view"	<br>
+	BDInfo comes from software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> the result of "View Reports"
+	',
+	'row_sticky_first_level_background_color' => 'Sticky first level bg color',
     'text_sticky_first_level_background_color_note' => 'Sticky first level bg color, it will be none if not set.',
     'row_sticky_second_level_background_color' => 'Sticky second level bg color',
     'text_sticky_second_level_background_color_note' => 'Sticky second level bg color, it will be none if not set.',
@@ -817,6 +819,17 @@ $lang_settings = array
     'text_max_price_note' => 'default: 1,000,000, set to 0 no limit',
     'row_paid_torrent_enabled' => 'Whether to enable paid torrents',
     'text_paid_torrent_enabled_note' => 'When enabled, users with permission can set a certain amount of bonus to be charged to users who download the torrents when they are sent, default: no',
+    'row_use_challenge_response_authentication' => 'Challenge-Response Authentication',
+    'text_use_challenge_response_authentication_note' => 'If enabled, no plaintext passwords will be transmitted at login, recommended. Future releases will remove this configuration and enable this feature.' ,
+    'row_complain_enabled' => 'Whether to enable complaints',
+    'row_complain_enabled_note' => 'default: "yes"',
+    'row_min_size' => 'Minimum volume',
+    'text_bonus_mini_size'=> 'The minimum volume required for torrent is',
+    'text_bonus_mini_size_help' => '. Torrent size smaller than this volume are not included in the bonus calculation. Unit: bytes (Byte), e.g., 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Reward Bonus Options',
+    'text_reward_bonus_options_note' => 'Reward bonus options on the torrent details page, multiple options separated by commas',
+    'row_reward_times_limit' => 'Reward Frequency Limit',
+    'text_reward_times_limit_note' => 'Daily limit per user for bonus rewards on seed detail pages. Set to 0 for no limit. Default: 0',
 );
 
 ?>

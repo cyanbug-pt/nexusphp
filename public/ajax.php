@@ -1,10 +1,13 @@
 <?php
 require "../include/bittorrent.php";
 dbconn();
-loggedinorreturn();
 
 $action = $_POST['action'] ?? '';
 $params = $_POST['params'] ?? [];
+
+if ($action != 'getPasskeyGetArgs' && $action != 'processPasskeyGet') {
+    loggedinorreturn();
+}
 
 class AjaxInterface{
 
@@ -157,6 +160,70 @@ class AjaxInterface{
         $rep = new \App\Repositories\ExamRepository();
         return $rep->assignToUser($CURUSER['id'], $params['exam_id']);
     }
+
+    public static function addToken($params)
+    {
+        global $CURUSER;
+        if (empty($params['name'])) {
+            throw new \InvalidArgumentException("Name is required");
+        }
+        $user = \App\Models\User::query()->findOrFail($CURUSER['id'], \App\Models\User::$commonFields);
+        $user->createToken($params['name']);
+        return true;
+    }
+
+    public static function removeToken($params)
+    {
+        global $CURUSER;
+        if (empty($params['id'])) {
+            throw new \InvalidArgumentException("id is required");
+        }
+        $user = \App\Models\User::query()->findOrFail($CURUSER['id'], \App\Models\User::$commonFields);
+        $user->tokens()->where('id', $params['id'])->delete();
+        return true;
+    }
+
+    public static function getPasskeyCreateArgs($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->getCreateArgs($CURUSER['id'], $CURUSER['username']);
+    }
+
+    public static function processPasskeyCreate($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->processCreate($CURUSER['id'], $params['clientDataJSON'], $params['attestationObject']);
+    }
+
+    public static function deletePasskey($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->delete($CURUSER['id'], $params['credentialId']);
+    }
+
+    public static function getPasskeyList($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->getList($CURUSER['id']);
+    }
+
+    public static function getPasskeyGetArgs($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->getGetArgs();
+    }
+
+    public static function processPasskeyGet($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->processGet($params['challenge'], $params['id'], $params['clientDataJSON'], $params['authenticatorData'], $params['signature'], $params['userHandle']);
+    }
 }
 
 $class = 'AjaxInterface';
@@ -171,5 +238,6 @@ try {
         throw new \RuntimeException("Invalid action: $action");
     }
 }catch(\Throwable $exception){
+    do_log($exception->getMessage() . $exception->getTraceAsString(), "error");
     exit(json_encode(fail($exception->getMessage(), $_POST)));
 }

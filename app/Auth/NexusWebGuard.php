@@ -1,6 +1,7 @@
 <?php
 namespace App\Auth;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -46,9 +47,16 @@ class NexusWebGuard implements StatefulGuard
         }
         $credentials = $this->request->cookie();
         if ($this->validate($credentials)) {
-            $user = $this->user;
+            /**
+             * @var User $user
+             */
+            $user = $this->provider->retrieveByCredentials($credentials);
+            if (empty($user)) {
+                return null;
+            }
             if ($this->provider->validateCredentials($user, $credentials)) {
-                return $user;
+                $user->checkIsNormal();
+                return $this->user = $user;
             }
         }
     }
@@ -56,35 +64,18 @@ class NexusWebGuard implements StatefulGuard
 
     /**
      * Validate a user's credentials.
-     *
      * @param  array  $credentials
      * @return bool
      */
     public function validate(array $credentials = [])
     {
-        $required = ['c_secure_pass', 'c_secure_uid', 'c_secure_login'];
+        $required = ['c_secure_pass'];
         foreach ($required as $value) {
             if (empty($credentials[$value])) {
                 return false;
             }
         }
-        $b_id = base64($credentials["c_secure_uid"],false);
-        $id = intval($b_id ?? 0);
-        if (!$id || !is_valid_id($id) || strlen($credentials["c_secure_pass"]) != 32) {
-            return false;
-        }
-        $user = $this->provider->retrieveById($id);
-        if (!$user) {
-            return false;
-        }
-        try {
-            $user->checkIsNormal();
-            $this->user = $user;
-            return true;
-        } catch (\Throwable $e) {
-            do_log($e->getMessage());
-            return false;
-        }
+        return true;
     }
 
     public function logout()

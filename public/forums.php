@@ -204,8 +204,10 @@ function insert_compose_frame($id, $type = 'new')
 				stderr($lang_forums['std_error'], $lang_forums['std_no_post_id']);
 			$arr = mysql_fetch_assoc($res);
 			$body = "[quote=".htmlspecialchars($arr["username"])."]".htmlspecialchars(unesc($arr["body"]))."[/quote]";
+			$postid = $id;
 			$id = $topicid;
 			$type = 'reply';
+			print("<input type=\"hidden\" name=\"postid\" value=\"".$postid."\" />");
 			break;
 		}
 		case 'edit':
@@ -347,6 +349,7 @@ if ($action == "post")
 			check_whether_exist($id, 'topic');
 			$topicid = $id;
 			$forumid = get_single_value("topics", "forumid", "WHERE id=".sqlesc($topicid));
+			$quotepostid = $_POST["postid"];
 			break;
 		}
 		case 'edit':
@@ -419,19 +422,19 @@ if ($action == "post")
 		$Cache->delete_value('post_'.$postid.'_content');
         //send pm
         $postUrl = sprintf('[url=forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $id, $id, $topicInfo->subject);
-        if ($postInfo->userid != $CURUSER['id']) {
+        if (!empty($postInfo->userid) && $postInfo->userid != $CURUSER['id']) {
             $receiver = $postInfo->user;
-            $locale = $receiver->locale;
-            $notify = [
-                'sender' => 0,
-                'receiver' => $receiver->id,
-                'subject' => nexus_trans('forum.post.edited_notify_subject', [], $locale),
-                'msg' => nexus_trans('forum.post.edited_notify_body', ['topic_subject' => $postUrl, 'editor' => $CURUSER['username']], $locale),
-                'added' => now(),
-            ];
-            \App\Models\Message::query()->insert($notify);
-            \Nexus\Database\NexusDB::cache_del("user_{$postInfo->userid}_unread_message_count");
-            \Nexus\Database\NexusDB::cache_del("user_{$postInfo->userid}_inbox_count");
+            if ($receiver) {
+                $locale = $receiver->locale;
+                $notify = [
+                    'sender' => 0,
+                    'receiver' => $receiver->id,
+                    'subject' => nexus_trans('forum.post.edited_notify_subject', [], $locale),
+                    'msg' => nexus_trans('forum.post.edited_notify_body', ['topic_subject' => $postUrl, 'editor' => $CURUSER['username']], $locale),
+                    'added' => now(),
+                ];
+                \App\Models\Message::add($notify);
+            }
         }
 	}
 	else
@@ -467,21 +470,41 @@ if ($action == "post")
 		//send pm
         $topicInfo = \App\Models\Topic::query()->findOrFail($topicid);
         $postUrl = sprintf('[url=forums.php?action=viewtopic&topicid=%s&page=p%s#pid%s]%s[/url]', $topicid, $postid, $postid, $topicInfo->subject);
-        if ($type == 'reply' && $topicInfo->userid != $CURUSER['id']) {
-            /** @var \App\Models\User $receiver */
-            $receiver = $topicInfo->user;
-            if ($receiver->acceptNotification('topic_reply')) {
-                $locale = $receiver->locale;
-                $notify = [
-                    'sender' => 0,
-                    'receiver' => $receiver->id,
-                    'subject' => nexus_trans('forum.topic.replied_notify_subject', [], $locale),
-                    'msg' => nexus_trans('forum.topic.replied_notify_body', ['topic_subject' => $postUrl], $locale),
-                    'added' => now(),
-                ];
-                \App\Models\Message::query()->insert($notify);
-                \Nexus\Database\NexusDB::cache_del("user_{$topicInfo->userid}_unread_message_count");
-                \Nexus\Database\NexusDB::cache_del("user_{$topicInfo->userid}_inbox_count");
+
+		if ($type == 'reply') {
+			/** @var \App\Models\User $receiver */
+			if (!empty($topicInfo->userid) && $topicInfo->userid != $CURUSER['id'])
+			{
+				$receiver = $topicInfo->user;
+				if ($receiver && $receiver->acceptNotification('topic_reply')) {
+					$locale = $receiver->locale;
+					$notify = [
+						'sender' => 0,
+						'receiver' => $receiver->id,
+						'subject' => nexus_trans('forum.topic.replied_notify_subject', [], $locale),
+						'msg' => nexus_trans('forum.topic.replied_notify_body', ['topic_subject' => $postUrl], $locale),
+						'added' => now(),
+					];
+                    \App\Models\Message::add($notify);
+				}
+			}
+
+            if (!empty($quotepostid)) {
+                $quotePostInfo = \App\Models\Post::query()->find($quotepostid);
+                if ($quotePostInfo && $quotePostInfo->userid != $CURUSER['id']) {
+                    $receiver = $quotePostInfo->user;
+                    if($receiver && $receiver->acceptNotification('topic_reply')) {
+                        $locale = $receiver->locale;
+                        $notify = [
+                            'sender' => 0,
+                            'receiver' => $receiver->id,
+                            'subject' => nexus_trans('forum.reply.replied_notify_subject', [], $locale),
+                            'msg' => nexus_trans('forum.reply.replied_notify_body', ['topic_subject' => $postUrl, 'replyer' => $CURUSER['username']], $locale),
+                            'added' => now(),
+                        ];
+                        \App\Models\Message::add($notify);
+                    }
+                }
             }
         }
 
@@ -765,7 +788,7 @@ if ($action == "viewtopic")
 
 		print("<table class=\"main\" width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n");
 
-		$body = "<div id=\"pid".$postid."body\">";
+		$body = "<div id=\"pid".$postid."body\" style=\"word-break: break-all;\">";
 		//hidden content applied to second or higher floor post (for whose user class below Ad , not poster , not mods ,not reply's author)
 //		if ($protected_enabled && $pn+$offset>1 && get_user_class()<UC_ADMINISTRATOR && $userid != $base_posterid && $posterid!=$userid && !$is_forummod){
 		if ($pn+$offset>1 && !can_view_post($userid, $arr)){

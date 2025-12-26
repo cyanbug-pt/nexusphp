@@ -1,0 +1,31 @@
+<?php
+
+$lang_fields = [
+    'field_management' => 'Mukautetun kentän hallinta',
+    'text_manage' => 'Hallitse',
+    'text_add' => 'Lisää',
+    'text_field' => 'Kenttä',
+    'text_delete' => 'Poista',
+    'text_edit' => 'Muokkaa',
+    'col_id' => 'ID',
+    'col_name' => 'Nimi',
+    'col_name_help' => 'Salli vain numero, aakkoset, alaviiva',
+    'col_label' => 'Näytä otsikko',
+    'col_type' => 'Tyyppi',
+    'col_required' => 'Pakollinen',
+    'col_help' => 'Ohjeiden teksti',
+    'col_options' => 'Valinnat',
+    'col_options_help' => 'Vaatii, kun tyyppi on radio, valintaruutu, valitse yksi rivi, yksi vaihtoehto, muoto: arvo näytön teksti',
+    'col_action' => 'Toiminto',
+    'col_is_single_row' => 'Näytä yhdellä rivillä',
+    'js_sure_to_delete_this' => 'Haluatko varmasti poistaa?',
+    'submit_submit' => 'Lähetä',
+    'field_type_text' => 'Lyhyt teksti',
+    'field_type_textarea' => 'Pitkä teksti',
+    'field_type_radio' => 'Vaakasuora yksittäinen valinta',
+    'field_type_checkbox' => 'Vaakasuora useita valintoja',
+    'field_type_select' => 'Pystysuora valinta',
+    'field_type_image' => 'Kuva',
+    'col_display' => 'Mukautettu näyttö',
+
+];

@@ -3,12 +3,18 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 0);
 require_once __DIR__ . '/constants.php';
 require_once $rootpath . 'vendor/autoload.php';
+$USERUPDATESET = array();
+$query_name=array();
 \Nexus\Nexus::boot();
-if (!file_exists($rootpath . '.env')) {
-    $installScriptRelativePath = 'install/install.php';
-    $installScriptFile = $rootpath . "public/$installScriptRelativePath";
-    if (file_exists($installScriptFile)) {
-        nexus_redirect($installScriptRelativePath);
+if (is_fpm_mode()) {
+    if (!file_exists($rootpath . '.env')
+        || (getenv('RUNNING_IN_DOCKER') && !file_exists($rootpath . \Nexus\Install\Install::INSTALL_LOCK_FILE))
+    ) {
+        $installScriptRelativePath = 'install/install.php';
+        $installScriptFile = $rootpath . "public/$installScriptRelativePath";
+        if (file_exists($installScriptFile)) {
+            nexus_redirect($installScriptRelativePath);
+        }
     }
 }
 require $rootpath . 'nexus/Database/helpers.php';
@@ -27,8 +33,6 @@ if (!isRunningInConsole() && !in_array($script, ['announce', 'scrape', 'torrentr
 }
 
 define('TIMENOW', time());
-$USERUPDATESET = array();
-$query_name=array();
 
 define ("UC_PEASANT", 0);
 define ("UC_USER", 1);

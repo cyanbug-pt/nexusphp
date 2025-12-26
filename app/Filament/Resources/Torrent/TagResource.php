@@ -2,14 +2,25 @@
 
 namespace App\Filament\Resources\Torrent;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\Torrent\TagResource\Pages\ListTags;
+use App\Filament\Resources\Torrent\TagResource\Pages\CreateTag;
+use App\Filament\Resources\Torrent\TagResource\Pages\EditTag;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
 use App\Filament\Resources\Torrent\TagResource\Pages;
 use App\Filament\Resources\Torrent\TagResource\RelationManagers;
 use App\Models\SearchBox;
 use App\Models\Tag;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -18,13 +29,13 @@ class TagResource extends Resource
 {
     protected static ?string $model = Tag::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Torrent';
+    protected static string | \UnitEnum | null $navigationGroup = 'Torrent';
 
     protected static ?int $navigationSort = 2;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.tags_list');
     }
@@ -34,24 +45,24 @@ class TagResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')->required()->label(__('label.name')),
-                Forms\Components\TextInput::make('color')->required()->label(__('label.tag.color')),
-                Forms\Components\TextInput::make('font_color')->required()->label(__('label.tag.font_color')),
-                Forms\Components\TextInput::make('font_size')->required()->label(__('label.tag.font_size')),
-                Forms\Components\TextInput::make('margin')->required()->label(__('label.tag.margin')),
-                Forms\Components\TextInput::make('padding')->required()->label(__('label.tag.padding')),
-                Forms\Components\TextInput::make('border_radius')->required()->label(__('label.tag.border_radius')),
-                Forms\Components\TextInput::make('priority')->integer()->required()->label(__('label.priority'))->default(0),
-                Forms\Components\Select::make('mode')
+        return $schema
+            ->components([
+                TextInput::make('name')->required()->label(__('label.name')),
+                TextInput::make('color')->required()->label(__('label.tag.color')),
+                TextInput::make('font_color')->required()->label(__('label.tag.font_color')),
+                TextInput::make('font_size')->required()->label(__('label.tag.font_size')),
+                TextInput::make('margin')->required()->label(__('label.tag.margin')),
+                TextInput::make('padding')->required()->label(__('label.tag.padding')),
+                TextInput::make('border_radius')->required()->label(__('label.tag.border_radius')),
+                TextInput::make('priority')->integer()->required()->label(__('label.priority'))->default(0),
+                Select::make('mode')
                     ->options(SearchBox::query()->pluck('name', 'id')->toArray())
                     ->label(__('label.search_box.taxonomy.mode'))
                     ->helperText(__('label.search_box.taxonomy.mode_help'))
                 ,
-                Forms\Components\Textarea::make('description')->label(__('label.description')),
+                Textarea::make('description')->label(__('label.description')),
             ]);
     }
 
@@ -59,26 +70,26 @@ class TagResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('search_box.name')
+                TextColumn::make('id'),
+                TextColumn::make('search_box.name')
                     ->label(__('label.search_box.label'))
                     ->formatStateUsing(fn ($record) => $record->search_box->name ?? 'All')
                 ,
-                Tables\Columns\TextColumn::make('name')->label(__('label.name'))->searchable(),
-                Tables\Columns\TextColumn::make('color')->label(__('label.tag.color')),
-                Tables\Columns\TextColumn::make('font_color')->label(__('label.tag.font_color')),
-                Tables\Columns\TextColumn::make('font_size')->label(__('label.tag.font_size')),
-                Tables\Columns\TextColumn::make('margin')->label(__('label.tag.margin')),
-                Tables\Columns\TextColumn::make('padding')->label(__('label.tag.padding')),
-                Tables\Columns\TextColumn::make('border_radius')->label(__('label.tag.border_radius')),
-                Tables\Columns\TextColumn::make('priority')->label(__('label.priority'))->sortable(),
-                Tables\Columns\TextColumn::make('torrents_count')->label(__('label.tag.torrents_count')),
-                Tables\Columns\TextColumn::make('torrents_sum_size')->label(__('label.tag.torrents_sum_size'))->formatStateUsing(fn ($state) => mksize($state)),
+                TextColumn::make('name')->label(__('label.name'))->searchable(),
+                TextColumn::make('color')->label(__('label.tag.color')),
+                TextColumn::make('font_color')->label(__('label.tag.font_color')),
+                TextColumn::make('font_size')->label(__('label.tag.font_size')),
+                TextColumn::make('margin')->label(__('label.tag.margin')),
+                TextColumn::make('padding')->label(__('label.tag.padding')),
+                TextColumn::make('border_radius')->label(__('label.tag.border_radius')),
+                TextColumn::make('priority')->label(__('label.priority'))->sortable(),
+                TextColumn::make('torrents_count')->label(__('label.tag.torrents_count')),
+                TextColumn::make('torrents_sum_size')->label(__('label.tag.torrents_sum_size'))->formatStateUsing(fn ($state) => mksize($state)),
 //                Tables\Columns\TextColumn::make('updated_at')->dateTime()->label(__('label.updated_at')),
             ])
             ->defaultSort('priority', 'desc')
             ->filters([
-                Tables\Filters\SelectFilter::make('mode')
+                SelectFilter::make('mode')
                     ->options(SearchBox::query()->pluck('name', 'id')->toArray())
                     ->label(__('label.search_box.taxonomy.mode'))
                     ->query(function (Builder $query, array $data) {
@@ -90,9 +101,9 @@ class TagResource extends Resource
                     })
                 ,
             ])
-            ->actions(self::getActions())
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->recordActions(self::getActions())
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
@@ -106,22 +117,22 @@ class TagResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTags::route('/'),
-            'create' => Pages\CreateTag::route('/create'),
-            'edit' => Pages\EditTag::route('/{record}/edit'),
+            'index' => ListTags::route('/'),
+            'create' => CreateTag::route('/create'),
+            'edit' => EditTag::route('/{record}/edit'),
         ];
     }
 
     private static function getActions(): array
     {
         $actions = [];
-        $actions[] = Tables\Actions\Action::make('detach_torrents')
+        $actions[] = Action::make('detach_torrents')
             ->label(__('admin.resources.tag.detach_torrents'))
             ->requiresConfirmation()
             ->action(function ($record) {
                 $record->torrent_tags()->delete();
             });
-        $actions[] = Tables\Actions\EditAction::make();
+        $actions[] = EditAction::make();
         return $actions;
     }
 }

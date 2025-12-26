@@ -42,6 +42,15 @@ return [
         'oauth_access_token' => '訪問令牌',
         'oauth_auth_code' => '授權碼',
         'oauth_refresh_token' => '刷新令牌',
+        'token' => '訪問令牌',
+        'oauth_provider' => '身份驗證',
+        'queue_monitor' => '隊列監控',
+        'user_modify_logs' => '修改記錄',
+        'message_templates' => '消息模板',
+        'tracker_url' => 'Tracker URL',
+        'announce_logs' => '匯報記錄',
+        'announce_monitor' => '匯報監控',
+        'activity_logs' => '操作日志',
     ],
     'resources' => [
         'agent_allow' => [
@@ -118,6 +127,8 @@ return [
         ],
         'seed_box_record' => [
             'toggle_status' => '更改狀態',
+            'check_modal_btn' => '檢測',
+            'check_modal_header' => '檢測 IP 是否為 SeedBox',
         ],
         'tag' => [
             'detach_torrents' => '分離所有種子',

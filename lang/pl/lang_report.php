@@ -1,0 +1,42 @@
+<?php
+
+$lang_report = array
+(
+	'std_error' => "Błąd",
+	'std_missing_reason' => "Brakujący powód!",
+	'std_message' => "Wiadomość",
+	'std_successfully_reported' => "Zgłoszono pomyślnie!",
+	'std_already_reported_this' => "Już to zgłosiłeś!",
+	'std_sorry' => "Przepraszamy",
+	'std_cannot_report_oneself' => "Nie możesz zgłosić siebie!",
+	'std_invalid_user_id' => "Nieprawidłowy identyfikator użytkownika!",
+	'std_cannot_report' => "Nie możesz zgłosić ",
+	'std_are_you_sure' => "Jesteś pewien?",
+	'text_are_you_sure_user' => "Czy na pewno chcesz zgłosić tego użytkownika ",
+	'text_to_staff' => " do personelu w przypadku naruszenia zasad?",
+	'text_not_for_leechers' => "Zauważ, że to jest <b>nie</b> do użycia do zgłaszania wyrzutni, mamy skrypty do zajęcia się nimi!",
+	'text_reason_is' => "Reason <font class=striking>(wymagany)</font>: ",
+	'submit_confirm' => "Potwierdź",
+	'text_reason_note' => "<b><font class=striking> ZAPEWNIA! </font></b>&nbsp;Jeśli nie podano powodu, otrzymasz ostrzeżenie samodzielnie.",
+	'std_invalid_torrent_id' => "Nieprawidłowy identyfikator torrenta!",
+	'text_are_you_sure_torrent' => "Czy na pewno chcesz zgłosić ten torrent ",
+	'std_invalid_post_id' => "Nieprawidłowy identyfikator wpisu!",
+	'text_are_you_sure_post' => "Czy na pewno chcesz zgłosić post na forum (ID ",
+	'text_of_topic' => " tematu ",
+	'text_of_torrent' => " torrent ",
+	'text_of_offer' => " oferta ",
+	'text_of_request' => " wniosku ",
+	'text_by' => ") przez ",
+	'std_invalid_comment_id' => "Nieprawidłowy identyfikator komentarza!",
+	'std_orphaned_comment' => "Ozdobny komentarz. Zgłoś to administratorowi.",
+	'text_are_you_sure_comment' => "Czy na pewno chcesz zgłosić komentarz (ID ",
+	'std_invalid_offer_id' => "Nieprawidłowy identyfikator oferty!",
+	'text_are_you_sure_offer' => "Czy na pewno chcesz zgłosić następującą ofertę ",
+	'std_invalid_request_id' => "Nieprawidłowy identyfikator żądania!",
+	'std_are_you_sure_request' => "Czy na pewno chcesz zgłosić następujące żądanie ",
+	'std_invalid_action' => "Nieprawidłowa akcja.",
+	'std_invalid_subtitle_id' => "Nieprawidłowy identyfikator napisów!",
+	'text_are_you_sure_subtitle' => "Czy na pewno chcesz zgłosić napisy ",
+);
+
+?>

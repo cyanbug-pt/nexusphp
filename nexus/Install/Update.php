@@ -9,11 +9,13 @@ use App\Models\Exam;
 use App\Models\ExamUser;
 use App\Models\HitAndRun;
 use App\Models\Icon;
+use App\Models\Language;
 use App\Models\SearchBox;
 use App\Models\Setting;
 use App\Models\Tag;
 use App\Models\Torrent;
 use App\Models\TorrentTag;
+use App\Models\TrackerUrl;
 use App\Models\User;
 use App\Models\UserBanLog;
 use App\Repositories\AttendanceRepository;
@@ -21,11 +23,14 @@ use App\Repositories\BonusRepository;
 use App\Repositories\ExamRepository;
 use App\Repositories\SearchBoxRepository;
 use App\Repositories\TagRepository;
+use App\Repositories\TokenRepository;
 use App\Repositories\ToolRepository;
 use App\Repositories\TorrentRepository;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
 
@@ -39,7 +44,7 @@ class Update extends Install
 
     public function getLogFile()
     {
-        return sprintf('%s/nexus-update-%s.log', sys_get_temp_dir(), date('Ymd'));
+        return getLogFile("update");
     }
 
     public function getUpdateDirectory()
@@ -91,6 +96,7 @@ class Update extends Install
     public function runExtraQueries()
     {
         $toolRep = new ToolRepository();
+        $redis = NExusDB::redis();
         /**
          * @since 1.7.13
          */
@@ -332,6 +338,35 @@ class Update extends Install
                 ["value" => User::query()->where("class", User::CLASS_STAFF_LEADER)->first(["id"])->id]
             );
         }
+
+        /**
+         * @since 1.9.0
+         */
+        if (!Schema::hasTable("torrent_extras")) {
+            $this->runMigrate("database/migrations/2025_01_08_133552_create_torrent_extra_table.php");
+            Artisan::call("upgrade:migrate_torrents_table_text_column");
+            Language::updateTransStatus();
+            $this->addSetting('main.complain_enabled', 'yes');
+            $this->addSetting('image_hosting.driver', 'local');
+            $this->addSetting('permission.user_token_allowed', json_encode(TokenRepository::listUserTokenPermissions(false)));
+        }
+        if (!$redis->exists(Setting::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY)) {
+            Setting::updateUserTokenPermissionAllowedCache(TokenRepository::listUserTokenPermissions(false));
+        }
+
+        /**
+         * @since 1.9.5
+         */
+        if (!Schema::hasColumn("snatched", "hit_and_run_id")) {
+            $this->runMigrate("database/migrations/2025_06_09_222012_add_hr_and_buy_id_to_snatched_table.php");
+            Artisan::call("upgrade:migrate_snatched_hr_id");
+            Artisan::call("upgrade:migrate_snatched_buy_log_id");
+        }
+        if (!Schema::hasTable("tracker_urls")) {
+            $this->runMigrate("database/migrations/2025_06_19_194137_create_tracker_urls_table.php");
+            $this->initTrackerUrl('update');
+            NexusDB::cache_del("nexus_plugin_store_all");
+        }
     }
 
     public function runExtraMigrate()
@@ -353,6 +388,8 @@ class Update extends Install
         } else {
             $this->doLog("torrents table does not has column: tags");
         }
+
+        clear_setting_cache();
 
     }
 
@@ -534,6 +571,29 @@ class Update extends Install
             }
         }
         return false;
+    }
+
+    public function updateEnvFile()
+    {
+        $envFile = ROOT_PATH . '.env';
+        $envExample = ROOT_PATH . '.env.example';
+        $envData = readEnvFile($envFile);
+        $envExampleData = readEnvFile($envExample);
+        foreach ($envExampleData as $key => $value) {
+            if (!isset($envData[$key])) {
+                $envData[$key] = $value;
+            }
+        }
+        $fp = @fopen($envFile, 'w');
+        if ($fp === false) {
+            throw new \RuntimeException("can't create env file, make sure php has permission to create file at: " . ROOT_PATH);
+        }
+        $content = "";
+        foreach ($envData as $key => $value) {
+            $content .= "{$key}={$value}\n";
+        }
+        fwrite($fp, $content);
+        fclose($fp);
     }
 
 

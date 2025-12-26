@@ -149,7 +149,7 @@ class TagRepository extends BaseRepository
         return self::$orderByFieldIdString;
     }
 
-    public function listAll(int $searchBoxId = 0): \Illuminate\Database\Eloquent\Collection|array
+    public static function listAll(int $searchBoxId = 0): \Illuminate\Database\Eloquent\Collection|array
     {
         if (empty(self::$allTags)) {
             self::$allTags = self::createBasicQuery()->get();

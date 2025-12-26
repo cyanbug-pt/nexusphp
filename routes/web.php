@@ -17,10 +17,14 @@ Route::get('/', function () {
     return redirect('index.php');
 });
 
-Route::group(['prefix' => 'web', 'middleware' => ['auth.nexus:nexus-web', 'locale']], function () {
+Route::get("/error", [\App\Http\Controllers\ToolController::class, "error"]);
+
+Route::group(['prefix' => 'web', 'middleware' => ['auth.nexus:nexus-web']], function () {
     Route::get('torrent-approval-page', [\App\Http\Controllers\TorrentController::class, 'approvalPage']);
     Route::get('torrent-approval-logs', [\App\Http\Controllers\TorrentController::class, 'approvalLogs']);
     Route::post('torrent-approval', [\App\Http\Controllers\TorrentController::class, 'approval']);
+    Route::post('token/add', [\App\Http\Controllers\TokenController::class, 'addToken']);
+    Route::post('token/del', [\App\Http\Controllers\TokenController::class, 'delToken']);
 });
 
 if (!isRunningInConsole()) {
@@ -30,10 +34,8 @@ if (!isRunningInConsole()) {
     }
 }
 
-Route::get('test', [\App\Http\Controllers\ToolController::class, 'test'])->middleware(['web']);
-
 Route::group(['prefix' => 'oauth'], function () {
     Route::get("user-info", [\App\Http\Controllers\OauthController::class, 'userInfo'])->name("oauth.user_info")->middleware('auth:api');
-//    Route::get('redirect', [\App\Http\Controllers\OauthController::class, 'redirect']);
-//    Route::get('callback', [\App\Http\Controllers\OauthController::class, 'callback']);
+    Route::get('redirect/{uuid}', [\App\Http\Controllers\OauthController::class, 'redirect']);
+    Route::get('callback/{uuid}', [\App\Http\Controllers\OauthController::class, 'callback']);
 });

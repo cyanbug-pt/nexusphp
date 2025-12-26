@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User\AttendanceLogResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\PageListSingle;
 use App\Filament\Resources\User\AttendanceLogResource;
 use Filament\Pages\Actions;
@@ -11,10 +12,10 @@ class ManageAttendanceLogs extends PageListSingle
 {
     protected static string $resource = AttendanceLogResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

@@ -11,7 +11,7 @@ class ListHitAndRuns extends PageList
 {
     protected static string $resource = HitAndRunResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
 //            Actions\CreateAction::make(),

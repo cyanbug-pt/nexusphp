@@ -12,12 +12,12 @@ $lang_takeinvite = array
 	'mail_here' => "这里",
 	'mail_tilte' => "网站邀请函",
 	'mail_one' => "你好，<br /><br />用户",
-	'mail_two' => "邀请你加入".$SITENAME."社区。
-".$SITENAME."拥有知识丰富的用户。 <br />如果你有意加入，请在阅读网站规则后确认该邀请。<br /><br />请点击以下链接确认邀请：",
+	'mail_two' => "邀请你加入%s社区。
+%s拥有知识丰富的用户。 <br />如果你有意加入，请在阅读网站规则后确认该邀请。<br /><br />请点击以下链接确认邀请：",
 	'mail_three' => "请在",
-	'mail_four' => "天内确认该邀请，之后邀请将作废。<br />".$SITENAME."真诚欢迎你加入我们的社区！<br /><br />来自邀请者",
+	'mail_four' => "天内确认该邀请，之后邀请将作废。<br />%s真诚欢迎你加入我们的社区！<br /><br />来自邀请者",
 	'mail_five' => "的话：",
-	'mail_six' => "如果你根本不认识邀请者，请将此邮件转发至".$REPORTMAIL."<br /><br />------<br />".$SITENAME."网站",
+	'mail_six' => "如果你根本不认识邀请者，请将此邮件转发至%s<br /><br />------<br />%s网站",
 	'std_error' => "错误",
 	'std_invite_denied' => "你的用户等级不允许发送邀请。你怎么到这来的？",
 	'std_email_address_banned' => "邮箱地址被禁用！",

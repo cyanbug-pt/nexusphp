@@ -38,7 +38,7 @@ class Plugin extends Command
             return 1;
         }
         try {
-            $mainClass->checkMainApplicationVersion();
+            $mainClass->checkMainApplicationVersion(false);
         } catch (\Exception $exception) {
             $this->error($exception->getMessage());
             return 1;

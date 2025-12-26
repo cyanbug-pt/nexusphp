@@ -11,6 +11,7 @@ use App\Models\Snatch;
 use App\Models\Torrent;
 use App\Models\User;
 use App\Models\UserBanLog;
+use App\Models\UserModifyLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
@@ -328,7 +329,7 @@ class ExamRepository extends BaseRepository
 
         $filter = Exam::FILTER_USER_REGISTER_DAYS_RANGE;
         $filterValues = $filters[$filter] ?? [];
-        $value = $user->added->diffInDays(now());
+        $value = $user->added->diffInDays(now(), true);
         $begin = $filterValues[0] ?? null;
         $end = $filterValues[1] ?? null;
         if ($begin !== null && $value < $begin) {
@@ -866,6 +867,7 @@ class ExamRepository extends BaseRepository
             $index['current_value'] = $currentValue;
             $index['current_value_formatted'] = $currentValueFormatted;
             $index['passed'] = $currentValue >= $requireValueAtomic;
+            $index['index_result'] = $index['passed'] ? nexus_trans($exam->getPassResultTransKey('pass')) : nexus_trans($exam->getPassResultTransKey('not_pass'));
             $result[] = $index;
         }
         return $result;
@@ -1137,9 +1139,10 @@ class ExamRepository extends BaseRepository
             }
             $result += $examUsers->count();
             $now = Carbon::now()->toDateTimeString();
-            $examUserIdArr = $uidToDisable = $messageToSend = $userBanLog = $userModcommentUpdate = [];
-            $bonusLog = $userBonusCommentUpdate = $userBonusUpdate = $uidToUpdateBonus = [];
+            $examUserIdArr = $uidToDisable = $messageToSend = $userBanLog = [];
+            $bonusLog = $userBonusUpdate = $uidToUpdateBonus = [];
             $examUserToInsert = [];
+            $userModifyLogs = [];
             foreach ($examUsers as $examUser) {
                 $minId = $examUser->id;
                 $examUserIdArr[] = $examUser->id;
@@ -1183,13 +1186,6 @@ class ExamRepository extends BaseRepository
                                 "new_total_value" => $examUser->user->seedbonus + $exam->success_reward_bonus,
                                 "business_type" => BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD,
                             ];
-                            $userBonusComment = nexus_trans("exam.reward_bonus_comment", [
-                                'exam_name' => $exam->name,
-                                'begin' => $examUser->begin,
-                                'end' => $examUser->end,
-                                'success_reward_bonus' => $exam->success_reward_bonus,
-                            ], $locale);
-                            $userBonusCommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', bonuscomment)", $uid, addslashes($userBonusComment));
                             $userBonusUpdate[] = sprintf("when `id` = %s then seedbonus + %d", $uid, $exam->success_reward_bonus);
                         }
                     }
@@ -1207,8 +1203,14 @@ class ExamRepository extends BaseRepository
                             'begin' => $examUser->begin,
                             'end' => $examUser->end
                         ], $locale);
-                        $userModcomment = sprintf('%s - %s', date('Y-m-d'), $userModcomment);
-                        $userModcommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', modcomment)", $uid, $userModcomment);
+//                        $userModcomment = sprintf('%s - %s', date('Y-m-d'), $userModcomment);
+//                        $userModcommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', modcomment)", $uid, $userModcomment);
+                        $userModifyLogs[] = [
+                            'user_id' => $uid,
+                            'content' => $userModcomment,
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
                         $banLogReason = nexus_trans('exam.ban_log_reason', [
                             'exam_name' => $exam->name,
                             'begin' => $examUser->begin,
@@ -1230,13 +1232,6 @@ class ExamRepository extends BaseRepository
                                 "new_total_value" => $examUser->user->seedbonus - $exam->fail_deduct_bonus,
                                 "business_type" => BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT,
                             ];
-                            $userBonusComment = nexus_trans("exam.deduct_bonus_comment", [
-                                'exam_name' => $exam->name,
-                                'begin' => $examUser->begin,
-                                'end' => $examUser->end,
-                                'fail_deduct_bonus' => $exam->fail_deduct_bonus,
-                            ], $locale);
-                            $userBonusCommentUpdate[] = sprintf("when `id` = %s then concat_ws('\n', '%s', bonuscomment)", $uid, addslashes($userBonusComment));
                             $userBonusUpdate[] = sprintf("when `id` = %s then seedbonus - %d", $uid, $exam->fail_deduct_bonus);
                         }
                     }
@@ -1256,7 +1251,7 @@ class ExamRepository extends BaseRepository
                     'msg' => $msg
                 ];
             }
-            DB::transaction(function () use ($uidToDisable, $messageToSend, $examUserIdArr, $examUserToInsert, $userBanLog, $userModcommentUpdate, $userBonusUpdate, $userBonusCommentUpdate, $bonusLog, $uidToUpdateBonus, $userTable, $logPrefix) {
+            DB::transaction(function () use ($uidToDisable, $messageToSend, $examUserIdArr, $examUserToInsert, $userBanLog, $userModifyLogs, $userBonusUpdate, $bonusLog, $uidToUpdateBonus, $userTable, $logPrefix) {
                 ExamUser::query()->whereIn('id', $examUserIdArr)->update(['status' => ExamUser::STATUS_FINISHED]);
                 do {
                     $deleted = ExamProgress::query()->whereIn('exam_user_id', $examUserIdArr)->limit(10000)->delete();
@@ -1266,8 +1261,8 @@ class ExamRepository extends BaseRepository
                 if (!empty($uidToDisable)) {
                     $uidStr = implode(', ', $uidToDisable);
                     $sql = sprintf(
-                        "update %s set enabled = '%s', modcomment = case %s end where id in (%s)",
-                        $userTable, User::ENABLED_NO, implode(' ', $userModcommentUpdate), $uidStr
+                        "update %s set enabled = '%s' where id in (%s)",
+                        $userTable, User::ENABLED_NO, $uidStr
                     );
                     $updateResult = DB::update($sql);
                     do_log(sprintf("$logPrefix, disable %s users: %s, sql: %s, updateResult: %s", count($uidToDisable), $uidStr, $sql, $updateResult));
@@ -1281,14 +1276,17 @@ class ExamRepository extends BaseRepository
                 if (!empty($userBonusUpdate)) {
                     $uidStr = implode(', ', $uidToUpdateBonus);
                     $sql = sprintf(
-                        "update %s set seedbonus = case %s end, bonuscomment = case %s end where id in (%s)",
-                        $userTable, implode(' ', $userBonusUpdate), implode(' ', $userBonusCommentUpdate), $uidStr
+                        "update %s set seedbonus = case %s end where id in (%s)",
+                        $userTable, implode(' ', $userBonusUpdate), $uidStr
                     );
                     $updateResult = DB::update($sql);
                     do_log(sprintf("$logPrefix, update %s users: %s seedbonus, sql: %s, updateResult: %s", count($uidToUpdateBonus), $uidStr, $sql, $updateResult));
                 }
                 if (!empty($bonusLog)) {
                     BonusLogs::query()->insert($bonusLog);
+                }
+                if (!empty($userModifyLogs)) {
+                    UserModifyLog::query()->insert($userModifyLogs);
                 }
             });
         }

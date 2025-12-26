@@ -2,14 +2,21 @@
 
 namespace App\Filament\Resources\System;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\System\PluginResource\Pages\ManagePlugins;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\Action;
 use App\Filament\Resources\System\PluginResource\Pages;
 use App\Filament\Resources\System\PluginResource\RelationManagers;
 use App\Jobs\ManagePlugin;
 use App\Models\Plugin;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,13 +26,13 @@ class PluginResource extends Resource
 {
     protected static ?string $model = Plugin::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-plus-circle';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-plus-circle';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string | \UnitEnum | null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 99;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.plugin');
     }
@@ -37,12 +44,12 @@ class PluginResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('package_name')->label(__('plugin.labels.package_name')),
-                Forms\Components\TextInput::make('remote_url')->label(__('plugin.labels.remote_url')),
+        return $schema
+            ->components([
+                TextInput::make('package_name')->label(__('plugin.labels.package_name')),
+                TextInput::make('remote_url')->label(__('plugin.labels.remote_url')),
             ]);
     }
 
@@ -50,36 +57,36 @@ class PluginResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('package_name')->label(__('plugin.labels.package_name')),
-                Tables\Columns\TextColumn::make('remote_url')->label(__('plugin.labels.remote_url')),
-                Tables\Columns\TextColumn::make('installed_version')->label(__('plugin.labels.installed_version')),
-                Tables\Columns\TextColumn::make('statusText')->label(__('label.status')),
-                Tables\Columns\TextColumn::make('updated_at')->label(__('plugin.labels.updated_at')),
+                TextColumn::make('id'),
+                TextColumn::make('package_name')->label(__('plugin.labels.package_name')),
+                TextColumn::make('remote_url')->label(__('plugin.labels.remote_url')),
+                TextColumn::make('installed_version')->label(__('plugin.labels.installed_version')),
+                TextColumn::make('statusText')->label(__('label.status')),
+                TextColumn::make('updated_at')->label(__('plugin.labels.updated_at')),
             ])
             ->filters([
                 //
             ])
-            ->actions(self::getActions())
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->recordActions(self::getActions())
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManagePlugins::route('/'),
+            'index' => ManagePlugins::route('/'),
         ];
     }
 
     private static function getActions()
     {
         $actions = [];
-        $actions[] = Tables\Actions\EditAction::make();
+        $actions[] = EditAction::make();
         $actions[] = self::buildInstallAction();
         $actions[] = self::buildUpdateAction();
-        $actions[] = Tables\Actions\DeleteAction::make('delete')
+        $actions[] = DeleteAction::make('delete')
             ->hidden(fn ($record) => !in_array($record->status, Plugin::$showDeleteBtnStatus))
             ->using(function ($record) {
                 $record->update(['status' => Plugin::STATUS_PRE_DELETE]);
@@ -90,7 +97,7 @@ class PluginResource extends Resource
 
     private static function buildInstallAction()
     {
-        return Tables\Actions\Action::make('install')
+        return Action::make('install')
             ->label(__('plugin.actions.install'))
             ->icon('heroicon-o-arrow-down')
             ->requiresConfirmation()
@@ -104,7 +111,7 @@ class PluginResource extends Resource
 
     private static function buildUpdateAction()
     {
-        return Tables\Actions\Action::make('update')
+        return Action::make('update')
             ->label(__('plugin.actions.update'))
             ->icon('heroicon-o-arrow-up')
             ->requiresConfirmation()

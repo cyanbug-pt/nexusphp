@@ -18,6 +18,14 @@ return [
         'subject' => '下載權限取消',
         'body' => '你因上傳速度過快下載權限被取消，若是盒子用戶請備案。',
     ],
+    'download_disable_announce_paid_torrent_too_many_times' => [
+        'subject' => '下载权限取消',
+        'body' => '你因向付費種子匯報失敗次數過多下載權限被取消，請確保你有足夠的魔力。',
+    ],
+    'download_disable_fake_announce' => [
+        'subject' => '下载权限取消',
+        'body' => '你因虛假匯報下載權限被取消。',
+    ],
     'download_enable' => [
         'subject' => '下載權限恢復',
         'body' => '你的下載權限恢復，你現在可以下載種子。By: :operator',
@@ -46,4 +54,18 @@ BODY,
         'subject' => '考核 :exam_name 結束時間變更',
         'body' => '你進行中的考核：:exam_name 的結束時間由 :old_end_time 變更為 :new_end_time。管理員：:operator，原因：:reason。',
     ],
+
+    'mail_dear' => "尊敬的",
+    'mail_you_received_a_pm' => "你收到了一條新短訊。",
+    'mail_sender' => "發送者	",
+    'mail_subject' => "主題	",
+    'mail_date' => "日期		",
+    'mail_use_following_url' => "你可以點擊",
+    'mail_use_following_url_1' => "來查看該短訊（你可能需要登錄）",
+    'mail_yours' => "",
+    'mail_the_site_team' => "%s網站",
+    'mail_received_pm_from' => "你有新短訊，來自",
+    'mail_here' => "這裏",
+    'msg_system' => "系統",
+    'msg_original_message_from' => "原短訊來自",
 ];

@@ -23,9 +23,20 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => '购买种子',
         \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => '任务完成奖励',
         \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => '任务未完成扣除',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => '奖励种子',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => '工作组工资',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => '种子被下载',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => '收到奖励',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => '收到礼物',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => '发布种子',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => '种子收到奖励',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => '做种基础魔力',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => '做种捐赠加成',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => '做种官种加成',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => '做种后宫加成',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => '做种勋章加成',
     ],
     'fields' => [
         'business_type' => '业务类型',
@@ -33,4 +44,5 @@ return [
         'value' => '交易值',
         'new_total_value' => '交易后值',
     ],
+    'exclude_seeding_bonus' => '不包含做种魔力',
 ];

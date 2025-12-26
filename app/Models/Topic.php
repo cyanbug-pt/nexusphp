@@ -3,8 +3,12 @@
 namespace App\Models;
 
 
+use App\Models\Traits\NexusActivityLogTrait;
+
 class Topic extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['userid', 'subject', 'locked', 'forumid', 'firstpost', 'lastpost', 'sticky', 'hlcolor', 'views'];
 
     public function user()
@@ -14,7 +18,7 @@ class Topic extends NexusModel
 
     public function forum()
     {
-        return $this->belongsTo(Forum::class. 'forumid');
+        return $this->belongsTo(Forum::class, 'forumid');
     }
 
     public function firstPost()

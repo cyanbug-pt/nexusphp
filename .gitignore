@@ -24,6 +24,7 @@ yarn-error.log
 /imdb/cache
 /imdb/images
 /resources/geoip
+/resources/upload
 .DS_Store
 /plugins
 auth.json
@@ -33,3 +34,12 @@ install.lock
 /torrents
 /.vscode
 /.history
+/public/dev.php
+crowdin.yml
+install.lock
+update.lock
+.env.bak
+attachments
+bitbucket
+/public/attachments
+/public/bitbucket

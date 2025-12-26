@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'business_types' => [
+        \App\Models\BonusLogs::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => 'H&Rをキャンセル',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_MEDAL => '勲章を購入',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_ATTENDANCE_CARD => '出席カードを購入する',
+        \App\Models\BonusLogs::BUSINESS_TYPE_STICKY_PROMOTION => '定番プロモーション',
+        \App\Models\BonusLogs::BUSINESS_TYPE_POST_REWARD => '報酬を投稿する',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD => 'Exchangeがアップロードされました',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE => '招待を購入',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CUSTOM_TITLE => 'カスタムタイトル',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_VIP => 'VIPを購入',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE => '誰かに贈りましょう',
+        \App\Models\BonusLogs::BUSINESS_TYPE_NO_AD => '広告をキャンセル',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_LOW_SHARE_RATIO => 'ギフトに対する低シェア率',
+        \App\Models\BonusLogs::BUSINESS_TYPE_LUCKY_DRAW => 'ラッキードロー（抽選）',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD => 'Exchangeがダウンロードされました',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TEMPORARY_INVITE => '一時招待を購入する',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_RAINBOW_ID => 'レインボーIDを購入',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'ユーザー名カードの変更を購入する',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => '勲章を贈ろう',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'トレントを購入',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => '報酬Torrent',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'ロールワーク給与（給与）',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent をダウンロードする',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => '報酬を受け取る',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'ギフトを受け取る',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Torrent をアップロード',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'トレント獲得報酬',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => '基本的なシード中',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'シードドナーの追加',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'シード中の公式追加',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'シードハーレム追加',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'シードメダル追加',
+    ],
+    'fields' => [
+        'business_type' => 'ビジネスタイプ',
+        'old_total_value' => '取引前の値',
+        'value' => '取引値',
+        'new_total_value' => '注文後の値',
+    ],
+    'exclude_seeding_bonus' => 'シードボーナスを除外',
+];

@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "¡No has iniciado sesión!",
+	'p_error' => "Error:",
+	'p_after_logged_in' => "La página que intentó ver sólo puede utilizarse cuando haya iniciado sesión.",
+	'p_need_cookies_enables' => "<b>Note</b>: You need cookies enabled to log in or switch language.",
+	'p_fail_ban' => "los inicios de sesión fallidos en una fila resultarán en banear tu ip!",
+	'p_you_have' => "Tienes",
+	'p_remaining_tries' => "intentos restantes.",
+	'p_no_account_signup' => "¿No tienes una cuenta? ¡ <a href=\"signup.php\"><b>Regístrate</b></a> ahora mismo!",
+	'p_forget_pass_recover' => "¿Olvidaste tu contraseña? Recupera tu contraseña <a href=\"recover.php\"><b>por correo electrónico</b></a>",
+    'p_account_banned' => "¿Cuenta bloqueada? Ver la razón en<a href=\"user-ban-log.php\"><b>registro de baneo de usuario</b></a>",
+	'p_resend_confirm' => "¿No ha recibido el correo de confirmación o el enlace de confirmación está roto? <a href=\"confirm_resend.php\"><b>Envíe de nuevo el correo de confirmación</b></a>",
+	'rowhead_username' => "Usuario:",
+	'rowhead_password' => "Contraseña:",
+	'button_login' => "¡Iniciar sesión!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Autocerrar sesión:",
+	'text_restrict_ip' => "Restringir IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Cerrar sesión después de 15 minutos",
+	'checkbox_restrict_ip' => " Restringir la sesión a mi IP",
+	'checkbox_ssl' => " Navegar por sitio web con cifrado SSL (navegador web)",
+	'checkbox_ssl_tracker' => " Conectar rastreador con cifrado SSL (cliente BitTorrent)",
+	'text_advanced_options' => "Opciones avanzadas:",
+	'text_helpbox' => "Caja de ayuda",
+	'text_helpbox_note' => "¿Tienes problemas con el registro o el inicio de sesión? Deja un mensaje aquí",
+	'text_message' => "Mensaje: ",
+	'sumbit_shout' => "gritar",
+	'submit_clear' => "limpiar",
+	'text_select_lang' => "Seleccionar idioma del sitio: ",
+	'head_login' => "Ingresar",
+    'rowhead_two_step_code' => 'Autenticación de dos factores',
+    'two_step_code_tooltip' => 'Si está habilitado debe rellenarse',
+    'text_complain' => 'Canal de queja',
+);
+
+?>

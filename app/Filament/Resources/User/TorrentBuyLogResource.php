@@ -2,13 +2,19 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
+use App\Filament\Resources\User\TorrentBuyLogResource\Pages\ListTorrentBuyLogs;
+use App\Filament\Resources\User\TorrentBuyLogResource\Pages\CreateTorrentBuyLog;
+use App\Filament\Resources\User\TorrentBuyLogResource\Pages\EditTorrentBuyLog;
 use App\Filament\Resources\User\TorrentBuyLogResource\Pages;
 use App\Filament\Resources\User\TorrentBuyLogResource\RelationManagers;
 use App\Models\TorrentBuyLog;
 use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,13 +23,13 @@ class TorrentBuyLogResource extends Resource
 {
     protected static ?string $model = TorrentBuyLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 10;
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return __('admin.sidebar.torrent_buy_log');
     }
@@ -33,10 +39,10 @@ class TorrentBuyLogResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -45,29 +51,29 @@ class TorrentBuyLogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uid')
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('uid')
                     ->formatStateUsing(fn ($state) => username_for_admin($state))
                     ->label(__('label.username'))
                 ,
-                Tables\Columns\TextColumn::make('torrent_id')
+                TextColumn::make('torrent_id')
                     ->formatStateUsing(fn ($record) => torrent_name_for_admin($record->torrent))
                     ->label(__('label.torrent.label'))
                 ,
-                Tables\Columns\TextColumn::make('price')
+                TextColumn::make('price')
                     ->formatStateUsing(fn ($state) => number_format($state))
                     ->label(__('label.price'))
                 ,
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->formatStateUsing(fn ($state) => format_datetime($state))
                     ->label(__('label.created_at'))
                 ,
             ])
             ->defaultSort('id','desc')
             ->filters([
-                Tables\Filters\Filter::make('uid')
-                    ->form([
-                        Forms\Components\TextInput::make('uid')
+                Filter::make('uid')
+                    ->schema([
+                        TextInput::make('uid')
                             ->label(__('label.username'))
                             ->placeholder('UID')
                         ,
@@ -75,9 +81,9 @@ class TorrentBuyLogResource extends Resource
                         return $query->when($data['uid'], fn (Builder $query, $value) => $query->where("uid", $value));
                     })
                 ,
-                Tables\Filters\Filter::make('torrent_id')
-                    ->form([
-                        Forms\Components\TextInput::make('torrent_id')
+                Filter::make('torrent_id')
+                    ->schema([
+                        TextInput::make('torrent_id')
                             ->label(__('label.torrent.label'))
                             ->placeholder('Torrent ID')
                         ,
@@ -86,10 +92,10 @@ class TorrentBuyLogResource extends Resource
                     })
                 ,
             ])
-            ->actions([
+            ->recordActions([
 //                Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
@@ -104,9 +110,9 @@ class TorrentBuyLogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTorrentBuyLogs::route('/'),
-            'create' => Pages\CreateTorrentBuyLog::route('/create'),
-            'edit' => Pages\EditTorrentBuyLog::route('/{record}/edit'),
+            'index' => ListTorrentBuyLogs::route('/'),
+            'create' => CreateTorrentBuyLog::route('/create'),
+            'edit' => EditTorrentBuyLog::route('/{record}/edit'),
         ];
     }
 }

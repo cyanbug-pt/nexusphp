@@ -10,25 +10,35 @@ if (($CURUSER['id'] != $id && !user_can('viewinvite')) || !is_valid_id($id))
 $email = unesc(htmlspecialchars(trim($_POST["email"])));
 if(!empty($_POST['conusr'])) {
 //    sql_query("UPDATE users SET status = 'confirmed', editsecret = '' WHERE id IN (" . implode(", ", $_POST['conusr']) . ") AND status='pending'");
-    \App\Models\User::query()->whereIn('id', $_POST['conusr'])
+    $userList = \App\Models\User::query()->whereIn('id', $_POST['conusr'])
         ->where('status', 'pending')
-        ->update(['status' => 'confirmed', 'editsecret' => ''])
+        ->get(\App\Models\User::$commonFields)
     ;
+    if ($userList->isNotEmpty()) {
+        $uidArr = [];
+        foreach ($userList as $user) {
+            $uidArr[] = $user->id;
+            fire_event(\App\Enums\ModelEventEnum::USER_UPDATED, $user);
+        }
+        \App\Models\User::query()->whereIn('id', $uidArr)->update(['status' => 'confirmed', 'editsecret' => '']);
+    }
 } else {
     stderr($lang_takeconfirm['std_sorry'],$lang_takeconfirm['std_no_buddy_to_confirm'].
         "<a class=altlink href=invite.php?id={$CURUSER['id']}>".$lang_takeconfirm['std_here_to_go_back'],false);
 }
 $title = $SITENAME.$lang_takeconfirm['mail_title'];
 $baseUrl = getSchemeAndHttpHost();
+$siteName = \App\Models\Setting::getSiteName();
+$mailContentTwo = sprintf($lang_takeconfirm['mail_content_two'], $siteName, $REPORTMAIL, $siteName);
 $body = <<<EOD
 {$lang_takeconfirm['mail_content_1']}
 <b><a href="javascript:void(null)" onclick="window.open('{$baseUrl}/login.php')">{$lang_takeconfirm['mail_here']}</a></b><br />
 {$baseUrl}/login.php
-{$lang_takeconfirm['mail_content_2']}
+{$mailContentTwo}
 EOD;
 
 //this mail is sent when the site is using admin(open/closed)/inviter(closed) confirmation and the admin/inviter confirmed the pending user
 sent_mail($email,$SITENAME,$SITEEMAIL,$title,$body,"invite confirm",false,false,'');
 
-header("Refresh: 0; url=invite.php?id=".htmlspecialchars($CURUSER['id']));
+header("Location: invite.php?id=".htmlspecialchars($CURUSER['id']));
 ?>

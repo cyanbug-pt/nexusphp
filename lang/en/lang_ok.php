@@ -18,7 +18,7 @@ $lang_ok = array
 	'std_already_confirmed_note' => "<p>This user account has already been confirmed. You can proceed to <a class=altlink href=\"login.php\">log in</a> with it.</p>\n",
 	'head_signup_confirmation' => "Signup confirmation",
 	'std_account_confirmed' => "<h1>Account successfully confirmed!</h1>\n",
-	'std_read_rules_faq' => "<p>Before you start using ".$SITENAME." we urge you to read the <a class=altlink href=\"rules.php\"><b>RULES</b></a> and the <a class=altlink href=\"faq.php\"><b>FAQ</b></a>.</p>\n"
+	'std_read_rules_faq' => "<p>Before you start using %s we urge you to read the <a class=altlink href=\"rules.php\"><b>RULES</b></a> and the <a class=altlink href=\"faq.php\"><b>FAQ</b></a>.</p>\n"
 );
 
 ?>

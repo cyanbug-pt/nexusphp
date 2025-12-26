@@ -1,0 +1,41 @@
+<?php
+
+$lang_reports = array
+(
+	'std_oho' => "Oho!",
+	'std_no_report' => "Žádná zpráva.",
+	'head_reports' => "Zprávy",
+	'text_reports' => "Zprávy",
+	'col_added' => "Přidáno",
+	'col_reporter' => "Hlášení",
+	'col_reporting' => "Podávání zpráv",
+	'col_type' => "Typ",
+	'col_reason' => "Důvod",
+	'col_dealt_with' => "Ukončit s",
+	'col_action' => "Zákon",
+	'text_yes' => "Ano",
+	'text_no' => "Ne",
+	'text_torrent' => "Torrent",
+	'text_torrent_does_not_exist' => "Torrent neexistuje nebo je odstraněn.",
+	'text_user' => "Uživatel",
+	'text_user_does_not_exist' => "Uživatel neexistuje nebo je smazán.",
+	'text_offer' => "Nabídka",
+	'text_offer_does_not_exist' => "Nabídka neexistuje nebo je odstraněna.",
+	'text_forum_post' => "Příspěvek na fóru",
+	'text_post_does_not_exist' => "Příspěvek ve fóru neexistuje nebo je odstraněn.",
+	'text_post_id' => "ID příspěvku ",
+	'text_of_topic' => " z tématu ",
+	'text_by' => " od ",
+	'text_comment' => "Komentář",
+	'text_comment_does_not_exist' => "Komentář neexistuje nebo je odstraněn.",
+	'text_of_torrent' => " torrent ",
+	'text_of_offer' => " nabízené ",
+	'text_comment_id' => "ID komentáře ",
+	'text_subtitle' => "Podtitulek",
+	'text_subtitle_does_not_exist' => "Podtitulek neexistuje nebo je odstraněn.",
+	'text_for_torrent_id' => " pro ID torrentu ",
+	'submit_set_dealt' => "Nastavit výdej",
+	'submit_delete' => "Vymazat",
+);
+
+?>

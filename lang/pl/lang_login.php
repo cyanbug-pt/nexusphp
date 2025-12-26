@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Nie zalogowano!",
+	'p_error' => "Błąd:",
+	'p_after_logged_in' => "Strona, którą próbowałeś wyświetlić może być użyta tylko po zalogowaniu.",
+	'p_need_cookies_enables' => "<b>Uwaga</b>: Potrzebujesz włączonych ciasteczek, aby zalogować się lub zmienić język.",
+	'p_fail_ban' => "nieudane logowanie z rzędu spowoduje zablokowanie Twojego IP!",
+	'p_you_have' => "Masz",
+	'p_remaining_tries' => "pozostałe próbki.",
+	'p_no_account_signup' => "Nie masz konta? <a href=\"signup.php\"><b>Zarejestruj się</b></a> teraz!",
+	'p_forget_pass_recover' => "Zapomniałeś hasła? Odzyskaj hasło <a href=\"recover.php\"><b>poprzez e-mail</b></a>",
+    'p_account_banned' => "Konto zbanowane? Zobacz powód na<a href=\"user-ban-log.php\"><b>banowanie użytkownika</b></a>",
+	'p_resend_confirm' => "Nie otrzymałeś wiadomości potwierdzającej lub link potwierdzający jest uszkodzony? <a href=\"confirm_resend.php\"><b>Wyślij wiadomość potwierdzającą ponownie</b></a>",
+	'rowhead_username' => "Nazwa użytkownika:",
+	'rowhead_password' => "Hasło:",
+	'button_login' => "Zaloguj się!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Automatyczne wylogowanie:",
+	'text_restrict_ip' => "Ogranicz IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Wyloguj mnie po 15 minutach",
+	'checkbox_restrict_ip' => " Ogranicz sesję do mojego adresu IP",
+	'checkbox_ssl' => " Przeglądaj stronę internetową z szyfrowaniem SSL (przeglądarka internetowa)",
+	'checkbox_ssl_tracker' => " Połącz tracker z szyfrowaniem SSL (klient BitTorrent)",
+	'text_advanced_options' => "Opcje zaawansowane:",
+	'text_helpbox' => "Skrzynka pomocy",
+	'text_helpbox_note' => "Masz problem z rejestracją lub logowaniem? Pozostaw tutaj wiadomość",
+	'text_message' => "Wiadomość: ",
+	'sumbit_shout' => "krzyk",
+	'submit_clear' => "wyczyść",
+	'text_select_lang' => "Wybierz język witryny: ",
+	'head_login' => "Logowanie",
+    'rowhead_two_step_code' => 'Uwierzytelnianie dwuetapowe',
+    'two_step_code_tooltip' => 'Jeśli włączone, musi być wypełnione',
+    'text_complain' => 'Kanał reklamacyjny',
+);
+
+?>

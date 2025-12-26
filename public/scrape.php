@@ -6,6 +6,33 @@ dbconn_announce();
 
 // BLOCK ACCESS WITH WEB BROWSERS AND CHEATS!
 block_browser();
+$passkey = $_GET['passkey'] ?? '';
+if (empty($passkey)) {
+    err('require passkey');
+}
+$redis = $Cache->getRedis();
+$passkeyInvalidKey = "passkey_invalid";
+// check passkey
+if (!$az = $Cache->get_value('user_passkey_'.$passkey.'_content')){
+    $res = sql_query("SELECT id, username, downloadpos, enabled, uploaded, downloaded, class, parked, clientselect, showclienterror, passkey, donor, donoruntil, seedbonus, tracker_url_id FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
+    $az = mysql_fetch_array($res);
+    do_log("[check passkey], currentUser: " . nexus_json_encode($az));
+    $Cache->cache_value('user_passkey_'.$passkey.'_content', $az, 3600);
+}
+if (!$az) {
+    $redis->set("$passkeyInvalidKey:$passkey", TIMENOW, ['ex' => 24*3600]);
+    err("Invalid passkey! Re-download the .torrent from $BASEURL");
+}
+if ($az["enabled"] == "no")
+    err("Your account is disabled!", 300);
+elseif ($az["parked"] == "yes")
+    err("Your account is parked! (Read the FAQ)", 300);
+elseif ($az["downloadpos"] == "no")
+    err("Your downloading privileges have been disabled! (Read the rules)", 300);
+
+$userid = intval($az['id'] ?? 0);
+unset($GLOBALS['CURUSER']);
+$CURUSER = $GLOBALS["CURUSER"] = $az;
 
 preg_match_all('/info_hash=([^&]*)/i', $_SERVER["QUERY_STRING"], $info_hash_array);
 $fields = "info_hash, times_completed, seeders, leechers";

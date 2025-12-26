@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
+use App\Enums\SeedBoxRecord\IpAsnEnum;
+use App\Enums\SeedBoxRecord\IsAllowedEnum;
+use App\Enums\SeedBoxRecord\TypeEnum;
+use App\Models\Traits\NexusActivityLogTrait;
+use App\Repositories\SeedBoxRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Nexus\Database\NexusDB;
 
 class SeedBoxRecord extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     protected $fillable = ['type', 'uid', 'status', 'operator', 'bandwidth', 'ip', 'ip_begin', 'ip_end', 'ip_begin_numeric', 'ip_end_numeric',
-        'comment', 'version', 'is_allowed',
+        'comment', 'version', 'is_allowed', 'asn'
     ];
 
     public $timestamps = true;
@@ -30,10 +38,54 @@ class SeedBoxRecord extends NexusModel
         self::STATUS_DENIED => ['text' => 'Denied'],
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (SeedBoxRecord $model) {
+            self::updateCache($model);
+        });
+        static::deleted(function (SeedBoxRecord $model) {
+            self::updateCache($model);
+        });
+    }
+
+    private static function updateCache(SeedBoxRecord $model): void
+    {
+        SeedBoxRepository::updateCache(
+            $model->type == TypeEnum::ADMIN->value ? 0 : $model->uid,
+            TypeEnum::from($model->type),
+            IsAllowedEnum::from($model->is_allowed),
+            !empty($model->ip) ? IpAsnEnum::IP : IpAsnEnum::ASN,
+        );
+    }
+
+    public static function getValidQuery(TypeEnum $type, IsAllowedEnum $isAllowed, IpAsnEnum $field)
+    {
+        $query = self::query()
+            ->where('status', self::STATUS_ALLOWED)
+            ->where('type', $type->value)
+            ->where('is_allowed', $isAllowed->value)
+        ;
+        if ($field == IpAsnEnum::IP) {
+            $query->whereNotNull("ip");
+        } elseif ($field == IpAsnEnum::ASN) {
+            $query->where("asn", ">", 0);
+        } else {
+            throw new \InvalidArgumentException("Invalid ipOrAsn");
+        }
+        return $query;
+    }
+
     protected function typeText(): Attribute
     {
         return new Attribute(
             get: fn($value, $attributes) => nexus_trans("seed-box.type_text." . $attributes['type'])
+        );
+    }
+
+    protected function ipRange(): Attribute
+    {
+        return new Attribute(
+            get: fn($value, $attributes) => $attributes['ip'] ?: sprintf('%s ~ %s', $attributes['ip_begin'] ?? '', $attributes['ip_end'] ?? ''),
         );
     }
 

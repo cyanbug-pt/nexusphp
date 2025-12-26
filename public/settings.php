@@ -41,8 +41,8 @@ if ($action == 'savesettings_main')	// save main
 		'showpolls','showstats','showlastxtorrents', 'showtrackerload','showshoutbox','showfunbox','showoffer','sptime','showhelpbox','enablebitbucket',
 		'smalldescription','altname','extforum','extforumurl','defaultlang','defstylesheet', 'donation','spsct','browsecat','specialcat','waitsystem',
 		'maxdlsystem','bitbucket','torrentnameprefix', 'showforumstats','verification','invite_count','invite_timeout', 'seeding_leeching_time_calc_start',
-		'startsubid', 'logo', 'banner_img', 'banner_link', 'showlastxforumposts', 'enable_technical_info', 'site_language_enabled', 'show_top_uploader', 'imdb_language', 'offer_skip_approved_count',
-        'upload_deny_approval_deny_count', 'enable_global_search', 'tmp_invite_count',
+		'startsubid', 'logo', 'showlastxforumposts', 'enable_technical_info', 'site_language_enabled', 'show_top_uploader', 'imdb_language', 'offer_skip_approved_count',
+        'upload_deny_approval_deny_count', 'enable_global_search', 'tmp_invite_count', 'complain_enabled'
 	);
 	GetVar($validConfig);
 	$MAIN = [];
@@ -99,7 +99,7 @@ elseif ($action == 'savesettings_bonus') 	// save bonus
         'tengbupload', 'ratiolimit','dlamountlimit','oneinvite','customtitle','vipstatus','bonusgift', 'basictax', 'taxpercentage',
         'prolinkpoint', 'prolinktime', 'attendance_initial', 'attendance_step', 'attendance_max', 'cancel_hr', 'attendance_card',
         'harem_addition', 'hundredgbupload', 'tengbdownload', 'hundredgbdownload', 'official_addition', 'official_tag', 'zero_bonus_tag', 'zero_bonus_factor',
-        'one_tmp_invite', 'rainbow_id', 'change_username_card',
+        'one_tmp_invite', 'rainbow_id', 'change_username_card', 'min_size'
     );
 	GetVar($validConfig);
 	$BONUS = [];
@@ -158,7 +158,7 @@ elseif($action == 'savesettings_torrent') 	// save account
         'thirtypercentleechbecome', 'expirethirtypercentleech', 'sticky_first_level_background_color', 'sticky_second_level_background_color',
         'download_support_passkey', 'claim_enabled', 'claim_torrent_ttl', 'claim_torrent_user_counts_up_limit', 'claim_user_torrent_counts_up_limit', 'claim_remove_deduct_user_bonus',
         'claim_give_up_deduct_user_bonus', 'claim_bonus_multiplier', 'claim_reach_standard_seed_time', 'claim_reach_standard_uploaded', 'approval_status_icon_enabled', 'approval_status_none_visible',
-        'nfo_view_style_default', 'tax_factor', 'max_price', 'paid_torrent_enabled'
+        'nfo_view_style_default', 'tax_factor', 'max_price', 'paid_torrent_enabled', 'reward_bonus_options', 'reward_times_limit'
     );
 	$validConfig = apply_filter('setting_valid_config', $validConfig);
 	GetVar($validConfig);
@@ -199,7 +199,7 @@ elseif ($action == 'savesettings_security') 	// save security
 	$validConfig = array(
 		'securelogin', 'securetracker', 'https_announce_url','iv','maxip','maxloginattempts','changeemail','cheaterdet','nodetect',
 		'guest_visit_type', 'guest_visit_value_static_page', 'guest_visit_value_custom_content', 'guest_visit_value_redirect',
-		'login_type', 'login_secret_lifetime',
+		'login_type', 'login_secret_lifetime', 'use_challenge_response_authentication',
 	);
 	GetVar($validConfig);
 	$SECURITY = [];
@@ -310,7 +310,7 @@ elseif ($action == 'tweaksettings')		// tweak settings
 	print ($notice);
 	print ("<form method='post' action='".$_SERVER["SCRIPT_NAME"]."'><input type='hidden' name='action' value='savesettings_tweak' />");
 	yesorno($lang_settings['row_save_user_location'], 'where', $TWEAK["where"], $lang_settings['text_save_user_location_note']);
-	yesorno($lang_settings['row_log_user_ips'], 'iplog1', $TWEAK["iplog1"], $lang_settings['text_store_user_ips_note']);
+//	yesorno($lang_settings['row_log_user_ips'], 'iplog1', $TWEAK["iplog1"], $lang_settings['text_store_user_ips_note']);
 	tr($lang_settings['row_kps_enabled'],"<input type='radio' id='bonusenable' name='bonus'" . ($TWEAK["bonus"] == "enable" ? " checked='checked'" : "") . " value='enable' /> <label for='bonusenable'>".$lang_settings['text_enabled']."</label> <input type='radio' id='bonusdisablesave' name='bonus'" . ($TWEAK["bonus"] == "disablesave" ? " checked='checked'" : "") . " value='disablesave' /> <label for='bonusdisablesave'>".$lang_settings['text_disabled_but_save']."</label> <input type='radio' id='bonusdisable' name='bonus'" . ($TWEAK["bonus"] == "disable" ? " checked='checked'" : "") . " value='disable' /> <label for='bonusdisable'>".$lang_settings['text_disabled_no_save']."</label> <br />".$lang_settings['text_kps_note'], 1);
 	yesorno($lang_settings['row_enable_location'], 'enablelocation', $TWEAK["enablelocation"], $lang_settings['text_enable_location_note']);
 	yesorno($lang_settings['row_enable_tooltip'], 'enabletooltip', $TWEAK["enabletooltip"], $lang_settings['text_enable_tooltip_note']);
@@ -368,14 +368,15 @@ elseif ($action == 'securitysettings')	//security settings
 	print("<tbody>");
 	print ("<form method='post' action='".$_SERVER["SCRIPT_NAME"]."' name='securitysettings_form'><input type='hidden' name='action' value='savesettings_security'>");
 	tr($lang_settings['row_enable_ssl'],"<input type='radio' name='securelogin'" . ($SECURITY["securelogin"] == "yes" ? " checked" : "") . " value='yes'> ".$lang_settings['text_yes']. " <input type='radio' name='securelogin'" . ($SECURITY["securelogin"] == "no" ? " checked" : "") . " value='no'> ".$lang_settings['text_no']. " <input type='radio' name='securelogin'" . ($SECURITY["securelogin"] == "op" ? " checked" : "") . " value='op'> ".$lang_settings['text_optional']."<br />".$lang_settings['text_ssl_note'], 1);
-	tr($lang_settings['row_enable_ssl_tracker'],"<input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "yes" ? " checked" : "") . " value='yes'> ".$lang_settings['text_yes']. " <input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "no" ? " checked" : "") . " value='no'> ".$lang_settings['text_no']. " <input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "op" ? " checked" : "") . " value='op'> ".$lang_settings['text_optional']."<br />".$lang_settings['text_ssl_note'], 1);
-	tr($lang_settings['row_https_announce_url'],"<input type='text' style=\"width: 300px\" name=https_announce_url value='".($SECURITY["https_announce_url"] ? $SECURITY["https_announce_url"] : "")."'> ".$lang_settings['text_https_announce_url_note'] . $_SERVER["HTTP_HOST"]."/announce.php", 1);
+//	tr($lang_settings['row_enable_ssl_tracker'],"<input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "yes" ? " checked" : "") . " value='yes'> ".$lang_settings['text_yes']. " <input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "no" ? " checked" : "") . " value='no'> ".$lang_settings['text_no']. " <input type='radio' name='securetracker'" . ($SECURITY["securetracker"] == "op" ? " checked" : "") . " value='op'> ".$lang_settings['text_optional']."<br />".$lang_settings['text_ssl_note'], 1);
+//	tr($lang_settings['row_https_announce_url'],"<input type='text' style=\"width: 300px\" name=https_announce_url value='".($SECURITY["https_announce_url"] ? $SECURITY["https_announce_url"] : "")."'> ".$lang_settings['text_https_announce_url_note'] . $_SERVER["HTTP_HOST"]."/announce.php", 1);
 	yesorno($lang_settings['row_enable_image_verification'], 'iv', $SECURITY["iv"], $lang_settings['text_image_verification_note']);
 	yesorno($lang_settings['row_allow_email_change'], 'changeemail', $SECURITY["changeemail"], $lang_settings['text_email_change_note']);
 	tr($lang_settings['row_cheater_detection_level'],"<select name='cheaterdet'><option value=0 " . ($SECURITY["cheaterdet"] == 0 ? " selected" : "") . "> ".$lang_settings['select_none']." </option><option value=1 " . ($SECURITY["cheaterdet"] == 1 ? " selected" : "") . "> ".$lang_settings['select_conservative']." </option><option value=2 " . ($SECURITY["cheaterdet"] == 2 ? " selected" : "") . "> ".$lang_settings['select_normal']." </option><option value=3 " . ($SECURITY["cheaterdet"] == 3 ? " selected" : "") . "> ".$lang_settings['select_strict']." </option><option value=4 " . ($SECURITY["cheaterdet"] == 4 ? " selected" : "") . "> ".$lang_settings['select_paranoid']." </option></select> ".$lang_settings['text_cheater_detection_level_note']."<br />".$lang_settings['text_never_suspect'].classlist('nodetect',$AUTHORITY['staffmem'],$SECURITY['nodetect']).$lang_settings['text_or_above'].get_user_class_name(UC_UPLOADER,false,true,true).".", 1);
 	tr($lang_settings['row_max_ips'],"<input type='text' style=\"width: 300px\" name=maxip value='" . ($SECURITY["maxip"] ? $SECURITY["maxip"] : "1")."'> ".$lang_settings['text_max_ips_note'], 1);
 	tr($lang_settings['row_max_login_attemps'],"<input type='text' style=\"width: 300px\" name=maxloginattempts value='" . ($SECURITY["maxloginattempts"] ? $SECURITY["maxloginattempts"] : "7")."'> ".$lang_settings['text_max_login_attemps_note'], 1);
 
+    yesorno($lang_settings['row_use_challenge_response_authentication'], 'use_challenge_response_authentication', $SECURITY["use_challenge_response_authentication"], $lang_settings['text_use_challenge_response_authentication_note']);
 	$guestVisitTypeRadio = '<label><input type="radio" name="guest_visit_type" value="normal"' . (empty($SECURITY['guest_visit_type']) || $SECURITY['guest_visit_type'] == 'normal' ? ' checked' : '') . ' onclick="document.getElementById(\'tbody_static_page\').style.display=\'none\';document.getElementById(\'tbody_custom_content\').style.display=\'none\';document.getElementById(\'tbody_redirect\').style.display=\'none\';">' . $lang_settings['text_guest_visit_type_normal'] . '</label>';
 	$guestVisitTypeRadio .= '<br/><label><input type="radio" name="guest_visit_type" value="static_page"' . ($SECURITY['guest_visit_type'] == 'static_page' ? ' checked' : '') . ' onclick="document.getElementById(\'tbody_static_page\').style.display=\'table-row-group\';document.getElementById(\'tbody_custom_content\').style.display=\'none\';document.getElementById(\'tbody_redirect\').style.display=\'none\';">' . $lang_settings['text_guest_visit_type_static_page'] . '</label>';
 	$guestVisitTypeRadio .= '<br/><label><input type="radio" name="guest_visit_type" value="custom_content"' . ($SECURITY['guest_visit_type'] == 'custom_content' ? ' checked' : '') . ' onclick="document.getElementById(\'tbody_static_page\').style.display=\'none\';document.getElementById(\'tbody_custom_content\').style.display=\'table-row-group\';document.getElementById(\'tbody_redirect\').style.display=\'none\';">' . $lang_settings['text_guest_visit_type_custom_content'] . '</label>';
@@ -506,7 +507,7 @@ elseif ($action == 'basicsettings')	// basic settings
 	print ("<form method='post' action='".$_SERVER["SCRIPT_NAME"]."'><input type='hidden' name='action' value='savesettings_basic'>");
 	tr($lang_settings['row_site_name'],"<input type='text' style=\"width: 300px\" name=SITENAME value='".($config["SITENAME"] ? $config["SITENAME"]: "Nexus")."'> ".$lang_settings['text_site_name_note'], 1);
 	tr($lang_settings['row_base_url'],"<input type='text' style=\"width: 300px\" name=BASEURL value='".($config["BASEURL"] ? $config["BASEURL"] : $_SERVER["HTTP_HOST"])."'> ".$lang_settings['text_it_should_be'] . $_SERVER["HTTP_HOST"] . $lang_settings['text_base_url_note'], 1);
-	tr($lang_settings['row_announce_url'],"<input type='text' style=\"width: 300px\" name=announce_url value='".($config["announce_url"] ? $config["announce_url"] : $_SERVER["HTTP_HOST"].DEFAULT_TRACKER_URI)."'> ".$lang_settings['text_it_should_be'] . $_SERVER["HTTP_HOST"].DEFAULT_TRACKER_URI, 1);
+//	tr($lang_settings['row_announce_url'],"<input type='text' style=\"width: 300px\" name=announce_url value='".($config["announce_url"] ? $config["announce_url"] : $_SERVER["HTTP_HOST"].DEFAULT_TRACKER_URI)."'> ".$lang_settings['text_it_should_be'] . $_SERVER["HTTP_HOST"].DEFAULT_TRACKER_URI, 1);
 //	tr($lang_settings['row_mysql_host'],"<input type='text' style=\"width: 300px\" name=mysql_host value='".($config["mysql_host"] ? $config["mysql_host"] : "localhost")."'> ".$lang_settings['text_mysql_host_note'], 1);
 //	tr($lang_settings['row_mysql_user'],"<input type='text' style=\"width: 300px\" name=mysql_user value='".($config["mysql_user"] ? $config["mysql_user"] : "root")."'> ".$lang_settings['text_mysql_user_note'], 1);
 //	tr($lang_settings['row_mysql_password'],"<input type='password' style=\"width: 300px\" name=mysql_pass value=''> ".$lang_settings['text_mysql_password_note'], 1);
@@ -574,6 +575,7 @@ elseif ($action == 'bonussettings'){
 	print ($notice);
 	print ("<form method='post' action='".$_SERVER["SCRIPT_NAME"]."'><input type='hidden' name='action' value='savesettings_bonus'>");
 	print("<tr><td colspan=2 align=center><b>".$lang_settings['text_bonus_by_seeding']."</b></td></tr>");
+	tr($lang_settings['row_min_size'], $lang_settings['text_bonus_mini_size']."<input type='text' style=\"width: 100px\" name=min_size value='".(isset($BONUS["min_size"]) ? $BONUS["min_size"] : 0 )."'>".$lang_settings['text_bonus_mini_size_help'],1);
 	tr($lang_settings['row_donor_gets_double'], $lang_settings['text_donor_gets']."<input type='text' style=\"width: 50px\" name=donortimes value='".(isset($BONUS["donortimes"]) ? $BONUS["donortimes"] : 2 )."'>".$lang_settings['text_times_as_many'],1);
 	tr($lang_settings['row_basic_seeding_bonus'], $lang_settings['text_user_would_get']."<input type='text' style=\"width: 50px\" name=perseeding value='".(isset($BONUS["perseeding"]) ? $BONUS["perseeding"] : 1 )."'>".$lang_settings['text_bonus_points']."<input type='text' style=\"width: 50px\" name=maxseeding value='".(isset($BONUS["maxseeding"]) ? $BONUS["maxseeding"] : 7 )."'>".$lang_settings['text_torrents_default'], 1);
 
@@ -744,8 +746,10 @@ elseif ($action == 'torrentsettings')
     yesorno($lang_settings['row_paid_torrent_enabled'], 'paid_torrent_enabled', $TORRENT["paid_torrent_enabled"], $lang_settings['text_paid_torrent_enabled_note']);
     tr($lang_settings['row_tax_factor'],"<input type='number' name=tax_factor style=\"width: 100px\" value={$TORRENT['tax_factor']}> ".$lang_settings['text_tax_factor_note'], 1);
     tr($lang_settings['row_max_price'],"<input type='number' name=max_price style=\"width: 100px\" value={$TORRENT['max_price']}> ".$lang_settings['text_max_price_note'], 1);
+    tr($lang_settings['row_reward_bonus_options'],"<input type='text' name=reward_bonus_options style=\"width: 200px\" value={$TORRENT['reward_bonus_options']}> ".$lang_settings['text_reward_bonus_options_note'], 1);
+    tr($lang_settings['row_reward_times_limit'],"<input type='number' name=reward_times_limit style=\"width: 100px\" value={$TORRENT['reward_times_limit']}> ".$lang_settings['text_reward_times_limit_note'], 1);
 
-    yesorno($lang_settings['row_promotion_rules'], 'prorules', $TORRENT["prorules"], $lang_settings['text_promotion_rules_note']);
+//    yesorno($lang_settings['row_promotion_rules'], 'prorules', $TORRENT["prorules"], $lang_settings['text_promotion_rules_note']);
 	tr($lang_settings['row_random_promotion'], $lang_settings['text_random_promotion_note_one']."<ul><li><input type='text' style=\"width: 50px\" name=randomhalfleech value='".(isset($TORRENT["randomhalfleech"]) ? $TORRENT["randomhalfleech"] : 5 )."'>".$lang_settings['text_halfleech_chance_becoming']."</li><li><input type='text' style=\"width: 50px\" name=randomfree value='".(isset($TORRENT["randomfree"]) ? $TORRENT["randomfree"] : 2 )."'>".$lang_settings['text_free_chance_becoming']."</li><li><input type='text' style=\"width: 50px\" name=randomtwoup value='".(isset($TORRENT["randomtwoup"]) ? $TORRENT["randomtwoup"] : 2 )."'>".$lang_settings['text_twoup_chance_becoming']."</li><li><input type='text' style=\"width: 50px\" name=randomtwoupfree value='".(isset($TORRENT["randomtwoupfree"]) ? $TORRENT["randomtwoupfree"] : 1 )."'>".$lang_settings['text_freetwoup_chance_becoming']."</li><li><input type='text' style=\"width: 50px\" name=randomtwouphalfdown value='".(isset($TORRENT["randomtwouphalfdown"]) ? $TORRENT["randomtwouphalfdown"] : 0 )."'>".$lang_settings['text_twouphalfleech_chance_becoming']."</li><li><input type='text' style=\"width: 50px\" name=randomthirtypercentdown value='".(isset($TORRENT["randomthirtypercentdown"]) ? $TORRENT["randomthirtypercentdown"] : 0 )."'>".$lang_settings['text_thirtypercentleech_chance_becoming']."</li></ul>".$lang_settings['text_random_promotion_note_two'], 1);
 	tr($lang_settings['row_large_torrent_promotion'], $lang_settings['text_torrent_larger_than']."<input type='text' style=\"width: 50px\" name=largesize value='".(isset($TORRENT["largesize"]) ? $TORRENT["largesize"] : 20 )."'>".$lang_settings['text_gb_promoted_to']."<select name=largepro>".promotion_selection((isset($TORRENT['largepro']) ? $TORRENT['largepro'] : 2), 1)."</select>".$lang_settings['text_by_system_upon_uploading']."<br />".$lang_settings['text_large_torrent_promotion_note'], 1);
 	tr($lang_settings['row_promotion_timeout'], $lang_settings['text_promotion_timeout_note_one']."<ul>
@@ -798,6 +802,7 @@ elseif ($action == 'mainsettings')	// main settings
 	tr($lang_settings['row_initial_invites'],"<input type='text' name=invite_count style=\"width: 50px\" value={$MAIN['invite_count']}> ".$lang_settings['text_initial_invites_note'], 1);
 	tr($lang_settings['row_initial_tmp_invites'],"<input type='text' name=tmp_invite_count style=\"width: 50px\" value={$MAIN['tmp_invite_count']}> ".$lang_settings['text_initial_tmp_invites_note'], 1);
 	tr($lang_settings['row_invite_timeout'],"<input type='text' name=invite_timeout style=\"width: 50px\" value={$MAIN['invite_timeout']}> ".$lang_settings['text_invite_timeout_note'], 1);
+	yesorno($lang_settings['row_complain_enabled'], 'complain_enabled', $MAIN['complain_enabled'], $lang_settings['row_complain_enabled_note']);
 	yesorno($lang_settings['row_enable_registration_system'], 'registration', $MAIN['registration'], $lang_settings['row_allow_registrations']);
 	tr($lang_settings['row_verification_type'],"<input type='radio' name='verification'" . ($MAIN["verification"] == "email" ? " checked" : " checked") . " value='email'> ".$lang_settings['text_email'] ." <input type='radio' name='verification'" . ($MAIN["verification"] == "admin" ? " checked" : "") . " value='admin'> ".$lang_settings['text_admin']." <input type='radio' name='verification'" . ($MAIN["verification"] == "automatic" ? " checked" : "") . " value='automatic'> ".$lang_settings['text_automatically']."<br />".$lang_settings['text_verification_type_note'], 1);
 	yesorno($lang_settings['row_enable_wait_system'],'waitsystem', $MAIN['waitsystem'], $lang_settings['text_wait_system_note']);

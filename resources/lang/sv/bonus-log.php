@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'business_types' => [
+        \App\Models\BonusLogs::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => 'Avbryt H&R',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_MEDAL => 'Köp medalj',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_ATTENDANCE_CARD => 'Köp närvarokort',
+        \App\Models\BonusLogs::BUSINESS_TYPE_STICKY_PROMOTION => 'Klistra in',
+        \App\Models\BonusLogs::BUSINESS_TYPE_POST_REWARD => 'Posta belöning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD => 'Utbyte uppladdat',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE => 'Köp inbjudan',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CUSTOM_TITLE => 'Anpassad titel',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_VIP => 'Köp VIP',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE => 'Gåva till någon',
+        \App\Models\BonusLogs::BUSINESS_TYPE_NO_AD => 'Avbryt annons',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_LOW_SHARE_RATIO => 'Gåva till lågt delningsförhållande',
+        \App\Models\BonusLogs::BUSINESS_TYPE_LUCKY_DRAW => 'Tur ritning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD => 'Utbyte hämtat',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TEMPORARY_INVITE => 'Köp tillfällig inbjudan',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_RAINBOW_ID => 'Köp regnbågs-ID',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Köp nytt användarnamn kort',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gåva medalj',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Köp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Belöning torrent',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rolllön',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent laddas ner',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Ta emot belöning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Ta emot gåva',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Ladda upp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent ta emot belöning',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding basic',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Seeding official addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Seeding harem addition',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Utsättning av medalj',
+    ],
+    'fields' => [
+        'business_type' => 'Typ av verksamhet',
+        'old_total_value' => 'Pre-trade värde',
+        'value' => 'Handelsvärde',
+        'new_total_value' => 'Post-handelsvärde',
+    ],
+    'exclude_seeding_bonus' => 'Exkludera sådd bonus',
+];

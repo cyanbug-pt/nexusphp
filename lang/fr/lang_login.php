@@ -1,0 +1,40 @@
+<?php
+
+$lang_login = array
+(
+	'h1_not_logged_in' => "Non connecté!",
+	'p_error' => "Erreur:",
+	'p_after_logged_in' => "La page que vous avez essayé de voir ne peut être utilisée que lorsque vous êtes connecté.",
+	'p_need_cookies_enables' => "<b>Note</b>: Vous avez besoin de cookies activés pour vous connecter ou changer de langue.",
+	'p_fail_ban' => "les connexions échouées dans une ligne vont entraîner un bannissement de votre ip!",
+	'p_you_have' => "Vous avez",
+	'p_remaining_tries' => "essais restants.",
+	'p_no_account_signup' => "Vous n'avez pas de compte ? <a href=\"signup.php\"><b>Inscrivez-vous</b></a> dès maintenant !",
+	'p_forget_pass_recover' => "Oubliez votre mot de passe ? Récupérez votre mot de passe <a href=\"recover.php\"><b>par e-mail</b></a>",
+    'p_account_banned' => "Le compte a été banni ? Voir la raison du bannissement du journal<a href=\"user-ban-log.php\"><b>du compte utilisateur</b></a>",
+	'p_resend_confirm' => "Vous n'avez pas reçu le mail de confirmation ou le lien de confirmation est cassé ? <a href=\"confirm_resend.php\"><b>Envoyer un mail de confirmation à nouveau</b></a>",
+	'rowhead_username' => "Nom d'utilisateur:",
+	'rowhead_password' => "Mot de passe :",
+	'button_login' => "Identifiant!",
+	'button_reset' => "Reset",
+	'text_auto_logout' => "Déconnexion automatique :",
+	'text_restrict_ip' => "Restreindre IP:",
+	'text_ssl' => "SSL (HTTPS):",
+	'checkbox_auto_logout' => " Déconnectez-moi après 15 minutes",
+	'checkbox_restrict_ip' => " Restreindre la session à mon IP",
+	'checkbox_ssl' => " Parcourir le site Web avec le cryptage SSL (navigateur Web)",
+	'checkbox_ssl_tracker' => " Connecter le tracker avec le cryptage SSL (client BitTorrent)",
+	'text_advanced_options' => "Options Avancées :",
+	'text_helpbox' => "Boîte d'aide",
+	'text_helpbox_note' => "Vous avez des problèmes lors de votre inscription ou de votre connexion ? Laissez un message ici",
+	'text_message' => "Message : ",
+	'sumbit_shout' => "crier",
+	'submit_clear' => "effacer",
+	'text_select_lang' => "Sélectionner la langue du site : ",
+	'head_login' => "Se connecter",
+    'rowhead_two_step_code' => 'Authentification à deux facteurs',
+    'two_step_code_tooltip' => 'Si activé, doit être renseigné',
+    'text_complain' => 'Canal des plaintes',
+);
+
+?>

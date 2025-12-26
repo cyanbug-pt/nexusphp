@@ -2,15 +2,18 @@
 
 namespace App\Filament;
 
+use Filament\Support\Enums\Width;
+use Closure;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Filters\Layout;
 use Illuminate\Database\Eloquent\Model;
 
 class PageList extends ListRecords
 {
-    protected ?string $maxContentWidth = 'full';
+    protected Width|string|null $maxContentWidth = 'full';
 
-    protected function getTableRecordUrlUsing(): ?\Closure
+    protected function getTableRecordUrlUsing(): ?Closure
     {
         return function (Model $record): ?string {
             return null;
@@ -19,6 +22,6 @@ class PageList extends ListRecords
 
     protected function getTableFiltersLayout(): ?string
     {
-        return Layout::AboveContent;
+        return FiltersLayout::AboveContent;
     }
 }

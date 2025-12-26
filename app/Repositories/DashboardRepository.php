@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\DB;
+use Nexus\Database\NexusDB;
 
 class DashboardRepository extends BaseRepository
 {
@@ -49,20 +50,28 @@ class DashboardRepository extends BaseRepository
         $result[$name] = [
             'name' => $name,
             'text' => nexus_trans("dashboard.system_info.$name"),
-            'value' => DB::select(DB::raw('select version() as info'))[0]->info,
+            'value' => NexusDB::select('select version() as info')[0]['info'],
         ];
-        $name = 'os';
+//        $name = 'os';
+//        $result[$name] = [
+//            'name' => $name,
+//            'text' => nexus_trans("dashboard.system_info.$name"),
+//            'value' => PHP_OS,
+//        ];
+        $name = 'redis_version';
         $result[$name] = [
             'name' => $name,
             'text' => nexus_trans("dashboard.system_info.$name"),
-            'value' => PHP_OS,
+            'value' =>  NexusDB::redis()->info()['redis_version'],
         ];
+
         $name = 'server_software';
         $result[$name] = [
             'name' => $name,
             'text' => nexus_trans("dashboard.system_info.$name"),
             'value' =>  $_SERVER['SERVER_SOFTWARE'] ?? '',
         ];
+
         $name = 'load_average';
         $result[$name] = [
             'name' => $name,

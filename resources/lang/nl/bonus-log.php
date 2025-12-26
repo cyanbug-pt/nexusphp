@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'business_types' => [
+        \App\Models\BonusLogs::BUSINESS_TYPE_CANCEL_HIT_AND_RUN => 'Annuleren H&R',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_MEDAL => 'Medaille kopen',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_ATTENDANCE_CARD => 'Aanwezigheidskaart kopen',
+        \App\Models\BonusLogs::BUSINESS_TYPE_STICKY_PROMOTION => 'Sticky promotie',
+        \App\Models\BonusLogs::BUSINESS_TYPE_POST_REWARD => 'Post beloning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_UPLOAD => 'Wissel geüpload',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_INVITE => 'Koop uitnodiging',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CUSTOM_TITLE => 'Aangepaste titel',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_VIP => 'VIP kopen',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_SOMEONE => 'Geschenk aan iemand',
+        \App\Models\BonusLogs::BUSINESS_TYPE_NO_AD => 'Annuleer advertentie',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_TO_LOW_SHARE_RATIO => 'Geschenk voor lage deelverhouding',
+        \App\Models\BonusLogs::BUSINESS_TYPE_LUCKY_DRAW => 'Geluks remise',
+        \App\Models\BonusLogs::BUSINESS_TYPE_EXCHANGE_DOWNLOAD => 'Wissel gedownload',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TEMPORARY_INVITE => 'Koop tijdelijke uitnodiging',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_RAINBOW_ID => 'Koop regenboog ID',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Koop wijziging gebruikersnaam kaart',
+        \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Cadeau medaille',
+        \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Koop torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Beloning torrent',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rol salaris',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent wordt gedownload',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_REWARD => 'Ontvang beloning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Cadeau ontvangen',
+        \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Upload torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent ontvangen beloning',
+
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Basis uploaden',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Upload donor toevoeging',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION => 'Officiële toevoeging upload',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_HAREM_ADDITION => 'Upload harem toevoeging',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => 'Medaille toevoeging uploaden',
+    ],
+    'fields' => [
+        'business_type' => 'Zakelijk type',
+        'old_total_value' => 'Pre-trade-waarde',
+        'value' => 'Ruilwaarde',
+        'new_total_value' => 'Na-handelswaarde',
+    ],
+    'exclude_seeding_bonus' => 'Bonus uitsluiten bij seeden',
+];

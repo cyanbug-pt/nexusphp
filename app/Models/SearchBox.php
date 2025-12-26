@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Auth\Permission;
+use App\Http\Middleware\Locale;
+use App\Models\Traits\NexusActivityLogTrait;
+use App\Repositories\TagRepository;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
@@ -9,6 +13,8 @@ use Nexus\Database\NexusDB;
 
 class SearchBox extends NexusModel
 {
+    use NexusActivityLogTrait;
+
     private static array $instances = [];
 
     private static array $modeOptions = [];
@@ -104,7 +110,9 @@ class SearchBox extends NexusModel
         $lang = get_langfolder_cookie();
         foreach ($this->extra[self::EXTRA_TAXONOMY_LABELS] ?? [] as $item) {
             if ($item['torrent_field'] == $torrentField) {
-                return $item['display_text'][$lang] ?? 'Unknown';
+                if (!empty($item['display_text'][$lang])) {
+                    return $item['display_text'][$lang];
+                }
             }
         }
         return nexus_trans("searchbox.sub_category_{$torrentField}_label") ?: ucfirst($torrentField);
@@ -153,8 +161,8 @@ class SearchBox extends NexusModel
         }
         $table = self::$taxonomies[$torrentField]['table'];
         return NexusDB::table($table)->where(function (Builder $query) use ($searchBox) {
-            return $query->where('mode', $searchBox->id)->orWhere('mode', 0);
-        })->orderBy('sort_index')->orderBy('id')->get();
+            return $query->whereIn('mode', [$searchBox->id, 0]);
+        })->orderBy('sort_index', 'desc')->orderBy('id', 'desc')->get();
     }
 
     public static function listModeOptions(): array
@@ -182,6 +190,25 @@ class SearchBox extends NexusModel
         }
     }
 
+    public function getDisplaySectionNameAttribute()
+    {
+        $locale = Locale::getDefault();
+        if (!empty($this->section_name[$locale])) {
+            return $this->section_name[$locale];
+        }
+        $defaultLang = get_setting("main.defaultlang");
+        if (!empty($this->section_name[$defaultLang])) {
+            return $this->section_name[$defaultLang];
+        }
+        if ($this->isSectionBrowse()) {
+            return nexus_trans("searchbox.sections.browse");
+        }
+        if ($this->isSectionSpecial()) {
+            return nexus_trans("searchbox.sections.special");
+        }
+        return $this->name;
+    }
+
     public static function listSearchModes(): array
     {
         $result = [];
@@ -193,7 +220,7 @@ class SearchBox extends NexusModel
 
     public static function isSpecialEnabled(): bool
     {
-        return Setting::get('main.spsct') == 'yes';
+        return Setting::getIsSpecialSectionEnabled();
     }
 
     public static function getBrowseMode()
@@ -201,9 +228,29 @@ class SearchBox extends NexusModel
         return Setting::get('main.browsecat');
     }
 
+    public static function getBrowseSearchBox()
+    {
+        return self::query()->find(self::getBrowseMode());
+    }
+
     public static function getSpecialMode()
     {
         return Setting::get('main.specialcat');
+    }
+
+    public static function getSpecialSearchBox()
+    {
+        return self::query()->find(self::getSpecialMode());
+    }
+
+    public function isSectionBrowse(): bool
+    {
+        return $this->id == self::getBrowseMode();
+    }
+
+    public function isSectionSpecial(): bool
+    {
+        return $this->id == self::getSpecialMode();
     }
 
 
@@ -245,6 +292,39 @@ class SearchBox extends NexusModel
     public function taxonomy_processing(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Processing::class, 'mode');
+    }
+
+    public function loadSubCategories(): void
+    {
+        foreach (self::$taxonomies as $name => $info) {
+            $relationName = "taxonomy_" . $name;
+            $show = "show" . $name;
+            if ($this->{$show} && isset(self::$taxonomies[$name])) {
+                $modelName = self::$taxonomies[$name]['model'];
+                $this->setRelation(
+                    $relationName,
+                    $modelName::query()->whereIn('mode', [$this->getKey(), 0])
+                        ->orderBy('sort_index', 'desc')
+                        ->orderBy('id', 'desc')
+                        ->get()
+                );
+            }
+        }
+    }
+
+    public function tags(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Tag::class, 'mode');
+    }
+
+    public function loadTags(): void
+    {
+        $allTags = TagRepository::listAll($this->getKey());
+        if (!Permission::canSetTorrentSpecialTag()) {
+            $specialTagIdList = Tag::listSpecial();
+            $allTags = $allTags->filter(fn ($item) => !in_array($item->id, $specialTagIdList));
+        }
+        $this->setRelation("tags", $allTags);
     }
 
     public static function getDefaultSearchMode()
@@ -290,5 +370,22 @@ class SearchBox extends NexusModel
         return $results;
     }
 
+    public static function listAuthorizedSectionId(): array
+    {
+        $modeIds = [self::getBrowseMode()];
+        if (self::isSpecialEnabled() && Permission::canViewSpecialSection()) {
+            $modeIds[] = self::getSpecialMode();
+        }
+        return $modeIds;
+    }
+
+    public static function listAllSectionId(): array
+    {
+        $modeIds = [self::getBrowseMode()];
+        if (self::isSpecialEnabled()) {
+            $modeIds[] = self::getSpecialMode();
+        }
+        return $modeIds;
+    }
 
 }
