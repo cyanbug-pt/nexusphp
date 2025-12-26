@@ -15,9 +15,9 @@ class UserPasskeyResource extends Resource
 {
     protected static ?string $model = Passkey::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-key';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-key';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 12;
 
@@ -31,12 +31,9 @@ class UserPasskeyResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function schema(): array
     {
-        return $form
-            ->schema([
-                //
-            ]);
+        return [];
     }
 
     public static function table(Table $table): Table
