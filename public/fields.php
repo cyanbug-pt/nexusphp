@@ -22,6 +22,7 @@ if ($action == 'view') {
     begin_main_frame();
     echo $field->buildFieldForm();
 } elseif ($action == 'submit') {
+    die("This method is deprecated! This method is no longer available in 1.10, it does not save data correctly, please go to the management system!");
     try {
         $result = $field->save($_REQUEST);
         nexus_redirect('fields.php?action=view');
