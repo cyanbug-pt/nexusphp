@@ -12,6 +12,7 @@ if(!empty($_POST['conusr'])) {
 //    sql_query("UPDATE users SET status = 'confirmed', editsecret = '' WHERE id IN (" . implode(", ", $_POST['conusr']) . ") AND status='pending'");
     $userList = \App\Models\User::query()->whereIn('id', $_POST['conusr'])
         ->where('status', 'pending')
+        ->where('invited_by', $id)
         ->get(\App\Models\User::$commonFields)
     ;
     if ($userList->isNotEmpty()) {
@@ -21,6 +22,9 @@ if(!empty($_POST['conusr'])) {
             fire_event(\App\Enums\ModelEventEnum::USER_UPDATED, $user);
         }
         \App\Models\User::query()->whereIn('id', $uidArr)->update(['status' => 'confirmed', 'editsecret' => '']);
+    } else {
+        stderr($lang_takeconfirm['std_sorry'],$lang_takeconfirm['std_no_buddy_to_confirm'].
+            "<a class=altlink href=invite.php?id={$CURUSER['id']}>".$lang_takeconfirm['std_here_to_go_back'],false);
     }
 } else {
     stderr($lang_takeconfirm['std_sorry'],$lang_takeconfirm['std_no_buddy_to_confirm'].

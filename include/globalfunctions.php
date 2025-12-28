@@ -1668,6 +1668,14 @@ JS;
     \Nexus\Nexus::js($js, 'footer', false);
 }
 
+function nexus_escape($data): array|string
+{
+    if (is_array($data)) {
+        return array_map('nexus_escape', $data);
+    }
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
 function is_fpm_mode(): bool
 {
     return php_sapi_name() === 'fpm-fcgi';

@@ -96,7 +96,7 @@ class CalculateUserSeedBonus implements ShouldQueue
         $logFile = getLogFile("seed-bonus-points");
         do_log("$logPrefix, [GET_UID_REAL], count: " . count($results) . ", logFile: $logFile");
         $fd = fopen($logFile, 'a');
-        $seedPointsUpdates = $seedPointsPerHourUpdates = $seedBonusUpdates = [];
+        $seedPointsUpdates = $seedPointsPerHourUpdates = $seedBonusPerHourUpdates = $seedBonusUpdates = [];
         $seedingTorrentCountUpdates = $seedingTorrentSizeUpdates = [];
         $logStr = "";
         $bonusLogInsert = [];
@@ -159,6 +159,7 @@ class CalculateUserSeedBonus implements ShouldQueue
 //            NexusDB::statement($sql);
             $seedPointsUpdates[] = sprintf("when %d then ifnull(seed_points, 0) + %f", $uid, $seed_points);
             $seedPointsPerHourUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['seed_points']);
+            $seedBonusPerHourUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['seed_bonus']);
             $seedingTorrentCountUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['torrent_peer_count']);
             $seedingTorrentSizeUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['size']);
             $seedBonusUpdates[] = sprintf("when %d then seedbonus + %f", $uid, $all_bonus);
@@ -177,8 +178,8 @@ class CalculateUserSeedBonus implements ShouldQueue
         }
         $nowStr = now()->toDateTimeString();
         $sql = sprintf(
-            "update users set seed_points = case id %s end, seed_points_per_hour = case id %s end, seedbonus = case id %s end, seeding_torrent_count = case id %s end, seeding_torrent_size = case id %s end, seed_points_updated_at = '%s' where id in (%s)",
-            implode(" ", $seedPointsUpdates), implode(" ", $seedPointsPerHourUpdates), implode(" ", $seedBonusUpdates), implode(" ", $seedingTorrentCountUpdates), implode(" ", $seedingTorrentSizeUpdates), $nowStr, $idStr
+            "update users set seed_points = case id %s end, seed_points_per_hour = case id %s end, seed_bonus_per_hour = case id %s end, seedbonus = case id %s end, seeding_torrent_count = case id %s end, seeding_torrent_size = case id %s end, seed_points_updated_at = '%s' where id in (%s)",
+            implode(" ", $seedPointsUpdates), implode(" ", $seedPointsPerHourUpdates), implode(" ", $seedBonusPerHourUpdates), implode(" ", $seedBonusUpdates), implode(" ", $seedingTorrentCountUpdates), implode(" ", $seedingTorrentSizeUpdates), $nowStr, $idStr
         );
         $result = NexusDB::statement($sql);
         if ($delIdRedisKey) {
