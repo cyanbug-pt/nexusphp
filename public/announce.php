@@ -13,7 +13,7 @@ foreach (array("passkey","info_hash","peer_id","event") as $x)
         $GLOBALS[$x] = $_GET[$x];
 }
 // get integer type port, downloaded, uploaded, left from client
-foreach (array("port","downloaded","uploaded","left","compact","no_peer_id") as $x)
+foreach (array("port","downloaded","uploaded","left") as $x)
 {
     $GLOBALS[$x] = intval($_GET[$x] ?? 0);
 }
@@ -172,7 +172,7 @@ elseif ($az['showclienterror'] == 'yes'){
 }
 
 // check torrent based on info_hash
-$checkTorrentSql = "SELECT torrents.id, size, owner, sp_state, seeders, leechers, UNIX_TIMESTAMP(added) AS ts, added, banned, hr, approval_status, price, categories.mode FROM torrents left join categories on torrents.category = categories.id WHERE " . hash_where("info_hash", $info_hash);
+$checkTorrentSql = "SELECT torrents.id, size, owner, sp_state, seeders, leechers, times_completed, UNIX_TIMESTAMP(added) AS ts, added, banned, hr, approval_status, price, categories.mode FROM torrents left join categories on torrents.category = categories.id WHERE " . hash_where("info_hash", $info_hash);
 if (!$torrent = $Cache->get_value('torrent_hash_'.$info_hash.'_content')){
 	$res = sql_query($checkTorrentSql);
 	$torrent = mysql_fetch_array($res);
@@ -251,13 +251,11 @@ $rep_dict = [
     "min interval" => (int)$announce_wait,
     "complete" => (int)$torrent["seeders"],
     "incomplete" => (int)$torrent["leechers"],
-    "peers" => [],  // By default it is a array object, only when `&compact=1` then it should be a string
+    "downloaded" => (int)$torrent["times_completed"],
+    "peers" => '',
+    "peers6" => '',
 ];
 
-if ($compact == 1) {
-    $rep_dict['peers'] = '';  // Change `peers` from array to string
-    $rep_dict['peers6'] = '';   // If peer use IPv6 address , we should add packed string in `peers6`
-}
 $GLOBALS['rep_dict'] = $rep_dict;
 if ($isReAnnounce) {
     do_log("$log, [YES_RE_ANNOUNCE]");
@@ -280,43 +278,11 @@ if (isset($event) && $event == "stopped") {
             continue;
         }
 
-        if ($compact == 1) {
-//            $peerField = filter_var($row['ip'],FILTER_VALIDATE_IP,FILTER_FLAG_IPV6) ? 'peers6' : 'peers';
-//            $rep_dict[$peerField] .= inet_pton($row["ip"]) . pack("n", $row["port"]);
-            if (!empty($row['ipv4'])) {
-                $rep_dict['peers'] .= inet_pton($row["ipv4"]) . pack("n", $row["port"]);
-            }
-            if (!empty($row['ipv6'])) {
-                $rep_dict['peers6'] .= inet_pton($row["ipv6"]) . pack("n", $row["port"]);
-            }
-        } else {
-//            $peer = [
-//                'ip' => $row["ip"],
-//                'port' => (int) $row["port"]
-//            ];
-//
-//            if ($no_peer_id == 1) {
-//                $peer['peer id'] = $row["peer_id"];
-//            }
-//            $rep_dict['peers'][] = $peer;
-            if (!empty($row['ipv4'])) {
-                $peer = [
-                    'peer_id' => $row['peer_id'],
-                    'ip' => $row['ipv4'],
-                    'port' => (int)$row['port'],
-                ];
-                if ($no_peer_id) unset($peer['peer_id']);
-                $rep_dict['peers'][] = $peer;
-            }
-            if (!empty($row['ipv6'])) {
-                $peer = [
-                    'peer_id' => $row['peer_id'],
-                    'ip' => $row['ipv6'],
-                    'port' => (int)$row['port'],
-                ];
-                if ($no_peer_id) unset($peer['peer_id']);
-                $rep_dict['peers'][] = $peer;
-            }
+        if (!empty($row['ipv4'])) {
+            $rep_dict['peers'] .= inet_pton($row["ipv4"]) . pack("n", $row["port"]);
+        }
+        if (!empty($row['ipv6'])) {
+            $rep_dict['peers6'] .= inet_pton($row["ipv6"]) . pack("n", $row["port"]);
         }
     }
 }

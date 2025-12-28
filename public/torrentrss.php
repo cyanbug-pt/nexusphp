@@ -11,7 +11,7 @@ if ($cacheData && nexus_env('APP_ENV') != 'local') {
     header ("Content-type: text/xml");
     die($cacheData);
 }
-dbconn();
+dbconn(doLogin: false);
 function hex_esc($matches) {
 	return sprintf("%02x", ord($matches[0]));
 }
@@ -19,8 +19,10 @@ $dllink = false;
 
 $where = "";
 if ($passkey){
-	$res = sql_query("SELECT id, enabled, parked, passkey FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
-	$user = mysql_fetch_array($res);
+    $user = \Nexus\Database\NexusDB::remember('user_passkey_'.$passkey.'_rss', 3600, function () use ($passkey) {
+        $res = sql_query("SELECT id, enabled, parked, passkey FROM users WHERE passkey=". sqlesc($passkey)." LIMIT 1");
+        return mysql_fetch_array($res);
+    });
 	if (!$user)
 		die("invalid passkey");
 	elseif ($user['enabled'] == 'no' || $user['parked'] == 'yes')

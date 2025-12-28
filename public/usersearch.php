@@ -311,7 +311,7 @@ if (count($_GET) > 0 && !$_GET['h'])
 	  	if (strpos($email,'*') === False && strpos($email,'?') === False
 	    		&& strpos($email,'%') === False)
 	    {
-      	if (validemail($email) !== 1)
+      	if (!validemail($email))
       	{
 	        stdmsg("Error", "Bad email.");
 	        stdfoot();

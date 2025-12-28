@@ -228,38 +228,6 @@ insert_tag(
     ""
 );
 
-insert_tag(
-	$lang_tags['text_flash'],
-	$lang_tags['text_flash_description'],
-	$lang_tags['text_flash_syntax'],
-	sprintf($lang_tags['text_flash_example'], getSchemeAndHttpHost()),
-	""
-);
-
-insert_tag(
-	$lang_tags['text_flash_two'],
-	$lang_tags['text_flash_two_description'],
-	$lang_tags['text_flash_two_syntax'],
-	sprintf($lang_tags['text_flash_two_example'], getSchemeAndHttpHost()),
-	""
-);
-
-insert_tag(
-	$lang_tags['text_flv_one'],
-	$lang_tags['text_flv_one_description'],
-	$lang_tags['text_flv_one_syntax'],
-	sprintf($lang_tags['text_flv_one_example'], getSchemeAndHttpHost()),
-	""
-);
-
-insert_tag(
-	$lang_tags['text_flv_two'],
-	$lang_tags['text_flv_two_description'],
-	$lang_tags['text_flv_two_syntax'],
-	sprintf($lang_tags['text_flv_two_example'], getSchemeAndHttpHost()),
-	""
-);
-
 
 insert_tag(
 	$lang_tags['text_youtube'],

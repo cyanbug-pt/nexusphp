@@ -936,6 +936,9 @@ EOD;
                 $twoStepY .= '</div>';
                 tr_small($lang_usercp['row_two_step_secret'], $twoStepY, 1);
             }
+            printf('<tr><td class="rowhead" valign="top" align="right">%s</td><td class="rowfollow" valign="top" align="left">', nexus_trans('passkey.passkey'));
+            \App\Repositories\UserPasskeyRepository::renderList($CURUSER['id']);
+            printf('</td></tr>');
 
 			if ($disableemailchange != 'no' && $smtptype != 'none') //system-wide setting
 				tr_small($lang_usercp['row_email_address'], "<input type=\"text\" name=\"email\" style=\"width: 200px\" value=\"" . htmlspecialchars($CURUSER["email"]) . "\" /> <br /><font class=small>".$lang_usercp['text_email_address_note']."</font>", 1);

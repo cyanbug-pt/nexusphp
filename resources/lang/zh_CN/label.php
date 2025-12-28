@@ -498,4 +498,18 @@ return [
         'select_section' => '选择',
         'select_section_help' => "如果某个选择未指定，其所有选项都符合此规则。必须至少指定一个选择。",
     ],
+    'field' => [
+        'label' => '自定义字段',
+        'name' => '名称',
+        'name_help' => '仅允许数字、字母、下划线',
+        'field_label' => '显示标签',
+        'type' => '类型',
+        'required' => '不能为空',
+        'mod_only' => '仅管理组可见',
+        'help' => '辅助说明',
+        'options' => '选项',
+        'options_help' => '类型为单选、多选、下拉时必填，一行一个，格式：选项值|选项描述文本',
+        'is_single_row' => '展示时单独一行',
+        'display' => '自定义展示',
+    ]
 ];

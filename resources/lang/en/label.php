@@ -456,4 +456,18 @@ Note: In 1.8, the 'searchbox_name' part can be omitted, i.e. the rule is 'pic/ca
         'select_section' => 'Selections',
         'select_section_help' => "If a selection is not defined, all options from the selection are allowed for the rule. At least one selection should be defined.",
     ],
+    'field' => [
+        'label' => 'Custom field',
+        'name' => 'Name',
+        'name_help' => 'Only allow digit, alphabet, underline',
+        'field_label' => 'Display label',
+        'type' => 'Type',
+        'required' => 'Required',
+        'mod_only' => 'Mod only',
+        'help' => 'Help text',
+        'options' => 'Options',
+        'options_help' => 'Required when type is radio, checkbox, select. One line, one option, format: value|display text',
+        'is_single_row' => 'Display on a single row',
+        'display' => 'Custom display',
+    ]
 ];

@@ -160,7 +160,7 @@ function print_attachment($dlkey, $enableimage = true, $imageresizer = true)
             }
             do_log(sprintf("driver: %s, location: %s, url: %s", $driver, $row['location'], $url));
 			if($imageresizer == true)
-				$onclick = " onclick=\"Previewurl('".$url."')\"";
+				$onclick = " data-zoomable data-zoom-src=\"".$url."\"";
 			else $onclick = "";
 			$return = "<img id=\"attach".$id."\" style=\"max-width: 700px\" alt=\"".htmlspecialchars($row['filename'])."\" src=\"".$url."\"". $onclick .  " onmouseover=\"domTT_activate(this, event, 'content', '".htmlspecialchars("<strong>".nexus_trans('attachment.size')."</strong>: ".mksize($row['filesize'])."<br />".gettime($row['added']))."', 'styleClass', 'attach', 'x', findPosition(this)[0], 'y', findPosition(this)[1]-58);\" />";
 		}
@@ -240,7 +240,7 @@ function formatImg($src, $enableImageResizer, $image_max_width, $image_max_heigh
     }
     return addTempCode("<img style=\"max-width: 100%\" id=\"$imgId\" alt=\"image\" src=\"$src\"" .
         ($enableImageResizer ?
-            " onload=\"Scale(this, $image_max_width, $image_max_height);\" onclick=\"Preview(this);\" " : "") .
+            " onload=\"Scale(this, $image_max_width, $image_max_height);\" data-zoomable " : "") .
         " onerror=\"handleImageError(this, '$src');\" />");
 }
 
@@ -409,28 +409,6 @@ function format_comment($text, $strip_html = true, $xssclean = false, $newtab = 
 		$s = preg_replace("/\[img=([^\<\r\n\"']+?)\]/i", '', $s, -1);
 	}
 
-	// [flash,500,400]http://www/image.swf[/flash]
-	if (strpos($s,"[flash") !== false) { //flash is not often used. Better check if it exist before hand
-		if ($enableflash) {
-//			$s = preg_replace("/\[flash(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(swf)))\[\/flash\]/ei", "formatFlash('\\4', '\\2', '\\3')", $s);
-			$s = preg_replace_callback("/\[flash(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(swf)))\[\/flash\]/i", function ($matches) {
-			    return formatFlash($matches[4], $matches[2], $matches[3]);
-            }, $s);
-		} else {
-			$s = preg_replace("/\[flash(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(swf)))\[\/flash\]/i", '', $s);
-		}
-	}
-	//[flv,320,240]http://www/a.flv[/flv]
-	if (strpos($s,"[flv") !== false) { //flv is not often used. Better check if it exist before hand
-		if ($enableflash) {
-//			$s = preg_replace("/\[flv(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(flv)))\[\/flv\]/ei", "formatFlv('\\4', '\\2', '\\3')", $s);
-			$s = preg_replace_callback("/\[flv(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(flv)))\[\/flv\]/i", function ($matches) {
-			    return formatFlv($matches[4], $matches[2], $matches[3]);
-            }, $s);
-		} else {
-			$s = preg_replace("/\[flv(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|ftp):\/\/[^\s'\"<>]+(\.(flv)))\[\/flv\]/i", '', $s);
-		}
-	}
     //[youtube,560,315]https://www.youtube.com/watch?v=DWDL3VTCcCg&ab_channel=ESPNMMA[/youtube]
 	if (str_contains($s, '[youtube') && str_contains($s, 'v=')) {
         $s = preg_replace_callback("/\[youtube(\,([1-9][0-9]*)\,([1-9][0-9]*))?\]((http|https):\/\/[^\s'\"<>]+)\[\/youtube\]/i", function ($matches) {
@@ -2316,7 +2294,7 @@ function validfilename($name) {
 }
 
 function validemail($email) {
-	return preg_match('/^[\w.-]+@([\w.-]+\.)+[a-z]{2,6}$/is', $email);
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
 function validlang($langid) {
@@ -2584,7 +2562,6 @@ $cssupdatedate=($cssupdatedate ? "?".htmlspecialchars($cssupdatedate) : "");
 <link rel="stylesheet" href="<?php echo get_forum_pic_folder()."/forumsprites.css".$cssupdatedate?>" type="text/css" />
 <link rel="stylesheet" href="<?php echo $css_uri."theme.css".$cssupdatedate?>" type="text/css" />
 <link rel="stylesheet" href="<?php echo $css_uri."DomTT.css".$cssupdatedate?>" type="text/css" />
-<link rel="stylesheet" href="styles/curtain_imageresizer.css<?php echo $cssupdatedate?>" type="text/css" />
 <link rel="stylesheet" href="styles/nexus.css<?php echo $cssupdatedate?>" type="text/css" />
 <?php
 if ($CURUSER){
@@ -3058,7 +3035,6 @@ function stdfoot() {
 		print("</ul>");
 		print("</div>");
 	}
-	print ("<div style=\"display: none;\" id=\"lightbox\" class=\"lightbox\"></div><div style=\"display: none;\" id=\"curtain\" class=\"curtain\"></div>");
 	if ($add_key_shortcut != "")
 	print($add_key_shortcut);
 	print("</div>");
@@ -3071,10 +3047,12 @@ function stdfoot() {
     }
 	$js = <<<JS
 <script type="application/javascript" src="js/nexus.js"></script>
+<script type="application/javascript" src="js/medium-zoom.min.js"></script>
 <script type="application/javascript" src="vendor/jquery-goup-1.1.3/jquery.goup.min.js"></script>
 <script>
 jQuery(document).ready(function(){
     jQuery.goup()
+    mediumZoom('[data-zoomable]')
 });
 </script>
 JS;

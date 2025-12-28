@@ -1,10 +1,13 @@
 <?php
 require "../include/bittorrent.php";
 dbconn();
-loggedinorreturn();
 
 $action = $_POST['action'] ?? '';
 $params = $_POST['params'] ?? [];
+
+if ($action != 'getPasskeyGetArgs' && $action != 'processPasskeyGet') {
+    loggedinorreturn();
+}
 
 class AjaxInterface{
 
@@ -178,6 +181,48 @@ class AjaxInterface{
         $user = \App\Models\User::query()->findOrFail($CURUSER['id'], \App\Models\User::$commonFields);
         $user->tokens()->where('id', $params['id'])->delete();
         return true;
+    }
+
+    public static function getPasskeyCreateArgs($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->getCreateArgs($CURUSER['id'], $CURUSER['username']);
+    }
+
+    public static function processPasskeyCreate($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->processCreate($CURUSER['id'], $params['clientDataJSON'], $params['attestationObject']);
+    }
+
+    public static function deletePasskey($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->delete($CURUSER['id'], $params['credentialId']);
+    }
+
+    public static function getPasskeyList($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->getList($CURUSER['id']);
+    }
+
+    public static function getPasskeyGetArgs($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->getGetArgs();
+    }
+
+    public static function processPasskeyGet($params)
+    {
+        global $CURUSER;
+        $rep = new \App\Repositories\UserPasskeyRepository();
+        return $rep->processGet($params['challenge'], $params['id'], $params['clientDataJSON'], $params['authenticatorData'], $params['signature'], $params['userHandle']);
     }
 }
 

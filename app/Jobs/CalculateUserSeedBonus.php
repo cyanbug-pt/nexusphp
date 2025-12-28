@@ -47,7 +47,7 @@ class CalculateUserSeedBonus implements ShouldQueue
 
     public $tries = 1;
 
-    public $timeout = 3600;
+    public $timeout = 120;
 
     /**
      * 获取任务时，应该通过的中间件。
@@ -72,6 +72,7 @@ class CalculateUserSeedBonus implements ShouldQueue
             $this->requestId, $this->beginUid, $this->endUid, $this->idStr, $this->idRedisKey
         );
         do_log("$logPrefix, job start ...");
+
         $haremAdditionFactor = Setting::get('bonus.harem_addition');
         $officialAdditionFactor = Setting::get('bonus.official_addition');
         $donortimes_bonus = Setting::get('bonus.donortimes');
