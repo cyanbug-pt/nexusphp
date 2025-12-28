@@ -139,6 +139,7 @@ class UserMedalResource extends Resource
                 DeleteAction::make()->using(function (NexusModel $record) {
                     $record->delete();
                     clear_user_cache($record->uid);
+                    send_admin_success_notification();
                 })
             ])
             ->toolbarActions([
