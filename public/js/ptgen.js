@@ -20,7 +20,11 @@ jQuery('.btn-get-pt-gen').on('click', function () {
         }
         doInsert(response.data.format, '', false)
         if (response.data.aka && response.data.site === 'douban') {
-            form.find("input[name=small_descr]").val(response.data.aka.join("/"))
+            let aka = response.data.aka
+            if (response.data.chinese_title) {
+                aka.unshift(response.data.chinese_title)
+            }
+            form.find("input[name=small_descr]").val(aka.join("/"))
         }
         if (response.data.imdb_link) {
             form.find("input[data-pt-gen=url]").val(response.data.imdb_link)
