@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Exceptions\NexusException;
 use App\Http\Middleware\Locale;
 use App\Repositories\ExamRepository;
+use App\Repositories\TokenRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -626,10 +627,32 @@ class User extends Authenticatable implements FilamentUser, HasName
         return is_null($this->original['notifs']) || str_contains($this->notifs, "[{$name}]");
     }
 
-    public function tokenCan(string $ability)
+    public function tokenCan(string $ability): bool
     {
         $redis = NexusDB::redis();
-        return $redis->sismember(Setting::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY, $ability)
+        $cacheKey = Setting::USER_TOKEN_PERMISSION_ALLOWED_CACHE_KRY;
+        if (!$redis->exists($cacheKey)) {
+            $lockKey = "$cacheKey:lock";
+            if ($redis->set($lockKey, 1, ['nx', 'ex' => 5])) {
+                try {
+                    if (!$redis->exists($cacheKey)) {
+                        $abilities = TokenRepository::listUserTokenPermissions(false);
+                        do_log("load user token permissions: " . json_encode($abilities), 'alert');
+                        if (!empty($abilities)) {
+                            $redis->sadd($cacheKey, ...$abilities);
+                        } else {
+                            $redis->sadd($cacheKey, "__NO_USER_TOKEN_PERMISSION__");
+                            $redis->expire($cacheKey, 900);
+                        }
+                    }
+                } catch (\Throwable $throwable) {
+                    do_log($throwable->getMessage(), 'error');
+                } finally {
+                    $redis->del($lockKey);
+                }
+            }
+        }
+        return $redis->sismember($cacheKey, $ability)
             && $this->accessToken && $this->accessToken->can($ability);
     }
 
