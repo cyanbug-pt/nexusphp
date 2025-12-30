@@ -25,17 +25,8 @@ class CommentController extends Controller
      */
     public function index(Request $request)
     {
-        $torrentId = $request->torrent_id;
-        $with = ['create_user', 'update_user'];
-        $comments = Comment::query()
-            ->with($with)
-            ->where('torrent', $torrentId)
-            ->paginate();
+        $comments = $this->repository->getList($request, Auth::user());
         $resource = CommentResource::collection($comments);
-//        $resource->additional([
-//            'page_title' => nexus_trans('comment.index.page_title'),
-//        ]);
-
         return $this->success($resource);
     }
 

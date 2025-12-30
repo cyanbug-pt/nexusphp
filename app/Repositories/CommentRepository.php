@@ -9,26 +9,27 @@ use App\Models\Torrent;
 use App\Models\User;
 use Carbon\Carbon;
 use Hamcrest\Core\Set;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Nexus\Database\NexusDB;
 
 class CommentRepository extends BaseRepository
 {
-    public function getList(array $params)
+    public function getList(Request $request, Authenticatable $user)
     {
         $query = Comment::query()->with(['create_user', 'update_user']);
-        if (!empty($params['torrent_id'])) {
-            $query->where('torrent', $params['torrent_id']);
+        if (!empty($request->torrent_id)) {
+            $query->where('torrent', $request->torrent_id);
         }
-        if (!empty($params['offer_id'])) {
-            $query->where('offer', $params['offer_id']);
+        if (!empty($request->offer_id)) {
+            $query->where('offer', $request->offer_id);
         }
-        if (!empty($params['request_id'])) {
-            $query->where('request', $params['request_id']);
+        if (!empty($request->request_id)) {
+            $query->where('request', $request->request_id);
         }
-        list($sortField, $sortType) = $this->getSortFieldAndType($params);
-        $query->orderBy($sortField, $sortType);
-        return $query->paginate();
+        $query->orderBy('id', 'desc');
+        return $query->paginate($this->getPerPageFromRequest($request));
     }
 
     public function store(array $params, User $user)

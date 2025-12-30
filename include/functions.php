@@ -4946,6 +4946,9 @@ function get_searchbox_value($mode = 1, $item = 'showsubcat'){
 
 function get_ratio($userid, $html = true){
 	$row = get_user_row($userid);
+    if (empty($row)) {
+        return "---";
+    }
 	$uped = $row['uploaded'];
 	$downed = $row['downloaded'];
 	if ($html == true){

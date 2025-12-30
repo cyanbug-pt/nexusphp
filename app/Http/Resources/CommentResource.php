@@ -15,15 +15,13 @@ class CommentResource extends JsonResource
      */
     public function toArray($request)
     {
-        $descriptionArr = format_description($this->text);
         return [
             'id' => $this->id,
-            'description' => $descriptionArr,
-            'images' => get_image_from_description($descriptionArr),
-            'updated_at_human' => format_datetime($this->editdate),
-            'created_at_human' => $this->added->format('Y-m-d H:i'),
+            'text' => $this->text,
+            'updated_at' => format_datetime($this->editdate),
+            'created_at' => format_datetime($this->added),
             'create_user' => new UserResource($this->whenLoaded('create_user')),
-            'update_user' => new UserResource($this->whenLoaded('update_user')),
+            'update_user' => $this->when($this->editedby > 0, new UserResource($this->whenLoaded('update_user'))),
         ];
     }
 }
