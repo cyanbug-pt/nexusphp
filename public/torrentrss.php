@@ -4,6 +4,17 @@ $passkey = $_GET['passkey'] ?? $CURUSER['passkey'] ?? '';
 if (!$passkey) {
     die("require passkey");
 }
+$exactParams = ['inclbookmarked', 'paid', 'rows', 'icat', 'ismalldescr', 'isize', 'iuplder', 'search', 'search_mode', 'sticky', 'linktype'];
+$prefixedParams = ['cat', 'sou', 'med', 'cod', 'sta', 'pro', 'tea', 'aud'];
+foreach ($_GET as $key => $value) {
+    if (in_array($key, $exactParams, true)) {
+        continue;
+    }
+    if (preg_match('/^(cat|sou|med|cod|sta|pro|tea|aud)\d+$/', $key)) {
+        continue;
+    }
+    unset($_GET[$key]);
+}
 $cacheKey = "nexus_rss:$passkey:" . md5(http_build_query($_GET));
 $cacheData = \Nexus\Database\NexusDB::cache_get($cacheKey);
 if ($cacheData && nexus_env('APP_ENV') != 'local') {
@@ -79,10 +90,6 @@ if (isset($searchstr)){
 	$where .= ($where ? " AND " : "") . implode(" AND ", $wherea);
 }
 $limit = "";
-$startindex = intval($_GET['startindex'] ?? 0);
-if ($startindex) {
-    $limit .= $startindex.", ";
-}
 $showrows = intval($_GET['rows'] ?? 0);
 if($showrows < 1 || $showrows > 50) {
     $showrows = 50;
@@ -184,7 +191,7 @@ if (!$noNormalResults) {
         return \Nexus\Database\NexusDB::select($query);
     });
 }
-if (!empty($prependIdArr) && $startindex == 0) {
+if (!empty($prependIdArr)) {
     $prependIdStr = implode(',', $prependIdArr);
     $query = "SELECT $fieldStr FROM torrents LEFT JOIN categories ON torrents.category = categories.id left join torrent_extras on torrent_extras.torrent_id = torrents.id where torrents.id in ($prependIdStr) and $where ORDER BY field(torrents.id, $prependIdStr)";
     $prependRows = \Nexus\Database\NexusDB::remember(sprintf("nexus_rss:prepend:%s", md5($query)), 300, function () use ($query) {
