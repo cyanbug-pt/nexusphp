@@ -83,6 +83,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => ['text' => 'Task failure penalty'],
         self::BUSINESS_TYPE_TASK_PASS_REWARD => ['text' => 'Task success reward'],
         self::BUSINESS_TYPE_REWARD_TORRENT => ['text' => 'Reward torrent'],
+        self::BUSINESS_TYPE_CLAIMED_UNREACHED => ['text' => 'Claimed torrent unreached'],
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
@@ -90,6 +91,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
         self::BUSINESS_TYPE_UPLOAD_TORRENT => ['text' => 'Upload torrent'],
         self::BUSINESS_TYPE_TORRENT_BE_REWARD => ['text' => 'Torrent be reward'],
+        self::BUSINESS_TYPE_CLAIMED_REACHED => ['text' => 'Claimed torrent reached'],
 
         self::BUSINESS_TYPE_SEEDING_BASIC => ['text' => 'Seeding basic'],
         self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => ['text' => 'Seeding donor addition'],
