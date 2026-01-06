@@ -42,6 +42,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT = 20;
     const BUSINESS_TYPE_TASK_PASS_REWARD = 21;
     const BUSINESS_TYPE_REWARD_TORRENT = 22;
+    const BUSINESS_TYPE_CLAIMED_UNREACHED = 23;
 
     //获得类，普通获得，1000 起步
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
@@ -50,6 +51,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
     const BUSINESS_TYPE_UPLOAD_TORRENT = 1004;
     const BUSINESS_TYPE_TORRENT_BE_REWARD = 1005;
+    const BUSINESS_TYPE_CLAIMED_REACHED = 1006;
 
     //获得类，做种获得，10000 起
     const BUSINESS_TYPE_SEEDING_BASIC = 10000;

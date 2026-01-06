@@ -22,6 +22,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gift medal',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Buy torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Reward torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Claimed torrent unreached',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Role work salary',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent be downloaded',
@@ -29,6 +30,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Receive gift',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Upload torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent receive reward',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Claimed torrent reached reward',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding basic',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
