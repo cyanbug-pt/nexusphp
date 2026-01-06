@@ -85,13 +85,23 @@ class TrackerUrl extends NexusModel
         if ($redis->exists($notFoundFlagKey)) {
             return false;
         }
-        self::saveUrlCache();
-        $result = call_user_func_array([$redis, $command], $params);
-        if ($result !== false) {
-            return $result;
+        $lockKey = "$notFoundFlagKey:lock";
+        if (!$redis->set($lockKey, 1, ["nx", "ex" => 5])) {
+            return false;
         }
-        //只从 db 拉取一次，仍然没有即标记不存在, 有效期 15 分钟
-        $redis->setex($notFoundFlagKey, 900, date("Y-m-d H:i:s"));
+        try {
+            self::saveUrlCache();
+            $result = call_user_func_array([$redis, $command], $params);
+            if ($result !== false) {
+                return $result;
+            }
+            //只从 db 拉取一次，仍然没有即标记不存在, 有效期 15 分钟
+            $redis->setex($notFoundFlagKey, 900, date("Y-m-d H:i:s"));
+        } catch (\Throwable $throwable) {
+            do_log($throwable->getMessage(), 'error');
+        } finally {
+            $redis->del($lockKey);
+        }
         do_log(sprintf("redis command %s with args %s no result", $command, json_encode($params)), 'error');
         return false;
     }

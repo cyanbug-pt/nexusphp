@@ -42,6 +42,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT = 20;
     const BUSINESS_TYPE_TASK_PASS_REWARD = 21;
     const BUSINESS_TYPE_REWARD_TORRENT = 22;
+    const BUSINESS_TYPE_CLAIMED_UNREACHED = 23;
 
     //获得类，普通获得，1000 起步
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
@@ -50,6 +51,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
     const BUSINESS_TYPE_UPLOAD_TORRENT = 1004;
     const BUSINESS_TYPE_TORRENT_BE_REWARD = 1005;
+    const BUSINESS_TYPE_CLAIMED_REACHED = 1006;
 
     //获得类，做种获得，10000 起
     const BUSINESS_TYPE_SEEDING_BASIC = 10000;
@@ -81,6 +83,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => ['text' => 'Task failure penalty'],
         self::BUSINESS_TYPE_TASK_PASS_REWARD => ['text' => 'Task success reward'],
         self::BUSINESS_TYPE_REWARD_TORRENT => ['text' => 'Reward torrent'],
+        self::BUSINESS_TYPE_CLAIMED_UNREACHED => ['text' => 'Claimed torrent unreached'],
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
@@ -88,6 +91,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
         self::BUSINESS_TYPE_UPLOAD_TORRENT => ['text' => 'Upload torrent'],
         self::BUSINESS_TYPE_TORRENT_BE_REWARD => ['text' => 'Torrent be reward'],
+        self::BUSINESS_TYPE_CLAIMED_REACHED => ['text' => 'Claimed torrent reached'],
 
         self::BUSINESS_TYPE_SEEDING_BASIC => ['text' => 'Seeding basic'],
         self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => ['text' => 'Seeding donor addition'],

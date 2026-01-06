@@ -94,6 +94,7 @@ class BonusLogResource extends Resource
                 SelectFilter::make('business_type')
                     ->options(BonusLogs::listStaticProps(Arr::except(BonusLogs::$businessTypes, BonusLogs::$businessTypeBonus), 'bonus-log.business_types', true))
                     ->label(__('bonus-log.fields.business_type'))
+                    ->searchable(true)
                 ,
 //                Tables\Filters\Filter::make('exclude_seeding_bonus')
 //                    ->toggle()

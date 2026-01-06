@@ -29,7 +29,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 //        Route::resource('messages', \App\Http\Controllers\MessageController::class);
 //        Route::get('messages-unread', [\App\Http\Controllers\MessageController::class, 'listUnread']);
 //        Route::resource('torrents', \App\Http\Controllers\TorrentController::class);
-//        Route::resource('comments', \App\Http\Controllers\CommentController::class);
 //        Route::resource('peers', \App\Http\Controllers\PeerController::class);
 //        Route::resource('files', \App\Http\Controllers\FileController::class);
 //        Route::resource('thanks', \App\Http\Controllers\ThankController::class);
@@ -56,7 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::post('bookmarks', [\App\Http\Controllers\BookmarkController::class, 'store'])->middleware(ability(RoutePermissionEnum::BOOKMARK_STORE));
         Route::post('bookmarks/delete', [\App\Http\Controllers\BookmarkController::class, 'destroy'])->middleware(ability(RoutePermissionEnum::BOOKMARK_DELETE));
-
+        Route::get('comments', [\App\Http\Controllers\CommentController::class, 'index'])->middleware(ability(RoutePermissionEnum::TORRENT_VIEW));
 
     });
 

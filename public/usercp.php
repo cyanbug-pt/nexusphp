@@ -1062,7 +1062,7 @@ if (get_setting('seed_box.enabled') == 'yes') {
     </div>
     <div class="form-control-row">
         <div class="label">{$columnIP}</div>
-        <div class="field"><input type="text" name="params[ip]"><div><small>{$columnIPHelp}</small></div></div>
+        <div class="field"><input type="text" name="params[ip]"></div>
     </div>
     <div class="form-control-row">
         <div class="label">{$columnComment}</div>

@@ -22,6 +22,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => '贈送勛章',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => '購買種子',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => '獎勵種子',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => '認領種子未達標扣除',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => '工作組工資',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => '種子被下載',
@@ -29,6 +30,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => '收到禮物',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => '發布種子',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => '種子收到獎勵',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => '認領種子達標獎勵',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => '做種基礎魔力',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => '做種捐贈加成',
