@@ -3138,6 +3138,7 @@ function deletetorrent($id, $notify = false) {
 	$idStr = implode(', ', $idArr ?: [0]);
 	$torrent_dir = get_setting('main.torrent_dir');
     \Nexus\Database\NexusDB::statement("DELETE FROM torrents WHERE id in ($idStr)");
+    \Nexus\Database\NexusDB::statement("DELETE FROM torrent_extras WHERE torrent_id in ($idStr)");
     //delete by torrent, make sure user is deleted
     \Nexus\Database\NexusDB::statement("DELETE FROM snatched WHERE torrentid in ($idStr) and not exists (select 1 from users where id = snatched.userid)");
 	foreach(array("peers", "files", "comments") as $x) {
@@ -3157,13 +3158,11 @@ function deletetorrent($id, $notify = false) {
             'action_type' => \App\Models\TorrentOperationLog::ACTION_TYPE_DELETE,
             'comment' => '',
         ], $notify);
+        do_action("torrent_delete", $_id);
+        fire_event("torrent_deleted", $torrentInfo->get($_id));
     }
     $meiliSearchRep = new \App\Repositories\MeiliSearchRepository();
     $meiliSearchRep->deleteDocuments($idArr);
-    if (is_int($id)) {
-        do_action("torrent_delete", $id);
-        fire_event("torrent_deleted", $torrentInfo->get($id));
-    }
 }
 
 function pager($rpp, $count, $href, $opts = array(), $pagename = "page") {
@@ -6548,6 +6547,20 @@ function can_view_post($uid, $post)
 
 function hide_text($text) {
     return '<span class="hidden-text">' . $text . '</span>';
+}
+
+function bbcode_attach_to_img(string $text) {
+    $pattern = "/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/is";
+    preg_match_all($pattern, $text, $matches);
+    if (empty($matches)) {
+        return $text;
+    }
+    $attachments = \App\Models\Attachment::query()->whereIn("dlkey", $matches[1])->get();
+    if ($attachments->isEmpty()) {
+        return $text;
+    }
+    $httpdirectory_attachment = get_setting('attachment.httpdirectory');
+
 }
 
 ?>
