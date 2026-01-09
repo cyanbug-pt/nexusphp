@@ -54,7 +54,7 @@
         "meilisearch/meilisearch-php": "^1.0",
         "orangehill/iseed": "^3.0",
         "phpgangsta/googleauthenticator": "dev-master",
-        "rhilip/bencode": "^2.0",
+        "rhilip/bencode": "^2.5.0",
         "rlanvin/php-ip": "^3.0",
         "spatie/laravel-activitylog": "^4.10",
         "stichoza/google-translate-php": "^5.2"

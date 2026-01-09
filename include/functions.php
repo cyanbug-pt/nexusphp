@@ -6615,4 +6615,9 @@ function hide_text($text) {
     return '<span class="hidden-text">' . $text . '</span>';
 }
 
+function make_content_disposition(string $filename, string $disposition = 'attachment'): string {
+    $filenameFallback = str_replace('%', '', Str::ascii($filename));
+    return \Symfony\Component\HttpFoundation\HeaderUtils::makeDisposition($disposition, $filename, $filenameFallback);
+}
+
 ?>
