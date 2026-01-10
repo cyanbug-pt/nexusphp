@@ -4,9 +4,11 @@ namespace App\Filament\Resources\User;
 
 use App\Filament\Resources\User\UserPasskeyResource\Pages;
 use App\Models\Passkey;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,9 +17,9 @@ class UserPasskeyResource extends Resource
 {
     protected static ?string $model = Passkey::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-key';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-key';
 
-    protected static ?string $navigationGroup = 'User';
+    protected static string | \UnitEnum | null $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 12;
 
@@ -31,10 +33,10 @@ class UserPasskeyResource extends Resource
         return self::getNavigationLabel();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -66,7 +68,7 @@ class UserPasskeyResource extends Resource
             ->filters([
                 Tables\Filters\Filter::make('user_id')
                     ->form([
-                        Forms\Components\TextInput::make('uid')
+                        TextInput::make('uid')
                             ->label(__('label.username'))
                             ->placeholder('UID')
                         ,
@@ -76,7 +78,7 @@ class UserPasskeyResource extends Resource
                 ,
                 Tables\Filters\Filter::make('credential_id')
                     ->form([
-                        Forms\Components\TextInput::make('credential_id')
+                        TextInput::make('credential_id')
                             ->label(__('passkey.fields.credential_id'))
                             ->placeholder('Credential ID')
                         ,
@@ -85,11 +87,11 @@ class UserPasskeyResource extends Resource
                     })
                 ,
             ])
-            ->actions([
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
