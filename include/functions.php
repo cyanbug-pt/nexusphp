@@ -5885,6 +5885,7 @@ function get_ip_location_from_geoip($ip): bool|array
             'city' => '',
             'country_en' => '',
             'city_en' => '',
+            'continent_en' => '',
         ];
         try {
             $database = nexus_env('GEOIP2_DATABASE');
@@ -5913,7 +5914,7 @@ function get_ip_location_from_geoip($ip): bool|array
             $info['continent'] = $continentName;
             $info['continent_en'] = $record->continent->names['en'] ?? '';
         } catch (\Exception $exception) {
-            do_log($exception->getMessage());
+            do_log($exception->getMessage() . ", trace: " .  $exception->getTraceAsString(), 'error');
         }
         return $info;
     });
