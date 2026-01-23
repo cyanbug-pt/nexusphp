@@ -28,7 +28,7 @@ class CommentRepository extends BaseRepository
         if (!empty($request->request_id)) {
             $query->where('request', $request->request_id);
         }
-        $query->orderBy('id', 'desc');
+        $query->orderBy('id', 'asc');
         return $query->paginate($this->getPerPageFromRequest($request));
     }
 
