@@ -6573,6 +6573,7 @@ function bbcode_attach_to_img(string $text) {
             } else {
                 $url = $httpdirectory_attachment."/".$row['location'];
             }
+            $url = sprintf("%s/%s", getSchemeAndHttpHost(true), trim($url, "/"));
         } else {
             $url = \Nexus\Attachment\Storage::getDriver($driver)->getImageUrl($row['location']);
         }
