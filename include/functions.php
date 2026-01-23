@@ -3195,6 +3195,7 @@ function deletetorrent($id, $notify = false) {
 	$idStr = implode(', ', $idArr ?: [0]);
 	$torrent_dir = get_setting('main.torrent_dir');
     \Nexus\Database\NexusDB::statement("DELETE FROM torrents WHERE id in ($idStr)");
+    \Nexus\Database\NexusDB::statement("DELETE FROM torrent_extras WHERE torrent_id in ($idStr)");
     //delete by torrent, make sure user is deleted
     \Nexus\Database\NexusDB::statement("DELETE FROM snatched WHERE torrentid in ($idStr) and not exists (select 1 from users where id = snatched.userid)");
 	foreach(array("peers", "files", "comments") as $x) {
@@ -3214,13 +3215,11 @@ function deletetorrent($id, $notify = false) {
             'action_type' => \App\Models\TorrentOperationLog::ACTION_TYPE_DELETE,
             'comment' => '',
         ], $notify);
+        do_action("torrent_delete", $_id);
+        fire_event("torrent_deleted", $torrentInfo->get($_id));
     }
     $meiliSearchRep = new \App\Repositories\MeiliSearchRepository();
     $meiliSearchRep->deleteDocuments($idArr);
-    if (is_int($id)) {
-        do_action("torrent_delete", $id);
-        fire_event("torrent_deleted", $torrentInfo->get($id));
-    }
 }
 
 function pager($rpp, $count, $href, $opts = array(), $pagename = "page") {
@@ -5943,6 +5942,7 @@ function get_ip_location_from_geoip($ip): bool|array
             'city' => '',
             'country_en' => '',
             'city_en' => '',
+            'continent_en' => '',
         ];
         try {
             $database = nexus_env('GEOIP2_DATABASE');
@@ -5971,7 +5971,7 @@ function get_ip_location_from_geoip($ip): bool|array
             $info['continent'] = $continentName;
             $info['continent_en'] = $record->continent->names['en'] ?? '';
         } catch (\Exception $exception) {
-            do_log($exception->getMessage());
+            do_log($exception->getMessage() . ", trace: " .  $exception->getTraceAsString(), 'error');
         }
         return $info;
     });
@@ -6618,6 +6618,37 @@ function hide_text($text) {
 function make_content_disposition(string $filename, string $disposition = 'attachment'): string {
     $filenameFallback = str_replace('%', '', Str::ascii($filename));
     return \Symfony\Component\HttpFoundation\HeaderUtils::makeDisposition($disposition, $filename, $filenameFallback);
+}
+
+function bbcode_attach_to_img(string $text) {
+    $pattern = "/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/is";
+    return preg_replace_callback($pattern, function ($matches) {
+        $dlkey = $matches[1];
+        $httpdirectory_attachment = get_setting('attachment.httpdirectory');
+        $row = \Nexus\Database\NexusDB::remember('attachment_'.$dlkey.'_content', 86400, function() use ($dlkey) {
+            $record =  \App\Models\Attachment::query()->where("dlkey", $dlkey)->first();
+            if ($record) {
+                return $record->toArray();
+            }
+            return [];
+        });
+        if (empty($row) || $row['isimage'] != 1) {
+            do_log(sprintf("dlkey: %s get attachment %s not exists or not image", $dlkey, json_encode($row)));
+            return $matches[0];
+        }
+        $driver = $row['driver'] ?? 'local';
+        if ($driver == "local") {
+            if ($row['thumb'] == 1){
+                $url = $httpdirectory_attachment."/".$row['location'].".thumb.jpg";
+            } else {
+                $url = $httpdirectory_attachment."/".$row['location'];
+            }
+            $url = sprintf("%s/%s", getSchemeAndHttpHost(true), trim($url, "/"));
+        } else {
+            $url = \Nexus\Attachment\Storage::getDriver($driver)->getImageUrl($row['location']);
+        }
+        return "[img]" . $url . "[/img]";
+    }, $text, 20);
 }
 
 ?>
