@@ -6552,16 +6552,32 @@ function hide_text($text) {
 
 function bbcode_attach_to_img(string $text) {
     $pattern = "/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/is";
-    preg_match_all($pattern, $text, $matches);
-    if (empty($matches)) {
-        return $text;
-    }
-    $attachments = \App\Models\Attachment::query()->whereIn("dlkey", $matches[1])->get();
-    if ($attachments->isEmpty()) {
-        return $text;
-    }
-    $httpdirectory_attachment = get_setting('attachment.httpdirectory');
-
+    return preg_replace_callback($pattern, function ($matches) {
+        $dlkey = $matches[1];
+        $httpdirectory_attachment = get_setting('attachment.httpdirectory');
+        $row = \Nexus\Database\NexusDB::remember('attachment_'.$dlkey.'_content', 86400, function() use ($dlkey) {
+            $record =  \App\Models\Attachment::query()->where("dlkey", $dlkey)->first();
+            if ($record) {
+                return $record->toArray();
+            }
+            return [];
+        });
+        if (empty($row) || $row['isimage'] != 1) {
+            do_log(sprintf("dlkey: %s get attachment %s not exists or not image", $dlkey, json_encode($row)));
+            return $matches[0];
+        }
+        $driver = $row['driver'] ?? 'local';
+        if ($driver == "local") {
+            if ($row['thumb'] == 1){
+                $url = $httpdirectory_attachment."/".$row['location'].".thumb.jpg";
+            } else {
+                $url = $httpdirectory_attachment."/".$row['location'];
+            }
+        } else {
+            $url = \Nexus\Attachment\Storage::getDriver($driver)->getImageUrl($row['location']);
+        }
+        return "[img]" . $url . "[/img]";
+    }, $text, 20);
 }
 
 ?>
