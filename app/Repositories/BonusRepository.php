@@ -15,6 +15,7 @@ use App\Models\UserMedal;
 use App\Models\UserMeta;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Nexus\Database\ClickHouse;
 use Nexus\Database\NexusDB;
 
 class BonusRepository extends BaseRepository
@@ -360,6 +361,52 @@ class BonusRepository extends BaseRepository
             do_log("bonusLog: " . nexus_json_encode($bonusLog));
             clear_user_cache($user->id, $user->passkey);
         });
+    }
+
+    public function getCount(int $userId, string $category, int $businessType = 0): int
+    {
+        if ($category == BonusLogs::CATEGORY_COMMON) {
+            $query = BonusLogs::query()->where('uid', $userId);
+            if ($businessType > 0) {
+                $query->where('business_type', $businessType);
+            }
+            return $query->count();
+        } else if ($category == BonusLogs::CATEGORY_SEEDING) {
+            $whereStr = "uid = :uid";
+            $binds = ["uid" => $userId];
+            if ($businessType > 0) {
+                $whereStr .= " AND business_type = :business_type";
+                $binds["business_type"] = $businessType;
+            }
+            return ClickHouse::count("bonus_logs", $whereStr, $binds);
+        }
+        throw new \InvalidArgumentException("Invalid category: $category");
+    }
+
+    public function getList(int $userId, string $category, int $businessType = 0, int $page = 1, int $perPage = 50)
+    {
+        if ($category == BonusLogs::CATEGORY_COMMON) {
+            $query = BonusLogs::query()->where('uid', $userId);
+            if ($businessType > 0) {
+                $query->where('business_type', $businessType);
+            }
+            return $query->orderBy("id", "desc")->forPage($page, $perPage)->get();
+        } else if ($category == BonusLogs::CATEGORY_SEEDING) {
+            $sql = "select * from bonus_logs where uid = :uid";
+            $binds = ["uid" => $userId];
+            if ($businessType > 0) {
+                $sql .= " AND business_type = :business_type";
+                $binds["business_type"] = $businessType;
+            }
+            $offset = ($page - 1) * $perPage;
+            $rows = ClickHouse::list("$sql order by created_at desc limit $offset, $perPage", $binds);
+            $result = [];
+            foreach ($rows as $row) {
+                $result[] = new BonusLogs($row);
+            }
+            return $result;
+        }
+        throw new \InvalidArgumentException("Invalid category: $category");
     }
 
 

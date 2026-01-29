@@ -400,7 +400,8 @@ if ($user["id"] == $CURUSER["id"] || user_can('viewhistory')) {
         $states = (new \App\Repositories\ClaimRepository())->getStats($user['id']);
         tr_small($lang_functions['menu_claim'], sprintf('<a href="claim.php?uid=%s" target="_blank">%s</a>', $user['id'], $states), 1);
     }
-    tr_small($lang_userdetails['row_karma_points'], number_format($user['seedbonus'], 1), 1);
+    $bonusLogText = sprintf('&nbsp;&nbsp;<a href="bonus-log.php?uid=%s" target="_blank" class="altlink">[%s]</a>', $user['id'], nexus_trans("bonus-log.view_detail"));
+    tr_small($lang_userdetails['row_karma_points'], number_format($user['seedbonus'], 1) . $bonusLogText, 1);
     tr_small($lang_functions['text_seed_points'], number_format($user['seed_points'], 1) . "&nbsp;&nbsp;<span class='text-muted'>(" . nexus_trans('label.updated_at') . ": " . $user['seed_points_updated_at'] . ")</span>", 1);
 }
 
@@ -511,7 +512,7 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
 		tr($lang_userdetails['row_comment'], "<textarea cols=\"60\" rows=\"6\" name=\"modcomment\">".$modcomment."</textarea>", 1);
         $bonuscomment = \App\Models\BonusLogs::query()
             ->where("uid", $user["id"])
-            ->whereNotIn("business_type", \App\Models\BonusLogs::$businessTypeBonus)
+            ->whereNotIn("business_type", \App\Models\BonusLogs::$businessTypeSeeding)
             ->orderBy("id", "desc")
             ->limit(20)
             ->get()

@@ -4,14 +4,17 @@ namespace App\Models;
 
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class BonusLogs extends NexusModel
 {
     protected $table = 'bonus_logs';
 
-    protected $fillable = ['uid', 'business_type', 'old_total_value', 'value', 'new_total_value', 'comment'];
+    protected $fillable = ['uid', 'business_type', 'old_total_value', 'value', 'new_total_value', 'comment', 'created_at', 'updated_at'];
 
     public $timestamps = true;
+    const CATEGORY_COMMON = 'common';
+    const CATEGORY_SEEDING = 'seeding';
 
     const DEFAULT_BONUS_CANCEL_ONE_HIT_AND_RUN = 10000;
     const DEFAULT_BONUS_BUY_ATTENDANCE_CARD = 1000;
@@ -100,13 +103,35 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => ['text' => 'Seeding medal addition'],
     ];
 
-    public static array $businessTypeBonus = [
+    public static array $businessTypeSeeding = [
         self::BUSINESS_TYPE_SEEDING_BASIC,
         self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION,
         self::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION,
         self::BUSINESS_TYPE_SEEDING_HAREM_ADDITION,
         self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION
     ];
+
+    public static function listBusinessTypeOptions($category = ''): array
+    {
+        $source = BonusLogs::$businessTypes;
+        if ($category == self::CATEGORY_COMMON) {
+            $source = Arr::except(BonusLogs::$businessTypes, BonusLogs::$businessTypeSeeding);
+        } else if ($category == self::CATEGORY_SEEDING) {
+            $source = Arr::only(BonusLogs::$businessTypes, BonusLogs::$businessTypeSeeding);
+        }
+        return self::listStaticProps($source, 'bonus-log.business_types', true);
+    }
+
+    public static function listCategoryOptions(bool $includeSeeding): array
+    {
+        $result = [
+            self::CATEGORY_COMMON => nexus_trans('bonus-log.category_common')
+        ];
+        if ($includeSeeding) {
+            $result[self::CATEGORY_SEEDING] = nexus_trans('bonus-log.category_seeding');
+        }
+        return $result;
+    }
 
     public function getBusinessTypeTextAttribute()
     {

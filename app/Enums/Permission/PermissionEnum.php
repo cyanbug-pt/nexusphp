@@ -16,5 +16,6 @@ enum PermissionEnum: string {
     case MANAGE_USER_BASIC_INFO = "prfmanage";
     case MANAGE_USER_CONFIDENTIAL_INFO = "cruprfmanage";
     case VIEW_USER_CONFIDENTIAL_INFO = "userprofile";
+    case VIEW_USER_HISTORY = "viewhistory";
 
 }

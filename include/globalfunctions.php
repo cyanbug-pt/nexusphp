@@ -301,6 +301,7 @@ function nexus_config($key, $default = null)
             ROOT_PATH . 'config/nexus.php',
             ROOT_PATH . 'config/emoji.php',
             ROOT_PATH . 'config/captcha.php',
+            ROOT_PATH . 'config/clickhouse.php',
         ];
         foreach ($files as $file) {
             $basename = basename($file);

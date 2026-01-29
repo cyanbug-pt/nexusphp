@@ -45,4 +45,9 @@ return [
         'new_total_value' => 'Post-trade value',
     ],
     'exclude_seeding_bonus' => 'Exclude seeding bonus',
+    'title_for_user' => 'User bonus details',
+    'category' => 'Category',
+    'category_common' => 'Common',
+    'category_seeding' => 'Seeding',
+    'view_detail' => 'Details',
 ];

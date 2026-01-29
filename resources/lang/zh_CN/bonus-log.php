@@ -47,4 +47,9 @@ return [
         'new_total_value' => '交易后值',
     ],
     'exclude_seeding_bonus' => '不包含做种魔力',
+    'title_for_user' => '用户魔力明细',
+    'category' => '分类',
+    'category_common' => '普通',
+    'category_seeding' => '做种',
+    'view_detail' => '明细',
 ];
