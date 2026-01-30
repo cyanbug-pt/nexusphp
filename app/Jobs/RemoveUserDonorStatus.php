@@ -45,8 +45,8 @@ class RemoveUserDonorStatus
             $user->save();
             clear_user_cache($user->id);
             publish_model_event(ModelEventEnum::USER_UPDATED, $user->id);
-            $subject = sqlesc(nexus_trans("cleanup.msg_donor_status_removed", [], $locale));
-            $msg = sqlesc(nexus_trans("cleanup.msg_donor_status_removed_body", [], $locale));
+            $subject = nexus_trans("cleanup.msg_donor_status_removed", [], $locale);
+            $msg = nexus_trans("cleanup.msg_donor_status_removed_body", [], $locale);
             Message::add([
                 'sender' => 0,
                 'receiver' => $user->id,

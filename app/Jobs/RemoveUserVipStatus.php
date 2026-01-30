@@ -43,8 +43,8 @@ class RemoveUserVipStatus
             $user->vip_until = null;
             if ($user->class <= User::CLASS_VIP) {
                 $user->class = User::CLASS_USER;
-                $subject = sqlesc(nexus_trans("cleanup.msg_vip_status_removed", [], $locale));
-                $msg = sqlesc(nexus_trans("cleanup.msg_vip_status_removed_body", [], $locale));
+                $subject = nexus_trans("cleanup.msg_vip_status_removed", [], $locale);
+                $msg = nexus_trans("cleanup.msg_vip_status_removed_body", [], $locale);
                 $message = [
                     'sender' => 0,
                     'receiver' => $user->id,
