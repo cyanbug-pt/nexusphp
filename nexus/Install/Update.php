@@ -95,6 +95,11 @@ class Update extends Install
 
     public function runExtraQueries()
     {
+        /**
+         * @since 1.10, must run first
+         */
+        $this->runMigrate('database/migrations/2025_10_05_030400_create_activity_log_table.php');
+
         $toolRep = new ToolRepository();
         $redis = NExusDB::redis();
         /**
