@@ -734,75 +734,77 @@ function docleanup($forceAll = 0, $printProgress = false) {
         printProgress($log);
     }
 
+    //migrate to job: RemoveUserVipStatus
 	//remove VIP status if time's up
-	$res = sql_query("SELECT id, class FROM users WHERE vip_added='yes' AND vip_until < NOW()") or sqlerr(__FILE__, __LINE__);
-	$userModifyLogs = [];
-    if (mysql_num_rows($res) > 0)
-	{
-		while ($arr = mysql_fetch_assoc($res))
-		{
-			$dt = sqlesc(date("Y-m-d H:i:s"));
-            $locale = get_user_locale($arr['id']);
-            $subject = sqlesc(nexus_trans("cleanup.msg_vip_status_removed", [], $locale));
-            $msg = sqlesc(nexus_trans("cleanup.msg_vip_status_removed_body", [], $locale));
-            $userModifyLogs[] = [
-                'user_id' => $arr['id'],
-                'content' => "VIP status removed by - AutoSystem",
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
-            ];
-			if ($arr['class'] > \App\Models\User::CLASS_VIP) {
-                /**
-                 * @since 1.8
-                 * never demotion VIP above
-                 */
-                sql_query("UPDATE users SET vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-            } else {
-                sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-                sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
-            }
-            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
-		}
-	}
-    if (!empty($userModifyLogs)) {
-        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
-    }
-	$log = "remove VIP status if time's up";
-	do_log($log);
-	if ($printProgress) {
-		printProgress($log);
-	}
+//	$res = sql_query("SELECT id, class FROM users WHERE vip_added='yes' AND vip_until < NOW()") or sqlerr(__FILE__, __LINE__);
+//	$userModifyLogs = [];
+//    if (mysql_num_rows($res) > 0)
+//	{
+//		while ($arr = mysql_fetch_assoc($res))
+//		{
+//			$dt = sqlesc(date("Y-m-d H:i:s"));
+//            $locale = get_user_locale($arr['id']);
+//            $subject = sqlesc(nexus_trans("cleanup.msg_vip_status_removed", [], $locale));
+//            $msg = sqlesc(nexus_trans("cleanup.msg_vip_status_removed_body", [], $locale));
+//            $userModifyLogs[] = [
+//                'user_id' => $arr['id'],
+//                'content' => "VIP status removed by - AutoSystem",
+//                'created_at' => date("Y-m-d H:i:s"),
+//                'updated_at' => date("Y-m-d H:i:s"),
+//            ];
+//			if ($arr['class'] > \App\Models\User::CLASS_VIP) {
+//                /**
+//                 * @since 1.8
+//                 * never demotion VIP above
+//                 */
+//                sql_query("UPDATE users SET vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//            } else {
+//                sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//                sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
+//            }
+//            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
+//		}
+//	}
+//    if (!empty($userModifyLogs)) {
+//        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
+//    }
+//	$log = "remove VIP status if time's up";
+//	do_log($log);
+//	if ($printProgress) {
+//		printProgress($log);
+//	}
 
+    //migrate to job: RemoveUserDonorStatus
     //remove donor status if time's up
-    $userModifyLogs = [];
-    $res = sql_query("SELECT id FROM users WHERE donor='yes' AND donoruntil is not null and donoruntil != '0000-00-00 00:00:00' and donoruntil < NOW()") or sqlerr(__FILE__, __LINE__);
-    if (mysql_num_rows($res) > 0)
-    {
-        while ($arr = mysql_fetch_assoc($res))
-        {
-            $dt = sqlesc(date("Y-m-d H:i:s"));
-            $locale = get_user_locale($arr['id']);
-            $subject = sqlesc(nexus_trans("cleanup.msg_donor_status_removed", [], $locale));
-            $msg = sqlesc(nexus_trans("cleanup.msg_donor_status_removed_body", [], $locale));
-            $userModifyLogs[] = [
-                'user_id' => $arr['id'],
-                'content' => "donor status removed by - AutoSystem",
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
-            ];
-            sql_query("UPDATE users SET donor = 'no' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-            sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
-            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
-        }
-    }
-    if (!empty($userModifyLogs)) {
-        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
-    }
-    $log = "remove donor status if time's up";
-    do_log($log);
-    if ($printProgress) {
-        printProgress($log);
-    }
+//    $userModifyLogs = [];
+//    $res = sql_query("SELECT id FROM users WHERE donor='yes' AND donoruntil is not null and donoruntil != '0000-00-00 00:00:00' and donoruntil < NOW()") or sqlerr(__FILE__, __LINE__);
+//    if (mysql_num_rows($res) > 0)
+//    {
+//        while ($arr = mysql_fetch_assoc($res))
+//        {
+//            $dt = sqlesc(date("Y-m-d H:i:s"));
+//            $locale = get_user_locale($arr['id']);
+//            $subject = sqlesc(nexus_trans("cleanup.msg_donor_status_removed", [], $locale));
+//            $msg = sqlesc(nexus_trans("cleanup.msg_donor_status_removed_body", [], $locale));
+//            $userModifyLogs[] = [
+//                'user_id' => $arr['id'],
+//                'content' => "donor status removed by - AutoSystem",
+//                'created_at' => date("Y-m-d H:i:s"),
+//                'updated_at' => date("Y-m-d H:i:s"),
+//            ];
+//            sql_query("UPDATE users SET donor = 'no' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//            sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
+//            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
+//        }
+//    }
+//    if (!empty($userModifyLogs)) {
+//        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
+//    }
+//    $log = "remove donor status if time's up";
+//    do_log($log);
+//    if ($printProgress) {
+//        printProgress($log);
+//    }
 
 	// promote peasant back to user
 
@@ -889,27 +891,28 @@ function docleanup($forceAll = 0, $printProgress = false) {
 		printProgress($log);
 	}
 
+    //migrate to job: RemoveUserWarning
 	//Remove warning of users
-	$dt = sqlesc(date("Y-m-d H:i:s")); // take date time
-	$res = sql_query("SELECT id FROM users WHERE enabled = 'yes' AND warned = 'yes' AND warneduntil < $dt") or sqlerr(__FILE__, __LINE__);
-
-	if (mysql_num_rows($res) > 0)
-	{
-		while ($arr = mysql_fetch_assoc($res))
-		{
-            $locale = get_user_locale($arr['id']);
-            $subject = nexus_trans("cleanup.msg_warning_removed", [], $locale);
-            $msg = nexus_trans("cleanup.msg_your_warning_removed", [], $locale);
-			writecomment($arr['id'],"Warning removed by System.");
-			sql_query("UPDATE users SET warned = 'no', warneduntil = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-			sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
-		}
-	}
-	$log = "remove warning of users";
-	do_log($log);
-	if ($printProgress) {
-		printProgress($log);
-	}
+//	$dt = sqlesc(date("Y-m-d H:i:s")); // take date time
+//	$res = sql_query("SELECT id FROM users WHERE enabled = 'yes' AND warned = 'yes' AND warneduntil < $dt") or sqlerr(__FILE__, __LINE__);
+//
+//	if (mysql_num_rows($res) > 0)
+//	{
+//		while ($arr = mysql_fetch_assoc($res))
+//		{
+//            $locale = get_user_locale($arr['id']);
+//            $subject = nexus_trans("cleanup.msg_warning_removed", [], $locale);
+//            $msg = nexus_trans("cleanup.msg_your_warning_removed", [], $locale);
+//			writecomment($arr['id'],"Warning removed by System.");
+//			sql_query("UPDATE users SET warned = 'no', warneduntil = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//			sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
+//		}
+//	}
+//	$log = "remove warning of users";
+//	do_log($log);
+//	if ($printProgress) {
+//		printProgress($log);
+//	}
 
 	//17.update total seeding and leeching time of users
 //	$res = sql_query("SELECT id FROM users where enabled = 'yes' and status = 'confirmed'") or sqlerr(__FILE__, __LINE__);

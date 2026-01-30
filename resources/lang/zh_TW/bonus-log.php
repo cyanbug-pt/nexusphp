@@ -21,6 +21,8 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => '購買改名卡',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => '贈送勛章',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => '購買種子',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => '任務完成獎勵',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => '任務未完成扣除',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => '獎勵種子',
         \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => '認領種子未達標扣除',
 

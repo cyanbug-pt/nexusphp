@@ -6,6 +6,9 @@ use App\Jobs\CheckCleanup;
 use App\Jobs\CheckQueueFailedJobs;
 use App\Jobs\MaintainPluginState;
 use App\Jobs\ManagePlugin;
+use App\Jobs\RemoveUserDonorStatus;
+use App\Jobs\RemoveUserVipStatus;
+use App\Jobs\RemoveUserWarning;
 use App\Jobs\SaveIpLogCacheToDB;
 use App\Jobs\UpdateIsSeedBoxFromUserRecordsCache;
 use App\Utils\ThirdPartyJob;
@@ -53,6 +56,9 @@ class Kernel extends ConsoleKernel
         $schedule->job(new UpdateIsSeedBoxFromUserRecordsCache())->everySixHours();
         $schedule->job(new CheckCleanup())->everyFifteenMinutes();
         $schedule->job(new SaveIpLogCacheToDB())->hourly();
+        $schedule->job(new RemoveUserWarning())->everyTwentySeconds();
+        $schedule->job(new RemoveUserVipStatus())->everyMinute();
+        $schedule->job(new RemoveUserDonorStatus())->everyMinute();
 
     }
 

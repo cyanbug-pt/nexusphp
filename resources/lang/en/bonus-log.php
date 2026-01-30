@@ -21,6 +21,8 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Buy change username card',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gift medal',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Buy torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Task finished reward',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Task unfinished deduct',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Reward torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Claimed torrent unreached',
 
