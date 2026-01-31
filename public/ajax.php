@@ -194,7 +194,7 @@ class AjaxInterface{
     {
         global $CURUSER;
         $rep = new \App\Repositories\UserPasskeyRepository();
-        return $rep->processCreate($CURUSER['id'], $params['clientDataJSON'], $params['attestationObject']);
+        return $rep->processCreate($CURUSER['id'], $params['challengeId'], $params['clientDataJSON'], $params['attestationObject']);
     }
 
     public static function deletePasskey($params)
@@ -222,7 +222,7 @@ class AjaxInterface{
     {
         global $CURUSER;
         $rep = new \App\Repositories\UserPasskeyRepository();
-        return $rep->processGet($params['challenge'], $params['id'], $params['clientDataJSON'], $params['authenticatorData'], $params['signature'], $params['userHandle']);
+        return $rep->processGet($params['challengeId'], $params['id'], $params['clientDataJSON'], $params['authenticatorData'], $params['signature'], $params['userHandle']);
     }
 }
 

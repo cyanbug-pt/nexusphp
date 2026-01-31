@@ -11,6 +11,7 @@ return [
     'passkey_delete' => 'Delete',
     'passkey_unknown' => 'An error occurred while processing your request.',
     'passkey_invalid' => 'Invalid passkey data.',
+    'passkey_timeout' => 'Operation timeout, please try again.',
     'passkey_error' => 'An error occurred while processing your request. Please try again later.',
     'passkey_user_not_found' => 'User not found.',
     'passkey_not_supported' => 'Your browser does not support passkey. Please use a modern browser to create and manage your passkey.',
