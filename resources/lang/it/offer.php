@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Si prega di caricare l'offerta all'interno ",
     'msg_hours_otherwise' => " ore. Altrimenti l'offerta verrebbe cancellata.",
     'msg_reason_is' => "Il motivo: ",
+    'msg_new_offer_subject' => "È stata aggiunta una nuova offerta",
+    'msg_new_offer_msg' => "Utente :username ha aggiunto una nuova offerta :offername",
 ];

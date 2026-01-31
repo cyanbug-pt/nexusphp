@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Vänligen ladda upp erbjudandet inom ",
     'msg_hours_otherwise' => " annars skulle erbjudandet tas bort.",
     'msg_reason_is' => "Anledningen till detta: ",
+    'msg_new_offer_subject' => "Ett nytt erbjudande har lagts till",
+    'msg_new_offer_msg' => "Användare :username har lagt till ett nytt erbjudande :offername",
 ];

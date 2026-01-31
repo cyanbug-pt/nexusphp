@@ -27,7 +27,7 @@ $lang_takesignup = array
 	'std_to_finish_signup' => " para terminar a inscrição, obrigado!",
 	'msg_subject' => "Bem-vindo a ",
 	'msg_congratulations' => "Parabéns! ",
-	'msg_you_are_a_member' => ",\n\nYou are now a member of %s,\nWe would like to take this opportunity to say hello and welcome to %s!\n\nPlease be sure to read the [url=rules.php][b]Rules[/b][/url] and the [url=faq.php][b]Faq[/b][/url].\n And be sure to stop by the [url=forums.php][b]Forums[/b][/url]: and say Hello!\n\nEnjoy your Stay.\nThe Staff of %s ",
+	'msg_you_are_a_member' => ",\n\nVocê agora é um membro da %s,\nGostaríamos de aproveitar esta oportunidade para dizer olá e bem-vindo a nós!\n\nPor favor, certifique-se de ler o [url=rules. hp][b]Regras[/b][/url] e o [url=faq. hp][b]Faq[/b][/url].\n E certifique-se de parar pelo [url=forums. hp][b]Fórum[/b][/url]: e diga Olá!\n\nAproveite sua estadia.\nO Cajado de %s ",
 	'mail_this_link' =>	"ESTA LINK",
 	'mail_here' => "AQUI",
 	'mail_title' => " Confirmação de cadastro de usuário",

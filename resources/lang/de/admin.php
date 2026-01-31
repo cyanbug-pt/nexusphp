@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Warteschlange Monitor',
         'user_modify_logs' => 'Benutzerprotokolle ändern',
         'message_templates' => 'Nachrichtenvorlagen',
+        'tracker_url' => 'Tracker-URL',
+        'activity_logs' => 'Aktivitätsprotokolle',
     ],
     'resources' => [
         'agent_allow' => [

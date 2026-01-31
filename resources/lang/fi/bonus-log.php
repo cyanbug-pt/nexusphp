@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Osta muutos käyttäjätunnus kortti',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Lahjan mitali',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Osta torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Tehtävä päättynyt palkinto',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Tehtävän keskeneräinen vähennys',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Palkitse torrentti',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Väitettyä torrenttia ei saavutettu',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Työn palkka',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrentti ladataan',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Vastaanota lahja',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Lataa torrentti',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrentti vastaanota palkkio',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Väitetty torrent saavutti palkkion',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Lähetys perustiedot',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Lähetetään luovuttajan lisäystä',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Kaupankäynnin jälkeinen arvo',
     ],
     'exclude_seeding_bonus' => 'Jätä pois kylvöbonus',
+    'title_for_user' => 'Käyttäjän bonuksen tiedot',
+    'category' => 'Kategoria',
+    'category_common' => 'Yleinen',
+    'category_seeding' => 'Lähetetään',
+    'view_detail' => 'Yksityiskohdat',
 ];

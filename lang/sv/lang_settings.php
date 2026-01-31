@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minut',
 	'row_login_secret_lifetime' => 'Logga in hemlig livstid',
 	'text_login_secret_lifetime_deadline' => 'Aktuell inloggning hemlig tidsfrist',
-	'row_enable_technical_info' => 'Aktivera MediaInfo',
-	'text_enable_technical_info' => "Standard 'Nej'. MediaInfo kommer från programvaran <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Textvy",
-    'row_sticky_first_level_background_color' => 'Klibbigt första nivå bg färg',
+	'row_enable_technical_info' => 'Aktivera MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Standard \'Nej\'. <br>
+	<unk> MediaInfo kommer från mjukvaran <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> resultatet av "Textvisning"	<br>
+	<unk> BDInfo kommer från mjukvaran <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> resultatet av "Visa rapporter"
+	',
+	'row_sticky_first_level_background_color' => 'Klibbigt första nivå bg färg',
     'text_sticky_first_level_background_color_note' => 'Sticky första nivå bg färg, det blir ingen om den inte anges.',
     'row_sticky_second_level_background_color' => 'Sticky andra nivå bg färg',
     'text_sticky_second_level_background_color_note' => 'Sticky andra nivå bg färg, det blir ingen om den inte anges.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Om aktiverad, kommer inga klartext lösenord att överföras vid inloggning, rekommenderas. Kommande utgåvor kommer att ta bort denna konfiguration och aktivera denna funktion.' ,
     'row_complain_enabled' => 'Om du vill aktivera klagomål',
     'row_complain_enabled_note' => 'default: "ja"',
+    'row_min_size' => 'Minsta volym',
+    'text_bonus_mini_size'=> 'Minsta volym som krävs för torrent är',
+    'text_bonus_mini_size_help' => '. Torrent storlek mindre än denna volym ingår inte i bonusberäkningen. Enhet: byte (Byte), t.ex., 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Bonusalternativ för belöning',
+    'text_reward_bonus_options_note' => 'Bonusalternativ på sidan torrent detaljer, flera alternativ separerade med kommatecken',
+    'row_reward_times_limit' => 'Frekvensgräns för belöning',
+    'text_reward_times_limit_note' => 'Daglig gräns per användare för bonusbelöningar på frödetaljsidor. Sätt till 0 för ingen gräns. Standard: 0',
 );
 
 ?>

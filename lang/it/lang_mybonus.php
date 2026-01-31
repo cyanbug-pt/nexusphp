@@ -168,6 +168,10 @@ dove<ul><li><b>A</b> è una variabile intermedia</li><li><b>Ti</b> è la <b>i</b
     'text_success_buy_change_username_card' => "Congratulazioni per il tuo acquisto riuscito di una carta <b>cambia nome utente</b>!",
     'text_change_username_card_already_has' => 'Hai già una scheda per cambiare nome utente',
     'text_rainbow_id_already_valid_forever' => 'Hai già un ID permanente Arcobaleno',
+    'text_get_by_medal' => 'Il bonus medaglia otterrà il seguente valore bonus aggiuntivo per ora',
+    'medal_additional_desc' => 'La formula di calcolo del bonus medaglia è la stessa di quanto sopra, indipendentemente dalla garanzia minima',
+    'medal_additional_factor' => 'Il bonus finale è il bonus di medaglia calcolato moltiplicato per il fattore medal_additional_factor',
+    'text_bonus_mini_size' => 'La dimensione del torrent deve essere almeno %s. Le dimensioni del torrent più piccole di questo volume sono escluse dai calcoli dei bonus'
 );
 
 ?>

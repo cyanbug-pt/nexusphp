@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Moniteur de file d\'attente',
         'user_modify_logs' => 'Journaux de modification de l\'utilisateur',
         'message_templates' => 'Modèles de message',
+        'tracker_url' => 'URL du tracker',
+        'activity_logs' => 'Journaux d\'activité',
     ],
     'resources' => [
         'agent_allow' => [

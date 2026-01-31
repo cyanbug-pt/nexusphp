@@ -27,7 +27,7 @@ $lang_takesignup = array
 	'std_to_finish_signup' => " 申し込みを終えてくれてありがとう!",
 	'msg_subject' => "ようこそ ",
 	'msg_congratulations' => "おめでとうございます ",
-	'msg_you_are_a_member' => ",\n\nYou are now a member of %s,\nWe would like to take this opportunity to say hello and welcome to %s!\n\nPlease be sure to read the [url=rules.php][b]Rules[/b][/url] and the [url=faq.php][b]Faq[/b][/url].\n And be sure to stop by the [url=forums.php][b]Forums[/b][/url]: and say Hello!\n\nEnjoy your Stay.\nThe Staff of %s ",
+	'msg_you_are_a_member' => ",\n\nYou are now a member of %s,\nWe would like to take this opportunity to say hello and welcome to join us!\n\nPlease be sure to read the [url=rules.php][b]Rules[/b][/url] and the [url=faq.php][b]Faq[/b][/url].\n And be sure to stop by the [url=forums.php][b]Forums[/b][/url]: and say Hello!\n\nEnjoy your Stay.\nThe Staff of %s ",
 	'mail_this_link' =>	"このリンク",
 	'mail_here' => "ここ",
 	'mail_title' => " ユーザー登録の確認",

@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'Globální',
 
     'reached_by_seed_time_comment' => 'Až do：:now,čas semínka: :seed_time dosáhne :seed_time_minimum hodin',
+    'reached_by_leech_time_comment' => 'Up to：:now，leech time: :leech_time Hour(s) reached :leech_time_minimum Hour(s)',
     'reached_by_share_ratio_comment' => "Až do：:now \nčas seedu: :seed_time Hhours Nedosažen :seed_time_minimum Hodin \npoměr sdílení :share_ratio dosáhl standardu：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "Vaše uživatelská třída: :user_class_text nebo uživatel daroval, ignorujte tento H&R",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) dosaženo!',

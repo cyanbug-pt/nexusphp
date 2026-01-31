@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Delta kort',
         'props' => 'Tilbehør',
         'class' => 'Klasse',
-        'vip_added' => 'VIP status fÃ¥r av bonus',
-        'vip_added_help' => 'Er VIP-statusen innløst av bonus.',
+        'vip_added' => 'VIP status utløper automatisk',
+        'vip_added_help' => 'Er VIP-statusen automatisk utløper.',
         'vip_until' => 'Slutttid for VIP',
-        'vip_until_help' => "Tid-formatet er 'År-Måned-dag-timer:Minute:Second The time nÃ¥r VIP status slutter. VIP-status fås av bonusen må settes til 'Ja' for at denne regelen skal tre i kraft.",
+        'vip_until_help' => "Tid-formatet er 'År-Måned-dag-timer:Minute:Second The time nÃ¥r VIP status slutter. VIP-status utløper automatisk\" må settes til 'Ja' for at denne regelen skal tre i kraft.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Rotér',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Invitert bruker har registrert",
     'msg_user_you_invited' => "Brukeren du har invitert ",
     'msg_has_registered' => " er registrert akkurat nå.",
+    'user_is_disabled' => 'Bruker: :username(ID: :user_id) er deaktivert.',
+    'user_is_not_confirmed' => 'Bruker: :username(ID: :user_id) ikke bekreftet.',
 ];

@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Weź udział w karcie',
         'props' => 'Reklamy',
         'class' => 'Klasa',
-        'vip_added' => 'Status VIP jest otrzymywany przez bonus',
-        'vip_added_help' => 'Czy status VIP jest spłacany bonusem.',
+        'vip_added' => 'Status VIP wygasa automatycznie',
+        'vip_added_help' => 'Czy status VIP wygasa automatycznie.',
         'vip_until' => 'Czas zakończenia statusu VIP',
-        'vip_until_help' => "Format czasu to 'Rok-Rok-Miesięczna-Godzina dnia:Minute:Drugi czas zakończenia statusu VIP. Status VIP jest uzyskiwany przez premię” musi być ustawiony na \"Tak\", aby ta reguła zaczęła obowiązywać.",
+        'vip_until_help' => "Format czasu to 'Rok-Rok-Miesięczna-Godzina dnia:Minute:Drugi czas zakończenia statusu VIP. Automatyczne wygasanie statusu VIP musi być ustawione na 'Tak', aby ta reguła zaczęła obowiązywać.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Wip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Zaproszony użytkownik został zarejestrowany",
     'msg_user_you_invited' => "Użytkownik, który zaprosiłeś ",
     'msg_has_registered' => " właśnie się zarejestrowała.",
+    'user_is_disabled' => 'Użytkownik: :username(ID: :user_id) jest wyłączony.',
+    'user_is_not_confirmed' => 'Użytkownik: :username(ID: :user_id) nie potwierdzony.',
 ];

@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Vei obține',
 	'std_by' => 'De',
 	'row_security_image' => "Imagine de securitate:",
+	'row_security_challenge' => "Provocări privind securitatea:",
 	'row_security_code' => "Cod de securitate:",
 	'text_slots' => "Sloturi:",
 	'text_unlimited' => "Nelimitat",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'Necesar',
 	'text_invalid' => 'Nevalid',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo vine de la software-ul <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>,fișier deschis, limba selectează engleza, dă click pe meniul de vizualizare > text > click dreapta în casetă > selectează toate > copie > trecut în această casetă.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo provine de la software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>, fișierul stiloului injector, limba selectează engleza click pe meniul de vizualizare > text > click dreapta în caseta > selectează toate > copie > trecut în această casetă.
+	<br>
+	<b>&middot;</b> BDInfo provine de la software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>puneți fișierul cu acest software, faceți clic pe Bitrates Scan pentru a vizualiza raportul. click dreapta în casetă > selectează tot, click dreapta > copiază și lipește-l aici.
+	',
     'text_management_system' => 'Gestionare',
     'text_seed_points' => 'Puncte de seed',
     'spoiler_expand_collapse' => 'Click pentru a extinde/restrânge',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Agent de contact',
     'full_site_promotion_in_effect' => 'Locul complet [%s] în efect!',
     'full_site_promotion_time_range' => 'Interval de timp: %s ~ %s',
+    'full_site_promotion_remark' => 'Notă: %s',
+    'full_site_promotion_upcoming' => 'Următorul site complet [%s]',
     'text_torrent_to_approval' => 'There %s%u not approval torrent%s . (Automatic Copy)',
     'std_confirm_remove' => 'Sunteţi sigur că doriţi să-l ştergeţi?',
     'select_an_user_class' => 'Selectați o clasă de utilizator',

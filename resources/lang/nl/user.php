@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Kaart bijwonen',
         'props' => 'Eigenschappen',
         'class' => 'Les',
-        'vip_added' => 'VIP status is ontvangen door een bonus',
-        'vip_added_help' => 'Is de VIP-status door bonus verkregen?',
+        'vip_added' => 'VIP-status verloopt automatisch',
+        'vip_added_help' => 'Vervalt de VIP-status automatisch.',
         'vip_until' => 'Eindtijd van de VIP-status',
-        'vip_until_help' => "Het tijdformaat is 'Jaar-Jaar-Maand-Maandag uur:Minute:Tweede De tijd wanneer de VIP-status eindigt. VIP status wordt verkregen door bonus' s moet op ja staan om deze regel van kracht te laten worden.",
+        'vip_until_help' => "Het tijdformaat is 'Jaar-Jaar-Maand-Maandag uur:Minute:Tweede De tijd wanneer de VIP-status eindigt. VIP status automatisch vervalt moet op 'Ja' staan om deze regel van kracht te laten worden.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Uitgenodigde gebruiker heeft zich geregistreerd",
     'msg_user_you_invited' => "De gebruiker die je hebt uitgenodigd ",
     'msg_has_registered' => " heeft zich zojuist geregistreerd.",
+    'user_is_disabled' => 'Gebruiker: :username(ID: :user_id) is uitgeschakeld.',
+    'user_is_not_confirmed' => 'Gebruiker: :username(ID: :user_id) niet bevestigd.',
 ];

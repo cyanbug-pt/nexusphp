@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Por favor, sube la oferta dentro de ",
     'msg_hours_otherwise' => " horas. De lo contrario, la oferta se eliminaría.",
     'msg_reason_is' => "La razón: ",
+    'msg_new_offer_subject' => "Se ha añadido una nueva oferta",
+    'msg_new_offer_msg' => "Usuario :username ha añadido una nueva oferta :offername",
 ];

@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Registrarse',
     'checkbox_pm_on_topic_reply' => 'Notificarme cuando haya nuevas respuestas a los mensajes del foro',
     'checkbox_pm_on_hr_reached' => 'Notificarme cuando H&R alcance el objetivo',
+    'row_tracker_url' => 'URL del rastreador',
+    'row_tracker_url_help' => '<b>Nota:</b> Una vez seleccionado, anunciar sólo puede ser enviado al enlace seleccionado. Por defecto, el anuncio sólo se puede enviar al primer enlace por defecto de la lista.',
 );
 
 ?>

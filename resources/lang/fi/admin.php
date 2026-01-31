@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Jonon monitori',
         'user_modify_logs' => 'Käyttäjä muokkaa lokeja',
         'message_templates' => 'Viestin pohjat',
+        'tracker_url' => 'Seurantapalvelimen URL',
+        'activity_logs' => 'Aktiviteetti Lokit',
     ],
     'resources' => [
         'agent_allow' => [

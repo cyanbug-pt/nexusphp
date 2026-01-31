@@ -27,7 +27,7 @@ $lang_takesignup = array
 	'std_to_finish_signup' => " для завершения регистрации, спасибо!",
 	'msg_subject' => "Добро пожаловать в ",
 	'msg_congratulations' => "Поздравления ",
-	'msg_you_are_a_member' => ",\n\nТеперь вы член %s,\nМы хотели бы воспользоваться этой возможностью, чтобы сказать приветствие и добро пожаловать в %s!\n\nПожалуйста, прочитайте [url=rules. hp][b]Правила[/b][/url] и [url=faq. hp][b]Faq[/b][/url]\n И не забудьте остановиться на [url=forums. hp][b]Форумы[/b][/url]: и сказать привет!\n\nНаслаждайтесь вашей пребыванием.\nПерсонал %s ",
+	'msg_you_are_a_member' => ",\n\nYou are now a member of %s,\nWe would like to take this opportunity to say hello and welcome to join us!\n\nPlease be sure to read the [url=rules.php][b]Rules[/b][/url] and the [url=faq.php][b]Faq[/b][/url].\n And be sure to stop by the [url=forums.php][b]Forums[/b][/url]: and say Hello!\n\nEnjoy your Stay.\nThe Staff of %s ",
 	'mail_this_link' =>	"ЭТО СЛОЖНО",
 	'mail_here' => "ЗДЕСЬ",
 	'mail_title' => " Подтверждение регистрации пользователя",

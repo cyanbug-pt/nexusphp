@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Você receberá',
 	'std_by' => 'por',
 	'row_security_image' => "Imagem de segurança:",
+	'row_security_challenge' => "Desafio de Segurança",
 	'row_security_code' => "Código de segurança:",
 	'text_slots' => "Espaços:",
 	'text_unlimited' => "Ilimitado",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'Obrigatório',
 	'text_invalid' => 'Inválido',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo vem do software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>, arquivo aberto, selecione inglês, clique no menu exibir > texto > botão direito na caixa > selecione tudo > copiar > passado nesta caixa.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo comes from software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>，open file, language select english, click the view menu > text > right click in the box > select all > copy > past into this box.
+	<br>
+	<b>&middot;</b> BDInfo comes from software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>，open the file with this software, click Scan Bitrates to view the report, right-click in the box > select all, right-click > copy, and paste it here.
+	',
     'text_management_system' => 'Gestão',
     'text_seed_points' => 'Pontos de semente',
     'spoiler_expand_collapse' => 'Clique para expandir/recolher',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Contatar a equipe',
     'full_site_promotion_in_effect' => 'Site inteiro [%s] em efeito!',
     'full_site_promotion_time_range' => 'Intervalo de tempo: %s ~ %s',
+    'full_site_promotion_remark' => 'Nota: %s',
+    'full_site_promotion_upcoming' => 'Próximo site completo [%s]',
     'text_torrent_to_approval' => '%s%u não aprova torrent%s.',
     'std_confirm_remove' => 'Você tem certeza que deseja apagá-lo?',
     'select_an_user_class' => 'Selecione uma classe de usuário',

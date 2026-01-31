@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Kjøp skifte brukernavn kort',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gave medalje',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Kjøp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Oppgave fullført belønning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Uferdige trekkrettigheter',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Belønning torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Innsatt torrent ikke nådd',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rolle arbeidstaker lønn',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent blir lastet ned',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Motta gave',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Last opp torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent motta belønning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Inngåtte torrenten har oppnådd belønning',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding basic',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Verdi etter handel',
     ],
     'exclude_seeding_bonus' => 'Utelat seeding bonus',
+    'title_for_user' => 'Brukerens bonusdetaljer',
+    'category' => 'Kategori',
+    'category_common' => 'Felles',
+    'category_seeding' => 'Deler',
+    'view_detail' => 'Detaljer',
 ];

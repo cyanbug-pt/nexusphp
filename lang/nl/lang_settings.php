@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minuut',
 	'row_login_secret_lifetime' => 'Inlog geheime levensduur',
 	'text_login_secret_lifetime_deadline' => 'Huidige login geheime deadline',
-	'row_enable_technical_info' => 'MediaInfo inschakelen',
-	'text_enable_technical_info' => "Standaard 'Nee'. MediaInfo is afkomstig van software <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Tekst weergave",
-    'row_sticky_first_level_background_color' => 'Sticky eerste niveau bg kleur',
+	'row_enable_technical_info' => 'MediaInfo/BDInfo inschakelen',
+	'text_enable_technical_info' => 'Standaard \'Nee\'. <br>
+	}}MediaInfo is van software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'> MediaInfo</a></b> het resultaat van "Tekst weergave"	<br>
+	Ø BDInfo is van software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> het resultaat van "View Reports"
+	',
+	'row_sticky_first_level_background_color' => 'Sticky eerste niveau bg kleur',
     'text_sticky_first_level_background_color_note' => 'Sticky first level bg kleur, deze zal geen zijn indien niet ingesteld.',
     'row_sticky_second_level_background_color' => 'Sticky tweede niveau bg kleur',
     'text_sticky_second_level_background_color_note' => 'Sticky tweede niveau bg kleur, deze zal geen zijn indien niet ingesteld.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Indien ingeschakeld, worden er geen onversleutelde wachtwoorden verstuurd bij het inloggen, aanbevolen. Toekomstige releases zullen deze configuratie verwijderen en deze functie inschakelen.' ,
     'row_complain_enabled' => 'Of klachten moeten worden ingeschakeld',
     'row_complain_enabled_note' => 'standaard: "ja"',
+    'row_min_size' => 'Minimum volume',
+    'text_bonus_mini_size'=> 'Het minimum volume dat nodig is voor torrent is',
+    'text_bonus_mini_size_help' => '. Torrent grootte kleiner dan dit volume is niet meegenomen in de bonus berekening. Eenheid: bytes (Byte), b., 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Beloning Bonus Opties',
+    'text_reward_bonus_options_note' => 'Beloning bonusopties op de torrent details pagina, meerdere opties gescheiden door komma\'s',
+    'row_reward_times_limit' => 'Beloning frequentie Limiet',
+    'text_reward_times_limit_note' => 'Dagelijkse limiet per gebruiker voor bonus beloningen op zaaddetail pagina\'s. Stel in op 0 voor geen limiet. Standaard: 0',
 );
 
 ?>

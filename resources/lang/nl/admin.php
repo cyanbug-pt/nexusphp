@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Wachtrij monitor',
         'user_modify_logs' => 'Gebruiker wijzigt logs',
         'message_templates' => 'Bericht sjabloon',
+        'tracker_url' => 'Tracker URL',
+        'activity_logs' => 'Activiteiten logs',
     ],
     'resources' => [
         'agent_allow' => [

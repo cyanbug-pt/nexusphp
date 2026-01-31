@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => '再表示',
     'retroactive_confirm_tip' => '参加確認: ',
     'retroactive_description' => '白の背景のドットをクリックして出席します。現在出席カード <b>%d</b> があります。',
+    'attend_button' => '今すぐチェック',
 );

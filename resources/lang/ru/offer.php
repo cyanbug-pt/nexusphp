@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Пожалуйста, загрузите предложение в течение ",
     'msg_hours_otherwise' => " часы в противном случае предложение будет удалено.",
     'msg_reason_is' => "Причина: ",
+    'msg_new_offer_subject' => "Новое предложение было добавлено",
+    'msg_new_offer_msg' => ":username добавил новое предложение :offername",
 ];

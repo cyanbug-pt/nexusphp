@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Registrera',
     'checkbox_pm_on_topic_reply' => 'Meddela mig när det finns nya svar på foruminlägg',
     'checkbox_pm_on_hr_reached' => 'Meddela mig när H&R når målet',
+    'row_tracker_url' => 'Spårare URL',
+    'row_tracker_url_help' => '<b>Obs:</b> När markerad, kan kungörelse endast skickas till den valda länken. Som standard kan annonsering endast skickas till den första standardlänken i listan.',
 );
 
 ?>

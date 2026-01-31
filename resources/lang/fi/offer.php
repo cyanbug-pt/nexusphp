@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Ole hyvä ja lataa tarjous ",
     'msg_hours_otherwise' => " tuntia. Muussa tapauksessa tarjous poistetaan.",
     'msg_reason_is' => "Syy: ",
+    'msg_new_offer_subject' => "Uusi tarjous on lisätty",
+    'msg_new_offer_msg' => "Käyttäjä :username on lisännyt uuden tarjouksen :offername",
 ];

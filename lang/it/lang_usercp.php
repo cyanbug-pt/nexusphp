@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Registrati',
     'checkbox_pm_on_topic_reply' => 'Avvisami quando ci sono nuove risposte ai post del forum',
     'checkbox_pm_on_hr_reached' => 'Avvisami quando H&R raggiunge l\'obiettivo',
+    'row_tracker_url' => 'Url Del Tracker',
+    'row_tracker_url_help' => '<b>Nota:</b> Una volta selezionato, annunciare può essere inviato solo al link selezionato. Per impostazione predefinita, l\'annuncio può essere inviato solo al primo link predefinito dell\'elenco.',
 );
 
 ?>

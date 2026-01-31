@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minuutti',
 	'row_login_secret_lifetime' => 'Kirjaudu sisään salainen elinikä',
 	'text_login_secret_lifetime_deadline' => 'Nykyinen kirjautumisen salainen määräaika',
-	'row_enable_technical_info' => 'Ota Mediatiedot Käyttöön',
-	'text_enable_technical_info' => "Oletus 'Ei'. MediaInfo tulee ohjelmistosta <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Tekstinäkymä",
-    'row_sticky_first_level_background_color' => 'Sticky ensimmäisen tason bg väri',
+	'row_enable_technical_info' => 'Ota MediaInfo/BdInfo Käyttöön',
+	'text_enable_technical_info' => 'Oletus \'Ei\'. <br>
+	¶ MediaInfo tulee ohjelmistosta <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> tulos "Tekstinäkymä"	<br>
+	¶ BDInfo tulee ohjelmistosta <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> "Näytä raportit"
+	',
+	'row_sticky_first_level_background_color' => 'Sticky ensimmäisen tason bg väri',
     'text_sticky_first_level_background_color_note' => 'Sticky ensimmäisen tason bg väri, se ei ole mitään, jos ei ole asetettu.',
     'row_sticky_second_level_background_color' => 'Sticky toisen tason bg väri',
     'text_sticky_second_level_background_color_note' => 'Sticky toisen tason bg väri, se ei ole mitään, jos ei ole asetettu.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Jos käytössä, plaintext-salasanoja ei lähetetä kirjautumisen yhteydessä, suositellaan. Tulevat julkaisut poistavat tämän määrityksen ja ottavat käyttöön tämän ominaisuuden.' ,
     'row_complain_enabled' => 'Otetaanko valitukset käyttöön',
     'row_complain_enabled_note' => 'oletus: "kyllä"',
+    'row_min_size' => 'Pienin äänenvoimakkuus',
+    'text_bonus_mini_size'=> 'Torrentille tarvittava vähimmäismäärä on',
+    'text_bonus_mini_size_help' => '. Tätä pienempää torrent- kokoa ei sisällytetä bonuslaskelmaan. Yksikkö: tavuja (Byte), esim., 1 KiB = 1024 tavua.',
+    'row_reward_bonus_options' => 'Palkintobonuksen Asetukset',
+    'text_reward_bonus_options_note' => 'Palkitse bonusoptiot torrent-tiedostosivulla, useita optioita erotettu pilkuilla',
+    'row_reward_times_limit' => 'Palkinnon Taajuusraja',
+    'text_reward_times_limit_note' => 'Päivittäinen raja per käyttäjä bonuspalkkille seed detail sivuilla. Aseta 0 ilman rajoitusta. Oletus: 0',
 );
 
 ?>

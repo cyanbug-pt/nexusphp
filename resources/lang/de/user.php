@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Karte besuchen',
         'props' => 'Reifen',
         'class' => 'Klasse',
-        'vip_added' => 'VIP-Status wird durch Bonus erreicht',
-        'vip_added_help' => 'Wird der VIP-Status durch den Bonus eingelöst.',
+        'vip_added' => 'VIP Status automatisch läuft ab',
+        'vip_added_help' => 'Ist der VIP Status automatisch ablaufen.',
         'vip_until' => 'VIP Status Endzeit',
-        'vip_until_help' => "Das Zeitformat ist 'Year-Year-Month-Day Stunde:Minute:Zweite Zeit, wenn der VIP-Status endet. Der VIP-Status wird durch den Bonus erhalten\" muss auf \"Ja\" gesetzt werden, damit diese Regel wirksam wird.",
+        'vip_until_help' => "Das Zeitformat ist 'Year-Year-Month-Day Stunde:Minute:Zweite Zeit, wenn der VIP-Status endet. Der VIP-Status läuft automatisch ab und muss auf 'Ja' gesetzt werden, damit diese Regel wirksam wird.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Eingeladener Benutzer hat sich registriert",
     'msg_user_you_invited' => "Der Benutzer, den Sie eingeladen haben ",
     'msg_has_registered' => " hat sich gerade registriert.",
+    'user_is_disabled' => 'Benutzer: :username(ID: :user_id) ist deaktiviert.',
+    'user_is_not_confirmed' => 'Benutzer: :username(ID: :user_id) nicht bestätigt.',
 ];

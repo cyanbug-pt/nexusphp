@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Prześlij ofertę w ciągu ",
     'msg_hours_otherwise' => " godziny. W przeciwnym razie oferta zostałaby usunięta.",
     'msg_reason_is' => "Powod: ",
+    'msg_new_offer_subject' => "Dodano nową ofertę",
+    'msg_new_offer_msg' => "Użytkownik :username dodał nową ofertę :offer",
 ];

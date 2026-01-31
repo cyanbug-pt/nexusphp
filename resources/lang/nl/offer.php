@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Upload de aanbieding binnen ",
     'msg_hours_otherwise' => " uren. Anders zou de aanbieding worden verwijderd.",
     'msg_reason_is' => "De reden: ",
+    'msg_new_offer_subject' => "Een nieuwe aanbieding is toegevoegd",
+    'msg_new_offer_msg' => "Gebruiker :username heeft een nieuwe aanbieding toegevoegd :offername",
 ];

@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Monitor de cola',
         'user_modify_logs' => 'Usuario modificar registros',
         'message_templates' => 'Plantillas de mensaje',
+        'tracker_url' => 'URL del rastreador',
+        'activity_logs' => 'Registros de actividad',
     ],
     'resources' => [
         'agent_allow' => [

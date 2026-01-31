@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'Globaali',
 
     'reached_by_seed_time_comment' => 'Jopa：:now,seed time: :seed_time Tunti(s) reached :seed_time_minimum Tunti(s)',
+    'reached_by_leech_time_comment' => 'Up to：:now，leech time: :leech_time Hour(s) reached :leech_time_minimum Hour(s)',
     'reached_by_share_ratio_comment' => "Enintään：:now \nseed time: :seed_time Tunti(t) Päättämättä :seed_time_minimum Tunti(t) \nJaa suhde: :share_ratio saavutti standardin：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "Käyttäjäluokka: :user_class_text tai lahjoittanut käyttäjän, ohita tämä H&R",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) saavutettu!',

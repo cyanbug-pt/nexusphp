@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Veuillez télécharger l'offre dans ",
     'msg_hours_otherwise' => " heures sinon l'offre serait supprimée.",
     'msg_reason_is' => "La raison : ",
+    'msg_new_offer_subject' => "Une nouvelle offre a été ajoutée",
+    'msg_new_offer_msg' => "L'utilisateur :username a ajouté une nouvelle offre :offername",
 ];

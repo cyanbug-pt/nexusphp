@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => '分',
 	'row_login_secret_lifetime' => 'ログインシークレットの有効期間',
 	'text_login_secret_lifetime_deadline' => '現在のログインシークレットの期限',
-	'row_enable_technical_info' => 'MediaInfo を有効にする',
-	'text_enable_technical_info' => "デフォルト 'いいえ' MediaInfo はソフトウェア <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> テキスト ビュー",
-    'row_sticky_first_level_background_color' => '最初のレベルのBG色をスティッキーする',
+	'row_enable_technical_info' => 'MediaInfo/BDInfo を有効にする',
+	'text_enable_technical_info' => 'Default \'No\'. <br>
+	MediaInfo comes from software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> the result of "Text view"	<br>
+	BDInfo comes from software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> the result of "View Reports"
+	',
+	'row_sticky_first_level_background_color' => '最初のレベルのBG色をスティッキーする',
     'text_sticky_first_level_background_color_note' => 'Sticky first level bg color, it will be none if not set.',
     'row_sticky_second_level_background_color' => 'スティッキーセカンドレベルBGの色',
     'text_sticky_second_level_background_color_note' => 'Sticky second level bg color, it will be none if not set.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => '有効にすると、ログイン時にプレインテキストパスワードは送信されません。今後のリリースではこの設定が削除され、この機能が有効になります。' ,
     'row_complain_enabled' => '苦情を有効にするか',
     'row_complain_enabled_note' => 'デフォルト: "はい"',
+    'row_min_size' => '最小音量',
+    'text_bonus_mini_size'=> 'トレントに必要な最小容量は',
+    'text_bonus_mini_size_help' => 'を選択します。 このボリュームより小さいトレントサイズはボーナス計算には含まれません。 単位: バイト (バイト)、例えば 1 KiB = 1024 バイト。',
+    'row_reward_bonus_options' => '報酬ボーナスオプション',
+    'text_reward_bonus_options_note' => 'トレントの詳細ページのボーナスオプション、コンマで区切られた複数のオプション',
+    'row_reward_times_limit' => '報酬回数上限',
+    'text_reward_times_limit_note' => 'シード詳細ページのユーザーごとのボーナス報酬の毎日の制限。制限なしの場合は0に設定します。デフォルト: 0',
 );
 
 ?>

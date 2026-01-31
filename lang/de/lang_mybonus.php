@@ -168,6 +168,10 @@ wo<ul><li><b>A</b> ist eine Zwischenvariablen</li><li><li><b>Ti</b> ist die <b>i
     'text_success_buy_change_username_card' => "Herzlichen Glückwunsch zum erfolgreichen Kauf einer <b>-Karte mit Nutzernamen</b> ändern!",
     'text_change_username_card_already_has' => 'Haben Sie bereits eine Benutzernamenskarte ändern',
     'text_rainbow_id_already_valid_forever' => 'Du hast bereits eine permanente Regenbogen-ID',
+    'text_get_by_medal' => 'Medaillen-Bonus erhält den folgenden zusätzlichen Bonuswert pro Stunde',
+    'medal_additional_desc' => 'Die Formel der Medaillen-Bonusberechnung ist die gleiche wie oben, unabhängig von der Mindestgarantie',
+    'medal_additional_factor' => 'Der finale Bonus ist der berechnete Medaillenbonus multipliziert mit dem medal_additional_factor',
+    'text_bonus_mini_size' => 'Torrent-Größe muss mindestens %ssein. Torrent-Größe kleiner als dieses Volumen sind von Bonusberechnungen ausgeschlossen'
 );
 
 ?>

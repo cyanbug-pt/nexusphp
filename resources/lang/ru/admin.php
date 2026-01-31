@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Монитор очереди',
         'user_modify_logs' => 'Изменение журналов',
         'message_templates' => 'Шаблоны сообщений',
+        'tracker_url' => 'URL трекера',
+        'activity_logs' => 'Журнал активности',
     ],
     'resources' => [
         'agent_allow' => [

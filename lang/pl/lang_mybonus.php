@@ -168,6 +168,10 @@ gdzie<ul><li><b>A</b> jest zmienną pośrednią</li><li><b>Ti</b> jest <b>i</b>C
     'text_success_buy_change_username_card' => "Gratulujemy udanego zakupu karty <b>zmiany nazwy użytkownika</b>!",
     'text_change_username_card_already_has' => 'Masz już kartę zmiany nazwy użytkownika',
     'text_rainbow_id_already_valid_forever' => 'Posiadasz już stały identyfikator Tęczówki',
+    'text_get_by_medal' => 'Premia Medalna otrzyma następujący dodatkowy bonus na godzinę',
+    'medal_additional_desc' => 'Wzór obliczania premii medycznej jest taki sam jak powyżej, niezależnie od gwarancji minimalnej',
+    'medal_additional_factor' => 'Ostateczna premia to obliczona premia medalna pomnożona przez medal_additional_factor',
+    'text_bonus_mini_size' => 'Rozmiar torrenta musi być co najmniej %s. Rozmiar torrenta mniejszy niż ten wolumen jest wyłączony z obliczeń bonusowych'
 );
 
 ?>

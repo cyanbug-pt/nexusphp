@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "jäljellä olevat yritykset.",
 	'p_no_account_signup' => "Eikö sinulla ole tiliä? <a href=\"signup.php\"><b>Rekisteröidy</b></a> juuri nyt!",
 	'p_forget_pass_recover' => "Unohditko salasanasi? Palauta salasanasi <a href=\"recover.php\"><b>sähköpostitse</b></a>",
-    'p_account_banned' => "Tili estetty? Katso syy<a href=\"user-ban-log.php\"><b>käyttäjäkiellon loki</b></a>",
+    'p_account_banned' => "Tili estetty? Katso syy <a href=\"user-ban-log.php\"><b>käyttäjäkiellon loki</b></a>",
 	'p_resend_confirm' => "Etkö saanut vahvistusviestiä tai vahvistuslinkki on rikki? <a href=\"confirm_resend.php\"><b>Lähetä vahvistusviesti uudelleen</b></a>",
 	'rowhead_username' => "Käyttäjätunnus:",
 	'rowhead_password' => "Salasana:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'Kaksivaiheinen Todennus',
     'two_step_code_tooltip' => 'Jos käytössä on täytettävä',
     'text_complain' => 'Valituskanava',
+    'other_methods' => "Muut Menetelmät",
 );
 
 ?>

@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Купить смену карты имени пользователя',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Подарочная медаль',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Купить торрент',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Задание завершено',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Задание незавершено',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Торрент наград',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Объявлен торрент недоступен',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Оплата ролей',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Торрент будет загружен',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Получить подарок',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Загрузить торрент',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Торрент получает награду',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Полученный торрент достиг награды',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Основа раздачи',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Добавление донорской раздачи',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Стоимость после сделки',
     ],
     'exclude_seeding_bonus' => 'Исключить бонус размножения',
+    'title_for_user' => 'Информация о бонусе пользователя',
+    'category' => 'Категория',
+    'category_common' => 'Обычный',
+    'category_seeding' => 'Раздача',
+    'view_detail' => 'Детали',
 ];

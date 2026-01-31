@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Οθόνη αναμονής',
         'user_modify_logs' => 'Αρχεία καταγραφής τροποποίησης χρήστη',
         'message_templates' => 'Πρότυπα μηνυμάτων',
+        'tracker_url' => 'Url Ανιχνευτή',
+        'activity_logs' => 'Καταγραφή Δραστηριοτήτων',
     ],
     'resources' => [
         'agent_allow' => [

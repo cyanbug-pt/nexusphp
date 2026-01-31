@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Osallistu korttiin',
         'props' => 'Props',
         'class' => 'Luokka',
-        'vip_added' => 'VIP tila saadaan bonuksella',
-        'vip_added_help' => 'Onko VIP-tila lunastettu bonuksella.',
+        'vip_added' => 'VIP tila vanhenee',
+        'vip_added_help' => 'Onko VIP-tila automaattinen vanheneminen.',
         'vip_until' => 'VIP-tilan päättymisaika',
-        'vip_until_help' => "Aikamuoto on 'Vuosi-kuukausi-päivä Tunti:Minuutti:Toinen kerta, kun VIP tila päättyy. VIP tila saadaan bonuksella” on asetettava 'kyllä', jotta tämä sääntö tulee voimaan.",
+        'vip_until_help' => "Aikamuoto on 'Vuosi-kuukausi-päivä Tunti:Minuutti:Toinen kerta, kun VIP tila päättyy. VIP-tilan automaattinen vanheneminen” on asetettava 'kyllä', jotta tämä sääntö tulee voimaan.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Kutsuttu käyttäjä on rekisteröitynyt",
     'msg_user_you_invited' => "Käyttäjä, jonka kutsuit ",
     'msg_has_registered' => " on rekisteröitynyt juuri nyt.",
+    'user_is_disabled' => 'Käyttäjä: :username(ID: :user_id) ei ole käytössä.',
+    'user_is_not_confirmed' => 'Käyttäjä: :username(ID: :user_id) ei vahvistettu.',
 ];

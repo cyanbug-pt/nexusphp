@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Monitorul de coadă',
         'user_modify_logs' => 'Jurnalele de modificare ale utilizatorului',
         'message_templates' => 'Şabloane de mesaje',
+        'tracker_url' => 'URL urmaritor',
+        'activity_logs' => 'Jurnal de activitate',
     ],
     'resources' => [
         'agent_allow' => [

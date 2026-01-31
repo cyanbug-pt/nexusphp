@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Monitor coda',
         'user_modify_logs' => 'Modificare i log dell\'utente',
         'message_templates' => 'Modelli di messaggi',
+        'tracker_url' => 'Url Del Tracker',
+        'activity_logs' => 'Log Attività',
     ],
     'resources' => [
         'agent_allow' => [

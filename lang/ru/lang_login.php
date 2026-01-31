@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "оставшихся попыток.",
 	'p_no_account_signup' => "Don't have an account? <a href=\"signup.php\"><b>Sign up</b></a> right now!",
 	'p_forget_pass_recover' => "Забыли пароль? Восстановить пароль <a href=\"recover.php\"><b>по электронной почте</b></a>",
-    'p_account_banned' => "Учетная запись заблокирована? Просмотрите причину бана<a href=\"user-ban-log.php\"><b>пользователя журнала</b></a>",
+    'p_account_banned' => "Учетная запись заблокирована? Просмотрите причину бана <a href=\"user-ban-log.php\"><b>пользователя журнала</b></a>",
 	'p_resend_confirm' => "Не получили письмо с подтверждением или ссылку для подтверждения повреждена? <a href=\"confirm_resend.php\"><b>Отправьте письмо с подтверждением еще раз</b></a>",
 	'rowhead_username' => "Имя пользователя:",
 	'rowhead_password' => "Пароль:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'Двухфакторная аутентификация',
     'two_step_code_tooltip' => 'Если включено должно быть заполнено',
     'text_complain' => 'Канал подачи жалоб',
+    'other_methods' => "Другие методы",
 );
 
 ?>

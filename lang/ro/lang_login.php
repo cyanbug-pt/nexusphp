@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "încercări rămase.",
 	'p_no_account_signup' => "Nu ai un cont? <a href=\"signup.php\"><b>Înscrie-te la</b></a> acum!",
 	'p_forget_pass_recover' => "V-ați uitat parola? Recuperați-vă parola <a href=\"recover.php\"><b>prin e-mail</b></a>",
-    'p_account_banned' => "Contul este banat? Vezi motivul pentru<a href=\"user-ban-log.php\"><b>banul de utilizator</b></a>",
+    'p_account_banned' => "Contul este banat? Vezi motivul pentru <a href=\"user-ban-log.php\"><b>banul de utilizator</b></a>",
 	'p_resend_confirm' => "Nu a primit e-mail de confirmare sau link-ul de confirmare este întrerupt? <a href=\"confirm_resend.php\"><b>Trimite e-mail de confirmare din nou</b></a>",
 	'rowhead_username' => "Utilizator:",
 	'rowhead_password' => "Parola:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'Autentificare în doi pași',
     'two_step_code_tooltip' => 'Dacă este activat, trebuie completat',
     'text_complain' => 'Canal de reclamații',
+    'other_methods' => "Alte metode",
 );
 
 ?>

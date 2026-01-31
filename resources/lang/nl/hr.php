@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'Wereldwijd',
 
     'reached_by_seed_time_comment' => 'Tot：:nee, zaad tijd: :seed_time uur(s) bereikten :seed_time_minimum uur(s)',
+    'reached_by_leech_time_comment' => 'Tot：:now,leech tijd: :leech_time uren bereikt(s) :leech_time_minimum uren',
     'reached_by_share_ratio_comment' => "Tot：:now \nhersteltijd: :seed_time uur(s) niet bereikt :seed_time_minimumuren \nShare ratio: :share_ratio reached standard：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "Je gebruikersklasse: :user_class_text of gedoneerde gebruiker, negeer deze H&R",
     'reached_message_subject' => '&R(ID: :hit_and_run_id) bereikt!',

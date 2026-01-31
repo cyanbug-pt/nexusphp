@@ -27,7 +27,7 @@ $lang_takesignup = array
 	'std_to_finish_signup' => " pentru a termina înscrierea, mulţumim!",
 	'msg_subject' => "Bun venit la ",
 	'msg_congratulations' => "Felicitări ",
-	'msg_you_are_a_member' => ",\n\nAcum sunteți membru al %s,\nDorim să profităm de această ocazie pentru a saluta și saluta primirea la %s!\n\nAsigurați-vă că citiți [url=rules. hp][b]Regulile[/b][/url] și [url=faq. hp][b]Faq[/b][/url].\n Și asigură-te că te oprești de către [url=forumuri. hp][b]Forumuri[/b][/url]și spuneți Salut!\n\nBucurați-vă de sejur.\nPersonalul %s ",
+	'msg_you_are_a_member' => ",\n\nAcum sunteți membru al %s,\nDorim să profităm de această ocazie pentru a saluta şi a saluta să ni se alăture!\n\nAsigurați-vă că citiți [url=rules. hp][b]Regulile[/b][/url] și [url=faq. hp][b]Faq[/b][/url].\n Și asigură-te că te oprești de [url=forumuri. hp][b]Forumuri[/b][/url]și spuneți Salut!\n\nBucurați-vă de sejur.\nPersonalul %s ",
 	'mail_this_link' =>	"ACEASTA LINK",
 	'mail_here' => "AICI",
 	'mail_title' => " Confirmare înregistrare utilizator",

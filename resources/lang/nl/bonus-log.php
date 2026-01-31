@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Koop wijziging gebruikersnaam kaart',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Cadeau medaille',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Koop torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Taak beëindigd beloning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Taak onvoltooide aftrek',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Beloning torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Opgehaalde torrent onbereikbaar',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rol salaris',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent wordt gedownload',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Cadeau ontvangen',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Upload torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent ontvangen beloning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Claimed torrent heeft een beloning bereikt',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Basis uploaden',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Upload donor toevoeging',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Na-handelswaarde',
     ],
     'exclude_seeding_bonus' => 'Bonus uitsluiten bij seeden',
+    'title_for_user' => 'Bonusgegevens gebruiker',
+    'category' => 'categorie',
+    'category_common' => 'Gemeenschappelijk',
+    'category_seeding' => 'Uploaden',
+    'view_detail' => 'Beschrijving',
 ];

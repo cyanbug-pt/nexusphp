@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "tentativi rimanenti.",
 	'p_no_account_signup' => "Non hai un account? <a href=\"signup.php\"><b>Registrati</b></a> adesso!",
 	'p_forget_pass_recover' => "Dimentica la password? Recupera la tua password <a href=\"recover.php\"><b>via email</b></a>",
-    'p_account_banned' => "Account bandito? visualizza il motivo su<a href=\"user-ban-log.php\"><b>user ban log</b></a>",
+    'p_account_banned' => "Account bandito? visualizza il motivo su <a href=\"user-ban-log.php\"><b>user ban log</b></a>",
 	'p_resend_confirm' => "Non hai ricevuto email di conferma o il link di conferma è rotto? <a href=\"confirm_resend.php\"><b>Invia di nuovo email di conferma</b></a>",
 	'rowhead_username' => "Utente:",
 	'rowhead_password' => "Password,",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'Autenticazione A Due Fattori',
     'two_step_code_tooltip' => 'Se abilitato deve essere compilato',
     'text_complain' => 'Canale Di Reclamo',
+    'other_methods' => "Altri Metodi",
 );
 
 ?>

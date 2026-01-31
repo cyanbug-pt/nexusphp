@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minut',
 	'row_login_secret_lifetime' => 'Log ind hemmelig levetid',
 	'text_login_secret_lifetime_deadline' => 'Nuværende hemmelige login deadline',
-	'row_enable_technical_info' => 'Aktiver MediaInfo',
-	'text_enable_technical_info' => "Standard 'Nej'. MediaInfo kommer fra software <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Tekstvisning",
-    'row_sticky_first_level_background_color' => 'Klæbrig første niveau bg farve',
+	'row_enable_technical_info' => 'Aktiver MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Standard \'Nej\'. <br>
+	● MediaInfo kommer fra software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> resultatet af "Text view"	<br>
+	● BDInfo kommer fra software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> resultatet af "View Reports"
+	',
+	'row_sticky_first_level_background_color' => 'Klæbrig første niveau bg farve',
     'text_sticky_first_level_background_color_note' => 'Klæbrig første niveau bg farve, vil det være ingen hvis ikke angivet.',
     'row_sticky_second_level_background_color' => 'Klæbrig anden niveau bg farve',
     'text_sticky_second_level_background_color_note' => 'Klæbrig anden niveau bg farve, vil det være ingen hvis ikke angivet.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Hvis aktiveret, vil ingen klartekst adgangskoder blive sendt ved login, anbefales. Fremtidige udgivelser vil fjerne denne konfiguration og aktivere denne funktion.' ,
     'row_complain_enabled' => 'Om klager skal aktiveres',
     'row_complain_enabled_note' => 'default: "ja"',
+    'row_min_size' => 'Minimum lydstyrke',
+    'text_bonus_mini_size'=> 'Den mindste mængde kræves for torrent er',
+    'text_bonus_mini_size_help' => '. Torrent størrelse mindre end denne volumen er ikke inkluderet i bonus beregning. Enhed: bytes (Byte), fx 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Bonusindstillinger For Belønning',
+    'text_reward_bonus_options_note' => 'Belønning bonus muligheder på torrent detaljer side, flere muligheder adskilt af kommaer',
+    'row_reward_times_limit' => 'Belønning Frekvens Grænse',
+    'text_reward_times_limit_note' => 'Daglig grænse pr. bruger for bonus belønninger på seed detalje sider. Sæt til 0 for ingen grænse. Standard: 0',
 );
 
 ?>

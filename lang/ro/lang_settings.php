@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minut',
 	'row_login_secret_lifetime' => 'Conectare la viață secretă',
 	'text_login_secret_lifetime_deadline' => 'Termenul curent de autentificare secret',
-	'row_enable_technical_info' => 'Activează MediaInfo',
-	'text_enable_technical_info' => "Implicit 'Nu'. MediaInfo vine de la software <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Vizualizare Text",
-    'row_sticky_first_level_background_color' => 'Sticky first level bg color',
+	'row_enable_technical_info' => 'Activează MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Implicit \'Nu\'. <br>
+	<unk> MediaInfo vine de la software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> rezultatul "Vizualizare text "	<br>
+	<unk> BDInfo vine de la software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> rezultatul "Vezi rapoarte"
+	',
+	'row_sticky_first_level_background_color' => 'Sticky first level bg color',
     'text_sticky_first_level_background_color_note' => 'Sticky first level bg color, daca nu este setat.',
     'row_sticky_second_level_background_color' => 'Sticky al doilea nivel culoare bg',
     'text_sticky_second_level_background_color_note' => 'Sticky second level bg color, if not set. (Automatic Copy)',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Dacă este activată, nici o parolă text nu va fi transmisă la autentificare, recomandată. Partajările viitoare vor elimina această configurare și vor activa această caracteristică.' ,
     'row_complain_enabled' => 'Posibilitatea de a permite reclamații',
     'row_complain_enabled_note' => 'implicit: "da"',
+    'row_min_size' => 'Volum minim',
+    'text_bonus_mini_size'=> 'Volumul minim necesar pentru torent este',
+    'text_bonus_mini_size_help' => '. Mărimea torrentului mai mică decât acest volum nu este inclusă în calculul bonusului. Unitate: bytes (Byte), ex. 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Opțiuni bonus recompensă',
+    'text_reward_bonus_options_note' => 'Opțiuni bonus recompensă pe pagina de detalii a torrentelor, opțiuni multiple separate de virgulă',
+    'row_reward_times_limit' => 'Limită de frecvenţă recompensă',
+    'text_reward_times_limit_note' => 'Limită zilnică per utilizator pentru recompense bonus în paginile de detalii seed. Setat la 0 pentru nicio limită. Implicit: 0',
 );
 
 ?>

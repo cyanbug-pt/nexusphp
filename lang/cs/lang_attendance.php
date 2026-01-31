@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Ruda',
     'retroactive_confirm_tip' => 'Potvrdit účast: ',
     'retroactive_description' => 'Kliknutím na tečku na bílém pozadí se zúčastníte. Momentálně máte kartu <b>%d</b>.',
+    'attend_button' => 'Přihlásit se',
 );

@@ -23,6 +23,10 @@ return [
         'subject' => 'Download tilladelse annulleret',
         'body' => 'Din downloadtilladelse er blevet annulleret på grund af at annoncere til betalt torrent for mange gange, skal du sørge for at du har nok bonus.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Download tilladelse annulleret',
+        'body' => 'Din downloadtilladelse er blevet annulleret på grund af annoncering af falske data.',
+    ],
     'download_enable' => [
         'subject' => 'Download tilladelse gendannet',
         'body' => 'Dine download-privilegier genoprettet, du kan nu downloade torrents. Af: :operator',

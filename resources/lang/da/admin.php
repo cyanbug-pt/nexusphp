@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Overvågning af kø',
         'user_modify_logs' => 'Bruger ændre logs',
         'message_templates' => 'Besked skabeloner',
+        'tracker_url' => 'Tracker URL',
+        'activity_logs' => 'Aktivitetslogs',
     ],
     'resources' => [
         'agent_allow' => [

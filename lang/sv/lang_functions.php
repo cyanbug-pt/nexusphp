@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Du kommer att få',
 	'std_by' => 'Av',
 	'row_security_image' => "Säkerhetsbild:",
+	'row_security_challenge' => "Säkerhetsutmaning:",
 	'row_security_code' => "Säkerhetskod:",
 	'text_slots' => "Slots:",
 	'text_unlimited' => "Obegränsad",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'Krävs',
 	'text_invalid' => 'Ogiltig',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo kommer från programvara <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>,öppen fil, språk välj engelska, klicka på menyn Visa > text > högerklicka i rutan > markera alla > kopiera > förbi i den här rutan.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo kommer från programvara <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>, pennfil, språk välj engelska, Klicka på menyn Visa > text > högerklicka i rutan > Markera alla > kopiera > förbi i denna ruta.
+	<br>
+	<b>&middot;</b> BDInfo kommer från programvaran <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>, penna filen med denna programvara, klicka på Skanna bithastigheter för att se rapporten, högerklicka i rutan > markera alla, högerklicka > kopiera och klistra in den här.
+	',
     'text_management_system' => 'Hantering',
     'text_seed_points' => 'Seed points',
     'spoiler_expand_collapse' => 'Klicka för att expandera/kollapsa',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Kontakta personal',
     'full_site_promotion_in_effect' => 'Full webbplats [%s] i effekt!',
     'full_site_promotion_time_range' => 'Tidsintervall: %s ~ %s',
+    'full_site_promotion_remark' => 'Obs: %s',
+    'full_site_promotion_upcoming' => 'Kommande full webbplats [%s]',
     'text_torrent_to_approval' => 'Det %s%u inte godkännande torrent%s.',
     'std_confirm_remove' => 'Är du säker du vill ta bort den?',
     'select_an_user_class' => 'Välj en användarklass',

@@ -23,6 +23,10 @@ return [
         'subject' => 'Oikeus lataukseen peruttu',
         'body' => 'Lataus lupa on peruutettu koska ilmoittaa maksettu torrent-tiedosto liian monta kertaa, varmista, että sinulla on tarpeeksi bonusta.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Oikeus lataukseen peruttu',
+        'body' => 'Lataus lupa on peruutettu koska ilmoittaa väärennettyjä tietoja.',
+    ],
     'download_enable' => [
         'subject' => 'Lataus oikeudet palautettu',
         'body' => 'Lataus oikeudet palautettu, voit nyt ladata torrents. Kirjoittaja: :operator',

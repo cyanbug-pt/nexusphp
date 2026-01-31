@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'ユーザー名カードの変更を購入する',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => '勲章を贈ろう',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'トレントを購入',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => '任務完了ボーナス',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'タスクが未完了です。',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => '報酬Torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'トレント権限がありません。',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'ロールワーク給与（給与）',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent をダウンロードする',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'ギフトを受け取る',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Torrent をアップロード',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'トレント獲得報酬',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'トレントを主張した報酬に達しました',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => '基本的なシード中',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'シードドナーの追加',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => '注文後の値',
     ],
     'exclude_seeding_bonus' => 'シードボーナスを除外',
+    'title_for_user' => 'ユーザーボーナスの詳細',
+    'category' => 'カテゴリ',
+    'category_common' => '一般的な',
+    'category_seeding' => 'シード中',
+    'view_detail' => '詳細',
 ];

@@ -168,6 +168,10 @@ $lang_mybonus = array
     'text_success_buy_change_username_card' => "Gratulujeme k úspěšnému zakoupení <b>změňte uživatelskou kartu</b>!",
     'text_change_username_card_already_has' => 'Již máte změněnou kartu uživatelského jména',
     'text_rainbow_id_already_valid_forever' => 'Již máte trvalé ID Rainbow',
+    'text_get_by_medal' => 'Mediální bonus získá následující doplňkovou bonusovou hodnotu za hodinu',
+    'medal_additional_desc' => 'Výpočet Mediálního bonusu je stejný jako výše bez ohledu na minimální záruku',
+    'medal_additional_factor' => 'Konečný bonus je vypočítaný medailový bonus vynásobený faktorem medal_additional_factor',
+    'text_bonus_mini_size' => 'Velikost Torrentu musí být alespoň %s. Velikost Torrentu menší než tato hlasitost je vyloučena z výpočtu bonusu'
 );
 
 ?>

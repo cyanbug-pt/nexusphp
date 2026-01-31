@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Re',
     'retroactive_confirm_tip' => 'Επιβεβαίωση συμμετοχής: ',
     'retroactive_description' => 'Κάντε κλικ στην τελεία στο λευκό φόντο για να συμμετάσχετε. Αυτή τη στιγμή έχετε μια κάρτα συμμετοχής <b>%d</b>.',
+    'attend_button' => 'Άφιξη τώρα',
 );

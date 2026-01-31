@@ -23,6 +23,10 @@ return [
         'subject' => 'Permissão de download cancelada',
         'body' => 'Sua permissão de download foi cancelada devido ao anúncio de torrent pago muitas vezes, por favor, certifique-se de ter bônus suficiente.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Permissão de download cancelada',
+        'body' => 'Sua permissão de download foi cancelada devido ao anúncio de dados falsos.',
+    ],
     'download_enable' => [
         'subject' => 'Permissão de download restaurada',
         'body' => 'Seus privilégios de download restaurados, agora você pode baixar torrents. Por: :operator',

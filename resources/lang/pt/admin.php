@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Monitor de fila',
         'user_modify_logs' => 'Modificação de logs do usuário',
         'message_templates' => 'Modelos de mensagem',
+        'tracker_url' => 'URL do Rastreador',
+        'activity_logs' => 'Registros de atividades',
     ],
     'resources' => [
         'agent_allow' => [

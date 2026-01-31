@@ -27,7 +27,7 @@ $lang_takesignup = array
 	'std_to_finish_signup' => " Aanmelden afmaken, bedankt!",
 	'msg_subject' => "Welkom bij ",
 	'msg_congratulations' => "Gefeliciteerd ",
-	'msg_you_are_a_member' => ",\n\nJe bent nu lid van %s,\nWe willen deze gelegenheid graag aangrijpen om hallo en welkom te heten naar %s!\n\nZorg ervoor dat je de [url=rules leest. hp][b]Regels[/b][/url] en de [url=faq. hp][b]Faq[/b][/url].\n en zorg ervoor dat je stopt door de [url=forums. hp][b]Forums[/b][/url]: en zeg Hallo!\n\nGeniet van je verblijf.\nDe Staf van %s ",
+	'msg_you_are_a_member' => ",\n\nJe bent nu lid van %s,\nWe zouden graag van de gelegenheid gebruik willen maken om hallo en welkom te heten!\n\nGelieve de [url=Rules te lezen. hp][b]Regels[/b][/url] en de [url=faq. hp][b]Faq[/b][/url].\n En zorg ervoor dat u stopt door de [url=forums. hp][b]Forums[/b][/url]: en zeg Hallo!\n\nGeniet van je verblijf.\nDe Staf van %s ",
 	'mail_this_link' =>	"DIT LINK",
 	'mail_here' => "HIER",
 	'mail_title' => " Gebruiker registratie bevestiging",

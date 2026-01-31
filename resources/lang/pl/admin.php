@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Monitor kolejki',
         'user_modify_logs' => 'Logi modyfikacji użytkownika',
         'message_templates' => 'Szablony wiadomości',
+        'tracker_url' => 'URL trackera',
+        'activity_logs' => 'Dzienniki aktywności',
     ],
     'resources' => [
         'agent_allow' => [

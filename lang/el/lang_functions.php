@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Θα πάρετε',
 	'std_by' => 'Από',
 	'row_security_image' => "Εικόνα Ασφαλείας:",
+	'row_security_challenge' => "Πρόκληση Ασφαλείας:",
 	'row_security_code' => "Κωδικός Ασφαλείας:",
 	'text_slots' => "Αυλακώσεις:",
 	'text_unlimited' => "Απεριόριστο",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'Απαιτείται',
 	'text_invalid' => 'Μη Έγκυρο',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'Το MediaInfo προέρχεται από το λογισμικό <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>,ανοιχτό αρχείο, γλώσσα επιλέξτε αγγλικά, κάντε κλικ στο μενού προβολής > κείμενο > δεξί κλικ στο πλαίσιο > επιλέξτε όλα > αντιγραφή > παρελθόν σε αυτό το κουτί.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> Το MediaInfo προέρχεται από λογισμικό <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>, στυλό αρχείο, γλώσσα επιλέξτε αγγλικά, κάντε κλικ στο μενού προβολής > κείμενο > δεξί κλικ στο πλαίσιο > επιλέξτε όλα > αντιγραφή > παρελθόν σε αυτό το πλαίσιο.
+	<br>
+	<b>&middot;</b> BDInfo προέρχεται από το λογισμικό <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>, στυλό το αρχείο με αυτό το λογισμικό, κάντε κλικ στην επιλογή Ανίχνευση Bitrates για να δείτε την έκθεση, δεξί κλικ στο πλαίσιο > επιλέξτε όλα, κάντε δεξί κλικ > αντιγραφή και επικολλήστε το εδώ.
+	',
     'text_management_system' => 'Διαχείριση',
     'text_seed_points' => 'Σημεία σποράς',
     'spoiler_expand_collapse' => 'Κλικ για επέκταση/σύμπτυξη',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Επικοινωνία με προσωπικό',
     'full_site_promotion_in_effect' => 'Full site [%s] in effect!',
     'full_site_promotion_time_range' => 'Χρονικό εύρος: %s ~ %s',
+    'full_site_promotion_remark' => 'Σημείωση: %s',
+    'full_site_promotion_upcoming' => 'Επερχόμενη πλήρης ιστοσελίδα [%s]',
     'text_torrent_to_approval' => 'Υπάρχει %s%u δεν εγκρίνει torrent%s.',
     'std_confirm_remove' => 'Είστε βέβαιοι ότι θέλετε να το διαγράψετε?',
     'select_an_user_class' => 'Επιλέξτε μια κλάση χρήστη',

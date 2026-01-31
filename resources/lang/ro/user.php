@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Participă card',
         'props' => 'Recuzita',
         'class' => 'Clasa',
-        'vip_added' => 'Statusul VIP este obţinut prin bonus',
-        'vip_added_help' => 'Este statutul VIP răscumpărat de bonus.',
+        'vip_added' => 'Starea VIP expiră automat',
+        'vip_added_help' => 'Statutul VIP expiră automat.',
         'vip_until' => 'Data sfarsit status VIP',
-        'vip_until_help' => "Formatul orei este 'An-lună-Ora Zilă:Minute:Al doilea moment în care statutul VIP se termină. Statutul VIP este obţinut prin bonus\" trebuie stabilit pe \"da\" pentru ca această regulă să intre în vigoare.",
+        'vip_until_help' => "Formatul orei este 'An-lună-Ora Zilă:Minute:Al doilea moment în care statutul VIP se termină. Starea VIP expiră automat\" trebuie setată la 'Da' pentru ca această regulă să aibă efect.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vibrează',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Utilizatorul invitat s-a înregistrat",
     'msg_user_you_invited' => "Utilizatorul pe care l-ai invitat ",
     'msg_has_registered' => " tocmai s-a înregistrat.",
+    'user_is_disabled' => 'Utilizator: :username(ID: :user_id) este dezactivat.',
+    'user_is_not_confirmed' => 'Utilizator: :username(ID: :user_id) nu a fost confirmat.',
 ];

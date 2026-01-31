@@ -168,6 +168,10 @@ $lang_mybonus = array
     'text_success_buy_change_username_card' => "Tillykke med dit vellykkede køb af et <b>ændre brugernavn kort</b>!",
     'text_change_username_card_already_has' => 'Har allerede ændret brugernavn kort',
     'text_rainbow_id_already_valid_forever' => 'Har allerede et permanent Regnbue-ID',
+    'text_get_by_medal' => 'Medalje bonus vil få følgende ekstra bonus værdi per time',
+    'medal_additional_desc' => 'Medalje bonus beregning formel er den samme som ovenfor, uanset minimumsgaranti',
+    'medal_additional_factor' => 'Den endelige bonus er den beregnede medalje-bonus ganget med medalen_additional_factor',
+    'text_bonus_mini_size' => 'Torrent størrelse skal være mindst %s. Torrent størrelse mindre end denne volumen er udelukket fra bonus beregninger'
 );
 
 ?>

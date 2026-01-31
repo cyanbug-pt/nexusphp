@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 return [
-    'reset'     => 'Het wachtwoord van uw account is gewijzigd.',
-    'sent'      => 'We hebben een e-mail verstuurd met instructies om een nieuw wachtwoord in te stellen.',
-    'throttled' => 'Gelieve even te wachten en het dan opnieuw te proberen.',
-    'token'     => 'Dit wachtwoordhersteltoken is niet geldig.',
-    'user'      => 'Geen gebruiker bekend met dit e-mailadres.',
+    'reset'     => 'Uw wachtwoord is opnieuw ingesteld.',
+    'sent'      => 'We hebben uw wachtwoord reset link verzonden.',
+    'throttled' => 'Wacht alsjeblieft voordat je opnieuw probeert.',
+    'token'     => 'Dit wachtwoord reset token is ongeldig.',
+    'user'      => 'We kunnen geen gebruiker met dat e-mailadres vinden.',
 ];

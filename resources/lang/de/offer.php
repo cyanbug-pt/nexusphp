@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Bitte lade das Angebot hoch innerhalb ",
     'msg_hours_otherwise' => " Andernfalls wird das Angebot gelöscht.",
     'msg_reason_is' => "Der Grund: ",
+    'msg_new_offer_subject' => "Ein neues Angebot wurde hinzugefügt",
+    'msg_new_offer_msg' => "Benutzer :username hat ein neues Angebot :offername hinzugefügt",
 ];

@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "resterende pogingen.",
 	'p_no_account_signup' => "Don't have an account? <a href=\"signup.php\"><b>Sign up</b></a> right now!",
 	'p_forget_pass_recover' => "Wachtwoord vergeten? Uw wachtwoord herstellen <a href=\"recover.php\"><b>via e-mail</b></a>",
-    'p_account_banned' => "Account geblokkeerd? Bekijk de reden op<a href=\"user-ban-log.php\"><b>user ban log</b></a>",
+    'p_account_banned' => "Account geblokkeerd? Bekijk de reden op <a href=\"user-ban-log.php\"><b>user ban log</b></a>",
 	'p_resend_confirm' => "Bevestigingsmail of bevestigingslink is niet ontvangen? <a href=\"confirm_resend.php\"><b>Stuur bevestigingsmail opnieuw</b></a>",
 	'rowhead_username' => "Gebruikersnaam:",
 	'rowhead_password' => "Wachtwoord:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'Tweestapsverificatie verificatie',
     'two_step_code_tooltip' => 'Indien ingeschakeld moet het ingevuld worden',
     'text_complain' => 'Klacht Kanaal',
+    'other_methods' => "Andere methoden",
 );
 
 ?>

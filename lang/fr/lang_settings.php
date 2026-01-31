@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minute',
 	'row_login_secret_lifetime' => 'Durée de vie de la connexion secrète',
 	'text_login_secret_lifetime_deadline' => 'Date limite de connexion secrète actuelle',
-	'row_enable_technical_info' => 'Activer MediaInfo',
-	'text_enable_technical_info' => "Par défaut 'Non'. MediaInfo vient du logiciel <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Vue texte",
-    'row_sticky_first_level_background_color' => 'Couleur de premier niveau adhésif de bg',
+	'row_enable_technical_info' => 'Activer MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Par défaut \'Non\'. <br>
+	MediaInfo vient du logiciel <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> le résultat de "Vue du texte"	<br>
+	BDInfo vient du logiciel <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> le résultat de "Voir les rapports"
+	',
+	'row_sticky_first_level_background_color' => 'Couleur de premier niveau adhésif de bg',
     'text_sticky_first_level_background_color_note' => 'Couleur de premier niveau collant, elle ne sera pas définie si elle n\'est pas définie.',
     'row_sticky_second_level_background_color' => 'Couleur de bg de deuxième niveau épais',
     'text_sticky_second_level_background_color_note' => 'Couleur de bg de deuxième niveau collant, elle ne sera pas définie si elle n\'est pas définie.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Si activé, aucun mot de passe en texte brut ne sera transmis lors de la connexion, recommandé. Les prochaines versions supprimeront cette configuration et activeront cette fonctionnalité.' ,
     'row_complain_enabled' => 'Activer ou non les plaintes',
     'row_complain_enabled_note' => 'par défaut: "oui"',
+    'row_min_size' => 'Volume minimum',
+    'text_bonus_mini_size'=> 'Le volume minimum requis pour le torrent est',
+    'text_bonus_mini_size_help' => '. La taille de torrent inférieure à ce volume n\'est pas incluse dans le calcul du bonus. Unité: octets (Byte), par exemple, 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Options de Bonus de Récompense',
+    'text_reward_bonus_options_note' => 'Options bonus de récompense sur la page de détails du torrent, plusieurs options séparées par des virgules',
+    'row_reward_times_limit' => 'Limite de Fréquence des Récompenses',
+    'text_reward_times_limit_note' => 'Limite quotidienne par utilisateur pour les récompenses bonus sur les pages de détails de la graine. Mettre à 0 pour aucune limite. Par défaut: 0',
 );
 
 ?>

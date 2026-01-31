@@ -8,5 +8,9 @@ return [
     'post' => [
         'edited_notify_subject' => '返信が変更されました',
         'edited_notify_body' => 'トピックへの返信:topic_subjectは:editorによって変更されました。',
+    ],
+    'reply' => [
+        'replied_notify_subject' => 'あなたの返信に新しい返信があります',
+        'replied_notify_body' => 'トピック：:topic_subjectへの返信は:replyerによって返信されました。',
     ]
 ];

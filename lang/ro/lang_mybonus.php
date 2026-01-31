@@ -168,6 +168,10 @@ where<ul><li><b>A</b> is an intermediate variable</li><li><b>Ti</b> is the <b>i<
     'text_success_buy_change_username_card' => "Felicitări pentru achiziția reușită a unui <b>schimbă cardul de utilizator</b>!",
     'text_change_username_card_already_has' => 'Deja aveți un card de utilizator pentru schimbare',
     'text_rainbow_id_already_valid_forever' => 'Deja aveți un ID permanent Rainbow',
+    'text_get_by_medal' => 'Bonusul medaliei va primi următoarea valoare suplimentară a bonusului pe oră',
+    'medal_additional_desc' => 'Formula de calcul al bonusului medaliei este aceeași ca cea de mai sus, indiferent de garanția minimă',
+    'medal_additional_factor' => 'Bonusul final este bonusul calculat medaliei înmulțit cu factorul medal_adional_aditiv',
+    'text_bonus_mini_size' => 'Dimensiunea torentului trebuie să fie cel puțin %s. Dimensiunea torentului este mai mică decât acest volum sunt excluse de la calcularea bonusului'
 );
 
 ?>

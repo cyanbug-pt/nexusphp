@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Παρακαλούμε ανεβάστε την προσφορά εντός ",
     'msg_hours_otherwise' => " ώρες. Διαφορετικά, η προσφορά θα διαγραφεί.",
     'msg_reason_is' => "Ο λόγος: ",
+    'msg_new_offer_subject' => "Μια νέα προσφορά έχει προστεθεί",
+    'msg_new_offer_msg' => "Ο χρήστης :username έχει προσθέσει μια νέα προσφορά :offername",
 ];

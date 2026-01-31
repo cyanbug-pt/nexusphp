@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "残りの試行だ",
 	'p_no_account_signup' => "アカウントをお持ちではありませんか？ <a href=\"signup.php\"><b></b></a> 今すぐサインアップ！",
 	'p_forget_pass_recover' => "パスワードを忘れましたか？ <a href=\"recover.php\"><b>メールでパスワード</b></a> を復元する",
-    'p_account_banned' => "アカウントが禁止されていますか?<a href=\"user-ban-log.php\"><b>ユーザー禁止のログ</b></a> の理由を確認する",
+    'p_account_banned' => "アカウントが禁止されていますか? <a href=\"user-ban-log.php\"><b>ユーザー禁止のログ</b></a> の理由を確認する",
 	'p_resend_confirm' => "Did not receive confirmation mail or confirmation link is broken? <a href=\"confirm_resend.php\"><b>Send confirmation mail again</b></a>",
 	'rowhead_username' => "ユーザー名:",
 	'rowhead_password' => "パスワード:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => '2要素認証',
     'two_step_code_tooltip' => '有効にする必要がある場合',
     'text_complain' => '苦情チャンネル',
+    'other_methods' => "その他のメソッド",
 );
 
 ?>

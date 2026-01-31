@@ -23,6 +23,10 @@ return [
         'subject' => 'Permiso de descarga cancelado',
         'body' => 'Tu permiso de descarga ha sido cancelado debido a que has anunciado que pagas el torrent demasiadas veces, por favor asegúrate de tener suficiente bono.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Permiso de descarga cancelado',
+        'body' => 'Tu permiso de descarga ha sido cancelado debido a que anuncias datos falsos.',
+    ],
     'download_enable' => [
         'subject' => 'Permiso de descarga restaurado',
         'body' => 'Tus privilegios de descarga han sido restaurados, ahora puedes descargar torrents. Por: :operator',

@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'λεπτό',
 	'row_login_secret_lifetime' => 'Μυστική ζωή σύνδεσης',
 	'text_login_secret_lifetime_deadline' => 'Τρέχουσα μυστική προθεσμία σύνδεσης',
-	'row_enable_technical_info' => 'Ενεργοποίηση MediaInfo',
-	'text_enable_technical_info' => "Προεπιλεγμένο 'Όχι'. Το MediaInfo προέρχεται από λογισμικό <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Προβολή κειμένου",
-    'row_sticky_first_level_background_color' => 'Κολλημένο χρώμα πρώτου επιπέδου bg',
+	'row_enable_technical_info' => 'Ενεργοποίηση MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Προεπιλογή \'Όχι\'. <br>
+	- Το MediaInfo προέρχεται από το λογισμικό <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> το αποτέλεσμα της "προβολής κειμένου"	<br>
+	- BDInfo προέρχεται από το λογισμικό <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> το αποτέλεσμα της "View Reports"
+	',
+	'row_sticky_first_level_background_color' => 'Κολλημένο χρώμα πρώτου επιπέδου bg',
     'text_sticky_first_level_background_color_note' => 'Κολλημένο χρώμα πρώτου επιπέδου bg, δεν θα είναι κανένα αν δεν οριστεί.',
     'row_sticky_second_level_background_color' => 'Κολλημένο χρώμα δεύτερου επιπέδου bg',
     'text_sticky_second_level_background_color_note' => 'Κολλημένο χρώμα δευτέρου επιπέδου bg, δεν θα είναι κανένα αν δεν οριστεί.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Αν ενεργοποιηθεί, δεν θα μεταδοθούν κωδικοί πρόσβασης μέσω καρφιτσώματος κατά τη σύνδεση, συνιστάται. Οι μελλοντικές εκδόσεις θα καταργήσουν αυτή τη ρύθμιση και θα ενεργοποιήσουν αυτήν τη λειτουργία.' ,
     'row_complain_enabled' => 'Αν θα ενεργοποιήσετε τις καταγγελίες',
     'row_complain_enabled_note' => 'προεπιλογή: "ναι"',
+    'row_min_size' => 'Ελάχιστος όγκος',
+    'text_bonus_mini_size'=> 'Ο ελάχιστος απαιτούμενος όγκος για το torrent είναι',
+    'text_bonus_mini_size_help' => '. Μέγεθος Torrent μικρότερο από αυτόν τον τόμο δεν περιλαμβάνεται στον υπολογισμό του μπόνους. Μονάδα: bytes (Byte), π.χ. 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Επιλογές Μπόνους Ανταμοιβής',
+    'text_reward_bonus_options_note' => 'Επιλογές μπόνους ανταμοιβής στη σελίδα λεπτομερειών torrent, πολλαπλές επιλογές διαχωρισμένες με κόμματα',
+    'row_reward_times_limit' => 'Όριο Συχνότητας Ανταμοιβής',
+    'text_reward_times_limit_note' => 'Ημερήσιο όριο ανά χρήστη για ανταμοιβές μπόνους σε σελίδες λεπτομερειών σπόρου. Ορίστε σε 0 χωρίς όριο. Προεπιλογή: 0',
 );
 
 ?>

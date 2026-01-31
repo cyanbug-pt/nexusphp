@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'минута',
 	'row_login_secret_lifetime' => 'Время жизни пароля для входа',
 	'text_login_secret_lifetime_deadline' => 'Текущий срок входа в систему',
-	'row_enable_technical_info' => 'Включить MediaInfo',
-	'text_enable_technical_info' => "По умолчанию 'Нет'. MediaInfo поставляется из программного обеспечения <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> текстовый вид",
-    'row_sticky_first_level_background_color' => 'Липкие первый уровень цвета bg',
+	'row_enable_technical_info' => 'Включить MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'По умолчанию «Нет». <br>
+	MediaInfo поставляется из программного обеспечения <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> результат "Текстовое представление"	<br>
+	BDInfo приходит от программного обеспечения <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> результат "Просмотр отчетов"
+	',
+	'row_sticky_first_level_background_color' => 'Липкие первый уровень цвета bg',
     'text_sticky_first_level_background_color_note' => 'Липкий первый уровень цвета bg, он не будет установлен, если не будет установлен.',
     'row_sticky_second_level_background_color' => 'Липкие второй уровень цвета bg',
     'text_sticky_second_level_background_color_note' => 'Липкий второй уровень цвета bg, он не будет установлен, если не будет установлен.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Если включено, пароли из обычного текста не будут передаваться при входе в систему, рекомендуется. Будущие релизы удалит эту конфигурацию и включит эту функцию.' ,
     'row_complain_enabled' => 'Разрешить ли жалобы',
     'row_complain_enabled_note' => 'по умолчанию: "да"',
+    'row_min_size' => 'Минимальная громкость',
+    'text_bonus_mini_size'=> 'Минимальный объем для торрента требуется',
+    'text_bonus_mini_size_help' => '. Размер торрента меньше, чем этот объем, не включен в бонусный расчёт. Единица: байт (Byte), например, 1 КиБ = 1024 байта.',
+    'row_reward_bonus_options' => 'Настройки бонусов',
+    'text_reward_bonus_options_note' => 'Опции бонуса за вознаграждение на странице детали торрента, несколько вариантов разделенных запятыми',
+    'row_reward_times_limit' => 'Лимит частоты',
+    'text_reward_times_limit_note' => 'Ежедневный лимит бонусных наград на страницах с информацией о семенах. 0 - без ограничений. По умолчанию: 0',
 );
 
 ?>

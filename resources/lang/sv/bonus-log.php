@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Köp nytt användarnamn kort',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gåva medalj',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Köp torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Uppgift klar belöning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Uppgift oavslutad avdrag',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Belöning torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Antagen torrent onått',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rolllön',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent laddas ner',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Ta emot gåva',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Ladda upp torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent ta emot belöning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Hämtad torrent uppnådd belöning',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Seeding basic',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Post-handelsvärde',
     ],
     'exclude_seeding_bonus' => 'Exkludera sådd bonus',
+    'title_for_user' => 'Information om användarens bonus',
+    'category' => 'Kategori',
+    'category_common' => 'Vanlig',
+    'category_seeding' => 'Seeding',
+    'view_detail' => 'Detaljer',
 ];

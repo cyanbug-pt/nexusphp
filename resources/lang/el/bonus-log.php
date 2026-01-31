@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Αγοράστε αλλαγή κάρτας ονόματος χρήστη',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Μετάλλιο δώρου',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Αγορά torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Η εργασία τελείωσε την ανταμοιβή',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Εργασία ατελής αφαίρεση',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Αμοιβή torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Το υποτιθέμενο torrent δεν επιτεύχθηκε',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Μισθός εργασίας ρόλων',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Κατεβάστε το Torrent',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Λήψη δώρου',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Μεταφόρτωση torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Ανταμοιβή λήψης torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Το υποτιθέμενο torrent έφτασε στην ανταμοιβή',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Βασική σπορά',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Προστίθεται η προσθήκη δότη',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Μετασυναλλακτική αξία',
     ],
     'exclude_seeding_bonus' => 'Εξαίρεση μπόνους σποράς',
+    'title_for_user' => 'Λεπτομέρειες μπόνους χρήστη',
+    'category' => 'Κατηγορία',
+    'category_common' => 'Συχνές',
+    'category_seeding' => 'Διαμοιρασμός',
+    'view_detail' => 'Λεπτομέρειες',
 ];

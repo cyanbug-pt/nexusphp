@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Kö monitor',
         'user_modify_logs' => 'Användare ändra loggar',
         'message_templates' => 'Mallar för meddelande',
+        'tracker_url' => 'Spårare URL',
+        'activity_logs' => 'Aktivitetsloggar',
     ],
     'resources' => [
         'agent_allow' => [

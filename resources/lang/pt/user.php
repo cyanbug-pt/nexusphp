@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Participar do cartão',
         'props' => 'Propriedades',
         'class' => 'Classe:',
-        'vip_added' => 'Status VIP é obtido por bônus',
-        'vip_added_help' => 'É o status VIP resgatado pelo bônus.',
+        'vip_added' => 'Status VIP expira automaticamente',
+        'vip_added_help' => 'É o status VIP expirado automaticamente.',
         'vip_until' => 'Hora de término de estado VIP',
-        'vip_until_help' => "O formato de hora é 'Ano-Mês-Dia: Minuto: Segundo tempo quando o estado VIP termina. O status VIP é obtido pelo bônus' deve ser definido como 'Sim' para que esta regra tenha efeito.",
+        'vip_until_help' => "O formato de hora é 'Ano-Mês-Dia: Minuto: Segundo tempo quando o estado VIP termina. O status VIP expira automaticamente' deve ser definido como 'Sim' para que esta regra tenha efeito.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'VIP',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Usuário convidado cadastrado",
     'msg_user_you_invited' => "O usuário que você convidou ",
     'msg_has_registered' => " acabou de se registar.",
+    'user_is_disabled' => 'Usuário: :username(ID: :user_id) está desativado.',
+    'user_is_not_confirmed' => 'Usuário: :username(ID: :user_id) não confirmado.',
 ];

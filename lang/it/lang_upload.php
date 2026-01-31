@@ -3,14 +3,14 @@
 $lang_upload = array
 (
 	'head_upload' => "Carica",
-	'std_sorry' =>  "Sorry...",
-	'std_unauthorized_to_upload' => "You are not authorized to upload torrents. Read (<a class=\"faqlink\" href=\"messages.php\">Inbox</a>)",
+	'std_sorry' =>  "Spiacenti...",
+	'std_unauthorized_to_upload' => "Non sei autorizzato a caricare torrent. Leggi (<a class=\"faqlink\" href=\"messages.php\">Posta in arrivo</a>)",
 	'std_please_offer' => "Non sei autorizzato a caricare torrent. (Vedi <a class=\"faqlink\" href=\"faq.php#id36\">Uploading</a> nelle FAQ.<br /><br />Se pensi di essere qualificato per il caricamento dei diritti, ti preghiamo di proporre la tua offerta <a class=\"faqlink\" href=\"offers.php\"><b>qui</b></a><br />",
 	'text_red_star_required' => "I campi contrassegnati con una stella rossa (<font color=\"red\">*</font>) sono obbligatori.",
 	'text_tracker_url' => "L'URL dell'annuncio del tracker è",
 	'row_torrent_file' => "File Torrent&nbsp;",
 	'row_torrent_name' => "Nome torrent&nbsp;",
-	'text_torrent_name_note' => "(Taken from filename if not specified. <b>Please use descriptive names.</b> e.g. Blade Runner 1982 Final Cut 720p HDDVD DTS x264-ESiR)\n",
+	'text_torrent_name_note' => "(Preso dal nome del file se non specificato <b>Si prega di utilizzare nomi descrittivi.</b> es. Blade Runner 1982 Final Cut 720p HDDVD DTS x264-ESiR)",
 	'row_small_description' => "Descrizione Piccola&nbsp;",
 	'text_small_description_note' => "(Questo è mostrato nella pagina torrent sotto il nome del torrent. es. 720p @ 4615 kbps - DTS 5.1 @ 1536 kbps)\n",
 	'row_nfo_file' => "NFO&nbsp;file",

@@ -168,6 +168,10 @@ $lang_mybonus = array
     'text_success_buy_change_username_card' => "Onnittelut siitä, että ostit onnistuneesti <b>muuttaa käyttäjätunnusta</b>!",
     'text_change_username_card_already_has' => 'Käyttäjätunnus on jo vaihdettu',
     'text_rainbow_id_already_valid_forever' => 'Jo käytössä pysyvä sateenkaaren tunnus',
+    'text_get_by_medal' => 'Medal bonus saa seuraavat ylimääräinen bonus arvo tunnissa',
+    'medal_additional_desc' => 'Medal bonuksen laskenta kaava on sama kuin edellä, riippumatta vähimmäistakauksesta',
+    'medal_additional_factor' => 'Lopullinen bonus on laskettu mitali bonus kerrottuna medal_additional_factor',
+    'text_bonus_mini_size' => 'Torrent- koon on oltava vähintään %s. Tätä pienempiä torrent- kokoja ei oteta huomioon bonuslaskelmissa'
 );
 
 ?>

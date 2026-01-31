@@ -23,6 +23,10 @@ return [
         'subject' => 'Åtkomst till hämtning avbruten',
         'body' => 'Din nedladdningsbehörighet har avbrutits på grund av att du har betalat torrent för många gånger, se till att du har tillräckligt med bonus.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Åtkomst till hämtning avbruten',
+        'body' => 'Din nedladdningsbehörighet har avbrutits på grund av att falska data har meddelats.',
+    ],
     'download_enable' => [
         'subject' => 'Åtkomst till hämtning återställd',
         'body' => 'Dina nedladdningsprivilegier återställdes, du kan nu ladda ner torrenter. Av: :operator',

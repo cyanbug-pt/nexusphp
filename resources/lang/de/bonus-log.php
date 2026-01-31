@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Benutzernamenskarte kaufen',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Geschenkmedaille',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Torrent kaufen',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Aufgabe abgeschlossen Belohnung',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Aufgabe unerledigter Abzug',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Belohnung Torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Angefragter Torrent nicht erreicht',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rolle Arbeitsgehalt',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent heruntergeladen',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Geschenk erhalten',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Torrent hochladen',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent-Belohnung erhalten',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Belohnung für beanspruchte Torrent erreicht',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Einfaches Verteilen',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Zusatz der Verteiler',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Post-Trade-Wert',
     ],
     'exclude_seeding_bonus' => 'Seeding-Bonus ausschließen',
+    'title_for_user' => 'Benutzer-Bonusdetails',
+    'category' => 'Kategorie',
+    'category_common' => 'Gewöhnlich',
+    'category_seeding' => 'Verteilen',
+    'view_detail' => 'Details',
 ];

@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'キューモニター',
         'user_modify_logs' => 'ユーザーの変更ログ',
         'message_templates' => 'メッセージ・テンプレート',
+        'tracker_url' => 'トラッカーURL',
+        'activity_logs' => '活動ログ',
     ],
     'resources' => [
         'agent_allow' => [

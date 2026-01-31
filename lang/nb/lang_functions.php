@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Du får nå',
 	'std_by' => 'Av',
 	'row_security_image' => "Sikkerhetsbilde:",
+	'row_security_challenge' => "Security Challenge:",
 	'row_security_code' => "Sikkerhetskoden:",
 	'text_slots' => "Trekker:",
 	'text_unlimited' => "Ubegrenset",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'Påkrevd',
 	'text_invalid' => 'Ugyldig',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo kommer fra programvare <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>,åpen fil, språkvelg engelsk, klikk på visningsmenyen > tekst > høyreklikk i boksen > velg all > kopi > forbi i denne boksen.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo comes from software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>，open file, language select english, click the view menu > text > right click in the box > select all > copy > past into this box.
+	<br>
+	<b>&middot;</b> BDInfo comes from software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>，open the file with this software, click Scan Bitrates to view the report, right-click in the box > select all, right-click > copy, and paste it here.
+	',
     'text_management_system' => 'Administrasjon',
     'text_seed_points' => 'Oppgavens poeng',
     'spoiler_expand_collapse' => 'Klikk for å utvide/lukke',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Kontakt ansatte',
     'full_site_promotion_in_effect' => 'Full site [%s] in effect!',
     'full_site_promotion_time_range' => 'Tidsintervall: %s ~ %s',
+    'full_site_promotion_remark' => 'Note: %s',
+    'full_site_promotion_upcoming' => 'Kommende fullside [%s]',
     'text_torrent_to_approval' => '%s%u godkjenner ikke torrent-%s.',
     'std_confirm_remove' => 'Er du sikker på at du vil slette denne?',
     'select_an_user_class' => 'Velg en brukerklasse',

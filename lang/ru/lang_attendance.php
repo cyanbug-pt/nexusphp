@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Re',
     'retroactive_confirm_tip' => 'Подтвердить участие: ',
     'retroactive_description' => 'Нажмите на точку на белом фоне, чтобы принять участие. На данный момент у вас есть карточка посещаемости <b>%d</b>.',
+    'attend_button' => 'Проверить сейчас',
 );

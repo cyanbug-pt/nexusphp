@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'Globalt',
 
     'reached_by_seed_time_comment' => 'Opp til：:now,seed time: :seed_time Tur(er) nådd :seed_time_minimum timour(s)',
+    'reached_by_leech_time_comment' => 'Up to：:now，leech time: :leech_time Hour(s) reached :leech_time_minimum Hour(s)',
     'reached_by_share_ratio_comment' => "Opptil：:now \nseed time: :seed_time Hour(s) Ikke nådd :seed_time_minimum Hour(s) \nDelforhold: :share_ratio nådd standard：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "Din brukerklasse: :user_class_text eller donert bruker, ignorer denne H&R",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) er nådd!',

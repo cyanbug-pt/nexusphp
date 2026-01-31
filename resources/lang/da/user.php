@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Deltag i kort',
         'props' => 'Props',
         'class' => 'Klasse',
-        'vip_added' => 'VIP status er opnået ved bonus',
-        'vip_added_help' => 'VIP-status indløses af bonus.',
+        'vip_added' => 'VIP status auto udløber',
+        'vip_added_help' => 'Er VIP status auto udløber.',
         'vip_until' => 'VIP status sluttidspunkt',
-        'vip_until_help' => "Tidsformatet er 'Året-Året-Måned-Dag Time: Minute:Sekund Den tid, hvor VIP-status slutter. VIP status er opnået ved bonus' skal sættes til 'Ja', for at denne regel kan træde i kraft.",
+        'vip_until_help' => "Tidsformatet er 'Året-Året-Måned-Dag Time: Minute:Sekund Den tid, hvor VIP-status slutter. VIP status auto expires' skal sættes til 'Ja', for at denne regel kan træde i kraft.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Inviteret bruger er registreret",
     'msg_user_you_invited' => "Brugeren du inviterede ",
     'msg_has_registered' => " har registreret sig lige nu.",
+    'user_is_disabled' => 'Bruger: :username( ID: :user_id) er deaktiveret.',
+    'user_is_not_confirmed' => 'Bruger: :username(ID: :user_id) ikke bekræftet.',
 ];
