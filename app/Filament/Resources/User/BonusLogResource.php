@@ -36,10 +36,10 @@ class BonusLogResource extends Resource
         return __('admin.sidebar.bonus_log');
     }
 
-    public static function getModelLabel(): string
-    {
-        return sprintf('%s(%s)', get_model_label(static::getModel()), __('bonus-log.exclude_seeding_bonus'));
-    }
+//    public static function getModelLabel(): string
+//    {
+//        return sprintf('%s(%s)', get_model_label(static::getModel()), __('bonus-log.exclude_seeding_bonus'));
+//    }
 
     public static function form(Schema $schema): Schema
     {

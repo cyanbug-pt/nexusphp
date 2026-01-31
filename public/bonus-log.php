@@ -77,9 +77,9 @@ JS;
 \Nexus\Nexus::js($resetJs, 'footer', false);
 
 $rep = new \App\Repositories\BonusRepository();
-$total = $rep->getCount($uid, $category, $businessType);
+$total = $rep->getCount($category, $uid, $businessType);
 list($pagertop, $pagerbottom, $limit, $offset, $pageSize, $page) = pager(50, $total, "$pagerParam&");
-$list = $rep->getList($uid, $category, $businessType, $page + 1, $pageSize);
+$list = $rep->getList($category, $uid, $businessType, $page + 1, $pageSize);
 begin_main_frame();
 print($filterForm);
 print("<table id='bonus-log-table' width='100%' cellpadding='5'>");
