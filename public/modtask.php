@@ -30,8 +30,10 @@ if ($action == "edituser")
 //	$class = intval($_POST["class"] ?? 0);
 	$class = $userInfo->class;
     $locale = get_user_locale($userid);
-	$vip_added = ($_POST["vip_added"] == 'yes' ? 'yes' : 'no');
-	$vip_until = !empty($_POST["vip_until"]) ? $_POST['vip_until'] : null;
+//	$vip_added = ($_POST["vip_added"] == 'yes' ? 'yes' : 'no');
+    $vip_added = $userInfo->vip_added;
+//	$vip_until = !empty($_POST["vip_until"]) ? $_POST['vip_until'] : null;
+    $vip_until = $userInfo->vip_until;
 
 	$warned = $_POST["warned"] ?? '';
 	$warnlength = intval($_POST["warnlength"] ?? 0);
@@ -251,26 +253,26 @@ if ($action == "edituser")
 //		$what = ($class > $curclass ? "Promoted" : "Demoted");
 //		$modcomment = date("Y-m-d") . " - $what to '" . get_user_class_name($class) . "' by {$CURUSER['username']}.\n". $modcomment;
 //	}
-	if ($class == UC_VIP)
-	{
-		$updateset[] = "vip_added = ".sqlesc($vip_added);
-		if ($vip_added == 'yes')
-			$updateset[] = "vip_until = ".sqlesc($vip_until);
-		$subject = nexus_trans("user.msg_your_vip_status_changed", [], $locale);
-		$msg = nexus_trans("user.msg_vip_status_changed_by", [], $locale).$CURUSER['username'];
-		$added = sqlesc(date("Y-m-d H:i:s"));
-
-		\App\Models\Message::add([
-		    'sender' => 0,
-		    'receiver' => $userid,
-		    'subject' => $subject,
-		    'msg' => $msg,
-		    'added' => now(),
-		]);
-
-//		$modcomment = date("Y-m-d") . " - VIP status changed by {$CURUSER['username']}. VIP added: ".$vip_added.($vip_added == 'yes' ? "; VIP until: ".$vip_until : "").".\n". $modcomment;
-        $userModifyLogs[] = "VIP status changed by {$CURUSER['username']}. VIP added: ".$vip_added.($vip_added == 'yes' ? "; VIP until: ".$vip_until : "");
-	}
+//	if ($class == UC_VIP)
+//	{
+//		$updateset[] = "vip_added = ".sqlesc($vip_added);
+//		if ($vip_added == 'yes')
+//			$updateset[] = "vip_until = ".sqlesc($vip_until);
+//		$subject = nexus_trans("user.msg_your_vip_status_changed", [], $locale);
+//		$msg = nexus_trans("user.msg_vip_status_changed_by", [], $locale).$CURUSER['username'];
+//		$added = sqlesc(date("Y-m-d H:i:s"));
+//
+//		\App\Models\Message::add([
+//		    'sender' => 0,
+//		    'receiver' => $userid,
+//		    'subject' => $subject,
+//		    'msg' => $msg,
+//		    'added' => now(),
+//		]);
+//
+////		$modcomment = date("Y-m-d") . " - VIP status changed by {$CURUSER['username']}. VIP added: ".$vip_added.($vip_added == 'yes' ? "; VIP until: ".$vip_until : "").".\n". $modcomment;
+//        $userModifyLogs[] = "VIP status changed by {$CURUSER['username']}. VIP added: ".$vip_added.($vip_added == 'yes' ? "; VIP until: ".$vip_until : "");
+//	}
 
 	if ($warned && $curwarned != $warned)
 	{

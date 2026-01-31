@@ -122,7 +122,7 @@ if ($CURUSER['id'] == $user['id'] || user_can('cruprfmanage'))
 $userIdDisplay = $user['id'];
 $userManageSystemUrl = sprintf('%s/%s/user/users/%s',getSchemeAndHttpHost(), nexus_env('FILAMENT_PATH', 'nexusphp'), $user['id']);
 $userManageSystemText = sprintf('<a href="%s" target="_blank" class="altlink">%s</a>', $userManageSystemUrl, $lang_functions['text_management_system']);
-$migratedHelp = sprintf($lang_userdetails['change_field_value_migrated'], $userManageSystemText);
+$migratedHelp = "&nbsp;&nbsp;".sprintf($lang_userdetails['change_field_value_migrated'], $userManageSystemText);
 if (user_can('prfmanage') && $user["class"] < get_user_class()) {
     $userIdDisplay .= "&nbsp;[$userManageSystemText]";
 }
@@ -484,8 +484,8 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
         $classselect=classlist('class', $maxclass, $user["class"], 0, false, true);
         tr($lang_userdetails['row_class'], $classselect . $migratedHelp, 1);
     }
-	tr($lang_userdetails['row_vip_by_bonus'], "<input type=\"radio\" name=\"vip_added\" value=\"yes\"" .($user["vip_added"] == "yes" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_yes']." <input type=\"radio\" name=\"vip_added\" value=\"no\"" .($user["vip_added"] == "no" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_no']."<br />", 1);
-	tr($lang_userdetails['row_vip_until'], "<input type=\"text\" name=\"vip_until\" value=\"".htmlspecialchars($user["vip_until"])."\" /> ".$lang_userdetails['text_vip_until_note'], 1);
+	tr($lang_userdetails['row_vip_by_bonus'], "<input type=\"radio\" name=\"vip_added\" value=\"yes\"" .($user["vip_added"] == "yes" ? " checked=\"checked\"" : "")." disabled='disabled'/>".$lang_userdetails['radio_yes']." <input type=\"radio\" name=\"vip_added\" value=\"no\"" .($user["vip_added"] == "no" ? " checked=\"checked\"" : "")." disabled='disabled'/>".$lang_userdetails['radio_no'].$migratedHelp, 1);
+	tr($lang_userdetails['row_vip_until'], "<input type=\"text\" name=\"vip_until\" value=\"".htmlspecialchars($user["vip_until"])."\" disabled='disabled'/> ".$lang_userdetails['text_vip_until_note']. $migratedHelp, 1);
 	$supportlang = htmlspecialchars($user["supportlang"]);
 	$supportfor = htmlspecialchars($user["supportfor"]);
 	$pickfor = htmlspecialchars($user["pickfor"]);
