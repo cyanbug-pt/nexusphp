@@ -11,6 +11,7 @@ return [
     'passkey_delete' => '删除',
     'passkey_unknown' => '处理您的请求时出错。',
     'passkey_invalid' => '通行密钥数据无效。',
+    'passkey_timeout' => '操作超时，请重试。',
     'passkey_error' => '处理您的请求时出错。请稍后重试。',
     'passkey_user_not_found' => '未找到用户。',
     'passkey_not_supported' => '您的浏览器不支持通行密钥。请使用现代浏览器创建和管理您的通行密钥。',
