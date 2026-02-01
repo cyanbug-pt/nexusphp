@@ -1,6 +1,6 @@
 中文 | [English](/README-EN.md)
 
-完整的 PT 建站解决方案。基于 NexusPHP + Laravel + Filament。
+完整的 PT 建站解决方案。基于 NexusPHP + Laravel + FilamentPHP。
 
 欢迎参与国际化工作，点击 [这里](https://github.com/xiaomlove/nexusphp/discussions/193) 了解详情
 
