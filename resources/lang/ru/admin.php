@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Индекс：:index дубликат !',
+            'index_seed_time_average_require_value_invalid' => 'Требуемое среднее время раздачи :index_seed_time_average_require_value больше, чем общая продолжительность экзамена :duration. Пожалуйста, измените его!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

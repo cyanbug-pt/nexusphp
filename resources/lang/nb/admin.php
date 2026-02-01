@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Indeks：:index duplisert !',
+            'index_seed_time_average_require_value_invalid' => 'Gjennomsnittlig gjennomsnittlig tid for seeding :index_seed_time_average_require_value er større enn total eksamens varighet :duration. Endre den!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

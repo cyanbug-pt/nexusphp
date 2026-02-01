@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Index：:index dubblett!',
+            'index_seed_time_average_require_value_invalid' => 'Den nödvändiga genomsnittliga såddtiden :index_seed_time_average_require_value är större än den totala testtiden :duration. Vänligen ändra det!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

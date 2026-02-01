@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Index：:index duplicitní!',
+            'index_seed_time_average_require_value_invalid' => 'Požadovaný průměrný čas distribuce :index_seed_time_average_require_value je větší než celková doba trvání zkoušky :duration. Prosím změňte jej!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

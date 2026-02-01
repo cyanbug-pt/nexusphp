@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Índice：:index duplicado!',
+            'index_seed_time_average_require_value_invalid' => 'O tempo médio de semeamento necessário :index_seed_time_average_require_value é maior do que a duração total do exame :duration. Por favor, modifique!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Index：:index duplicate !',
+            'index_seed_time_average_require_value_invalid' => 'Ο απαιτούμενος μέσος χρόνος σποράς :index_seed_time_average_require_value είναι μεγαλύτερος από τη συνολική διάρκεια εξετάσεων :duration. Παρακαλώ τροποποιήστε το!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

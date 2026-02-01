@@ -235,6 +235,7 @@ class Exam extends NexusModel
 
     public function getRecurringBegin(Carbon $time): Carbon
     {
+        $time = $time->copy();
         $recurring = $this->recurring;
         if ($recurring == self::RECURRING_WEEKLY) {
             return $time->startOfWeek();

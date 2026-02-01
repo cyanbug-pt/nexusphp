@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Indeksi：:index kopioi !',
+            'index_seed_time_average_require_value_invalid' => 'Vaadittu keskimääräinen lähetysaika :index_seed_time_average_require_value on suurempi kuin kokonaistentin kesto :duration. Muokkaa sitä!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

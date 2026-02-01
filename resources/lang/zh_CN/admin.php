@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => '指标：:index 重复！',
+            'index_seed_time_average_require_value_invalid' => '指标平均做种时间的要求量：:index_seed_time_average_require_value 大于整个考核时长：:duration，请修改！'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => '批量免罪',

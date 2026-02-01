@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Index：:index dupliqué !',
+            'index_seed_time_average_require_value_invalid' => 'Le temps moyen requis pour le seeding :index_seed_time_average_require_value est supérieur à la durée totale de l\'examen :duration. Veuillez le modifier !'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

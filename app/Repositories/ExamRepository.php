@@ -31,8 +31,8 @@ class ExamRepository extends BaseRepository
 
     public function store(array $params)
     {
-        $this->checkIndexes($params);
-        $this->checkBeginEnd($params);
+        $diffInHours = $this->checkBeginEnd($params);
+        $this->checkIndexes($params, $diffInHours);
         $this->checkFilters($params);
         /**
          * does not limit this
@@ -48,8 +48,8 @@ class ExamRepository extends BaseRepository
 
     public function update(array $params, $id)
     {
-        $this->checkIndexes($params);
-        $this->checkBeginEnd($params);
+        $diffInHours = $this->checkBeginEnd($params);
+        $this->checkIndexes($params, $diffInHours);
         $this->checkFilters($params);
         /**
          * does not limit this
@@ -76,7 +76,7 @@ class ExamRepository extends BaseRepository
         return $params;
     }
 
-    private function checkIndexes(array $params): bool
+    private function checkIndexes(array $params, float $examDuration): bool
     {
         if (empty($params['indexes'])) {
             throw new \InvalidArgumentException("Require index.");
@@ -94,6 +94,14 @@ class ExamRepository extends BaseRepository
                     'Invalid require value for index: %s.', $index['index']
                 ));
             }
+            if ($index['index'] == Exam::INDEX_SEED_TIME_AVERAGE) {
+                if ($index['require_value'] > $examDuration) {
+                    throw new \InvalidArgumentException(nexus_trans(
+                        'admin.resources.exam.index_seed_time_average_require_value_invalid',
+                        ['index_seed_time_average_require_value' => $index['require_value'], 'duration' => $examDuration]
+                    ));
+                }
+            }
             $validIndex[$index['index']] = $index;
         }
         if (empty($validIndex)) {
@@ -102,28 +110,40 @@ class ExamRepository extends BaseRepository
         return true;
     }
 
-    private function checkBeginEnd(array $params): bool
+    /**
+     * check if begin/end valid, if yes, return diff in hours, else throw InvalidArgumentException
+     * @param array $params
+     * @return float
+     */
+    private function checkBeginEnd(array $params): float
     {
         if (
             !empty($params['begin']) && !empty($params['end'])
             && empty($params['duration'])
             && empty($params['recurring'])
         ) {
-            return true;
+            $begin = Carbon::parse($params['begin']);
+            $end = Carbon::parse($params['end']);
+            return round($begin->diffInHours($end, true));
         }
         if (
             empty($params['begin']) && empty($params['end'])
             && isset($params['duration']) && ctype_digit((string)$params['duration']) && $params['duration'] > 0
             && empty($params['recurring'])
         ) {
-            return true;
+            //unit: day
+            return round(floatval($params['duration']) * 24);
         }
         if (
             empty($params['begin']) && empty($params['end'])
             && empty($params['duration'])
             && !empty($params['recurring'])
         ) {
-            return true;
+            $exam = new Exam(['recurring' => $params['recurring']]);
+            $now = Carbon::now();
+            $begin = $exam->getRecurringBegin($now);
+            $end = $exam->getRecurringEnd($now);
+            return round($begin->diffInHours($end, true));
         }
 
         throw new \InvalidArgumentException(nexus_trans("exam.time_condition_invalid"));
@@ -672,8 +692,8 @@ class ExamRepository extends BaseRepository
             if ($index['index'] == Exam::INDEX_SEED_TIME_AVERAGE) {
                 $torrentCountsRes = Snatch::query()
                     ->where('userid', $user->id)
-                    ->where('completedat', '>=', $begin)
-                    ->where('completedat', '<=', $end)
+                    ->where('last_action', '>=', $begin)
+                    ->where('last_action', '<=', $end)
                     ->selectRaw("count(distinct(torrentid)) as counts")
                     ->first();
                 do_log("special index: {$index['index']}, get torrent count by: " . last_query());

@@ -108,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'インデックス：:index duplication!',
+            'index_seed_time_average_require_value_invalid' => '必要なシード時間 :index_seed_time_average_require_value は、合計試験時間 :durationよりも大きいです。変更してください！'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',
