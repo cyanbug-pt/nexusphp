@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a074b30b7cd641b75fa1b4860b805538",
+    "content-hash": "5b47efd58770c5bf618a2e898044ad08",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2725,16 +2725,16 @@
         },
         {
             "name": "imdbphp/imdbphp",
-            "version": "v8.3.2",
+            "version": "v8.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tboothman/imdbphp.git",
-                "reference": "61fe9fac330914c3e61aa52ac27814c298d96cc6"
+                "reference": "ec21f17959c32c401635834499f93a60fdb3124a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tboothman/imdbphp/zipball/61fe9fac330914c3e61aa52ac27814c298d96cc6",
-                "reference": "61fe9fac330914c3e61aa52ac27814c298d96cc6",
+                "url": "https://api.github.com/repos/tboothman/imdbphp/zipball/ec21f17959c32c401635834499f93a60fdb3124a",
+                "reference": "ec21f17959c32c401635834499f93a60fdb3124a",
                 "shasum": ""
             },
             "require": {
@@ -2745,7 +2745,7 @@
                 "ext-simplexml": "*",
                 "php": ">=5.6",
                 "psr/log": "^1.0 || ^2.0",
-                "psr/simple-cache": "^1.0|^3.0"
+                "psr/simple-cache": "^1.0"
             },
             "require-dev": {
                 "cache/array-adapter": "^1.2",
@@ -2767,9 +2767,9 @@
             "description": "Library for retrieving film and tv information from IMDb",
             "support": {
                 "issues": "https://github.com/tboothman/imdbphp/issues",
-                "source": "https://github.com/tboothman/imdbphp/tree/v8.3.2"
+                "source": "https://github.com/tboothman/imdbphp/tree/v8.3.1"
             },
-            "time": "2026-01-13T18:58:23+00:00"
+            "time": "2025-12-22T10:34:50+00:00"
         },
         {
             "name": "irazasyed/telegram-bot-sdk",
@@ -6763,25 +6763,25 @@
         },
         {
             "name": "psr/simple-cache",
-            "version": "3.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/simple-cache.git",
-                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/764e0b3939f5ca87cb904f570ef9be2d78a07865",
-                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.0"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -6796,7 +6796,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
             "description": "Common interfaces for simple caching",
@@ -6808,9 +6808,9 @@
                 "simple-cache"
             ],
             "support": {
-                "source": "https://github.com/php-fig/simple-cache/tree/3.0.0"
+                "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
-            "time": "2021-10-29T13:26:27+00:00"
+            "time": "2017-10-23T01:57:42+00:00"
         },
         {
             "name": "psy/psysh",
@@ -14031,5 +14031,5 @@
         "ext-zip": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

@@ -110,7 +110,7 @@ if ($maxPrice > 0 && isset($_POST['price']) && $_POST['price'] > $maxPrice && $p
 
 try {
     $dict = TorrentFile::load($tmpname);
-    $dict->unhybridizedTo();
+    $dict = $dict->unhybridizedTo();
     $dict->parse();
 } catch (ParseException $e) {
     bark($e->getMessage());
