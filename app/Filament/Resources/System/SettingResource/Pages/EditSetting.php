@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\System\SettingResource\Pages;
 
+use Filament\Actions\Action;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Schemas\Schema;
@@ -41,8 +42,6 @@ class EditSetting extends Page implements HasForms
 
     protected static string $resource = SettingResource::class;
 
-    protected string $view = 'filament.resources.system.setting-resource.pages.edit-hit-and-run';
-
     public ?array $data = [];
 
     public function getTitle(): string
@@ -56,7 +55,7 @@ class EditSetting extends Page implements HasForms
         $this->fillForm();
     }
 
-    public function form(Schema $schema): Schema
+    public function content(Schema $schema): Schema
     {
         return $schema
             ->components($this->getFormSchema())
@@ -76,7 +75,7 @@ class EditSetting extends Page implements HasForms
         }
         Arr::set($settings, 'captcha.attendance.enabled', $normalized);
 
-        $this->form->fill($settings);
+        $this->content->fill($settings);
     }
 
 
@@ -85,7 +84,10 @@ class EditSetting extends Page implements HasForms
     {
         return [
             Tabs::make('Heading')
-                ->tabs($this->getTabs())
+                ->tabs($this->getTabs()),
+            Action::make('submit')
+                ->label(__('label.save'))
+                ->action(fn() => $this->submit()),
         ];
     }
 
@@ -93,7 +95,7 @@ class EditSetting extends Page implements HasForms
     {
         static::authorizeResourceAccess();
 
-        $formData = $this->form->getState();
+        $formData = $this->content->getState();
         $notAutoloadNames = ['donation_custom'];
         $data = [];
         foreach ($formData as $prefix => $parts) {

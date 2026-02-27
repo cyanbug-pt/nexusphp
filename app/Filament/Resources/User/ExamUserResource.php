@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BooleanColumn;
@@ -193,10 +195,21 @@ class ExamUserResource extends Resource
                         ->columns(2)
                     ,
                     Group::make([
-                        ViewEntry::make('progressFormatted')
-                            ->label('进度')
-                            ->view('filament.resources.user.exam-user-resource.pages.detail-v3')
-                        ])->columnSpan(1),
+                        RepeatableEntry::make('progressFormatted')
+                            ->hiddenLabel()
+                            ->table([
+                                TableColumn::make(__('label.exam.index_required_label')),
+                                TableColumn::make(__('label.exam.index_required_value')),
+                                TableColumn::make(__('label.exam.index_current_value')),
+                                TableColumn::make(__('label.exam.index_result')),
+                            ])
+                            ->schema([
+                                TextEntry::make('index_formatted'),
+                                TextEntry::make('require_value_formatted'),
+                                TextEntry::make('current_value_formatted'),
+                                TextEntry::make('index_result')->html(),
+                            ])
+                    ])->columnSpan(1),
                 ]),
             ]);
 
