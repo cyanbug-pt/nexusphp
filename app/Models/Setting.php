@@ -334,4 +334,9 @@ class Setting extends NexusModel
     {
         return self::get('main.showimdbinfo') == 'yes';
     }
+
+    public static function getSelfEnableBonus(): int
+    {
+        return (int)self::get("bonus.self_enable", BonusLogs::DEFAULT_BONUS_SELF_ENABLE);
+    }
 }

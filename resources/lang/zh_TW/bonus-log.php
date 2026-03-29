@@ -25,6 +25,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => '任務未完成扣除',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => '獎勵種子',
         \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => '認領種子未達標扣除',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SELF_ENABLE => '自助解封',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => '工作組工資',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => '種子被下載',

@@ -36,8 +36,8 @@ if (!$row)
 	failedlogins();
 if ($row['status'] == 'pending')
 	failedlogins($lang_takelogin['std_user_account_unconfirmed']);
-if ($row["enabled"] == "no")
-    bark($lang_takelogin['std_account_disabled']);
+//if ($row["enabled"] == "no")
+//    bark($lang_takelogin['std_account_disabled']);
 
 if (!empty($row['two_step_secret'])) {
     if (empty($_POST['two_step_code'])) {

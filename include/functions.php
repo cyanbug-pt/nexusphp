@@ -2072,7 +2072,6 @@ function userlogin() {
     if (empty($row)) {
         return $loginResult = false;
     }
-
 	if (!$row["passkey"]){
 		$passkey = md5($row['username'].date("Y-m-d H:i:s").$row['passhash']);
 		sql_query("UPDATE users SET passkey = ".sqlesc($passkey)." WHERE id=" . sqlesc($row["id"]));
@@ -2093,6 +2092,9 @@ function userlogin() {
 //		error_reporting(E_ALL & ~E_NOTICE);
 //		error_reporting(-1);
 //	}
+    if ($row['enabled'] !== 'yes') {
+
+    }
     return $loginResult = true;
 }
 
@@ -3168,8 +3170,9 @@ function base64 ($string, $encode=true) {
 
 function loggedinorreturn($mainpage = false) {
 	global $CURUSER,$BASEURL;
+    $script = nexus()->getScript();
 	if (!$CURUSER) {
-	    if (nexus()->getScript() == 'ajax') {
+	    if ($script == 'ajax') {
 	        exit(fail('Not login!', $_POST));
         }
 		if ($mainpage) {
@@ -3181,7 +3184,9 @@ function loggedinorreturn($mainpage = false) {
 		}
 		exit();
 	}
-//	do_log("[USER]: " . $CURUSER['id']);
+    if ($CURUSER['enabled'] != 'yes' && $script != 'self-enable') {
+        nexus_redirect('self-enable.php');
+    }
 }
 
 function deletetorrent($id, $notify = false) {

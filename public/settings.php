@@ -99,7 +99,7 @@ elseif ($action == 'savesettings_bonus') 	// save bonus
         'tengbupload', 'ratiolimit','dlamountlimit','oneinvite','customtitle','vipstatus','bonusgift', 'basictax', 'taxpercentage',
         'prolinkpoint', 'prolinktime', 'attendance_initial', 'attendance_step', 'attendance_max', 'cancel_hr', 'attendance_card',
         'harem_addition', 'hundredgbupload', 'tengbdownload', 'hundredgbdownload', 'official_addition', 'official_tag', 'zero_bonus_tag', 'zero_bonus_factor',
-        'one_tmp_invite', 'rainbow_id', 'change_username_card', 'min_size'
+        'one_tmp_invite', 'rainbow_id', 'change_username_card', 'min_size', 'self_enable'
     );
 	GetVar($validConfig);
 	$BONUS = [];
@@ -630,6 +630,7 @@ elseif ($action == 'bonussettings'){
     tr($lang_settings['row_attendance_card'],$lang_settings['text_it_costs_user']."<input type='text' style=\"width: 50px\" name=attendance_card value='".(isset($BONUS["attendance_card"]) ? $BONUS["attendance_card"] : \App\Models\BonusLogs::DEFAULT_BONUS_BUY_ATTENDANCE_CARD )."'>".$lang_settings['text_attendance_card_note'], 1);
     tr($lang_settings['row_buy_rainbow_id'],$lang_settings['text_it_costs_user']."<input type='text' style=\"width: 50px\" name=rainbow_id value='".(isset($BONUS["rainbow_id"]) ? $BONUS["rainbow_id"] : \App\Models\BonusLogs::DEFAULT_BONUS_BUY_RAINBOW_ID )."'>".$lang_settings['text_buy_rainbow_id_note'], 1);
     tr($lang_settings['row_buy_change_username_card'],$lang_settings['text_it_costs_user']."<input type='text' style=\"width: 50px\" name=change_username_card value='".(isset($BONUS["change_username_card"]) ? $BONUS["change_username_card"] : \App\Models\BonusLogs::DEFAULT_BONUS_BUY_CHANGE_USERNAME_CARD )."'>".$lang_settings['text_buy_change_username_card_note'], 1);
+    tr($lang_settings['row_self_enable'],$lang_settings['text_it_costs_user']."<input type='text' style=\"width: 50px\" name=self_enable value='".(isset($BONUS["self_enable"]) ? $BONUS["self_enable"] : \App\Models\BonusLogs::DEFAULT_BONUS_SELF_ENABLE )."'>".$lang_settings['text_self_enable_note'], 1);
 
 
     echo '<tr><td colspan="2" align="center"><b>' . $lang_settings['text_attendance_get_bonus'] . '</b></td></tr>';

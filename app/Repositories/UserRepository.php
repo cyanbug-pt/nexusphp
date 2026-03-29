@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use App\Enums\ModelEventEnum;
-use App\Enums\RedisKeysEnum;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\ExamUserResource;
@@ -29,7 +28,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
@@ -228,9 +226,9 @@ class UserRepository extends BaseRepository
             'operator' => $operator->id,
         ];
         $modCommentText = sprintf("%s - Disable by %s, reason: %s.", now()->format('Y-m-d'), $operator->username, $reason);
-        DB::transaction(function () use ($targetUser, $banLog, $modCommentText) {
+        NexusDB::transaction(function () use ($targetUser, $banLog, $modCommentText) {
             $targetUser->updateWithModComment(['enabled' => User::ENABLED_NO], $modCommentText);
-            UserBanLog::query()->insert($banLog);
+            UserBanLog::query()->create($banLog);
         });
         do_log("user: $uid, $modCommentText");
         $this->clearCache($targetUser);

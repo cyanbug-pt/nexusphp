@@ -21,6 +21,7 @@ class BonusLogs extends NexusModel
     const DEFAULT_BONUS_BUY_TEMPORARY_INVITE = 500;
     const DEFAULT_BONUS_BUY_RAINBOW_ID = 5000;
     const DEFAULT_BONUS_BUY_CHANGE_USERNAME_CARD = 100000;
+    const DEFAULT_BONUS_SELF_ENABLE = 100000;
 
     //扣除类，1开始
     const BUSINESS_TYPE_CANCEL_HIT_AND_RUN = 1;
@@ -46,6 +47,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_TASK_PASS_REWARD = 21;
     const BUSINESS_TYPE_REWARD_TORRENT = 22;
     const BUSINESS_TYPE_CLAIMED_UNREACHED = 23;
+    const BUSINESS_TYPE_SELF_ENABLE = 24;
 
     //获得类，普通获得，1000 起步
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
@@ -87,6 +89,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_TASK_PASS_REWARD => ['text' => 'Task success reward'],
         self::BUSINESS_TYPE_REWARD_TORRENT => ['text' => 'Reward torrent'],
         self::BUSINESS_TYPE_CLAIMED_UNREACHED => ['text' => 'Claimed torrent unreached'],
+        self::BUSINESS_TYPE_SELF_ENABLE => ['text' => 'Self enable'],
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],

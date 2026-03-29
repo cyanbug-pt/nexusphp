@@ -1505,8 +1505,15 @@ function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models
     $tokenJson = $result['token_json'];
     $signature = $result['signature'];
     $log .= ", uid = $id";
+    $isAjax = nexus()->isAjax();
+    //only in nexus web can self-enable
+    $shouldIgnoreEnabled = IN_NEXUS && !$isAjax;
     if ($isArray) {
-        $res = sql_query("SELECT * FROM users WHERE users.id = ".sqlesc($id)." AND users.enabled='yes' AND users.status = 'confirmed' LIMIT 1");
+        $whereStr = sprintf("id = %d and status = 'confirmed'", $id);
+        if (!$shouldIgnoreEnabled) {
+            $whereStr .= " and enabled = 'yes'";
+        }
+        $res = sql_query("SELECT * FROM users WHERE $whereStr LIMIT 1");
         $row = mysql_fetch_array($res);
         if (!$row) {
             do_log("$log, user not exists");
@@ -1520,7 +1527,11 @@ function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models
             do_log("$log, user not exists");
             return null;
         }
-        $row->checkIsNormal();
+        $checkFields = ['status'];
+        if (!$shouldIgnoreEnabled) {
+            $checkFields[] = 'enabled';
+        }
+        $row->checkIsNormal($checkFields);
         $authKey = $row->auth_key;
     }
     $expectedSignature = hash_hmac('sha256', $tokenJson, $authKey);

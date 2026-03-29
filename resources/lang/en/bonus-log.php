@@ -25,6 +25,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Task unfinished deduct',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Reward torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Claimed torrent unreached',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SELF_ENABLE => 'Self enable',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Role work salary',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent be downloaded',

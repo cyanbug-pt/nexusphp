@@ -8,6 +8,8 @@ class UserBanLog extends NexusModel
 
     protected $fillable = ['uid', 'username', 'operator', 'reason'];
 
+    public $timestamps = true;
+
     public static function clearUserBanLogDuplicate()
     {
         $lists = UserBanLog::query()

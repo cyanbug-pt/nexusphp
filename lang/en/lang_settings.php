@@ -826,6 +826,8 @@ $lang_settings = array
     'text_reward_bonus_options_note' => 'Reward bonus options on the torrent details page, multiple options separated by commas',
     'row_reward_times_limit' => 'Reward Frequency Limit',
     'text_reward_times_limit_note' => 'Daily limit per user for bonus rewards on seed detail pages. Set to 0 for no limit. Default: 0',
+    'row_self_enable' => 'Self-service unblocking',
+    'text_self_enable_note' => 'points. If he chooses to unblock within 1 day of being banned. If the ban duration is N days, the lost mana points will be N times this value.',
 );
 
 ?>
