@@ -3181,7 +3181,7 @@ function loggedinorreturn($mainpage = false) {
 		}
 		exit();
 	}
-    if ($CURUSER['enabled'] != 'yes' && $script != 'self-enable' && \App\Models\Setting::getSelfEnableBonus() > 0) {
+    if ($CURUSER['enabled'] != 'yes' && $script != 'self-enable') {
         nexus_redirect('self-enable.php');
     }
 }

@@ -1506,8 +1506,9 @@ function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models
     $signature = $result['signature'];
     $log .= ", uid = $id";
     $isAjax = nexus()->isAjax();
-    //only in nexus web can self-enable
-    $shouldIgnoreEnabled = IN_NEXUS && !$isAjax;
+    $selfEnableBonus = \App\Models\Setting::getSelfEnableBonus();
+    //only in nexus web can self-enable, and require bonus > 0
+    $shouldIgnoreEnabled = IN_NEXUS && !$isAjax && $selfEnableBonus > 0;
     if ($isArray) {
         $whereStr = sprintf("id = %d and status = 'confirmed'", $id);
         if (!$shouldIgnoreEnabled) {
