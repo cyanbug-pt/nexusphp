@@ -10,4 +10,5 @@ return [
     'deduct_bonus_total' => 'Currently banned for :days days, total bonus to be deducted :total',
     'enable_desc' => 'If you need to unblock, click the button below, the corresponding bonus points will be deducted and the account will return to normal.',
     'enable_button' => 'Click to unblock',
+    'feature_disabled' => 'Feature not enabled',
 ];

@@ -10,4 +10,5 @@ return [
     'deduct_bonus_total' => '當前已封禁 :days 天，共需扣除魔力 :total',
     'enable_desc' => '若需要解封，點擊下面按鈕，扣除相應魔力後賬號即恢復正常。',
     'enable_button' => '點我解封',
+    'feature_disabled' => '功能未啟用',
 ];

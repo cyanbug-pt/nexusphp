@@ -2092,9 +2092,6 @@ function userlogin() {
 //		error_reporting(E_ALL & ~E_NOTICE);
 //		error_reporting(-1);
 //	}
-    if ($row['enabled'] !== 'yes') {
-
-    }
     return $loginResult = true;
 }
 
@@ -3184,7 +3181,7 @@ function loggedinorreturn($mainpage = false) {
 		}
 		exit();
 	}
-    if ($CURUSER['enabled'] != 'yes' && $script != 'self-enable') {
+    if ($CURUSER['enabled'] != 'yes' && $script != 'self-enable' && \App\Models\Setting::getSelfEnableBonus() > 0) {
         nexus_redirect('self-enable.php');
     }
 }

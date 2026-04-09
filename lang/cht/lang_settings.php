@@ -827,7 +827,7 @@ $lang_settings = array
     'row_reward_times_limit' => '魔力獎勵次數限制',
     'text_reward_times_limit_note' => '種子詳情頁的魔力獎勵每人每天次數限制，設置爲 0 不限制。默認：0',
     'row_self_enable' => '自助解封',
-    'text_self_enable_note' => '個魔力值，如果他選擇在被封禁 1 天內解封。封禁時長為 N 天，失去的魔力值將會是此值的 N 倍。',
+    'text_self_enable_note' => '個魔力值，如果他選擇在被封禁 1 天內解封。封禁時長為 N 天，失去的魔力值將會是此值的 N 倍。設置為 0 禁用此功能。',
 );
 
 ?>

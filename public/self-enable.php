@@ -9,9 +9,10 @@ $title = nexus_trans('self-enable.title');
 stdhead($title);
 begin_main_frame();
 begin_frame($title, true,10,"100%","center");
-
-
-if ($CURUSER['enabled'] == 'yes') {
+$unit = \App\Models\Setting::getSelfEnableBonus();
+if ($unit <= 0) {
+    printf('<h3>%s</h3>', nexus_trans('self-enable.feature_disabled'));
+} elseif ($CURUSER['enabled'] == 'yes') {
     printf('<h3>%s</h3>', nexus_trans('self-enable.enable_status_normal'));
 } else {
     $latestBanLog = \App\Models\UserBanLog::query()
@@ -21,7 +22,6 @@ if ($CURUSER['enabled'] == 'yes') {
     if (!$latestBanLog) {
         printf('<h3>%s</h3>', nexus_trans('self-enable.no_ban_info'));
     } else {
-        $unit = \App\Models\Setting::getSelfEnableBonus();
         $elapsedDay = ceil((time() - $latestBanLog->created_at->getTimestamp()) / 86400);
         $total = $unit * $elapsedDay;
         $isUserBonusEnough = $CURUSER['seedbonus'] >= $total;
