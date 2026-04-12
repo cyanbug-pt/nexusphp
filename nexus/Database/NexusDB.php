@@ -57,7 +57,8 @@ class NexusDB
             return self::$instance;
         }
         $instance = new self;
-        $driver = new DBMysqli();
+//        $driver = new DBMysqli();
+        $driver = new DBPdo();
         $instance->setDriver($driver);
         return self::$instance = $instance;
     }
@@ -259,7 +260,7 @@ class NexusDB
     public static function bootEloquent(array $config)
     {
         $capsule = new Capsule(Container::getInstance());
-        $connectionName = self::ELOQUENT_CONNECTION_NAME;
+        $connectionName = self::getConnectionName();
         $capsule->addConnection($config, $connectionName);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
@@ -271,7 +272,7 @@ class NexusDB
     private static function schema(): \Illuminate\Database\Schema\Builder
     {
         if (IN_NEXUS) {
-            return Capsule::schema(self::ELOQUENT_CONNECTION_NAME);
+            return Capsule::schema(self::getConnectionName());
         }
         throw new \RuntimeException('can not call this when not in nexus.');
     }
@@ -295,7 +296,7 @@ class NexusDB
     public static function table($table): \Illuminate\Database\Query\Builder
     {
         if (IN_NEXUS) {
-            return Capsule::table($table, null, self::ELOQUENT_CONNECTION_NAME);
+            return Capsule::table($table, null, self::getConnectionName());
         }
         return DB::table($table);
     }
@@ -319,7 +320,7 @@ class NexusDB
     public static function transaction(\Closure $callback, $attempts = 1)
     {
         if (IN_NEXUS) {
-            return Capsule::connection(self::ELOQUENT_CONNECTION_NAME)->transaction($callback, $attempts);
+            return Capsule::connection(self::getConnectionName())->transaction($callback, $attempts);
         }
         return DB::transaction($callback, $attempts);
     }
@@ -454,6 +455,12 @@ class NexusDB
             Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
         }
     }
+
+    public static function getConnectionName()
+    {
+        return nexus_config('nexus.database.default');
+    }
+
 
 
 }

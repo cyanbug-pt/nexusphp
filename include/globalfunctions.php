@@ -622,10 +622,11 @@ function last_query($all = false, $format = 'json')
 {
     static $connection;
     if (is_null($connection)) {
+        $connectionName = \Nexus\Database\NexusDB::getConnectionName();
         if (IN_NEXUS) {
-            $connection = \Illuminate\Database\Capsule\Manager::connection(\Nexus\Database\NexusDB::ELOQUENT_CONNECTION_NAME);
+            $connection = \Illuminate\Database\Capsule\Manager::connection($connectionName);
         } else {
-            $connection = \Illuminate\Support\Facades\DB::connection(config('database.default'));
+            $connection = \Illuminate\Support\Facades\DB::connection($connectionName);
         }
     }
     if ($all === 'COUNT') {

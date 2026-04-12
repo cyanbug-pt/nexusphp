@@ -1,6 +1,11 @@
 <?php
 namespace Nexus\Database;
 
+/**
+ * @deprecated
+ *
+ * use DBPdo instead
+ */
 class DBMysqli implements DBInterface
 {
     private $mysqli;

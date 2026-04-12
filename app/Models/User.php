@@ -31,8 +31,6 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     protected $perPage = 50;
 
-    protected $connection = NexusDB::ELOQUENT_CONNECTION_NAME;
-
     const STATUS_CONFIRMED = 'confirmed';
     const STATUS_PENDING = 'pending';
 
@@ -108,6 +106,11 @@ class User extends Authenticatable implements FilamentUser, HasName
     public static array $notificationOptions = ['topic_reply', 'hr_reached'];
 
     private const USER_ENABLE_LATELY = "user_enable_lately:%s";
+
+    public function getConnectionName()
+    {
+        return NexusDB::getConnectionName();
+    }
 
     public static function getUserEnableLatelyCacheKey(int $userId): string
     {
