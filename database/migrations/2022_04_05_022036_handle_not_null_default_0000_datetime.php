@@ -13,6 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
+        if (\Nexus\Database\NexusDB::isPgsql()) {
+            //fresh install no need
+            return;
+        }
         $tableFields = \App\Repositories\UpgradeRepository::DATETIME_INVALID_VALUE_FIELDS;
 
         foreach ($tableFields as $table => $fields) {

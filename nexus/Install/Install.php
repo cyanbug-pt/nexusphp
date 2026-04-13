@@ -28,7 +28,7 @@ class Install
 
     protected $envNames = [
         'TIMEZONE',
-        'DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD', 'DB_DATABASE',
+        'DB_CONNECTION', 'DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD', 'DB_DATABASE',
         'REDIS_HOST', 'REDIS_PORT', 'REDIS_DB', 'REDIS_PASSWORD',
         'UID_STARTS',
     ];
@@ -482,6 +482,10 @@ class Install
             if ($name == 'TIMEZONE') {
                 $item['type'] = 'select';
                 $item['options'] = $this->listTimeZone();
+            }
+            if ($name == 'DB_CONNECTION') {
+                $item['type'] = 'select';
+                $item['options'] = ['mysql', 'pgsql'];
             }
             $formControls[] = $item;
         }

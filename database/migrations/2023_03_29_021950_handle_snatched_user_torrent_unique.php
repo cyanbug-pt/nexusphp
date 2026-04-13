@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Nexus\Database\NexusDB;
 
 return new class extends Migration
 {
@@ -15,26 +16,24 @@ return new class extends Migration
     public function up()
     {
         $tableName = 'snatched';
-        $result = DB::select('show index from ' . $tableName);
-        $indexToDrop = [];
-        foreach ($result as $item) {
-            if (in_array($item->Column_name, ['torrentid', 'userid'])) {
-                if ($item->Non_unique == 0) {
-                    return;
+        $columnNames = ['torrentid', 'userid'];
+        // 1. 获取该表所有的索引信息
+        $indexesToDelete = NexusDB::listColumnIndexNames($tableName, $columnNames);
+
+        // 3. 执行删除操作
+        Schema::table($tableName, function (Blueprint $table) use ($indexesToDelete) {
+            foreach ($indexesToDelete as $indexName) {
+                // 如果是主键，需要单独处理
+                if ($indexName === 'primary') {
+                    $table->dropPrimary();
+                } else {
+                    $table->dropIndex($indexName);
                 }
-                $indexToDrop[$item->Key_name] = "drop index " . $item->Key_name;
             }
-        }
-        if (!empty($indexToDrop)) {
-            $sql = sprintf("alter table %s %s", $tableName, implode(', ', $indexToDrop));
-            DB::statement($sql);
-        }
+            $table->unique(['torrentid', 'userid']);
+            $table->index('userid');
+        });
 
-        $sql = "alter table $tableName add unique unique_torrent_user(`torrentid`, `userid`)";
-        DB::statement($sql);
-
-        $sql = "alter table $tableName add index idx_user(`userid`)";
-        DB::statement($sql);
     }
 
     /**

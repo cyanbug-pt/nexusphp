@@ -461,6 +461,30 @@ class NexusDB
         return nexus_config('nexus.database.default');
     }
 
+    public static function isMysql(): bool
+    {
+        return self::getConnectionName() === 'mysql';
+    }
+
+    public static function isPgsql(): bool
+    {
+        return self::getConnectionName() === 'pgsql';
+    }
+
+    public static function listColumnIndexNames(string $table, array $columns): array
+    {
+        $indexes = Schema::getIndexes($table);
+        $indexesNames = [];
+        foreach ($indexes as $index) {
+            foreach ($columns as $columnName) {
+                if (in_array($columnName, $index['columns'])) {
+                    $indexesNames[] = $index['name'];
+                }
+            }
+        }
+        return $indexesNames;
+    }
+
 
 
 }

@@ -24,7 +24,12 @@ class CreateTorrentsCustomFieldValuesTable extends Migration
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });
-        \Illuminate\Support\Facades\DB::statement('alter table torrents_custom_field_values add index(custom_field_value(191))');
+        if (\Nexus\Database\NexusDB::isMysql()) {
+            \Illuminate\Support\Facades\DB::statement('alter table torrents_custom_field_values add index(custom_field_value(191))');
+        } else if (Nexus\Database\NexusDB::isPgsql()) {
+            \Illuminate\Support\Facades\DB::statement('alter table torrents_custom_field_values left(custom_field_value,191)');
+        }
+
     }
 
     /**

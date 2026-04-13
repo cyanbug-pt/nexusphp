@@ -1,7 +1,7 @@
 <?php
 
-$config = require ROOT_PATH . 'config/nexus.php';
-$connectionMysql = $config['mysql'];
-\Nexus\Database\NexusDB::bootEloquent($connectionMysql);
+$dbConfig = nexus_config('nexus.database');
+$config = $dbConfig['connections'][$dbConfig['default']];
+\Nexus\Database\NexusDB::bootEloquent($config);
 
 

@@ -18,6 +18,7 @@ class CreateTorrentsTable extends Migration
         }
         Schema::create('torrents', function (Blueprint $table) {
             $table->mediumIncrements('id');
+            $table->binary('info_hash', 20)->nullable()->unique();
             $table->string('name')->default('')->index('name');
             $table->string('filename')->default('');
             $table->string('save_as')->default('');
@@ -58,14 +59,13 @@ class CreateTorrentsTable extends Migration
             $table->dateTime('picktime')->nullable();
             $table->dateTime('last_reseed')->nullable();
             $table->mediumText('pt_gen')->nullable();
-//            $table->integer('tags')->default(0);
             $table->text('technical_info')->nullable();
             $table->index(['visible', 'pos_state', 'id'], 'visible_pos_id');
             $table->index(['category', 'visible', 'banned'], 'category_visible_banned');
             $table->index(['visible', 'banned', 'pos_state', 'id'], 'visible_banned_pos_id');
         });
-        $sql = 'alter table torrents add column `info_hash` binary(20) NOT NULL after id, add unique info_hash(`info_hash`)';
-        \Illuminate\Support\Facades\DB::statement($sql);
+//        $sql = 'alter table torrents add column `info_hash` binary(20) NOT NULL after id, add unique info_hash(`info_hash`)';
+//        \Illuminate\Support\Facades\DB::statement($sql);
     }
 
     /**

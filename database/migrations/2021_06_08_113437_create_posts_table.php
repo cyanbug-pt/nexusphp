@@ -27,7 +27,6 @@ class CreatePostsTable extends Migration
             $table->dateTime('editdate')->nullable();
             $table->index(['topicid', 'id'], 'topicid_id');
         });
-        \Illuminate\Support\Facades\DB::statement('alter table posts add fulltext body(body)');
     }
 
     /**

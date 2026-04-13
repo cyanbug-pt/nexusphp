@@ -15,23 +15,23 @@ return new class extends Migration
     public function up()
     {
         $tableName = 'peers';
-        $result = DB::select('show index from ' . $tableName);
-        $indexToDrop = [];
-        foreach ($result as $item) {
-            if (in_array($item->Column_name, ['torrent', 'peer_id'])) {
-                $indexToDrop[$item->Key_name] = "drop index " . $item->Key_name;
+        $columnNames = ['torrent', 'peer_id'];
+        // 1. 获取该表所有的索引信息
+        $indexesToDelete = \Nexus\Database\NexusDB::listColumnIndexNames($tableName, $columnNames);
+
+        // 3. 执行删除操作
+        Schema::table($tableName, function (Blueprint $table) use ($indexesToDelete) {
+            foreach ($indexesToDelete as $indexName) {
+                // 如果是主键，需要单独处理
+                if ($indexName === 'primary') {
+                    $table->dropPrimary();
+                } else {
+                    $table->dropIndex($indexName);
+                }
             }
-        }
-        if (!empty($indexToDrop)) {
-            $sql = sprintf("alter table %s %s", $tableName, implode(', ', $indexToDrop));
-            DB::statement($sql);
-        }
-
-        $sql = "alter table $tableName add index idx_torrent_peer(`torrent`, `peer_id`(20))";
-        DB::statement($sql);
-
-        $sql = "alter table $tableName add index idx_peer(`peer_id`(20))";
-        DB::statement($sql);
+            $table->index(['torrent', 'peer_id']);
+            $table->index('peer_id');
+        });
 
     }
 
