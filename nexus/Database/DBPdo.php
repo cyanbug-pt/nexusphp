@@ -8,10 +8,9 @@ class DBPdo implements DBInterface
     private $driver;
     private $lastStmt;
 
-    public function connect($host, $username, $password, $database, $port)
+    public function connect($host, $username, $password, $database, $port, $driver = 'mysql')
     {
-        $driver = $this->driver = nexus_config('nexus.database.default');
-
+        $this->driver = $driver;
         if ($driver === 'mysql') {
             $dsn = "mysql:host={$host};port={$port};dbname={$database};charset=utf8mb4";
         } elseif ($driver === 'pgsql') {

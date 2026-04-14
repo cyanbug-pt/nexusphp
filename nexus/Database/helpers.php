@@ -1,9 +1,9 @@
 <?php
 use Nexus\Database\NexusDB;
 
-function mysql_connect($host, $username, $password, $database, $port)
+function mysql_connect($host, $username, $password, $database, $port, $driver = 'mysql')
 {
-    return NexusDB::getInstance()->connect($host, $username, $password, $database, $port);
+    return NexusDB::getInstance()->connect($host, $username, $password, $database, $port, $driver);
 }
 
 function mysql_errno()

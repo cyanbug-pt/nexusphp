@@ -63,9 +63,9 @@ class NexusDB
         return self::$instance = $instance;
     }
 
-    public function connect($host, $username, $password, $database, $port)
+    public function connect($host, $username, $password, $database, $port, $driver = 'mysql')
     {
-        $result = $this->driver->connect($host, $username, $password, $database, $port);
+        $result = $this->driver->connect($host, $username, $password, $database, $port, $driver);
         if (!$result) {
             throw new DatabaseException(sprintf('[%s]: %s', $this->errno(), $this->error()));
         }
@@ -78,8 +78,9 @@ class NexusDB
         if ($this->isConnected()) {
             return null;
         }
-        $config = nexus_config('nexus.mysql');
-        return $this->connect($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
+        $dbType = self::getConnectionName();
+        $config = nexus_config('nexus.database.connections.' . $dbType);
+        return $this->connect($config['host'], $config['username'], $config['password'], $config['database'], $config['port'], $dbType);
     }
 
     public function query(string $sql)
@@ -484,7 +485,5 @@ class NexusDB
         }
         return $indexesNames;
     }
-
-
 
 }

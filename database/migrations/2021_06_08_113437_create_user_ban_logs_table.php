@@ -18,8 +18,8 @@ class CreateUserBanLogsTable extends Migration
         }
         Schema::create('user_ban_logs', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->integer('uid')->default(0)->index('idx_uid');
-            $table->string('username')->default('')->index('idx_username');
+            $table->integer('uid')->default(0)->index();
+            $table->string('username')->default('')->index();
             $table->integer('operator')->default(0);
             $table->string('reason')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();

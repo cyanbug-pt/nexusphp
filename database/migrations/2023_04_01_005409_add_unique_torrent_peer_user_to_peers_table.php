@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
+use Nexus\Database\NexusDB;
 
 return new class extends Migration
 {
@@ -14,10 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
+        if (NexusDB::isPgsql()) {
+            return;
+        }
         $tableName = 'peers';
         $columnNames = ['torrent', 'peer_id', 'userid'];
         // 1. 获取该表所有的索引信息
-        $indexesToDelete = \Nexus\Database\NexusDB::listColumnIndexNames($tableName, $columnNames);
+        $indexesToDelete = NexusDB::listColumnIndexNames($tableName, $columnNames);
 
         // 3. 执行删除操作
         Schema::table($tableName, function (Blueprint $table) use ($indexesToDelete) {

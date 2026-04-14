@@ -19,7 +19,7 @@ class CreateNewsTable extends Migration
         Schema::create('news', function (Blueprint $table) {
             $table->mediumIncrements('id');
             $table->unsignedMediumInteger('userid')->default(0);
-            $table->dateTime('added')->nullable()->index('added');
+            $table->dateTime('added')->nullable()->index();
             $table->text('body')->nullable();
             $table->string('title')->default('');
             $table->enum('notify', ['yes', 'no'])->default('no');

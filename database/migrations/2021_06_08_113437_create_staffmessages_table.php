@@ -23,7 +23,7 @@ class CreateStaffmessagesTable extends Migration
             $table->text('msg')->nullable();
             $table->string('subject', 128)->default('');
             $table->unsignedMediumInteger('answeredby')->default(0);
-            $table->boolean('answered')->default(0);
+            $table->smallInteger('answered')->default(0);
             $table->text('answer')->nullable();
         });
     }

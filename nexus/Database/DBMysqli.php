@@ -10,7 +10,7 @@ class DBMysqli implements DBInterface
 {
     private $mysqli;
 
-    public function connect($host, $username, $password, $database, $port)
+    public function connect($host, $username, $password, $database, $port, $driver = 'mysql')
     {
         $mysqli = new \mysqli($host, $username, $password, $database, $port);
         /* check connection */

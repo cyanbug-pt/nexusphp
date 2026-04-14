@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('searchbox', function (Blueprint $table) {
-            $table->json('extra')->nullable()->change();
+            if (\Nexus\Database\NexusDB::isMysql()) {
+                $table->json('extra')->nullable()->change();
+            }
             $table->string('custom_fields_display_name')->nullable(true)->default('')->change();
         });
 

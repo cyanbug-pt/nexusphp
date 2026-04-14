@@ -22,14 +22,14 @@ class CreateUsersTable extends Migration
         }
         Schema::create('users', function (Blueprint $table) use ($uidStarts) {
             $table->id('id')->startingValue($uidStarts);
-            $table->string('username', 40)->default('')->unique('username');
+            $table->string('username', 40)->default('')->unique();
             $table->string('passhash', 32)->default('');
             $table->binary('secret');
             $table->string('email', 80)->default('');
             $table->enum('status', ['pending', 'confirmed'])->default('pending');
             $table->dateTime('added')->nullable();
             $table->dateTime('last_login')->nullable();
-            $table->dateTime('last_access')->nullable()->index('last_access');
+            $table->dateTime('last_access')->nullable()->index();
             $table->dateTime('last_home')->nullable();
             $table->dateTime('last_offer')->nullable();
             $table->dateTime('forum_access')->nullable();
@@ -48,25 +48,25 @@ class CreateUsersTable extends Migration
             $table->text('info')->nullable();
             $table->enum('acceptpms', ['yes', 'friends', 'no'])->default('yes');
             $table->enum('commentpm', ['yes', 'no'])->default('yes');
-            $table->string('ip', 64)->default('')->index('ip');
-            $table->unsignedTinyInteger('class')->default(1)->index('class');
+            $table->string('ip', 64)->default('')->index();
+            $table->unsignedTinyInteger('class')->default(1)->index();
             $table->tinyInteger('max_class_once')->default(1);
             $table->string('avatar')->default('');
-            $table->unsignedBigInteger('uploaded')->default(0)->index('uploaded');
-            $table->unsignedBigInteger('downloaded')->default(0)->index('downloaded');
+            $table->unsignedBigInteger('uploaded')->default(0)->index();
+            $table->unsignedBigInteger('downloaded')->default(0)->index();
             $table->unsignedBigInteger('seedtime')->default(0);
             $table->unsignedBigInteger('leechtime')->default(0);
             $table->string('title', 30)->default('');
-            $table->unsignedSmallInteger('country')->default(107)->index('country');
+            $table->unsignedSmallInteger('country')->default(107)->index();
             $table->string('notifs', 500)->nullable();
             $table->text('modcomment')->nullable();
-            $table->enum('enabled', ['yes', 'no'])->default('yes')->index('enabled');
+            $table->enum('enabled', ['yes', 'no'])->default('yes')->index();
             $table->enum('avatars', ['yes', 'no'])->default('yes');
             $table->enum('donor', ['yes', 'no'])->default('no');
             $table->decimal('donated')->default(0.00);
             $table->decimal('donated_cny')->default(0.00);
             $table->dateTime('donoruntil')->nullable();
-            $table->enum('warned', ['yes', 'no'])->default('no')->index('warned');
+            $table->enum('warned', ['yes', 'no'])->default('no')->index();
             $table->dateTime('warneduntil')->nullable();
             $table->enum('noad', ['yes', 'no'])->default('no');
             $table->dateTime('noaduntil')->nullable();
@@ -84,7 +84,7 @@ class CreateUsersTable extends Migration
             $table->string('supportfor')->default('');
             $table->string('pickfor')->default('');
             $table->string('supportlang', 50)->default('');
-            $table->string('passkey', 32)->default('')->index('passkey');
+            $table->string('passkey', 32)->default('')->index();
             $table->string('promotion_link', 32)->nullable();
             $table->enum('uploadpos', ['yes', 'no'])->default('yes');
             $table->enum('forumpost', ['yes', 'no'])->default('yes');
@@ -93,7 +93,7 @@ class CreateUsersTable extends Migration
             $table->enum('signatures', ['yes', 'no'])->default('yes');
             $table->string('signature', 800)->default('');
             $table->unsignedSmallInteger('lang')->default(6);
-            $table->smallInteger('cheat')->default(0)->index('cheat');
+            $table->smallInteger('cheat')->default(0)->index();
             $table->unsignedInteger('download')->default(0);
             $table->unsignedInteger('upload')->default(0);
             $table->unsignedTinyInteger('isp')->default(0);
@@ -118,7 +118,7 @@ class CreateUsersTable extends Migration
             $table->enum('showdescription', ['yes', 'no'])->nullable()->default('yes');
             $table->enum('showcomment', ['yes', 'no'])->nullable()->default('yes');
             $table->enum('showclienterror', ['yes', 'no'])->default('no');
-            $table->boolean('showdlnotice')->default(1);
+            $table->smallInteger('showdlnotice')->default(1);
             $table->enum('tooltip', ['minorimdb', 'medianimdb', 'off'])->default('off');
             $table->enum('shownfo', ['yes', 'no'])->nullable()->default('yes');
             $table->enum('timetype', ['timeadded', 'timealive'])->nullable()->default('timealive');
@@ -136,7 +136,7 @@ class CreateUsersTable extends Migration
             $table->unsignedSmallInteger('school')->default(35);
             $table->enum('showfb', ['yes', 'no'])->default('yes');
             $table->string('page')->nullable()->default('');
-            $table->index(['status', 'added'], 'status_added');
+            $table->index(['status', 'added']);
 
         });
     }

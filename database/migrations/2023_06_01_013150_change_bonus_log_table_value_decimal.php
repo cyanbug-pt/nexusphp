@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->decimal("seedbonus", 20, 1)->change();
+            $table->decimal("seedbonus", 20, 1)->default(0)->change();
         });
         Schema::table('bonus_logs', function (Blueprint $table) {
             $table->decimal("old_total_value", 20, 1)->change();

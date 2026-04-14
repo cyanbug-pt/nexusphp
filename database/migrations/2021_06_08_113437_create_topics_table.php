@@ -18,8 +18,8 @@ class CreateTopicsTable extends Migration
         }
         Schema::create('topics', function (Blueprint $table) {
             $table->mediumIncrements('id');
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
-            $table->string('subject', 128)->default('')->index('subject');
+            $table->unsignedMediumInteger('userid')->default(0)->index();
+            $table->string('subject', 128)->default('')->index();
             $table->enum('locked', ['yes', 'no'])->default('no');
             $table->unsignedSmallInteger('forumid')->default(0);
             $table->unsignedInteger('firstpost')->default(0);
@@ -27,8 +27,8 @@ class CreateTopicsTable extends Migration
             $table->enum('sticky', ['no', 'yes'])->default('no');
             $table->unsignedTinyInteger('hlcolor')->default(0);
             $table->unsignedInteger('views')->default(0);
-            $table->index(['forumid', 'lastpost'], 'forumid_lastpost');
-            $table->index(['forumid', 'sticky', 'lastpost'], 'forumid_sticky_lastpost');
+            $table->index(['forumid', 'lastpost'], );
+            $table->index(['forumid', 'sticky', 'lastpost'], );
         });
     }
 

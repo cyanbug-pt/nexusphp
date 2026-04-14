@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('oauth_refresh_tokens', function (Blueprint $table) {
             $table->string('id', 100)->primary();
             $table->string('access_token_id', 100)->index();
-            $table->boolean('revoked');
+            $table->smallInteger('revoked');
             $table->dateTime('expires_at')->nullable();
         });
     }

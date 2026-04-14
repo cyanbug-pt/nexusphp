@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('searchbox', function (Blueprint $table) {
-            $table->text('extra')->nullable();
+            $table->json('extra')->nullable();
         });
     }
 

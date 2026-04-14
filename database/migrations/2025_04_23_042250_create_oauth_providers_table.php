@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email_claim')->nullable();
             $table->string('level_claim')->nullable();
             $table->string('level_limit')->nullable();
-            $table->boolean('enabled');
+            $table->smallInteger('enabled');
             $table->integer('priority');
             $table->timestamps();
         });

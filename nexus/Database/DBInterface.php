@@ -3,7 +3,7 @@ namespace Nexus\Database;
 
 interface DBInterface
 {
-    public function connect($host, $username, $password, $database, $port);
+    public function connect($host, $username, $password, $database, $port, $driver = 'mysql');
 
     public function query(string $sql);
 

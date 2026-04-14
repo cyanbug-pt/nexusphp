@@ -27,8 +27,8 @@ class CreateAttachmentsTable extends Migration
             $table->unsignedBigInteger('filesize')->default(0);
             $table->string('location')->default('');
             $table->mediumInteger('downloads')->default(0);
-            $table->boolean('isimage')->unsigned()->default(0);
-            $table->boolean('thumb')->unsigned()->default(0);
+            $table->smallInteger('isimage')->unsigned()->default(0);
+            $table->smallInteger('thumb')->unsigned()->default(0);
             $table->index(['userid', 'id'], 'pid');
             $table->index(['added', 'isimage', 'downloads'], 'dateline');
         });

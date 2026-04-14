@@ -28,7 +28,7 @@ class CreateCheatersTable extends Migration
             $table->unsignedMediumInteger('leechers')->default(0);
             $table->unsignedTinyInteger('hit')->default(0);
             $table->unsignedMediumInteger('dealtby')->default(0);
-            $table->boolean('dealtwith')->default(0);
+            $table->smallInteger('dealtwith')->default(0);
             $table->string('comment')->default('');
         });
     }

@@ -156,7 +156,7 @@ if ($currentStep == 4) {
     $symbolicLinks = $settingTableRows['symbolic_links'];
     $tableRows = $settingTableRows['table_rows'];
     $pass = $settingTableRows['pass'];
-    $mysqlInfo = $update->getMysqlVersionInfo();
+    $mysqlInfo = $update->getDatabaseVersionInfo();
     $redisInfo = $update->getRedisVersionInfo();
     while ($isPost) {
         set_time_limit(300);

@@ -5410,7 +5410,7 @@ function saveSetting(string $prefix, array $nameAndValue, string $autoload = 'ye
 {
     $prefix = strtolower($prefix);
     $datetimeNow = date('Y-m-d H:i:s');
-    $sql = "insert into `settings` (name, value, created_at, updated_at, autoload) values ";
+    $sql = "insert into settings (name, value, created_at, updated_at, autoload) values ";
     $data = [];
     foreach ($nameAndValue as $name => $value) {
         if (is_array($value)) {
@@ -5418,7 +5418,14 @@ function saveSetting(string $prefix, array $nameAndValue, string $autoload = 'ye
         }
         $data[] = sprintf("(%s, %s, %s, %s, '%s')", sqlesc("$prefix.$name"), sqlesc($value), sqlesc($datetimeNow), sqlesc($datetimeNow), $autoload);
     }
-    $sql .= implode(",", $data) . " on duplicate key update value = values(value)";
+    $sql .= implode(",", $data);
+    if (\Nexus\Database\NexusDB::isMysql()) {
+        $sql .= " on duplicate key update value = values(value)";
+    } else if (\Nexus\Database\NexusDB::isPgsql()) {
+        $sql .= " on conflict (name) do update set value = EXCLUDED.value";
+    } else {
+        throw new \RuntimeException('Not supported database.');
+    }
     \Nexus\Database\NexusDB::statement($sql);
     clear_setting_cache();
     do_action("nexus_setting_update");

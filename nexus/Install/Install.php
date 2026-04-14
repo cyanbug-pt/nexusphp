@@ -36,7 +36,7 @@ class Install
     protected array $requiredExtensions = [
         'ctype', 'curl', 'fileinfo', 'json', 'mbstring', 'openssl', 'pdo_mysql', 'tokenizer', 'xml',
         'mysqli', 'bcmath', 'redis', 'gd', 'gmp', 'Zend OPcache', 'pcntl', 'posix', 'sockets', 'zip', 'intl',
-        'sqlite3', 'pdo_sqlite'
+        'sqlite3', 'pdo_sqlite', 'pdo_pgsql',
     ];
 
     protected array $conflictExtensions = [
@@ -156,11 +156,18 @@ class Install
 
     public function listExistsTable()
     {
-        $sql = 'show tables';
+        if (NexusDB::isMysql()) {
+            $schema = nexus_env('DB_DATABASE');
+        } else if (NexusDB::isPgsql()) {
+            $schema = 'public';
+        } else {
+            throw new \RuntimeException('Invalid DB_CONNECTION');
+        }
+        $sql =  "SELECT table_name FROM information_schema.tables WHERE table_schema = '$schema'";
         $res = sql_query($sql);
         $data = [];
-        while ($row = mysql_fetch_row($res)) {
-            $data[] = $row[0];
+        while ($row = mysql_fetch_assoc($res)) {
+            $data[] = $row['table_name'];
         }
         return $data;
     }
@@ -554,7 +561,8 @@ class Install
         }
         $this->doLog("[CREATE ENV] final newData: " . json_encode($newData));
         unset($key, $value);
-        mysql_connect($newData['DB_HOST'], $newData['DB_USERNAME'], $newData['DB_PASSWORD'], $newData['DB_DATABASE'], (int)$newData['DB_PORT']);
+        //check
+        mysql_connect($newData['DB_HOST'], $newData['DB_USERNAME'], $newData['DB_PASSWORD'], $newData['DB_DATABASE'], (int)$newData['DB_PORT'], $newData['DB_CONNECTION']);
         $redis = new \Redis();
         $redis->connect($newData['REDIS_HOST'], $newData['REDIS_PORT'] ?: 6379);
         if (!empty($data['REDIS_PASSWORD'])) {
@@ -723,14 +731,25 @@ class Install
         return $results;
     }
 
-    public function getMysqlVersionInfo(): array
+    public function getDatabaseVersionInfo(): array
     {
-        $sql = 'select version() as v';
-        $result = NexusDB::select($sql);
-        $version = $result[0]['v'];
-        $minVersion = '5.7.8';
+        if (NexusDB::isMysql()) {
+            $sql = 'select version() as v';
+            $result = NexusDB::select($sql);
+            $version = $result[0]['v'];
+            $minVersion = '5.7.8';
+            $dbType = "mysql";
+        } else if (NexusDB::isPgsql()) {
+            $sql = 'SHOW server_version;';
+            $result = NexusDB::select($sql);
+            $version = $result[0]['server_version'];
+            $minVersion = '16.0';
+            $dbType = "pgsql";
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
         $match = version_compare($version, $minVersion, '>=');
-        return compact('version', 'match', 'minVersion');
+        return compact('version', 'match', 'minVersion', 'dbType');
     }
 
     public function getRedisVersionInfo(): array

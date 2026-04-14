@@ -18,8 +18,8 @@ class CreateTorrentSecretsTable extends Migration
         }
         Schema::create('torrent_secrets', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('uid')->index('idx_uid');
-            $table->integer('torrent_id')->default(0)->index('idx_torrent_id');
+            $table->integer('uid')->index();
+            $table->integer('torrent_id')->default(0)->index();
             $table->string('secret');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

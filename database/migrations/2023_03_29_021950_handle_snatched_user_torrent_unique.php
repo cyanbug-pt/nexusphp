@@ -15,6 +15,9 @@ return new class extends Migration
      */
     public function up()
     {
+        if (NexusDB::isPgsql()) {
+            return;
+        }
         $tableName = 'snatched';
         $columnNames = ['torrentid', 'userid'];
         // 1. 获取该表所有的索引信息

@@ -18,7 +18,7 @@ class CreateSitelogTable extends Migration
         }
         Schema::create('sitelog', function (Blueprint $table) {
             $table->increments('id');
-            $table->dateTime('added')->nullable()->index('added');
+            $table->dateTime('added')->nullable()->index();
             $table->text('txt');
             $table->enum('security_level', ['normal', 'mod'])->default('normal');
         });

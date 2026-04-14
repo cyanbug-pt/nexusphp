@@ -108,7 +108,7 @@ class NexusUpdate extends Command
 //        $settings = $settingTableRows['settings'];
         $symbolicLinks = $settingTableRows['symbolic_links'];
         $fails = $settingTableRows['fails'];
-        $mysqlInfo = $this->update->getMysqlVersionInfo();
+        $mysqlInfo = $this->update->getDatabaseVersionInfo();
         $redisInfo = $this->update->getRedisVersionInfo();
 
         if (!empty($fails)) {

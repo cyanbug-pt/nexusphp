@@ -14,6 +14,9 @@ return new class extends Migration
      */
     public function up()
     {
+        if (\Nexus\Database\NexusDB::isPgsql()) {
+            return;
+        }
         $tableName = 'peers';
         $columnNames = ['torrent', 'peer_id'];
         // 1. 获取该表所有的索引信息

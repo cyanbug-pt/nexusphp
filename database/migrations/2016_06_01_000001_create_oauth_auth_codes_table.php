@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('client_id');
             $table->text('scopes')->nullable();
-            $table->boolean('revoked');
+            $table->smallInteger('revoked');
             $table->dateTime('expires_at')->nullable();
         });
     }
