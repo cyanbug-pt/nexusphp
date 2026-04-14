@@ -671,7 +671,7 @@ if ($action == "viewtopic")
 	$pagerbottom = "<p align=\"center\">".$pagerstr."<br />".$pager."</p>\n";
 	//------ Get posts
 
-	$res = sql_query("SELECT * FROM posts $where ORDER BY id LIMIT $offset,$perpage") or sqlerr(__FILE__, __LINE__);
+	$res = sql_query("SELECT * FROM posts $where ORDER BY id LIMIT $perpage offset $offset") or sqlerr(__FILE__, __LINE__);
 
 	stdhead($lang_forums['head_view_topic']." \"".$orgsubject."\"");
 	begin_main_frame("",true);

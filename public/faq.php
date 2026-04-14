@@ -22,15 +22,17 @@ $is_rulelang = get_single_value("language","rule_lang","WHERE id = ".sqlesc($lan
 if (!$is_rulelang){
 	$lang_id = 6; //English
 }
-$res = sql_query("SELECT `id`, `link_id`, `question`, `flag` FROM `faq` WHERE `type`='categ' AND `lang_id` = ".sqlesc($lang_id)." ORDER BY `order` ASC");
-while ($arr = mysql_fetch_array($res)) {
+//$res = sql_query("SELECT id, link_id, question, flag FROM faq WHERE type='categ' AND lang_id = ".sqlesc($lang_id)." ORDER BY order ASC");
+$res = \App\Models\Faq::query()->where('type', 'categ')->where('lang_id', $lang_id)->orderBy('order')->get()->toArray();
+    foreach ($res as $arr) {
 	$faq_categ[$arr['link_id']]['title'] = $arr['question'];
 	$faq_categ[$arr['link_id']]['flag'] = $arr['flag'];
 	$faq_categ[$arr['link_id']]['link_id'] = $arr['link_id'];
 }
 
-$res = sql_query("SELECT `id`, `link_id`, `question`, `answer`, `flag`, `categ` FROM `faq` WHERE `type`='item' AND `lang_id` = ".sqlesc($lang_id)." ORDER BY `order` ASC");
-while ($arr = mysql_fetch_array($res)) {
+//$res = sql_query("SELECT id, link_id, question, answer, flag, categ FROM faq WHERE type='item' AND lang_id = ".sqlesc($lang_id)." ORDER BY order ASC");
+$res = \App\Models\Faq::query()->where('type', 'item')->where('lang_id', $lang_id)->get()->toArray();
+foreach ($res as $arr) {
 	$faq_categ[$arr['categ']]['items'][$arr['id']]['question'] = $arr['question'];
 	$faq_categ[$arr['categ']]['items'][$arr['id']]['answer'] = $arr['answer'];
 	$faq_categ[$arr['categ']]['items'][$arr['id']]['flag'] = $arr['flag'];

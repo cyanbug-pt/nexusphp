@@ -42,7 +42,7 @@ return [
         'nexus_release_date' => 'NexusPHP release date',
         'laravel_version' => 'Laravel version',
         'php_version' => 'PHP version',
-        'mysql_version' => 'Mysql version',
+        'mysql_version' => 'Database version',
         'os' => 'OS',
         'server_software' => 'Web software',
         'load_average' => 'Server load average',

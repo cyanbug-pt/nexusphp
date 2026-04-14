@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Repositories\TagRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Nexus\Database\NexusDB;
 
 class Torrent extends NexusModel
 {
@@ -185,6 +186,19 @@ class Torrent extends NexusModel
         self::NFO_VIEW_STYLE_DOS => ['text' => 'DOS-vy'],
         self::NFO_VIEW_STYLE_WINDOWS => ['text' => 'Windows-vy'],
     ];
+
+    public function scopeWhereInfoHash($query, string $binaryHash)
+    {
+        if (NexusDB::isPgsql()) {
+            return $query->whereRaw(
+                "info_hash = decode(?, 'hex')",
+                [bin2hex($binaryHash)]
+            );
+        } elseif (NexusDB::isMysql()) {
+            return $query->where('info_hash', $binaryHash);
+        }
+        throw new \RuntimeException("Not supported database");
+    }
 
     public function getPickInfoAttribute()
     {
@@ -521,8 +535,16 @@ class Torrent extends NexusModel
 
     public function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
+        $idsString = TagRepository::getOrderByFieldIdString();
+        if (NexusDB::isPgsql()) {
+            $orderByRaw = "array_position(ARRAY[$idsString]::int[], tags.id)";
+        } else if (NexusDB::isMysql()) {
+            $orderByRaw = "FIELD(tags.id, $idsString)";
+        } else {
+            throw new \RuntimeException("Unsupported database");
+        }
         return $this->belongsToMany(Tag::class, 'torrent_tags', 'torrent_id', 'tag_id')
-            ->orderByRaw(sprintf("field(`tags`.`id`,%s)", TagRepository::getOrderByFieldIdString()));
+            ->orderByRaw($orderByRaw);
     }
 
     public function reward_logs(): \Illuminate\Database\Eloquent\Relations\HasMany

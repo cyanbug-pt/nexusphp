@@ -384,7 +384,14 @@ JS;
             $torrentIdArr = [$torrentId];
         }
         $torrentIdStr = implode(',', $torrentIdArr);
-        $res = sql_query("select f.*, v.custom_field_value, v.torrent_id from torrents_custom_field_values v inner join torrents_custom_fields f on v.custom_field_id = f.id inner join searchbox box on box.id = $searchBoxId and find_in_set(f.id, box.custom_fields) where torrent_id in ($torrentIdStr) order by f.priority desc");
+        if (NexusDB::isMysql()) {
+            $customFieldStr = "find_in_set(f.id, box.custom_fields)";
+        } elseif (NexusDB::isPgsql()) {
+            $customFieldStr = "f.id = ANY(string_to_array(box.custom_fields, ',')::int[])";
+        } else {
+            throw new \RuntimeException("Not supported database");
+        }
+        $res = sql_query("select f.*, v.custom_field_value, v.torrent_id from torrents_custom_field_values v inner join torrents_custom_fields f on v.custom_field_id = f.id inner join searchbox box on box.id = $searchBoxId and $customFieldStr where torrent_id in ($torrentIdStr) order by f.priority desc");
         $values = [];
         $result = [];
         while ($row = mysql_fetch_assoc($res)) {

@@ -164,9 +164,9 @@ class NexusDB
         if (!IN_NEXUS) {
             return DB::table($table)->insertGetId($data);
         }
-        $fields = array_map(function ($value) {return "`$value`";}, array_keys($data));
+        $fields = array_map(function ($value) {return "$value";}, array_keys($data));
         $values = array_map(function ($value) {return sqlesc($value);}, array_values($data));
-        $sql = sprintf("insert into `%s` (%s) values (%s)", $table, implode(', ', $fields), implode(', ', $values));
+        $sql = sprintf("insert into %s (%s) values (%s)", $table, implode(', ', $fields), implode(', ', $values));
         sql_query($sql);
         return mysql_insert_id();
     }
@@ -484,6 +484,26 @@ class NexusDB
             }
         }
         return $indexesNames;
+    }
+
+    public static function getDatabaseVersionInfo(): array
+    {
+        if (self::isMysql()) {
+            $sql = 'select version() as v';
+            $result = NexusDB::select($sql);
+            $version = $result[0]['v'];
+            $minVersion = '5.7.8';
+        } else if (self::isPgsql()) {
+            $sql = 'SHOW server_version;';
+            $result = NexusDB::select($sql);
+            $version = $result[0]['server_version'];
+            $minVersion = '16.0';
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+        $dbType = self::getConnectionName();
+        $match = version_compare($version, $minVersion, '>=');
+        return compact('version', 'match', 'minVersion', 'dbType');
     }
 
 }

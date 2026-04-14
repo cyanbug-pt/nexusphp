@@ -139,7 +139,7 @@ if ($piecesCount > $maxPieceCount && $idealPiecesCount < $maxPieceCount) {
     bark('Too many pieces');
 }
 $infohash = $dict->getInfoHashV1ForAnnounce();
-$exists = \App\Models\Torrent::query()->where('info_hash', $infohash)->first(['id']);
+$exists = \App\Models\Torrent::query()->whereInfoHash($infohash)->first(['id']);
 if ($exists) {
 //    bark($lang_takeupload['std_torrent_existed']);
     nexus_redirect(sprintf("details.php?id=%d&existed=1", $exists['id']));

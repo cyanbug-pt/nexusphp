@@ -40,12 +40,14 @@ else
 {
 	$lastseen .= " (" . gettime($lastseen, true, false, true).")";
 }
-$res = sql_query("SELECT COUNT(*) FROM comments WHERE user=" . $user['id']) or sqlerr();
-$arr3 = mysql_fetch_row($res);
-$torrentcomments = $arr3[0];
-$res = sql_query("SELECT COUNT(*) FROM posts WHERE userid=" . $user['id']) or sqlerr();
-$arr3 = mysql_fetch_row($res);
-$forumposts = $arr3[0];
+//$res = sql_query("SELECT COUNT(*) FROM comments WHERE user=" . $user['id']) or sqlerr();
+//$arr3 = mysql_fetch_row($res);
+//$torrentcomments = $arr3[0];
+$torrentcomments = \App\Models\Comment::query()->where('user', $user['id'])->count();
+//$res = sql_query("SELECT COUNT(*) FROM posts WHERE userid=" . $user['id']) or sqlerr();
+//$arr3 = mysql_fetch_row($res);
+//$forumposts = $arr3[0];
+$forumposts = \App\Models\Post::query()->where('userid', $user['id'])->count();
 
 	$arr = get_country_row($user['country']);
 	$country = "<img src=\"pic/flag/".$arr['flagpic']."\" alt=\"".$arr['name']."\" style='margin-left: 8pt' />";
@@ -240,7 +242,7 @@ if (user_can('userprofile') ||  $user["id"] == $CURUSER["id"])
 	tr_small($lang_userdetails['row_ip_address'], hide_text($ip.$locationinfo.$seedBoxIcon), 1);
 }
 $clientselect = '';
-$res = sql_query("SELECT peer_id, agent, ipv4, ipv6, port FROM peers WHERE userid = {$user['id']} GROUP BY agent, ipv4, ipv6, port") or sqlerr();
+$res = sql_query("SELECT peer_id, agent, ipv4, ipv6, port FROM peers WHERE userid = {$user['id']} GROUP BY peer_id, agent, ipv4, ipv6, port") or sqlerr();
 if (mysql_num_rows($res) > 0)
 {
     $clientselect .= "<table border='1' cellspacing='0' cellpadding='5'><tr><td class='colhead'>Agent</td><td class='colhead'>IPV4</td><td class='colhead'>IPV6</td><td class='colhead'>Port</td></tr>";

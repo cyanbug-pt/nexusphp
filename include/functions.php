@@ -3303,7 +3303,7 @@ function pager($rpp, $count, $href, $opts = array(), $pagename = "page") {
 
 	$start = $page * $rpp;
 	$add_key_shortcut = key_shortcut($page,$pages-1);
-	return array($pagertop, $pagerbottom, "LIMIT $start,$rpp", $start, $rpp, $page);
+	return array($pagertop, $pagerbottom, "limit $rpp offset $start", $start, $rpp, $page);
 }
 
 function commenttable($rows, $type, $parent_id, $review = false)
@@ -6146,7 +6146,7 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
         $idStr = implode(',', \Illuminate\Support\Arr::wrap($torrentIdArr));
         $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, 'NO_PEER_ID' as peerID, '' as last_action, '' as ip from torrents  WHERE id in ($idStr) and size >= $minSize";
     } else {
-        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action, peers.ip from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' and torrents.size > $minSize group by peers.torrent, peers.peer_id";
+        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action, peers.ip from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' and torrents.size > $minSize group by torrents.id, peers.id";
     }
     $tagGrouped = [];
     $torrentResult = \Nexus\Database\NexusDB::select($sql);
@@ -6161,7 +6161,14 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
     $officialAdditionalFactor = \App\Models\Setting::get('bonus.official_addition');
     $zeroBonusTag = \App\Models\Setting::get('bonus.zero_bonus_tag');
     $zeroBonusFactor = \App\Models\Setting::get('bonus.zero_bonus_factor');
-    $userMedalResult = \Nexus\Database\NexusDB::select("select round(sum(bonus_addition_factor), 5) as factor from medals where id in (select medal_id from user_medals where uid = $uid and (expire_at is null or expire_at > '$nowStr') and (bonus_addition_expire_at is null or bonus_addition_expire_at > '$nowStr'))");
+    if (\Nexus\Database\NexusDB::isMysql()) {
+        $factorField = "round(sum(bonus_addition_factor), 5)";
+    } elseif (\Nexus\Database\NexusDB::isPgsql()) {
+        $factorField = "round(sum(bonus_addition_factor)::numeric, 5)";
+    } else {
+        throw new \RuntimeException("Not supported database");
+    }
+    $userMedalResult = \Nexus\Database\NexusDB::select("select $factorField as factor from medals where id in (select medal_id from user_medals where uid = $uid and (expire_at is null or expire_at > '$nowStr') and (bonus_addition_expire_at is null or bonus_addition_expire_at > '$nowStr'))");
     $medalAdditionalFactor = floatval($userMedalResult[0]['factor'] ?? 0);
     do_log("$logPrefix, sql: $sql, count: " . count($torrentResult) . ", officialTag: $officialTag, officialAdditionalFactor: $officialAdditionalFactor, zeroBonusTag: $zeroBonusTag, zeroBonusFactor: $zeroBonusFactor, medalAdditionalFactor: $medalAdditionalFactor");
     $last_action = "";

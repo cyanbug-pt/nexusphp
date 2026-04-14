@@ -733,23 +733,7 @@ class Install
 
     public function getDatabaseVersionInfo(): array
     {
-        if (NexusDB::isMysql()) {
-            $sql = 'select version() as v';
-            $result = NexusDB::select($sql);
-            $version = $result[0]['v'];
-            $minVersion = '5.7.8';
-            $dbType = "mysql";
-        } else if (NexusDB::isPgsql()) {
-            $sql = 'SHOW server_version;';
-            $result = NexusDB::select($sql);
-            $version = $result[0]['server_version'];
-            $minVersion = '16.0';
-            $dbType = "pgsql";
-        } else {
-            throw new \RuntimeException('Not supported database.');
-        }
-        $match = version_compare($version, $minVersion, '>=');
-        return compact('version', 'match', 'minVersion', 'dbType');
+        return NexusDB::getDatabaseVersionInfo();
     }
 
     public function getRedisVersionInfo(): array

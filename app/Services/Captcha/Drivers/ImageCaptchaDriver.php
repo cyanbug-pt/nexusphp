@@ -2,6 +2,7 @@
 
 namespace App\Services\Captcha\Drivers;
 
+use App\Models\RegImage;
 use App\Services\Captcha\CaptchaDriverInterface;
 use App\Services\Captcha\Exceptions\CaptchaValidationException;
 
@@ -67,16 +68,11 @@ class ImageCaptchaDriver implements CaptchaDriverInterface
         $random = random_str();
         $imagehash = md5($random);
         $dateline = time();
-
-        $sql = sprintf(
-            "INSERT INTO `regimages` (`imagehash`, `imagestring`, `dateline`) VALUES ('%s', '%s', '%s')",
-            mysql_real_escape_string($imagehash),
-            mysql_real_escape_string($random),
-            mysql_real_escape_string((string) $dateline)
-        );
-
-        sql_query($sql);
-
+        RegImage::query()->insert([
+            'imagehash' => $imagehash,
+            'dateline' => $dateline,
+            'imagestring' => $random,
+        ]);
         return $imagehash;
     }
 
