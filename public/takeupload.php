@@ -279,6 +279,13 @@ if (!is_writable($torrentSavePath)) {
  */
 $descriptionArr = format_description($descr);
 $cover = get_image_from_description($descriptionArr, true, false);
+if (\Nexus\Database\NexusDB::isPgsql()) {
+    $infoHashInsert = \Nexus\Database\NexusDB::raw("decode('" . bin2hex($infohash) . "', 'hex')");
+} elseif (\Nexus\Database\NexusDB::isMysql()) {
+    $infoHashInsert = $infohash;
+} else {
+    throw new \RuntimeException("Not supported database");
+}
 $insert = [
     'filename' => $fname,
     'owner' => $CURUSER['id'],
@@ -305,7 +312,7 @@ $insert = [
     'added' => $dateTimeStringNow,
     'last_action' => $dateTimeStringNow,
 //    'nfo' => $nfo,
-    'info_hash' => $infohash,
+    'info_hash' => $infoHashInsert,
 //    'pt_gen' => $_POST['pt_gen'] ?? '',
 //    'technical_info' => $_POST['technical_info'] ?? '',
     'cover' => $cover,
@@ -354,10 +361,10 @@ if (user_can('torrent-approval-allow-automatic')) {
     $insert['approval_status'] = \App\Models\Torrent::APPROVAL_STATUS_ALLOW;
 }
 if (user_can('torrent-set-price') && $paidTorrentEnabled) {
-    $insert['price'] = $_POST['price'] ?? 0;
+    $insert['price'] = intval($_POST['price'] ?? 0);
 }
 do_log("[INSERT_TORRENT]: " . nexus_json_encode($insert));
-$id = \Nexus\Database\NexusDB::insert('torrents', $insert);
+$id = \App\Models\Torrent::query()->insertGetId($insert);
 
 //$ret = sql_query("INSERT INTO torrents (filename, owner, visible, anonymous, name, size, numfiles, type, url, small_descr, descr, ori_descr, category, source, medium, codec, audiocodec, standard, processing, team, save_as, sp_state, added, last_action, nfo, info_hash, pt_gen, technical_info) VALUES (".sqlesc($fname).", ".sqlesc($CURUSER["id"]).", 'yes', ".sqlesc($anonymous).", ".sqlesc($torrent).", ".sqlesc($totallen).", ".count($filelist).", ".sqlesc($type).", ".sqlesc($url).", ".sqlesc($small_descr).", ".sqlesc($descr).", ".sqlesc($descr).", ".sqlesc($catid).", ".sqlesc($sourceid).", ".sqlesc($mediumid).", ".sqlesc($codecid).", ".sqlesc($audiocodecid).", ".sqlesc($standardid).", ".sqlesc($processingid).", ".sqlesc($teamid).", ".sqlesc($dname).", ".sqlesc($sp_state) .
 //", " . sqlesc(date("Y-m-d H:i:s")) . ", " . sqlesc(date("Y-m-d H:i:s")) . ", ".sqlesc($nfo).", " . sqlesc($infohash). ", " . sqlesc($_POST['pt_gen']) . ", " . sqlesc($_POST['technical_info'] ?? '') . ")");
@@ -426,7 +433,7 @@ fire_event(\App\Enums\ModelEventEnum::TORRENT_CREATED, \App\Models\Torrent::quer
 //===notify people who voted on offer thanks CoLdFuSiOn :)
 if ($is_offer)
 {
-	$res = sql_query("SELECT `userid` FROM `offervotes` WHERE `userid` != " . $CURUSER["id"] . " AND `offerid` = ". sqlesc($offerid)." AND `vote` = 'yeah'") or sqlerr(__FILE__, __LINE__);
+	$res = sql_query("SELECT userid FROM offervotes WHERE userid != " . $CURUSER["id"] . " AND offerid = ". sqlesc($offerid)." AND vote = 'yeah'") or sqlerr(__FILE__, __LINE__);
 
 	while($row = mysql_fetch_assoc($res))
 	{

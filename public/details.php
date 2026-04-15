@@ -618,7 +618,7 @@ echo "</script>";
         $no_give = "";
         $add_value ="";
 
-        $tempresult = sql_query ("SELECT count( DISTINCT `userid` ) as count FROM magic WHERE torrentid=".sqlesc($id));
+        $tempresult = sql_query ("SELECT count( DISTINCT userid ) as count FROM magic WHERE torrentid=".sqlesc($id));
         $count_user = mysql_fetch_array($tempresult);
         $count_user_number = $count_user['count'];
 

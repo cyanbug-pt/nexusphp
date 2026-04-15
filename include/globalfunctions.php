@@ -89,6 +89,9 @@ function sqlesc($value) {
 }
 
 function hash_pad($hash) {
+    if (is_resource($hash)) {
+        $hash = stream_get_contents($hash);
+    }
     return str_pad($hash, 20);
 }
 

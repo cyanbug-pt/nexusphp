@@ -200,6 +200,15 @@ class Torrent extends NexusModel
         throw new \RuntimeException("Not supported database");
     }
 
+    /**
+     * 重写获取 info_hash 的方法，确保从数据库读出时是正确的格式
+     */
+    public function getInfoHashAttribute($value): false|string
+    {
+        // PostgreSQL 返回 bytea 时可能是十六进制流或资源
+        return is_resource($value) ? stream_get_contents($value) : $value;
+    }
+
     public function getPickInfoAttribute()
     {
         $info = self::$pickTypes[$this->picktype] ?? null;

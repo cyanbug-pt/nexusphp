@@ -1277,9 +1277,9 @@ function parse_imdb_id($url)
         $url = str_pad($url, 7, '0', STR_PAD_LEFT);
     }
 	if ($url != "" && preg_match("/[0-9]+/i", $url, $matches)) {
-		return $matches[0];
+		return intval($matches[0]);
 	}
-	return '';
+	return null;
 }
 
 function build_imdb_url($imdb_id)
@@ -6066,7 +6066,7 @@ function insert_torrent_tags($torrentId, $tagIdArr, $sync = false)
     if (empty($tagIdArr)) {
         return;
     }
-    $insertTagsSql = 'insert into torrent_tags (`torrent_id`, `tag_id`, `created_at`, `updated_at`) values ';
+    $insertTagsSql = 'insert into torrent_tags (torrent_id, tag_id, created_at, updated_at) values ';
     $values = [];
     foreach ($tagIdArr as $tagId) {
         if (in_array($tagId, $specialTags) && !$canSetSpecialTag) {
