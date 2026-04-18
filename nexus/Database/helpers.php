@@ -65,3 +65,8 @@ function mysql_free_result($result)
 {
     return NexusDB::getInstance()->freeResult($result);
 }
+
+function mysql_prepare(string $sql): \PDOStatement
+{
+    return NexusDB::getInstance()->prepare($sql);
+}

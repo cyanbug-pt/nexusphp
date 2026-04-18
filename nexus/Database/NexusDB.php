@@ -151,6 +151,11 @@ class NexusDB
         return $this->driver->freeResult($result);
     }
 
+    public function prepare(string $sql)
+    {
+        return $this->driver->prepare($sql);
+    }
+
     public function isConnected()
     {
         return $this->isConnected;
@@ -504,6 +509,17 @@ class NexusDB
         $dbType = self::getConnectionName();
         $match = version_compare($version, $minVersion, '>=');
         return compact('version', 'match', 'minVersion', 'dbType');
+    }
+
+    public static function unixTimestampField(string $field): string
+    {
+        if (self::isMysql()) {
+            return sprintf("UNIX_TIMESTAMP(%s)", $field);
+        } elseif (self::isPgsql()) {
+            return sprintf("EXTRACT(EPOCH FROM %s)", $field);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
     }
 
 }

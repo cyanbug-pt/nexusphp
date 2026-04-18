@@ -90,6 +90,7 @@ function sqlesc($value) {
 
 function hash_pad($hash) {
     if (is_resource($hash)) {
+        rewind($hash);
         $hash = stream_get_contents($hash);
     }
     return str_pad($hash, 20);
@@ -99,7 +100,14 @@ function hash_where($name, $hash) {
 //	$shhash = preg_replace('/ *$/s', "", $hash);
 //	return "($name = " . sqlesc($hash) . " OR $name = " . sqlesc($shhash) . ")";
 //	return sprintf("$name in (%s, %s)", sqlesc($hash), sqlesc($shhash));
-    return "$name = " . sqlesc($hash);
+    if (\Nexus\Database\NexusDB::isMysql()) {
+        return "$name = " . sqlesc($hash);
+    } elseif (Nexus\Database\NexusDB::isPgsql()) {
+        return "$name = decode(bin2hex('$hash'), 'hex')";
+    } else {
+        throw new \RuntimeException("Not supported database");
+    }
+
 }
 
 //no need any more...

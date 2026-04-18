@@ -202,11 +202,20 @@ class Torrent extends NexusModel
 
     /**
      * 重写获取 info_hash 的方法，确保从数据库读出时是正确的格式
+     * 注意：不要使用 getInfoHashAttribute()，不带缓存，第1次有值，第2次指针到头，数据是空！！！
      */
-    public function getInfoHashAttribute($value): false|string
+    public function infoHash(): Attribute
     {
-        // PostgreSQL 返回 bytea 时可能是十六进制流或资源
-        return is_resource($value) ? stream_get_contents($value) : $value;
+        return Attribute::make(
+            get: function ($value) {
+                // PostgreSQL 返回 bytea 时可能是十六进制流或资源
+                if (is_resource($value)) {
+                    rewind($value);
+                    return stream_get_contents($value);
+                }
+                return $value;
+            }
+        )->shouldCache();
     }
 
     public function getPickInfoAttribute()

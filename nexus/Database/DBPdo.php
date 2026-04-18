@@ -125,4 +125,9 @@ class DBPdo implements DBInterface
         return $stmt->closeCursor();
     }
 
+    public function prepare(string $sql): \PDOStatement
+    {
+        return $this->lastStmt = $this->pdo->prepare($sql);
+    }
+
 }

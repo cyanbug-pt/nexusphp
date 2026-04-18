@@ -92,4 +92,9 @@ class DBMysqli implements DBInterface
         return $mysqliResult->free_result();
     }
 
+    public function prepare(string $sql): \PDOStatement
+    {
+        throw new \RuntimeException("mysqli not supported");
+    }
+
 }
