@@ -174,7 +174,7 @@ elseif ($az['showclienterror'] == 'yes'){
 // check torrent based on info_hash
 $tsField = \Nexus\Database\NexusDB::unixTimestampField('added');
 $checkTorrentSql = "SELECT torrents.id, size, owner, sp_state, seeders, leechers, times_completed, $tsField AS ts, added, banned, hr, approval_status, price, categories.mode FROM torrents left join categories on torrents.category = categories.id WHERE info_hash = decode(:info_hash, 'hex') limit 1";
-if (!$torrent = $Cache->get_value('torrent_hash_'.$info_hash.'_content_111')){
+if (!$torrent = $Cache->get_value('torrent_hash_'.$info_hash.'_content')){
     $res = mysql_prepare($checkTorrentSql);
     $res->execute(['info_hash' => bin2hex($info_hash)]);
 	$torrent = mysql_fetch_array($res);
