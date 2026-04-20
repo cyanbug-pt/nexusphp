@@ -20,7 +20,7 @@ class CreateBookmarksTable extends Migration
             $table->increments('id');
             $table->unsignedMediumInteger('torrentid')->default(0);
             $table->unsignedMediumInteger('userid')->default(0);
-            $table->index(['userid', 'torrentid'], 'userid_torrentid');
+            $table->index(['userid', 'torrentid'], );
         });
     }
 

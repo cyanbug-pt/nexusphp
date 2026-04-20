@@ -178,7 +178,9 @@ function dltable($name, $arr, $torrent, &$isSeedBoxCaseWhens)
         $downloaders = $seedersAndLeechers['leechers'];
         do_log("SEEDER_LEECHER_FROM_FILTER: torrent_seeder_leecher_list");
     } else {
-        $subres = sql_query("SELECT id, seeder, finishedat, downloadoffset, uploadoffset, ip, ipv4, ipv6, port, uploaded, downloaded, to_go, UNIX_TIMESTAMP(started) AS st, connectable, agent, peer_id, UNIX_TIMESTAMP(last_action) AS la, userid FROM peers WHERE torrent = $id") or sqlerr();
+        $startedField = \Nexus\Database\NexusDB::unixTimestampField('started');
+        $lastActionField = \Nexus\Database\NexusDB::unixTimestampField('last_action');
+        $subres = sql_query("SELECT id, seeder, finishedat, downloadoffset, uploadoffset, ip, ipv4, ipv6, port, uploaded, downloaded, to_go, $startedField AS st, connectable, agent, peer_id, $lastActionField AS la, userid FROM peers WHERE torrent = $id") or sqlerr();
         while ($subrow = mysql_fetch_array($subres)) {
             if ($subrow["seeder"] == "yes")
                 $seeders[] = $subrow;

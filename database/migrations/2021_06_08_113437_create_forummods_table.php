@@ -18,7 +18,7 @@ class CreateForummodsTable extends Migration
         }
         Schema::create('forummods', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->unsignedSmallInteger('forumid')->default(0)->index('forumid');
+            $table->unsignedSmallInteger('forumid')->default(0)->index();
             $table->unsignedMediumInteger('userid')->default(0);
         });
     }

@@ -18,8 +18,8 @@ class CreateMagicTable extends Migration
         }
         Schema::create('magic', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('torrentid')->default(0)->index('idx_torrentid');
-            $table->integer('userid')->default(0)->index('idx_userid');
+            $table->integer('torrentid')->default(0)->index();
+            $table->integer('userid')->default(0)->index();
             $table->integer('value')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

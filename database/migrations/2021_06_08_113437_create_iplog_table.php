@@ -19,7 +19,7 @@ class CreateIplogTable extends Migration
         Schema::create('iplog', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('ip', 64)->default('');
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
+            $table->unsignedMediumInteger('userid')->default(0)->index();
             $table->dateTime('access')->nullable();
         });
     }

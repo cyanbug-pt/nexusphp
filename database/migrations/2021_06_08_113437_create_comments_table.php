@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
         }
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedMediumInteger('user')->default(0)->index('user');
+            $table->unsignedMediumInteger('user')->default(0)->index();
             $table->unsignedMediumInteger('torrent')->default(0);
             $table->dateTime('added')->nullable();
             $table->text('text')->nullable();
@@ -28,8 +28,8 @@ class CreateCommentsTable extends Migration
             $table->unsignedMediumInteger('offer')->default(0);
             $table->integer('request')->default(0);
             $table->enum('anonymous', ['yes', 'no'])->default('no');
-            $table->index(['torrent', 'id'], 'torrent_id');
-            $table->index(['offer', 'id'], 'offer_id');
+            $table->index(['torrent', 'id'], );
+            $table->index(['offer', 'id'], );
         });
     }
 

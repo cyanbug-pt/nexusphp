@@ -18,7 +18,7 @@ class CreateSettingsTable extends Migration
         }
         Schema::create('settings', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->string('name')->default('')->unique('uniqe_name');
+            $table->string('name')->default('')->unique();
             $table->mediumText('value')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

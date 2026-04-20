@@ -18,8 +18,8 @@ class CreateMessagesTable extends Migration
         }
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedMediumInteger('sender')->default(0)->index('sender');
-            $table->unsignedMediumInteger('receiver')->default(0)->index('receiver');
+            $table->unsignedMediumInteger('sender')->default(0)->index();
+            $table->unsignedMediumInteger('receiver')->default(0)->index();
             $table->dateTime('added')->nullable();
             $table->string('subject', 128)->default('');
             $table->text('msg')->nullable();

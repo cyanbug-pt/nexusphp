@@ -20,7 +20,7 @@ class CreateBlocksTable extends Migration
             $table->increments('id');
             $table->unsignedMediumInteger('userid')->default(0);
             $table->unsignedMediumInteger('blockid')->default(0);
-            $table->unique(['userid', 'blockid'], 'userfriend');
+            $table->unique(['userid', 'blockid'],);
         });
     }
 

@@ -18,9 +18,9 @@ class CreateSuggestTable extends Migration
         }
         Schema::create('suggest', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('keywords')->default('')->index('keywords');
+            $table->string('keywords')->default('')->index();
             $table->unsignedMediumInteger('userid')->default(0);
-            $table->dateTime('adddate')->nullable()->index('adddate');
+            $table->dateTime('adddate')->nullable()->index();
         });
     }
 

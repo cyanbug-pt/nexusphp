@@ -23,7 +23,7 @@ class CreateBansTable extends Migration
             $table->string('comment')->default('');
             $table->bigInteger('first')->default(0);
             $table->bigInteger('last')->default(0);
-            $table->index(['first', 'last'], 'first_last');
+            $table->index(['first', 'last'], );
         });
     }
 

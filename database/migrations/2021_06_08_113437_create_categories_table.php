@@ -24,7 +24,7 @@ class CreateCategoriesTable extends Migration
             $table->string('image')->default('');
             $table->unsignedSmallInteger('sort_index')->default(0);
             $table->integer('icon_id')->default(0);
-            $table->index(['mode', 'sort_index'], 'mode_sort');
+            $table->index(['mode', 'sort_index'], );
         });
     }
 
