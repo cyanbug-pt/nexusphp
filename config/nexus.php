@@ -41,7 +41,7 @@ return [
                 'charset' => 'utf8',
                 'prefix' => '',
                 'prefix_indexes' => true,
-                'schema' => 'public',
+                'schema' => nexus_env('DB_SCHEMA', 'public'),
                 'sslmode' => 'prefer',
             ],
         ],

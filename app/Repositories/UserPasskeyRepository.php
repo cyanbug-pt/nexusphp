@@ -219,7 +219,7 @@ class UserPasskeyRepository extends BaseRepository
                         <td>
                             <div style="display:flex;align-items:center;padding:4px">
                                 <?php
-                                $meta = $AAGUIDS[$passkey->AAGUID()];
+                                $meta = $AAGUIDS[$passkey->getAaguidFormatted()];
                                 if (isset($meta)) {
                                     printf('<img style="width: 32px" src="%s" alt="%s" /><div style="margin-right:4px"><b>%s</b> (%s)', $meta['icon_dark'], $meta['name'], $meta['name'], $passkey->credential_id);
                                 } else {

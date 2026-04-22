@@ -9,7 +9,7 @@ class Passkey extends NexusModel
     public $timestamps = true;
 
     protected $fillable = [
-        'id', 'user_id', 'AAGUID', 'credential_id', 'public_key', 'counter',
+        'id', 'user_id', 'aaguid', 'credential_id', 'public_key', 'counter',
     ];
 
     public function user()
@@ -17,8 +17,9 @@ class Passkey extends NexusModel
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function AAGUID() {
-        $guid = $this->AAGUID;
+    public function getAaguidFormatted(): string
+    {
+        $guid = $this->aaguid;
         return sprintf(
             '%s-%s-%s-%s-%s',
             substr($guid, 0, 8),

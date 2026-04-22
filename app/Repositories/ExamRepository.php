@@ -269,8 +269,12 @@ class ExamRepository extends BaseRepository
         $now = Carbon::now();
         $query = Exam::query()
             ->where('status', Exam::STATUS_ENABLED)
-            ->whereRaw("if(begin is not null and end is not null, begin <= '$now' and end >= '$now', duration > 0 or recurring is not null)")
-        ;
+            ->whereRaw('
+    CASE
+        WHEN begin IS NOT NULL AND "end" IS NOT NULL
+        THEN begin <= ? AND "end" >= ?
+        ELSE duration > 0 OR recurring IS NOT NULL
+    END', [$now, $now]);
 
         if (!is_null($excludeId)) {
             $query->whereNotIn('id', Arr::wrap($excludeId));
@@ -1139,10 +1143,22 @@ class ExamRepository extends BaseRepository
             ->orderBy("$examUserTable.id", "asc");
         if (!$ignoreTimeRange) {
             $whenThens = [];
-            $whenThens[] = "when $examUserTable.`end` is not null then $examUserTable.`end` < '$now'";
-            $whenThens[] = "when $examTable.`end` is not null then $examTable.`end` < '$now'";
-            $whenThens[] = "when $examTable.duration > 0 then date_add($examUserTable.created_at, interval $examTable.duration day) < '$now'";
-            $baseQuery->whereRaw(sprintf("case %s else false end", implode(" ", $whenThens)));
+            $params = [];
+
+            $whenThens[] = "WHEN $examUserTable.\"end\" IS NOT NULL THEN $examUserTable.\"end\" < ?";
+            $params[] = $now;
+
+            $whenThens[] = "WHEN $examTable.\"end\" IS NOT NULL THEN $examTable.\"end\" < ?";
+            $params[] = $now;
+
+            if (NexusDB::isMysql()) {
+                $whenThens[] = "when $examTable.duration > 0 then date_add($examUserTable.created_at, interval $examTable.duration day) < ?";
+            } elseif (NexusDB::isPgsql()) {
+                $whenThens[] = "WHEN $examTable.duration > 0 THEN ($examUserTable.created_at + ($examTable.duration || ' day')::INTERVAL) < ?";
+            }
+            $params[] = $now;
+
+            $baseQuery->whereRaw(sprintf("CASE %s ELSE false END", implode(" ", $whenThens)), $params);
         }
 
         $size = 1000;

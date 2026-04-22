@@ -51,7 +51,7 @@ class UserPasskeyResource extends Resource
                     ->formatStateUsing(fn($state) => username_for_admin($state))
                     ->label(__('label.username'))
                 ,
-                Tables\Columns\TextColumn::make('AAGUID')
+                Tables\Columns\TextColumn::make('aaguid')
                     ->label("AAGUID")
                 ,
                 Tables\Columns\TextColumn::make('credential_id')
