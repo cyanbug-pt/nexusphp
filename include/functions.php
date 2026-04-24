@@ -5418,14 +5418,7 @@ function saveSetting(string $prefix, array $nameAndValue, string $autoload = 'ye
         }
         $data[] = sprintf("(%s, %s, %s, %s, '%s')", sqlesc("$prefix.$name"), sqlesc($value), sqlesc($datetimeNow), sqlesc($datetimeNow), $autoload);
     }
-    $sql .= implode(",", $data);
-    if (\Nexus\Database\NexusDB::isMysql()) {
-        $sql .= " on duplicate key update value = values(value)";
-    } else if (\Nexus\Database\NexusDB::isPgsql()) {
-        $sql .= " on conflict (name) do update set value = EXCLUDED.value";
-    } else {
-        throw new \RuntimeException('Not supported database.');
-    }
+    $sql .= implode(",", $data) . " " . \Nexus\Database\NexusDB::upsertField(['name'], ['value']);
     \Nexus\Database\NexusDB::statement($sql);
     clear_setting_cache();
     do_action("nexus_setting_update");

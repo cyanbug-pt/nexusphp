@@ -35,6 +35,7 @@
         "ext-xml": "*",
         "ext-zend-opcache": "*",
         "ext-zip": "*",
+        "ext-pdo": "*",
         "calebporzio/sushi": "^2.5",
         "cybercog/laravel-clickhouse": "dev-master",
         "elasticsearch/elasticsearch": "^7.16",
@@ -87,7 +88,8 @@
             "@php artisan key:generate --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan filament:upgrade"
+            "@php artisan filament:upgrade",
+            "@php artisan livewire:publish --assets"
         ]
     },
     "extra": {

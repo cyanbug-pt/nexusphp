@@ -1049,13 +1049,13 @@ class ExamRepository extends BaseRepository
             if ($donateStatus == User::DONATE_YES) {
                 $baseQuery->where(function (Builder $query) {
                     $query->where('donor', 'yes')->where(function (Builder $query) {
-                        $query->where('donoruntil', '0000-00-00 00:00:00')->orWhereNull('donoruntil')->orWhere('donoruntil', '>=', Carbon::now());
+                        $query->whereNull('donoruntil')->orWhere('donoruntil', '>=', Carbon::now());
                     });
                 });
             } elseif ($donateStatus == User::DONATE_NO) {
                 $baseQuery->where(function (Builder $query) {
                     $query->where('donor', 'no')->orWhere(function (Builder $query) {
-                        $query->where('donoruntil', '!=','0000-00-00 00:00:00')->whereNotNull('donoruntil')->where('donoruntil', '<', Carbon::now());
+                        $query->whereNotNull('donoruntil')->where('donoruntil', '<', Carbon::now());
                     });
                 });
             } else {

@@ -566,8 +566,8 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
             if ($snatchInfo['downloaded'] >= $requiredDownloaded) {
                 $nowStr = date('Y-m-d H:i:s');
                 $sql = sprintf(
-                    "insert into hit_and_runs (uid, torrent_id, snatched_id, created_at, updated_at) values (%d, %d, %d, '%s', '%s') on duplicate key update updated_at = '%s'",
-                    $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, $nowStr
+                    "insert into hit_and_runs (uid, torrent_id, snatched_id, created_at, updated_at) values (%d, %d, %d, '%s', '%s') %s",
+                    $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, \Nexus\Database\NexusDB::upsertField(['uid', 'torrent_id'], ['updated_at'])
                 );
                 $affectedRows = sql_query($sql);
                 $hitAndRunId = mysql_insert_id();

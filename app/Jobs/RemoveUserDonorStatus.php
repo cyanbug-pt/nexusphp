@@ -28,7 +28,6 @@ class RemoveUserDonorStatus
             ->with('language')
             ->where('donor', 'yes')
             ->whereNotNull('donoruntil')
-            ->where('donoruntil', '!=', '0000-00-00 00:00:00')
             ->where('donoruntil', '<', now())
             ->get();
         $userModifyLogs = [];

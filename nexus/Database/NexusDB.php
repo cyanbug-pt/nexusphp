@@ -522,4 +522,39 @@ class NexusDB
         }
     }
 
+    public static function fromUnixTimestampField(int $timestamp): string
+    {
+        if (self::isMysql()) {
+            return sprintf("FROM_UNIXTIME(%d)", $timestamp);
+        } elseif (self::isPgsql()) {
+            return sprintf("to_timestamp(%d)", $timestamp);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function upsertField(array $uniqueFields, array $updateFields): string
+    {
+        if (self::isMysql()) {
+            $updates = [];
+            foreach ($updateFields ?: ['id'] as $field) {
+                $updates[] = "`$field` = VALUES(`$field`)";
+            }
+            return sprintf("ON DUPLICATE KEY UPDATE %s", implode(', ', $updates));
+        } elseif (self::isPgsql()) {
+            if (empty($updateFields)) {
+                $updateStr = "NOTHING";
+            } else {
+                $updates = [];
+                foreach ($updateFields as $field) {
+                    $updates[] = "$field = EXCLUDED.$field";
+                }
+                $updateStr = "UPDATE SET " . implode(', ', $updates);
+            }
+            return sprintf("ON CONFLICT (%s) DO %s", implode(', ', $uniqueFields), $updateStr);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
 }

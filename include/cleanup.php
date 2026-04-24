@@ -139,7 +139,8 @@ function promotion($class, $down_floor_gb, $minratio, $time_week, $addinvite = 0
 
 function demotion($class,$deratio){
 	$newclass = $class - 1;
-    $sql = "SELECT id FROM users WHERE class = $class AND uploaded / downloaded < $deratio";
+//    $sql = "SELECT id FROM users WHERE class = $class AND uploaded / downloaded < $deratio";
+    $sql = "SELECT id FROM users WHERE class = $class AND uploaded < downloaded * $deratio";
 	$res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
     $matchUserCount = mysql_num_rows($res);
     do_log("sql: $sql, match user count: $matchUserCount");
@@ -585,7 +586,8 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
 	//3.delete unconfirmed accounts
 	$deadtime = time() - $signup_timeout;
-	sql_query("DELETE FROM users WHERE status = 'pending' AND added < FROM_UNIXTIME($deadtime) AND last_login < FROM_UNIXTIME($deadtime) AND last_access < FROM_UNIXTIME($deadtime)") or sqlerr(__FILE__, __LINE__);
+    $deadlineField = \Nexus\Database\NexusDB::fromUnixTimestampField($deadtime);
+	sql_query("DELETE FROM users WHERE status = 'pending' AND added < $deadlineField AND last_login < $deadlineField AND last_access < $deadlineField") or sqlerr(__FILE__, __LINE__);
 //	$query = \App\Models\User::query()
 //        ->where('status', 'pending')
 //        ->whereRaw("added < FROM_UNIXTIME($deadtime)")
@@ -619,7 +621,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 	}
 
 	//7.delete regimage codes
-	sql_query("TRUNCATE TABLE `regimages`") or sqlerr(__FILE__, __LINE__);
+	sql_query("TRUNCATE TABLE regimages") or sqlerr(__FILE__, __LINE__);
 	$log = "delete regimage codes";
 	do_log($log);
 	if ($printProgress) {
@@ -1069,7 +1071,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
     //delete old shoutbox
     $until = TIMENOW - $length;
-    sql_query("DELETE FROM shoutbox WHERE `date` < ".sqlesc($until)) or sqlerr(__FILE__, __LINE__);
+    sql_query("DELETE FROM shoutbox WHERE date < $until") or sqlerr(__FILE__, __LINE__);
     $log = "delete old shoutbox";
     do_log($log);
     if ($printProgress) {
@@ -1078,7 +1080,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
 	//delete old general log
 	$until = date("Y-m-d H:i:s",(TIMENOW - $length));
-	sql_query("DELETE FROM sitelog WHERE added < ".sqlesc($until)) or sqlerr(__FILE__, __LINE__);
+	sql_query("DELETE FROM sitelog WHERE added < " . sqlesc($until)) or sqlerr(__FILE__, __LINE__);
 	$log = "delete old general log";
 	do_log($log);
 	if ($printProgress) {
@@ -1157,7 +1159,10 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
 	//8.lock topics where last post was made more than x days ago
 	$secs = 365*24*60*60;
-	sql_query("UPDATE topics, posts SET topics.locked='yes' WHERE topics.lastpost = posts.id AND topics.sticky = 'no' AND UNIX_TIMESTAMP(posts.added) < ".TIMENOW." - $secs") or sqlerr(__FILE__, __LINE__);
+    $postAddedField = \Nexus\Database\NexusDB::unixTimestampField('posts.added');
+    $diff = TIMENOW - $secs;
+//	sql_query("UPDATE topics, posts SET topics.locked='yes' WHERE topics.lastpost = posts.id AND topics.sticky = 'no' AND $postAddedField < ".TIMENOW." - $secs") or sqlerr(__FILE__, __LINE__);
+	sql_query("UPDATE topics SET locked='yes' WHERE sticky = 'no' AND lastpost in (select id from posts where $postAddedField < $diff)");
 
 	$log = "lock topics where last post was made more than x days ago";
 	do_log($log);
