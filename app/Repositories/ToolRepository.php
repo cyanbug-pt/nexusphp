@@ -511,8 +511,9 @@ class ToolRepository extends BaseRepository
         $stickyPromotionExists = NexusDB::hasTable($stickyPromotionParticipatorsTable);
         $claimTableExists = NexusDB::hasTable($claimTable);
         $hitAndRunTableExists = NexusDB::hasTable($hitAndRunTable);
+        $idsField = NexusDB::groupConcatField('id');
         while (true) {
-            $snatchRes = NexusDB::select("select userid, torrentid, group_concat(id) as ids from snatched group by userid, torrentid having(count(*)) > 1 limit $size");
+            $snatchRes = NexusDB::select("select userid, torrentid, $idsField as ids from snatched group by userid, torrentid having(count(*)) > 1 limit $size");
             if (empty($snatchRes)) {
                 break;
             }
@@ -542,8 +543,9 @@ class ToolRepository extends BaseRepository
     public function removeDuplicatePeer()
     {
         $size = 2000;
+        $idsField = NexusDB::groupConcatField('id');
         while (true) {
-            $results = NexusDB::select("select torrent, userid, group_concat(id) as ids from peers group by torrent, peer_id, userid having(count(*)) > 1 limit $size");
+            $results = NexusDB::select("select torrent, userid, $idsField as ids from peers group by torrent, peer_id, userid having(count(*)) > 1 limit $size");
             if (empty($results)) {
                 do_log("[DELETE_DUPLICATED_PEERS], no data: ". last_query());
                 break;

@@ -533,7 +533,7 @@ class NexusDB
         }
     }
 
-    public static function upsertField(array $uniqueFields, array $updateFields): string
+    public static function upsertField(array $uniqueFields, array $updateFields = []): string
     {
         if (self::isMysql()) {
             $updates = [];
@@ -552,6 +552,17 @@ class NexusDB
                 $updateStr = "UPDATE SET " . implode(', ', $updates);
             }
             return sprintf("ON CONFLICT (%s) DO %s", implode(', ', $uniqueFields), $updateStr);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function groupConcatField(string $field): string
+    {
+        if (self::isMysql()) {
+            return sprintf("group_concat(%s)", $field);
+        } elseif (self::isPgsql()) {
+            return sprintf("string_agg(%s::text, ',')", $field);
         } else {
             throw new \RuntimeException('Not supported database.');
         }
