@@ -364,7 +364,7 @@ HTML;
         }
     }
 
-    public function listRatings(array $ptGenData, string $imdbLink, string $desc = ''): array
+    public function listRatings(array $ptGenData, ?string $imdbLink, string $desc = ''): array
     {
         $results = [];
         $log = "";

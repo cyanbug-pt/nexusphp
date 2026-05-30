@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckSiteStatus;
 use App\Http\Middleware\Filament;
 use App\Http\Middleware\Locale;
 use App\Http\Middleware\LogUserIp;
@@ -48,6 +49,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            CheckSiteStatus::class,
         ],
         'filament' => [
             \Illuminate\Session\Middleware\StartSession::class,

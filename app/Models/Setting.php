@@ -339,4 +339,9 @@ class Setting extends NexusModel
     {
         return (int)self::get("bonus.self_enable", BonusLogs::DEFAULT_BONUS_SELF_ENABLE);
     }
+
+    public static function getIsSiteOnline(): bool
+    {
+        return self::get('main.site_online') == 'yes';
+    }
 }
