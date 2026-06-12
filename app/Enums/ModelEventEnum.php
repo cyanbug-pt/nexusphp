@@ -14,6 +14,7 @@ use App\Events\HitAndRunUpdated;
 use App\Events\MessageCreated;
 use App\Events\NewsCreated;
 use App\Events\SnatchedUpdated;
+use App\Events\StaffMessageCreated;
 use App\Events\TorrentCreated;
 use App\Events\TorrentDeleted;
 use App\Events\TorrentUpdated;
@@ -28,6 +29,7 @@ use App\Models\HitAndRun;
 use App\Models\Message;
 use App\Models\News;
 use App\Models\Snatch;
+use App\Models\StaffMessage;
 use App\Models\Torrent;
 use App\Models\User;
 
@@ -59,6 +61,8 @@ final class ModelEventEnum {
     const SNATCHED_UPDATED = 'snatched_updated';
     const MESSAGE_CREATED = 'message_created';
 
+    const STAFF_MESSAGE_CREATED = 'staff_message_created';
+
     public static array $eventMaps = [
         self::TORRENT_CREATED => ['event' => TorrentCreated::class, 'model' => Torrent::class],
         self::TORRENT_UPDATED => ['event' => TorrentUpdated::class, 'model' => Torrent::class],
@@ -87,5 +91,7 @@ final class ModelEventEnum {
         self::AGENT_DENY_CREATED => ['event' => AgentDenyCreated::class, 'model' => AgentDeny::class],
         self::AGENT_DENY_UPDATED => ['event' => AgentDenyUpdated::class, 'model' => AgentDeny::class],
         self::AGENT_DENY_DELETED => ['event' => AgentDenyDeleted::class, 'model' => AgentDeny::class],
+
+        self::STAFF_MESSAGE_CREATED => ['event' => StaffMessageCreated::class, 'model' => StaffMessage::class],
     ];
 }
