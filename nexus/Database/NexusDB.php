@@ -568,4 +568,26 @@ class NexusDB
         }
     }
 
+    public static function binaryField(string $field): string
+    {
+        if (self::isMysql()) {
+            return sprintf("%s = :%s", $field, $field);
+        } elseif (self::isPgsql()) {
+            return sprintf("%s = decode(:%s, 'hex')", $field, $field);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function binaryFieldBindValue($value): string
+    {
+        if (self::isMysql()) {
+            return $value;
+        } elseif (self::isPgsql()) {
+            return bin2hex($value);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
 }
