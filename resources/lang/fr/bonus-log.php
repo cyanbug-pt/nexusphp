@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Acheter changer le nom d\'utilisateur',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Médaille cadeau',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Acheter le torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Récompense de Tâche terminée',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Tâche non déduite',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Récompense torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Torrent réclamé non atteint',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Salaire de travail du rôle',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent à télécharger',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Recevoir un cadeau',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Télécharger le torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Récompense de réception du torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Récompense atteint pour le torrent réclamé',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Bases de seeding',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Ajout de donneurs en seeding',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Valeur post-négociation',
     ],
     'exclude_seeding_bonus' => 'Exclure le bonus de seeding',
+    'title_for_user' => 'Détails du bonus utilisateur',
+    'category' => 'Catégorie',
+    'category_common' => 'Commun',
+    'category_seeding' => 'Sources',
+    'view_detail' => 'Détails du produit',
 ];

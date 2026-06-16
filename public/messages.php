@@ -245,7 +245,7 @@ $subject = $lang_messages['text_no_subject'];
 }
 
 // Mark message unread
-sql_query("UPDATE messages SET unread='no' WHERE id=" . sqlesc($pm_id) . " AND receiver=" . sqlesc($CURUSER['id']) . " LIMIT 1");
+sql_query("UPDATE messages SET unread='no' WHERE id=" . sqlesc($pm_id) . " AND receiver=" . sqlesc($CURUSER['id']));
 $Cache->delete_value('user_'.$CURUSER['id'].'_unread_message_count');
 // Display message
 stdhead("PM ($subject)"); ?>

@@ -18,7 +18,8 @@ class CreateTorrentsTable extends Migration
         }
         Schema::create('torrents', function (Blueprint $table) {
             $table->mediumIncrements('id');
-            $table->string('name')->default('')->index('name');
+            $table->binary('info_hash', 20)->nullable()->unique();
+            $table->string('name')->default('')->index();
             $table->string('filename')->default('');
             $table->string('save_as')->default('');
             $table->text('descr')->nullable();
@@ -45,27 +46,26 @@ class CreateTorrentsTable extends Migration
             $table->dateTime('last_action')->nullable();
             $table->enum('visible', ['yes', 'no'])->default('yes');
             $table->enum('banned', ['yes', 'no'])->default('no');
-            $table->unsignedMediumInteger('owner')->default(0)->index('owner');
+            $table->unsignedMediumInteger('owner')->default(0)->index();
             $table->binary('nfo')->nullable();
             $table->unsignedTinyInteger('sp_state')->default(1);
             $table->unsignedTinyInteger('promotion_time_type')->default(0);
             $table->dateTime('promotion_until')->nullable();
             $table->enum('anonymous', ['yes', 'no'])->default('no');
-            $table->unsignedInteger('url')->nullable()->index('url');
+            $table->unsignedInteger('url')->nullable()->index();
             $table->string('pos_state', 32)->default('normal');
             $table->unsignedTinyInteger('cache_stamp')->default(0);
             $table->enum('picktype', ['hot', 'classic', 'recommended', 'normal'])->default('normal');
             $table->dateTime('picktime')->nullable();
             $table->dateTime('last_reseed')->nullable();
             $table->mediumText('pt_gen')->nullable();
-//            $table->integer('tags')->default(0);
             $table->text('technical_info')->nullable();
-            $table->index(['visible', 'pos_state', 'id'], 'visible_pos_id');
-            $table->index(['category', 'visible', 'banned'], 'category_visible_banned');
-            $table->index(['visible', 'banned', 'pos_state', 'id'], 'visible_banned_pos_id');
+            $table->index(['visible', 'pos_state', 'id'] );
+            $table->index(['category', 'visible', 'banned']);
+            $table->index(['visible', 'banned', 'pos_state', 'id']);
         });
-        $sql = 'alter table torrents add column `info_hash` binary(20) NOT NULL after id, add unique info_hash(`info_hash`)';
-        \Illuminate\Support\Facades\DB::statement($sql);
+//        $sql = 'alter table torrents add column `info_hash` binary(20) NOT NULL after id, add unique info_hash(`info_hash`)';
+//        \Illuminate\Support\Facades\DB::statement($sql);
     }
 
     /**

@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Re',
     'retroactive_confirm_tip' => 'Bekräfta att deltaga: ',
     'retroactive_description' => 'Klicka på pricken på den vita bakgrunden för att delta. Du har för närvarande ett närvarokort <b>%d</b>.',
+    'attend_button' => 'Checka in nu',
 );

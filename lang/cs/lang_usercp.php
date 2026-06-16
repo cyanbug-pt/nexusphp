@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Registrovat se',
     'checkbox_pm_on_topic_reply' => 'Upozornit mě na nové odpovědi na příspěvky ve fóru',
     'checkbox_pm_on_hr_reached' => 'Upozornit mě, když H&R dosáhne cíle',
+    'row_tracker_url' => 'URL Trackeru',
+    'row_tracker_url_help' => '<b>Poznámka:</b> Po výběru lze oznámení odeslat pouze na vybraný odkaz. Ve výchozím nastavení může být oznámení odesláno pouze na první výchozí odkaz v seznamu.',
 );
 
 ?>

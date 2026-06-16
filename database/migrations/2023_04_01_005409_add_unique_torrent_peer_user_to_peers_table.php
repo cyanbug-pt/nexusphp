@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
+use Nexus\Database\NexusDB;
 
 return new class extends Migration
 {
@@ -14,16 +14,28 @@ return new class extends Migration
      */
     public function up()
     {
-        $tableName = 'peers';
-        $result = DB::select('show index from ' . $tableName);
-        $toDropIndex = 'idx_torrent_peer';
-        foreach ($result as $item) {
-            if ($item->Key_name == $toDropIndex) {
-                DB::statement("alter table $tableName drop index $toDropIndex");
-                break;
-            }
+        if (NexusDB::isPgsql()) {
+            return;
         }
-        DB::statement("alter table $tableName add unique unique_torrent_peer_user(`torrent`, `peer_id`, `userid`)");
+        $tableName = 'peers';
+        $columnNames = ['torrent', 'peer_id', 'userid'];
+        // 1. 获取该表所有的索引信息
+        $indexesToDelete = NexusDB::listColumnIndexNames($tableName, $columnNames);
+
+        // 3. 执行删除操作
+        Schema::table($tableName, function (Blueprint $table) use ($indexesToDelete) {
+            foreach ($indexesToDelete as $indexName) {
+                // 如果是主键，需要单独处理
+                if ($indexName === 'primary') {
+                    $table->dropPrimary();
+                } else {
+                    $table->dropIndex($indexName);
+                }
+            }
+            $table->unique(['torrent', 'peer_id', 'userid']);
+            $table->index('peer_id');
+            $table->index('userid');
+        });
 
     }
 

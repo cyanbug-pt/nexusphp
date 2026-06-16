@@ -17,10 +17,10 @@ $lang_userhistory = array
 	'head_comments_history' => "Cronologia commenti",
 	'text_comments_history_for' => "Cronologia commenti per ",
 	'text_torrent' => "<b>Torrent:&nbsp;</b>",
-	'text_comment' => "<b>Comment:&nbsp;",
+	'text_comment' => "",
 	'std_history_error' => "Errore Cronologia",
 	'std_unkown_action' => "Azione sconosciuta",
-	'std_invalid_or_no_query' => "Interrogazione non valida o non valida."
+	'std_invalid_or_no_query' => "Query vuota o non valida."
 );
 
 ?>

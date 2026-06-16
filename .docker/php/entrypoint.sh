@@ -67,7 +67,10 @@ if [ "$SERVICE_NAME" = "php" ]; then
       cp -r "$SOURCE_DIR" "$TARGET_DIR"
       sed -i 's|LOG_FILE.*|LOG_FILE=php://stdout|g' "$ROOT_PATH/.env.example"
       if [ -f "$ENV_FILE" ]; then
+        echo_info "update LOG_FILE + DB_HOST + REDIS_HOST ..."
         sed -i 's|LOG_FILE.*|LOG_FILE=php://stdout|g' "$ENV_FILE"
+        sed -i 's|DB_HOST.*|DB_HOST=mysql|g' "$ENV_FILE"
+        sed -i 's|REDIS_HOST.*|REDIS_HOST=redis|g' "$ENV_FILE"
       fi
     else
       echo_success ".env file: $ENV_FILE and vendor autoload file: $VENDOR_AUTOLOAD_FILE already exists, skip copy install file ..."

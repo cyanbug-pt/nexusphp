@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Upload venligst tilbuddet inden ",
     'msg_hours_otherwise' => " timer. Ellers ville tilbuddet blive slettet.",
     'msg_reason_is' => "Årsagen: ",
+    'msg_new_offer_subject' => "Et nyt tilbud er blevet tilføjet",
+    'msg_new_offer_msg' => "Bruger :brugernavn har tilføjet et nyt tilbud :offername",
 ];

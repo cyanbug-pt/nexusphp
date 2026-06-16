@@ -19,15 +19,14 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedMediumInteger('topicid')->default(0);
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
-            $table->dateTime('added')->nullable()->index('added');
+            $table->unsignedMediumInteger('userid')->default(0)->index();
+            $table->dateTime('added')->nullable()->index();
             $table->text('body')->nullable();
             $table->text('ori_body')->nullable();
             $table->unsignedMediumInteger('editedby')->default(0);
             $table->dateTime('editdate')->nullable();
-            $table->index(['topicid', 'id'], 'topicid_id');
+            $table->index(['topicid', 'id']);
         });
-        \Illuminate\Support\Facades\DB::statement('alter table posts add fulltext body(body)');
     }
 
     /**

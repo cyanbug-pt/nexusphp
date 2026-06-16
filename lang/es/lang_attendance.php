@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Re',
     'retroactive_confirm_tip' => 'Confirmar atención: ',
     'retroactive_description' => 'Haz clic en el punto en el fondo blanco para hacer la atención. Actualmente tienes una tarjeta de asistencia <b>%d</b>.',
+    'attend_button' => 'Registrarse ahora',
 );

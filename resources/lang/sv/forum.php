@@ -8,5 +8,9 @@ return [
     'post' => [
         'edited_notify_subject' => 'Inläggssvar har ändrats',
         'edited_notify_body' => 'Ditt svar på ämnet: :topic_subject ändrades av: :editor.',
+    ],
+    'reply' => [
+        'replied_notify_subject' => 'Ditt svar har ett nytt svar',
+        'replied_notify_body' => 'Ditt svar på ämnet：:topic_subject besvarades av :replyer.',
     ]
 ];

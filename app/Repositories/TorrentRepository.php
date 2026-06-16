@@ -749,7 +749,7 @@ class TorrentRepository extends BaseRepository
                     $values[] = sprintf("(%s, %s, '%s', '%s')", $torrentId, $tagId, $time, $time);
                 }
             }
-            $sql .= implode(', ', $values) . " on duplicate key update updated_at = values(updated_at)";
+            $sql .= implode(', ', $values) . " " . NexusDB::upsertField(['torrent_id', 'tag_id'], ['updated_at']);
             if ($remove) {
                 TorrentTag::query()->whereIn('torrent_id', $idArr)->delete();
             }

@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Sinä saat',
 	'std_by' => 'Tekijä',
 	'row_security_image' => "Turvallisuus Kuva:",
+	'row_security_challenge' => "Turvallisuushaaste:",
 	'row_security_code' => "Turvakoodi:",
 	'text_slots' => "Ruudut:",
 	'text_unlimited' => "Rajoittamaton",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'Pakollinen',
 	'text_invalid' => 'Virheellinen',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo tulee ohjelmistosta <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>, avoin tiedosto kieli valitse english, paina näkymävalikkoa > teksti > oikea klikkaa laatikkoa > valitse kaikki > kopio > ohi tässä laatikossa.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo tulee ohjelmistosta <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>, kynätiedosto, kieli valitse englanti, klikkaa näkymävalikkoa > teksti > vasen klikkaa laatikkoa > valitse kaikki > kopio > ohi tässä laatikossa.
+	<br>
+	<b>&middot;</b> BDInfo tulee ohjelmistosta <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>, kynää tiedosto tällä ohjelmistolla, klikkaa Scan Bitrates nähdäksesi raportin, napsauta hiiren kakkospainikkeella laatikkoa > valitse kaikki, hiiren kakkospainikkeella > kopioida, ja liitä se tähän.
+	',
     'text_management_system' => 'Hallinta',
     'text_seed_points' => 'Siemenpisteet',
     'spoiler_expand_collapse' => 'Napsauta laajentaaksesi/tiivistääksesi',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Ota yhteyttä henkilökuntaan',
     'full_site_promotion_in_effect' => 'Koko sivusto [%s] voimassa!',
     'full_site_promotion_time_range' => 'Aikaväli: %s ~ %s',
+    'full_site_promotion_remark' => 'Huomautus: %s',
+    'full_site_promotion_upcoming' => 'Tuleva koko sivusto [%s]',
     'text_torrent_to_approval' => 'There %s%u ei hyväksytä torrent%s.',
     'std_confirm_remove' => 'Oletko varma, että haluat poistaa sen?',
     'select_an_user_class' => 'Valitse käyttäjäluokka',

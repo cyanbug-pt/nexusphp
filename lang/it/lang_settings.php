@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minuto',
 	'row_login_secret_lifetime' => 'Login segreto',
 	'text_login_secret_lifetime_deadline' => 'Termine segreto di accesso attuale',
-	'row_enable_technical_info' => 'Abilita MediaInfo',
-	'text_enable_technical_info' => "Default 'No'. MediaInfo proviene dal software <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Visualizzazione testo",
-    'row_sticky_first_level_background_color' => 'Colore bg di primo livello adesivo',
+	'row_enable_technical_info' => 'Abilita MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Predefinito \'No\'. <br>
+	<unk> MediaInfo proviene dal software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> il risultato di "Text view"	<br>
+	<unk> BDInfo proviene dal software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> il risultato di "View Reports"
+	',
+	'row_sticky_first_level_background_color' => 'Colore bg di primo livello adesivo',
     'text_sticky_first_level_background_color_note' => 'Sticky primo livello colore bg, sarà nessuno se non impostato.',
     'row_sticky_second_level_background_color' => 'Adesivo secondo livello colore bg',
     'text_sticky_second_level_background_color_note' => 'Adesivo secondo livello colore bg, sarà nessuno se non impostato.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Se abilitata, nessuna password di testo semplice sarà trasmessa al login, raccomandata. Le versioni future rimuoveranno questa configurazione e attiveranno questa funzione.' ,
     'row_complain_enabled' => 'Indica se abilitare i reclami',
     'row_complain_enabled_note' => 'default: "sì"',
+    'row_min_size' => 'Volume minimo',
+    'text_bonus_mini_size'=> 'Il volume minimo richiesto per il torrent è',
+    'text_bonus_mini_size_help' => '. Le dimensioni del torrent più piccole di questo volume non sono incluse nel calcolo del bonus. Unità: byte (Byte), ad esempio, 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Opzioni Bonus Ricompensa',
+    'text_reward_bonus_options_note' => 'Opzioni bonus premio nella pagina dei dettagli del torrent, opzioni multiple separate da virgole',
+    'row_reward_times_limit' => 'Limite Frequenza Ricompensa',
+    'text_reward_times_limit_note' => 'Limite giornaliero per utente per premi bonus sulle pagine di dettaglio del seme. Impostare a 0 per nessun limite. Predefinito: 0',
 );
 
 ?>

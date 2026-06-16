@@ -20,7 +20,7 @@ class CreateFriendsTable extends Migration
             $table->increments('id');
             $table->unsignedMediumInteger('userid')->default(0);
             $table->unsignedMediumInteger('friendid')->default(0);
-            $table->unique(['userid', 'friendid'], 'userfriend');
+            $table->unique(['userid', 'friendid']);
         });
     }
 

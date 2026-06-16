@@ -830,6 +830,8 @@ $lang_settings = array
     'text_reward_bonus_options_note' => '种子详情页的魔力值奖励选项，多个用英文逗号分割',
     'row_reward_times_limit' => '魔力奖励次数限制',
     'text_reward_times_limit_note' => '种子详情页的魔力奖励每人每天次数限制，设置为 0 不限制。默认：0',
+    'row_self_enable' => '自助解封',
+    'text_self_enable_note' => '个魔力值，如果他选择在被封禁 1 天内解封。封禁时长为 N 天，失去的魔力值将会是此值的 N 倍。设置为 0 禁用此功能。',
 );
 
 ?>

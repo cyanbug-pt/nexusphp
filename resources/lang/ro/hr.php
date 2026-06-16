@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'Global',
 
     'reached_by_seed_time_comment' => 'Până la：:now,timp seed_time: :seed_time Ora (ore) atins(e) :seed_time_minimum Ore',
+    'reached_by_leech_time_comment' => 'Până la：:now,timp de leech_time: :leech_time or(e) au ajuns la :leech_time_minimum Ore',
     'reached_by_share_ratio_comment' => "Până la：:now \ntimp seed_time Ora (ore) Neatins :seed_time_minimum Ore \nRaport de partajare: :share_ratio a atins standardul：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "Clasa ta de utilizator: :user_class_text sau utilizator donat, ignoră acest H&R",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) a ajuns!',

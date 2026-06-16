@@ -8,7 +8,7 @@ $lang_confirm_resend = array
 	'std_email_not_found' => "L'indirizzo email non è stato trovato nel database.\n",
 	'std_user_already_confirm' => "L'utente che utilizza questo indirizzo email è già confermato.\n",
 	'std_passwords_unmatched' => "Le password non corrispondono! Deve aver battuto. Riprova.<unk>",
-	'std_password_too_short' => "Siamo spiacenti, la password è troppo corta (min è 6 caratteri)",
+	'std_password_too_short' => "Siamo spiacenti, la password è troppo corta (minimo 6 caratteri)",
 	'std_password_too_long' => "Siamo spiacenti, la password è troppo lunga (max 40 caratteri)",
 	'std_password_equals_username' => "Siamo spiacenti, la password non può essere la stessa del nome utente.",
 	'std_error' => "Errore",
@@ -18,7 +18,7 @@ $lang_confirm_resend = array
 	'row_new_password' => "Nuova password: ",
 	'text_password_note' => "Minimo è di 6 caratteri",
 	'row_enter_password_again' => "Inserire nuovamente la password: ",
-	'submit_send_it' => "Mandatelo!",
+	'submit_send_it' => "Invia!",
 	'text_you_have' => "Hai ",
 	'text_remaining_tries' => " tentativi rimanenti.",
 
@@ -30,7 +30,7 @@ $lang_confirm_resend = array
 	'mail_three' => " come contatto utente.<br /><br />Se non lo hai fatto, ignora questa email. La persona che ha inserito il tuo indirizzo email <br />aveva l'indirizzo IP ",
 	'mail_four' => ". Si prega di non rispondere.<br /><br />Per confermare la registrazione dell'utente, è necessario seguire ",
 	'mail_four_1' => "<br /><br />Se il link qui sopra è rotto o scaduto, prova a inviare nuovamente una nuova email di conferma da ",
-	'mail_five' => "<br /><br />After you do this, you will be able to use your new account. If you fail to <br />do this, your account will be deleted within 24 hours. We urge you to read <br />the RULES and FAQ before you start using %s.<br /><br />Please Note: If you did not register for %s, please report this email to %s<br /><br />------<br />Yours,<br />The %s Team.",
+	'mail_five' => "<br /><br />Dopo aver fatto, sarai in grado di utilizzare il tuo nuovo account. Se non riesci a <br />farlo, il tuo account verrà eliminato entro 24 ore. Ti invitiamo a leggere <br />le NORME e le FAQ prima di iniziare a utilizzare %s.<br /><br />Nota: Se non ti sei registrato %s, per favore segnala questa email a %s<br /><br />------<br />Tuo,<br />Il Team %s.",
 	'text_select_lang' => "Seleziona Lingua Del Sito: ",
 	'std_need_admin_verification' => "L'account necessita di verifica manuale da parte degli amministratori."
 );

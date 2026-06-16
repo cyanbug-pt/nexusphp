@@ -168,6 +168,10 @@ where<ul><li><b>A</b> is an intermediate variable</li><li><b>Ti</b> is the <b>i<
     'text_success_buy_change_username_card' => "Поздравляем с успешной покупкой <b>смените имя пользователя</b>!",
     'text_change_username_card_already_has' => 'Уже есть карта для изменения имени пользователя',
     'text_rainbow_id_already_valid_forever' => 'У вас уже есть постоянный Rainbow ID',
+    'text_get_by_medal' => 'Бонус медалей получит следующий дополнительный бонус в час',
+    'medal_additional_desc' => 'Формула расчета медалей совпадает с показателем выше, независимо от минимальной гарантии',
+    'medal_additional_factor' => 'Окончательный бонус — это рассчитанный бонус, умноженный на медаль_additional_factor',
+    'text_bonus_mini_size' => 'Размер торрента должен быть по крайней мере %s. Размер торрента меньше, чем этот объем исключены из бонусных расчетов'
 );
 
 ?>

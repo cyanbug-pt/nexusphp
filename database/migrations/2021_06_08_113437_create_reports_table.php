@@ -24,7 +24,7 @@ class CreateReportsTable extends Migration
             $table->enum('type', ['torrent', 'user', 'offer', 'request', 'post', 'comment', 'subtitle'])->default('torrent');
             $table->string('reason')->default('');
             $table->unsignedMediumInteger('dealtby')->default(0);
-            $table->boolean('dealtwith')->default(0);
+            $table->smallInteger('dealtwith')->default(0);
         });
     }
 

@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Vă rugăm să încărcați oferta în ",
     'msg_hours_otherwise' => " ore. În caz contrar, oferta ar fi ștearsă.",
     'msg_reason_is' => "Motivul: ",
+    'msg_new_offer_subject' => "A fost adăugată o nouă ofertă",
+    'msg_new_offer_msg' => "Utilizatorul :username a adăugat o nouă ofertă :offername",
 ];

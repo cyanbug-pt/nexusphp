@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use App\Enums\ModelEventEnum;
-use App\Enums\RedisKeysEnum;
 use App\Exceptions\InsufficientPermissionException;
 use App\Exceptions\NexusException;
 use App\Http\Resources\ExamUserResource;
@@ -29,13 +28,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Nexus\Database\NexusDB;
 
 class UserRepository extends BaseRepository
 {
+    private static array $allowIncludes = ['inviter', 'valid_medals'];
+    private static array $allowIncludeFields = ['seeding_leeching_data'];
+    private static array $allowIncludeCounts = [];
     public function getList(array $params)
     {
         $query = User::query();
@@ -66,28 +67,34 @@ class UserRepository extends BaseRepository
     {
         //query this info default
         $query = User::query()->with([]);
-        $allowIncludes = ['inviter', 'valid_medals'];
-        $allowIncludeCounts = [];
-        $allowIncludeFields = [];
         $apiQueryBuilder = ApiQueryBuilder::for(UserResource::NAME, $query)
-            ->allowIncludes($allowIncludes)
-            ->allowIncludeCounts($allowIncludeCounts)
-            ->allowIncludeFields($allowIncludeFields)
+            ->allowIncludes(self::$allowIncludes)
+            ->allowIncludeCounts(self::$allowIncludeCounts)
+            ->allowIncludeFields(self::$allowIncludeFields)
         ;
         $query = $apiQueryBuilder->build();
         $user = $query->findOrFail($id);
         Gate::authorize('view', $user);
-        return $this->appendIncludeFields($apiQueryBuilder, $currentUser, $user);
+        $userList =  $this->appendIncludeFields($apiQueryBuilder, $currentUser, [$user]);
+        return $userList[0];
     }
 
-    private function appendIncludeFields(ApiQueryBuilder $apiQueryBuilder, Authenticatable $currentUser, User $user): User
+    private function appendIncludeFields(ApiQueryBuilder $apiQueryBuilder, Authenticatable $currentUser, $userList)
     {
-//        $id = $torrent->id;
-//        if ($apiQueryBuilder->hasIncludeField('has_bookmarked')) {
-//            $torrent->has_bookmarked = (int)$user->bookmarks()->where('torrentid', $id)->exists();;
-//        }
-
-        return $user;
+        $idArr = [];
+        foreach ($userList as $user) {
+            $idArr[] = $user->id;
+        }
+        if ($hasFieldSeedingData = $apiQueryBuilder->hasIncludeField('seeding_leeching_data')) {
+            $seedingData = $this->listUserSeedingLeechingData($idArr);
+        }
+        foreach ($userList as $user) {
+            $id = $user->id;
+            if ($hasFieldSeedingData && isset($seedingData[$id])) {
+                $user->seeding_leeching_data = $seedingData[$id];
+            }
+        }
+        return $userList;
     }
 
     /**
@@ -219,9 +226,9 @@ class UserRepository extends BaseRepository
             'operator' => $operator->id,
         ];
         $modCommentText = sprintf("%s - Disable by %s, reason: %s.", now()->format('Y-m-d'), $operator->username, $reason);
-        DB::transaction(function () use ($targetUser, $banLog, $modCommentText) {
+        NexusDB::transaction(function () use ($targetUser, $banLog, $modCommentText) {
             $targetUser->updateWithModComment(['enabled' => User::ENABLED_NO], $modCommentText);
-            UserBanLog::query()->insert($banLog);
+            UserBanLog::query()->create($banLog);
         });
         do_log("user: $uid, $modCommentText");
         $this->clearCache($targetUser);
@@ -259,7 +266,7 @@ class UserRepository extends BaseRepository
 
     private function setEnableLatelyCache(int $userId): void
     {
-        NexusDB::cache_put(User::getUserEnableLatelyCacheKey($userId), now()->toDateTimeString());
+        NexusDB::cache_put(User::getUserEnableLatelyCacheKey($userId), now()->toDateTimeString(), 86400);
     }
 
     public function getInviteInfo($id)
@@ -812,6 +819,40 @@ class UserRepository extends BaseRepository
             executeCommand($command, "string", true, false);
         }
         return $loginLog;
+    }
+
+    /**
+     * get user seeding/leeching count and size
+     *
+     * @see calculate_seed_bonus()
+     * @param array $userIdArr
+     * @return array
+     */
+    private function listUserSeedingLeechingData(array $userIdArr)
+    {
+        $minSize = get_setting('bonus.min_size', 0);
+        $idStr = implode(",", $userIdArr);
+        $sql = "select peers.userid, peers.seeder, torrents.size from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid in ($idStr) and torrents.size > $minSize group by peers.torrent, peers.peer_id, peers.userid, peers.seeder";
+        $data = NexusDB::select($sql);
+        $result = [];
+        foreach ($data as $row) {
+            if (!isset($result[$row['userid']])) {
+                $result[$row['userid']] = [
+                    'seeding_count' => 0,
+                    'seeding_size' => 0,
+                    'leeching_count' => 0,
+                    'leeching_size' => 0,
+                ];
+            }
+            if ($row['seeder'] == 'yes') {
+                $result[$row['userid']]['seeding_count'] += 1;
+                $result[$row['userid']]['seeding_size'] += $row['size'];
+            } else {
+                $result[$row['userid']]['leeching_count'] += 1;
+                $result[$row['userid']]['leeching_size'] += $row['size'];
+            }
+        }
+        return $result;
     }
 
 }

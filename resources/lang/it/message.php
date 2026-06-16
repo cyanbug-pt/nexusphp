@@ -23,6 +23,10 @@ return [
         'subject' => 'Autorizzazione di download annullata',
         'body' => 'Il tuo permesso di download è stato annullato a causa di un annuncio di torrent pagato troppe volte, assicurati di avere abbastanza bonus.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Autorizzazione di download annullata',
+        'body' => 'Il tuo permesso di download è stato annullato a causa di dati falsi.',
+    ],
     'download_enable' => [
         'subject' => 'Autorizzazione download ripristinata',
         'body' => 'I tuoi privilegi di download ripristinati, ora puoi scaricare i torrent. Dy: :operator',

@@ -27,7 +27,7 @@ $lang_takesignup = array
 	'std_to_finish_signup' => " lopettaa ilmoittautuminen, kiitos!",
 	'msg_subject' => "Tervetuloa ",
 	'msg_congratulations' => "Onnittelut ",
-	'msg_you_are_a_member' => ",\n\nOlet nyt jäsenenä %s,\nHaluaisimme käyttää tilaisuutta hyväksemme ja sanoa tervetuloa %s:lle!\n\nMuista lukea [url=rules (URl=rules. ). hp][b]säännöt[/b][/url] ja [url=faq. hp][b]Faq[/b][/url].\n Ja muista pysähtyä [url=foorumeilla. hp][b]Foorumit[/b][/url]: ja sano hei!\n\nNauti oleskelustasi.\n %s henkilökunta ",
+	'msg_you_are_a_member' => ",\n\nOlet nyt jäsenenä %s,\nHaluaisimme käyttää tilaisuutta hyväksemme ja sanoa tervetuloa liittymään meihin!\n\nOle hyvä ja lue [url=säännöt. hp][b]säännöt[/b][/url] ja [url=faq. hp][b]Faq[/b][/url].\n Ja muista pysähtyä [url=foorumeilla. hp][b]Foorumit[/b][/url]: ja sano hei!\n\nNauti oleskelustasi.\n %s henkilökunta ",
 	'mail_this_link' =>	"TÄMÄ LINKKI",
 	'mail_here' => "TÄSTÄ",
 	'mail_title' => " Käyttäjän Rekisteröinti Vahvistus",

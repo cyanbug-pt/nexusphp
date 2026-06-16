@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 return [
-    'reset'     => 'Passordet ditt har blitt nullstilt!',
-    'sent'      => 'Vi har sendt din lenke for å nullstille passordet!',
+    'reset'     => 'Ditt passord er tilbakestilt.',
+    'sent'      => 'Vi har sendt deg en lenke for nullstilling av passordet ditt.',
     'throttled' => 'Vennligst vent før du prøver på nytt.',
-    'token'     => 'Denne koden for å nullstille passordet er ugyldig.',
-    'user'      => 'Vi kan ikke finne en bruker med den e-postadressen.',
+    'token'     => 'Denne passordresetten er ugyldig.',
+    'user'      => 'Vi finner ikke en bruker med den e-postadressen.',
 ];

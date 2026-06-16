@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Registreren',
     'checkbox_pm_on_topic_reply' => 'Informeer mij wanneer er nieuwe reacties zijn op forumberichten',
     'checkbox_pm_on_hr_reached' => 'Waarschuw me wanneer H&R doelwit bereikt',
+    'row_tracker_url' => 'Tracker URL',
+    'row_tracker_url_help' => '<b>Opmerking:</b> Eenmaal geselecteerd, kan de aanmelding alleen worden verzonden naar de geselecteerde link. Aankoop kan standaard alleen worden verzonden naar de eerste standaard link in de lijst.',
 );
 
 ?>

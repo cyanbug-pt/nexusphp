@@ -8,5 +8,9 @@ return [
     'post' => [
         'edited_notify_subject' => 'Răspunsul a fost modificat',
         'edited_notify_body' => 'Răspunsul dvs. la subiect: :topic_subject a fost modificat de :editor.',
+    ],
+    'reply' => [
+        'replied_notify_subject' => 'Răspunsul dvs. are un răspuns nou',
+        'replied_notify_body' => 'Răspunsul tău la subiectul de discuţie：:topic_subject a fost răspuns de :replyer.',
     ]
 ];

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('claims', function (Blueprint $table) {
-            $table->index("created_at", "idx_created_at");
+            $table->index("created_at", );
         });
     }
 

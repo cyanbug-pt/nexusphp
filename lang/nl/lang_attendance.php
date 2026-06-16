@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 're',
     'retroactive_confirm_tip' => 'Bevestig om bij te wonen: ',
     'retroactive_description' => 'Klik op de stip op de witte achtergrond om aanwezig te zijn. Je hebt momenteel een presentiekaart <b>%d</b>.',
+    'attend_button' => 'Check nu in',
 );

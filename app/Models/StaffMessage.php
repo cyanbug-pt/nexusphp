@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Repositories\ToolRepository;
-use Google\Service\Testing\ToolResultsExecution;
+use App\Enums\ModelEventEnum;
 
 class StaffMessage extends NexusModel
 {
@@ -25,6 +24,18 @@ class StaffMessage extends NexusModel
     public function answer_user()
     {
         return $this->belongsTo(User::class, 'answeredby');
+    }
+
+    public static function add(int $sender, string $subject, string $msg)
+    {
+        $record = self::query()->create([
+            'sender' => $sender,
+            'subject' => $subject,
+            'msg' => $msg,
+            'added' => now(),
+        ]);
+        fire_event(ModelEventEnum::STAFF_MESSAGE_CREATED, $record);
+        return $record;
     }
 
 }

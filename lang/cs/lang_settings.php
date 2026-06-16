@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minuta',
 	'row_login_secret_lifetime' => 'Životnost přihlášení tajného kódu',
 	'text_login_secret_lifetime_deadline' => 'Aktuální přihlašovací tajná lhůta',
-	'row_enable_technical_info' => 'Povolit MediaInfo',
-	'text_enable_technical_info' => "Výchozí 'Ne'. MediaInfo pochází z softwaru <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Text",
-    'row_sticky_first_level_background_color' => 'Barva lepšího prvního stupně pozadí',
+	'row_enable_technical_info' => 'Povolit MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Default \'No\'. <br>
+	MediaInfo comes from software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> the result of "Text view"	<br>
+	BDInfo comes from software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> the result of "View Reports"
+	',
+	'row_sticky_first_level_background_color' => 'Barva lepšího prvního stupně pozadí',
     'text_sticky_first_level_background_color_note' => 'Zvýraznit barvu barvy na první úrovni, pokud není nastavena žádná úroveň.',
     'row_sticky_second_level_background_color' => 'Barva lepšího druhého stupně bg',
     'text_sticky_second_level_background_color_note' => 'Barva lepšího druhého stupně bg, pokud není nastavena, nebude žádný.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Pokud je povoleno, při přihlášení nebudou přenášena žádná klíčová hesla. Budoucí vydání tuto konfiguraci odstraní a povolí tuto funkci.' ,
     'row_complain_enabled' => 'Zda povolit stížnosti',
     'row_complain_enabled_note' => 'výchozí: "ano"',
+    'row_min_size' => 'Minimální objem',
+    'text_bonus_mini_size'=> 'Minimální objem požadovaný pro torrent je',
+    'text_bonus_mini_size_help' => '. Velikost Torrentu menší než tato hlasitost není zahrnuta do výpočtu bonusu. Jednotka: bajty (Byte), např. 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Možnosti odměn',
+    'text_reward_bonus_options_note' => 'Odměňovací bonusové možnosti na stránce s podrobnostmi torrentu, více možností oddělených čárkami',
+    'row_reward_times_limit' => 'Limit frekvence odměn',
+    'text_reward_times_limit_note' => 'Denní limit na uživatele pro bonusové odměny na detailních stránkách. Nastavte na 0 bez omezení. Výchozí hodnota: 0',
 );
 
 ?>

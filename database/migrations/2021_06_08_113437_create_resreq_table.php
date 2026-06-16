@@ -18,7 +18,7 @@ class CreateResreqTable extends Migration
         }
         Schema::create('resreq', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('reqid')->default(0)->index('reqid');
+            $table->integer('reqid')->default(0)->index();
             $table->integer('torrentid')->default(0);
             $table->enum('chosen', ['yes', 'no'])->default('no');
         });

@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Inscription',
     'checkbox_pm_on_topic_reply' => 'M\'avertir lorsqu\'il y a de nouvelles réponses aux messages du forum',
     'checkbox_pm_on_hr_reached' => 'M\'avertir lorsque H&R atteint la cible',
+    'row_tracker_url' => 'URL du tracker',
+    'row_tracker_url_help' => '<b>Note :</b> Une fois sélectionné, l\'annonce ne peut être envoyée que sur le lien sélectionné. Par défaut, l\'annonce ne peut être envoyée qu\'au premier lien par défaut de la liste.',
 );
 
 ?>

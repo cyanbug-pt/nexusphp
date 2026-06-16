@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Rekisteröidy',
     'checkbox_pm_on_topic_reply' => 'Ilmoita minulle, kun on olemassa uusia vastauksia foorumi viestejä',
     'checkbox_pm_on_hr_reached' => 'Ilmoita minulle, kun H&R saavuttaa tavoitteen',
+    'row_tracker_url' => 'Seurantapalvelimen URL',
+    'row_tracker_url_help' => '<b>Huomautus:</b> Kun ilmoitus on valittu, se voidaan lähettää vain valittuun linkkiin. Oletuksena ilmoitus voidaan lähettää vain listan ensimmäiselle oletuslinkille. @ info: whatsthis',
 );
 
 ?>

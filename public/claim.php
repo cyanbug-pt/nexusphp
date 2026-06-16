@@ -115,7 +115,7 @@ if ($sort == 'seed_time') {
 }
 $list = $query->selectRaw("claims.*")->get();
 print($filterForm);
-print("<table id='claim-table' width='100%'>");
+print("<table id='claim-table' width='100%' cellpadding='5'>");
 print("<tr>
     <td class='colhead' align='center'>".nexus_trans('claim.th_id')."</td>
     <td class='colhead' align='center'>".nexus_trans('claim.th_username')."</td>

@@ -1,7 +1,7 @@
 services:
   php:
     build:
-      context: ./.docker/php
+      dockerfile: .docker/php/Dockerfile
     image: nexusphp_php
     container_name: nexusphp-php
     environment:
@@ -83,7 +83,7 @@ services:
 
   openresty:
     build:
-      context: ./.docker/openresty
+      dockerfile: .docker/openresty/Dockerfile
     container_name: nexusphp-openresty
     environment:
       NP_DOMAIN: ${NP_DOMAIN:-localhost}

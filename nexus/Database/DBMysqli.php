@@ -1,11 +1,16 @@
 <?php
 namespace Nexus\Database;
 
+/**
+ * @deprecated
+ *
+ * use DBPdo instead
+ */
 class DBMysqli implements DBInterface
 {
     private $mysqli;
 
-    public function connect($host, $username, $password, $database, $port)
+    public function connect($host, $username, $password, $database, $port, $driver = 'mysql')
     {
         $mysqli = new \mysqli($host, $username, $password, $database, $port);
         /* check connection */
@@ -85,6 +90,11 @@ class DBMysqli implements DBInterface
     public function freeResult($mysqliResult)
     {
         return $mysqliResult->free_result();
+    }
+
+    public function prepare(string $sql): \PDOStatement
+    {
+        throw new \RuntimeException("mysqli not supported");
     }
 
 }

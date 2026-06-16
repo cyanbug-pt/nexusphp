@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] != "POST")
 	$save = ($save == 'yes') ? "yes" : "no";
 	// End of Change
 
-	$res = sql_query("SELECT id,username,parked,email,acceptpms, notifs, UNIX_TIMESTAMP(last_access) as la FROM users WHERE id=".sqlesc($receiver)) or sqlerr(__FILE__, __LINE__);
+	$res = sql_query("SELECT id,username,parked,email,acceptpms, notifs, ".\Nexus\Database\NexusDB::unixTimestampField("last_access")." as la FROM users WHERE id=".$receiver) or sqlerr(__FILE__, __LINE__);
 	$user = mysql_fetch_assoc($res);
 	if (!$user)
 		stderr($lang_takemessage['std_error'], $lang_takemessage['std_user_not_exist']);
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] != "POST")
 
 	$subject = trim($_POST['subject']);
 
-	\App\Models\Message::add([
+	$messageRecord = \App\Models\Message::add([
 		'sender' => $CURUSER["id"],
 		'receiver' => $receiver,
 		'msg' => $msg,
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] != "POST")
 
 	$Cache->delete_value('user_'.$CURUSER["id"].'_outbox_count');
 
-	$msgid=mysql_insert_id();
+	$msgid=$messageRecord->id;
 	$date=date("Y-m-d H:i:s");
 	// Update Last PM sent...
 	sql_query("UPDATE users SET last_pm = NOW() WHERE id = ".sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);

@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "オファーをアップロードしてください ",
     'msg_hours_otherwise' => " 時間。そうでなければオファーは削除されます。",
     'msg_reason_is' => "理由： ",
+    'msg_new_offer_subject' => "新しいオファーが追加されました",
+    'msg_new_offer_msg' => "ユーザー :username が新しいオファー :offername を追加しました",
 ];

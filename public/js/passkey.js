@@ -13,9 +13,9 @@ const Passkey = (() => {
         return await PublicKeyCredential.isConditionalMediationAvailable();
     }
 
-    const getCreateArgs = async () => {
+    const getArgs = async (type) => {
         const getArgsParams = new URLSearchParams();
-        getArgsParams.set('action', 'getPasskeyCreateArgs');
+        getArgsParams.set('action', type === 'create' ? 'getPasskeyCreateArgs' : 'getPasskeyGetArgs');
 
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -26,18 +26,22 @@ const Passkey = (() => {
             throw new Error(data.msg);
         }
 
-        const createArgs = data.data;
-        recursiveBase64StrToArrayBuffer(createArgs);
-        return createArgs;
+        const options = data.data.options;
+        recursiveBase64StrToArrayBuffer(options);
+        return {
+            challengeId: data.data.challengeId,
+            options: options,
+        };
     }
 
     const createRegistration = async () => {
-        const createArgs = await getCreateArgs();
+        const args = await getArgs('create');
 
-        const cred = await navigator.credentials.create(createArgs);
+        const cred = await navigator.credentials.create(args.options);
 
         const processCreateParams = new URLSearchParams();
         processCreateParams.set('action', 'processPasskeyCreate');
+        processCreateParams.set('params[challengeId]', args.challengeId);
         processCreateParams.set('params[transports]', cred.response.getTransports ? cred.response.getTransports() : null)
         processCreateParams.set('params[clientDataJSON]', cred.response.clientDataJSON ? arrayBufferToBase64(cred.response.clientDataJSON) : null);
         processCreateParams.set('params[attestationObject]', cred.response.attestationObject ? arrayBufferToBase64(cred.response.attestationObject) : null);
@@ -52,24 +56,6 @@ const Passkey = (() => {
         }
     }
 
-    const getGetArgs = async () => {
-        const getArgsParams = new URLSearchParams();
-        getArgsParams.set('action', 'getPasskeyGetArgs');
-
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            body: getArgsParams,
-        });
-        const data = await response.json();
-        if (data.ret !== 0) {
-            throw new Error(data.msg);
-        }
-
-        const getArgs = data.data;
-        recursiveBase64StrToArrayBuffer(getArgs);
-        return getArgs;
-    }
-
     let abortController;
 
     const checkRegistration = async (conditional, showLoading) => {
@@ -78,20 +64,21 @@ const Passkey = (() => {
             abortController = null;
         }
         if (!conditional) showLoading();
-        const getArgs = await getGetArgs();
+        const args = await getArgs('get');
+        const options = args.options;
         if (conditional) {
             abortController = new AbortController();
-            getArgs.signal = abortController.signal;
-            getArgs.mediation = 'conditional';
+            options.signal = abortController.signal;
+            options.mediation = 'conditional';
         }
 
-        const cred = await navigator.credentials.get(getArgs);
+        const cred = await navigator.credentials.get(options);
 
         if (conditional) showLoading();
 
         const processGetParams = new URLSearchParams();
         processGetParams.set('action', 'processPasskeyGet');
-        processGetParams.set('params[challenge]', arrayBufferToBase64(getArgs['publicKey']['challenge']));
+        processGetParams.set('params[challengeId]', args.challengeId);
         processGetParams.set('params[id]', cred.rawId ? arrayBufferToBase64(cred.rawId) : null);
         processGetParams.set('params[clientDataJSON]', cred.response.clientDataJSON ? arrayBufferToBase64(cred.response.clientDataJSON) : null);
         processGetParams.set('params[authenticatorData]', cred.response.authenticatorData ? arrayBufferToBase64(cred.response.authenticatorData) : null);

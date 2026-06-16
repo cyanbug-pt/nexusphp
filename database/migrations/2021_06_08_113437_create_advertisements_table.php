@@ -18,7 +18,7 @@ class CreateAdvertisementsTable extends Migration
         }
         Schema::create('advertisements', function (Blueprint $table) {
             $table->mediumIncrements('id');
-            $table->boolean('enabled')->default(0);
+            $table->smallInteger('enabled')->default(0);
             $table->enum('type', ['bbcodes', 'xhtml', 'text', 'image', 'flash']);
             $table->enum('position', ['header', 'footer', 'belownav', 'belowsearchbox', 'torrentdetail', 'comment', 'interoverforums', 'forumpost', 'popup']);
             $table->tinyInteger('displayorder')->default(0);

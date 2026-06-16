@@ -18,7 +18,7 @@ class CreateOffersTable extends Migration
         }
         Schema::create('offers', function (Blueprint $table) {
             $table->mediumIncrements('id');
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
+            $table->unsignedMediumInteger('userid')->default(0)->index();
             $table->string('name', 225)->default('');
             $table->text('descr')->nullable();
             $table->dateTime('added')->nullable();

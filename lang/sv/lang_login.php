@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "återstående försök.",
 	'p_no_account_signup' => "Har du inget konto? <a href=\"signup.php\"><b>Registrera dig</b></a> just nu!",
 	'p_forget_pass_recover' => "Glöm ditt lösenord? Återställ ditt lösenord <a href=\"recover.php\"><b>via e-post</b></a>",
-    'p_account_banned' => "Kontot bannad? visa anledning för<a href=\"user-ban-log.php\"><b>användarens bannlysning logg</b></a>",
+    'p_account_banned' => "Kontot bannad? visa anledning för <a href=\"user-ban-log.php\"><b>användarens bannlysning logg</b></a>",
 	'p_resend_confirm' => "Har du inte fått bekräftelsemeddelande eller bekräftelselänk? <a href=\"confirm_resend.php\"><b>Skicka bekräftelsemeddelande igen</b></a>",
 	'rowhead_username' => "Användarnamn:",
 	'rowhead_password' => "Lösenord:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'Tvåfaktorsautentisering',
     'two_step_code_tooltip' => 'Om aktiverad måste fyllas i',
     'text_complain' => 'Klagomål Kanal',
+    'other_methods' => "Andra metoder",
 );
 
 ?>

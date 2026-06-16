@@ -65,13 +65,11 @@ elseif (strlen($reason) < 20)
 	stderr($lang_linksmanage['std_error'], $lang_linksmanage['std_reason_too_short']);
 else{
 	$message = "[b]Sitename[/b]: ".$sitename."\n[b]URL[/b]: ".$url."\n[b]Title[/b]: ".$title."\n[b]Administrator: [/b]".$admin."\n[b]EMail[/b]: ".$email."\n[b]Reason[/b]: \n".$reason."\n";
-	$message = sqlesc($message);
 	$subject = $sitename." applys for links";
-	$subject = sqlesc($subject);
 	$added = "'" . date("Y-m-d H:i:s") . "'";
 	$userid = $CURUSER['id'];
-	sql_query("INSERT INTO staffmessages (sender, added, msg, subject) VALUES($userid, $added, $message, $subject)") or sqlerr(__FILE__, __LINE__);
-	stderr($lang_linksmanage['std_success'], $lang_linksmanage['std_success_note']);
+	\App\Models\StaffMessage::add($userid, $subject, $message);
+    stderr($lang_linksmanage['std_success'], $lang_linksmanage['std_success_note']);
 	}
 }
 else permissiondenied();

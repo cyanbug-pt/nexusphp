@@ -8,5 +8,9 @@ return [
     'post' => [
         'edited_notify_subject' => 'Artikkelin vastausta muokattiin',
         'edited_notify_body' => 'Vastauksesi aiheeseen: :topic_subject was modified by: :editor.',
+    ],
+    'reply' => [
+        'replied_notify_subject' => 'Vastauksellasi on uusi vastaus',
+        'replied_notify_body' => 'Vastauksesi aiheeseen：:topic_subject vastasi :replyer.',
     ]
 ];

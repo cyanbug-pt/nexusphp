@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "zbývající pokusy.",
 	'p_no_account_signup' => "Nemáte účet? <a href=\"signup.php\"><b>Zaregistrujte se</b></a> právě teď!",
 	'p_forget_pass_recover' => "Zapomněli jste heslo? Obnovte své heslo <a href=\"recover.php\"><b>e-mailem</b></a>",
-    'p_account_banned' => "Účet zablokován? Zobrazit důvod na<a href=\"user-ban-log.php\"><b>uživatelský log</b></a>",
+    'p_account_banned' => "Účet zablokován? Zobrazit důvod na <a href=\"user-ban-log.php\"><b>uživatelský log</b></a>",
 	'p_resend_confirm' => "Neobdrželi jste potvrzovací e-mail nebo je nedostupný potvrzovací odkaz? <a href=\"confirm_resend.php\"><b>Pošlete potvrzovací e-mail znovu</b></a>",
 	'rowhead_username' => "Uživatelské jméno:",
 	'rowhead_password' => "Heslo:",
@@ -28,13 +28,14 @@ $lang_login = array
 	'text_helpbox' => "Nápověda",
 	'text_helpbox_note' => "Máte problémy s registrací nebo přihlášením? Zanechte zprávu zde",
 	'text_message' => "Zpráva: ",
-	'sumbit_shout' => "křičet",
+	'sumbit_shout' => "odeslat",
 	'submit_clear' => "vyčistit",
 	'text_select_lang' => "Vyberte jazyk stránky: ",
 	'head_login' => "Přihlásit se",
     'rowhead_two_step_code' => 'Dvoufaktorové ověření',
     'two_step_code_tooltip' => 'Pokud je povoleno, musí být vyplněno',
     'text_complain' => 'Kanál stížnosti',
+    'other_methods' => "Jiné metody",
 );
 
 ?>

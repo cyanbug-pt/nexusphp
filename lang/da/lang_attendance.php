@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Rå',
     'retroactive_confirm_tip' => 'Bekræft at deltage: ',
     'retroactive_description' => 'Klik på prikken på den hvide baggrund for at deltage. Du har i øjeblikket et fremmøde kort <b>%d</b>.',
+    'attend_button' => 'Tjek ind nu',
 );

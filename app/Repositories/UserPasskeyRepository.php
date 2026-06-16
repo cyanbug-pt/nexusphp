@@ -15,7 +15,25 @@ class UserPasskeyRepository extends BaseRepository
     public static function createWebAuthn()
     {
         $formats = ['android-key', 'android-safetynet', 'apple', 'fido-u2f', 'packed', 'tpm', 'none'];
-        return new WebAuthn(get_setting('basic.SITENAME'), nexus()->getRequestHost(), $formats);
+        $rpId = explode(':', nexus()->getRequestHost())[0];
+        return new WebAuthn(get_setting('basic.SITENAME'), $rpId, $formats);
+    }
+
+    private static function putChallenge($challenge): string
+    {
+        $challengeId = bin2hex(random_bytes(32));
+        NexusDB::cache_put("passkey_challenge_{$challengeId}", $challenge, 120);
+        return $challengeId;
+    }
+
+    private static function getChallenge($challengeId)
+    {
+        $challenge = NexusDB::cache_get("passkey_challenge_{$challengeId}") ?? null;
+        if ($challenge == null) {
+            throw new RuntimeException(nexus_trans('passkey.passkey_timeout'));
+        }
+        NexusDB::cache_del("passkey_challenge_{$challengeId}");
+        return $challenge;
     }
 
     public static function getCreateArgs($userId, $userName)
@@ -28,20 +46,22 @@ class UserPasskeyRepository extends BaseRepository
             return hex2bin($item['credential_id']);
         }, $passkey->toArray());
 
-        $createArgs = $WebAuthn->getCreateArgs(bin2hex($userId), $userName, $userName, 60 * 4, true, 'preferred', null, $credentialIds);
+        $createArgs = $WebAuthn->getCreateArgs(bin2hex($userId), $userName, $userName, 120, true, 'preferred', null, $credentialIds);
+        $challengeId = self::putChallenge($WebAuthn->getChallenge());
 
-        NexusDB::cache_put("{$userId}_passkey_challenge", $WebAuthn->getChallenge(), 60 * 4);
-
-        return $createArgs;
+        return [
+            'challengeId' => $challengeId,
+            'options' => $createArgs,
+        ];
     }
 
-    public static function processCreate($userId, $clientDataJSON, $attestationObject)
+    public static function processCreate($userId, $challengeId, $clientDataJSON, $attestationObject)
     {
-        $WebAuthn = self::createWebAuthn();
-
+        $challenge = self::getChallenge($challengeId);
         $clientDataJSON = !empty($clientDataJSON) ? base64_decode($clientDataJSON) : null;
         $attestationObject = !empty($attestationObject) ? base64_decode($attestationObject) : null;
-        $challenge = NexusDB::cache_get("{$userId}_passkey_challenge") ?? null;
+
+        $WebAuthn = self::createWebAuthn();
 
         $data = $WebAuthn->processCreate($clientDataJSON, $attestationObject, $challenge, false, true, false);
 
@@ -60,9 +80,13 @@ class UserPasskeyRepository extends BaseRepository
     {
         $WebAuthn = self::createWebAuthn();
 
-        $getArgs = $WebAuthn->getGetArgs(null, 60 * 4, true, true, true, true, true, 'preferred');
+        $getArgs = $WebAuthn->getGetArgs(null, 120, true, true, true, true, true, 'preferred');
+        $challengeId = self::putChallenge($WebAuthn->getChallenge());
 
-        return $getArgs;
+        return [
+            'challengeId' => $challengeId,
+            'options' => $getArgs,
+        ];
     }
 
     public static function insertUserPasskey($userId, $AAGUID, $credentialId, $publicKey, $counter)
@@ -77,21 +101,19 @@ class UserPasskeyRepository extends BaseRepository
         Passkey::query()->create($params);
     }
 
-    public static function processGet($challenge, $id, $clientDataJSON, $authenticatorData, $signature, $userHandle)
+    public static function processGet($challengeId, $id, $clientDataJSON, $authenticatorData, $signature, $userHandle)
     {
-        $WebAuthn = self::createWebAuthn();
-
+        $challenge = self::getChallenge($challengeId);
         $clientDataJSON = !empty($clientDataJSON) ? base64_decode($clientDataJSON) : null;
         $id = !empty($id) ? base64_decode($id) : null;
         $authenticatorData = !empty($authenticatorData) ? base64_decode($authenticatorData) : null;
         $signature = !empty($signature) ? base64_decode($signature) : null;
         $userHandle = !empty($userHandle) ? base64_decode($userHandle) : null;
-        $challenge = !empty($challenge) ? base64_decode($challenge) : null;
+
+        $WebAuthn = self::createWebAuthn();
 
         $passkey = Passkey::query()->where('credential_id', '=', bin2hex($id))->first();
-        $credentialPublicKey = $passkey->public_key;
-
-        if ($credentialPublicKey === null) {
+        if ($passkey === null) {
             throw new RuntimeException(nexus_trans('passkey.passkey_unknown'));
         }
 
@@ -100,7 +122,7 @@ class UserPasskeyRepository extends BaseRepository
         }
 
         try {
-            $WebAuthn->processGet($clientDataJSON, $authenticatorData, $signature, $credentialPublicKey, $challenge, null, 'preferred');
+            $WebAuthn->processGet($clientDataJSON, $authenticatorData, $signature, $passkey->public_key, $challenge, null, false, true);
         } catch (Exception $e) {
             throw new RuntimeException(nexus_trans('passkey.passkey_error') . "\n" . $e->getMessage());
         }
@@ -197,7 +219,7 @@ class UserPasskeyRepository extends BaseRepository
                         <td>
                             <div style="display:flex;align-items:center;padding:4px">
                                 <?php
-                                $meta = $AAGUIDS[$passkey->AAGUID()];
+                                $meta = $AAGUIDS[$passkey->getAaguidFormatted()];
                                 if (isset($meta)) {
                                     printf('<img style="width: 32px" src="%s" alt="%s" /><div style="margin-right:4px"><b>%s</b> (%s)', $meta['icon_dark'], $meta['name'], $meta['name'], $passkey->credential_id);
                                 } else {

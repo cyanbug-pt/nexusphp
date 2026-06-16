@@ -23,6 +23,10 @@ return [
         'subject' => 'Downloadmachtiging geannuleerd',
         'body' => 'Uw downloadmachtiging is geannuleerd als gevolg van het al te vaak aankondigen van betaalde torrent. Zorg ervoor dat u genoeg bonus heeft.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Downloadmachtiging geannuleerd',
+        'body' => 'Uw downloadmachtiging is geannuleerd vanwege het bekendmaken van valse gegevens.',
+    ],
     'download_enable' => [
         'subject' => 'Downloadmachtiging hersteld',
         'body' => 'Je downloadrechten zijn hersteld, je kan nu torrents downloaden door: :operator',

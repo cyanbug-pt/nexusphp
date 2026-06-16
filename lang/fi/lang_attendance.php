@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Re',
     'retroactive_confirm_tip' => 'Vahvista osallistuminen: ',
     'retroactive_description' => 'Klikkaa pistettä valkoisella taustalla osallistuaksesi. Sinulla on tällä hetkellä läsnäolikortti <b>%d</b>.',
+    'attend_button' => 'Tarkista nyt',
 );

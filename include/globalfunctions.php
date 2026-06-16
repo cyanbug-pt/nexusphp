@@ -86,17 +86,26 @@ function sqlesc($value)
     return $value;
 }
 
-function hash_pad($hash)
-{
+function hash_pad($hash) {
+    if (is_resource($hash)) {
+        rewind($hash);
+        $hash = stream_get_contents($hash);
+    }
     return str_pad($hash, 20);
 }
 
-function hash_where($name, $hash)
-{
-    //	$shhash = preg_replace('/ *$/s', "", $hash);
-    //	return "($name = " . sqlesc($hash) . " OR $name = " . sqlesc($shhash) . ")";
-    //	return sprintf("$name in (%s, %s)", sqlesc($hash), sqlesc($shhash));
-    return "$name = " . sqlesc($hash);
+function hash_where($name, $hash) {
+//	$shhash = preg_replace('/ *$/s', "", $hash);
+//	return "($name = " . sqlesc($hash) . " OR $name = " . sqlesc($shhash) . ")";
+//	return sprintf("$name in (%s, %s)", sqlesc($hash), sqlesc($shhash));
+    if (\Nexus\Database\NexusDB::isMysql()) {
+        return "$name = " . sqlesc($hash);
+    } elseif (Nexus\Database\NexusDB::isPgsql()) {
+        return "$name = decode(bin2hex('$hash'), 'hex')";
+    } else {
+        throw new \RuntimeException("Not supported database");
+    }
+
 }
 
 //no need any more...
@@ -302,6 +311,7 @@ function nexus_config($key, $default = null)
             ROOT_PATH . 'config/nexus.php',
             ROOT_PATH . 'config/emoji.php',
             ROOT_PATH . 'config/captcha.php',
+            ROOT_PATH . 'config/clickhouse.php',
         ];
         foreach ($files as $file) {
             $basename = basename($file);
@@ -622,10 +632,11 @@ function last_query($all = false, $format = 'json')
 {
     static $connection;
     if (is_null($connection)) {
+        $connectionName = \Nexus\Database\NexusDB::getConnectionName();
         if (IN_NEXUS) {
-            $connection = \Illuminate\Database\Capsule\Manager::connection(\Nexus\Database\NexusDB::ELOQUENT_CONNECTION_NAME);
+            $connection = \Illuminate\Database\Capsule\Manager::connection($connectionName);
         } else {
-            $connection = \Illuminate\Support\Facades\DB::connection(config('database.default'));
+            $connection = \Illuminate\Support\Facades\DB::connection($connectionName);
         }
     }
     if ($all === 'COUNT') {
@@ -1573,8 +1584,16 @@ function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models
     $tokenJson = $result['token_json'];
     $signature = $result['signature'];
     $log .= ", uid = $id";
+    $isAjax = nexus()->isAjax();
+    $selfEnableBonus = \App\Models\Setting::getSelfEnableBonus();
+    //only in nexus web can self-enable, and require bonus > 0
+    $shouldIgnoreEnabled = IN_NEXUS && !$isAjax && $selfEnableBonus > 0;
     if ($isArray) {
-        $res = sql_query("SELECT * FROM users WHERE users.id = ".sqlesc($id)." AND users.enabled='yes' AND users.status = 'confirmed' LIMIT 1");
+        $whereStr = sprintf("id = %d and status = 'confirmed'", $id);
+        if (!$shouldIgnoreEnabled) {
+            $whereStr .= " and enabled = 'yes'";
+        }
+        $res = sql_query("SELECT * FROM users WHERE $whereStr LIMIT 1");
         $row = mysql_fetch_array($res);
         if (!$row) {
             do_log("$log, user not exists");
@@ -1588,7 +1607,11 @@ function get_user_from_cookie(array $cookie, $isArray = true): array|\App\Models
             do_log("$log, user not exists");
             return null;
         }
-        $row->checkIsNormal();
+        $checkFields = ['status'];
+        if (!$shouldIgnoreEnabled) {
+            $checkFields[] = 'enabled';
+        }
+        $row->checkIsNormal($checkFields);
         $authKey = $row->auth_key;
     }
     $expectedSignature = hash_hmac('sha256', $tokenJson, $authKey);
@@ -1736,6 +1759,14 @@ JS;
     \Nexus\Nexus::js("vendor/jquery-loading/jquery.loading.min.js", 'footer', true);
     \Nexus\Nexus::js("js/crypto-js.js", 'footer', true);
     \Nexus\Nexus::js($js, 'footer', false);
+}
+
+function nexus_escape($data): array|string
+{
+    if (is_array($data)) {
+        return array_map('nexus_escape', $data);
+    }
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 }
 
 function is_fpm_mode(): bool

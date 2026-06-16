@@ -35,14 +35,15 @@
         "ext-xml": "*",
         "ext-zend-opcache": "*",
         "ext-zip": "*",
+        "ext-pdo": "*",
         "calebporzio/sushi": "^2.5",
         "cybercog/laravel-clickhouse": "dev-master",
         "elasticsearch/elasticsearch": "^7.16",
-        "filament/filament": "~4.0",
+        "filament/filament": "~5.0",
         "flowframe/laravel-trend": "^0.4",
         "geoip2/geoip2": "~2.0",
         "google/auth": "1.44.0",
-        "imdbphp/imdbphp": "^8.0",
+        "imdbphp/imdbphp": "8.3.1",
         "irazasyed/telegram-bot-sdk": "^3.11",
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.31",
@@ -54,7 +55,7 @@
         "meilisearch/meilisearch-php": "^1.0",
         "orangehill/iseed": "^3.0",
         "phpgangsta/googleauthenticator": "dev-master",
-        "rhilip/bencode": "^2.0",
+        "rhilip/bencode": "^2.5.0",
         "rlanvin/php-ip": "^3.0",
         "spatie/laravel-activitylog": "^4.10",
         "stichoza/google-translate-php": "^5.2"
@@ -87,7 +88,8 @@
             "@php artisan key:generate --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan filament:upgrade"
+            "@php artisan filament:upgrade",
+            "@php artisan livewire:publish --assets"
         ]
     },
     "extra": {

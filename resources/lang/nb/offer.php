@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Vennligst last opp tilbudet innen ",
     'msg_hours_otherwise' => " timer. Hvis ikke vil tilbudet bli slettet.",
     'msg_reason_is' => "Grunnen til det: ",
+    'msg_new_offer_subject' => "Et nytt tilbud er lagt til",
+    'msg_new_offer_msg' => "Bruker :username har lagt til et nytt tilbud :offername",
 ];

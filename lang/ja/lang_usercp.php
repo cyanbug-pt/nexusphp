@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => '登録',
     'checkbox_pm_on_topic_reply' => 'フォーラムの投稿に新しい返信がある場合に通知する',
     'checkbox_pm_on_hr_reached' => 'H&Rがターゲットに達したときに通知する',
+    'row_tracker_url' => 'トラッカーURL',
+    'row_tracker_url_help' => '<b>注意:</b> 選択すると、アナウンスは選択したリンクにのみ送信できます。 デフォルトでは、アナウンスはリストの最初のデフォルトリンクにのみ送信できます。',
 );
 
 ?>

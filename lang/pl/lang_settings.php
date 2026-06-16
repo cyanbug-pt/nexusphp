@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minuta',
 	'row_login_secret_lifetime' => 'Sekretny czas trwania logowania',
 	'text_login_secret_lifetime_deadline' => 'Bieżący tajny termin logowania',
-	'row_enable_technical_info' => 'Włącz MediaInfo',
-	'text_enable_technical_info' => "Domyślnie 'Nie'. MediaInfo pochodzi z oprogramowania <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> widok tekstu",
-    'row_sticky_first_level_background_color' => 'Przyklejony kolor bg pierwszego poziomu',
+	'row_enable_technical_info' => 'Włącz Media Info/BDInfo',
+	'text_enable_technical_info' => 'Domyślny \'Nie\'. <br>
+	MediaInfo pochodzi z oprogramowania <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> wynik "Widok tekstowy"	<br>
+	BDInfo pochodzi z oprogramowania <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> wynik "Zobacz raporty"
+	',
+	'row_sticky_first_level_background_color' => 'Przyklejony kolor bg pierwszego poziomu',
     'text_sticky_first_level_background_color_note' => 'Przyklejony kolor bg pierwszego poziomu, jeśli nie zostanie ustawiony.',
     'row_sticky_second_level_background_color' => 'Przyklejony kolor bg drugiego poziomu',
     'text_sticky_second_level_background_color_note' => 'Przyklejony kolor bg drugiego poziomu, jeśli nie zostanie ustawiony.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Jeśli opcja jest włączona, żadne hasła nie zostaną przesłane przy logowaniu, rekomendowane. Przyszłe wydania usuną tę konfigurację i włącz tę funkcję.' ,
     'row_complain_enabled' => 'Czy włączyć skargi',
     'row_complain_enabled_note' => 'domyślnie: "tak"',
+    'row_min_size' => 'Minimalna objętość',
+    'text_bonus_mini_size'=> 'Minimalna objętość wymagana dla torrenta to',
+    'text_bonus_mini_size_help' => '. Rozmiar torrenta mniejszy niż ten wolumen nie jest uwzględniony w obliczeniach premii. Jednostka: bajty (Byte), np. 1 KiB = 1024 bajty.',
+    'row_reward_bonus_options' => 'Opcje bonusowe',
+    'text_reward_bonus_options_note' => 'Opcje bonusowe na stronie szczegółów torrentu, wiele opcji oddzielonych przecinkami',
+    'row_reward_times_limit' => 'Limit częstotliwości nagród',
+    'text_reward_times_limit_note' => 'Dzienny limit bonusowych nagród na stronach szczegółów ziarna. Ustaw 0 bez limitu. Domyślnie: 0',
 );
 
 ?>

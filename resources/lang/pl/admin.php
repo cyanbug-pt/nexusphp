@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Monitor kolejki',
         'user_modify_logs' => 'Logi modyfikacji użytkownika',
         'message_templates' => 'Szablony wiadomości',
+        'tracker_url' => 'URL trackera',
+        'activity_logs' => 'Dzienniki aktywności',
     ],
     'resources' => [
         'agent_allow' => [
@@ -106,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Indeks：:index duplikat!',
+            'index_seed_time_average_require_value_invalid' => 'Wymagany średni czas seedowania :index_seed_time_average_require_value jest większy niż całkowity czas trwania egzaminu :duration. Zmodyfikuj go!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

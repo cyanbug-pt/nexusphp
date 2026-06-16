@@ -244,8 +244,8 @@ class AttendanceRepository extends BaseRepository
             return 0;
         }
         $sql = sprintf(
-            "insert into `%s` (`uid`, `points`, `date`) values %s on duplicate key update `uid` = values(`uid`)",
-            $table, implode(',', $insert)
+            'insert into %s (uid, points, "date") values %s %s',
+            $table, implode(',', $insert), NexusDB::upsertField(['uid'], ['uid'])
         );
         NexusDB::statement($sql);
         $insertCount = count($insert);

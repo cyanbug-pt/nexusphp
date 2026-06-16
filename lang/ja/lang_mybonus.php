@@ -168,6 +168,10 @@ where<ul><li><b>A</b> is an intermediate variable</li><li><b>Ti</b> is the <b>i<
     'text_success_buy_change_username_card' => "<b>変更ユーザー名カード</b> の購入が完了しました！",
     'text_change_username_card_already_has' => 'すでにユーザー名カードを変更しています',
     'text_rainbow_id_already_valid_forever' => 'すでに恒久的なレインボーIDを持っています',
+    'text_get_by_medal' => '勲章ボーナスは1時間あたり以下の追加ボーナスを獲得します',
+    'medal_additional_desc' => 'メダルボーナス計算式は、最小保証に関係なく上記と同じです。',
+    'medal_additional_factor' => '最終ボーナスはメダルボーナスの計算にmedal_additional_factorを掛けたものです',
+    'text_bonus_mini_size' => 'トレントサイズは少なくとも %sでなければなりません。このボリュームよりも小さいトレントサイズはボーナス計算から除外されます'
 );
 
 ?>

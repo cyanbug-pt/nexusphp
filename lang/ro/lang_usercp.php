@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Inregistrare',
     'checkbox_pm_on_topic_reply' => 'Anunţă-mă când există răspunsuri noi la posturile din forum',
     'checkbox_pm_on_hr_reached' => 'Anunță-mă când H&R atinge ținta',
+    'row_tracker_url' => 'URL urmaritor',
+    'row_tracker_url_help' => '<b>Notă:</b> Odată selectat, anunțul poate fi trimis doar către link-ul selectat. În mod implicit, anunţul poate fi trimis doar la primul link implicit din listă.',
 );
 
 ?>

@@ -707,9 +707,13 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minute',
 	'row_login_secret_lifetime' => 'Geheime Anmeldedauer',
 	'text_login_secret_lifetime_deadline' => 'Aktueller Login-Geheimtermin',
-	'row_enable_technical_info' => 'MediaInfo aktivieren',
-	'text_enable_technical_info' => "Standard 'Nein'. MediaInfo kommt von Software <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> Textansicht",
-    'row_sticky_first_level_background_color' => 'Angepinnte bg-Farbe der ersten Stufe',
+	'row_enable_technical_info' => 'MediaInfo/BDInfo aktivieren',
+	'text_enable_technical_info' => 'Standard \'Nein\'. <br>
+	MediaInfo stammt von Software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> das Ergebnis von "Textansicht"	<br>
+	
+ BDInfo stammt von Software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> das Ergebnis von "Berichte ansehen"
+	',
+	'row_sticky_first_level_background_color' => 'Angepinnte bg-Farbe der ersten Stufe',
     'text_sticky_first_level_background_color_note' => 'Fixierte erste Stufe bg Farbe, es wird keine sein, wenn nicht gesetzt.',
     'row_sticky_second_level_background_color' => 'Farbe des zweiten Levels',
     'text_sticky_second_level_background_color_note' => 'Fixierte zweite Ebene bg Farbe, es wird keine sein, wenn nicht gesetzt.',
@@ -816,6 +820,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Wenn aktiviert, werden beim Login keine Klartext-Passwörter übermittelt, empfohlen. Zukünftige Versionen werden diese Konfiguration entfernen und diese Funktion aktivieren.' ,
     'row_complain_enabled' => 'Ob Beschwerden aktiviert werden sollen',
     'row_complain_enabled_note' => 'default: "Ja"',
+    'row_min_size' => 'Minimale Lautstärke',
+    'text_bonus_mini_size'=> 'Die minimale Lautstärke für Torrent ist',
+    'text_bonus_mini_size_help' => '. Die Torrent-Größe kleiner als dieses Volumen sind nicht in der Bonusberechnung enthalten.',
+    'row_reward_bonus_options' => 'Bonusoptionen',
+    'text_reward_bonus_options_note' => 'Bonusoptionen auf der Detailseite des Torrents, mehrere durch Kommas getrennte Optionen',
+    'row_reward_times_limit' => 'Prämienfrequenz Limit',
+    'text_reward_times_limit_note' => 'Tägliches Limit pro Benutzer für Bonusbelohnungen auf den Seed-Detailseiten. Auf 0 setzen für kein Limit. Standard: 0',
 );
 
 ?>

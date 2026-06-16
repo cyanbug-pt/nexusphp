@@ -4,20 +4,24 @@ namespace App\Models;
 
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class BonusLogs extends NexusModel
 {
     protected $table = 'bonus_logs';
 
-    protected $fillable = ['uid', 'business_type', 'old_total_value', 'value', 'new_total_value', 'comment'];
+    protected $fillable = ['uid', 'business_type', 'old_total_value', 'value', 'new_total_value', 'comment', 'created_at', 'updated_at'];
 
     public $timestamps = true;
+    const CATEGORY_COMMON = 'common';
+    const CATEGORY_SEEDING = 'seeding';
 
     const DEFAULT_BONUS_CANCEL_ONE_HIT_AND_RUN = 10000;
     const DEFAULT_BONUS_BUY_ATTENDANCE_CARD = 1000;
     const DEFAULT_BONUS_BUY_TEMPORARY_INVITE = 500;
     const DEFAULT_BONUS_BUY_RAINBOW_ID = 5000;
     const DEFAULT_BONUS_BUY_CHANGE_USERNAME_CARD = 100000;
+    const DEFAULT_BONUS_SELF_ENABLE = 100000;
 
     //扣除类，1开始
     const BUSINESS_TYPE_CANCEL_HIT_AND_RUN = 1;
@@ -42,6 +46,8 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT = 20;
     const BUSINESS_TYPE_TASK_PASS_REWARD = 21;
     const BUSINESS_TYPE_REWARD_TORRENT = 22;
+    const BUSINESS_TYPE_CLAIMED_UNREACHED = 23;
+    const BUSINESS_TYPE_SELF_ENABLE = 24;
 
     //获得类，普通获得，1000 起步
     const BUSINESS_TYPE_ROLE_WORK_SALARY = 1000;
@@ -50,6 +56,7 @@ class BonusLogs extends NexusModel
     const BUSINESS_TYPE_RECEIVE_GIFT = 1003;
     const BUSINESS_TYPE_UPLOAD_TORRENT = 1004;
     const BUSINESS_TYPE_TORRENT_BE_REWARD = 1005;
+    const BUSINESS_TYPE_CLAIMED_REACHED = 1006;
 
     //获得类，做种获得，10000 起
     const BUSINESS_TYPE_SEEDING_BASIC = 10000;
@@ -81,6 +88,8 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => ['text' => 'Task failure penalty'],
         self::BUSINESS_TYPE_TASK_PASS_REWARD => ['text' => 'Task success reward'],
         self::BUSINESS_TYPE_REWARD_TORRENT => ['text' => 'Reward torrent'],
+        self::BUSINESS_TYPE_CLAIMED_UNREACHED => ['text' => 'Claimed torrent unreached'],
+        self::BUSINESS_TYPE_SELF_ENABLE => ['text' => 'Self enable'],
 
         self::BUSINESS_TYPE_ROLE_WORK_SALARY => ['text' => 'Role work salary'],
         self::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => ['text' => 'Torrent be downloaded'],
@@ -88,6 +97,7 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_RECEIVE_GIFT => ['text' => 'Receive gift'],
         self::BUSINESS_TYPE_UPLOAD_TORRENT => ['text' => 'Upload torrent'],
         self::BUSINESS_TYPE_TORRENT_BE_REWARD => ['text' => 'Torrent be reward'],
+        self::BUSINESS_TYPE_CLAIMED_REACHED => ['text' => 'Claimed torrent reached'],
 
         self::BUSINESS_TYPE_SEEDING_BASIC => ['text' => 'Seeding basic'],
         self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => ['text' => 'Seeding donor addition'],
@@ -96,13 +106,35 @@ class BonusLogs extends NexusModel
         self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION => ['text' => 'Seeding medal addition'],
     ];
 
-    public static array $businessTypeBonus = [
+    public static array $businessTypeSeeding = [
         self::BUSINESS_TYPE_SEEDING_BASIC,
         self::BUSINESS_TYPE_SEEDING_DONOR_ADDITION,
         self::BUSINESS_TYPE_SEEDING_OFFICIAL_ADDITION,
         self::BUSINESS_TYPE_SEEDING_HAREM_ADDITION,
         self::BUSINESS_TYPE_SEEDING_MEDAL_ADDITION
     ];
+
+    public static function listBusinessTypeOptions($category = ''): array
+    {
+        $source = BonusLogs::$businessTypes;
+        if ($category == self::CATEGORY_COMMON) {
+            $source = Arr::except(BonusLogs::$businessTypes, BonusLogs::$businessTypeSeeding);
+        } else if ($category == self::CATEGORY_SEEDING) {
+            $source = Arr::only(BonusLogs::$businessTypes, BonusLogs::$businessTypeSeeding);
+        }
+        return self::listStaticProps($source, 'bonus-log.business_types', true);
+    }
+
+    public static function listCategoryOptions(bool $includeSeeding): array
+    {
+        $result = [
+            self::CATEGORY_COMMON => nexus_trans('bonus-log.category_common')
+        ];
+        if ($includeSeeding) {
+            $result[self::CATEGORY_SEEDING] = nexus_trans('bonus-log.category_seeding');
+        }
+        return $result;
+    }
 
     public function getBusinessTypeTextAttribute()
     {

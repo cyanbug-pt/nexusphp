@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Rejestracja',
     'checkbox_pm_on_topic_reply' => 'Powiadom mnie, gdy pojawią się nowe odpowiedzi na posty na forum',
     'checkbox_pm_on_hr_reached' => 'Powiadom mnie, gdy H&R osiągnie cel',
+    'row_tracker_url' => 'URL trackera',
+    'row_tracker_url_help' => '<b>Uwaga:</b> Po wybraniu, ogłoszenie może być wysłane tylko do wybranego linku. Domyślnie ogłoszenie może być wysłane tylko na pierwszy domyślny link na liście.',
 );
 
 ?>

@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        $sql = 'ALTER table torrents MODIFY column `info_hash` binary(20) DEFAULT NULL';
-        \Illuminate\Support\Facades\DB::statement($sql);
+        Schema::table('torrents', function (Blueprint $table) {
+            $table->binary('info_hash', 20)->nullable()->change();
+        });
     }
 
     /**

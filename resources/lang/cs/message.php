@@ -23,6 +23,10 @@ return [
         'subject' => 'Oprávnění ke stažení zrušeno',
         'body' => 'Vaše oprávnění ke stažení bylo zrušeno kvůli příliš mnohokrát ohlášenému placenému torrentu, prosím ujistěte se, že máte dostatek bonusu.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Oprávnění ke stažení zrušeno',
+        'body' => 'Vaše oprávnění ke stažení bylo zrušeno z důvodu oznámení falešných dat.',
+    ],
     'download_enable' => [
         'subject' => 'Oprávnění ke stažení obnoveno',
         'body' => 'Vaše oprávnění ke stažení byla obnovena, nyní můžete stahovat torrenty. By: :operator',

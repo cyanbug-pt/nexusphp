@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "εναπομείναντες προσπάθειες.",
 	'p_no_account_signup' => "Don't have an account? <a href=\"signup.php\"><b>Sign up</b></a> right now!",
 	'p_forget_pass_recover' => "Ξεχάστε τον κωδικό πρόσβασής σας? Ανάκτηση του κωδικού σας <a href=\"recover.php\"><b>μέσω email</b></a>",
-    'p_account_banned' => "Ο λογαριασμός απαγορεύθηκε? λόγος προβολής στο αρχείο καταγραφής απαγόρευσης<a href=\"user-ban-log.php\"><b></b></a>",
+    'p_account_banned' => "Ο λογαριασμός απαγορεύθηκε? λόγος προβολής στο αρχείο καταγραφής απαγόρευσης <a href=\"user-ban-log.php\"><b></b></a>",
 	'p_resend_confirm' => "Δεν έλαβε email επιβεβαίωσης ή ο σύνδεσμος επιβεβαίωσης είναι σπασμένος? <a href=\"confirm_resend.php\"><b>Αποστολή email επιβεβαίωσης ξανά</b></a>",
 	'rowhead_username' => "Όνομα Χρήστη:",
 	'rowhead_password' => "Κωδικός:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'Έλεγχος Ταυτότητας Δύο Παραγόντων',
     'two_step_code_tooltip' => 'Εάν ενεργοποιηθεί πρέπει να συμπληρωθεί',
     'text_complain' => 'Κανάλι Καταγγελίας',
+    'other_methods' => "Άλλες Μέθοδοι",
 );
 
 ?>

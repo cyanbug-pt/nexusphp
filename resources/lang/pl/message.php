@@ -23,6 +23,10 @@ return [
         'subject' => 'Uprawnienie do pobierania anulowane',
         'body' => 'Twoje zezwolenie na pobieranie zostało anulowane z powodu zbyt wielu ogłoszeń o płatnym torrencie, upewnij się, że masz wystarczająco dużo bonusu.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Uprawnienie do pobierania anulowane',
+        'body' => 'Twoje pozwolenie na pobieranie zostało anulowane z powodu ogłoszenia fałszywych danych.',
+    ],
     'download_enable' => [
         'subject' => 'Uprawnienia pobierania przywrócone',
         'body' => 'Twoje uprawnienia do pobierania przywrócone, możesz teraz pobrać torrenty. przez: :operator',

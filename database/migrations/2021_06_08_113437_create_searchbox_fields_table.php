@@ -23,7 +23,7 @@ class CreateSearchboxFieldsTable extends Migration
             $table->integer('field_id')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('update_at')->useCurrent();
-            $table->unique(['searchbox_id', 'field_type', 'field_id'], 'uniq_searchbox_type_id');
+            $table->unique(['searchbox_id', 'field_type', 'field_id']);
         });
     }
 

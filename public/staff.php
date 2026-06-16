@@ -91,7 +91,7 @@ end_frame();
 
 //--------------------- forum moderators section ---------------------------//
 $ppl = '';
-$res = sql_query("SELECT forummods.userid AS userid, users.last_access, users.country FROM forummods LEFT JOIN users ON forummods.userid = users.id GROUP BY userid ORDER BY forummods.forumid, forummods.userid") or sqlerr();
+$res = sql_query("SELECT forummods.userid AS userid, users.last_access, users.country FROM forummods LEFT JOIN users ON forummods.userid = users.id GROUP BY userid,users.last_access, users.country,forummods.forumid, forummods.userid ORDER BY forummods.forumid, forummods.userid") or sqlerr();
 while ($arr = mysql_fetch_assoc($res))
 {
 	$countryrow = get_country_row($arr['country']);

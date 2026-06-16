@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Køb ændre brugernavn kort',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Gave medalje',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Køb torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Opgave færdig belønning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Opgave uafsluttede fradrag',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'Belønnings torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'Påkrævet torrent unået',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Rolle arbejdsløn',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent hentes',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Modtag gave',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Upload torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent modtager belønning',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Påkrævet torrent nået belønning',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Grundlæggende frø',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Seeding donor addition',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Post-handelsværdi',
     ],
     'exclude_seeding_bonus' => 'Udelad seeding bonus',
+    'title_for_user' => 'Bruger bonus detaljer',
+    'category' => 'Kategori',
+    'category_common' => 'Almindelig',
+    'category_seeding' => 'Seeder',
+    'view_detail' => 'Detaljer',
 ];

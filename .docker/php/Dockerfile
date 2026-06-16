@@ -81,7 +81,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 ENV LOG_CHANNEL=stderr
 ENV RUNNING_IN_DOCKER=1
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY .docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["entrypoint.sh"]

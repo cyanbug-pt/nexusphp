@@ -23,6 +23,10 @@ return [
         'subject' => 'Tillatelse for nedlasting avbrutt',
         'body' => 'Din nedlastningstillatelse er avbrutt på grunn av annonsering til å betalt torrent for mange ganger, sørg for at du har nok bonus.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Tillatelse for nedlasting avbrutt',
+        'body' => 'Din nedlastingstillatelse er avbrutt på grunn av annonsering av falske data.',
+    ],
     'download_enable' => [
         'subject' => 'Nedlastings tillatelse gjenopprettet',
         'body' => 'Dine nedlastingsrettigheter gjenopprettet. Nå kan du laste ned torrenter. Av: Operatør',

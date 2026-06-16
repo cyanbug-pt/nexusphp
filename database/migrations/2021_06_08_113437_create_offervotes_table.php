@@ -19,7 +19,7 @@ class CreateOffervotesTable extends Migration
         Schema::create('offervotes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedMediumInteger('offerid')->default(0);
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
+            $table->unsignedMediumInteger('userid')->default(0)->index();
             $table->enum('vote', ['yeah', 'against'])->default('yeah');
         });
     }

@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Monitor de cola',
         'user_modify_logs' => 'Usuario modificar registros',
         'message_templates' => 'Plantillas de mensaje',
+        'tracker_url' => 'URL del rastreador',
+        'activity_logs' => 'Registros de actividad',
     ],
     'resources' => [
         'agent_allow' => [
@@ -106,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Índice：:índice duplicado!',
+            'index_seed_time_average_require_value_invalid' => 'El tiempo de semilla requerido :index_seed_time_average_require_value es mayor que el tiempo total del examen :duración. ¡Por favor, modifícalo!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

@@ -15,7 +15,10 @@ class NexusModel extends Model
 
     protected $perPage = 50;
 
-    protected $connection = NexusDB::ELOQUENT_CONNECTION_NAME;
+    public function getConnectionName()
+    {
+        return NexusDB::getConnectionName();
+    }
 
     protected function usernameForAdmin(): Attribute
     {

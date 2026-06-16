@@ -28,7 +28,7 @@ class CreateSubsTable extends Migration
             $table->enum('anonymous', ['yes', 'no'])->default('no');
             $table->unsignedMediumInteger('hits')->default(0);
             $table->string('ext', 10)->default('');
-            $table->index(['torrent_id', 'lang_id'], 'torrentid_langid');
+            $table->index(['torrent_id', 'lang_id'],);
         });
     }
 

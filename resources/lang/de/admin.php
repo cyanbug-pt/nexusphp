@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Warteschlange Monitor',
         'user_modify_logs' => 'Benutzerprotokolle ändern',
         'message_templates' => 'Nachrichtenvorlagen',
+        'tracker_url' => 'Tracker-URL',
+        'activity_logs' => 'Aktivitätsprotokolle',
     ],
     'resources' => [
         'agent_allow' => [
@@ -106,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Index：:Index duplizieren !',
+            'index_seed_time_average_require_value_invalid' => 'Die erforderliche durchschnittliche Verteilungszeit :index_seed_time_durchschnitage_require_value ist größer als die Gesamtprüfungsdauer :Dauer. Bitte ändern!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

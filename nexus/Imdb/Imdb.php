@@ -32,6 +32,7 @@ class Imdb
         $config->photoroot = $photoRoot;
         $config->language = get_setting('main.imdb_language', 'en-US');
         $config->cache_expire = 0;
+        $config->force_agent = 'Googlebot/2.1 (+http://www.google.com/bot.html)';
         $this->config = $config;
     }
 

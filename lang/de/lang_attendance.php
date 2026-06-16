@@ -13,4 +13,5 @@ $lang_attendance = array
     'retroactive_event_text' => 'Re',
     'retroactive_confirm_tip' => 'Teilnahme bestätigen: ',
     'retroactive_description' => 'Klicke auf den Punkt auf den weißen Hintergrund, um teilzunehmen. Du hast derzeit eine Anwesenheitskarte <b>%d</b>.',
+    'attend_button' => 'Jetzt einchecken',
 );

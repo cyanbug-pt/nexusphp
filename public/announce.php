@@ -172,11 +172,15 @@ elseif ($az['showclienterror'] == 'yes'){
 }
 
 // check torrent based on info_hash
-$checkTorrentSql = "SELECT torrents.id, size, owner, sp_state, seeders, leechers, times_completed, UNIX_TIMESTAMP(added) AS ts, added, banned, hr, approval_status, price, categories.mode FROM torrents left join categories on torrents.category = categories.id WHERE " . hash_where("info_hash", $info_hash);
+$tsField = \Nexus\Database\NexusDB::unixTimestampField('added');
+$infoHashField = \Nexus\Database\NexusDB::binaryField('info_hash');
+$infoHashFieldBindValue = \Nexus\Database\NexusDB::binaryFieldBindValue($info_hash);
+$checkTorrentSql = "SELECT torrents.id, size, owner, sp_state, seeders, leechers, times_completed, $tsField AS ts, added, banned, hr, approval_status, price, categories.mode FROM torrents left join categories on torrents.category = categories.id WHERE $infoHashField limit 1";
 if (!$torrent = $Cache->get_value('torrent_hash_'.$info_hash.'_content')){
-	$res = sql_query($checkTorrentSql);
+    $res = mysql_prepare($checkTorrentSql);
+    $res->execute(['info_hash' => $infoHashFieldBindValue]);
 	$torrent = mysql_fetch_array($res);
-	$Cache->cache_value('torrent_hash_'.$info_hash.'_content', $torrent, 350);
+    $Cache->cache_value('torrent_hash_'.$info_hash.'_content', $torrent, 350);
 }
 if (!$torrent) {
     $firstNeedle = "info_hash=";
@@ -226,7 +230,9 @@ if ($newnumpeers > $rsize)
 else $limit = "";
 
 $announce_wait = \App\Repositories\TrackerRepository::MIN_ANNOUNCE_WAIT_SECOND;
-$fields = "id, seeder, peer_id, ip, ipv4, ipv6, port, uploaded, downloaded, userid, last_action, UNIX_TIMESTAMP(last_action) as last_action_unix_timestamp, prev_action, (".TIMENOW." - UNIX_TIMESTAMP(last_action)) AS announcetime, UNIX_TIMESTAMP(prev_action) AS prevts";
+$lastActionField = \Nexus\Database\NexusDB::unixTimestampField('last_action');
+$prevActionField = \Nexus\Database\NexusDB::unixTimestampField('prev_action');
+$fields = "id, seeder, peer_id, ip, ipv4, ipv6, port, uploaded, downloaded, userid, last_action, $lastActionField as last_action_unix_timestamp, prev_action, (".TIMENOW." - $lastActionField) AS announcetime, $prevActionField AS prevts";
 //$peerlistsql = "SELECT ".$fields." FROM peers WHERE torrent = ".$torrentid." AND connectable = 'yes' ".$only_leech_query.$limit;
 /**
  * return all peers,include connectable no
@@ -286,11 +292,14 @@ if (isset($event) && $event == "stopped") {
         }
     }
 }
-$selfwhere = "torrent = $torrentid AND " . hash_where("peer_id", $peer_id) . " AND userid = $userid";
+$peerIdField = \Nexus\Database\NexusDB::binaryField('peer_id');
+$peerIdFieldBindValue = \Nexus\Database\NexusDB::binaryFieldBindValue($peer_id);
+$selfwhere = "torrent = $torrentid AND $peerIdField AND userid = $userid";
 //no found in the above random selection
 if (!isset($self))
 {
-	$res = sql_query("SELECT $fields FROM peers WHERE $selfwhere LIMIT 1");
+	$res = mysql_prepare("SELECT $fields FROM peers WHERE $selfwhere LIMIT 1");
+    $res->execute(['peer_id' => $peerIdFieldBindValue]);
 	$row = mysql_fetch_assoc($res);
 	if ($row)
 	{
@@ -500,8 +509,10 @@ elseif(isset($self))
 else
 {
     if ($event != 'stopped') {
-        $isPeerExistResultSet = sql_query("select id from peers where $selfwhere limit 1");
-        if (mysql_num_rows($isPeerExistResultSet) == 0) {
+        $stmt = mysql_prepare("select id from peers where $selfwhere limit 1");
+        $stmt->execute(['peer_id' => bin2hex($peer_id)]);
+        $isPeerExistResultSet = mysql_fetch_assoc($stmt);
+        if (empty($isPeerExistResultSet)) {
             $connectable = "yes";
             $insertPeerSql = "INSERT INTO peers (torrent, userid, peer_id, ip, port, connectable, uploaded, downloaded, to_go, started, last_action, seeder, agent, downloadoffset, uploadoffset, passkey, ipv4, ipv6, is_seed_box) VALUES ($torrentid, $userid, ".sqlesc($peer_id).", ".sqlesc($ip).", $port, '$connectable', $uploaded, $downloaded, $left, $dt, $dt, '$seeder', ".sqlesc($agent).", $downloaded, $uploaded, ".sqlesc($passkey).", ".sqlesc($ipv4).", ".sqlesc($ipv6).", ".intval($isIPSeedBox).")";
             do_log("[INSERT PEER] peer not exists for $selfwhere, do insert with $insertPeerSql");
@@ -559,8 +570,8 @@ if (($left > 0 || $event == "completed") && $az['class'] < \App\Models\HitAndRun
             if ($snatchInfo['downloaded'] >= $requiredDownloaded) {
                 $nowStr = date('Y-m-d H:i:s');
                 $sql = sprintf(
-                    "insert into hit_and_runs (uid, torrent_id, snatched_id, created_at, updated_at) values (%d, %d, %d, '%s', '%s') on duplicate key update updated_at = '%s'",
-                    $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, $nowStr
+                    "insert into hit_and_runs (uid, torrent_id, snatched_id, created_at, updated_at) values (%d, %d, %d, '%s', '%s') %s",
+                    $userid, $torrentid, $snatchInfo['id'], $nowStr, $nowStr, \Nexus\Database\NexusDB::upsertField(['uid', 'torrent_id'], ['updated_at'])
                 );
                 $affectedRows = sql_query($sql);
                 $hitAndRunId = mysql_insert_id();

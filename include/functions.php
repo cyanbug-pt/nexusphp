@@ -1277,9 +1277,9 @@ function parse_imdb_id($url)
         $url = str_pad($url, 7, '0', STR_PAD_LEFT);
     }
 	if ($url != "" && preg_match("/[0-9]+/i", $url, $matches)) {
-		return $matches[0];
+		return intval($matches[0]);
 	}
-	return '';
+	return null;
 }
 
 function build_imdb_url($imdb_id)
@@ -2072,7 +2072,6 @@ function userlogin() {
     if (empty($row)) {
         return $loginResult = false;
     }
-
 	if (!$row["passkey"]){
 		$passkey = md5($row['username'].date("Y-m-d H:i:s").$row['passhash']);
 		sql_query("UPDATE users SET passkey = ".sqlesc($passkey)." WHERE id=" . sqlesc($row["id"]));
@@ -3210,8 +3209,9 @@ function base64 ($string, $encode=true) {
 
 function loggedinorreturn($mainpage = false) {
 	global $CURUSER,$BASEURL;
+    $script = nexus()->getScript();
 	if (!$CURUSER) {
-	    if (nexus()->getScript() == 'ajax') {
+	    if ($script == 'ajax') {
 	        exit(fail('Not login!', $_POST));
         }
 		if ($mainpage) {
@@ -3223,7 +3223,9 @@ function loggedinorreturn($mainpage = false) {
 		}
 		exit();
 	}
-//	do_log("[USER]: " . $CURUSER['id']);
+    if ($CURUSER['enabled'] != 'yes' && $script != 'self-enable') {
+        nexus_redirect('self-enable.php');
+    }
 }
 
 function deletetorrent($id, $notify = false) {
@@ -3237,6 +3239,7 @@ function deletetorrent($id, $notify = false) {
 	$idStr = implode(', ', $idArr ?: [0]);
 	$torrent_dir = get_setting('main.torrent_dir');
     \Nexus\Database\NexusDB::statement("DELETE FROM torrents WHERE id in ($idStr)");
+    \Nexus\Database\NexusDB::statement("DELETE FROM torrent_extras WHERE torrent_id in ($idStr)");
     //delete by torrent, make sure user is deleted
     \Nexus\Database\NexusDB::statement("DELETE FROM snatched WHERE torrentid in ($idStr) and not exists (select 1 from users where id = snatched.userid)");
 	foreach(array("peers", "files", "comments") as $x) {
@@ -3256,13 +3259,11 @@ function deletetorrent($id, $notify = false) {
             'action_type' => \App\Models\TorrentOperationLog::ACTION_TYPE_DELETE,
             'comment' => '',
         ], $notify);
+        do_action("torrent_delete", $_id);
+        fire_event("torrent_deleted", $torrentInfo->get($_id));
     }
     $meiliSearchRep = new \App\Repositories\MeiliSearchRepository();
     $meiliSearchRep->deleteDocuments($idArr);
-    if (is_int($id)) {
-        do_action("torrent_delete", $id);
-        fire_event("torrent_deleted", $torrentInfo->get($id));
-    }
 }
 
 function pager($rpp, $count, $href, $opts = array(), $pagename = "page") {
@@ -3344,7 +3345,7 @@ function pager($rpp, $count, $href, $opts = array(), $pagename = "page") {
 
 	$start = $page * $rpp;
 	$add_key_shortcut = key_shortcut($page,$pages-1);
-	return array($pagertop, $pagerbottom, "LIMIT $start,$rpp", $start, $rpp, $page);
+	return array($pagertop, $pagerbottom, "limit $rpp offset $start", $start, $rpp, $page);
 }
 
 function commenttable($rows, $type, $parent_id, $review = false)
@@ -3926,10 +3927,12 @@ foreach ($rows as $row)
 
 	if (user_can('torrentmanage'))
 	{
+        $actions = [];
         if (user_can('torrent-delete')) {
-            print("<td class=\"rowfollow\"><a href=\"".htmlspecialchars("fastdelete.php?id=".$row['id'])."\"><img class=\"staff_delete\" src=\"pic/trans.gif\" alt=\"D\" title=\"".$lang_functions['text_delete']."\" /></a>");
+            $actions[] = "<a href=\"".htmlspecialchars("fastdelete.php?id=".$row['id'])."\"><img class=\"staff_delete\" src=\"pic/trans.gif\" alt=\"D\" title=\"".$lang_functions['text_delete']."\" /></a>";
         }
-		print("<br /><a href=\"edit.php?returnto=" . rawurlencode($_SERVER["REQUEST_URI"]) . "&amp;id=" . $row["id"] . "\"><img class=\"staff_edit\" src=\"pic/trans.gif\" alt=\"E\" title=\"".$lang_functions['text_edit']."\" /></a></td>\n");
+        $actions[] = "<a href=\"edit.php?returnto=" . rawurlencode($_SERVER["REQUEST_URI"]) . "&amp;id=" . $row["id"] . "\"><img class=\"staff_edit\" src=\"pic/trans.gif\" alt=\"E\" title=\"".$lang_functions['text_edit']."\" /></a>";
+		echo sprintf("<td class=\"rowfollow\">%s</td>", implode("<br />", $actions));
 	}
 	print("</tr>\n");
 	$counter++;
@@ -5043,6 +5046,9 @@ function get_searchbox_value($mode = 1, $item = 'showsubcat'){
 
 function get_ratio($userid, $html = true){
 	$row = get_user_row($userid);
+    if (empty($row)) {
+        return "---";
+    }
 	$uped = $row['uploaded'];
 	$downed = $row['downloaded'];
 	if ($html == true){
@@ -5446,7 +5452,7 @@ function saveSetting(string $prefix, array $nameAndValue, string $autoload = 'ye
 {
     $prefix = strtolower($prefix);
     $datetimeNow = date('Y-m-d H:i:s');
-    $sql = "insert into `settings` (name, value, created_at, updated_at, autoload) values ";
+    $sql = "insert into settings (name, value, created_at, updated_at, autoload) values ";
     $data = [];
     foreach ($nameAndValue as $name => $value) {
         if (is_array($value)) {
@@ -5454,7 +5460,7 @@ function saveSetting(string $prefix, array $nameAndValue, string $autoload = 'ye
         }
         $data[] = sprintf("(%s, %s, %s, %s, '%s')", sqlesc("$prefix.$name"), sqlesc($value), sqlesc($datetimeNow), sqlesc($datetimeNow), $autoload);
     }
-    $sql .= implode(",", $data) . " on duplicate key update value = values(value)";
+    $sql .= implode(",", $data) . " " . \Nexus\Database\NexusDB::upsertField(['name'], ['value']);
     \Nexus\Database\NexusDB::statement($sql);
     clear_setting_cache();
     do_action("nexus_setting_update");
@@ -5980,6 +5986,7 @@ function get_ip_location_from_geoip($ip): bool|array
             'city' => '',
             'country_en' => '',
             'city_en' => '',
+            'continent_en' => '',
         ];
         try {
             $database = nexus_env('GEOIP2_DATABASE');
@@ -6008,7 +6015,7 @@ function get_ip_location_from_geoip($ip): bool|array
             $info['continent'] = $continentName;
             $info['continent_en'] = $record->continent->names['en'] ?? '';
         } catch (\Exception $exception) {
-            do_log($exception->getMessage());
+            do_log($exception->getMessage() . ", trace: " .  $exception->getTraceAsString(), 'error');
         }
         return $info;
     });
@@ -6094,7 +6101,7 @@ function insert_torrent_tags($torrentId, $tagIdArr, $sync = false)
     if (empty($tagIdArr)) {
         return;
     }
-    $insertTagsSql = 'insert into torrent_tags (`torrent_id`, `tag_id`, `created_at`, `updated_at`) values ';
+    $insertTagsSql = 'insert into torrent_tags (torrent_id, tag_id, created_at, updated_at) values ';
     $values = [];
     foreach ($tagIdArr as $tagId) {
         if (in_array($tagId, $specialTags) && !$canSetSpecialTag) {
@@ -6174,7 +6181,7 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
         $idStr = implode(',', \Illuminate\Support\Arr::wrap($torrentIdArr));
         $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, 'NO_PEER_ID' as peerID, '' as last_action, '' as ip from torrents  WHERE id in ($idStr) and size >= $minSize";
     } else {
-        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action, peers.ip from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' and torrents.size > $minSize group by peers.torrent, peers.peer_id";
+        $sql = "select torrents.id, torrents.added, torrents.size, torrents.seeders, peers.id as peerID, peers.last_action, peers.ip from torrents LEFT JOIN peers ON peers.torrent = torrents.id WHERE peers.userid = $uid AND peers.seeder ='yes' and torrents.size > $minSize group by torrents.id, peers.id";
     }
     $tagGrouped = [];
     $torrentResult = \Nexus\Database\NexusDB::select($sql);
@@ -6189,7 +6196,14 @@ function calculate_seed_bonus($uid, $torrentIdArr = null): array
     $officialAdditionalFactor = \App\Models\Setting::get('bonus.official_addition');
     $zeroBonusTag = \App\Models\Setting::get('bonus.zero_bonus_tag');
     $zeroBonusFactor = \App\Models\Setting::get('bonus.zero_bonus_factor');
-    $userMedalResult = \Nexus\Database\NexusDB::select("select round(sum(bonus_addition_factor), 5) as factor from medals where id in (select medal_id from user_medals where uid = $uid and (expire_at is null or expire_at > '$nowStr') and (bonus_addition_expire_at is null or bonus_addition_expire_at > '$nowStr'))");
+    if (\Nexus\Database\NexusDB::isMysql()) {
+        $factorField = "round(sum(bonus_addition_factor), 5)";
+    } elseif (\Nexus\Database\NexusDB::isPgsql()) {
+        $factorField = "round(sum(bonus_addition_factor)::numeric, 5)";
+    } else {
+        throw new \RuntimeException("Not supported database");
+    }
+    $userMedalResult = \Nexus\Database\NexusDB::select("select $factorField as factor from medals where id in (select medal_id from user_medals where uid = $uid and (expire_at is null or expire_at > '$nowStr') and (bonus_addition_expire_at is null or bonus_addition_expire_at > '$nowStr'))");
     $medalAdditionalFactor = floatval($userMedalResult[0]['factor'] ?? 0);
     do_log("$logPrefix, sql: $sql, count: " . count($torrentResult) . ", officialTag: $officialTag, officialAdditionalFactor: $officialAdditionalFactor, zeroBonusTag: $zeroBonusTag, zeroBonusFactor: $zeroBonusFactor, medalAdditionalFactor: $medalAdditionalFactor");
     $last_action = "";
@@ -6650,6 +6664,42 @@ function can_view_post($uid, $post)
 
 function hide_text($text) {
     return '<span class="hidden-text">' . $text . '</span>';
+}
+
+function make_content_disposition(string $filename, string $disposition = 'attachment'): string {
+    $filenameFallback = str_replace('%', '', Str::ascii($filename));
+    return \Symfony\Component\HttpFoundation\HeaderUtils::makeDisposition($disposition, $filename, $filenameFallback);
+}
+
+function bbcode_attach_to_img(string $text) {
+    $pattern = "/\[attach\]([0-9a-zA-z][0-9a-zA-z]*)\[\/attach\]/is";
+    return preg_replace_callback($pattern, function ($matches) {
+        $dlkey = $matches[1];
+        $httpdirectory_attachment = get_setting('attachment.httpdirectory');
+        $row = \Nexus\Database\NexusDB::remember('attachment_'.$dlkey.'_content', 86400, function() use ($dlkey) {
+            $record =  \App\Models\Attachment::query()->where("dlkey", $dlkey)->first();
+            if ($record) {
+                return $record->toArray();
+            }
+            return [];
+        });
+        if (empty($row) || $row['isimage'] != 1) {
+            do_log(sprintf("dlkey: %s get attachment %s not exists or not image", $dlkey, json_encode($row)));
+            return $matches[0];
+        }
+        $driver = $row['driver'] ?? 'local';
+        if ($driver == "local") {
+            if ($row['thumb'] == 1){
+                $url = $httpdirectory_attachment."/".$row['location'].".thumb.jpg";
+            } else {
+                $url = $httpdirectory_attachment."/".$row['location'];
+            }
+            $url = sprintf("%s/%s", getSchemeAndHttpHost(true), trim($url, "/"));
+        } else {
+            $url = \Nexus\Attachment\Storage::getDriver($driver)->getImageUrl($row['location']);
+        }
+        return "[img]" . $url . "[/img]";
+    }, $text, 20);
 }
 
 ?>

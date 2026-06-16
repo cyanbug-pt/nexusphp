@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('invites', function (Blueprint $table) {
             $table->dateTime('expired_at')->nullable(true)->index();
             $table->dateTime('created_at')->useCurrent();
-            $table->index(['inviter'], 'idx_inviter');
+            $table->index(['inviter'], );
         });
     }
 

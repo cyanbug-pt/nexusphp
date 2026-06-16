@@ -11,7 +11,7 @@ $lang_login = array
 	'p_remaining_tries' => "resterende forsøg.",
 	'p_no_account_signup' => "Har du ikke en konto? <a href=\"signup.php\"><b>Tilmeld</b></a> lige nu!",
 	'p_forget_pass_recover' => "Glem din adgangskode? Gendan din adgangskode <a href=\"recover.php\"><b>via e-mail</b></a>",
-    'p_account_banned' => "Konto banned? se årsag til<a href=\"user-ban-log.php\"><b>bruger ban log</b></a>",
+    'p_account_banned' => "Konto banned? se årsag til <a href=\"user-ban-log.php\"><b>bruger ban log</b></a>",
 	'p_resend_confirm' => "Har du ikke modtaget bekræftelsesmail, eller bekræftelseslinket er i stykker? <a href=\"confirm_resend.php\"><b>Send bekræftelsesmail igen</b></a>",
 	'rowhead_username' => "Brugernavn:",
 	'rowhead_password' => "Adgangskode:",
@@ -35,6 +35,7 @@ $lang_login = array
     'rowhead_two_step_code' => 'To-Faktor Godkendelse',
     'two_step_code_tooltip' => 'Hvis aktiveret skal udfyldes',
     'text_complain' => 'Klager Kanal',
+    'other_methods' => "Andre Metoder",
 );
 
 ?>

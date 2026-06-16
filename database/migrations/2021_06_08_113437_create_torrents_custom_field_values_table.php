@@ -18,13 +18,16 @@ class CreateTorrentsCustomFieldValuesTable extends Migration
         }
         Schema::create('torrents_custom_field_values', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('torrent_id')->default(0)->index('idx_torrent_id');
-            $table->integer('custom_field_id')->default(0)->index('idx_field_id');
+            $table->integer('torrent_id')->default(0)->index();
+            $table->integer('custom_field_id')->default(0)->index();
             $table->mediumText('custom_field_value')->nullable();
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });
-        \Illuminate\Support\Facades\DB::statement('alter table torrents_custom_field_values add index(custom_field_value(191))');
+        if (\Nexus\Database\NexusDB::isMysql()) {
+            \Illuminate\Support\Facades\DB::statement('alter table torrents_custom_field_values add index(custom_field_value(191))');
+        }
+
     }
 
     /**

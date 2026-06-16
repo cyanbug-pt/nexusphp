@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'カードに参加',
         'props' => 'props',
         'class' => 'クラス',
-        'vip_added' => 'VIPステータスはボーナスで獲得できます',
-        'vip_added_help' => 'VIPステータスはボーナスで償還されます。',
+        'vip_added' => 'VIPステータスの自動期限切れ',
+        'vip_added_help' => 'VIPステータスの自動期限が切れます。',
         'vip_until' => 'VIPステータス終了時間',
-        'vip_until_help' => "時間形式は「年-年-月-日時間:分:秒(Minute) VIPステータスが終了する時間。 このルールを有効にするには、「はい」に設定する必要があります。",
+        'vip_until_help' => "時間形式は「年-年-月-日時間:分:秒(Minute) VIPステータスが終了する時間。 このルールを有効にするには、VIPステータスの自動有効期限を「はい」にする必要があります。",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "招待されたユーザーが登録されました",
     'msg_user_you_invited' => "招待したユーザー ",
     'msg_has_registered' => " 今登録されています。",
+    'user_is_disabled' => 'ユーザー: :username(ID: :user_id) は無効です。',
+    'user_is_not_confirmed' => 'ユーザー: :username(ID: :user_id) が確認されていません。',
 ];

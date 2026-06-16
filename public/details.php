@@ -29,7 +29,6 @@ $row = mysql_fetch_array($res);
 if (user_can('torrentmanage') || $CURUSER["id"] == $row["owner"])
 $owned = 1;
 else $owned = 0;
-
 $settingMain = get_setting('main');
 if (!$row) {
     stderr($lang_details['std_error'], $lang_details['std_no_torrent_id']);
@@ -308,20 +307,20 @@ JS;
 
         //technical info
         if ($settingMain['enable_technical_info'] == 'yes') {
-            $technicalData = $row['technical_info'] ?? '';
-            
+            $technicalData = nexus_escape($row['technical_info'] ?? '');
+
             // 判断是否为BDINFO格式
             $isBdInfo = false;
             if (!empty($technicalData)) {
                 $firstLine = strtok($technicalData, "\n");
-                if (strpos($firstLine, 'DISC INFO') !== false 
+                if (strpos($firstLine, 'DISC INFO') !== false
 				|| strpos($firstLine, 'Disc Title') !== false
 				|| strpos($firstLine, 'Disc Label') !== false
 				) {
                     $isBdInfo = true;
                 }
             }
-            
+
             if ($isBdInfo) {
                 // 使用BdInfoExtra处理BDINFO格式
                 $technicalInfo = new \Nexus\Torrent\BdInfoExtra($technicalData);
@@ -329,7 +328,7 @@ JS;
                 // 使用TechnicalInformation处理MediaInfo格式
                 $technicalInfo = new \Nexus\Torrent\TechnicalInformation($technicalData);
             }
-            
+
             $technicalInfoResult = $technicalInfo->renderOnDetailsPage();
             if (!empty($technicalInfoResult)) {
                 tr($lang_functions['text_technical_info'], $technicalInfoResult, 1);
@@ -619,7 +618,7 @@ echo "</script>";
         $no_give = "";
         $add_value ="";
 
-        $tempresult = sql_query ("SELECT count( DISTINCT `userid` ) as count FROM magic WHERE torrentid=".sqlesc($id));
+        $tempresult = sql_query ("SELECT count( DISTINCT userid ) as count FROM magic WHERE torrentid=".sqlesc($id));
         $count_user = mysql_fetch_array($tempresult);
         $count_user_number = $count_user['count'];
 

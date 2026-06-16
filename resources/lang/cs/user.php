@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Účast na kartě',
         'props' => 'Příznivé',
         'class' => 'Třída:',
-        'vip_added' => 'VIP status je získán bonusem',
-        'vip_added_help' => 'Je VIP status vyplacen bonusem.',
+        'vip_added' => 'VIP status automaticky vyprší',
+        'vip_added_help' => 'Je VIP status automaticky vyprší.',
         'vip_until' => 'VIP status končí čas',
-        'vip_until_help' => "Formát času je 'Rok-Rok - měsíc hodina:Minute:Druhý čas, kdy VIP status skončí. VIP status je získán bonusem\" musí být nastaven na 'Ano', aby se toto pravidlo projevilo.",
+        'vip_until_help' => "Formát času je 'Rok-Rok - měsíc hodina:Minute:Druhý čas, kdy VIP status skončí. Automatické vypršení platnosti VIP stavu\" musí být nastaveno na \"Ano\", aby se toto pravidlo projevilo.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Pozvaný uživatel se zaregistroval",
     'msg_user_you_invited' => "Uživatel, který jste pozvali ",
     'msg_has_registered' => " se právě nyní zaregistroval.",
+    'user_is_disabled' => 'Uživatel: :username(ID: :user_id) je zakázáno.',
+    'user_is_not_confirmed' => 'Uživatel: :username(ID: :user_id) není potvrzeno.',
 ];

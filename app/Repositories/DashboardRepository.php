@@ -47,10 +47,11 @@ class DashboardRepository extends BaseRepository
             'value' => PHP_VERSION,
         ];
         $name = 'mysql_version';
+        $databaseInfo = NexusDB::getDatabaseVersionInfo();
         $result[$name] = [
             'name' => $name,
             'text' => nexus_trans("dashboard.system_info.$name"),
-            'value' => NexusDB::select('select version() as info')[0]['info'],
+            'value' => sprintf("%s: %s", $databaseInfo['dbType'], $databaseInfo['version']),
         ];
 //        $name = 'os';
 //        $result[$name] = [

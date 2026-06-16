@@ -110,6 +110,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => '指標：:index 重復！',
+            'index_seed_time_average_require_value_invalid' => '指標平均做種時間的要求量：:index_seed_time_average_require_value 大於整個考核時長：:duration，請修改！'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => '批量免罪',

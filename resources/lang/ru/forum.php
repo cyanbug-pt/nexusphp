@@ -8,5 +8,9 @@ return [
     'post' => [
         'edited_notify_subject' => 'Ответ был изменен',
         'edited_notify_body' => 'Ваш ответ на тему: :topic_subject был изменен :editor.',
+    ],
+    'reply' => [
+        'replied_notify_subject' => 'У вашего ответа новый ответ',
+        'replied_notify_body' => 'Ваш ответ на тему：:topic_subject был отвечен :replyer.',
     ]
 ];

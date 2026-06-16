@@ -1,9 +1,11 @@
 <?php
 namespace Nexus\Database;
 
+use PDOStatement;
+
 interface DBInterface
 {
-    public function connect($host, $username, $password, $database, $port);
+    public function connect($host, $username, $password, $database, $port, $driver = 'mysql');
 
     public function query(string $sql);
 
@@ -28,5 +30,7 @@ interface DBInterface
     public function lastInsertId(): int;
 
     public function freeResult($result);
+
+    public function prepare(string $sql): PDOStatement;
 
 }

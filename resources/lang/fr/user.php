@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Participer à la carte',
         'props' => 'Accessoires',
         'class' => 'Classe',
-        'vip_added' => 'Le statut VIP est obtenu par le bonus',
-        'vip_added_help' => 'Est le statut VIP échangé par bonus.',
+        'vip_added' => 'Expiration automatique du statut VIP',
+        'vip_added_help' => 'Le statut VIP expirera automatiquement.',
         'vip_until' => 'Heure de fin du statut VIP',
-        'vip_until_help' => "Le format de l'heure est 'Année - Mois - Heure de la journée:Minute:Seconde Le temps où le statut VIP se termine. Le statut VIP est obtenu par bonus' doit être défini sur \"Oui\" pour que cette règle prenne effet.",
+        'vip_until_help' => "Le format de l'heure est 'Année - Mois - Heure de la journée:Minute:Seconde Le temps où le statut VIP se termine. Le statut VIP expire automatiquement' doit être défini sur \"Oui\" pour que cette règle prenne effet.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "L'utilisateur invité s'est enregistré",
     'msg_user_you_invited' => "L'utilisateur que vous avez invité ",
     'msg_has_registered' => " s'est inscrit tout à l'heure.",
+    'user_is_disabled' => 'Utilisateur: :username(ID: :user_id) est désactivé.',
+    'user_is_not_confirmed' => 'Utilisateur : :username(ID: :user_id) non confirmé.',
 ];

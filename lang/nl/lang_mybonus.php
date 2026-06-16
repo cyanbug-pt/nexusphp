@@ -168,6 +168,10 @@ where<ul><li><b>A</b> is an intermediate variable</li><li><b>Ti</b> is the <b>i<
     'text_success_buy_change_username_card' => "Gefeliciteerd met je succesvolle aankoop van een <b>verander gebruikersnaam kaart</b>!",
     'text_change_username_card_already_has' => 'Al een wijziging gebruikersnaam kaart',
     'text_rainbow_id_already_valid_forever' => 'Reeds een permanente Regenboog ID',
+    'text_get_by_medal' => 'Medaillebonus zal de volgende extra bonuswaarde per uur ontvangen',
+    'medal_additional_desc' => 'De formule voor medaille bonus berekening is dezelfde als hierboven, ongeacht minimale garantie',
+    'medal_additional_factor' => 'De uiteindelijke bonus is de berekende medaille bonus vermenigvuldigd met de medal_additional_factor',
+    'text_bonus_mini_size' => 'Torrent grootte moet minstens %szijn. Torrent grootte kleiner dan dit volume wordt uitgesloten van bonus berekeningen'
 );
 
 ?>

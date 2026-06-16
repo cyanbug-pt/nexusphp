@@ -45,8 +45,8 @@ class SettingRepository extends BaseRepository
             return true;
         }
         $sql = sprintf(
-            "insert into `%s` (`name`, `value`) values %s on duplicate key update `value` = values(`value`)",
-            $settingModel->getTable(), implode(', ', $values)
+            'insert into %s (name, "value") values %s %s',
+            $settingModel->getTable(), implode(', ', $values), NexusDB::upsertField(['name'], ['value'])
         );
         $result = DB::insert($sql);
         do_log("sql: $sql, result: $result");

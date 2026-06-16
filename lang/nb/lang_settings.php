@@ -707,9 +707,12 @@ $lang_settings = array
 	'text_login_secret_lifetime_unit' => 'minutt',
 	'row_login_secret_lifetime' => 'Pålogging hemmelig levetid',
 	'text_login_secret_lifetime_deadline' => 'Nåværende hemmelige frist for pålogging',
-	'row_enable_technical_info' => 'Aktivere MediaInfo',
-	'text_enable_technical_info' => "Standard 'Nei'. MediaInfo kommer fra programvare <b><a href=\"https://mediaarea.net/en/MediaInfo\" target='_blank'>MediaInfo</a></b> tekstvisning",
-    'row_sticky_first_level_background_color' => 'Klissete første nivå bg farge',
+	'row_enable_technical_info' => 'Aktivere MediaInfo/BDInfo',
+	'text_enable_technical_info' => 'Standard \'Nei\'. <br>
+	AS. MediaInfo kommer fra programvare <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b> resultatet av "Tekstvisning"	<br>
+	ΦBDInfo kommer fra programvare <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b> resultatet av "Vis rapporter"
+	',
+	'row_sticky_first_level_background_color' => 'Klissete første nivå bg farge',
     'text_sticky_first_level_background_color_note' => 'Fast første nivå bg farge, det vil ikke være noen hvis det ikke er satt.',
     'row_sticky_second_level_background_color' => 'Klissete andre nivå bg farge',
     'text_sticky_second_level_background_color_note' => 'Klissete andre nivå bg farge, det vil ikke være noen hvis det ikke er satt.',
@@ -816,6 +819,13 @@ $lang_settings = array
     'text_use_challenge_response_authentication_note' => 'Dersom aktivert vil ingen klartekst passord bli overført på innlogging. Anbefalte framtidige utgivelser vil fjerne denne konfigurasjonen og aktivere denne funksjonen.' ,
     'row_complain_enabled' => 'Å aktivere klager',
     'row_complain_enabled_note' => 'standard: "ja"',
+    'row_min_size' => 'Minimum volum',
+    'text_bonus_mini_size'=> 'Minimum volum nødvendig for torrent er',
+    'text_bonus_mini_size_help' => '. Torrentstørrelse mindre enn dette volumet er ikke inkludert i bonusberegningen. Enhet: bytes (Byte), f.eks 1 KiB = 1024 Byte.',
+    'row_reward_bonus_options' => 'Alternativer for belønningsbonus',
+    'text_reward_bonus_options_note' => 'Belønnings bonus alternativer på siden for torrentdetaljer, flere valg separert med komma',
+    'row_reward_times_limit' => 'Belønnings frekvensgrense',
+    'text_reward_times_limit_note' => 'Daglig grense per bruker for bonusbelønning på avdelingssider. Sett til 0 for ingen grense. Standard: 0',
 );
 
 ?>

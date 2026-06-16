@@ -23,6 +23,10 @@ return [
         'subject' => 'Autorisation de téléchargement annulée',
         'body' => 'Votre autorisation de téléchargement a été annulée en raison de l\'annonce de torrent payé trop de fois, assurez-vous que vous avez suffisamment de bonus.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Autorisation de téléchargement annulée',
+        'body' => 'Votre autorisation de téléchargement a été annulée en raison de l\'annonce de fausses données.',
+    ],
     'download_enable' => [
         'subject' => 'Autorisation de téléchargement restaurée',
         'body' => 'Vos privilèges de téléchargement ont été restaurés, vous pouvez maintenant télécharger des torrents. Par: :operator',

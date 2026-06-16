@@ -18,8 +18,8 @@ class CreateReadpostsTable extends Migration
         }
         Schema::create('readposts', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
-            $table->unsignedMediumInteger('topicid')->default(0)->index('topicid');
+            $table->unsignedMediumInteger('userid')->default(0)->index();
+            $table->unsignedMediumInteger('topicid')->default(0)->index();
             $table->unsignedInteger('lastpostread')->default(0);
         });
     }

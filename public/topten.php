@@ -484,7 +484,14 @@ $Cache->add_whole_row();
 
 if ($type == 1)
 {
-	$mainquery = "SELECT id as userid, username, added, uploaded, downloaded, uploaded / (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(added)) AS upspeed, downloaded / (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(added)) AS downspeed FROM users WHERE enabled = 'yes'";
+    if (\Nexus\Database\NexusDB::isMysql()) {
+        $speedStr = "uploaded / (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(added)) AS upspeed, downloaded / (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(added)) AS downspeed";
+    } else if (\Nexus\Database\NexusDB::isPgsql()) {
+        $speedStr = "uploaded::numeric / (EXTRACT(EPOCH FROM NOW()) - EXTRACT(EPOCH FROM added)) AS upspeed";
+    } else {
+        throw new \RuntimeException('Not supported database.');
+    }
+	$mainquery = "SELECT id as userid, username, added, uploaded, downloaded, $speedStr FROM users WHERE enabled = 'yes'";
 
 
 	if ($limit == 10 || $subtype == "ul")
@@ -581,7 +588,7 @@ elseif ($type == 3)
 {
 	if ($limit == 10 || $subtype == "us")
 	{
-		$r = sql_query("SELECT name, flagpic, COUNT(users.country) as num FROM countries LEFT JOIN users ON users.country = countries.id GROUP BY name ORDER BY num DESC LIMIT $limit") or sqlerr();
+		$r = sql_query("SELECT name, flagpic, COUNT(users.country) as num FROM countries LEFT JOIN users ON users.country = countries.id GROUP BY name,flagpic ORDER BY num DESC LIMIT $limit") or sqlerr();
 		countriestable($r, $lang_topten['text_top']."$limit ".$lang_topten['text_countries_users']. ($limit == 10 ? " <font class=\"small\"> - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=25&amp;subtype=us\">Top 25</a>]</font>" : ""),$lang_topten['col_users']);
 	}
 
@@ -630,13 +637,13 @@ elseif ($type == 5)
 {
 	if ($limit == 10 || $subtype == "mtop")
 	{
-		$r = sql_query( "SELECT users_topics.userid,  users_topics.usertopics, COUNT(posts.id) as userposts FROM (SELECT users.id as userid, COUNT(topics.id) as usertopics from users LEFT JOIN topics ON users.id = topics.userid GROUP BY users.id) as users_topics LEFT JOIN posts ON users_topics.userid = posts.userid GROUP BY users_topics.userid ORDER BY usertopics DESC LIMIT $limit") or sqlerr();
+		$r = sql_query( "SELECT users_topics.userid,  users_topics.usertopics, COUNT(posts.id) as userposts FROM (SELECT users.id as userid, COUNT(topics.id) as usertopics from users LEFT JOIN topics ON users.id = topics.userid GROUP BY users.id) as users_topics LEFT JOIN posts ON users_topics.userid = posts.userid GROUP BY users_topics.userid, users_topics.usertopics ORDER BY usertopics DESC LIMIT $limit") or sqlerr();
 		postable($r, $lang_topten['text_top']."$limit ".$lang_topten['text_most_topic'] . ($limit == 10 ? " <font class=\"small\"> - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=100&amp;subtype=mtop\">".$lang_topten['text_one_hundred']."</a>] - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=250&amp;subtype=mtop\">".$lang_topten['text_top_250']."</a>]</font>" : ""));
 	}
 
 	if ($limit == 10 || $subtype == "mpos")
 	{
-		$r = sql_query( "SELECT users_topics.userid,  users_topics.usertopics, COUNT(posts.id) as userposts FROM (SELECT users.id as userid, COUNT(topics.id) as usertopics from users LEFT JOIN topics ON users.id = topics.userid GROUP BY users.id) as users_topics LEFT JOIN posts ON users_topics.userid = posts.userid GROUP BY users_topics.userid ORDER BY userposts DESC LIMIT $limit") or sqlerr();
+		$r = sql_query( "SELECT users_topics.userid,  users_topics.usertopics, COUNT(posts.id) as userposts FROM (SELECT users.id as userid, COUNT(topics.id) as usertopics from users LEFT JOIN topics ON users.id = topics.userid GROUP BY users.id) as users_topics LEFT JOIN posts ON users_topics.userid = posts.userid GROUP BY users_topics.userid, users_topics.usertopics ORDER BY userposts DESC LIMIT $limit") or sqlerr();
 		postable($r, $lang_topten['text_top']."$limit ".$lang_topten['text_most_post'] . ($limit == 10 ? " <font class=\"small\"> - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=100&amp;subtype=mpos\">".$lang_topten['text_one_hundred']."</a>] - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=250&amp;subtype=mpos\">".$lang_topten['text_top_250']."</a>]</font>" : ""));
 	}
 
@@ -704,17 +711,17 @@ if ($enabledonation == 'yes'){
 
 	if ($limit == 10 || $subtype == "mcli")
 	{
-		$r = sql_query( "SELECT agent_allowed_family.family as client_name, COUNT(users.id) as client_num from users RIGHT JOIN agent_allowed_family ON agent_allowed_family.id = users.clientselect GROUP BY clientselect ORDER BY client_num DESC LIMIT $limit") or sqlerr();
+		$r = sql_query( "SELECT agent_allowed_family.family as client_name, COUNT(users.id) as client_num from users RIGHT JOIN agent_allowed_family ON agent_allowed_family.id = users.clientselect GROUP BY clientselect, client_name ORDER BY client_num DESC LIMIT $limit") or sqlerr();
 		clienttable($r, $lang_topten['text_top']."$limit ".$lang_topten['text_most_client'] . ($limit == 10 ? " <font class=\"small\"> - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=100&amp;subtype=mcli\">".$lang_topten['text_one_hundred']."</a>] - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=250&amp;subtype=mcli\">".$lang_topten['text_top_250']."</a>]</font>" : ""));
 	}
 	if ($limit == 10 || $subtype == "ss")
 	{
-		$r = sql_query( "SELECT stylesheets.name as stylesheet_name, COUNT(users.id) as stylesheet_num from users JOIN stylesheets ON stylesheets.id = users.stylesheet GROUP BY stylesheet ORDER BY stylesheet_num DESC LIMIT $limit") or sqlerr();
+		$r = sql_query( "SELECT stylesheets.name as stylesheet_name, COUNT(users.id) as stylesheet_num from users JOIN stylesheets ON stylesheets.id = users.stylesheet GROUP BY stylesheet, stylesheet_name ORDER BY stylesheet_num DESC LIMIT $limit") or sqlerr();
 		stylesheettable($r, $lang_topten['text_top']."$limit ".$lang_topten['text_most_stylesheet'] . ($limit == 10 ? "<font class=\"small\"> - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=25&amp;subtype=ss\">Top 25</a>] - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=50&amp;subtype=ss\">Top 50</a>]</font>" : ""));
 	}
 	if ($limit == 10 || $subtype == "lang")
 	{
-		$r = sql_query( "SELECT language.lang_name as lang_name, COUNT(users.id) as lang_num from users JOIN language ON language.id = users.lang WHERE site_lang=1 GROUP BY lang ORDER BY lang_num DESC LIMIT $limit") or sqlerr();
+		$r = sql_query( "SELECT language.lang_name as lang_name, COUNT(users.id) as lang_num from users JOIN language ON language.id = users.lang WHERE site_lang=1 GROUP BY lang, lang_name ORDER BY lang_num DESC LIMIT $limit") or sqlerr();
 		languagetable($r, $lang_topten['text_top']."$limit ".$lang_topten['text_most_language'] . ($limit == 10 ? "<font class=\"small\"> - [<a class=\"altlink\" href=\"topten.php?type=$type&amp;lim=25&amp;subtype=lang\">Top 25</a>]</font>" : ""));
 	}
 }

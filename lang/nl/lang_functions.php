@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Je krijgt',
 	'std_by' => 'Door',
 	'row_security_image' => "Beveiliging afbeelding:",
+	'row_security_challenge' => "Beveiligings Uitdaging:",
 	'row_security_code' => "Beveiligings Code",
 	'text_slots' => "Sleuf:",
 	'text_unlimited' => "Onbeperkt",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'vereist',
 	'text_invalid' => 'Ongeldig',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo comes from software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>，open file, language select english, click the view menu > text > right click in the box > select all > copy > past into this box.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo is afkomstig van software <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>, penbestand, taal kiezen Engels, klik op weergave menu > tekst > rechtermuisknop in het vak > selecteer alles > kopieer > verleden in dit vak.
+	<br>
+	<b>&middot;</b> BDInfo is afkomstig van software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>, pen van het bestand met deze software, klik op Scan Bitrates om het rapport te bekijken. klik met de rechtermuisknop in het vak > alles selecteren, met de rechtermuisknop > kopiëren en plak het hier.
+	',
     'text_management_system' => 'Beheer',
     'text_seed_points' => 'Seed punten',
     'spoiler_expand_collapse' => 'Klik om uitvouwen/inklappen',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Neem contact op',
     'full_site_promotion_in_effect' => 'Volledige site [%s] is in werking!',
     'full_site_promotion_time_range' => 'Tijd bereik: %s ~ %s',
+    'full_site_promotion_remark' => 'Opmerking: %s',
+    'full_site_promotion_upcoming' => 'Upcoming full site [%s]',
     'text_torrent_to_approval' => 'Er is %s%u geen goedkeuring van torrent%s.',
     'std_confirm_remove' => 'Weet u zeker dat u het wilt verwijderen?',
     'select_an_user_class' => 'Selecteer een gebruikersklasse',

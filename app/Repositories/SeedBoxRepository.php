@@ -199,7 +199,7 @@ class SeedBoxRepository extends BaseRepository
         $size = 1000;
         $page = 1;
         $logPrefix = "isAllowed: $isAllowed->name, field: $field->name, page: $page, size: $size";
-        $selectRaw = sprintf("uid, group_concat(%s) as str", $field == IpAsnEnum::ASN ? 'asn' : 'ip');
+        $selectRaw = sprintf("uid, %s as str", NexusDB::groupConcatField($field == IpAsnEnum::ASN ? 'asn' : 'ip'));
         while (true) {
             $list = SeedBoxRecord::getValidQuery(TypeEnum::USER, $isAllowed, $field)
                 ->selectRaw($selectRaw)

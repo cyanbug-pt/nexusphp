@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Registrer',
     'checkbox_pm_on_topic_reply' => 'Varsle meg når det er nye svar på foruminnlegg',
     'checkbox_pm_on_hr_reached' => 'Gi meg beskjed når H&R når målet',
+    'row_tracker_url' => 'Sporingsagent URL',
+    'row_tracker_url_help' => '<b>Note:</b> Once selected, announce can only be sent to the selected link. By default, announce can only be sent to the first default link in the list.',
 );
 
 ?>

@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'グローバル',
 
     'reached_by_seed_time_comment' => '：:now,seed時間:seed_time 時間が:seed_time_minimum Hours(s) に達しました',
+    'reached_by_leech_time_comment' => '：:now,leech 時間: :leech_time 営業時間が:leech_time_minimum Hours(s) に達しました',
     'reached_by_share_ratio_comment' => "：:now \nシード時間: :seed_time Hours(s) Unreached :seed_time_minimum Hours(s) \nシェア比率: :share_ratio が標準：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "あなたのユーザークラス: :user_class_text または寄付されたユーザーは、この H&R を無視してください",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) に達しました！',

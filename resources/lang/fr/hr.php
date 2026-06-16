@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'Globale',
 
     'reached_by_seed_time_comment' => 'Jusqu\'à：:now,durée de la seed : :seed_time Hour(s) atteinte(s) :seed_time_minimum(s)',
+    'reached_by_leech_time_comment' => 'Jusqu\'à：:now,leech time: :leech_time Heures(s) atteinte(s) :leech_time_minimum(s)',
     'reached_by_share_ratio_comment' => "Jusqu'à：:now \ndurée de la graine: :seed_time Hour(s) Inatteinte(s) :seed_time_minimum Hour(s) \nRatio Partage: :share_ratio atteint la norme：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "Votre classe utilisateur : :user_class_text ou un utilisateur donné, ignorez cette H&R",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) atteint !',

@@ -18,9 +18,9 @@ class CreatePollanswersTable extends Migration
         }
         Schema::create('pollanswers', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedMediumInteger('pollid')->default(0)->index('pollid');
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
-            $table->unsignedTinyInteger('selection')->default(0)->index('selection');
+            $table->unsignedMediumInteger('pollid')->default(0)->index();
+            $table->unsignedMediumInteger('userid')->default(0)->index();
+            $table->unsignedTinyInteger('selection')->default(0)->index();
         });
     }
 

@@ -18,7 +18,7 @@ class CreateFilesTable extends Migration
         }
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedMediumInteger('torrent')->default(0)->index('torrent');
+            $table->unsignedMediumInteger('torrent')->default(0)->index();
             $table->string('filename')->default('');
             $table->unsignedBigInteger('size')->default(0);
         });

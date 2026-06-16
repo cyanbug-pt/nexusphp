@@ -41,6 +41,7 @@ $lang_functions = array
 	'std_you_will_get' => 'Získáte',
 	'std_by' => 'Od',
 	'row_security_image' => "Bezpečnostní obrázek:",
+	'row_security_challenge' => "Výzva pro zabezpečení:",
 	'row_security_code' => "Bezpečnostní kód:",
 	'text_slots' => "Sloty:",
 	'text_unlimited' => "Bez omezení",
@@ -320,8 +321,11 @@ $lang_functions = array
 	'text_tag_hdr' => 'HDR',
 	'text_required' => 'Požadováno',
 	'text_invalid' => 'Neplatné',
-	'text_technical_info' => 'MediaInfo',
-	'text_technical_info_help_text' => 'MediaInfo pochází ze softwaru <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>,open soubor, jazyk, vyberte angličtinu, klikněte na nabídku Zobrazit > text > pravým tlačítkem myši v rámečku > vyberte vše > zkopírovat > minulost do tohoto pole.',
+	'text_technical_info' => 'MediaInfo/BDInfo',
+	'text_technical_info_help_text' => '<b>&middot;</b> MediaInfo pochází z softwaru <b><a href="https://mediaarea.net/en/MediaInfo" target=\'_blank\'>MediaInfo</a></b>soubor pera, jazyk vybrat angličtinu, klikněte na nabídku Zobrazení > text > pravé tlačítko v poli > vyberte vše > zkopírovat > minulost do tohoto pole.
+	<br>
+	<b>&middot;</b> BDInfo pochází z software <b><a href="https://github.com/UniqProject/BDInfo" target=\'_blank\'>BDInfo</a></b>upravte soubor pomocí tohoto softwaru, klepněte na tlačítko Scan Bitrates pro zobrazení sestavy, Klepněte pravým tlačítkem myši v poli > vyberte všechno, pravým kliknutím > kopírovat a vložte jej zde.
+	',
     'text_management_system' => 'Správa',
     'text_seed_points' => 'Semenné body',
     'spoiler_expand_collapse' => 'Klepnutím rozbalit/sbalit',
@@ -331,6 +335,8 @@ $lang_functions = array
     'text_contactstaff' => 'Kontaktní personál',
     'full_site_promotion_in_effect' => 'Celá stránka [%s] je v účinku!',
     'full_site_promotion_time_range' => 'Časový rozsah: %s ~ %s',
+    'full_site_promotion_remark' => 'Poznámka: %s',
+    'full_site_promotion_upcoming' => 'Nadcházející celý web [%s]',
     'text_torrent_to_approval' => '%s%u není schvalovací torrent%s.',
     'std_confirm_remove' => 'Jste si jisti, že jej chcete odstranit?',
     'select_an_user_class' => 'Vyberte uživatelskou třídu',

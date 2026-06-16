@@ -15,6 +15,7 @@ use App\Models\UserMedal;
 use App\Models\UserMeta;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Nexus\Database\ClickHouse;
 use Nexus\Database\NexusDB;
 
 class BonusRepository extends BaseRepository
@@ -360,6 +361,72 @@ class BonusRepository extends BaseRepository
             do_log("bonusLog: " . nexus_json_encode($bonusLog));
             clear_user_cache($user->id, $user->passkey);
         });
+    }
+
+    public function getCount(string $category = '', int $userId = 0, int $businessType = 0): int
+    {
+        if ($category == BonusLogs::CATEGORY_COMMON) {
+            $query = $this->buildQuery($userId, $businessType);
+            return $query->count();
+        } else if ($category == BonusLogs::CATEGORY_SEEDING) {
+            list($whereStr, $binds) = $this->buildWhereStrAndBinds($userId, $businessType);
+            return ClickHouse::count("bonus_logs", $whereStr, $binds);
+        }
+        throw new \InvalidArgumentException("Invalid category: $category");
+    }
+
+    public function getList(string $category = '', int $userId = 0, int $businessType = 0, int $page = 1, int $perPage = 50)
+    {
+        if ($category == BonusLogs::CATEGORY_COMMON) {
+            $query = $this->buildQuery($userId, $businessType);
+            return $query->orderBy("id", "desc")->forPage($page, $perPage)->get();
+        } else if ($category == BonusLogs::CATEGORY_SEEDING) {
+            list($whereStr, $binds) = $this->buildWhereStrAndBinds($userId, $businessType);
+            $offset = ($page - 1) * $perPage;
+            $rows = ClickHouse::list("select * from bonus_logs $whereStr order by created_at desc limit $offset, $perPage", $binds);
+            $result = [];
+            $id = 1;//fake id
+            foreach ($rows as $row) {
+                $record = new BonusLogs($row);
+                $record->id = $id;
+                $result[] = $record;
+                $id++;
+            }
+            return $result;
+        }
+        throw new \InvalidArgumentException("Invalid category: $category");
+    }
+
+    private function buildWhereStrAndBinds(int $userId = 0,  int $businessType = 0)
+    {
+        $whereArr = [];
+        $binds = [];
+        if ($userId > 0) {
+            $whereArr[] = "uid = :uid";
+            $binds['uid'] = $userId;
+        }
+        if ($businessType > 0) {
+            $whereArr[] = "business_type = :business_type";
+            $binds["business_type"] = $businessType;
+        }
+        if (empty($whereArr)) {
+            $whereStr = "";
+        } else {
+            $whereStr = sprintf("where %s", implode(' AND ', $whereArr));
+        }
+        return [$whereStr, $binds];
+    }
+
+    private function buildQuery(int $userId = 0,  int $businessType = 0): Builder
+    {
+        $query = BonusLogs::query();
+        if ($userId > 0) {
+            $query->where('uid', $userId);
+        }
+        if ($businessType > 0) {
+            $query->where('business_type', $businessType);
+        }
+        return $query;
     }
 
 

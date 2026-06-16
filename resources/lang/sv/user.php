@@ -17,10 +17,10 @@ return [
         'attendance_card' => 'Delta kort',
         'props' => 'Rekvisita',
         'class' => 'Klass',
-        'vip_added' => 'VIP-status erhålls genom bonus',
-        'vip_added_help' => 'Är VIP-status inlöst av bonus.',
+        'vip_added' => 'VIP-status upphör automatiskt',
+        'vip_added_help' => 'Är VIP-status automatiskt upphör.',
         'vip_until' => 'Sluttid för VIP status',
-        'vip_until_help' => "Tidsformatet är \"Året Månads-Dag Timme:Minute:Second Den tid då VIP-status slutar. VIP-status erhålls genom bonus\" måste sättas till \"Ja\" för att denna regel ska träda i kraft.",
+        'vip_until_help' => "Tidsformatet är \"Året Månads-Dag Timme:Minute:Second Den tid då VIP-status slutar. VIP-status automatiskt upphör att gälla måste vara satt till \"Ja\" för att denna regel ska träda i kraft.",
     ],
     'class_names' => [
         \App\Models\User::CLASS_VIP => 'Vip',
@@ -109,4 +109,6 @@ return [
     'msg_invited_user_has_registered' => "Inbjuden användare har registrerat sig",
     'msg_user_you_invited' => "Användaren du bjöd in ",
     'msg_has_registered' => " har registrerat sig just nu.",
+    'user_is_disabled' => 'Användare: :username(ID: :user_id) är inaktiverat.',
+    'user_is_not_confirmed' => 'Användare: :username(ID: :user_id) bekräftades inte.',
 ];

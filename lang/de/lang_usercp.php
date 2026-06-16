@@ -256,6 +256,8 @@ $lang_usercp = array
     'add_seed_box_btn' => 'Registrieren',
     'checkbox_pm_on_topic_reply' => 'Benachrichtigen Sie mich, wenn es neue Antworten auf Forenbeiträge gibt',
     'checkbox_pm_on_hr_reached' => 'Benachrichtigen, wenn H&R das Ziel erreicht',
+    'row_tracker_url' => 'Tracker-URL',
+    'row_tracker_url_help' => '<b>Hinweis:</b> Einmal ausgewählt, kann Ankündigungen nur an den ausgewählten Link gesendet werden. Standardmäßig kann Ankündigungen nur an den ersten Standardlink in der Liste gesendet werden.',
 );
 
 ?>

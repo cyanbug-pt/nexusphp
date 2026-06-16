@@ -14,4 +14,6 @@ return [
     'msg_you_must_upload_in' => "Prosím nahrajte nabídku do ",
     'msg_hours_otherwise' => " hodin. V opačném případě by byla nabídka odstraněna.",
     'msg_reason_is' => "Důvod: ",
+    'msg_new_offer_subject' => "Byla přidána nová nabídka",
+    'msg_new_offer_msg' => "Uživatel :username přidal novou nabídku :offername",
 ];

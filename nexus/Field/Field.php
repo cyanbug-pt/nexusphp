@@ -55,14 +55,13 @@ class Field
 
     public function getTypeHuman($type)
     {
-        global $lang_fields;
         $map = [
-            self::TYPE_TEXT => $lang_fields['field_type_text'],
-            self::TYPE_TEXTAREA => $lang_fields['field_type_textarea'],
-            self::TYPE_RADIO => $lang_fields['field_type_radio'],
-            self::TYPE_CHECKBOX => $lang_fields['field_type_checkbox'],
-            self::TYPE_SELECT => $lang_fields['field_type_select'],
-            self::TYPE_IMAGE => $lang_fields['field_type_image'],
+            self::TYPE_TEXT => nexus_trans('field.type.text'),
+            self::TYPE_TEXTAREA => nexus_trans('field.type.textarea'),
+            self::TYPE_RADIO => nexus_trans('field.type.radio'),
+            self::TYPE_CHECKBOX => nexus_trans('field.type.checkbox'),
+            self::TYPE_SELECT => nexus_trans('field.type.select'),
+            self::TYPE_IMAGE => nexus_trans('field.type.image'),
         ];
         return $map[$type] ?? '';
     }
@@ -385,7 +384,14 @@ JS;
             $torrentIdArr = [$torrentId];
         }
         $torrentIdStr = implode(',', $torrentIdArr);
-        $res = sql_query("select f.*, v.custom_field_value, v.torrent_id from torrents_custom_field_values v inner join torrents_custom_fields f on v.custom_field_id = f.id inner join searchbox box on box.id = $searchBoxId and find_in_set(f.id, box.custom_fields) where torrent_id in ($torrentIdStr) order by f.priority desc");
+        if (NexusDB::isMysql()) {
+            $customFieldStr = "find_in_set(f.id, box.custom_fields)";
+        } elseif (NexusDB::isPgsql()) {
+            $customFieldStr = "f.id = ANY(string_to_array(box.custom_fields, ',')::int[])";
+        } else {
+            throw new \RuntimeException("Not supported database");
+        }
+        $res = sql_query("select f.*, v.custom_field_value, v.torrent_id from torrents_custom_field_values v inner join torrents_custom_fields f on v.custom_field_id = f.id inner join searchbox box on box.id = $searchBoxId and $customFieldStr where torrent_id in ($torrentIdStr) order by f.priority desc");
         $values = [];
         $result = [];
         while ($row = mysql_fetch_assoc($res)) {
@@ -439,7 +445,7 @@ JS;
                     $customFieldDisplay = $field['display'];
                     $customFieldDisplay = str_replace("<%{$field['name']}.label%>", $field['label'], $customFieldDisplay);
                     $customFieldDisplay = str_replace("<%{$field['name']}.value%>", $contentNotFormatted, $customFieldDisplay);
-                    $rowByRowHtml .= tr($field['label'], format_comment($customFieldDisplay, false), 1);
+                    $rowByRowHtml .= tr($field['label'], format_comment($customFieldDisplay), 1);
                 } else {
                     $contentFormatted = $this->formatCustomFieldValue($field, true);
                     $rowByRowHtml .= tr($field['label'], $contentFormatted, 1);
@@ -463,13 +469,13 @@ JS;
         switch ($customFieldWithValue['type']) {
             case self::TYPE_TEXT:
             case self::TYPE_TEXTAREA:
-                $result .= $doFormatComment ? format_comment($fieldValue, false) : $fieldValue;
+                $result .= $doFormatComment ? format_comment($fieldValue) : $fieldValue;
                 break;
             case self::TYPE_IMAGE:
                 if (substr($fieldValue, 0, 4) == 'http') {
                     $result .= $doFormatComment ? formatImg($fieldValue, true, 700, 0, "attach{$customFieldWithValue['id']}") : $fieldValue;
                 } else {
-                    $result .= $doFormatComment ? format_comment($fieldValue, false) : $fieldValue;
+                    $result .= $doFormatComment ? format_comment($fieldValue) : $fieldValue;
                 }
                 break;
             case self::TYPE_RADIO:

@@ -16,6 +16,7 @@ use App\Models\SecondIcon;
 use App\Models\Source;
 use App\Models\Standard;
 use App\Models\Team;
+use App\Models\TorrentCustomField;
 use App\Models\User;
 use App\Policies\CodecPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -34,6 +35,7 @@ class AuthServiceProvider extends ServiceProvider
         Category::class => CodecPolicy::class,
         Icon::class => CodecPolicy::class,
         SecondIcon::class => CodecPolicy::class,
+        TorrentCustomField::class => CodecPolicy::class,
 
         Codec::class => CodecPolicy::class,
         AudioCodec::class => CodecPolicy::class,

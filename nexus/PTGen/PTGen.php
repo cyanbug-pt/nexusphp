@@ -84,14 +84,15 @@ class PTGen
 
     public function generate(string $url, bool $withoutCache = false): array
     {
-        $parsed = $this->parse($url);
+//        $parsed = $this->parse($url);
         $targetUrl = trim($this->apiPoint, '/');
         if (Str::contains($targetUrl, '?')) {
             $targetUrl .= "&";
         } else {
             $targetUrl .= "?";
         }
-        $targetUrl .= sprintf('site=%s&sid=%s&url=%s', $parsed['site'] , $parsed['id'], urlencode($parsed['url']));
+//        $targetUrl .= sprintf('site=%s&sid=%s&url=%s', $parsed['site'] , $parsed['id'], urlencode($parsed['url']));
+        $targetUrl .= "url=" . urlencode($url);
         return $this->request($targetUrl, $withoutCache);
     }
 
@@ -177,7 +178,7 @@ HTML;
         }
         do_log("$logPrefix, going to send request...");
         $http = new Client();
-        $response = $http->get($url, ['timeout' => 10]);
+        $response = $http->post($url, ['timeout' => 10]);
         $statusCode = $response->getStatusCode();
         if ($statusCode != 200) {
             $msg = "api point response http status code: $statusCode";
@@ -363,7 +364,7 @@ HTML;
         }
     }
 
-    public function listRatings(array $ptGenData, string $imdbLink, string $desc = ''): array
+    public function listRatings(array $ptGenData, ?string $imdbLink, string $desc = ''): array
     {
         $results = [];
         $log = "";

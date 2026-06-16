@@ -19,7 +19,7 @@ class CreateSnatchedTable extends Migration
         Schema::create('snatched', function (Blueprint $table) {
             $table->bigIncrements('id', true);
             $table->unsignedMediumInteger('torrentid')->default(0);
-            $table->unsignedMediumInteger('userid')->default(0)->index('userid');
+            $table->unsignedMediumInteger('userid')->default(0)->index();
             $table->string('ip', 64)->default('');
             $table->unsignedSmallInteger('port')->default(0);
             $table->unsignedBigInteger('uploaded')->default(0);
@@ -31,7 +31,7 @@ class CreateSnatchedTable extends Migration
             $table->dateTime('startdat')->nullable();
             $table->dateTime('completedat')->nullable();
             $table->enum('finished', ['yes', 'no'])->default('no');
-            $table->unique(['torrentid', 'userid'], 'torrentid_userid');
+            $table->unique(['torrentid', 'userid']);
         });
     }
 

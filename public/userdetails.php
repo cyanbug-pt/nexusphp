@@ -40,12 +40,14 @@ else
 {
 	$lastseen .= " (" . gettime($lastseen, true, false, true).")";
 }
-$res = sql_query("SELECT COUNT(*) FROM comments WHERE user=" . $user['id']) or sqlerr();
-$arr3 = mysql_fetch_row($res);
-$torrentcomments = $arr3[0];
-$res = sql_query("SELECT COUNT(*) FROM posts WHERE userid=" . $user['id']) or sqlerr();
-$arr3 = mysql_fetch_row($res);
-$forumposts = $arr3[0];
+//$res = sql_query("SELECT COUNT(*) FROM comments WHERE user=" . $user['id']) or sqlerr();
+//$arr3 = mysql_fetch_row($res);
+//$torrentcomments = $arr3[0];
+$torrentcomments = \App\Models\Comment::query()->where('user', $user['id'])->count();
+//$res = sql_query("SELECT COUNT(*) FROM posts WHERE userid=" . $user['id']) or sqlerr();
+//$arr3 = mysql_fetch_row($res);
+//$forumposts = $arr3[0];
+$forumposts = \App\Models\Post::query()->where('userid', $user['id'])->count();
 
 	$arr = get_country_row($user['country']);
 	$country = "<img src=\"pic/flag/".$arr['flagpic']."\" alt=\"".$arr['name']."\" style='margin-left: 8pt' />";
@@ -122,7 +124,7 @@ if ($CURUSER['id'] == $user['id'] || user_can('cruprfmanage'))
 $userIdDisplay = $user['id'];
 $userManageSystemUrl = sprintf('%s/%s/user/users/%s',getSchemeAndHttpHost(), nexus_env('FILAMENT_PATH', 'nexusphp'), $user['id']);
 $userManageSystemText = sprintf('<a href="%s" target="_blank" class="altlink">%s</a>', $userManageSystemUrl, $lang_functions['text_management_system']);
-$migratedHelp = sprintf($lang_userdetails['change_field_value_migrated'], $userManageSystemText);
+$migratedHelp = "&nbsp;&nbsp;".sprintf($lang_userdetails['change_field_value_migrated'], $userManageSystemText);
 if (user_can('prfmanage') && $user["class"] < get_user_class()) {
     $userIdDisplay .= "&nbsp;[$userManageSystemText]";
 }
@@ -240,7 +242,7 @@ if (user_can('userprofile') ||  $user["id"] == $CURUSER["id"])
 	tr_small($lang_userdetails['row_ip_address'], hide_text($ip.$locationinfo.$seedBoxIcon), 1);
 }
 $clientselect = '';
-$res = sql_query("SELECT peer_id, agent, ipv4, ipv6, port FROM peers WHERE userid = {$user['id']} GROUP BY agent, ipv4, ipv6, port") or sqlerr();
+$res = sql_query("SELECT peer_id, agent, ipv4, ipv6, port FROM peers WHERE userid = {$user['id']} GROUP BY peer_id, agent, ipv4, ipv6, port") or sqlerr();
 if (mysql_num_rows($res) > 0)
 {
     $clientselect .= "<table border='1' cellspacing='0' cellpadding='5'><tr><td class='colhead'>Agent</td><td class='colhead'>IPV4</td><td class='colhead'>IPV6</td><td class='colhead'>Port</td></tr>";
@@ -404,7 +406,8 @@ if ($user["id"] == $CURUSER["id"] || user_can('viewhistory')) {
         $states = (new \App\Repositories\ClaimRepository())->getStats($user['id']);
         tr_small($lang_functions['menu_claim'], sprintf('<a href="claim.php?uid=%s" target="_blank">%s</a>', $user['id'], $states), 1);
     }
-    tr_small($lang_userdetails['row_karma_points'], number_format($user['seedbonus'], 1), 1);
+    $bonusLogText = sprintf('&nbsp;&nbsp;<a href="bonus-log.php?uid=%s" target="_blank" class="altlink">[%s]</a>', $user['id'], nexus_trans("bonus-log.view_detail"));
+    tr_small($lang_userdetails['row_karma_points'], number_format($user['seedbonus'], 1) . $bonusLogText, 1);
     tr_small($lang_functions['text_seed_points'], number_format($user['seed_points'], 1) . "&nbsp;&nbsp;<span class='text-muted'>(" . nexus_trans('label.updated_at') . ": " . $user['seed_points_updated_at'] . ")</span>", 1);
 }
 
@@ -487,8 +490,8 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
         $classselect=classlist('class', $maxclass, $user["class"], 0, false, true);
         tr($lang_userdetails['row_class'], $classselect . $migratedHelp, 1);
     }
-	tr($lang_userdetails['row_vip_by_bonus'], "<input type=\"radio\" name=\"vip_added\" value=\"yes\"" .($user["vip_added"] == "yes" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_yes']." <input type=\"radio\" name=\"vip_added\" value=\"no\"" .($user["vip_added"] == "no" ? " checked=\"checked\"" : "")." />".$lang_userdetails['radio_no']."<br />", 1);
-	tr($lang_userdetails['row_vip_until'], "<input type=\"text\" name=\"vip_until\" value=\"".htmlspecialchars($user["vip_until"])."\" /> ".$lang_userdetails['text_vip_until_note'], 1);
+	tr($lang_userdetails['row_vip_by_bonus'], "<input type=\"radio\" name=\"vip_added\" value=\"yes\"" .($user["vip_added"] == "yes" ? " checked=\"checked\"" : "")." disabled='disabled'/>".$lang_userdetails['radio_yes']." <input type=\"radio\" name=\"vip_added\" value=\"no\"" .($user["vip_added"] == "no" ? " checked=\"checked\"" : "")." disabled='disabled'/>".$lang_userdetails['radio_no'].$migratedHelp, 1);
+	tr($lang_userdetails['row_vip_until'], "<input type=\"text\" name=\"vip_until\" value=\"".htmlspecialchars($user["vip_until"])."\" disabled='disabled'/> ".$lang_userdetails['text_vip_until_note']. $migratedHelp, 1);
 	$supportlang = htmlspecialchars($user["supportlang"]);
 	$supportfor = htmlspecialchars($user["supportfor"]);
 	$pickfor = htmlspecialchars($user["pickfor"]);
@@ -515,7 +518,7 @@ if (user_can('prfmanage') && $user["class"] < get_user_class())
 		tr($lang_userdetails['row_comment'], "<textarea cols=\"60\" rows=\"6\" name=\"modcomment\">".$modcomment."</textarea>", 1);
         $bonuscomment = \App\Models\BonusLogs::query()
             ->where("uid", $user["id"])
-            ->whereNotIn("business_type", \App\Models\BonusLogs::$businessTypeBonus)
+            ->whereNotIn("business_type", \App\Models\BonusLogs::$businessTypeSeeding)
             ->orderBy("id", "desc")
             ->limit(20)
             ->get()

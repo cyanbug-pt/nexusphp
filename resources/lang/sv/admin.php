@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Kö monitor',
         'user_modify_logs' => 'Användare ändra loggar',
         'message_templates' => 'Mallar för meddelande',
+        'tracker_url' => 'Spårare URL',
+        'activity_logs' => 'Aktivitetsloggar',
     ],
     'resources' => [
         'agent_allow' => [
@@ -106,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Index：:index dubblett!',
+            'index_seed_time_average_require_value_invalid' => 'Den nödvändiga genomsnittliga såddtiden :index_seed_time_average_require_value är större än den totala testtiden :duration. Vänligen ändra det!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

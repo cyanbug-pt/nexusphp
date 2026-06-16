@@ -1,9 +1,9 @@
 <?php
 use Nexus\Database\NexusDB;
 
-function mysql_connect($host, $username, $password, $database, $port)
+function mysql_connect($host, $username, $password, $database, $port, $driver = 'mysql')
 {
-    return NexusDB::getInstance()->connect($host, $username, $password, $database, $port);
+    return NexusDB::getInstance()->connect($host, $username, $password, $database, $port, $driver);
 }
 
 function mysql_errno()
@@ -64,4 +64,9 @@ function mysql_insert_id()
 function mysql_free_result($result)
 {
     return NexusDB::getInstance()->freeResult($result);
+}
+
+function mysql_prepare(string $sql): \PDOStatement
+{
+    return NexusDB::getInstance()->prepare($sql);
 }

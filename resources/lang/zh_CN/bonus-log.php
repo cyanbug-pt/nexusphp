@@ -24,6 +24,8 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => '任务完成奖励',
         \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => '任务未完成扣除',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => '奖励种子',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => '认领种子未达标扣除',
+        \App\Models\BonusLogs::BUSINESS_TYPE_SELF_ENABLE => '自助解封',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => '工作组工资',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => '种子被下载',
@@ -31,6 +33,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => '收到礼物',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => '发布种子',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => '种子收到奖励',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => '认领种子达标奖励',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => '做种基础魔力',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => '做种捐赠加成',
@@ -45,4 +48,9 @@ return [
         'new_total_value' => '交易后值',
     ],
     'exclude_seeding_bonus' => '不包含做种魔力',
+    'title_for_user' => '用户魔力明细',
+    'category' => '分类',
+    'category_common' => '普通',
+    'category_seeding' => '做种',
+    'view_detail' => '明细',
 ];

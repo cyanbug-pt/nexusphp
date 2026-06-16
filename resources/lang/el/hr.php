@@ -11,6 +11,7 @@ return [
     'mode_' . \App\Models\HitAndRun::MODE_GLOBAL => 'Καθολικό',
 
     'reached_by_seed_time_comment' => 'Έως το：:now,seed time: :seed_time Ώρα(ες) έφτασε το :seed_time_minimum Ώρα(ες)',
+    'reached_by_leech_time_comment' => 'Up to：:now，leech time: :leech_time Hour(s) reached :leech_time_minimum Hour(s)',
     'reached_by_share_ratio_comment' => "Up to：:now \nseed time: :seed_time Hour(s) Unreached :seed_time_minimum Hour(s) \nShare ratio: :share_ratio reached standard：:ignore_when_ratio_reach",
     'reached_by_special_user_class_comment' => "Η κλάση χρήστη σας: :user_class_text ή ο χρήστης που δωρήθηκε, αγνοήστε αυτό το H&R",
     'reached_message_subject' => 'H&R(ID: :hit_and_run_id) έφτασε!',

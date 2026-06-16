@@ -57,14 +57,15 @@ class NexusDB
             return self::$instance;
         }
         $instance = new self;
-        $driver = new DBMysqli();
+//        $driver = new DBMysqli();
+        $driver = new DBPdo();
         $instance->setDriver($driver);
         return self::$instance = $instance;
     }
 
-    public function connect($host, $username, $password, $database, $port)
+    public function connect($host, $username, $password, $database, $port, $driver = 'mysql')
     {
-        $result = $this->driver->connect($host, $username, $password, $database, $port);
+        $result = $this->driver->connect($host, $username, $password, $database, $port, $driver);
         if (!$result) {
             throw new DatabaseException(sprintf('[%s]: %s', $this->errno(), $this->error()));
         }
@@ -77,8 +78,9 @@ class NexusDB
         if ($this->isConnected()) {
             return null;
         }
-        $config = nexus_config('nexus.mysql');
-        return $this->connect($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
+        $dbType = self::getConnectionName();
+        $config = nexus_config('nexus.database.connections.' . $dbType);
+        return $this->connect($config['host'], $config['username'], $config['password'], $config['database'], $config['port'], $dbType);
     }
 
     public function query(string $sql)
@@ -149,6 +151,11 @@ class NexusDB
         return $this->driver->freeResult($result);
     }
 
+    public function prepare(string $sql)
+    {
+        return $this->driver->prepare($sql);
+    }
+
     public function isConnected()
     {
         return $this->isConnected;
@@ -162,9 +169,9 @@ class NexusDB
         if (!IN_NEXUS) {
             return DB::table($table)->insertGetId($data);
         }
-        $fields = array_map(function ($value) {return "`$value`";}, array_keys($data));
+        $fields = array_map(function ($value) {return "$value";}, array_keys($data));
         $values = array_map(function ($value) {return sqlesc($value);}, array_values($data));
-        $sql = sprintf("insert into `%s` (%s) values (%s)", $table, implode(', ', $fields), implode(', ', $values));
+        $sql = sprintf("insert into %s (%s) values (%s)", $table, implode(', ', $fields), implode(', ', $values));
         sql_query($sql);
         return mysql_insert_id();
     }
@@ -259,7 +266,7 @@ class NexusDB
     public static function bootEloquent(array $config)
     {
         $capsule = new Capsule(Container::getInstance());
-        $connectionName = self::ELOQUENT_CONNECTION_NAME;
+        $connectionName = self::getConnectionName();
         $capsule->addConnection($config, $connectionName);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
@@ -271,7 +278,7 @@ class NexusDB
     private static function schema(): \Illuminate\Database\Schema\Builder
     {
         if (IN_NEXUS) {
-            return Capsule::schema(self::ELOQUENT_CONNECTION_NAME);
+            return Capsule::schema(self::getConnectionName());
         }
         throw new \RuntimeException('can not call this when not in nexus.');
     }
@@ -295,7 +302,7 @@ class NexusDB
     public static function table($table): \Illuminate\Database\Query\Builder
     {
         if (IN_NEXUS) {
-            return Capsule::table($table, null, self::ELOQUENT_CONNECTION_NAME);
+            return Capsule::table($table, null, self::getConnectionName());
         }
         return DB::table($table);
     }
@@ -319,7 +326,7 @@ class NexusDB
     public static function transaction(\Closure $callback, $attempts = 1)
     {
         if (IN_NEXUS) {
-            return Capsule::connection(self::ELOQUENT_CONNECTION_NAME)->transaction($callback, $attempts);
+            return Capsule::connection(self::getConnectionName())->transaction($callback, $attempts);
         }
         return DB::transaction($callback, $attempts);
     }
@@ -455,5 +462,132 @@ class NexusDB
         }
     }
 
+    public static function getConnectionName()
+    {
+        return nexus_config('nexus.database.default');
+    }
+
+    public static function isMysql(): bool
+    {
+        return self::getConnectionName() === 'mysql';
+    }
+
+    public static function isPgsql(): bool
+    {
+        return self::getConnectionName() === 'pgsql';
+    }
+
+    public static function listColumnIndexNames(string $table, array $columns): array
+    {
+        $indexes = Schema::getIndexes($table);
+        $indexesNames = [];
+        foreach ($indexes as $index) {
+            foreach ($columns as $columnName) {
+                if (in_array($columnName, $index['columns'])) {
+                    $indexesNames[] = $index['name'];
+                }
+            }
+        }
+        return $indexesNames;
+    }
+
+    public static function getDatabaseVersionInfo(): array
+    {
+        if (self::isMysql()) {
+            $sql = 'select version() as v';
+            $result = NexusDB::select($sql);
+            $version = $result[0]['v'];
+            $minVersion = '5.7.8';
+        } else if (self::isPgsql()) {
+            $sql = 'SHOW server_version;';
+            $result = NexusDB::select($sql);
+            $version = $result[0]['server_version'];
+            $minVersion = '16.0';
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+        $dbType = self::getConnectionName();
+        $match = version_compare($version, $minVersion, '>=');
+        return compact('version', 'match', 'minVersion', 'dbType');
+    }
+
+    public static function unixTimestampField(string $field): string
+    {
+        if (self::isMysql()) {
+            return sprintf("UNIX_TIMESTAMP(%s)", $field);
+        } elseif (self::isPgsql()) {
+            return sprintf("EXTRACT(EPOCH FROM %s)", $field);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function fromUnixTimestampField(int $timestamp): string
+    {
+        if (self::isMysql()) {
+            return sprintf("FROM_UNIXTIME(%d)", $timestamp);
+        } elseif (self::isPgsql()) {
+            return sprintf("to_timestamp(%d)", $timestamp);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function upsertField(array $uniqueFields, array $updateFields = []): string
+    {
+        if (self::isMysql()) {
+            $updates = [];
+            foreach ($updateFields ?: ['id'] as $field) {
+                $updates[] = "`$field` = VALUES(`$field`)";
+            }
+            return sprintf("ON DUPLICATE KEY UPDATE %s", implode(', ', $updates));
+        } elseif (self::isPgsql()) {
+            if (empty($updateFields)) {
+                $updateStr = "NOTHING";
+            } else {
+                $updates = [];
+                foreach ($updateFields as $field) {
+                    $updates[] = "$field = EXCLUDED.$field";
+                }
+                $updateStr = "UPDATE SET " . implode(', ', $updates);
+            }
+            return sprintf("ON CONFLICT (%s) DO %s", implode(', ', $uniqueFields), $updateStr);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function groupConcatField(string $field): string
+    {
+        if (self::isMysql()) {
+            return sprintf("group_concat(%s)", $field);
+        } elseif (self::isPgsql()) {
+            return sprintf("string_agg(%s::text, ',')", $field);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function binaryField(string $field): string
+    {
+        if (self::isMysql()) {
+            return sprintf("%s = :%s", $field, $field);
+        } elseif (self::isPgsql()) {
+            return sprintf("%s = decode(:%s, 'hex')", $field, $field);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
+
+    public static function binaryFieldBindValue($value): string
+    {
+        if (self::isMysql()) {
+            return $value;
+        } elseif (self::isPgsql()) {
+            return bin2hex($value);
+        } else {
+            throw new \RuntimeException('Not supported database.');
+        }
+    }
 
 }

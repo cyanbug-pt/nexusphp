@@ -23,6 +23,10 @@ return [
         'subject' => 'Download-Berechtigung abgebrochen',
         'body' => 'Deine Download-Berechtigung wurde wegen zu vielen Ankündigungen an bezahlten Torrent abgebrochen, bitte stelle sicher, dass du genug Bonus hast.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Download-Berechtigung abgebrochen',
+        'body' => 'Ihre Download-Berechtigung wurde wegen der Ankündigung gefälschter Daten annulliert.',
+    ],
     'download_enable' => [
         'subject' => 'Download-Berechtigung wiederhergestellt',
         'body' => 'Ihre Download-Berechtigungen wiederhergestellt, Sie können jetzt Torrents herunterladen. Von: :operator',

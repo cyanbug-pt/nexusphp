@@ -47,6 +47,8 @@ return [
         'queue_monitor' => 'Οθόνη αναμονής',
         'user_modify_logs' => 'Αρχεία καταγραφής τροποποίησης χρήστη',
         'message_templates' => 'Πρότυπα μηνυμάτων',
+        'tracker_url' => 'Url Ανιχνευτή',
+        'activity_logs' => 'Καταγραφή Δραστηριοτήτων',
     ],
     'resources' => [
         'agent_allow' => [
@@ -106,6 +108,7 @@ return [
         ],
         'exam' => [
             'index_duplicate' => 'Index：:index duplicate !',
+            'index_seed_time_average_require_value_invalid' => 'Ο απαιτούμενος μέσος χρόνος σποράς :index_seed_time_average_require_value είναι μεγαλύτερος από τη συνολική διάρκεια εξετάσεων :duration. Παρακαλώ τροποποιήστε το!'
         ],
         'hit_and_run' => [
             'bulk_action_pardon' => 'Bulk pardon',

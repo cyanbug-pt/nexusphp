@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Jobs\SettleClaim;
+use App\Models\BonusLogs;
 use App\Models\Claim;
 use App\Models\Message;
 use App\Models\Snatch;
@@ -260,16 +261,24 @@ class ClaimRepository extends BaseRepository
 
         //Wrap with transaction
         DB::transaction(function () use ($uid, $unReachedIdArr, $toUpdateIdArr, $bonusFinal, $totalDeduct, $uploadedCaseWhen, $seedTimeCaseWhen, $message, $now) {
+            //get latest
+            $oldBonus = User::query()->find($uid, ['seedbonus'])->seedbonus;
+            $delta = 0;
             //Increase user bonus
-            User::query()->where('id', $uid)->increment('seedbonus', $bonusFinal);
-            do_log("Increase user bonus: $bonusFinal", 'alert');
+            $delta += $bonusFinal;
+            do_log("Increase user: $uid bonus: $bonusFinal", 'alert');
+            BonusLogs::add($uid, $oldBonus, $bonusFinal, $oldBonus + $bonusFinal, "", BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED);
+            $oldBonus += $bonusFinal;
 
             //Handle unreached
             if (!empty($unReachedIdArr)) {
                 Claim::query()->whereIn('id', $unReachedIdArr)->delete();
-                User::query()->where('id', $uid)->decrement('seedbonus', $totalDeduct);
-                do_log("Deduct user bonus: $totalDeduct", 'alert');
+                $delta -= $totalDeduct;
+                do_log("Deduct user: $uid bonus: $totalDeduct", 'alert');
+                BonusLogs::add($uid, $oldBonus, $totalDeduct, $oldBonus - $totalDeduct, "", BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED);
+                $oldBonus -= $totalDeduct;
             }
+            User::query()->where('id', $uid)->increment('seedbonus', $delta);
 
             //Update claim `last_settle_at` and init `seed_time_begin` & `uploaded_begin`
             if (!empty($toUpdateIdArr)) {

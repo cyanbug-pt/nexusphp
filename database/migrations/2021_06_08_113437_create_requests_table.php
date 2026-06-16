@@ -18,7 +18,7 @@ class CreateRequestsTable extends Migration
         }
         Schema::create('requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('userid')->default(0)->index('userid');
+            $table->unsignedInteger('userid')->default(0)->index();
             $table->string('request', 225)->default('');
             $table->text('descr');
             $table->unsignedInteger('comments')->default(0);
@@ -31,7 +31,7 @@ class CreateRequestsTable extends Migration
             $table->string('ori_descr')->default('');
             $table->integer('ori_amount')->default(0);
             $table->dateTime('added')->nullable();
-            $table->index(['finish', 'userid'], 'finish, userid');
+            $table->index(['finish', 'userid']);
         });
     }
 

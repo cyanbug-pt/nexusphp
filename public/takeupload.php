@@ -1,5 +1,8 @@
 <?php
 //require_once("../include/benc.php");
+use Rhilip\Bencode\ParseException;
+use Rhilip\Bencode\TorrentFile;
+
 require_once("../include/bittorrent.php");
 
 ini_set("upload_max_filesize",$max_torrent_size);
@@ -83,13 +86,11 @@ $audiocodecid = intval($_POST["audiocodec_sel"][$catmod] ?? 0);
 if (!is_valid_id($catid))
 bark($lang_takeupload['std_category_unselected']);
 
-if (!validfilename($fname))
-bark($lang_takeupload['std_invalid_filename']);
 if (!preg_match('/^(.+)\.torrent$/si', $fname, $matches))
 bark($lang_takeupload['std_filename_not_torrent']);
 $shortfname = $torrent = $matches[1];
 if (!empty($_POST["name"]))
-$torrent = unesc($_POST["name"]);
+$torrent = trim(unesc($_POST["name"]));
 if ($f['size'] > $max_torrent_size)
 bark($lang_takeupload['std_torrent_file_too_big'].number_format($max_torrent_size).$lang_takeupload['std_remake_torrent_note']);
 $tmpname = $f["tmp_name"];
@@ -108,80 +109,37 @@ if ($maxPrice > 0 && isset($_POST['price']) && $_POST['price'] > $maxPrice && $p
 }
 
 try {
-    $dict = \Rhilip\Bencode\Bencode::load($tmpname);
-} catch (\Rhilip\Bencode\ParseErrorException $e) {
-    bark($lang_takeupload['std_not_bencoded_file']);
+    $dict = TorrentFile::load($tmpname);
+    $dict = $dict->unhybridizedTo();
+    $dict->parse();
+} catch (ParseException $e) {
+    bark($e->getMessage());
 }
 
-function checkTorrentDict($dict, $key, $type = null)
-{
-    global $lang_takeupload;
-
-    if (!is_array($dict)) bark($lang_takeupload['std_not_a_dictionary']);
-    $value = $dict[$key];
-    if (!isset($value)) bark($lang_takeupload['std_dictionary_is_missing_key']);
-    if (!is_null($type)) {
-        $isFunction = 'is_' . $type;
-        if (function_exists($isFunction) && !$isFunction($value)) {
-            bark($lang_takeupload['std_invalid_entry_in_dictionary']);
-        }
-    }
-    return $value;
-}
-
-$info = checkTorrentDict($dict, 'info');
-if (isset($dict['piece layers']) || isset($info['files tree']) || (isset($info['meta version']) && $info['meta version'] == 2)) {
-    bark('Torrent files created with Bittorrent Protocol v2, or hybrid torrents are not supported.');
-}
-$plen = checkTorrentDict($info, 'piece length', 'integer');  // Only Check without use
-$dname = checkTorrentDict($info, 'name', 'string');
-$pieces = checkTorrentDict($info, 'pieces', 'string');
-
-if (strlen($pieces) % 20 != 0)
-bark($lang_takeupload['std_invalid_pieces']);
-
-$filelist = array();
-$totallen = $info['length'] ?? null;
-if (isset($totallen)) {
-	$filelist[] = array($dname, $totallen);
-	$type = "single";
-}
-else {
-    $flist = checkTorrentDict($info, 'files', 'array');
-
-    if (!isset($flist)) bark($lang_takeupload['std_missing_length_and_files']);
-    if (!count($flist)) bark("no files");
-
-    $totallen = 0;
-    foreach ($flist as $fn) {
-        $ll = checkTorrentDict($fn, 'length', 'integer');
-        $path_key = isset($fn['path.utf-8']) ? 'path.utf-8' : 'path';
-        $ff = checkTorrentDict($fn, $path_key, 'list');
-
-        $totallen += $ll;
-        $ffa = array();
-        foreach ($ff as $ffe) {
-            if (!is_string($ffe)) bark($lang_takeupload['std_filename_errors']);
-            $ffa[] = $ffe;
-        }
-
-        if (!count($ffa)) bark($lang_takeupload['std_filename_errors']);
-        $ffe = implode("/", $ffa);
-        $filelist[] = array($ffe, $ll);
-    }
-    $type = "multi";
-}
-
-$dict['announce'] = get_protocol_prefix() . $announce_urls[0];  // change announce url to local
-$dict['info']['private'] = 1;
 //The following line requires uploader to re-download torrents after uploading
 //even the torrent is set as private and with uploader's passkey in it.
-$dict['info']['source'] = "[$BASEURL] $SITENAME";
-unset ($dict['announce-list']); // remove multi-tracker capability
-unset ($dict['nodes']); // remove cached peers (Bitcomet & Azareus)
+$dict->cleanRootFields()
+    ->setComment(getSchemeAndHttpHost())
+    ->setCreationDate(time())
+    ->setCreatedBy($SITENAME)
+    ->setAnnounce(get_protocol_prefix() . $announce_urls[0])  // change announce url to local
+    ->setPrivate(true)
+    ->setSource("[$BASEURL] $SITENAME");
 
-$infohash = pack("H*", sha1(\Rhilip\Bencode\Bencode::encode($dict['info']))); // double up on the becoding solves the occassional misgenerated infohash
-$exists = \App\Models\Torrent::query()->where('info_hash', $infohash)->first(['id']);
+
+$filelist = $dict->getFileList();
+$dname = $dict->getName();
+$type = $dict->getFileMode();
+$totallen = $dict->getSize();
+$pieces = $dict->getInfoField('pieces');
+$piecesCount = strlen($pieces) / 20;
+$maxPieceCount = 24576;
+$idealPiecesCount = $totallen / (8 * 1024 ** 2);
+if ($piecesCount > $maxPieceCount && $idealPiecesCount < $maxPieceCount) {
+    bark('Too many pieces');
+}
+$infohash = $dict->getInfoHashV1ForAnnounce();
+$exists = \App\Models\Torrent::query()->whereInfoHash($infohash)->first(['id']);
 if ($exists) {
 //    bark($lang_takeupload['std_torrent_existed']);
     nexus_redirect(sprintf("details.php?id=%d&existed=1", $exists['id']));
@@ -321,6 +279,13 @@ if (!is_writable($torrentSavePath)) {
  */
 $descriptionArr = format_description($descr);
 $cover = get_image_from_description($descriptionArr, true, false);
+if (\Nexus\Database\NexusDB::isPgsql()) {
+    $infoHashInsert = \Nexus\Database\NexusDB::raw("decode('" . bin2hex($infohash) . "', 'hex')");
+} elseif (\Nexus\Database\NexusDB::isMysql()) {
+    $infoHashInsert = $infohash;
+} else {
+    throw new \RuntimeException("Not supported database");
+}
 $insert = [
     'filename' => $fname,
     'owner' => $CURUSER['id'],
@@ -347,11 +312,11 @@ $insert = [
     'added' => $dateTimeStringNow,
     'last_action' => $dateTimeStringNow,
 //    'nfo' => $nfo,
-    'info_hash' => $infohash,
+    'info_hash' => $infoHashInsert,
 //    'pt_gen' => $_POST['pt_gen'] ?? '',
 //    'technical_info' => $_POST['technical_info'] ?? '',
     'cover' => $cover,
-    'pieces_hash' => sha1($info['pieces']),
+    'pieces_hash' => sha1($pieces),
     'cache_stamp' => time(),
 ];
 /**
@@ -396,10 +361,10 @@ if (user_can('torrent-approval-allow-automatic')) {
     $insert['approval_status'] = \App\Models\Torrent::APPROVAL_STATUS_ALLOW;
 }
 if (user_can('torrent-set-price') && $paidTorrentEnabled) {
-    $insert['price'] = $_POST['price'] ?? 0;
+    $insert['price'] = intval($_POST['price'] ?? 0);
 }
 do_log("[INSERT_TORRENT]: " . nexus_json_encode($insert));
-$id = \Nexus\Database\NexusDB::insert('torrents', $insert);
+$id = \App\Models\Torrent::query()->insertGetId($insert);
 
 //$ret = sql_query("INSERT INTO torrents (filename, owner, visible, anonymous, name, size, numfiles, type, url, small_descr, descr, ori_descr, category, source, medium, codec, audiocodec, standard, processing, team, save_as, sp_state, added, last_action, nfo, info_hash, pt_gen, technical_info) VALUES (".sqlesc($fname).", ".sqlesc($CURUSER["id"]).", 'yes', ".sqlesc($anonymous).", ".sqlesc($torrent).", ".sqlesc($totallen).", ".count($filelist).", ".sqlesc($type).", ".sqlesc($url).", ".sqlesc($small_descr).", ".sqlesc($descr).", ".sqlesc($descr).", ".sqlesc($catid).", ".sqlesc($sourceid).", ".sqlesc($mediumid).", ".sqlesc($codecid).", ".sqlesc($audiocodecid).", ".sqlesc($standardid).", ".sqlesc($processingid).", ".sqlesc($teamid).", ".sqlesc($dname).", ".sqlesc($sp_state) .
 //", " . sqlesc(date("Y-m-d H:i:s")) . ", " . sqlesc(date("Y-m-d H:i:s")) . ", ".sqlesc($nfo).", " . sqlesc($infohash). ", " . sqlesc($_POST['pt_gen']) . ", " . sqlesc($_POST['technical_info'] ?? '') . ")");
@@ -412,7 +377,7 @@ $id = \Nexus\Database\NexusDB::insert('torrents', $insert);
 //$id = mysql_insert_id();
 
 $torrentFilePath = "$torrentSavePath/$id.torrent";
-$saveResult = \Rhilip\Bencode\Bencode::dump($torrentFilePath, $dict);
+$saveResult = $dict->dump($torrentFilePath);
 if ($saveResult === false) {
     sql_query("delete from torrents where id = $id limit 1");
     bark("save torrent to $torrentFilePath fail.");
@@ -442,7 +407,7 @@ if (!empty($tagIdArr)) {
 
 @sql_query("DELETE FROM files WHERE torrent = $id");
 foreach ($filelist as $file) {
-	@sql_query("INSERT INTO files (torrent, filename, size) VALUES ($id, ".sqlesc($file[0]).",".$file[1].")");
+	@sql_query("INSERT INTO files (torrent, filename, size) VALUES ($id, ".sqlesc($file['path']).",".$file['size'].")");
 }
 $extra['torrent_id'] = $id;
 \App\Models\TorrentExtra::query()->create($extra);
@@ -468,7 +433,7 @@ fire_event(\App\Enums\ModelEventEnum::TORRENT_CREATED, \App\Models\Torrent::quer
 //===notify people who voted on offer thanks CoLdFuSiOn :)
 if ($is_offer)
 {
-	$res = sql_query("SELECT `userid` FROM `offervotes` WHERE `userid` != " . $CURUSER["id"] . " AND `offerid` = ". sqlesc($offerid)." AND `vote` = 'yeah'") or sqlerr(__FILE__, __LINE__);
+	$res = sql_query("SELECT userid FROM offervotes WHERE userid != " . $CURUSER["id"] . " AND offerid = ". sqlesc($offerid)." AND vote = 'yeah'") or sqlerr(__FILE__, __LINE__);
 
 	while($row = mysql_fetch_assoc($res))
 	{

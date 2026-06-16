@@ -139,7 +139,8 @@ function promotion($class, $down_floor_gb, $minratio, $time_week, $addinvite = 0
 
 function demotion($class,$deratio){
 	$newclass = $class - 1;
-    $sql = "SELECT id FROM users WHERE class = $class AND uploaded / downloaded < $deratio";
+//    $sql = "SELECT id FROM users WHERE class = $class AND uploaded / downloaded < $deratio";
+    $sql = "SELECT id FROM users WHERE class = $class AND uploaded < downloaded * $deratio";
 	$res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
     $matchUserCount = mysql_num_rows($res);
     do_log("sql: $sql, match user count: $matchUserCount");
@@ -341,7 +342,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
     //rest seed_points_per_hour
     $seedPointsUpdatedAtMin = $carbonNow->subSeconds(2*intval($autoclean_interval_one))->toDateTimeString();
-    sql_query("update users set seed_points_per_hour = 0 where seed_points_updated_at < " . sqlesc($seedPointsUpdatedAtMin));
+    sql_query("update users set seed_points_per_hour = 0, seed_bonus_per_hour = 0, seeding_torrent_count = 0, seeding_torrent_size = 0 where seed_points_updated_at < " . sqlesc($seedPointsUpdatedAtMin));
 
 	\App\Repositories\CleanupRepository::runBatchJobCalculateUserSeedBonus($requestId);
 
@@ -585,7 +586,8 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
 	//3.delete unconfirmed accounts
 	$deadtime = time() - $signup_timeout;
-	sql_query("DELETE FROM users WHERE status = 'pending' AND added < FROM_UNIXTIME($deadtime) AND last_login < FROM_UNIXTIME($deadtime) AND last_access < FROM_UNIXTIME($deadtime)") or sqlerr(__FILE__, __LINE__);
+    $deadlineField = \Nexus\Database\NexusDB::fromUnixTimestampField($deadtime);
+	sql_query("DELETE FROM users WHERE status = 'pending' AND added < $deadlineField AND last_login < $deadlineField AND last_access < $deadlineField") or sqlerr(__FILE__, __LINE__);
 //	$query = \App\Models\User::query()
 //        ->where('status', 'pending')
 //        ->whereRaw("added < FROM_UNIXTIME($deadtime)")
@@ -619,7 +621,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 	}
 
 	//7.delete regimage codes
-	sql_query("TRUNCATE TABLE `regimages`") or sqlerr(__FILE__, __LINE__);
+	sql_query("TRUNCATE TABLE regimages") or sqlerr(__FILE__, __LINE__);
 	$log = "delete regimage codes";
 	do_log($log);
 	if ($printProgress) {
@@ -734,75 +736,77 @@ function docleanup($forceAll = 0, $printProgress = false) {
         printProgress($log);
     }
 
+    //migrate to job: RemoveUserVipStatus
 	//remove VIP status if time's up
-	$res = sql_query("SELECT id, class FROM users WHERE vip_added='yes' AND vip_until < NOW()") or sqlerr(__FILE__, __LINE__);
-	$userModifyLogs = [];
-    if (mysql_num_rows($res) > 0)
-	{
-		while ($arr = mysql_fetch_assoc($res))
-		{
-			$dt = sqlesc(date("Y-m-d H:i:s"));
-            $locale = get_user_locale($arr['id']);
-            $subject = sqlesc(nexus_trans("cleanup.msg_vip_status_removed", [], $locale));
-            $msg = sqlesc(nexus_trans("cleanup.msg_vip_status_removed_body", [], $locale));
-            $userModifyLogs[] = [
-                'user_id' => $arr['id'],
-                'content' => "VIP status removed by - AutoSystem",
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
-            ];
-			if ($arr['class'] > \App\Models\User::CLASS_VIP) {
-                /**
-                 * @since 1.8
-                 * never demotion VIP above
-                 */
-                sql_query("UPDATE users SET vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-            } else {
-                sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-                sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
-            }
-            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
-		}
-	}
-    if (!empty($userModifyLogs)) {
-        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
-    }
-	$log = "remove VIP status if time's up";
-	do_log($log);
-	if ($printProgress) {
-		printProgress($log);
-	}
+//	$res = sql_query("SELECT id, class FROM users WHERE vip_added='yes' AND vip_until < NOW()") or sqlerr(__FILE__, __LINE__);
+//	$userModifyLogs = [];
+//    if (mysql_num_rows($res) > 0)
+//	{
+//		while ($arr = mysql_fetch_assoc($res))
+//		{
+//			$dt = sqlesc(date("Y-m-d H:i:s"));
+//            $locale = get_user_locale($arr['id']);
+//            $subject = sqlesc(nexus_trans("cleanup.msg_vip_status_removed", [], $locale));
+//            $msg = sqlesc(nexus_trans("cleanup.msg_vip_status_removed_body", [], $locale));
+//            $userModifyLogs[] = [
+//                'user_id' => $arr['id'],
+//                'content' => "VIP status removed by - AutoSystem",
+//                'created_at' => date("Y-m-d H:i:s"),
+//                'updated_at' => date("Y-m-d H:i:s"),
+//            ];
+//			if ($arr['class'] > \App\Models\User::CLASS_VIP) {
+//                /**
+//                 * @since 1.8
+//                 * never demotion VIP above
+//                 */
+//                sql_query("UPDATE users SET vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//            } else {
+//                sql_query("UPDATE users SET class = '1', vip_added = 'no', vip_until = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//                sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
+//            }
+//            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
+//		}
+//	}
+//    if (!empty($userModifyLogs)) {
+//        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
+//    }
+//	$log = "remove VIP status if time's up";
+//	do_log($log);
+//	if ($printProgress) {
+//		printProgress($log);
+//	}
 
+    //migrate to job: RemoveUserDonorStatus
     //remove donor status if time's up
-    $userModifyLogs = [];
-    $res = sql_query("SELECT id FROM users WHERE donor='yes' AND donoruntil is not null and donoruntil != '0000-00-00 00:00:00' and donoruntil < NOW()") or sqlerr(__FILE__, __LINE__);
-    if (mysql_num_rows($res) > 0)
-    {
-        while ($arr = mysql_fetch_assoc($res))
-        {
-            $dt = sqlesc(date("Y-m-d H:i:s"));
-            $locale = get_user_locale($arr['id']);
-            $subject = sqlesc(nexus_trans("cleanup.msg_donor_status_removed", [], $locale));
-            $msg = sqlesc(nexus_trans("cleanup.msg_donor_status_removed_body", [], $locale));
-            $userModifyLogs[] = [
-                'user_id' => $arr['id'],
-                'content' => "donor status removed by - AutoSystem",
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
-            ];
-            sql_query("UPDATE users SET donor = 'no' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-            sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
-            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
-        }
-    }
-    if (!empty($userModifyLogs)) {
-        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
-    }
-    $log = "remove donor status if time's up";
-    do_log($log);
-    if ($printProgress) {
-        printProgress($log);
-    }
+//    $userModifyLogs = [];
+//    $res = sql_query("SELECT id FROM users WHERE donor='yes' AND donoruntil is not null and donoruntil != '0000-00-00 00:00:00' and donoruntil < NOW()") or sqlerr(__FILE__, __LINE__);
+//    if (mysql_num_rows($res) > 0)
+//    {
+//        while ($arr = mysql_fetch_assoc($res))
+//        {
+//            $dt = sqlesc(date("Y-m-d H:i:s"));
+//            $locale = get_user_locale($arr['id']);
+//            $subject = sqlesc(nexus_trans("cleanup.msg_donor_status_removed", [], $locale));
+//            $msg = sqlesc(nexus_trans("cleanup.msg_donor_status_removed_body", [], $locale));
+//            $userModifyLogs[] = [
+//                'user_id' => $arr['id'],
+//                'content' => "donor status removed by - AutoSystem",
+//                'created_at' => date("Y-m-d H:i:s"),
+//                'updated_at' => date("Y-m-d H:i:s"),
+//            ];
+//            sql_query("UPDATE users SET donor = 'no' WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//            sql_query("INSERT INTO messages (sender, receiver, added, msg, subject) VALUES(0, {$arr['id']}, $dt, $msg, $subject)") or sqlerr(__FILE__, __LINE__);
+//            publish_model_event(ModelEventEnum::USER_UPDATED, $arr['id']);
+//        }
+//    }
+//    if (!empty($userModifyLogs)) {
+//        \App\Models\UserModifyLog::query()->insert($userModifyLogs);
+//    }
+//    $log = "remove donor status if time's up";
+//    do_log($log);
+//    if ($printProgress) {
+//        printProgress($log);
+//    }
 
 	// promote peasant back to user
 
@@ -889,27 +893,28 @@ function docleanup($forceAll = 0, $printProgress = false) {
 		printProgress($log);
 	}
 
+    //migrate to job: RemoveUserWarning
 	//Remove warning of users
-	$dt = sqlesc(date("Y-m-d H:i:s")); // take date time
-	$res = sql_query("SELECT id FROM users WHERE enabled = 'yes' AND warned = 'yes' AND warneduntil < $dt") or sqlerr(__FILE__, __LINE__);
-
-	if (mysql_num_rows($res) > 0)
-	{
-		while ($arr = mysql_fetch_assoc($res))
-		{
-            $locale = get_user_locale($arr['id']);
-            $subject = nexus_trans("cleanup.msg_warning_removed", [], $locale);
-            $msg = nexus_trans("cleanup.msg_your_warning_removed", [], $locale);
-			writecomment($arr['id'],"Warning removed by System.");
-			sql_query("UPDATE users SET warned = 'no', warneduntil = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
-			sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
-		}
-	}
-	$log = "remove warning of users";
-	do_log($log);
-	if ($printProgress) {
-		printProgress($log);
-	}
+//	$dt = sqlesc(date("Y-m-d H:i:s")); // take date time
+//	$res = sql_query("SELECT id FROM users WHERE enabled = 'yes' AND warned = 'yes' AND warneduntil < $dt") or sqlerr(__FILE__, __LINE__);
+//
+//	if (mysql_num_rows($res) > 0)
+//	{
+//		while ($arr = mysql_fetch_assoc($res))
+//		{
+//            $locale = get_user_locale($arr['id']);
+//            $subject = nexus_trans("cleanup.msg_warning_removed", [], $locale);
+//            $msg = nexus_trans("cleanup.msg_your_warning_removed", [], $locale);
+//			writecomment($arr['id'],"Warning removed by System.");
+//			sql_query("UPDATE users SET warned = 'no', warneduntil = null WHERE id = {$arr['id']}") or sqlerr(__FILE__, __LINE__);
+//			sql_query("INSERT INTO messages (sender, receiver, added, subject, msg) VALUES(0, {$arr['id']}, $dt, ".sqlesc($subject).", ".sqlesc($msg).")") or sqlerr(__FILE__, __LINE__);
+//		}
+//	}
+//	$log = "remove warning of users";
+//	do_log($log);
+//	if ($printProgress) {
+//		printProgress($log);
+//	}
 
 	//17.update total seeding and leeching time of users
 //	$res = sql_query("SELECT id FROM users where enabled = 'yes' and status = 'confirmed'") or sqlerr(__FILE__, __LINE__);
@@ -1066,7 +1071,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
     //delete old shoutbox
     $until = TIMENOW - $length;
-    sql_query("DELETE FROM shoutbox WHERE `date` < ".sqlesc($until)) or sqlerr(__FILE__, __LINE__);
+    sql_query("DELETE FROM shoutbox WHERE date < $until") or sqlerr(__FILE__, __LINE__);
     $log = "delete old shoutbox";
     do_log($log);
     if ($printProgress) {
@@ -1075,7 +1080,7 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
 	//delete old general log
 	$until = date("Y-m-d H:i:s",(TIMENOW - $length));
-	sql_query("DELETE FROM sitelog WHERE added < ".sqlesc($until)) or sqlerr(__FILE__, __LINE__);
+	sql_query("DELETE FROM sitelog WHERE added < " . sqlesc($until)) or sqlerr(__FILE__, __LINE__);
 	$log = "delete old general log";
 	do_log($log);
 	if ($printProgress) {
@@ -1154,7 +1159,10 @@ function docleanup($forceAll = 0, $printProgress = false) {
 
 	//8.lock topics where last post was made more than x days ago
 	$secs = 365*24*60*60;
-	sql_query("UPDATE topics, posts SET topics.locked='yes' WHERE topics.lastpost = posts.id AND topics.sticky = 'no' AND UNIX_TIMESTAMP(posts.added) < ".TIMENOW." - $secs") or sqlerr(__FILE__, __LINE__);
+    $postAddedField = \Nexus\Database\NexusDB::unixTimestampField('posts.added');
+    $diff = TIMENOW - $secs;
+//	sql_query("UPDATE topics, posts SET topics.locked='yes' WHERE topics.lastpost = posts.id AND topics.sticky = 'no' AND $postAddedField < ".TIMENOW." - $secs") or sqlerr(__FILE__, __LINE__);
+	sql_query("UPDATE topics SET locked='yes' WHERE sticky = 'no' AND lastpost in (select id from posts where $postAddedField < $diff)");
 
 	$log = "lock topics where last post was made more than x days ago";
 	do_log($log);

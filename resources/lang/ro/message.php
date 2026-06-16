@@ -23,6 +23,10 @@ return [
         'subject' => 'Permisiune de descărcare anulată',
         'body' => 'Permisiunea ta de descărcare a fost anulată din cauza anunțării torentului plătit de prea multe ori, te rugăm să te asiguri că ai suficiente bonus.' ,
     ],
+    'download_disable_fake_announce' => [
+        'subject' => 'Permisiune de descărcare anulată',
+        'body' => 'Permisiunea dvs. de descărcare a fost anulată datorită anunțării unor date false.',
+    ],
     'download_enable' => [
         'subject' => 'Permisiunea de descărcare restaurată',
         'body' => 'Privilegii de descărcare restaurate, acum poți descărca torrente. Dy: :operator',

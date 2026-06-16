@@ -168,6 +168,10 @@ where<ul><li><b>A</b> is an intermediate variable</li><li><b>Ti</b> is the <b>i<
     'text_success_buy_change_username_card' => "Congratulations on your successful purchase of a <b>change username card</b>!",
     'text_change_username_card_already_has' => 'Já tem um cartão de nome de usuário de mudança',
     'text_rainbow_id_already_valid_forever' => 'Já tem um ID de Arco-íris permanente',
+    'text_get_by_medal' => 'Bônus de Medalha receberá o seguinte valor adicional de bônus por hora',
+    'medal_additional_desc' => 'fórmula de cálculo de bônus de medalha é o mesmo que acima, independente da garantia mínima',
+    'medal_additional_factor' => 'O bônus final é o bônus calculado da medalha multiplicado pelo fator medal_aditional_adicional',
+    'text_bonus_mini_size' => 'Tamanho do torrent deve ter pelo menos %s. Tamanho do torrent menor que este volume é excluído dos cálculos de bônus'
 );
 
 ?>

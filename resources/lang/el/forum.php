@@ -8,5 +8,9 @@ return [
     'post' => [
         'edited_notify_subject' => 'Η ανάρτηση απάντησης τροποποιήθηκε',
         'edited_notify_body' => 'Η απάντησή σας στο θέμα: :topic_subject τροποποιήθηκε από: :editor.',
+    ],
+    'reply' => [
+        'replied_notify_subject' => 'Η απάντησή σας έχει μια νέα απάντηση',
+        'replied_notify_body' => 'Η απάντησή σας στο θέμα：:topic_subject απάντησε από την :replyer.',
     ]
 ];

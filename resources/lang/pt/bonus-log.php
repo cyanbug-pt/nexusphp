@@ -21,7 +21,10 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_CHANGE_USERNAME_CARD => 'Comprar cartão do usuário para troco',
         \App\Models\BonusLogs::BUSINESS_TYPE_GIFT_MEDAL => 'Medalha de presente',
         \App\Models\BonusLogs::BUSINESS_TYPE_BUY_TORRENT => 'Comprar torrent',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_PASS_REWARD => 'Recompensa da Tarefa Finalizada',
+        \App\Models\BonusLogs::BUSINESS_TYPE_TASK_NOT_PASS_DEDUCT => 'Tarefa não concluída deduzida',
         \App\Models\BonusLogs::BUSINESS_TYPE_REWARD_TORRENT => 'torrent de recompensa',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_UNREACHED => 'torrent reivindicado inalcado',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_ROLE_WORK_SALARY => 'Papel Salário de Trabalho',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_DOWNLOADED => 'Torrent foi baixado',
@@ -29,6 +32,7 @@ return [
         \App\Models\BonusLogs::BUSINESS_TYPE_RECEIVE_GIFT => 'Receber presente',
         \App\Models\BonusLogs::BUSINESS_TYPE_UPLOAD_TORRENT => 'Carregar torrent',
         \App\Models\BonusLogs::BUSINESS_TYPE_TORRENT_BE_REWARD => 'Torrent recebe recompensa',
+        \App\Models\BonusLogs::BUSINESS_TYPE_CLAIMED_REACHED => 'Torrent reivindicado alcançou a recompensa',
 
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_BASIC => 'Semeando básico',
         \App\Models\BonusLogs::BUSINESS_TYPE_SEEDING_DONOR_ADDITION => 'Semeando adição de doador',
@@ -43,4 +47,9 @@ return [
         'new_total_value' => 'Valor pós-operação',
     ],
     'exclude_seeding_bonus' => 'Excluir bônus de semeamento',
+    'title_for_user' => 'Detalhes do bônus de usuário',
+    'category' => 'categoria',
+    'category_common' => 'Comum',
+    'category_seeding' => 'Semeando',
+    'view_detail' => 'detalhes',
 ];

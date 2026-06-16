@@ -20,7 +20,7 @@ class CreateInvitesTable extends Migration
             $table->increments('id');
             $table->unsignedMediumInteger('inviter')->default(0);
             $table->string('invitee', 80)->default('');
-            $table->char('hash', 32)->index('hash');
+            $table->char('hash', 32)->index();
             $table->dateTime('time_invited')->nullable();
             $table->tinyInteger('valid')->default(1);
             $table->integer('invitee_register_uid')->nullable();

@@ -27,7 +27,7 @@ $lang_takesignup = array
 	'std_to_finish_signup' => " för att slutföra registreringen, tack!",
 	'msg_subject' => "Välkommen till ",
 	'msg_congratulations' => "Grattis ",
-	'msg_you_are_a_member' => ",\n\nDu är nu medlem i %s,\nVi vill ta tillfället i akt att säga hej och välkommen till %s!\n\nVar noga med att läsa [url=regler. hp][b]Regler[/b][/url] och [url=faq. hp][b]Faq[/b][/url].\n Och se till att sluta med [url=forum. hp][b]Forum[/b][/url]: och säg Hej!\n\nNjut av din vistelse.\nPersonalen på %s ",
+	'msg_you_are_a_member' => ",\n\nDu är nu medlem i %s,\nVi vill ta tillfället i akt att säga hej och välkommen att vara med oss!\n\nSe till att läsa [url=regler. hp][b]Regler[/b][/url] och [url=faq. hp][b]Faq[/b][/url].\n Och se till att sluta med [url=forum. hp][b]Forum[/b][/url]: och säg Hej!\n\nNjut av din vistelse.\nPersonal på %s ",
 	'mail_this_link' =>	"DETTA LÄNK",
 	'mail_here' => "HÄR",
 	'mail_title' => " Bekräftelse på användarregistrering",

@@ -176,6 +176,22 @@ final class Nexus
         return false;
     }
 
+    public function isAjax(): bool
+    {
+        if ($this->getScript() == 'ajax') {
+            return true;
+        }
+        $ajax = $this->retrieveFromServer(['HTTP_X_REQUESTED_WITH'], true);
+        if (!empty($ajax) && strtolower($ajax) == 'xmlhttprequest') {
+            return true;
+        }
+        $json =  $this->retrieveFromServer(['HTTP_ACCEPT'], true);
+        if (!empty($json) && strtolower($json) == 'application/json') {
+            return true;
+        }
+        return false;
+    }
+
     private function generateRequestId(): string
     {
         $prefix = ($_SERVER['SCRIPT_FILENAME'] ?? '') . implode('', $_SERVER['argv'] ?? []);
@@ -424,6 +440,8 @@ final class Nexus
         self::getQueueManager()->connection(self::QUEUE_CONNECTION_NAME)->push($job);
         do_log("dispatchQueueJob: " . nexus_json_encode($job));
     }
+
+
 
 
 }

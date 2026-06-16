@@ -168,6 +168,10 @@ där<ul><li><b>A</b> är en mellanvariabel</li><li><b>Ti</b> är <b>i</b>torrent
     'text_success_buy_change_username_card' => "Grattis till ditt lyckade köp av ett <b>användarkort</b>!",
     'text_change_username_card_already_has' => 'Har redan ett nytt användarnamn kort',
     'text_rainbow_id_already_valid_forever' => 'Har redan ett permanent Rainbow ID',
+    'text_get_by_medal' => 'Medaljbonus får följande extra bonusvärde per timme',
+    'medal_additional_desc' => 'Medaljbonusberäkning formel är densamma som ovan, oavsett minsta garanti',
+    'medal_additional_factor' => 'Den slutliga bonusen är den beräknade medaljbonusen multiplicerad med medal_additional_factor',
+    'text_bonus_mini_size' => 'Torrent storlek måste vara minst %s. Torrent storlek mindre än denna volym är exkluderad från bonusberäkningar'
 );
 
 ?>
