@@ -630,6 +630,7 @@ if(count($USERUPDATESET) && $userid)
 }
 $lockKey = sprintf("record_batch_lock:%s:%s", $userid, $torrentid);
 if ($redis->set($lockKey, TIMENOW, ['nx', 'ex' => $autoclean_interval_one])) {
+    \App\Repositories\CleanupRepository::recordAnnounceTrace((int)$userid, (int)$torrentid, $_GET['event'] ?? '', (int)$left, $seeder, $lockKey, nexus()->getRequestId(), TIMENOW);
     \App\Repositories\CleanupRepository::recordBatch($redis, $userid, $torrentid);
     \App\Repositories\IpLogRepository::saveToCache($userid, null, [$ip]);
 }

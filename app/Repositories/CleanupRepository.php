@@ -17,6 +17,8 @@ class CleanupRepository extends BaseRepository
     const TORRENT_SEEDERS_ETC_BATCH_KEY = "batch_key:torrent_seeders_etc";
 
     const IDS_KEY_PREFIX = "cleanup_batch_job_ids:";
+    public const USER_SEED_BONUS_TRACE_CACHE_KEY_PREFIX = "user_seed_bonus_trace:";
+    private const USER_SEED_BONUS_TRACE_TTL = 86400;
 
     private static array $batchKeyActionsMap = [
         self::USER_SEED_BONUS_BATCH_KEY => [
@@ -47,6 +49,25 @@ class CleanupRepository extends BaseRepository
         ];
         $result  = $redis->eval(self::getAddRecordLuaScript(), $args, 3);
         $err = $redis->getLastError();
+        $batchKeys = $redis->mGet([
+            self::USER_SEED_BONUS_BATCH_KEY,
+            self::USER_SEEDING_LEECHING_TIME_BATCH_KEY,
+            self::TORRENT_SEEDERS_ETC_BATCH_KEY,
+        ]);
+        $record = [
+            'recorded_at' => now()->toDateTimeString(),
+            'uid' => (int)$uid,
+            'torrent_id' => (int)$torrentId,
+            'eval_result' => $result,
+            'redis_error' => $err ?: null,
+            'batch_keys' => [
+                self::USER_SEED_BONUS_BATCH_KEY => $batchKeys[0] ?? null,
+                self::USER_SEEDING_LEECHING_TIME_BATCH_KEY => $batchKeys[1] ?? null,
+                self::TORRENT_SEEDERS_ETC_BATCH_KEY => $batchKeys[2] ?? null,
+            ],
+        ];
+        self::putUserSeedBonusTrace((int)$uid, 'batch_record', $record);
+        do_log('[SEED_BONUS_TRACE][BATCH_RECORD] ' . nexus_json_encode($record));
         if ($err) {
             do_log("[REDIS_LUA_ERROR]: $err", "error");
         }
@@ -116,6 +137,21 @@ class CleanupRepository extends BaseRepository
                 $idStr = implode(",", $validFields);
                 $idRedisKey = self::IDS_KEY_PREFIX . Str::random();
                 NexusDB::cache_put($idRedisKey, $idStr);
+                $runBatchTrace = [
+                    'recorded_at' => now()->toDateTimeString(),
+                    'request_id' => $requestId,
+                    'batch_key' => $batchKey,
+                    'batch' => $batch,
+                    'page' => $page,
+                    'valid_user_id_count' => count($validFields),
+                    'dead_user_id_count' => count($toRemoveFields),
+                    'id_redis_key' => $idRedisKey,
+                    'id_str' => $idStr,
+                ];
+                do_log('[SEED_BONUS_TRACE][RUN_BATCH_JOB] ' . nexus_json_encode($runBatchTrace));
+                foreach ($validFields as $validUid) {
+                    self::putUserSeedBonusTrace((int)$validUid, 'run_batch_job', $runBatchTrace);
+                }
                 $command = sprintf(
                     'cleanup --action=%s --begin_id=%s --end_id=%s --id_redis_key=%s --request_id=%s --delay=%s',
                     $batchKeyInfo['action'], 0, 0,  $idRedisKey, $requestId, $delay
@@ -123,6 +159,19 @@ class CleanupRepository extends BaseRepository
                 $output = executeCommand($command, 'string', true);
                 do_log(sprintf('output: %s', $output));
                 $count += count($validFields);
+            }
+            if (empty($validFields)) {
+                $runBatchTrace = [
+                    'recorded_at' => now()->toDateTimeString(),
+                    'request_id' => $requestId,
+                    'batch_key' => $batchKey,
+                    'batch' => $batch,
+                    'page' => $page,
+                    'valid_user_id_count' => 0,
+                    'dead_user_id_count' => count($toRemoveFields),
+                    'id_redis_key' => null,
+                ];
+                do_log('[SEED_BONUS_TRACE][RUN_BATCH_JOB] ' . nexus_json_encode($runBatchTrace));
             }
             if (!empty($toRemoveFields)) {
                 $redis->hDel($batch, ...$toRemoveFields);
@@ -139,6 +188,41 @@ class CleanupRepository extends BaseRepository
     }
 
 
+    public static function recordAnnounceTrace(int $uid, int $torrentId, string $event, int $left, string $seeder, string $lockKey, string $requestId, int $timestamp): void
+    {
+        $announceTrace = [
+            'recorded_at' => date('Y-m-d H:i:s', $timestamp),
+            'uid' => $uid,
+            'torrent_id' => $torrentId,
+            'event' => $event,
+            'left' => $left,
+            'seeder' => $seeder,
+            'lock_key' => $lockKey,
+            'request_id' => $requestId,
+        ];
+        self::putUserSeedBonusTrace($uid, 'announce', $announceTrace);
+        do_log('[SEED_BONUS_TRACE][ANNOUNCE] ' . nexus_json_encode($announceTrace));
+    }
+
+    public static function putUserSeedBonusTrace(int $uid, string $type, array $payload): void
+    {
+        if ($uid <= 0) {
+            return;
+        }
+        $key = self::USER_SEED_BONUS_TRACE_CACHE_KEY_PREFIX . $uid;
+        $trace = NexusDB::cache_get($key);
+        if (!is_array($trace)) {
+            $trace = [];
+        }
+        $trace[$type] = $payload;
+        NexusDB::cache_put($key, $trace, self::USER_SEED_BONUS_TRACE_TTL);
+    }
+
+    public static function getUserSeedBonusTrace(int $uid): array
+    {
+        $trace = NexusDB::cache_get(self::USER_SEED_BONUS_TRACE_CACHE_KEY_PREFIX . $uid);
+        return is_array($trace) ? $trace : [];
+    }
 
     private static function getBatch(\Redis $redis, $batchKey)
     {
