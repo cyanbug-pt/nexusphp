@@ -98,6 +98,7 @@ class CleanupRepository extends BaseRepository
         $count = 0;
         $it = NULL;
         $length = $redis->hLen($batch);
+        do_log(sprintf("%s, batch: %s, hash length: %s", $logPrefix, $batch, $length));
         $page = 0;
         /* Don't ever return an empty array until we're done iterating */
         $redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
@@ -118,10 +119,26 @@ class CleanupRepository extends BaseRepository
                 NexusDB::cache_put($idRedisKey, $idStr);
                 $command = sprintf(
                     'cleanup --action=%s --begin_id=%s --end_id=%s --id_redis_key=%s --request_id=%s --delay=%s',
-                    $batchKeyInfo['action'], 0, 0,  $idRedisKey, $requestId, $delay
+                    escapeshellarg($batchKeyInfo['action']),
+                    escapeshellarg(0),
+                    escapeshellarg(0),
+                    escapeshellarg($idRedisKey),
+                    escapeshellarg($requestId),
+                    escapeshellarg($delay)
                 );
-                $output = executeCommand($command, 'string', true);
-                do_log(sprintf('output: %s', $output));
+                $commandResult = self::executeArtisanCommand($command);
+                $logContext = sprintf(
+                    "full_command: %s, exit_code: %s, stdout: %s, stderr: %s",
+                    $commandResult['command'],
+                    $commandResult['exit_code'],
+                    $commandResult['stdout'],
+                    $commandResult['stderr']
+                );
+                if ($commandResult['exit_code'] !== 0) {
+                    do_log("$logPrefix, execute cleanup artisan command failed, $logContext", 'error');
+                } else {
+                    do_log("$logPrefix, execute cleanup artisan command success, $logContext");
+                }
                 $count += count($validFields);
             }
             if (!empty($toRemoveFields)) {
@@ -136,6 +153,39 @@ class CleanupRepository extends BaseRepository
         }
         $endTimestamp = time();
         do_log(sprintf("$logPrefix, [DONE], batch: $batch, count: $count, cost time: %d seconds", $endTimestamp - $beginTimestamp));
+    }
+
+    private static function executeArtisanCommand(string $artisanCommand): array
+    {
+        $phpPath = nexus_env('PHP_PATH') ?: 'php';
+        $webRoot = rtrim(ROOT_PATH, '/');
+        $fullCommand = sprintf('%s %s %s', escapeshellcmd($phpPath), escapeshellarg($webRoot . '/artisan'), $artisanCommand);
+        do_log("command: $fullCommand");
+        $descriptors = [
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
+        $process = proc_open($fullCommand, $descriptors, $pipes);
+        if (!is_resource($process)) {
+            return [
+                'command' => $fullCommand,
+                'exit_code' => 1,
+                'stdout' => '',
+                'stderr' => 'proc_open failed',
+            ];
+        }
+        $stdout = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+        $stderr = stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
+        $exitCode = proc_close($process);
+
+        return [
+            'command' => $fullCommand,
+            'exit_code' => $exitCode,
+            'stdout' => trim($stdout),
+            'stderr' => trim($stderr),
+        ];
     }
 
 
