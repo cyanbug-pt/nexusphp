@@ -39,6 +39,9 @@ class CleanupRepository extends BaseRepository
 
     private static int $scanSize = 500;
 
+    private const ANNOUNCE_INTERVAL_JITTER_SECONDS = 100;
+
+
     public static function recordBatch(\Redis $redis, $uid, $torrentId)
     {
         $args = [
@@ -94,7 +97,7 @@ class CleanupRepository extends BaseRepository
             $redis->expire($newBatch, $lifeTime);
         }
 
-        $userSeedBonusDeadline = deadtime();
+        $userSeedBonusDeadline = self::getUserSeedBonusBatchDeadline();
         $count = 0;
         $it = NULL;
         $length = $redis->hLen($batch);
@@ -107,6 +110,12 @@ class CleanupRepository extends BaseRepository
             foreach ($arr_keys as $field => $value) {
                 if ($batchKey == self::USER_SEED_BONUS_BATCH_KEY && $value < $userSeedBonusDeadline) {
                     //dead, should remove
+                    do_log(sprintf(
+                        "[USER_SEED_BONUS_BATCH_EXPIRED], user_id: %s, recorded_at: %s, deadtime: %s",
+                        $field,
+                        $value,
+                        $userSeedBonusDeadline
+                    ));
                     $toRemoveFields[] = $field;
                 } else {
                     $validFields[] = $field;
@@ -235,7 +244,47 @@ LUA;
         $four = self::getInterval("four");
         $three = self::getInterval("three");
         $one = self::getInterval("one");
-        return intval($four) + intval($three) + intval($one);
+        return max(
+            intval($four) + intval($three) + intval($one),
+            self::getSeedBonusBatchLifeTime()
+        );
+    }
+
+    private static function getUserSeedBonusBatchDeadline(): int
+    {
+        return time() - self::getSeedBonusBatchLifeTime();
+    }
+
+    private static function getSeedBonusBatchLifeTime(): int
+    {
+        return max(
+            self::getDeadtimeLifeTime(),
+            self::getMaxTrackerAnnounceInterval() + self::getInterval("one") + self::getMaxQueueDelay(self::$batchKeyActionsMap[self::USER_SEED_BONUS_BATCH_KEY]['task_index'])
+        );
+    }
+
+    private static function getDeadtimeLifeTime(): int
+    {
+        return (int)floor(self::getIntervalSetting("main.anninterthree") * 1.3);
+    }
+
+    private static function getMaxTrackerAnnounceInterval(): int
+    {
+        return max(
+            self::getIntervalSetting("main.announce_interval"),
+            self::getIntervalSetting("main.annintertwo"),
+            self::getIntervalSetting("main.anninterthree")
+        ) + self::ANNOUNCE_INTERVAL_JITTER_SECONDS;
+    }
+
+    private static function getMaxQueueDelay(int $taskIndex): int
+    {
+        return (int)(self::getDelayBase($taskIndex) + self::getOneTaskSeconds());
+    }
+
+    private static function getIntervalSetting(string $name): int
+    {
+        return intval(get_setting($name));
     }
 
     private static function getInterval($level): int
