@@ -630,6 +630,18 @@ if(count($USERUPDATESET) && $userid)
 }
 $lockKey = sprintf("record_batch_lock:%s:%s", $userid, $torrentid);
 if ($redis->set($lockKey, TIMENOW, ['nx', 'ex' => $autoclean_interval_one])) {
+    $announceTrace = [
+        'recorded_at' => date('Y-m-d H:i:s', TIMENOW),
+        'uid' => (int)$userid,
+        'torrent_id' => (int)$torrentid,
+        'event' => $_GET['event'] ?? '',
+        'left' => (int)$left,
+        'seeder' => $seeder,
+        'lock_key' => $lockKey,
+        'request_id' => nexus()->getRequestId(),
+    ];
+    \App\Repositories\CleanupRepository::putUserSeedBonusTrace((int)$userid, 'announce', $announceTrace);
+    do_log('[SEED_BONUS_TRACE][ANNOUNCE] ' . nexus_json_encode($announceTrace));
     \App\Repositories\CleanupRepository::recordBatch($redis, $userid, $torrentid);
     \App\Repositories\IpLogRepository::saveToCache($userid, null, [$ip]);
 }

@@ -6,6 +6,7 @@ use App\Models\BonusLogs;
 use App\Models\IpLog;
 use App\Models\Setting;
 use App\Models\User;
+use App\Repositories\CleanupRepository;
 use App\Repositories\IpLogRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -158,6 +159,24 @@ class CalculateUserSeedBonus implements ShouldQueue
 //            $sql = "update users set seed_points = ifnull(seed_points, 0) + $seed_points, seed_points_per_hour = {$seedBonusResult['seed_points']}, seedbonus = seedbonus + $all_bonus, seed_points_updated_at = '$updatedAt' where id = $uid limit 1";
 //            do_log("$bonusLog, query: $sql");
 //            NexusDB::statement($sql);
+            $jobUserTrace = [
+                'recorded_at' => now()->toDateTimeString(),
+                'request_id' => $this->requestId,
+                'uid' => (int)$uid,
+                'id_redis_key' => $this->idRedisKey,
+                'seed_points_before' => $userInfo['seed_points'],
+                'seed_points_delta' => $seed_points,
+                'seed_points_after' => $userInfo['seed_points'] + $seed_points,
+                'seedbonus_before' => $userInfo['seedbonus'],
+                'seedbonus_delta' => $all_bonus,
+                'seedbonus_after' => $userInfo['seedbonus'] + $all_bonus,
+                'seed_points_per_hour' => $seedBonusResult['seed_points'],
+                'seed_bonus_per_hour' => $seedBonusResult['seed_bonus'],
+                'torrent_peer_count' => $seedBonusResult['torrent_peer_count'],
+                'seeding_size' => $seedBonusResult['size'],
+            ];
+            CleanupRepository::putUserSeedBonusTrace((int)$uid, 'seed_bonus_job', $jobUserTrace);
+            do_log('[SEED_BONUS_TRACE][SEED_BONUS_JOB_USER] ' . nexus_json_encode($jobUserTrace));
             $seedPointsUpdates[] = sprintf("when %d then ifnull(seed_points, 0) + %f", $uid, $seed_points);
             $seedPointsPerHourUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['seed_points']);
             $seedBonusPerHourUpdates[] = sprintf("when %d then %f", $uid, $seedBonusResult['seed_bonus']);
