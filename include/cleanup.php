@@ -14,59 +14,24 @@ function printProgress($msg) {
 function torrent_promotion_expire($days, $type = 2, $targettype = 1){
 	$secs = (int)($days * 86400); //XX days
 	$dt = sqlesc(date("Y-m-d H:i:s",(TIMENOW - ($secs))));
-	$res = sql_query("SELECT id, name FROM torrents WHERE added < $dt AND sp_state = ".sqlesc($type).' AND promotion_time_type=0') or sqlerr(__FILE__, __LINE__);
-	switch($targettype)
-	{
-		case 1: //normal
-		{
-			$sp_state = 1;
-			$become = "normal";
-			break;
-		}
-		case 2: //Free
-		{
-			$sp_state = 2;
-			$become = "Free";
-			break;
-		}
-		case 3: //2X
-		{
-			$sp_state = 3;
-			$become = "2X";
-			break;
-		}
-		case 4: //2X Free
-		{
-			$sp_state = 4;
-			$become = "2X Free";
-			break;
-		}
-		case 5: //Half Leech
-		{
-			$sp_state = 5;
-			$become = "50%";
-			break;
-		}
-		case 6: //2X Half Leech
-		{
-			$sp_state = 6;
-			$become = "2X 50%";
-			break;
-		}
-		default: //normal
-		{
-			$sp_state = 1;
-			$become = "normal";
-			break;
-		}
-	}
-	while($arr = mysql_fetch_assoc($res)){
-		sql_query("UPDATE torrents SET sp_state = ".sqlesc($sp_state)." WHERE id={$arr['id']}") or sqlerr(__FILE__, __LINE__);
-        publish_model_event(ModelEventEnum::TORRENT_UPDATED, $arr['id']);
-		if ($sp_state == 1)
-			write_log("Torrent {$arr['id']} ({$arr['name']}) is no longer on promotion (time expired)",'normal');
-		else write_log("Promotion type for torrent {$arr['id']} ({$arr['name']}) is changed to ".$become." (time expired)",'normal');
-	}
+    $sp_state = isset(\App\Models\Torrent::$promotionTypes[$targettype]) ? (int)$targettype : \App\Models\Torrent::PROMOTION_NORMAL;
+    $become = \App\Models\Torrent::$promotionTypes[$sp_state]['text'] ?? 'Normal';
+    if ((int)$type === $sp_state) {
+        do_log("Skip torrent promotion expire because source type equals target type, type: $type, days: $days");
+        return;
+    }
+    $where = "added < $dt AND sp_state = ".sqlesc($type).' AND promotion_time_type=0';
+    sql_query("UPDATE torrents SET sp_state = ".sqlesc($sp_state)." WHERE $where") or sqlerr(__FILE__, __LINE__);
+    $affectedRows = mysql_affected_rows();
+    if ($affectedRows <= 0) {
+        return;
+    }
+    if ($sp_state == \App\Models\Torrent::PROMOTION_NORMAL) {
+        write_log("{$affectedRows} torrent(s) are no longer on promotion (time expired)", 'normal');
+    } else {
+        write_log("Promotion type for {$affectedRows} torrent(s) is changed to ".$become." (time expired)", 'normal');
+    }
+    do_log("torrent promotion expired, source type: $type, target type: $sp_state, affected rows: $affectedRows");
 }
 
 function torrent_promotion_individual_expire() {
