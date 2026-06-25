@@ -2039,7 +2039,7 @@ function dbconn($autoclean = false, $doLogin = true)
 	if ($doLogin) {
         userlogin();
     }
-	if (!$useCronTriggerCleanUp && $autoclean) {
+	if (!$useCronTriggerCleanUp && $autoclean && PHP_SAPI === 'cli') {
 		register_shutdown_function("autoclean");
 	}
 }
@@ -2098,25 +2098,66 @@ function userlogin() {
 function autoclean($printProgress = false) {
 	global $autoclean_interval_one, $rootpath;
 	$now = TIMENOW;
+    $lockKey = 'cleanup:autoclean:lock';
+    $lockToken = function_exists('nexus') ? nexus()->getRequestId() : (string)$now;
+    $redis = \Nexus\Database\NexusDB::redis();
+    $lockTtl = max((int)$autoclean_interval_one * 2, 1800);
+    if ($printProgress) {
+        printProgress("autoclean begin, now: $now, interval_one: $autoclean_interval_one");
+    }
+    if (!$redis->set($lockKey, $lockToken, ['nx', 'ex' => $lockTtl])) {
+        $log = "autoclean skip, lock occupied: $lockKey";
+        do_log($log);
+        if ($printProgress) {
+            printProgress($log);
+        }
+        return false;
+    }
+    $locked = true;
+    try {
 	$res = sql_query("SELECT value_u FROM avps WHERE arg = 'lastcleantime'");
 	$row = mysql_fetch_array($res);
 	if (!$row) {
 	    do_log("SELECT value_u FROM avps WHERE arg = 'lastcleantime', empty");
+        if ($printProgress) {
+            printProgress("autoclean no lastcleantime, insert and skip");
+        }
 		sql_query("INSERT INTO avps (arg, value_u) VALUES ('lastcleantime',$now)") or sqlerr(__FILE__, __LINE__);
 		return false;
 	}
 	$ts = $row[0];
 	if ($ts + $autoclean_interval_one > $now) {
 	    do_log("ts: {$ts} + autoclean_interval_one: $autoclean_interval_one > now: $now");
+        if ($printProgress) {
+            printProgress("autoclean skip, lastcleantime: $ts, next_due: " . ($ts + $autoclean_interval_one));
+        }
 		return false;
 	}
-	sql_query("UPDATE avps SET value_u=$now WHERE arg='lastcleantime' AND value_u = $ts") or sqlerr(__FILE__, __LINE__);
-	if (!mysql_affected_rows()) {
-	    do_log("UPDATE avps SET value_u=$now WHERE arg='lastcleantime' AND value_u = $ts, affectedRows = 0");
-		return false;
-	}
+    if ($printProgress) {
+        printProgress("autoclean due, lastcleantime: $ts, will update_to after docleanup: $now");
+    }
 	require_once($rootpath . 'include/cleanup.php');
-	return docleanup(0, $printProgress);
+    if ($printProgress) {
+        printProgress("autoclean enter docleanup");
+    }
+	$result = docleanup(0, $printProgress);
+    sql_query("UPDATE avps SET value_u=$now WHERE arg='lastcleantime' AND value_u = $ts") or sqlerr(__FILE__, __LINE__);
+    $affectedRows = mysql_affected_rows();
+    if ($printProgress) {
+        printProgress("autoclean updated lastcleantime after docleanup, old: $ts, update_to: $now, affected_rows: $affectedRows");
+    }
+	if (!$affectedRows) {
+	    do_log("UPDATE avps SET value_u=$now WHERE arg='lastcleantime' AND value_u = $ts, affectedRows = 0", 'error');
+	}
+    if ($printProgress) {
+        printProgress("autoclean docleanup returned: " . var_export($result, true));
+    }
+    return $result;
+    } finally {
+        if ($locked && $redis->get($lockKey) === $lockToken) {
+            $redis->del($lockKey);
+        }
+    }
 }
 
 function unesc($x) {
