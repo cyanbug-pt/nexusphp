@@ -1022,7 +1022,7 @@ if (isset($searchstr))
 elseif ($sectiontype == $browsecatmode)
 	stdhead($lang_torrents['head_torrents']);
 else stdhead($lang_torrents['head_special']);
-print("<table width=\"97%\" class=\"main\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\">");
+print("<table width=\"97%\" class=\"main torrent-page\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\">");
 
 displayHotAndClassic();
 $searchBoxRightTdStyle = 'padding: 1px;padding-left: 10px;white-space: nowrap';
@@ -1301,11 +1301,11 @@ if ($allTags->isNotEmpty()) {
 	}
 if($inclbookmarked == 1)
 {
-	print("<h1 align=\"center\">" . get_username($CURUSER['id']) . $lang_torrents['text_s_bookmarked_torrent'] . "</h1>");
+	print("<h1 class=\"torrent-title\" align=\"center\">" . get_username($CURUSER['id']) . $lang_torrents['text_s_bookmarked_torrent'] . "</h1>");
 }
 elseif($inclbookmarked == 2)
 {
-	print("<h1 align=\"center\">" . get_username($CURUSER['id']) . $lang_torrents['text_s_not_bookmarked_torrent'] . "</h1>");
+	print("<h1 class=\"torrent-title\" align=\"center\">" . get_username($CURUSER['id']) . $lang_torrents['text_s_not_bookmarked_torrent'] . "</h1>");
 }
 
 if ($count) {
@@ -1318,6 +1318,7 @@ if ($count) {
         }
     }
     $rows = apply_filter('torrent_list', $rows, $page, $sectiontype, $_GET['search'] ?? '');
+	print("<div class=\"torrent-results\">");
 	print($pagertop);
 	if ($sectiontype == $browsecatmode)
 		torrenttable($rows, "torrents", $sectiontype);
@@ -1325,6 +1326,7 @@ if ($count) {
 		torrenttable($rows, "music", $sectiontype);
 	else torrenttable($rows, "bookmarks", $sectiontype);
 	print($pagerbottom);
+	print("</div>");
 }
 else {
 	if (isset($searchstr)) {

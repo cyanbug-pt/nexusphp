@@ -676,14 +676,14 @@ if ($action == "viewtopic")
 	stdhead($lang_forums['head_view_topic']." \"".$orgsubject."\"");
 	begin_main_frame("",true);
 
-	print("<h1 align=\"center\"><a class=\"faqlink\" href=\"forums.php\">".$SITENAME."&nbsp;".$lang_forums['text_forums']."</a>--><a class=\"faqlink\" href=\"".htmlspecialchars("?action=viewforum&forumid=".$forumid)."\">".$forumname."</a><b>--></b><span id=\"top\">".$subject.($locked ? "&nbsp;&nbsp;<b>[<font class=\"striking\">".$lang_forums['text_locked']."</font>]</b>" : "")."</span></h1>\n");
+	print("<h1 class=\"forum-title forum-breadcrumb\" align=\"center\"><a class=\"faqlink\" href=\"forums.php\">".$SITENAME."&nbsp;".$lang_forums['text_forums']."</a>--><a class=\"faqlink\" href=\"".htmlspecialchars("?action=viewforum&forumid=".$forumid)."\">".$forumname."</a><b>--></b><span id=\"top\">".$subject.($locked ? "&nbsp;&nbsp;<b>[<font class=\"striking\">".$lang_forums['text_locked']."</font>]</b>" : "")."</span></h1>\n");
 	end_main_frame();
 	print($pagertop);
 
 	//------ Print table
 
 	begin_main_frame();
-	print("<table border=\"0\" class=\"main\" cellspacing=\"0\" cellpadding=\"5\" width=\"97%\"><tr>\n");
+	print("<table border=\"0\" class=\"main forum-toolbar\" cellspacing=\"0\" cellpadding=\"5\" width=\"97%\"><tr>\n");
 	print("<td class=\"embedded\" width=\"99%\">&nbsp;&nbsp;".$lang_forums['there_is']."<b>".$views."</b>".$lang_forums['hits_on_this_topic']);
 	print("</td>\n");
 	print("<td class=\"embedded nowrap\" width=\"1%\" align=\"right\">");
@@ -774,7 +774,7 @@ if ($action == "viewtopic")
 			}
 		}
 
-		print("<div style=\"margin-top: 8pt; margin-bottom: 8pt;\"><table id=\"pid".$postid."\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr><td class=\"embedded\" width=\"99%\"><a href=\"".htmlspecialchars("forums.php?action=viewtopic&topicid=".$topicid."&page=p".$postid."#pid".$postid)."\">#".$postid."</a>&nbsp;&nbsp;<font color=\"gray\">".$lang_forums['text_by']."</font>".$by."&nbsp;&nbsp;<font color=\"gray\">".$lang_forums['text_at']."</font>".$added);
+		print("<div class=\"forum-post-wrap\" style=\"margin-top: 8pt; margin-bottom: 8pt;\"><table id=\"pid".$postid."\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr><td class=\"embedded\" width=\"99%\"><a href=\"".htmlspecialchars("forums.php?action=viewtopic&topicid=".$topicid."&page=p".$postid."#pid".$postid)."\">#".$postid."</a>&nbsp;&nbsp;<font color=\"gray\">".$lang_forums['text_by']."</font>".$by."&nbsp;&nbsp;<font color=\"gray\">".$lang_forums['text_at']."</font>".$added);
 		if (is_valid_id($arr['editedby']))
 			print("");
 		print("&nbsp;&nbsp;<font color=\"gray\">|</font>&nbsp;&nbsp;");
@@ -786,7 +786,7 @@ if ($action == "viewtopic")
 
 		print("</table></div>\n");
 
-		print("<table class=\"main\" width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n");
+		print("<table class=\"main forum-post\" width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n");
 
 		$body = "<div id=\"pid".$postid."body\" style=\"word-break: break-all;\">";
 		//hidden content applied to second or higher floor post (for whose user class below Ad , not poster , not mods ,not reply's author)
@@ -916,7 +916,7 @@ if ($action == "viewtopic")
 
 	print($pagerbottom);
 	if ($maypost){
-	print("<br /><table style='border:1px solid #000000;'><tr>".
+	print("<br /><table class=\"forum-quick-reply\" style='border:1px solid #000000;'><tr>".
 "<td class=\"text\" align=\"center\"><b>".$lang_forums['text_quick_reply']."</b><br /><br />".
 "<form id=\"compose\" name=\"compose\" method=\"post\" action=\"?action=post\" onsubmit=\"return postvalid(this);\">".
 "<input type=\"hidden\" name=\"id\" value=\"".$topicid."\" /><input type=\"hidden\" name=\"type\" value=\"reply\" /><br />");
@@ -1209,7 +1209,7 @@ if ($action == "viewforum")
 	$numtopics = mysql_num_rows($topicsres);
 	stdhead($lang_forums['head_forum']." ".$forumname);
 	begin_main_frame("",true);
-	print("<h1 align=\"center\"><a class=\"faqlink\" href=\"forums.php\">".$SITENAME."&nbsp;".$lang_forums['text_forums'] ."</a>--><a class=\"faqlink\" href=\"".htmlspecialchars("forums.php?action=viewforum&forumid=".$forumid)."\">".$forumname."</a></h1>\n");
+	print("<h1 class=\"forum-title forum-breadcrumb\" align=\"center\"><a class=\"faqlink\" href=\"forums.php\">".$SITENAME."&nbsp;".$lang_forums['text_forums'] ."</a>--><a class=\"faqlink\" href=\"".htmlspecialchars("forums.php?action=viewforum&forumid=".$forumid)."\">".$forumname."</a></h1>\n");
 	end_main_frame();
 	print("<br />");
 	$maypost = get_user_class() >= $row["minclasswrite"] && get_user_class() >= $row["minclasscreate"] && $CURUSER["forumpost"] == 'yes';
@@ -1217,7 +1217,7 @@ if ($action == "viewforum")
 	if (!$maypost)
 		print("<p><i>".$lang_forums['text_unpermitted_starting_new_topics']."</i></p>\n");
 
-	print("<table border=\"0\" class=\"main\" cellspacing=\"0\" cellpadding=\"5\" width=\"97%\"><tr>\n");
+	print("<table border=\"0\" class=\"main forum-toolbar\" cellspacing=\"0\" cellpadding=\"5\" width=\"97%\"><tr>\n");
 	print("<td class=\"embedded\" width=\"90%\">");
 	print($forummoderators ? "&nbsp;&nbsp;<img class=\"forum_mod\" src=\"pic/trans.gif\" alt=\"Moderator\" title=\"".$lang_forums['col_moderator']."\">&nbsp;".$forummoderators : "");
 	print("</td><td class=\"embedded nowrap\" width=\"1%\">");
@@ -1227,7 +1227,7 @@ if ($action == "viewforum")
 	print("</tr></table>\n");
 	if ($numtopics > 0)
 	{
-		print("<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\" width=\"97%\">");
+		print("<table class=\"forum-topic-list\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\" width=\"97%\">");
 
 		print("<tr><td class=\"colhead\" align=\"center\" width=\"99%\">".$lang_forums['col_topic']."</td><td class=\"colhead\" align=\"center\"><a href=\"".htmlspecialchars("?action=viewforum&forumid=".$forumid.$addparam."&sort=".(isset($_GET["sort"]) && $_GET["sort"] == 'firstpostdesc' ? "firstpostasc" : "firstpostdesc"))."\" title=\"".(isset($_GET["sort"]) && $_GET["sort"] == 'firstpostdesc' ?  $lang_forums['title_order_topic_asc'] : $lang_forums['title_order_topic_desc'])."\">".$lang_forums['col_author']."</a></td><td class=\"colhead\" align=\"center\">".$lang_forums['col_replies']."/".$lang_forums['col_views']."</td><td class=\"colhead\" align=\"center\"><a href=\"".htmlspecialchars("?action=viewforum&forumid=".$forumid.$addparam."&sort=".(isset($_GET["sort"]) && $_GET["sort"] == 'lastpostasc' ? "lastpostdesc" : "lastpostasc"))."\" title=\"".(isset($_GET["sort"]) && $_GET["sort"] == 'lastpostasc' ? $lang_forums['title_order_post_desc'] : $lang_forums['title_order_post_asc'])."\">".$lang_forums['col_last_post']."</a></td>\n");
 
@@ -1360,7 +1360,7 @@ if ($action == "viewforum")
 			create_tooltip_container($lastpost_tooltip, 400);
 	} // if
 	else
-		print("<p>".$lang_forums['text_no_topics_found']."</p>");
+		print("<p class=\"forum-empty\">".$lang_forums['text_no_topics_found']."</p>");
 	stdfoot();
 	die;
 }
@@ -1376,7 +1376,7 @@ if ($action == "viewunread")
 	$res = sql_query("SELECT id, forumid, subject, lastpost, hlcolor FROM topics WHERE lastpost > ".$CURUSER['last_catchup'].($beforepostid ? " AND lastpost < ".sqlesc($beforepostid) : "")." ORDER BY lastpost DESC LIMIT 100") or sqlerr(__FILE__, __LINE__);
 
 	stdhead($lang_forums['head_view_unread']);
-	print("<h1 align=\"center\"><a class=\"faqlink\" href=\"forums.php\">".$SITENAME."&nbsp;".$lang_forums['text_forums']."</a>-->".$lang_forums['text_topics_with_unread_posts']."</h1>");
+	print("<h1 class=\"forum-title forum-breadcrumb\" align=\"center\"><a class=\"faqlink\" href=\"forums.php\">".$SITENAME."&nbsp;".$lang_forums['text_forums']."</a>-->".$lang_forums['text_topics_with_unread_posts']."</h1>");
 
 	$n = 0;
 	$uc = get_user_class();
@@ -1404,7 +1404,7 @@ if ($action == "viewunread")
 		$forumname = $a['name'];
 		if ($n == 1)
 		{
-			print("<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n");
+			print("<table class=\"forum-topic-list forum-unread-list\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n");
 			print("<tr><td class=\"colhead\" align=\"left\">".$lang_forums['col_topic']."</td><td class=\"colhead\" align=\"left\">".$lang_forums['col_forum']."</td></tr>\n");
 		}
 		print("<tr><td class=\"rowfollow\" align=\"left\"><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"embedded\" style='padding-right: 10px'>" .
@@ -1415,14 +1415,14 @@ if ($action == "viewunread")
 	if ($n > 0)
 	{
 		print("</table>\n");
-		print("<table border=\"0\" class=\"main\" cellspacing=\"0\" cellpadding=\"5\" width=\"1%\"><tr><td class=\"embedded\"><form method=\"get\" action=\"?\"><input type=\"hidden\" name=\"catchup\" value=\"1\" /><input type=\"submit\" value=\"".$lang_forums['text_catch_up']."\" class=\"btn\" /></form></td>");
+		print("<table border=\"0\" class=\"main forum-toolbar forum-actions\" cellspacing=\"0\" cellpadding=\"5\" width=\"1%\"><tr><td class=\"embedded\"><form method=\"get\" action=\"?\"><input type=\"hidden\" name=\"catchup\" value=\"1\" /><input type=\"submit\" value=\"".$lang_forums['text_catch_up']."\" class=\"btn\" /></form></td>");
 		if ($n > $maxresults){
 			print("<td class=\"embedded\"><form method=\"get\" action=\"?\"><input type=\"hidden\" name=\"action\" value=\"viewunread\" /><input type=\"hidden\" name=\"beforepostid\" value=\"".$topiclastpost."\" /><input type=\"submit\" value=\"".$lang_forums['submit_show_more']."\" class=\"btn\" /></form></td>");
 		}
 		print("</tr></table>");
 	}
 	else
-		print("<p>".$lang_forums['text_nothing_found']."</p>");
+		print("<p class=\"forum-empty\">".$lang_forums['text_nothing_found']."</p>");
 	stdfoot();
 	die;
 }
@@ -1532,9 +1532,9 @@ if ($CURUSER)
 
 stdhead($lang_forums['head_forums']);
 begin_main_frame();
-print("<h1 align=\"center\">".$SITENAME."&nbsp;".$lang_forums['text_forums']."</h1>");
-print("<p align=\"center\"><a href=\"?action=search\"><b>".$lang_forums['text_search']."</b></a> | <a href=\"?action=viewunread\"><b>".$lang_forums['text_view_unread']."</b></a> | <a href=\"?catchup=1\"><b>".$lang_forums['text_catch_up']."</b></a> ".(user_can('forummanage') ? "| <a href=\"forummanage.php\"><b>".$lang_forums['text_forum_manager']."</b></a>":"")."</p>");
-print("<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\" width=\"100%\">\n");
+print("<h1 class=\"forum-title\" align=\"center\">".$SITENAME."&nbsp;".$lang_forums['text_forums']."</h1>");
+print("<p class=\"forum-tools\" align=\"center\"><a href=\"?action=search\"><b>".$lang_forums['text_search']."</b></a> | <a href=\"?action=viewunread\"><b>".$lang_forums['text_view_unread']."</b></a> | <a href=\"?catchup=1\"><b>".$lang_forums['text_catch_up']."</b></a> ".(user_can('forummanage') ? "| <a href=\"forummanage.php\"><b>".$lang_forums['text_forum_manager']."</b></a>":"")."</p>");
+print("<table class=\"forum-list\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\" width=\"100%\">\n");
 
 if (!$overforums = $Cache->get_value('overforums_list')){
 	$overforums = array();

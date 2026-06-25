@@ -2692,8 +2692,8 @@ if ($enabledonation == 'yes'){?>
 	</tr>
 </table>
 
-<table class="mainouter" width="<?php echo CONTENT_WIDTH ?>" cellspacing="0" cellpadding="5" align="center">
-	<tr><td id="nav_block" class="text" align="center">
+<table class="mainouter site-shell" width="<?php echo CONTENT_WIDTH ?>" cellspacing="0" cellpadding="5" align="center">
+	<tr><td id="nav_block" class="text nav-shell" align="center">
 <?php if (!$CURUSER) { ?>
 			<a href="login.php"><font class="big"><b><?php echo $lang_functions['text_login'] ?></b></font></a> / <a href="signup.php"><font class="big"><b><?php echo $lang_functions['text_signup'] ?></b></font></a>
 <?php }
@@ -2757,12 +2757,12 @@ else {
     $attendance = $attendanceRep->getAttendance($CURUSER['id'], date('Ymd'))
 ?>
 
-<table id="info_block" cellpadding="4" cellspacing="0" border="0" width="100%"><tr>
+<table id="info_block" class="user-panel" cellpadding="4" cellspacing="0" border="0" width="100%"><tr>
 	<td><table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>
 		<td class="bottom" align="left"><image src='<?php echo get_user_avatar()?>' style="width:50px;border-radius:25px;margin-right:3px" /></td>
 		<td class="bottom" align="left">
-        <div class="medium">
-					<div>
+        <div class="medium user-summary">
+					<div class="user-stats-row">
 						<!-- 欢迎词和用户名 -->
 						<?php echo get_username($CURUSER['id'])?>
 						<!-- 退出 -->
@@ -2784,7 +2784,7 @@ else {
 						<?php if(\App\Models\HitAndRun::getIsEnabled()) { ?><font class='color_bonus'>H&R: </font> <?php echo sprintf('[<a class="nav-btn" href="myhr.php">%s</a>]', (new \App\Repositories\HitAndRunRepository())->getStatusStats($CURUSER['id']))?><?php }?>
 						<?php if(\App\Models\Claim::getConfigIsEnabled()) { ?><font class='color_bonus'><?php echo $lang_functions['menu_claim']?></font> <?php echo sprintf('[<a href="claim.php?uid=%s">%s</a>]', $CURUSER['id'], (new \App\Repositories\ClaimRepository())->getStats($CURUSER['id']))?><?php }?>
 				</div>
-				<div style="margin-top:5px">
+				<div class="user-action-row" style="margin-top:5px">
 					<!-- 控制面板 -->
 					<a class='nav-btn' href="usercp.php"><?php echo $lang_functions['text_user_cp'] ?></a>
 					<!-- 管理组面板 -->
@@ -2796,7 +2796,7 @@ else {
 					<!-- 收藏 -->
 					<a class='nav-btn' href="torrents.php?inclbookmarked=1&amp;allsec=1&amp;incldead=0"><?php echo $lang_functions['text_bookmarks'] ?></a>
 					<!-- 签到信息 -->
-					<?php if($attendance){ printf(' <a class="nav-btn" href="attendance.php" class="">'.$lang_functions['text_attended'].'</a>', $attendance->points, $CURUSER['attendance_card']); }else{ printf(' <a href="attendance.php" class="nav-btn">%s</a>', $lang_functions['text_attendance']);}?>
+					<?php if($attendance){ printf(' <a class="nav-btn" href="attendance.php">'.$lang_functions['text_attended'].'</a>', $attendance->points, $CURUSER['attendance_card']); }else{ printf(' <a href="attendance.php" class="nav-btn">%s</a>', $lang_functions['text_attendance']);}?>
 					<!-- 魔力相关 -->
         	<a class='nav-btn' href="mybonus.php"><?php echo ($lang_functions['text_bonus'].$lang_functions['text_use'].":".number_format($CURUSER['seedbonus'], 1)) ?></a>
 					<!-- 勋章 -->
@@ -2811,8 +2811,8 @@ else {
 			</div>
         </td>
                 <?php if(SearchBox::isSpecialEnabled() && get_setting('main.enable_global_search') == 'yes'){?>
-        <td class="bottom" align="left" style="border: none">
-            <form action="search.php" method="get" target="<?php echo nexus()->getScript() == 'search' ? '_self' : '_blank'?>">
+        <td class="bottom global-search" align="left" style="border: none">
+            <form class="global-search-form" action="search.php" method="get" target="<?php echo nexus()->getScript() == 'search' ? '_self' : '_blank'?>">
                 <div style="display: flex;align-items: center">
                     <div style="display: flex;flex-direction: column">
                         <div>
@@ -2822,7 +2822,7 @@ else {
                             <span><?php echo build_search_area($_GET['search_area'] ?? '', ['style' => 'width: 88px'])?></span>
                         </div>
                     </div>
-                    <div><input type="submit" value="<?php echo nexus_trans('search.global_search')?>" style="width: 39px;white-space: break-spaces;padding: 0" /></div>
+                    <div><input class="global-search-submit" type="submit" value="<?php echo nexus_trans('search.global_search')?>" style="width: 39px;white-space: break-spaces;padding: 0" /></div>
                 </div>
             </form>
         </td>
