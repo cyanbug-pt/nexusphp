@@ -68,7 +68,7 @@ return array (
     'extforum' => 'no',
     'extforumurl' => 'http://www.cc98.org',
     'defaultlang' => 'en',
-    'defstylesheet' => '3',
+    'defstylesheet' => '8',
     'donation' => 'yes',
     'spsct' => 'no',
     'browsecat' => '4',
