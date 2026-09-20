@@ -952,13 +952,21 @@ if ($shouldUseMeili) {
     $resultFromSearchRep = $searchRep->search($searchParams, $CURUSER['id']);
     $count = $resultFromSearchRep['total'];
 } else {
-    do_log("[BEFORE_TORRENT_COUNT_SQL]", 'debug');
-    $res = sql_query($sql);
-    do_log("[AFTER_TORRENT_COUNT_SQL] $sql", 'debug');
-    $count = 0;
-    while($row = mysql_fetch_array($res)) {
-        $count += $row[0];
-    }
+    $count = \Nexus\Database\TorrentCountCache::count(
+        $Cache,
+        [$CURUSER['id'], $CURUSER['class'], $CURUSER['enabled'] ?? null, $CURUSER['downloadpos'] ?? null],
+        $sql,
+        function () use ($sql) {
+            do_log("[BEFORE_TORRENT_COUNT_SQL]", 'debug');
+            $res = sql_query($sql);
+            do_log("[AFTER_TORRENT_COUNT_SQL] $sql", 'debug');
+            $count = 0;
+            while ($row = mysql_fetch_array($res)) {
+                $count += $row[0];
+            }
+            return $count;
+        }
+    );
 }
 $maxPageSize = 100;
 if (!empty($_GET['pageSize'])) {

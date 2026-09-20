@@ -270,10 +270,10 @@ if ($isReAnnounce) {
 }
 $log .= ", [NO_RE_ANNOUNCE]";
 unset($self);
-$res = sql_query($peerlistsql);
 if (isset($event) && $event == "stopped") {
     // Don't fetch peers for stopped event
 } else {
+    $res = sql_query($peerlistsql);
     // bencoding the peers info get for this announce
     while ($row = mysql_fetch_assoc($res)) {
         $row["peer_id"] = hash_pad($row["peer_id"]);
@@ -510,7 +510,7 @@ else
 {
     if ($event != 'stopped') {
         $stmt = mysql_prepare("select id from peers where $selfwhere limit 1");
-        $stmt->execute(['peer_id' => bin2hex($peer_id)]);
+        $stmt->execute(['peer_id' => $peerIdFieldBindValue]);
         $isPeerExistResultSet = mysql_fetch_assoc($stmt);
         if (empty($isPeerExistResultSet)) {
             $connectable = "yes";
@@ -610,7 +610,7 @@ if (count($updateset) || $hasChangeSeederLeecher) // Update only when there is c
 if($client_familyid != 0 && $client_familyid != $az['clientselect']) {
     $USERUPDATESET[] = "clientselect = ".sqlesc($client_familyid);
 }
-$USERUPDATESET[] = "last_announce_at = $dt";
+$USERUPDATESET = $USERUPDATESET ?? [];
 /**
  * VIP do not calculate downloaded
  * @since 1.7.13
@@ -622,11 +622,14 @@ if ($az['class'] == UC_VIP) {
         }
     }
 }
-if(count($USERUPDATESET) && $userid)
+if ($userid)
 {
-    $sql = "UPDATE users SET " . join(",", $USERUPDATESET) . " WHERE id = ".$userid;
-    sql_query($sql);
-    do_log("[ANNOUNCE_UPDATE_USER], $sql");
+    \Nexus\Tracker\AnnounceUserUpdater::update($redis, (int) $userid, $USERUPDATESET, $dt, function (array $updates) use ($userid) {
+        $sql = "UPDATE users SET " . join(",", $updates) . " WHERE id = " . $userid;
+        $result = sql_query($sql);
+        do_log("[ANNOUNCE_UPDATE_USER], $sql");
+        return $result;
+    });
 }
 $lockKey = sprintf("record_batch_lock:%s:%s", $userid, $torrentid);
 if ($redis->set($lockKey, TIMENOW, ['nx', 'ex' => $autoclean_interval_one])) {
