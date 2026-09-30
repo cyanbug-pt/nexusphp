@@ -269,12 +269,24 @@ class ExamRepository extends BaseRepository
         $now = Carbon::now();
         $query = Exam::query()
             ->where('status', Exam::STATUS_ENABLED)
-            ->whereRaw('
-    CASE
-        WHEN begin IS NOT NULL AND "end" IS NOT NULL
-        THEN begin <= ? AND "end" >= ?
-        ELSE duration > 0 OR recurring IS NOT NULL
-    END', [$now, $now]);
+            ->where(function ($q) use ($now) {
+                $q->where(function ($sub) use ($now) {
+                    // 如果 begin 和 end 都不为空，则判断时间
+                    $sub->whereNotNull('begin')
+                        ->whereNotNull('end')
+                        ->where('begin', '<=', $now)
+                        ->where('end', '>=', $now);
+                })->orWhere(function ($sub) {
+                    // 如果不满足上面的条件（即 begin 或 end 任意一个为空）
+                    $sub->where(function ($inner) {
+                        $inner->whereNull('begin')
+                            ->orWhereNull('end');
+                    })->where(function ($inner) {
+                        $inner->where('duration', '>', 0)
+                            ->orWhereNotNull('recurring');
+                    });
+                });
+            });
 
         if (!is_null($excludeId)) {
             $query->whereNotIn('id', Arr::wrap($excludeId));
@@ -285,6 +297,7 @@ class ExamRepository extends BaseRepository
         if (!is_null($type)) {
             $query->where("type", $type);
         }
+
         return $query->orderBy('priority', 'desc')->orderBy('id', 'asc')->get();
     }
 
@@ -1131,34 +1144,44 @@ class ExamRepository extends BaseRepository
 
     public function cronjobCheckout($ignoreTimeRange = false): int
     {
-        $now = Carbon::now()->toDateTimeString();
+        $now = Carbon::now(); // 保持 Carbon 对象即可，Laravel 会自动序列化
         $examUserTable = (new ExamUser())->getTable();
         $examTable = (new Exam())->getTable();
         $userTable = (new User())->getTable();
+
         $baseQuery = ExamUser::query()
             ->join($examTable, "$examUserTable.exam_id", "=", "$examTable.id")
             ->where("$examUserTable.status", ExamUser::STATUS_NORMAL)
-            ->selectRaw("$examUserTable.*")
+            ->select("$examUserTable.*") // 替换 selectRaw
             ->with(['exam', 'user', 'user.language'])
             ->orderBy("$examUserTable.id", "asc");
+
         if (!$ignoreTimeRange) {
-            $whenThens = [];
-            $params = [];
+            $baseQuery->where(function ($query) use ($examUserTable, $examTable, $now) {
+                $query->where(function ($q) use ($examUserTable, $now) {
+                    // 条件 1: exam_user.end 不为空且小于当前时间
+                    $q->whereNotNull("$examUserTable.end")
+                        ->where("$examUserTable.end", '<', $now);
+                })
+                    ->orWhere(function ($q) use ($examTable, $now) {
+                        // 条件 2: exam.end 不为空且小于当前时间
+                        $q->whereNotNull("$examTable.end")
+                            ->where("$examTable.end", '<', $now);
+                    })
+                    ->orWhere(function ($q) use ($examUserTable, $examTable, $now) {
+                        // 条件 3: exam.duration > 0 且过期
+                        // 因为涉及到列与列的计算，这里需要用 whereRaw，但我们可以针对多数据库做自适应
+                        $q->where("$examTable.duration", '>', 0);
 
-            $whenThens[] = "WHEN $examUserTable.\"end\" IS NOT NULL THEN $examUserTable.\"end\" < ?";
-            $params[] = $now;
-
-            $whenThens[] = "WHEN $examTable.\"end\" IS NOT NULL THEN $examTable.\"end\" < ?";
-            $params[] = $now;
-
-            if (NexusDB::isMysql()) {
-                $whenThens[] = "when $examTable.duration > 0 then date_add($examUserTable.created_at, interval $examTable.duration day) < ?";
-            } elseif (NexusDB::isPgsql()) {
-                $whenThens[] = "WHEN $examTable.duration > 0 THEN ($examUserTable.created_at + ($examTable.duration || ' day')::INTERVAL) < ?";
-            }
-            $params[] = $now;
-
-            $baseQuery->whereRaw(sprintf("CASE %s ELSE false END", implode(" ", $whenThens)), $params);
+                        if (NexusDB::isPgsql()) {
+                            // PG 写法：使用 || 拼接字符串再转为 INTERVAL
+                            $q->whereRaw("$examUserTable.created_at + ($examTable.duration || ' day')::INTERVAL < ?", [$now]);
+                        } else {
+                            // MySQL 写法
+                            $q->whereRaw("DATE_ADD($examUserTable.created_at, INTERVAL $examTable.duration DAY) < ?", [$now]);
+                        }
+                    });
+            });
         }
 
         $size = 1000;
