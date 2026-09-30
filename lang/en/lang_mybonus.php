@@ -79,6 +79,8 @@ $lang_mybonus = array
 	'text_uploaded_two' => "5.0 GB Uploaded",
 	'text_uploaded_three' => "10.0 GB Uploaded",
 	'text_uploaded_four' => "100.0 GB Uploaded",
+    'text_uploaded_one_tb' => "1.0 TB Uploaded",
+    'text_downloaded_one_tb' => "1.0 TB <font color='#ff4500'>Downloaded</font>",
 	'text_downloaded_ten_gb' => "10.0 GB <font color='#ff4500'>Downloaded</font>",
 	'text_downloaded_hundred_gb' => "100.0 GB <font color='#ff4500'>Downloaded</font>",
 	'text_buy_invite' => "1 Invite",

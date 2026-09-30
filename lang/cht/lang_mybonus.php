@@ -79,6 +79,8 @@ $lang_mybonus = array
 	'text_uploaded_two' => "5.0 GB上傳量",
 	'text_uploaded_three' => "10.0 GB上傳量",
 	'text_uploaded_four' => "100.0 GB上傳量",
+    'text_uploaded_one_tb' => "1.0 TB上傳量",
+    'text_downloaded_one_tb' => "1.0 TB <font color='#ff4500'>下載量</font>",
     'text_downloaded_ten_gb' => "10.0 GB <font color='#ff4500'>下載量</font>",
     'text_downloaded_hundred_gb' => "100.0 GB <font color='#ff4500'>下載量</font>",
 	'text_buy_invite' => "1個邀請名額",

@@ -48,6 +48,15 @@ function bonusarray($option = 0){
     $bonus['description'] = $lang_mybonus['text_uploaded_note'];
     $results[] = $bonus;
 
+    //1.0 TB Uploaded
+    $bonus = array();
+    $bonus['points'] = get_setting('bonus.hundredgbupload') * 1024 / 100;
+    $bonus['art'] = 'traffic';
+    $bonus['menge'] = 1099511627776;
+    $bonus['name'] = $lang_mybonus['text_uploaded_one_tb'] ?? '1.0 TB Uploaded';
+    $bonus['description'] = $lang_mybonus['text_uploaded_note'];
+    $results[] = $bonus;
+
     //10.0 GB Downloaded
     $bonus = array();
     $bonus['points'] = get_setting('bonus.tengbdownload');
@@ -63,6 +72,15 @@ function bonusarray($option = 0){
     $bonus['art'] = 'traffic_downloaded';
     $bonus['menge'] = 107374182400;
     $bonus['name'] = $lang_mybonus['text_downloaded_hundred_gb'];
+    $bonus['description'] = $lang_mybonus['text_download_note'];
+    $results[] = $bonus;
+
+    //1.0 TB Downloaded
+    $bonus = array();
+    $bonus['points'] = get_setting('bonus.hundredgbdownload') * 1024 / 100;
+    $bonus['art'] = 'traffic_downloaded';
+    $bonus['menge'] = 1099511627776;
+    $bonus['name'] = $lang_mybonus['text_downloaded_one_tb'] ?? "1.0 TB <font color='#ff4500'>Downloaded</font>";
     $bonus['description'] = $lang_mybonus['text_download_note'];
     $results[] = $bonus;
 
