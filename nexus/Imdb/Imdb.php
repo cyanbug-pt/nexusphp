@@ -342,9 +342,13 @@ class Imdb
     {
         $imdbId = parse_imdb_id($imdbId);
         $defaultRating = $rating = 'N/A';
-        if ($imdbId && $this->getCacheStatus($imdbId) == 1) {
-            $movie = $this->getMovie($imdbId);
-            $rating = $movie->rating();
+        try {
+            if ($imdbId && $this->getCacheStatus($imdbId) == 1) {
+                $movie = $this->getMovie($imdbId);
+                $rating = $movie->rating();
+            }
+        } catch (\Throwable $exception) {
+            do_log("Failed to get IMDb rating, imdb: $imdbId, error: " . $exception->getMessage(), 'error');
         }
         if (!is_numeric($rating)) {
             $rating = $defaultRating;
@@ -403,7 +407,17 @@ class Imdb
             return;
         }
         NexusDB::cache_put($lockKey, 1, 600);
-        \App\Jobs\FetchImdbCacheJob::dispatch(null, (string) $imdbId);
+        try {
+            if (defined('IN_NEXUS') && IN_NEXUS) {
+                \Nexus\Nexus::dispatchQueueJob(new \App\Jobs\FetchImdbCacheJob(null, (string) $imdbId));
+            } else {
+                \App\Jobs\FetchImdbCacheJob::dispatch(null, (string) $imdbId);
+            }
+        } catch (\Throwable $exception) {
+            NexusDB::cache_del($lockKey);
+            do_log("Failed to dispatch FetchImdbCacheJob, imdb: $imdbId, error: " . $exception->getMessage(), 'error');
+            return;
+        }
         do_log("FetchImdbCacheJob dispatched for missing cache, imdb: $imdbId");
     }
 }
